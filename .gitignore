@@ -1,0 +1,8 @@
+.project
+.settings
+.cache
+.buildpath
+crewstuff
+test.php
+base/data/trac_rss.php
+*.swp

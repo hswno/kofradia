@@ -1,0 +1,1094 @@
+/*
+ * CSS for Kofradia
+ * Skrevet av Henrik Steen
+ * www.henrist.net
+ *
+ * Beskyttet av �ndsverkloven
+ * Alle rettigheter tilh�rer Henrik Steen dersom ikke annet er oppgitt
+ *
+ * Copyright (c) 2010 All rights reserved
+ */
+
+html {
+	margin: 0;
+	padding: 10px;
+}
+body {
+	background-color: #FFF;
+	font-family: Tahoma, Arial, Verdana;
+	font-size: 11px;
+	color: #222222;
+	padding: 0;
+	margin: 0 auto;
+}
+
+
+/** Fonter */
+body,
+input,
+select,
+textarea {
+	/* font etc */
+	font-family: Tahoma, Sans, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	
+	/*line-height: 1.35em;*/
+}
+
+
+/** Bilder */
+img {
+	border: 0;
+}
+
+
+/** overskrifter */
+h1, h2, h3, h4, h5, h6 {
+	font-familiy: Tahoma, Sans, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	
+	margin: 0;
+	padding: 0;
+}
+
+/* heading 1 */
+h1 {
+	/*font-size: 15px;*/
+	color: #BBBBBB;
+}
+
+/* heading 2 */
+h2 {
+	color: #BBBBBB;
+}
+
+
+/** Avsnitt */
+p {
+	padding: 0;
+}
+
+
+/** Forskjellige tekst st�rrelser og margins */
+h1 { font-size: 15px; margin: 1em /*0.67em*/ 0 }
+h2 { font-size: 13px; margin: 1em /*0.75em*/ 0 }
+h3 { font-size: 12px; margin: 1em /*0.83em*/ 0 }
+h4, p, .p, blockquote, ul, fieldset, form, ol, dl, dir, menu { margin: 1em /*1.12em*/ 0 }
+h5 { font-size: 10px; margin: 1em /*1.5em*/ 0 }
+h6 { font-size: 10px; margin: 1em /*1.67em*/ 0 }
+
+
+/** Linker */
+a, .fakelink {
+	color: #AAAAAA;
+	text-decoration: underline;
+	cursor: pointer;
+}
+a:hover, .fakelink:hover {
+	color: #FFFFFF;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+
+/**
+ * Horisontal linje
+ * Syntax: <div class="hr"><hr /></div>
+ */
+hr { display: none }
+div.hr {
+	border-bottom: 1px dashed #555555;
+	margin: 1.4em 0;
+	padding: 0;
+}
+
+
+
+/** Feilmeldinger og informasjonsmeldinger */
+.error_box {
+	margin: 1em 0; /* 10px 0 0 0 */
+	padding: 0.5em; /* 5px */
+	background: #663333 url(../../static/icon/exclamation.png) no-repeat 5px 5px !important;
+	padding-left: 26px !important;
+	color: #EEEEEE !important;
+}
+.info_box {
+	margin: 1em 0; /* 10px 0 10px 0 */
+	padding: 0.5em; /* 5px */
+	background: #335566 url(../../static/icon/information.png) no-repeat 5px 5px !important;
+	padding-left: 26px !important;
+	color: #EEEEEE !important;
+}
+.information {
+	background-color: #335566;
+}
+.info_box_img {
+	margin: 1px 5px 2px 0;
+	float: left;
+}
+.error_box p, .info_box p { margin: 0 !important }
+.error_box p + p, .info_box p + p { margin-top: 0.5em !important }
+
+/* advarsel/varsel felt */
+.warning, .information {
+	background: #663333 url(../../static/icon/exclamation.png) no-repeat 5px center;
+	margin: 10px 0;
+	padding: 0 10px 0 26px;
+	overflow: hidden;
+}
+.information {
+	background: #335566 url(../../static/icon/information.png) no-repeat 5px center;
+}
+
+
+/** Justeringer av tekst */
+tbody.r td, .r, .l .r, .c .r, .j .r {
+	text-align: right !important;
+}
+tbody.l td, .l, .r .l, .c .l, .j .l {
+	text-align: left !important;
+}
+tbody.c td, .c, .r .c, .l .c, .j .c {
+	text-align: center !important;
+}
+tbody.j td, .j, .r .l, .r .j, .l .j {
+	text-align: justify !important;
+}
+
+
+/** Fieldsets */
+fieldset {
+	margin: 1.3em 0; padding: 0 10px; border: 1px solid #CCC;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #FAFAFA;
+}
+/*fieldset p { margin: 8px 0 5px; padding: 0 }*/
+legend { color: #FFFFFF; background-color: #333333; padding: 3px 5px }
+fieldset fieldset legend { color: #FFFFFF; background-color: #333333 }
+
+
+/** Tabeller */
+table, .table {
+	border-collapse: collapse;
+}
+.table {
+	margin: 0; /* 15px 0 15px 0 */
+	padding: 0;
+	font-size: 11px;
+}
+
+/* margins (for � unng� firefox problem med margin-collapse pga. table table) */
+.tablemt {
+	margin-top: 1em;
+}
+.tablemb {
+	margin-bottom: 1em;
+}
+.tablem {
+	margin: 1em 0;
+}
+
+
+/* alle celler */
+.table th, .table td {
+	border-right: 1px solid #282828;
+	border-bottom: 1px solid #282828;
+}
+.table th:last-child, .table td:last-child {
+	border-right: 0;
+}
+.table tbody tr:last-child th, .table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+/* heading */
+.table th, .table thead td {
+	font-weight: bold;
+	background-color: #444444;
+	text-align: center;
+	
+	padding: 0; /* 3px */
+}
+.table tbody th {
+	text-align: left;
+	padding: 5px 5px 4px 5px; /* 5px 5px 4px 5px */
+	/*font-size: 11px;*/
+	font-weight: normal;
+	color: #BBBBBB;
+	/*line-height: 1.2em;*/
+}
+.table th a {
+	/* linker i overskrifter har ingen understrek */
+	text-transform: none;
+}
+
+/* underoverskrift */
+.table thead td {
+	background-color: #404040;
+	padding: 3px 3px 2px 3px; /* 3px 3px 2px 3px */
+	/*font-size: 11px;*/
+	font-weight: normal;
+	color: #999999;
+}
+
+/* hovedoverskrifter */
+.table thead th {
+	padding: 5px 5px 4px 5px;
+	/*font-size: 12px;*/
+	font-weight: normal;
+	color: #BBBBBB;
+	/*line-height: 1.2em;*/
+}
+
+/* vanlige celler */
+.table td {
+	background-color: #333333;
+	padding: 3px 5px;
+}
+.table tr.color td {
+	/* egen bakgrunn (for forskjell p� odd/even rader) */
+	background-color: #2D2D2D;
+}
+.table tr.highlight td {
+	/* highlight */
+	background-color: #444444;
+}
+
+/* celler som brukes sammen med boxhandle */
+.table .spacerfix td, .table.spacerfix td, td.spacerfix {
+	padding: 4px 6px;
+}
+
+
+/** Profil lenker */
+.profile_link, .profile_link:hover {
+	text-decoration: none;
+	white-space: nowrap;
+}
+.profile_link img {
+	margin-right: 3px;
+	vertical-align: text-top;
+	border: 0 !important;
+}
+.profile_link img.deactivated {
+	margin-right: 0;
+	margin-left: 1px;
+}
+.profile_link span {
+	text-decoration: none;
+}
+.profile_link:hover span {
+	text-decoration: underline;
+}
+.user_strike .profile_link span {
+	text-decoration: line-through;
+}
+
+
+/** Profilbilder */
+.profile_image {
+	border: 1px solid #000000;
+}
+
+span.c_idemyldrer { color: #F9E600 }
+span.c_forum_mod { color: #FF6600 }
+span.c_mod { color: #33CCFF }
+span.c_admin { color: #CCFF00 }
+span.c_system { color: #8888FF }
+span.c_deactivated { color: #FF0000 }
+
+span.c_idemyldrer span { color: #AAAAAA }
+span.c_forum_mod span { color: #AAAAAA }
+span.c_mod span { color: #AAAAAA }
+span.c_admin span { color: #AAAAAA }
+span.c_system span { color: #AAAAAA }
+span.c_deactivated span { color: #AAAAAA }
+
+.c_idemyldrer:hover span { color: #F9E600 }
+.c_forum_mod:hover span { color: #FF6600 }
+.c_mod:hover span { color: #33CCFF }
+.c_admin:hover span { color: #CCFF00 }
+.c_system:hover span { color: #8888FF }
+/*.c_deactivated:hover span { color: #FF0000 }*/
+
+
+/** Standard bredder som kan brukes */
+.w30 { width: 30px }
+.w40 { width: 40px }
+.w50 { width: 50px }
+.w60 { width: 60px }
+.w75 { width: 75px }
+.w80 { width: 80px }
+.w90 { width: 90px }
+.w100 { width: 100px }
+.w120 { width: 120px }
+.w125 { width: 125px }
+.w150 { width: 150px }
+.w175 { width: 175px }
+.w180 { width: 180px }
+.w200 { width: 200px }
+.w250 { width: 250px }
+.w300 { width: 300px }
+.w350 { width: 350px }
+.w400 { width: 400px }
+.w450 { width: 450px }
+
+
+/** Skjemaer */
+form {
+	display: inline;
+}
+
+
+/** Skrivefelt */
+input.styled {
+	margin: 0; /* -2px 0 0 0 */
+	padding: 2px 4px; /* 2px 5px */
+	border: 1px solid #333333;
+	background-color: #444444;
+	color: #EEEEEE;
+	text-decoration: none;
+}
+.trident5 input.styled {
+	/* ie7 fix */
+	vertical-align: -3px;
+}
+textarea {
+	margin: 0;
+	padding: 2px 4px; /* 2px 5px */
+	border: 1px solid #333333;
+	background-color: #444444;
+	color: #EEEEEE;
+	/*font-size: 11px;*/
+	/*overflow: auto;*/
+	resize: vertical;
+}
+
+
+/** Avmerkeringsbokser */
+input[type=checkbox] {
+	margin: 0;
+	vertical-align: text-bottom;
+}
+
+
+/** Dropdown */
+select {
+	margin: 0; /* -2px 0 0 0 */
+	padding: 0;
+	border: 2px solid #333333;
+	background-color: #444444;
+	color: #EEEEEE;
+	/*font-size: 12px;*/
+}
+
+
+/** Knapper */
+.button, .button_hover {
+	margin: 0;
+	padding: 2px 5px; /* 2px 5px */
+	border: 1px solid;
+	border-color: #999999 #666666 #666666 #999999;
+	background-color: #3D3D3D;
+	color: #EEEEEE;
+	text-decoration: none;
+	text-align: center;
+	cursor: pointer;
+	font-size: 11px;
+	opacity: 0.5;
+	filter: alpha(opacity=75);
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+}
+.button_hover, .button:hover {
+	border-color: #A1BF26;
+	background-color: #A1BF26;
+	color: #222222;
+	text-decoration: none;
+	color: #222222;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	opacity: 1;
+	filter: alpha(opacity=100)
+}
+
+/* for trident (IE) (TODO: sjekk IE8 - trenger sannsynligvis ikke dette) */
+.trident .button, .trident .button_hover {
+	padding: 1px 5px 0; /* IE7 */
+	vertical-align: -4px;
+	width: auto;
+	overflow: visible;
+}
+.trident .button {
+	border-color: #5D5D5D #444444 #444444 #5D5D5D;
+	background-color: #2F2F2F;
+	color: #888888;
+}
+.trident .button:hover, .trident .button_hover {
+	border-color: #A1BF26;
+	background-color: #A1BF26;
+	color: #222222;
+}
+.trident a.button, .trident a.button_hover {
+	padding: 2px 5px;
+	/*margin-top: 0 !important;*/
+	/*vertical-align: -1px;*/
+}
+/* for gecko */
+.gecko .button, .gecko .button_hover {
+	padding: 1px 5px;
+}
+.gecko a.button, .gecko a.button:hover {
+	padding: 2px 5px;
+}
+/* fix for opera og IE7 */
+.presto .button, .presto .button_hover,
+.trident5 .button, .trident5 .button_hover {
+	display: inline-block;
+}
+
+/* div farger */
+.red .button_hover, .red .button:hover {
+	background-color: #FF3333;
+	border-color: #FF3333;
+}
+/*.green .button_hover, .red .button:hover {
+	
+}*/
+
+
+/** Definisjonslister */
+dt, dd {
+	padding: 0;
+	margin: 0;
+}
+dl {
+	/*margin: 10px 0 10px 0;*/
+	/*position: relative;*/
+}
+dt, dd {
+	/*line-height: 1.7em;*/
+	overflow: hidden;
+}
+dt {
+	clear: both;
+	float: left;
+	padding: 3px 0 2px 0;
+	/*padding: 3px 2px 2px 0;*/
+	/*color: #CCCCCC;*/
+	/*min-height: 19px;*/
+	/*position: relative;*/
+}
+dd {
+	padding: 3px 0 2px 0;
+	/*padding: 3px 0 2px 2px;*/
+	/*min-height: 19px;*/
+}
+
+/* ulike bredder */
+dl.dl_10 dt { width: 10% }
+dl.dl_15 dt { width: 15% }
+dl.dl_20 dt { width: 20% }
+dl.dl_30 dt { width: 30% }
+dl.dl_35 dt { width: 35% }
+dl.dl_40 dt { width: 40% }
+dl.dl_45 dt { width: 45% }
+dl.dl_50 dt { width: 50% }
+dl.dl_60 dt { width: 60% }
+dl.dl_70 dt { width: 70% }
+dl.dl_50px dt { width: 50px }
+dl.dl_100px dt { width: 100px }
+dl.dl_150px dt { width: 150px }
+dl.dl_200px dt { width: 200px }
+dl.dl_2x dt, dl.dl_2x dd { /*margin-bottom: 7px*/ }
+dl.dl_2x dt { margin-top: 2px }
+.dd_right dd { text-align: right }
+
+
+/** Lister */
+ul, ol {
+	/*margin: 0; /*10px 0 10px 15px*/
+	padding: 0 0 0 1.8em;
+	/*position: relative;*/
+}
+ol {
+	/*margin: 0; /*10px 0 10px 10px*/
+	/*padding: 0; /*0 0 0 25px*/
+	/*position: relative;*/
+}
+ul li, ol li {
+	/*margin: 0;
+	padding: 0;
+	/*position: relative;*/
+}
+ol ul, ul ol, ul ul, ol ol {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+ul.spacer li, ol.spacer li {
+	margin-top: 1em;
+}
+
+/* ikke bruk som liste */
+.nolist {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.nolist li {
+	margin: 0;
+	padding: 0;
+}
+
+
+/** Runde hj�rner (delvis CSS3 - funker ikke i IE og Opera) */
+.r4, .r4l, .r4t, .r4tl { -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; border-top-left-radius: 4px }
+.r4, .r4r, .r4t, .r4tr { -moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; border-top-right-radius: 4px }
+.r4, .r4l, .r4b, .r4bl { -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; border-bottom-left-radius: 4px }
+.r4, .r4r, .r4b, .r4br { -moz-border-radius-bottomright: 4px; -webkit-border-bottom-right-radius: 4px; border-bottom-right-radius: 4px }
+
+.r3, .r3l, .r3t, .r3tl { -moz-border-radius-topleft: 7px; -webkit-border-top-left-radius: 7px; border-top-left-radius: 7px }
+.r3, .r3r, .r3t, .r3tr { -moz-border-radius-topright: 7px; -webkit-border-top-right-radius: 7px; border-top-right-radius: 7px }
+.r3, .r3l, .r3b, .r3bl { -moz-border-radius-bottomleft: 7px; -webkit-border-bottom-left-radius: 7px; border-bottom-left-radius: 7px }
+.r3, .r3r, .r3b, .r3br { -moz-border-radius-bottomright: 7px; -webkit-border-bottom-right-radius: 7px; border-bottom-right-radius: 7px }
+
+.r2, .r2l, .r2t, .r2tl { -moz-border-radius-topleft: 11px; -webkit-border-top-left-radius: 11px; border-top-left-radius: 11px }
+.r2, .r2r, .r2t, .r2tr { -moz-border-radius-topright: 11px; -webkit-border-top-right-radius: 11px; border-top-right-radius: 11px }
+.r2, .r2l, .r2b, .r2bl { -moz-border-radius-bottomleft: 11px; -webkit-border-bottom-left-radius: 11px; border-bottom-left-radius: 11px }
+.r2, .r2r, .r2b, .r2br { -moz-border-radius-bottomright: 11px; -webkit-border-bottom-right-radius: 11px; border-bottom-right-radius: 11px }
+
+.r1, .r1l, .r1t, .r1tl { -moz-border-radius-topleft: 15px; -webkit-border-top-left-radius: 15px; border-top-left-radius: 15px }
+.r1, .r1r, .r1t, .r1tr { -moz-border-radius-topright: 15px; -webkit-border-top-right-radius: 15px; border-top-right-radius: 15px }
+.r1, .r1l, .r1b, .r1bl { -moz-border-radius-bottomleft: 15px; -webkit-border-bottom-left-radius: 15px; border-bottom-left-radius: 15px }
+.r1, .r1r, .r1b, .r1br { -moz-border-radius-bottomright: 15px; -webkit-border-bottom-right-radius: 15px; border-bottom-right-radius: 15px }
+
+
+/* Plassere tekst til venstre/h�yre i overskrifter */
+.h_left, .h_right {
+	float: right;
+	margin: -36px 0 0 0 !important;
+	font-size: 11px;
+	/*font-weight: normal;
+	text-transform: none;
+	text-decoration: none;*/
+	color: #888888;
+	position: relative; /* gj�re det synlig */
+}
+.h_left {
+	float: left;
+}
+.h_left a, .h_right a {
+	font-size: 11px;
+	font-weight: normal;
+	text-transform: none;
+	text-decoration: none;
+	color: #888888;
+	margin-left: 8px;
+}
+.h_left a {
+	margin-left: 0;
+	margin-right: 8px;
+}
+.h_left a:hover, .h_right a:hover {
+	text-decoration: underline;
+	color: #AAAAAA;
+}
+
+
+/** Fargede bokser */
+
+/* bg1 (h1=30px, h2=25px) */
+.bg1_c.tiny { margin-top: 40px; margin-bottom: 40px; width: 180px }
+.bg1_c.xxsmall { margin-top: 40px; margin-bottom: 40px; width: 220px }
+.bg1_c.xsmall { margin-top: 40px; margin-bottom: 40px; width: 300px }
+.bg1_c.smaller { margin-top: 40px; margin-bottom: 40px; width: 450px }
+.bg1_c.small { margin-top: 40px; margin-bottom: 40px; width: 400px }
+.bg1_c.xmedium { margin-top: 40px; margin-bottom: 40px; width: 500px }
+.bg1_c.medium { margin-top: 40px; margin-bottom: 40px; width: 550px }
+.bg1_c.xlarge { margin-top: 30px; margin-bottom: 30px; width: 580px }
+.bg1_c.large { margin-top: 20px; margin-bottom: 20px; width: 610px }
+.bg1 .bg1_c { margin-top: 20px; margin-bottom: 20px }
+.bg1_c { margin-left: auto; margin-right: auto }
+/*.bg1 p { margin: 10px 0 }*/
+
+/* heading 1 */
+h1.bg1 {
+	border: 0;
+	margin: 0.67em 15px 0; /* 10px 15px 0 */
+	padding: 12px 0 8px;
+	line-height: 10px;
+	background: url(../../static/themes/sm/bg1.png) repeat-x 0 -220px;
+	height: 10px;
+	font-size: 12px;
+	text-align: center;
+	position: relative;
+	color: #AAAAAA;
+	zoom: 1; /* IE fix */
+}
+h1.bg1 .left,
+h1.bg1 .left2 {
+	width: 15px;
+	height: 30px;
+	position: absolute;
+	left: -15px;
+	top: 0px;
+	background: url(../../static/themes/sm/bg1.png) no-repeat 0 0;
+}
+h1.bg1 .right,
+h1.bg1 .right2 {
+	width: 15px;
+	height: 30px;
+	position: absolute;
+	left: auto;
+	right: -15px;
+	top: 0px;
+	background: url(../../static/themes/sm/bg1.png) no-repeat 0 -30px;
+}
+h1.bg1 .leftr {
+	background-position: 0 -60px;
+}
+h1.bg1 .rightr {
+	background-position: 0 -90px;
+}
+h1.bg1.span {
+	margin-left: -11px;
+	margin-right: -11px;
+}
+
+/* heading 2 */
+h2.bg1 {
+	border: 0;
+	margin: 0.67em 15px 0; /* 10px 15px 0 */
+	padding: 8px 0 7px 0; /* 8px 5px 7px 5px */
+	background: url(../../static/themes/sm/bg1.png) repeat-x 0 -250px;
+	height: 10px;
+	line-height: 10px;
+	/*font-size: 11px;*/
+	text-align: center;
+	position: relative;
+	color: #AAAAAA;
+	zoom: 1; /* IE fix */
+}
+h2.bg1 .left,
+h2.bg1 .left2 {
+	width: 15px;
+	height: 25px;
+	position: absolute;
+	left: -15px;
+	top: 0px;
+	background: url(../../static/themes/sm/bg1.png) no-repeat 0 -120px;
+}
+h2.bg1 .right,
+h2.bg1 .right2 {
+	width: 15px;
+	height: 25px;
+	position: absolute;
+	left: auto;
+	right: -15px;
+	top: 0px;
+	background: url(../../static/themes/sm/bg1.png) no-repeat 0 -145px;
+}
+h2.bg1 .leftr {
+	background-position: 0 -170px;
+}
+h2.bg1 .rightr {
+	background-position: 0 -195px;
+}
+h2.bg1.span {
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+/* the content */
+div.bg1 {
+	/*position: relative;*/
+	padding: 0 10px; /* 1px 10px */
+	margin: 0 0 1em; /* 0 0 10px */
+	background-color: #282828;
+	border: 1px solid #333333;
+	overflow: hidden;
+	zoom: 1;
+}
+.bg1 + div.bg1, p + div.bg1 {
+	border-top: 0;
+}
+/*div.bg1 .section {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 0;
+	background-color: #333333;
+	overflow: hidden;
+}
+div.bg1 table { 
+	margin-top: 10px;
+	margin-bottom: 10px;
+}*/
+div.bg1 div.bg1 {
+	background-color: #2C2C2C;
+	margin-bottom: 10px;
+}
+.bg1_c .h_left,
+.bg1_c .h_right {
+	margin: -17px 10px 0 10px !important;
+}
+
+/* more space/padding */
+.bg1_padding div.bg1 {
+	padding: 1em 2em;
+}
+.bg1_padding div.bg1 h1.bg1,
+.bg1_padding div.bg1 h2.bg1 {
+	margin-top: 2em;
+}
+.bg1_padding div.bg1 div.bg1 {
+	padding: 0 1em;
+}
+.bg1_padding div.bg1 div.bg1 h1.bg1,
+.bg1_padding div.bg1 div.bg1 h2.bg1 {
+	margin-top: 1em;
+}
+
+
+
+
+/** Progressbars */
+.progressbar, .progressbar_v {
+	position: relative;
+	height: 20px;
+}
+.progressbar {
+	background-color: #888888;
+}
+.progressbar_v {
+	/* vertikal */
+	background-color: #CCCCCC;
+}
+.progressbar .progress {
+	background-color: #CCCCCC;
+	height: 20px;
+}
+.progressbar_v .progress {
+	/* vertikal */
+	background-color: #888888;
+	height: 20px;
+}
+.progressbar p, .progressbar_v p {
+	padding: 0;
+	margin: 0 0 0 8px !important;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 20px;
+	line-height: 20px;
+	color: #000000;
+	width: 200px;
+	overflow: hidden;
+}
+
+
+/** Pekere p� andre elementer enn <a> */
+.pointer, .pointer td, td.pointer { cursor: pointer }
+.nopointer, .nopointer td, td.nopointer { cursor: default }
+
+
+/** FIXME - ting som b�r fikses og gj�res p� en annen m�te - risikerer cross-browser kr�sj ved � bruke disse */
+.clear {
+	clear: both;
+}
+
+
+/** Nye ting */
+.ny {
+	/* endringer og nye ting i menyen */
+	color: #FF0000;
+	font-weight: bold;
+}
+
+
+/** M�rk tekst */
+.dark {
+	color: #888888;
+}
+
+
+/** Farget tekst (brukes for even/odd rader osv) og highligh */
+.color {
+	background-color: #353535 !important;
+}
+.highlight {
+	background-color: #555 !important;
+}
+
+
+/** Plain tekst (blokktekst) */
+.plain { font-family: "Courier New", Courier, monospace }
+
+
+/** En seksjon (en egen boks) */
+.section {
+	margin: 1em auto;
+	border: 2px solid #444444;
+	background-color: #2A2A2A;
+	padding: 0 1em;
+	/*position: relative;*/
+}
+/*.section .section {
+	margin: 1em 0;
+}*/
+.section h1, .section h2, .section h3, .section h4, .section h5 {
+	background-color: #444444;
+	margin: 0 -1em;
+	font-size: 12px;
+	border: 0;
+	color: #BBBBBB;
+	
+	padding: 0.5em 0.5em 0.4em 0.5em;
+	font-weight: normal;
+	/*line-height: 1.2em;*/
+	
+	position: relative;
+}
+.section h3 {
+	background-color: #3A3A3A;
+	font-size: 11px;
+}
+.section h4 {
+	font-size: 11px;
+	text-align: center;
+	background-color: #3A3A3A;
+	border-top: 2px solid #444444;
+	/*position: relative;*/
+}
+/*.section h1 .right, .section h2 .right, .section h3 .right {
+	float: right;
+}*/
+.section .h_left, .section .h_right {
+	/* tekst i headings */
+	margin-top: -17px !important;
+}
+
+
+/** Gjennomsiktighet */
+.op25 {
+	/* 25 % */
+	opacity: 0.25;
+	filter: alpha(opacity=25);
+}
+.op50 {
+	/* 50 % */
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+}
+.op75 {
+	/* 75 % */
+	opacity: 0.75;
+	filter: alpha(opacity=75);
+}
+/* fjern gjennomsiktighet p� linker ved hover */
+a.op25:hover, a:hover .op25,
+a.op50:hover, a:hover .op50,
+a.op75:hover, a:hover .op75 { opacity: 1; filter: alpha(opacity=100) }
+
+
+/** Plassere ting i midten p� siden (block elementer) */
+.center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+/** Skjule ting (som senere kan vises med javascript f.eks. */
+.hide { display: none }
+
+
+/** Ikke wrappe ting */
+.nowrap { white-space: nowrap }
+
+
+/** Kolonneseende (st�tter 2, 3 og 4 kolonner ) */
+
+/* 2 kolonner */
+.col2_w { overflow: hidden; margin: -5px 0 0; padding: 0 0 }
+.col2_w .col_w { float: left; width: 50% }
+.col2_w .col_w.left .col { margin: 0 3px 0 0 }
+.col2_w .col_w.right .col { margin: 0 0 0 3px }
+
+/* 3 kolonner */
+.col3_w { overflow: hidden; margin: -5px -1px 0; padding: 0 1px }
+.col3_w .col_w { float: left; width: 34% }
+.col3_w .col_w.left, .col3_w .col_w.right { width: 33% }
+.col3_w .col_w .col { margin: 0 3px }
+.col3_w .col_w.left .col { margin-left: 0 }
+.col3_w .col_w.right .col { margin-right: 0 }
+
+/* 4 kolonner */
+.col4_w { overflow: hidden; margin: -5px -1px 0; padding: 0 1px }
+.col4_w .col_w { float: left; width: 25% }
+.col4_w .col_w .col { marign: 0 3px }
+.col4_w .col_w.left .col { margin-left: 0 }
+.col4_w .col_w.right .col { margin-right: 0 }
+
+
+/** Linker med ikon og vanlige ikon */
+.link-icon, .link-icon:hover {
+	text-decoration: none !important;
+}
+.icon, .link-icon img {
+	vertical-align: bottom;
+	margin-right: 3px;
+}
+
+
+/** Quotes */
+.quote_box {
+	margin: 0.3em 0 0.2em;
+	padding: 0.1em 1em;
+	border-left: 3px solid #444444;
+	overflow: hidden;
+}
+.quote_header {
+	display: none;
+}
+
+/* utskrift */
+@media print {
+	.print { display: block }
+	.noprint { display: none }
+	#default_left, #default_center_left, #default_center_top, #default_topmenu, #default_right, #default_bottom_1 { display: none }
+	#default_bottom_2 { margin-top: 15px; border-top: 2px solid #CCCCCC; padding-top: 5px; font-size: 10px; line-height: 1.2em }
+	#default_bottom_2 p { margin: 0 }
+	#default_container { margin: 0; padding: 0 }
+	#default_center { width: auto; float: auto }
+	#default_main { padding: 0; width: auto }
+	
+	ul, ol { color: #000 }
+	div.bg1 { overflow: visible; border: none; background-color: none; padding: 0 }
+	.bg1_c, .bg1 .bg1_c { width: auto !important; margin: 1em 0 !important }
+	h1.bg1, h2.bg1 { background: none; color: #000; margin: 0 auto !important }
+	h1.bg1 .left, h1.bg1 .right, h1.bg1 .left2, h1.bg1 .right2,
+	h2.bg1 .left, h2.bg1 .right, h2.bg1 .left2, h2.bg1 .right2 { display: none }
+	.warning, .information { background: none; padding: 0; margin: 1em 0; overflow: visible }
+}
+
+
+/* headings */
+h1, h2, h3, h4 {
+	color: #222222;
+}
+h2 {
+	color: #333;
+	text-decoration: underline;
+}
+h3 {
+	font-weight: bold;
+}
+
+/* linker */
+a {
+	color: #0479D0;
+	text-decoration: underline;
+}
+a:hover {
+	color: #666666;
+	text-decoration: none;
+}
+
+
+/* farger for utseende (pga. lys bakgrunn) */
+.border { border: 1px solid #555555 }
+div.hr { border-bottom: 1px dashed #AAAAAA }
+
+.error_box { background-color: #BB6666; color: #FFF }
+.info_box { background-color: #668899; color: #FFF }
+
+/* advarsel/varsel felt */
+.warning, .information {
+	background-color: #BB6666;
+	color: #FFF;
+}
+.information {
+	background-color: #668899;
+	color: #FFF;
+}
+
+.table { border-left: 0; border-top: 0; font-size: 12px }
+.table th, .table td { border-color: #FAFAFA; border-color: #FAFAFA }
+.table th, .table thead td { background-color: #BBB }
+.table tbody th { color: #444444 }
+.table thead td { background-color: #AFAFAF }
+.table thead th { color: #444444 }
+.table thead td { color: #666666 }
+
+.table td { background-color: #EEEEEE }
+.table tr.color td { background-color: #F3F3F3 }
+.table td tr.color td { background-color: #A5A5A5 }
+.table tr.highlight td { background-color: #C6CCCC }
+tr.spacer td { background-color: #DDDDDD }
+.table tr.color2_0 td { background-color: #B7B7B7 }
+.table tr.color2_1 td { background-color: #BDBDBD }
+
+.profile_link { padding: 3px; margin: -3px }
+/*.profile_link:hover { background-color: #888 }*/
+
+/*.status_box, .link_box { color: #111111 }
+.status_box { border: 1px dashed #333333; background-color: #DDDDDD }
+
+.link_box a { border: 1px dashed #3300FF; background-color: #D3CBEB; color: #111111 }
+.link_box a:hover { border: 2px solid #3300FF }
+.link_box.inactive a { border-color: #333333; background-color: #DDDDDD }
+.link_box.inactive a:hover { border-color: #333333; background-color: #DDDDDD }*/
+
+.link_box { width: 150px }
+.link_box a { background-color: #FAFAFA; color: #333; border-color: #444 }
+.link_box a:hover { background-color: #F3F3F3; color: #000; border-color: #888 }
+
+/** Skrivefelt */
+input.styled, textarea, select {
+	border: 1px solid #CCCCCC;
+	background-color: #FFFFFF;
+	color: #111111;
+}
+input:focus, textarea:focus, select:focus {
+	border-color: #999999;
+}
+select { border-width: 2px }
+
+.button, .button_hover { border-color: #BBBBBB #CCCCCC #CCCCCC #BBBBBB !important; background-color: #DDD !important; color: #000 !important }
+.button_hover, .button:hover { border-color: #AAAAAA #BBBBBB #BBBBBB #AAAAAA !important; background-color: #77C4FD !important; color: #333333; text-decoration: none !important }
+.red .button, .red .button_hover, .red .button:hover { background-color: #3E0909 !important; border-color: #610605 #3E0909 #3E0909 #610605 !important }
+.red .button_hover, .red .button:hover { border-color: #750502 #610605 #610605 #750502 !important }
+.green .button, .green .button_hover, .green .button:hover { background-color: #273D08 !important; border-color: #395F04 #273D08 #273D08 #395F04 !important }
+.green .button_hover, .green .button:hover { border-color: #427302 #395F04 #395F04 #427302 !important }
+
+.profile_box { color: #EEE }
+.profile_box a { color: #AAAAAA }
+.profile_box a:hover { color: #FFFFFF }
+
+.h_right { color: #777777 }
+.h_right a { color: #777777 }
+.h_right a:hover { color: #555555 }
+.dark { color: #777777}
+.color { background-color: #CACACA !important}
+.highlight { background-color: #FAFAFA !important}
+
+.section { border: 2px solid #BBBBBB; background-color: #D5D5D5 }
+.section h1, .section h2, .section h3, .section h4, .section h5 { background-color: #BBBBBB; color: #444444 }
+.section h3 { background-color: #C5C5C5 }
+.section h4 { background-color: #C5C5C5; border-top: 2px solid #BBBBBB }
+.section .h1l { color: #777777 }
+.section .table thead th { background-color: #B5B5B5 }
+
+dt { color: #333333 }
+.dd_light dd { color: #555555}
+.dd_light dd span { color: #AAAAAA}
+
+.progressbar { background-color: #777777}
+.progressbar_v { background-color: #333333}
+.progressbar .progress { background-color: #333333 }
+.progressbar_v .progress { background-color: #777777 }
+.progressbar p, .progressbar_v p { color: #FFFFFF }

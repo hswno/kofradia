@@ -1,0 +1,106 @@
+/**
+ * Julekalender
+ */
+#julekalender {
+	max-width: 710px;
+	/*width: 300px;*/
+	margin: 60px auto 20px;
+	padding-right: 10px;
+}
+#julekalender .jul_h {
+	text-align: center;
+}
+#julekalender h1 {
+}
+.jul_rad {
+	margin-top: 10px;
+}
+.jul_rad:first-child {
+	margin-top: 0;
+}
+.jul_cell_wrap {
+	display: inline-block;
+	width: 16.666%;
+	/*max-width: 150px;*/
+}
+.jul_cell {
+	text-align: center;
+	margin-left: 10px;
+
+	background: #222222;
+	border-radius: 3px;
+
+	position: relative;
+	opacity: 0.7;
+}
+.jul_cell_wrap:first-child .jul_cell {
+	/*margin-left: 0;*/
+}
+.jul_cell:hover,
+.jul_cell.hover {
+	opacity: 1;
+}
+.jul_cell h1 {
+	line-height: 50px;
+	font-size: 22px;
+	font-weight: normal;
+	margin: 0;
+	padding: 0;
+	color: inherit;
+}
+.jul_cell.no_day,
+.jul_cell.ahead {
+	background-color: #151515;
+}
+.jul_cell.no_day h1,
+.jul_cell.ahead h1 {
+	color: #888;
+}
+.jul_cell.today {
+	background-color: #AE1B1B;
+	cursor: pointer;
+}
+.jul_cell.today h1 {
+	color: #FFF;
+}
+
+.jul_data {
+	display: none;
+	position: absolute;
+	left: 10px;
+	top: 40px;
+	width: 240px;
+
+	background: rgba(30, 30, 30, 0.9);
+	padding: 0 10px;
+	border-radius: 3px;
+
+	z-index: 5;
+	text-align: left;
+}
+.no_day .jul_data,
+.ahead .jul_data {
+	width: auto;
+	white-space: nowrap;
+}
+.jul_cell.ahead:hover .jul_data,
+.jul_cell.no_day:hover .jul_data,
+.jul_cell.prev:hover .jul_data,
+.jul_cell.hover .jul_data {
+	display: block;
+}
+
+.jul_data .question {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.jul_notes {
+	margin-top: 20px;
+	text-align: center;
+	color: #666;
+	font-style: italic;
+}
+.jul_notes p {
+	margin: 3px 0;
+}

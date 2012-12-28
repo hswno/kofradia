@@ -1,0 +1,125 @@
+/*
+ * CSS fil for avissystemet
+ * &copy; Kofradia
+ */
+
+/*
+ * Template: grunnstil
+ */
+
+.ffn_template {
+	width: 620px;
+	margin: 10px auto;
+}
+.ffn_template_logo {
+	text-align: center;
+}
+.ffn_template_ffna {
+	margin: 10px 0 0 0;
+	border: 1px solid #333333;
+	padding: 1px;
+	overflow: hidden;
+}
+.ffn_template_title {
+	line-height: 13px;
+	padding: 3px 5px 2px;
+	color: #BBBBBB;
+	background: url(../static/firma/avis_tittel.png) top left #282828;
+}
+.ffn_template_text {
+	padding: 5px;
+	background-color: #1C1C1C;
+	margin: 1px 0;
+	color: #BBBBBB;
+}
+.ffn_template_u {
+	line-height: 13px;
+	padding: 3px 5px 2px;
+	text-align: right;
+	color: #888888;
+	background: url(../static/firma/avis_av.png) top left #1E1E1E;
+}
+.ffn_template_ffna_example {
+	opacity: 0.3;
+}
+
+/*
+ * Template: template1
+ * top, left, center, right, bottom
+ */
+.ffn_template_template1 .ffn_template_left {
+	float:  left;
+	width: 150px;
+}
+.ffn_template_template1 .ffn_template_group_right {
+	float: right;
+	width: 460px;
+}
+.ffn_template_template1 .ffn_template_center {
+	float: left;
+	width: 300px;
+}
+.ffn_template_template1 .ffn_template_right {
+	float: right;
+	width: 150px;
+}
+
+/*
+ * Template: template2
+ * top, left, right, bottom
+ */
+
+.ffn_template_template2 .ffn_template_left {
+	float:  left;
+	width: 50%;
+}
+.ffn_template_template2 .ffn_template_left .ffn_template_ffna {
+	margin-right: 5px;
+}
+.ffn_template_template2 .ffn_template_right {
+	float: right;
+	width: 50%;
+}
+.ffn_template_template2 .ffn_template_right .ffn_template_ffna {
+	margin-left: 5px;
+}
+
+/*
+ * Template: template3
+ * top, left, right, bottom
+ */
+
+.ffn_template_template3 .ffn_template_left {
+	float:  left;
+	width: 150px;
+}
+.ffn_template_template3 .ffn_template_left .ffn_template_ffna {
+	margin-right: 5px;
+}
+.ffn_template_template3 .ffn_template_right {
+	float: right;
+	width: 470px;
+}
+.ffn_template_template3 .ffn_template_right .ffn_template_ffna {
+	margin-left: 5px;
+}
+
+/*
+ * Template: template4
+ * top, left, right, bottom
+ */
+
+.ffn_template_template4 .ffn_template_left {
+	float:  left;
+	width: 470px;
+}
+.ffn_template_template4 .ffn_template_left .ffn_template_ffna {
+	margin-right: 5px;
+}
+.ffn_template_template4 .ffn_template_right {
+	float: right;
+	width: 150px;
+}
+.ffn_template_template4 .ffn_template_right .ffn_template_ffna {
+	margin-left: 5px;
+}

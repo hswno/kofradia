@@ -1,0 +1,31 @@
+/*
+ * CSS for anti-bot filen
+ * Henrik Steen
+ */
+
+#antibot {
+	width: 309px;
+	/*border: 1px solid #488C9F;*/
+	background-color: #161616;
+	margin-left: auto;
+	margin-right: auto;
+	padding-bottom: 1px;
+	padding-left: 1px;
+}
+.antibot_row { overflow: hidden }
+.antibot_col1, .antibot_col2, .antibot_col3 {
+	float: left;
+	width: 92px;
+	background-color: #222222;
+	margin-right: 1px;
+	margin-top: 1px;
+	padding: 5px;
+	height: 60px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 0px;
+	position: relative;
+}
+
+/* Sørg for at checkboksene er over bildene når Javascript ikke er aktivert */
+#antibot input { position: absolute; z-index: 100; top: 5px; left: 5px; padding: 3px }

@@ -1,0 +1,108 @@
+/*
+ * CSS for Kofradia
+ *
+ * Beskyttet av åndsverkloven
+ * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ *
+ * Copyright (c) 2011 All rights reserved
+ */
+
+body {
+	/*color: #d3d2d2;*/
+}
+.login_topcontent {
+	margin: 0 10px 20px;
+}
+
+
+/**
+ * Logg inn skjemaet
+ */
+.login_box {
+	width: 220px;
+	margin-left: 10px;
+	float: left;
+}
+.login_box .guest_content {
+	padding: 1px 20px 10px 20px;
+}
+.login_box p {
+	/*margin: 10px 20px;*/
+}
+.login_box input[type=text], .login_box input[type=password] {
+	outline: none;
+	background: #282624;
+	border: solid 1px #3a3737;
+	color: #f1f0f0;
+	width: 150px;
+	padding: 5px;
+	margin-top: 5px;
+}
+.login_box input[type=checkbox], .login_box input[type=radio] {
+	margin-top: 10px;
+}
+/*.login_box button {
+	background: #2c2b29;
+	color: #d3d2d2;
+	border: 1px solid #363432;
+	font-size: 12px;
+}*/
+.login_box input[type=submit] {
+	margin: 10px 10px 10px 20px;
+}
+
+
+/**
+ * Lenkeboks
+ */
+.login_info {
+	float: left;
+	width: 150px;
+	margin-left: 20px;
+	margin-bottom: 20px;
+}
+
+
+/**
+ * Siste hendelser
+ */
+.login_actions_box {
+	width: 510px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	float: right;
+	clear: right;
+}
+.login_actions_box p {
+	margin: 5px 0;
+}
+.login_actions_box .time {
+	color: #6d6c6b;
+}
+.login_actions_box .guest_content {
+	padding-bottom: 5px;
+}
+.login_actions_box p.last {
+	text-align: right;
+	font-size: 8pt;
+	font-style: italic;
+}
+
+
+/**
+ * Beste ranker
+ */
+.login_ranker {
+	width: 340px;
+	margin: 0 10px 20px 0;
+	float: right;
+}
+.login_ranker .ranklist_box { background-color: transparent; overflow: visible }
+.login_ranker .ranklist_box .rp_familie {
+	bottom: -3px;
+	right: 0;
+}
+.login_ranker .clear {
+	display: block;
+	clear: both;
+}

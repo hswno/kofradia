@@ -1,0 +1,215 @@
+/*
+
+Kofradia Doc
+
+*/
+
+body {
+	background-color: #EEEEEE;
+	padding: 0;
+	font-size: 12px;
+	color: #222222;
+	background-image: url(../../static/other/doc_bg.png);
+	background-repeat: repeat-x;
+}
+
+#doc_header {
+	margin: 70px 0 0 0;
+	padding: 0 10px 2px 10px;
+	border: none;
+	background-color: transparent;
+}
+#doc_header a {
+	font-size: 25px;
+	font-weight: normal;
+	color: #333;
+	text-decoration: none;
+}
+#doc_header a:hover { color: #000 }
+#doc_header a:hover:after { content: " \BB" }
+
+#doc_userinfo, #doc_crew, #doc_crewm {
+	position: absolute;
+	right: 0;
+	top: 0;
+	margin: 0;
+	padding: 5px;
+	height: 13px;
+	font-size: 11px;
+	color: #888888;
+	border-left: 1px solid #DDD;
+	border-bottom: 1px solid #DDD;
+	background-color: #FFF;
+	opacity: 0.7;
+}
+#doc_userinfo:hover, #doc_crew:hover, #doc_crewm:hover {
+	opacity: 1;
+}
+#doc_crew {
+	height: auto;
+	top: 23px;
+	border-top: 1px solid #DDD;
+}
+#doc_crewm {
+	left: 0;
+	right: auto;
+	height: auto;
+	border-left: 0;
+	border-right: 1px solid #DDD;
+	overflow: hidden;
+}
+#doc_crewm .link_box { float: left; margin: 0 0 0 5px }
+#doc_crewm p { margin: 0 0 0 5px; float: left; border-left: 1px solid #CCC; padding-left: 5px }
+#doc_crewm p.first { border: 0; padding-left: 0 }
+
+#doc_content {
+	background-color: #FFFFFF;
+	padding: 10px;
+	opacity: 0.90;
+}
+/*.trident #doc_content {
+	overflow: hidden;
+}*/
+
+#doc_footer {
+	text-align: right;
+	padding: 5px;
+}
+#doc_footer p { margin: 0 }
+#doc_footer_left {
+	float: left;
+	font-size: 10px;
+	color: #AAA;
+	text-align: left;
+}
+#doc_footer a {
+	display: block;
+	margin: 0 0 0 auto;
+	width: 164px;
+	height: 28px;
+	background: url(../../static/other/hsw_logo_footer.png) no-repeat;
+}
+#doc_footer a:hover {
+	background-position: 0 -28px;
+}
+#doc_footer a span {
+	display: none;
+}
+
+
+/* headings */
+h1, h2, h3, h4 {
+	color: #222222;
+}
+h2 {
+	color: #333;
+	text-decoration: underline;
+}
+h3 {
+	font-weight: bold;
+}
+
+/* linker */
+a {
+	color: #0479D0;
+	text-decoration: underline;
+}
+a:hover {
+	color: #666666;
+	text-decoration: none;
+}
+
+
+/* farger for utseende (pga. lys bakgrunn) */
+.border { border: 1px solid #555555 }
+div.hr { border-bottom: 1px dashed #AAAAAA }
+
+.error_box { background-color: #BB6666; color: #FFF }
+.info_box { background-color: #668899; color: #FFF }
+
+/* advarsel/varsel felt */
+.warning, .information {
+	background-color: #BB6666;
+	color: #FFF;
+}
+.information {
+	background-color: #668899;
+	color: #FFF;
+}
+
+.table { border-left: 0; border-top: 0; font-size: 12px }
+.table th, .table td { border-color: #FAFAFA; border-color: #FAFAFA }
+.table th, .table thead td { background-color: #BBB }
+.table tbody th { color: #444444 }
+.table thead td { background-color: #AFAFAF }
+.table thead th { color: #444444 }
+.table thead td { color: #666666 }
+
+.table td { background-color: #EEEEEE }
+.table tr.color td { background-color: #F3F3F3 }
+.table td tr.color td { background-color: #A5A5A5 }
+.table tr.highlight td { background-color: #C6CCCC }
+tr.spacer td { background-color: #DDDDDD }
+.table tr.color2_0 td { background-color: #B7B7B7 }
+.table tr.color2_1 td { background-color: #BDBDBD }
+
+.profile_link { padding: 3px; margin: -3px }
+/*.profile_link:hover { background-color: #888 }*/
+
+/*.status_box, .link_box { color: #111111 }
+.status_box { border: 1px dashed #333333; background-color: #DDDDDD }
+
+.link_box a { border: 1px dashed #3300FF; background-color: #D3CBEB; color: #111111 }
+.link_box a:hover { border: 2px solid #3300FF }
+.link_box.inactive a { border-color: #333333; background-color: #DDDDDD }
+.link_box.inactive a:hover { border-color: #333333; background-color: #DDDDDD }*/
+
+.link_box { width: 150px }
+.link_box a { background-color: #FAFAFA; color: #333; border-color: #444 }
+.link_box a:hover { background-color: #F3F3F3; color: #000; border-color: #888 }
+
+/** Skrivefelt */
+input.styled, textarea, select {
+	border: 1px solid #CCCCCC;
+	background-color: #FFFFFF;
+	color: #111111;
+}
+input:focus, textarea:focus, select:focus {
+	border-color: #999999;
+}
+select { border-width: 2px }
+
+.button, .button_hover { border-color: #BBBBBB #CCCCCC #CCCCCC #BBBBBB !important; background-color: #DDD !important; color: #000 !important }
+.button_hover, .button:hover { border-color: #AAAAAA #BBBBBB #BBBBBB #AAAAAA !important; background-color: #77C4FD !important; color: #333333; text-decoration: none !important }
+.red .button, .red .button_hover, .red .button:hover { background-color: #3E0909 !important; border-color: #610605 #3E0909 #3E0909 #610605 !important }
+.red .button_hover, .red .button:hover { border-color: #750502 #610605 #610605 #750502 !important }
+.green .button, .green .button_hover, .green .button:hover { background-color: #273D08 !important; border-color: #395F04 #273D08 #273D08 #395F04 !important }
+.green .button_hover, .green .button:hover { border-color: #427302 #395F04 #395F04 #427302 !important }
+
+.profile_box { color: #EEE }
+.profile_box a { color: #AAAAAA }
+.profile_box a:hover { color: #FFFFFF }
+
+.h_right { color: #777777 }
+.h_right a { color: #777777 }
+.h_right a:hover { color: #555555 }
+.dark { color: #777777}
+.color { background-color: #CACACA !important}
+.highlight { background-color: #FAFAFA !important}
+
+.section { border: 2px solid #BBBBBB; background-color: #D5D5D5 }
+.section h1, .section h2, .section h3, .section h4, .section h5 { background-color: #BBBBBB; color: #444444 }
+.section h3 { background-color: #C5C5C5 }
+.section h4 { background-color: #C5C5C5; border-top: 2px solid #BBBBBB }
+.section .h1l { color: #777777 }
+.section .table thead th { background-color: #B5B5B5 }
+
+dt { color: #333333 }
+.dd_light dd { color: #555555}
+.dd_light dd span { color: #AAAAAA}
+
+.progressbar { background-color: #777777}
+.progressbar_v { background-color: #333333}
+.progressbar .progress { background-color: #333333 }
+.progressbar_v .progress { background-color: #777777 }
+.progressbar p, .progressbar_v p { color: #FFFFFF }

@@ -1,0 +1,183 @@
+/*
+ * CSS for Kofradia
+ *
+ * Beskyttet av åndsverkloven
+ * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ *
+ * Copyright (c) 2011 All rights reserved
+ */
+
+html, body {
+	min-width: 770px;
+	max-width: 1100px;
+	margin: 0 auto;
+}
+body {
+	background: url('../../static/themes/kofradia/login_bg.png') center top no-repeat #0c0c0c;
+}
+
+
+/*
+ * Header
+ */
+header {
+	height: 145px;
+	margin: 0 10px;
+	position: relative;
+}
+header h1 {
+	background: url('../../static/themes/kofradia/login_logo.png') center left no-repeat;
+	height: 116px;
+	width: 356px;
+	float: left;
+	margin: 15px 0 0 0;
+}
+
+header h1 a {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+header h1 a span { display: none }
+
+header #facebook {
+	width: 124px;
+	position: absolute;
+	top: 65px;
+	right: 15px;
+}
+header #facebook #num {
+	background: url('../../static/themes/kofradia/login_fblike.png') center left no-repeat;
+	padding-left: 22px;
+	color: #FFFFFF;
+	font-size: 11pt;
+}
+header #facebook #sub {
+	color: #605e5d;
+	font-size: 8pt;
+	margin-top: -10px;
+}
+header #facebook #sub a {
+	color: inherit;
+	text-decoration: none;
+}
+header #facebook #sub a:hover {
+	border-bottom: dotted 1px;
+}
+
+
+/**
+ * Meny
+ */
+.guest_menu {
+	clear: both;
+	float: left;
+	width: 150px;
+	overflow: hidden;
+	margin-left: 10px;
+}
+.guest_menu ul:first-child {
+	margin-top: 0;
+}
+
+
+/**
+ * Hovedinnhold
+ */
+#guest_page {
+	margin-left: 180px;
+	margin-right: 10px;
+}
+#guest_simple_page {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.guest_page_box {
+	background: rgb(20, 20, 20);
+	background: rgba(54, 54, 54, 0.13);
+}
+.guest_page_box h1.guest_title, .node_a_path {
+	background: rgb(40, 40, 40);
+	background: rgba(54, 54, 54, 0.42);
+	font-size: 11pt;
+	font-weight: bold;
+	padding: 5px 0px 5px 10px;
+	margin: 0 0 10px 0;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.guest_page_box .guest_content {
+	padding: 0 10px 1px;
+}
+
+
+/**
+ * Footer
+ */
+footer {
+	clear: both;
+	margin: 20px 10px;
+	text-align: center;
+	overflow: hidden;
+}
+footer #first {
+	font-size: 8pt;
+	color: #FFFFFF;
+}
+footer #first a {
+	color: inherit;
+	text-decoration: none;
+}
+footer #first a:hover {
+	text-decoration: underline;
+}
+footer #first .help {
+	background: url('../../static/themes/kofradia/login_help.png') center left no-repeat;
+	padding-left: 14px;
+	margin: 0 7px;
+}
+footer #first .forgot {
+	background: url('../../static/themes/kofradia/login_forgot.png') center left no-repeat;
+	padding-left: 22px;
+	margin: 0 7px;
+}
+footer #first .login {
+	background: url('../../static/themes/kofradia/login_login.png') center left no-repeat;
+	padding-left: 16px;
+	margin: 0 7px;
+}
+footer #first .register {
+	background: url('../../static/themes/kofradia/login_register.png') center left no-repeat;
+	padding-left: 15px;
+	margin: 0 7px;
+}
+footer #first .contact {
+	background: url('../../static/themes/kofradia/login_contact.png') center left no-repeat;
+	padding-left: 17px;
+	margin: 0 7px;
+}
+footer #first .frontpage {
+	/*background: url('../../static/themes/kofradia/login_login.png') center left no-repeat;
+	padding-left: 17px;*/
+	margin: 0 7px;
+}
+footer #last {
+	border-top-color: #48433e;
+	border-top-width: 1px;
+	border-top-style: dotted;
+	padding-top: 5px;
+	font-size: 8pt;
+	color: #706c68;
+	width: 350px;
+	margin: 0 auto;
+}
+footer #last a {
+	color: inherit;
+	text-decoration: none;
+	margin: 0 10px 0 10px;
+}
+footer #last a:hover {
+	text-decoration: underline;
+}
+footer.blokk {
+	width: 430px;
+}

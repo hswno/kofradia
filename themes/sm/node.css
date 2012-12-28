@@ -1,0 +1,187 @@
+/*
+ * CSS for Kofradia
+ *
+ * Beskyttet av åndsverkloven
+ * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ *
+ * Copyright (c) 2011 All rights reserved
+ */
+
+html, body {
+	min-width: 700px;
+	max-width: 900px;
+	font-size: 13px;
+}
+
+
+/**
+ * Header med brukerinfo
+ */
+.node_header {
+	position: relative;
+	margin: 0 10px;
+	z-index: 2;
+}
+
+.node_header_r {
+	float: right;
+	text-align: right;
+}
+.node_header_r p {
+	margin: 0;
+	padding: 5px 0 0 0;
+}
+
+#node_crewm {
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+#node_crewm .link_box { float: left; margin: 0 0 0 5px }
+#node_crewm p { margin: 0 0 0 5px; float: left; /*border-left: 1px solid #CCC;*/ padding-left: 5px }
+#node_crewm p.first { border: 0; padding-left: 0 }
+
+
+
+
+
+/*.profile_link { padding: 3px; margin: -3px }*/
+
+/*.link_box { width: 150px }
+.link_box a { background-color: #FAFAFA; color: #333; border-color: #444 }
+.link_box a:hover { background-color: #F3F3F3; color: #000; border-color: #888 }*/
+
+/**
+ * Wrapper
+ */
+.node_wrap {
+	background: rgb(20, 20, 20);
+	background: rgba(54, 54, 54, 0.13);
+	margin: 0 10px;
+	padding-bottom: 10px;
+}
+
+
+/**
+ * Hvor vi er
+ */
+.node_a_path {
+	color: #BBBBBB;
+}
+.node_a_path ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	overflow: hidden;
+}
+.node_a_path ul li {
+	margin: 0 5px 0 0;
+	padding: 0;
+	float: left;
+	/*font-size: 11px;*/
+}
+.node_a_path a {
+	text-decoration: none;
+	color: #BBB;
+}
+.node_a_path a:hover {
+	text-decoration: underline;
+	color: #BBB;
+}
+
+/**
+ * Seperatorer
+ */
+.node_a_leftsep, .node_a_rightsep {
+	border-left: 1px dotted #333;
+	position: absolute;
+	height: 100%;
+	width: 1px;
+}
+.node_a_leftsep { right: -1px }
+.node_a_rightsep { left: -1px }
+
+
+/**
+ * Menyen
+ */
+.node_a_left {
+	float: left;
+	width: 22%;
+	position: relative;
+}
+.node_a_menu {
+	padding: 0 10px;
+	overflow: hidden;
+}
+.node_a_menu ul {
+	margin: 0;
+	padding: 0 0 0 0;
+	list-style-type: none;
+}
+.node_a_menu ul ul {
+	padding: 4px 0 0 0;
+}
+.node_a_menu ul ul li {
+	background-image: url(/static/other/menu_li.gif);
+	/*background-color: #EEE;*/
+	background-position: left top;
+	background-repeat: no-repeat;
+	padding: 2px 0 2px 10px;
+}
+.node_a_menu ul li {
+	margin: 0;
+	padding: 2px 0;
+	font-size: 12px;
+}
+.node_a_menu li a {
+	color: #BBB;
+	text-decoration: none;
+}
+.node_a_menu li a:hover {
+	color: #BBB;
+	text-decoration: underline;
+}
+.node_a_menu a.active {
+	/*font-weight: bold;*/
+	background-color: #DDD;
+	color: #222;
+	padding: 2px;
+	margin: -2px;
+}
+.node_a_menu a.active:hover {
+	color: #222;
+}
+
+
+/**
+ * Hovedinnhold
+ */
+.node_a_right {
+	float: left;
+	width: 78%;
+	position: relative;
+}
+
+.node_a_content {
+	padding: 0 10px;
+}
+.node_a_content h1 {
+	margin-top: 0;
+	margin-bottom: 0;
+	font-size: 22px;
+	color: #FFF;
+}
+.node_a_content h2 {
+	font-size: 18px;
+	margin-top: 20px;
+	margin-bottom: 0;
+	border-top: 1px solid #333;
+	padding-top: 20px;
+	color: #FFF;
+}
+.node_a_content h3 {
+	font-size: 14px;
+	margin-top: 20px;
+	margin-bottom: 5px;
+	color: #FFF;
+}
