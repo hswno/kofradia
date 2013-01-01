@@ -205,10 +205,14 @@ class theme_sm_default
 	<div id="default_bottom_2">
 		<p>Script: '.round(microtime(true)-SCRIPT_START-ess::$b->db->time, 4).' sek - Database: '.round(ess::$b->db->time, 4).' sek ('.ess::$b->db->queries.' spørring'.(ess::$b->db->queries == 1 ? '' : 'er').')<span id="js_time"></span></p>';
 		
-		#$revision = self::get_revision_info();
-		
-		#echo '
-		#<p>Revisjon '.$revision['revision'].' oppdatert '.$revision['revision_time'].'.</p>';
+		$revision = self::get_revision_info();
+		if ($revision) {
+			echo '
+		<p>Versjon <a href="https://github.com/hswno/kofradia/commit/'.$revision['commit'].'" title="'.htmlspecialchars($revision['message']).'">'.substr($revision['commit'], 0, 8).'</a> oppdatert '.ess::$b->date->get($revision['date'])->format().'.</p>';
+		} else {
+			echo '
+		<p>Versjonsinformasjon er utilgjengelig.</p>';
+		}
 		
 		echo '
 		<p>Tid og dato ved visning: <b>'.self::$date_now->format(date::FORMAT_SEC).'</b>.</p>
@@ -778,27 +782,38 @@ class theme_sm_default
 	
 	protected static function get_revision_info()
 	{
-		// finn ut revisjon etc
+		$branch = "";
+
+		// hent informasjon fra Git
+		$data = @file_get_contents(ROOT."/.git/HEAD");
+		if (!$data) return null;
+
+		if (substr($data, 0, 3) == "ref") {
+			$ref = trim(substr($data, 5));
+			$commit = @file_get_contents(ROOT."/.git/$ref");
+			$branch = basename($ref);
+		} else {
+			$commit = trim($data);
+			$branch = $commit;
+		}
+
+		if (!$commit) return null;
+
+		// hent tidspunkt og melding
+		$last_rev = cache::fetch("gitlog_last_rev");
+		$last_info = cache::fetch("gitlog_last_info");
+		if (!$last_rev || $last_rev != $commit) {
+			$res = shell_exec("git log -1 --format=\"%ct %s\"");
+			$last_info = sscanf($res, "%d %[^$]s");
+			cache::store("gitlog_last_info", $last_info);
+		}
+
 		$r = array(
-			"revision" => "ukjent",
-			"revision_time" => "ukjent"
+			"branch" => $branch,
+			"commit" => $commit,
+			"date" => $last_info[0],
+			"message" => $last_info[1]
 		);
-		/*if (MAIN_SERVER)
-		{
-			$content = @file_get_contents(ROOT."/.svn/entries");
-			
-			// hent linje 10 og 11
-			$lines = explode("\n", $content, 12);
-			$r['revision'] = intval($lines[10]);
-			if ($r['revision'] == 0)
-			{
-				$r['revision'] = "ukjent";
-			}
-			else
-			{
-				$r['revision_time'] = ess::$b->date->parse($lines[9])->format();
-			}
-		}*/
 		
 		return $r;
 	}
