@@ -1331,6 +1331,14 @@ div.quote div.quote span.quote_time {
 		position: relative;
 	}
 	#default_header_img {
+		width: 356px;
+		height: 116px;
+		position: absolute;
+		left: 84px;
+		top: 68px;
+		background: url(../../static/themes/kofradia/header.png) no-repeat;
+	}
+	.juleheader #default_header_img {
 		width: 376px;
 		height: 184px;
 		position: absolute;

@@ -51,12 +51,18 @@ class theme_sm_default
 	{
 		/*<div class="default_hidden" id="content"><a href="#top">Til toppen av siden</a></div>
 				<div class="default_hidden"><a href="#content">Til toppen av innholdet</a></div>*/
+
+		$extra_classes = '';
+
+		// vise juleheader?
+		$d = ess::$b->date->get();
+		if ($d->format("m") == 12) $extra_classes .= ' juleheader';
 		
 		echo '<!DOCTYPE html>
 <html lang="no">
 <head>
 <title>'.ess::$b->page->generate_title().'</title>'.ess::$b->page->generate_head().'</head>
-<body class="'.self::$class_browser.self::$class_crew.(self::$locked ? ' is_lock' : '').'" id="default_th">'.ess::$b->page->body_start.'
+<body class="'.self::$class_browser.self::$class_crew.(self::$locked ? ' is_lock' : '').$extra_classes.'" id="default_th">'.ess::$b->page->body_start.'
 	<!--<div class="default_hidden print" id="top">
 		<h1><a href="'.ess::$s['absolute_path'].'">kofradia.no</a></h1>
 		<p class="default_hidden"><a href="#content">Til innholdet</a></p>
