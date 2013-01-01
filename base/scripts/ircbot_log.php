@@ -47,13 +47,13 @@ $irc_networks = array(
 
 */
 
+require "../essentials.php";
+
 if (!isset($irc_networks[$network]))
 {
 	die("Invalid network $network.\n");
 }
 $network = $irc_networks[$network];
-
-require "../essentials.php";
 
 // sørg for at det ikke er noen time limit
 @set_time_limit(0);
