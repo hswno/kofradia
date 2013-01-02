@@ -50,7 +50,7 @@ class page_banken extends pages_player
 		$this->auth_verify();
 		
 		// logge ut?
-		if (isset($_GET['logout']))
+		if (isset($_GET['logout']) && !isset(login::$extended_access['authed']))
 		{
 			login::data_set("banken_last_view", 0);
 			ess::$b->page->add_message("Du er nå logget ut av banken.");
@@ -334,7 +334,7 @@ class page_banken extends pages_player
 			$hash = password::hash($pass1, null, "bank_auth");
 			
 			// kontroller det gamle passord
-			if (!password::verify_hash($pass0, $this->up->user->data['u_bank_auth'], "bank_auth"))
+			if (isset(login::$extended_access['authed']) && !password::verify_hash($pass0, $this->up->user->data['u_bank_auth'], "bank_auth"))
 			{
 				ess::$b->page->add_message("Det gamle passordet var ikke korrekt.", "error");
 			}
@@ -394,11 +394,12 @@ class page_banken extends pages_player
 	<div class="bg1">
 		<boxes />
 		<p class="c"><a href="banken">Tilbake</a></p>
-		<form action="" method="post">
-			<dl class="dd_right dl_2x">
+		<form action="" method="post">'.(isset(login::$extended_access['authed']) ? '
+			<p>Du er logget inn med utvidere tilganger. Dette passordet brukes kun hvis du er logget ut av utvidere tilganger.</p>' : '').'
+			<dl class="dd_right dl_2x">'.(!isset(login::$extended_access['authed']) ? '
 				<dt>Nåværende passord</dt>
 				<dd><input type="password" class="styled w100" name="passord_old" id="passold" /></dd>
-				
+				' : '').'
 				<dt>Nytt Passord</dt>
 				<dd><input type="password" class="styled w100" name="passord_1" /></dd>
 				
@@ -1021,8 +1022,8 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 	<p class="h_left">
 		<a href="'.ess::$s['rpath'].'/node/31">Hjelp</a>
 	</p>
-	<p class="h_right">
-		<a href="banken?logout">Logg ut av banken</a>
+	<p class="h_right">'.(!isset(login::$extended_access['authed']) ? '
+		<a href="banken?logout">Logg ut av banken</a>' : '').'
 		<a href="banken?authc">Endre pass</a>
 	</p>
 	<div class="bg1" style="padding: 0 15px">
