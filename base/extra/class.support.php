@@ -897,8 +897,8 @@ td.support_important {
 		{
 			if ($row['up_access_level'] == 4)
 				$level = 3;
-			elseif ($row['up_access_level'] == 11)
-				$level = 6;
+			elseif ($row['up_access_level'] == 6)
+				$level = 3;
 			elseif ($row['up_access_level'] == 8)
 				$level = 7;
 			else
