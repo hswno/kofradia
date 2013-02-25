@@ -447,7 +447,7 @@ class page_forsiden extends pages_player
 				<span class="rp_up">'.game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']).'</span><br />
 				<span class="rp_rank">'.$rank['name'].'</span>
 			</span>
-			<span class="rp_familie">'.(!isset($familier[$row['up_id']]) ? '<i class="rp_no_familie">Ingen familie</i>' : implode(", ", $familier[$row['up_id']])).'</span>
+			<span class="rp_familie">'.(!isset($familier[$row['up_id']]) ? '<i class="rp_no_familie">Ingen broderskap</i>' : implode(", ", $familier[$row['up_id']])).'</span>
 		</p>';
 			
 			if ($e == 15) break;
