@@ -3009,7 +3009,9 @@ class ff
 		
 		$cap = $this->get_bullets_capacity();
 		$bullets = $this->params->get("bullets", 0);
-		
+
+		$up->lock();
+
 		$up_cap = $up->weapon->data['bullets'];
 		$up_bullets = $up->data['up_weapon_bullets'];
 		$up_bullets_a = $up->data['up_weapon_bullets_auksjon'];
@@ -3017,12 +3019,14 @@ class ff
 		// har vi kulene?
 		if ($num > $bullets)
 		{
+			ess::$b->db->commit();
 			return "missing";
 		}
 		
 		// er ikke plass?
 		if ($up_bullets + $up_bullets_a + $num > $up_cap)
 		{
+			ess::$b->db->commit();
 			return "full";
 		}
 		
@@ -3033,7 +3037,7 @@ class ff
 			$this->params->commit();
 			return "missing";
 		}
-		$this->params->update("bullets", $this->params->get("bullets") - $num, true);
+		$this->params->update("bullets", $this->params->get("bullets") - $num);
 		
 		// gi til spilleren
 		ess::$b->db->query("
@@ -3041,6 +3045,10 @@ class ff
 			SET up_weapon_bullets = up_weapon_bullets + $num
 			WHERE up_id = ".$up->id);
 		$up->data['up_weapon_bullets'] += $num;
+
+		$this->params->commit(false);
+		ess::$b->db->commit();
+		$this->params->commit(); // setter intern status i params_update til ulåst
 		
 		// FF-logg
 		$this->add_log("bullets_out", "{$up->id}:$num".($real_up ? ":".$real_up->id : ""));
