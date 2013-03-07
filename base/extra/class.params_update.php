@@ -45,9 +45,11 @@ class params_update extends params
 		// allerede låst?
 		if ($this->locked) return;
 		$this->locked = true;
-		
+
+		// er ikke låst i databasemodulen?
 		// lås raden og hent friske verdier
-		ess::$b->db->begin();
+		if (!ess::$b->db->transaction) ess::$b->db->begin();
+		
 		$result = ess::$b->db->query("SELECT $this->link_column FROM $this->link_table WHERE $this->link_where LIMIT 1 FOR UPDATE");
 		
 		// erstatt med friske verdier
