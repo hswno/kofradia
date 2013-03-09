@@ -8,7 +8,7 @@ global $_base, $__server;
  */
 
 // hent konkurranser som skal avsluttes
-$result_faf = $_base->db->query("SELECT fff_id, fff_time_expire, fff_required_points FROM ff_free WHERE fff_time_expire <= ".time()." AND fff_active != 0");
+$result_faf = $_base->db->query("SELECT fff_id, fff_time_expire, fff_required_points FROM ff_free WHERE fff_time_expire <= ".time()." AND fff_active = 1");
 
 while ($faf = mysql_fetch_assoc($result_faf))
 {
