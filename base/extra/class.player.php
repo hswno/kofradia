@@ -402,6 +402,9 @@ class player
 	 */
 	public static function increase_rank_static($points_change, $up, $use_login = false, $silent = null, $points_change_rel = null, $oppdrag_name = null)
 	{
+		// ikke behandle hvis antall poeng ikke endres
+		if (!$points_change) return;
+
 		// hent ut spillerid
 		if (!is_numeric($up) && (!is_object($up) || !($up instanceof player))) throw new HSException("Ukjent spiller.");
 		if (is_numeric($up))
