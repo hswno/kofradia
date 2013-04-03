@@ -76,7 +76,7 @@ $search_ranks_query = array();
 foreach ($_REQUEST as $key => $dummy)
 {
 	$match = false;
-	if (preg_match("/^r(\\d+)$/D", $key, $match))
+	if (preg_match("/^r(\\d+)$/Du", $key, $match))
 	{
 		if (isset($search_ranks[$match[1]]))
 		{

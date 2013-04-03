@@ -90,7 +90,7 @@ class scheduler
 				
 				// sjekk for gjentakelser (*/x)
 				$matches = false;
-				if (preg_match("/^\\*\\/(\\d+)$/D", $u, $matches))
+				if (preg_match("/^\\*\\/(\\d+)$/Du", $u, $matches))
 				{
 					$n = intval($matches[1]);
 					if ($n >= 0 && $n < $max)

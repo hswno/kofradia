@@ -155,7 +155,7 @@ class page_min_side_user
 		
 		if (page_min_side::$active_user->data['u_created_referer'] != "")
 		{
-			$referer = preg_replace("/\\|/", "\n", page_min_side::$active_user->data['u_created_referer'], 1);
+			$referer = preg_replace("/\\|/u", "\n", page_min_side::$active_user->data['u_created_referer'], 1);
 			echo '
 							<dt>Henvisning</dt>
 							<dd>'.game::format_data($referer).'</dd>';
@@ -1440,7 +1440,7 @@ www.kofradia.no';
 			foreach ($_GET as $name => $val)
 			{
 				$matches = NULL;
-				if (preg_match("/^f([0-9]+)$/D", $name, $matches) && in_array($matches[1], $tilgjengelig))
+				if (preg_match("/^f([0-9]+)$/Du", $name, $matches) && in_array($matches[1], $tilgjengelig))
 				{
 					$filter[] = $matches[1];
 				}
@@ -3399,7 +3399,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 			{
 				$phone = postval("phone");
 				$log = trim(postval("log"));
-				if (!preg_match("/^47\\d{8}$/D", $phone) && $phone != "")
+				if (!preg_match("/^47\\d{8}$/Du", $phone) && $phone != "")
 				{
 					ess::$b->page->add_message("Ugyldig telefonnummer. Må bestå av 10 tall inkludert 47 først.", "error");
 				}

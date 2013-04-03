@@ -13,7 +13,7 @@ abstract class irc_info
 	{
 		// script for info til IRC (mIRC kaller denne filen)
 		$this->cmd_x = explode(" ", $text, 2);
-		$cmd = preg_replace("/[^a-zA-Z0-9\\_]/", "", $this->cmd_x[0]);
+		$cmd = preg_replace("/[^a-zA-Z0-9\\_]/u", "", $this->cmd_x[0]);
 		
 		// finnes denne funksjonen?
 		if (method_exists($this, "c_" . $cmd))
@@ -68,7 +68,7 @@ abstract class irc_info
 	{
 		$date = $this->cmd_x[1];
 		if (empty($date)) $date = ess::$b->date->get(time())->format("Y-m-d");
-		if (!preg_match("/^200[6-9](-[0-9]{2}){2}$/D", $date))
+		if (!preg_match("/^200[6-9](-[0-9]{2}){2}$/Du", $date))
 		{
 			$this->send_output("Ugyldig inntasting. Syntax: yyyy-mm-dd");
 		}
@@ -798,7 +798,7 @@ abstract class irc_info
 				$contents .= fread($fh, 8192);
 			}
 			
-			if (preg_match("/^false/", $contents) || $contents == "")
+			if (preg_match("/^false/u", $contents) || $contents == "")
 			{
 				$this->send_output("SMafia.no er åpent.");
 			}
@@ -897,7 +897,7 @@ abstract class irc_info
 					$n_year = $date->format("Y");
 					$time = $date->format("U");
 					
-					$result = preg_match("/^(.*)-(.*)-(.*)$/D", $row['u_birth'], $info);
+					$result = preg_match("/^(.*)-(.*)-(.*)$/Du", $row['u_birth'], $info);
 					$age = $n_year - $info[1] - (($n_month < $info[2] || ($info[2] == $n_month && $n_day < $info[3])) ? 1 : 0);
 					$left = "";
 					if ($age < 13)
@@ -944,7 +944,7 @@ abstract class irc_info
 					$date = ess::$b->date->get(time());
 					$time = $date->format("U");
 					
-					$result = preg_match("/^(.*)-(.*)-(.*)$/D", $row['u_birth'], $info);
+					$result = preg_match("/^(.*)-(.*)-(.*)$/Du", $row['u_birth'], $info);
 					$date->setTime(0, 0, 0);
 					$date->setDate($info[1], $info[2], $info[3]);
 					$birth = $date->format("U");
@@ -1086,7 +1086,7 @@ abstract class irc_info
 		// minne informasjon
 		$mem = shell_exec("free -t");
 		$matches = false;
-		if (preg_match("/Mem:\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)/", $mem, $matches))
+		if (preg_match("/Mem:\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)/u", $mem, $matches))
 		{
 			$mem_percent = number_format($matches[2]/$matches[1]*100, 1, ",", " ");
 		}

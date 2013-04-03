@@ -109,7 +109,7 @@ class sysreport
 						
 						else
 						{
-							$str .= "\n\t\tparametere:\n".preg_replace("/^/m", "\t\t", preg_replace("/[\r\n]+$/D", "", $args));
+							$str .= "\n\t\tparametere:\n".preg_replace("/^/mu", "\t\t", preg_replace("/[\r\n]+$/Du", "", $args));
 						}
 					}
 				} else { $str .= '()' . $fileinfo; }

@@ -32,17 +32,17 @@ class password
 		switch ($level)
 		{
 			case self::LEVEL_STRONG:
-				if (!preg_match("/[a-zæøå]/", $password))
+				if (!preg_match("/[a-zæøå]/u", $password))
 				{
 					$error |= self::ERROR_NONCAP;
 				}
 				
-				if (!preg_match("/[A-ZÆØÅ]/", $password))
+				if (!preg_match("/[A-ZÆØÅ]/u", $password))
 				{
 					$error |= self::ERROR_CAP;
 				}
 				
-				if (!preg_match("/\\d/", $password))
+				if (!preg_match("/\\d/u", $password))
 				{
 					$error |= self::ERROR_NUM;
 				}

@@ -78,7 +78,7 @@ class page_min_side_stats
 		{
 			$date = $_GET['dato_m'];
 			$matches = false;
-			if (preg_match("/^(20[0-2]\\d)-(0[1-9]|1[0-2])$/D", $date, $matches))
+			if (preg_match("/^(20[0-2]\\d)-(0[1-9]|1[0-2])$/Du", $date, $matches))
 			{
 				$d = ess::$b->date->get();
 				$d->setDate($matches[1], (int)$matches[2], 1);
@@ -116,7 +116,7 @@ class page_min_side_stats
 		if (isset($_GET['dato_d']))
 		{
 			$date = $_GET['dato_d'];
-			if (preg_match("/^(20[0-2]\\d)-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/D", $date, $matches))
+			if (preg_match("/^(20[0-2]\\d)-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/Du", $date, $matches))
 			{
 				$d = ess::$b->date->get();
 				$d->setDate($matches[1], (int)$matches[2], (int)$matches[3]);
@@ -460,7 +460,7 @@ class page_min_side_stats
 		{
 			$date = $_GET['dato_p'];
 			$matches = false;
-			if (preg_match("/^(20[0-2]\\d)-(0[1-9]|1[0-2])$/D", $date, $matches))
+			if (preg_match("/^(20[0-2]\\d)-(0[1-9]|1[0-2])$/Du", $date, $matches))
 			{
 				$d = ess::$b->date->get();
 				$d->setDate($matches[1], (int)$matches[2], 1);

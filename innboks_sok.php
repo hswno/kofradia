@@ -55,7 +55,7 @@ if ($search_from_id == 4)
 	{
 		$name = trim($name);
 		if (empty($name)) continue;
-		if (preg_match('/^[0-9a-zA-Z\-_ ]+$/D', $name))
+		if (preg_match('/^[0-9a-zA-Z\-_ ]+$/Du', $name))
 		{
 			$search_from[4][2][] = $name;
 		}

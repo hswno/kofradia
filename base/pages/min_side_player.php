@@ -963,7 +963,7 @@ a.status_venter:hover { }
 			foreach ($_GET as $name => $val)
 			{
 				$matches = NULL;
-				if (preg_match("/^f([0-9]+)$/D", $name, $matches) && in_array($matches[1], $tilgjengelig))
+				if (preg_match("/^f([0-9]+)$/Du", $name, $matches) && in_array($matches[1], $tilgjengelig))
 				{
 					$filter[] = $matches[1];
 				}
@@ -1804,7 +1804,7 @@ function rp_preview_profile_text()
 				$id = ess::$b->db->insert_id();
 				
 				// lagre bildet
-				$img_navn = preg_replace("[^a-zA-Z0-9\\-_\\. ]", "", page_min_side::$active_player->data['up_name']);
+				$img_navn = preg_replace("/[^a-zA-Z0-9\\-_\\. ]/u", "", page_min_side::$active_player->data['up_name']);
 				if (empty($img_navn)) $img_navn = page_min_side::$active_player->id;
 				$img_navn .= ".$id.png";
 				

@@ -58,7 +58,7 @@ class crewfiles
 		$title = str_replace(" ", "_", $title);
 		
 		// tillatte tegn: a-zA-Z0-9_-.,
-		$title = preg_replace("/[^a-zA-Z0-9_\\-\\.,]/", "", $title);
+		$title = preg_replace("/[^a-zA-Z0-9_\\-\\.,]/u", "", $title);
 		
 		// lowercase
 		$title = strtolower($title);
@@ -182,7 +182,7 @@ class crewfiles
 	public static function filter_filename($filename)
 	{
 		// fjern "ugyldige" tegn
-		return preg_replace("/[\\\\\\/:*?\"<>|]/", "", $filename);
+		return preg_replace("/[\\\\\\/:*?\"<>|]/u", "", $filename);
 	}
 	
 	/**

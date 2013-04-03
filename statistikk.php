@@ -40,7 +40,7 @@ if (MAIN_SERVER)
 	// minneinformasjon
 	$mem = shell_exec("free -bo");
 	$matches = false;
-	if (preg_match_all("/(Mem|Swap):\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)(\\s+(\\d+)\\s+(\\d+)\\s+(\\d+))?/", $mem, $matches, PREG_SET_ORDER))
+	if (preg_match_all("/(Mem|Swap):\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)(\\s+(\\d+)\\s+(\\d+)\\s+(\\d+))?/u", $mem, $matches, PREG_SET_ORDER))
 	{
 		$mem = array(
 			"mem" => array(

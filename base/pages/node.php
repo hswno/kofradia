@@ -24,7 +24,7 @@ class page_node
 			// sjekk node og om den er gyldig
 			array_shift($path);
 			$node_id = $path[0];
-			if (preg_match("/(^0|[^0-9])/", $node_id))
+			if (preg_match("/(^0|[^0-9])/u", $node_id))
 			{
 				// admin?
 				if ($node_id == "a")
@@ -413,13 +413,13 @@ class page_node
 				
 				foreach ($search_list as &$q)
 				{
-					$q = '/(\\P{L}|^)'.preg_replace(array('/([\\/\\\\\\[\\]()$.+?|{}])/', '/\\*\\*+/', '/\\*/'), array('\\\\$1', '*', '\\S*'), $q).'(\\P{L}|$)/i';
+					$q = '/(\\P{L}|^)'.preg_replace(array('/([\\/\\\\\\[\\]()$.+?|{}])/u', '/\\*\\*+/u', '/\\*/u'), array('\\\\$1', '*', '\\S*'), $q).'(\\P{L}|$)/i';
 				}
 				
 				// sett opp søkeliste hvor vi søker med * på slutten av ordene
 				foreach ($search_list2 as &$q)
 				{
-					$q = '/'.preg_replace(array('/([\\/\\\\\\[\\]()$.+?|{}])/', '/\\*\\*+/', '/\\*/'), array('\\\\$1', '*', '\\S*'), $q).'/i';
+					$q = '/'.preg_replace(array('/([\\/\\\\\\[\\]()$.+?|{}])/u', '/\\*\\*+/u', '/\\*/u'), array('\\\\$1', '*', '\\S*'), $q).'/i';
 				}
 				
 				// gå over alle sidene og finn treff
@@ -445,13 +445,13 @@ class page_node
 			$nodes[$row['ni_node_id']]['enheter'][] = $data;
 			
 			// bygg opp plain tekst
-			$plain = preg_replace("/<br[^\\/>]*\\/?>/", "\n", $data);
-			$plain = preg_replace("/(<\\/?(h[1-6]|p)[^>]*>)/", "\n\\1", $plain);
+			$plain = preg_replace("/<br[^\\/>]*\\/?>/u", "\n", $data);
+			$plain = preg_replace("/(<\\/?(h[1-6]|p)[^>]*>)/u", "\n\\1", $plain);
 			$plain = html_entity_decode(strip_tags($plain));
-			$plain = preg_replace("/(^ +| +$|\\r)/m", "", $plain);
-			#$plain = preg_replace("/(?<![!,.\\n ])\\n/", " ", $plain);
-			$plain = preg_replace("/\\n/", " ", $plain);
-			$plain = preg_replace("/  +/", " ", $plain);
+			$plain = preg_replace("/(^ +| +$|\\r)/mu", "", $plain);
+			#$plain = preg_replace("/(?<![!,.\\n ])\\n/u", " ", $plain);
+			$plain = preg_replace("/\\n/u", " ", $plain);
+			$plain = preg_replace("/  +/u", " ", $plain);
 			$plain = trim($plain);
 			$nodes[$row['ni_node_id']]['plain'] .= $plain . " ";
 		}
@@ -889,7 +889,7 @@ class page_node_admin
 				// lagre endringer?
 				if (isset($_POST['destination_node_id']))
 				{
-					$match = preg_match("/^(under_)?(\\d+)$/", postval("destination_node_id"), $matches);
+					$match = preg_match("/^(under_)?(\\d+)$/u", postval("destination_node_id"), $matches);
 					$type = $match && $matches[1] == "under_" ? "under" : "inside";
 					$dest_node_id = $match ? $matches[2] : -1;
 					$parent_node_id = $type == "inside" ? $dest_node_id : nodes::$nodes[$dest_node_id]['node_parent_node_id'];

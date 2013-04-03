@@ -75,7 +75,7 @@ else
 	$result = false;
 	if (!preg_match_all('#<tr.*<td>(.*)<td>(.*)<td>(.*)<td>(.*)
 	<td>(.*)<td>(.*)<td>(.*)<td>(.*)<td>(.*)<td>(.*)
-	<td[^>]*>(?:<font face="Arial,Helvetica" size="-1">)(.*)(?:</font>)<td[^>]*>(?:<font face="Arial,Helvetica" size="-1">)(.*)(?:</font>)<td[^>]*>(?:<font face="Arial,Helvetica" size="-1">)(.*)(?:</font>)#', $data, $result, PREG_SET_ORDER))
+	<td[^>]*>(?:<font face="Arial,Helvetica" size="-1">)(.*)(?:</font>)<td[^>]*>(?:<font face="Arial,Helvetica" size="-1">)(.*)(?:</font>)<td[^>]*>(?:<font face="Arial,Helvetica" size="-1">)(.*)(?:</font>)#u', $data, $result, PREG_SET_ORDER))
 	{
 		echo '
 <p>Ingen samsvar!</p>';

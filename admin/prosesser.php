@@ -16,7 +16,7 @@ $keys = array();
 foreach ($linjer as $linje)
 {
 	if (empty($linje)) continue;
-	$linje = preg_split("/[ \t]+/", $linje, 11);
+	$linje = preg_split("/[ \t]+/u", $linje, 11);
 	if ($linje[1] == "PID") continue;
 	$prosesser[] = $linje;
 	$keys[$i] = floatval($linje[2]);

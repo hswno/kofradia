@@ -450,7 +450,7 @@ class page_ff_panel
 			$name = trim(postval("name"));
 			
 			// fjern evt. flere mellomromstegn etter hverandre
-			$name = preg_replace("/  +/", " ", $name);
+			$name = preg_replace("/  +/u", " ", $name);
 			$_POST['name'] = $name;
 			
 			// samme navn som før?
@@ -460,7 +460,7 @@ class page_ff_panel
 			}
 			
 			// kontroller at navnet ikke har noen ugyldige tegn
-			elseif (preg_match("/[^\\p{L}\\d ]/", $name))
+			elseif (preg_match("/[^\\p{L}\\d ]/u", $name))
 			{
 				ess::$b->page->add_message("Navnet kan kun inneholde bokstaver, tall og mellomrom.", "error");
 			}
@@ -575,7 +575,7 @@ class page_ff_panel
 				$reason = trim(postval("reason"));
 				
 				// fjern evt. flere mellomromstegn etter hverandre
-				$name = preg_replace("/  +/", " ", $name);
+				$name = preg_replace("/  +/u", " ", $name);
 				$_POST['name'] = $name;
 				
 				// samme navn som før?
@@ -585,7 +585,7 @@ class page_ff_panel
 				}
 				
 				// kontroller at navnet ikke har noen ugyldige tegn
-				elseif (preg_match("/[^\\p{L}\\d ]/", $name))
+				elseif (preg_match("/[^\\p{L}\\d ]/u", $name))
 				{
 					ess::$b->page->add_message("Navnet kan kun inneholde bokstaver, tall og mellomrom.", "error");
 				}

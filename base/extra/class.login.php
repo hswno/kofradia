@@ -796,7 +796,7 @@ class login
 			$allowed[] = "^p\\/";
 		}
 		
-		$allowed = '/('.implode("|", $allowed).')/';
+		$allowed = '/('.implode("|", $allowed).')/u';
 		
 		// finn adressen for denne siden
 		global $__server;
@@ -821,7 +821,7 @@ class login
 		}
 		
 		// informere om begrensningene?
-		if (!preg_match("/^lock/", $path) && (count(self::$user->lock) > 1 || !in_array("player", self::$user->lock)))
+		if (!preg_match("/^lock/u", $path) && (count(self::$user->lock) > 1 || !in_array("player", self::$user->lock)))
 		{
 			// melding
 			echo '

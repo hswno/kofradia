@@ -26,7 +26,7 @@ if (!($user = mysql_fetch_assoc($result)))
 if (isset($_GET['Dato']))
 {
 	$dato = $_GET['Dato'];
-	if (!preg_match("/^(200[6-9])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/", $dato, $matches))
+	if (!preg_match("/^(200[6-9])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/u", $dato, $matches))
 	{
 		die("Ugyldig dato: ".htmlspecialchars($dato)."!");
 	}

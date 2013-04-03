@@ -143,7 +143,7 @@ class page_innboks_ny
 		
 		// lengde
 		$plain = strip_tags(game::bb_to_html($message));
-		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/", '', $plain);
+		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/u", '', $plain);
 		
 		// er ikke begge feltene fylt ut?
 		if (empty($title) || empty($message))

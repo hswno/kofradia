@@ -29,7 +29,7 @@ class email
 		// avsender
 		$this->params = "";
 		$matches = false;
-		preg_match("/([a-zA-Z_\\-][\\w\\.\\-_]*[a-zA-Z0-9_\\-]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z])/i", $this->headers['From'], $matches);
+		preg_match("/([a-zA-Z_\\-][\\w\\.\\-_]*[a-zA-Z0-9_\\-]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z])/iu", $this->headers['From'], $matches);
 		if (isset($matches[1]))
 		{
 			$this->params = "-f {$matches[1]}";
@@ -294,7 +294,7 @@ class email
 		
 		// sørg for gyldig mottakeradresse (kun e-post, ikke navn)
 		$matches = false;
-		preg_match("/([a-zA-Z_\\-][\\w\\.\\-_]*[a-zA-Z0-9_\\-]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z])/i", $receiver, $matches);
+		preg_match("/([a-zA-Z_\\-][\\w\\.\\-_]*[a-zA-Z0-9_\\-]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z])/iu", $receiver, $matches);
 		if (isset($matches[1]))
 		{
 			// kjør To: header

@@ -1,5 +1,7 @@
 <?php
 
+mb_internal_encoding("utf-8");
+
 class ess
 {
 	/**
@@ -272,7 +274,7 @@ class essentials
 				$contents .= fread($fh, 8192);
 			}
 			
-			if (!preg_match("/^false/", $contents) && $contents != "" && $_SERVER['SCRIPT_NAME'] != "/irc/scripts/command.php" && $_SERVER['SCRIPT_NAME'] != "/irc/scripts/logs.php")
+			if (!preg_match("/^false/u", $contents) && $contents != "" && $_SERVER['SCRIPT_NAME'] != "/irc/scripts/command.php" && $_SERVER['SCRIPT_NAME'] != "/irc/scripts/logs.php")
 			{
 				// siden er låst
 				header("HTTP/1.0 503 Service Unavailiable");

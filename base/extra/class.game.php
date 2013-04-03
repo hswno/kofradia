@@ -252,13 +252,13 @@ class game
 		// funksjonen runder alltid tall NEDOVER
 		// brukes for svært store tall
 
-		$negative = preg_match('/^\s*\-/', $number);
-		$number = preg_replace('/[^0-9\.Ee\+]/', '', $number);
-		$number = preg_replace('/^0*/', '', $number);
+		$negative = preg_match('/^\s*\-/u', $number);
+		$number = preg_replace('/[^0-9\.Ee\+]/u', '', $number);
+		$number = preg_replace('/^0*/u', '', $number);
 
 		// E tall?
 		$matches = false;
-		if (preg_match('/^([0-9])(?:\.([0-9]+))?[eE]\+([0-9]+)$/D', $number, $matches))
+		if (preg_match('/^([0-9])(?:\.([0-9]+))?[eE]\+([0-9]+)$/Du', $number, $matches))
 		{
 			$number = $matches[1];
 
@@ -300,13 +300,13 @@ class game
 	// intval
 	public static function intval($number)
 	{
-		$negative = preg_match('/^\s*\-/', $number);
-		$number = preg_replace('/[^0-9\.E\+]/', '', $number);
-		$number = preg_replace('/^0*/', '', $number);
+		$negative = preg_match('/^\s*\-/u', $number);
+		$number = preg_replace('/[^0-9\.E\+]/u', '', $number);
+		$number = preg_replace('/^0*/u', '', $number);
 
 		// E tall?
 		$matches = false;
-		if (preg_match('/^([0-9])(?:\.([0-9]+))?E\+([0-9]+)$/D', $number, $matches))
+		if (preg_match('/^([0-9])(?:\.([0-9]+))?E\+([0-9]+)$/Du', $number, $matches))
 		{
 			$number = $matches[1];
 
@@ -319,7 +319,7 @@ class game
 			}
 		}
 
-		$number = preg_replace('/[^0-9\.]/', '', $number);
+		$number = preg_replace('/[^0-9\.]/u', '', $number);
 		$number = explode(".", $number, 2);
 		$number = $number[0];
 		if (empty($number)) $number = 0;
@@ -398,7 +398,7 @@ class game
 			}
 		}*/
 		
-		if (preg_match("/(^javascript)/i", $addr))
+		if (preg_match("/(^javascript)/iu", $addr))
 		{
 			return "[img]$addr (EXPLOIT WARNING)[/img]";
 		}
@@ -431,7 +431,7 @@ class game
 	public static function html_generate_passphrase($text)
 	{
 		$key = "smafia_raw_html";
-		$text = preg_replace("/[\n\r\t ]/", "", $text);
+		$text = preg_replace("/[\n\r\t ]/u", "", $text);
 		return substr(md5($key . $text), 0, 8);
 	}
 	
@@ -441,7 +441,7 @@ class game
 		global $_base;
 		
 		// har vi musikk?
-		$text = preg_replace("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|e", 'game::music_get(\'$1\', true)', $text);
+		$text = preg_replace("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|eu", 'game::music_get(\'$1\', true)', $text);
 		
 		game::$nobb[] = $text;
 		end(game::$nobb);
@@ -463,7 +463,7 @@ class game
 	
 	public static function nobb_replace($text)
 	{
-		return preg_replace("|<nobb id=\"([0-9]+)\" />|e", 'game::nobb_get(\'$1\')', $text);
+		return preg_replace("|<nobb id=\"([0-9]+)\" />|eu", 'game::nobb_get(\'$1\')', $text);
 	}
 	
 	public static function linkonly_add($text)
@@ -487,8 +487,8 @@ class game
 		
 		$rep = array(
 			// internettadresser
-			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~i' => '<a href="$1" target="_blank">$1</a>',
-			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~i' => '<a href="http://$1" target="_blank">$1</a>'
+			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="$1" target="_blank">$1</a>',
+			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="http://$1" target="_blank">$1</a>'
 		);
 		$code_from = array_keys($rep);
 		$code_to = array_values($rep);
@@ -499,7 +499,7 @@ class game
 	
 	public static function linkonly_replace($text)
 	{
-		return preg_replace("|<linkonly id=\"([0-9]+)\" />|e", 'game::linkonly_get(\'$1\')', $text);
+		return preg_replace("|<linkonly id=\"([0-9]+)\" />|eu", 'game::linkonly_get(\'$1\')', $text);
 	}
 	
 	public static function music_add($text)
@@ -545,9 +545,9 @@ class game
 	{
 		if ($original)
 		{
-			return preg_replace("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|e", 'game::music_get(\'$1\', true)', $text);
+			return preg_replace("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|eu", 'game::music_get(\'$1\', true)', $text);
 		}
-		return preg_replace("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|e", 'game::music_get(\'$1\')', $text);
+		return preg_replace("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|eu", 'game::music_get(\'$1\')', $text);
 	}
 	
 	// formatter tekst til riktig format
@@ -572,7 +572,7 @@ class game
 				return $bb;
 			
 			case "music_pre":
-				return preg_replace('~\[music\](https?://.+?)\[/music\]~ie', 'game::music_add(\'$1\')', $data);
+				return preg_replace('~\[music\](https?://.+?)\[/music\]~ieu', 'game::music_add(\'$1\')', $data);
 			
 			case "music_post":
 				return game::music_replace($data);
@@ -614,8 +614,8 @@ class game
 				
 				// rankbar
 				$type = false;
-				$match_rank = preg_match("~\\[rank_(neste_tid|neste_dato|tid|dato)\\]~i", $data);
-				if (preg_match("~\\[rankbar( type=(1|2))?\\]~i", $data, $type) || $match_rank)
+				$match_rank = preg_match("~\\[rank_(neste_tid|neste_dato|tid|dato)\\]~iu", $data);
+				if (preg_match("~\\[rankbar( type=(1|2))?\\]~iu", $data, $type) || $match_rank)
 				{
 					// høyeste rank?
 					if ($rank['need_points'] == 0)
@@ -890,110 +890,110 @@ class game
 			// kode som kun skal kjøres en gang
 			$replaces_single = array(
 				// carrage returns
-				'~\r~' => '',
+				'~\r~u' => '',
 				
 				// raw html i BB kode (ved hjelp av "passphrase"
-				'~\[html=([a-z0-9]+)\](.+?)\[/html=\1\]~ise' => 'game::html_add(\'$1\', \'$2\')',
+				'~\[html=([a-z0-9]+)\](.+?)\[/html=\1\]~iseu' => 'game::html_add(\'$1\', \'$2\')',
 				
 				// nobb -> ikke formatter bb kodene inni denne..
-				'~\[nobb\](.+?)\[/nobb\]~ise' => 'game::nobb_add(\'$1\')',
+				'~\[nobb\](.+?)\[/nobb\]~iseu' => 'game::nobb_add(\'$1\')',
 				
 				// linkonly -> til bruk for youtube-adresser
-				'~\[linkonly\](.+?)\[/linkonly\]~ise' => 'game::linkonly_add(\'$1\')',
+				'~\[linkonly\](.+?)\[/linkonly\]~iseu' => 'game::linkonly_add(\'$1\')',
 				
 				// kommentarer -> skjul alt
-				'~\[comment\](.+?)\[/comment\]~is' => '#',
-				'~\[comment=([^\]]+)\](.+?)\[/comment\]~is' => '<span style="border: 1px solid #333333; background-color: #222222; padding: 2px">#$1</span>',
-				'~\[comment hide\](.+?)\[/comment\]~is' => '',
+				'~\[comment\](.+?)\[/comment\]~isu' => '#',
+				'~\[comment=([^\]]+)\](.+?)\[/comment\]~isu' => '<span style="border: 1px solid #333333; background-color: #222222; padding: 2px">#$1</span>',
+				'~\[comment hide\](.+?)\[/comment\]~isu' => '',
 				
 				// hide -> ikke vis
-				'~\[hide\](.+?)\[/hide\]~is' => '',
+				'~\[hide\](.+?)\[/hide\]~isu' => '',
 				
 				// youtube videoer
-				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(https?://)?(www.)?youtube.com/v/([0-9a-z_\-]{11})[^\s<>&\\\]*~i' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$3"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$3" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object><br />Adresse: <a href="$0">$0</a>',
+				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(https?://)?(www.)?youtube.com/v/([0-9a-z_\-]{11})[^\s<>&\\\]*~iu' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$3"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$3" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object><br />Adresse: <a href="$0">$0</a>',
 				
-				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(https?://)?(www.)?youtube.com/.+v=([0-9a-z_\-]{11})[^\s<]*~i' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$3"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$3" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
+				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(https?://)?(www.)?youtube.com/.+v=([0-9a-z_\-]{11})[^\s<]*~iu' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$3"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$3" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
-				'~\[youtube\].+v=([0-9a-z_\.]+).*\[/youtube\]~i' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$1"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
+				'~\[youtube\].+v=([0-9a-z_\.]+).*\[/youtube\]~iu' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$1"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
-				'~\[youtube\](https?://(www.)?youtube.com/.+?)\[/youtube\]~i' => '<object width="425" height="350"><param name="movie" value="$1"></param><param name="wmode" value="transparent"></param><embed src="$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
+				'~\[youtube\](https?://(www.)?youtube.com/.+?)\[/youtube\]~iu' => '<object width="425" height="350"><param name="movie" value="$1"></param><param name="wmode" value="transparent"></param><embed src="$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
 				// bilder
-				'~\[img\]([^\["\'\n]+)\[/img\]~ie' => 'game::secure_img_addr(\'$1\')',
+				'~\[img\]([^\["\'\n]+)\[/img\]~ieu' => 'game::secure_img_addr(\'$1\')',
 				
 				// internettadresser
-				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~i' => '<a href="$1" target="_blank">$1</a>',
-				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~i' => '<a href="http://$1" target="_blank">$1</a>',
+				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="$1" target="_blank">$1</a>',
+				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="http://$1" target="_blank">$1</a>',
 				
 				// intern adresse på nettstedet
-				'~\[iurl=/?([^\]\n]*)\](.+?)\[/iurl\]~ie' => '\'<a href="'.$__server['absolute_path'].'/$1">\'.stripslashes(\'$2\').\'</a>\'',
+				'~\[iurl=/?([^\]\n]*)\](.+?)\[/iurl\]~ieu' => '\'<a href="'.$__server['absolute_path'].'/$1">\'.stripslashes(\'$2\').\'</a>\'',
 				
 				// brukere
-				'~\[user=([0-9a-zA-Z\-_ ]+)\]~i' => '<user="$1" />',
-				'~\[user id=([0-9]+)\]~i' => '<user id="$1" />',
+				'~\[user=([0-9a-zA-Z\-_ ]+)\]~iu' => '<user="$1" />',
+				'~\[user id=([0-9]+)\]~iu' => '<user id="$1" />',
 				
 				// firma/familie-lenke
-				'~\[ff=([0-9]+)\]~' => '<ff_link>$1</ff_link>',
+				'~\[ff=([0-9]+)\]~u' => '<ff_link>$1</ff_link>',
 				
 				// hr
-				'~\[hr\](\n)?~i' => '<div class="hr"></div>'
+				'~\[hr\](\n)?~iu' => '<div class="hr"></div>'
 			);
 			
 			// kode som kan kjøres flere ganger
 			$replaces_multiple = array(
 				// headers
-				'~(?:\n){0,2}\[h([1-6])\](.+?)\[/h\1\]\n{0,2}~i' => '<h$1>$2</h$1>',
+				'~(?:\n){0,2}\[h([1-6])\](.+?)\[/h\1\]\n{0,2}~iu' => '<h$1>$2</h$1>',
 				
 				// bold
-				'~\[b\](.+?)\[/b\]~is' => '<b>$1</b>',
+				'~\[b\](.+?)\[/b\]~isu' => '<b>$1</b>',
 				
 				// italic
-				'~\[i\](.+?)\[/i\]~is' => '<i>$1</i>',
+				'~\[i\](.+?)\[/i\]~isu' => '<i>$1</i>',
 				
 				// understrek
-				'~\[u\](.+?)\[/u\]~is' => '<u>$1</u>',
+				'~\[u\](.+?)\[/u\]~isu' => '<u>$1</u>',
 				
 				// midtstrek
-				'~\[s\](.+?)\[/s\]~is' => '<del>$1</del>',
+				'~\[s\](.+?)\[/s\]~isu' => '<del>$1</del>',
 				
 				// tekstjustering
-				'~\[left=([0-5]?[0-9]{1,2})(?:px)?\](.+?)\[/left\](\n)?~is' => '<div class="l" style="margin-left:$1px">$2</div>',
-				'~\[right=([0-5]?[0-9]{1,2})(?:px)?\](.+?)\[/right\](\n)?~is' => '<div class="r" style="margin-right:$1px">$2</div>',
-				'~\[left=([0-9]{1,2})%\](.+?)\[/left\](\n)?~is' => '<div class="l" style="margin-left:$1%">$2</div>',
-				'~\[right=([0-9]{1,2})%\](.+?)\[/right\](\n)?~is' => '<div class="r" style="margin-right:$1%">$2</div>',
-				'~\[left\](.+?)\[/left\](\n)?~is' => '<div class="l">$1</div>',
-				'~\[right\](.+?)\[/right\](\n)?~is' => '<div class="r">$1</div>',
-				'~\[center\](.+?)\[/center\](\n)?~is' => '<div class="c">$1</div>',
-				'~\[justify\](.+?)\[/justify\](\n)?~is' => '<div class="j">$1</div>',
+				'~\[left=([0-5]?[0-9]{1,2})(?:px)?\](.+?)\[/left\](\n)?~isu' => '<div class="l" style="margin-left:$1px">$2</div>',
+				'~\[right=([0-5]?[0-9]{1,2})(?:px)?\](.+?)\[/right\](\n)?~isu' => '<div class="r" style="margin-right:$1px">$2</div>',
+				'~\[left=([0-9]{1,2})%\](.+?)\[/left\](\n)?~isu' => '<div class="l" style="margin-left:$1%">$2</div>',
+				'~\[right=([0-9]{1,2})%\](.+?)\[/right\](\n)?~isu' => '<div class="r" style="margin-right:$1%">$2</div>',
+				'~\[left\](.+?)\[/left\](\n)?~isu' => '<div class="l">$1</div>',
+				'~\[right\](.+?)\[/right\](\n)?~isu' => '<div class="r">$1</div>',
+				'~\[center\](.+?)\[/center\](\n)?~isu' => '<div class="c">$1</div>',
+				'~\[justify\](.+?)\[/justify\](\n)?~isu' => '<div class="j">$1</div>',
 				
 				// float og clear
-				'~\[float=(right)\](.+?)\[/float\](\n)?~is' => '<div style="float:$1;margin-left: 5px">$2</div>',
-				'~\[float=(left)\](.+?)\[/float\](\n)?~is' => '<div style="float:$1;margin-right: 5px">$2</div>',
-				'~\[clear\]~i' => '<div style="clear:both"></div>',
+				'~\[float=(right)\](.+?)\[/float\](\n)?~isu' => '<div style="float:$1;margin-left: 5px">$2</div>',
+				'~\[float=(left)\](.+?)\[/float\](\n)?~isu' => '<div style="float:$1;margin-right: 5px">$2</div>',
+				'~\[clear\]~iu' => '<div style="clear:both"></div>',
 				
 				// fast bredde
-				'~\[width=([0-6]?[0-9]{1,2})(?:px)?\](.+?)\[/width\](\n)?~is' => '<div style="width:$1px">$2</div>',
+				'~\[width=([0-6]?[0-9]{1,2})(?:px)?\](.+?)\[/width\](\n)?~isu' => '<div style="width:$1px">$2</div>',
 				
 				// lister
-				'~\n?\[ul\](?:.+?)(\[li\].+?)\n*\[/ul\]\n{0,2}~is' => '<ul>$1</ul>',
-				'~\n*\[li\]\n?(.+?)\n?\[/li\][^\[<]*~is' => '<li>$1</li>$2',
+				'~\n?\[ul\](?:.+?)(\[li\].+?)\n*\[/ul\]\n{0,2}~isu' => '<ul>$1</ul>',
+				'~\n*\[li\]\n?(.+?)\n?\[/li\][^\[<]*~isu' => '<li>$1</li>$2',
 				
 				
 				// farger
-				'~\[color=(SM|bakgrunn)\](.*?)\[/color\]~is' => '<span style="color: #222222;">$2</span>',
-				'~\[color=(#[\da-fA-F]{3}|#[\da-fA-F]{6}|[\w]{1,12})\](.*?)\[/color\]~is' => '<span style="color: $1;">$2</span>',
-				'~\[(black|white|red|green|blue)\](.+?)\[/\1\]~is' => '<span style="color: $1;">$2</span>',
+				'~\[color=(SM|bakgrunn)\](.*?)\[/color\]~isu' => '<span style="color: #222222;">$2</span>',
+				'~\[color=(#[\da-fA-F]{3}|#[\da-fA-F]{6}|[\w]{1,12})\](.*?)\[/color\]~isu' => '<span style="color: $1;">$2</span>',
+				'~\[(black|white|red|green|blue)\](.+?)\[/\1\]~isu' => '<span style="color: $1;">$2</span>',
 				
 				// quote
-				'~\[quote]\n?(.+?)\n?\[/quote\]\n?~is' => '<div class="quote_box"><span class="quote_header">Sitat:</span>$1</div>',
+				'~\[quote]\n?(.+?)\n?\[/quote\]\n?~isu' => '<div class="quote_box"><span class="quote_header">Sitat:</span>$1</div>',
 				
 				// senket/hevet skrift
-				'~\[sub\](.+?)\[/sub\]~is' => '<sub>$1</sub>',
-				'~\[sup\](.+?)\[/sup\]~is' => '<sup>$1</sup>',
+				'~\[sub\](.+?)\[/sub\]~isu' => '<sub>$1</sub>',
+				'~\[sup\](.+?)\[/sup\]~isu' => '<sup>$1</sup>',
 				
 				// skriftstørrelse
-				'~\[size=(1?[\d]{1,2}p[xt]|(?:x-)?small(?:er)?|(?:x-)?large[r]?)\](.+?)\[/size\]~is' => '<span style="font-size: $1;">$2</span>',
-				'~\[size=([\d])\](.+?)\[/size\]~is' => '<font size="$1">$2</font>',
+				'~\[size=(1?[\d]{1,2}p[xt]|(?:x-)?small(?:er)?|(?:x-)?large[r]?)\](.+?)\[/size\]~isu' => '<span style="font-size: $1;">$2</span>',
+				'~\[size=([\d])\](.+?)\[/size\]~isu' => '<font size="$1">$2</font>',
 			);
 			
 			$code_from_cache = array_keys($replaces_multiple);
@@ -1008,7 +1008,7 @@ class game
 		
 		// fiks liste med *
 		$matches = false;
-		if (preg_match_all("~(?:\n{0,2})^ \\* .+(\n \\* .+)*$(?:\n{0,2})~m", $bb, $matches))
+		if (preg_match_all("~(?:\n{0,2})^ \\* .+(\n \\* .+)*$(?:\n{0,2})~mu", $bb, $matches))
 		{
 			foreach ($matches[0] as $match)
 			{
@@ -1030,7 +1030,7 @@ class game
 		
 		// fiks liste med #
 		$matches = false;
-		if (preg_match_all("~(?:\n{0,2})^ # .+(\n # .+)*$(?:\n{0,2})~m", $bb, $matches))
+		if (preg_match_all("~(?:\n{0,2})^ # .+(\n # .+)*$(?:\n{0,2})~mu", $bb, $matches))
 		{
 			foreach ($matches[0] as $match)
 			{
@@ -1077,7 +1077,7 @@ class game
 			global $_smileys, $__server;
 			foreach ($_smileys as $from => $to)
 			{
-				$smileys_from_cache[] = '/(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(' . preg_quote($from, '/') . '|' . preg_quote(htmlspecialchars($from, ENT_QUOTES), '/') . ')(?=[^\]A-Za-z0-9"]|$)/i';
+				$smileys_from_cache[] = '/(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(' . preg_quote($from, '/') . '|' . preg_quote(htmlspecialchars($from, ENT_QUOTES), '/') . ')(?=[^\]A-Za-z0-9"]|$)/iu';
 				$smileys_to_cache[] = '<img src="'.$to.'" alt="'.htmlspecialchars($from).'" />';
 			}
 		}
@@ -1211,7 +1211,7 @@ class game
 	// sjekk for gyldig e-postadresse
 	public static function validemail($address)
 	{
-		return preg_match("/^[a-zA-Z_\\-][\\w\\.\\-_]*[a-zA-Z0-9_\\-]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$/Di", $address);
+		return preg_match("/^[a-zA-Z_\\-][\\w\\.\\-_]*[a-zA-Z0-9_\\-]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$/Diu", $address);
 	}
 
 

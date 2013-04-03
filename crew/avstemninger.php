@@ -21,7 +21,7 @@ function verify_sid()
 redirect::store("/polls/admin", redirect::ROOT);
 
 // aktuell avstemning?
-if (isset($pages[2]) && preg_match("/^\\d+\$/D", $pages[2]))
+if (isset($pages[2]) && preg_match("/^\\d+\$/Du", $pages[2]))
 {
 	// hent avstemningen
 	$result = $_base->db->query("SELECT p_id, p_title, p_text, p_ft_id, p_params, p_active, p_time_start, p_time_end, p_votes FROM polls WHERE p_id = ".intval($pages[2]));
@@ -342,7 +342,7 @@ function setNow(elm, event)
 	}
 	
 	// alternativ?
-	$po_id = isset($pages[3]) && preg_match("/^\\d+\$/D", $pages[3]) ? (int) $pages[3] : false;
+	$po_id = isset($pages[3]) && preg_match("/^\\d+\$/Du", $pages[3]) ? (int) $pages[3] : false;
 	$option = isset($pages[4]) ? $pages[4] : false;
 	
 	// redigere alternativ?

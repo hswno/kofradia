@@ -375,7 +375,7 @@ Denne e-posten kan ikke besvares.";
 		foreach ($_GET as $var => $dummy)
 		{
 			$matches = false;
-			if (preg_match("/^s([0-4])$/D", $var, $matches))
+			if (preg_match("/^s([0-4])$/Du", $var, $matches))
 			{
 				$show[] = $matches[1];
 			}

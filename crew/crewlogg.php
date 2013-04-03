@@ -481,7 +481,7 @@ class page_crewloggs
 			return;
 		}
 		
-		$this->filter_by_up = array_unique(preg_split("/ *, */", $_POST['by']));
+		$this->filter_by_up = array_unique(preg_split("/ *, */u", $_POST['by']));
 		
 		if (count($this->filter_by_up) == 0) $this->filter_by_up = null;
 		else $this->filters_active = true;
@@ -495,7 +495,7 @@ class page_crewloggs
 			return;
 		}
 		
-		$this->filter_a_up = array_unique(preg_split("/ *, */", $_POST['a']));
+		$this->filter_a_up = array_unique(preg_split("/ *, */u", $_POST['a']));
 		
 		if (count($this->filter_a_up) == 0) $this->filter_a_up = null;
 		else $this->filters_active = true;

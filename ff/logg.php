@@ -53,7 +53,7 @@ class page_ff_log
 		$matches = false;
 		foreach ($_GET as $name => $val)
 		{
-			if (preg_match("/^f([0-9]+)$/D", $name, $matches) && in_array($matches[1], $tilgjengelig))
+			if (preg_match("/^f([0-9]+)$/Du", $name, $matches) && in_array($matches[1], $tilgjengelig))
 			{
 				$filter[] = $matches[1];
 			}

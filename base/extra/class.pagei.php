@@ -142,7 +142,7 @@ class pagei
 	/** Utfør spørring */
 	public function query($query, $critical = true, $debug = false)
 	{
-		$query = preg_replace("/^\\s*SELECT\\s+/", "", $query);
+		$query = preg_replace("/^\\s*SELECT\\s+/u", "", $query);
 		$result = ess::$b->db->query("SELECT SQL_CALC_FOUND_ROWS $query LIMIT {$this->start}, {$this->per_page}", $critical, $debug);
 		
 		// hvis vi ikke er på en gyldig side

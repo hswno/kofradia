@@ -27,7 +27,7 @@ if (!($user = mysql_fetch_assoc($result)))
 if (isset($_GET['Dato']))
 {
 	$dato = $_GET['Dato'];
-	if (!preg_match("/^(200[6-9])-(0[1-9]|1[0-2])$/", $dato, $matches))
+	if (!preg_match("/^(200[6-9])-(0[1-9]|1[0-2])$/u", $dato, $matches))
 	{
 		die("Ugyldig måned: ".htmlspecialchars($dato)."!");
 	}

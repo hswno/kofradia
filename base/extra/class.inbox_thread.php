@@ -625,7 +625,7 @@ class inbox_thread
 		
 		// kontroller lengde
 		$plain = strip_tags(game::bb_to_html($text));
-		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/", '', $plain);
+		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/u", '', $plain);
 		if (strlen($plain) < 3)
 		{
 			$this->handle_ret(self::RET_ERROR_CONTENT_SHORT);

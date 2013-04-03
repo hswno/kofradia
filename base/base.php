@@ -146,7 +146,7 @@ class base
 		{
 			// sjekk at den inneholder en webside..
 			$matches = false;
-			if (preg_match('~(https?://([^/\n\r\t]+))(/[^\n\r\t]*)?$~', $referer, $matches))
+			if (preg_match('~(https?://([^/\n\r\t]+))(/[^\n\r\t]*)?$~u', $referer, $matches))
 			{
 				$addr = strtolower($matches[1]);
 				if ($addr == $__server['http_path']) return;

@@ -87,7 +87,7 @@ class page_email_blacklist
 			}
 			
 			// ugyldig verdi for domene?
-			elseif ($type == "domain" && !preg_match("/^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$/Di", $value))
+			elseif ($type == "domain" && !preg_match("/^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$/Diu", $value))
 			{
 				ess::$b->page->add_message("Verdien du skrev inn er ikke et gyldig domenenavn eller underdomene.", "error");
 			}
@@ -251,7 +251,7 @@ class page_email_blacklist
 			}
 			
 			// ugyldig verdi for domene?
-			elseif ($type == "domain" && !preg_match("/^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$/Di", $value))
+			elseif ($type == "domain" && !preg_match("/^[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$/Diu", $value))
 			{
 				ess::$b->page->add_message("Verdien du skrev inn er ikke et gyldig domenenavn eller underdomene.", "error");
 			}

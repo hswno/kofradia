@@ -20,7 +20,7 @@ class patch
 		{
 			// hvilken handling?
 			$matches = false;
-			if ($skip-- > 0 || !preg_match("/^([0-9]+)(?:,([0-9]+))?([acd])([0-9]+)(?:,([0-9]+))?$/D", $line, $matches))
+			if ($skip-- > 0 || !preg_match("/^([0-9]+)(?:,([0-9]+))?([acd])([0-9]+)(?:,([0-9]+))?$/Du", $line, $matches))
 			{
 				// ukjent
 				continue;

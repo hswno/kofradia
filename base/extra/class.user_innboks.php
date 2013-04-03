@@ -207,10 +207,10 @@ class user_innboks
 			while ($row = mysql_fetch_assoc($result))
 			{
 				$d = strip_tags(game::format_data($row['id_text']));
-				$d = preg_replace("/(^ +| +$|\\r)/m", "", $d);
-				$d = preg_replace("/(?<![!,.\\n ])\\n/", ". ", $d);
-				$d = preg_replace("/\\n/", " ", $d);
-				$d = preg_replace("/  +/", " ", $d);
+				$d = preg_replace("/(^ +| +$|\\r)/mu", "", $d);
+				$d = preg_replace("/(?<![!,.\\n ])\\n/u", ". ", $d);
+				$d = preg_replace("/\\n/u", " ", $d);
+				$d = preg_replace("/  +/u", " ", $d);
 				$d = trim($d);
 				if (strlen($d) > $max)
 				{

@@ -915,7 +915,7 @@ class forum
 		// gjør om data til kun tillatte tegn
 		$data = trim($data);
 		$plain = htmlspecialchars_decode(strip_tags(game::format_data($data)));
-		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/", '', $plain);
+		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/u", '', $plain);
 		
 		// sjekk lengden
 		return strlen($plain);

@@ -234,7 +234,7 @@ class page_kriminalitet extends pages_player
 			foreach ($_POST as $name => $val)
 			{
 				$matches = false;
-				if (preg_match("/^id([1-9]+|[1-9][0-9]+)$/D", $name, $matches))
+				if (preg_match("/^id([1-9]+|[1-9][0-9]+)$/Du", $name, $matches))
 				{
 					$id = $matches[1];
 				}

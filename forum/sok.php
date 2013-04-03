@@ -38,7 +38,7 @@ $search_forums_active = array();
 foreach ($_REQUEST as $key => $dummy)
 {
 	$match = false;
-	if (preg_match("/^s(\\d+)$/D", $key, $match))
+	if (preg_match("/^s(\\d+)$/Du", $key, $match))
 	{
 		if (isset($search_forums[$match[1]]))
 		{

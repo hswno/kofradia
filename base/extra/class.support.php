@@ -185,7 +185,7 @@ td.support_important {
 			{
 				$name = trim($name);
 				if (empty($name)) continue;
-				if (preg_match('/^[0-9a-zA-Z\-_ ]+$/D', $name))
+				if (preg_match('/^[0-9a-zA-Z\-_ ]+$/Du', $name))
 				{
 					$search_from[4][2][] = $name;
 				}
@@ -229,7 +229,7 @@ td.support_important {
 		foreach ($_REQUEST as $key => $dummy)
 		{
 			$match = false;
-			if (preg_match("/^k(\\d+)$/D", $key, $match))
+			if (preg_match("/^k(\\d+)$/Du", $key, $match))
 			{
 				if (isset($search_kat[$match[1]]))
 				{
