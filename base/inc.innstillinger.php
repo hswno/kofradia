@@ -3,7 +3,7 @@
 // innstillinger
 // for Kofradia
 
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_STRICT);
 
 // sett konstanter
 define("LOGIN_TYPE_TIMEOUT", 0);
