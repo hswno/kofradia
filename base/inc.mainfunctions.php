@@ -536,33 +536,6 @@ function js_encode($value)
 }
 
 /**
- * Dekod JSON til ISO-8859-1
- * @param string utf8
- * @return mixed iso-8859-1
- */
-function js_decode_from_utf8($value)
-{
-	$v = json_decode($value, true);
-	
-	js_decode_from_utf8_helper($v);
-	return $v;
-}
-function js_decode_from_utf8_helper(&$v)
-{
-	if (is_scalar($v))
-	{
-		//$v = utf8_decode($v);
-		$v = decodeURIComponent(urlencode($v));
-		return;
-	}
-	
-	foreach ($v as $k => &$r)
-	{
-		js_decode_from_utf8_helper($r);
-	}
-}
-
-/**
  * Formattere ord (flertallsendinger)
  *
  * @param mixed $single
