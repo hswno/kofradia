@@ -20,7 +20,7 @@ class facebook
 			return "ukjent";
 		}
 		
-		$data = json_decode($json);
+		$data = json_decode($json, true);
 		cache::store("facebook_likes", $data['likes'], $ttl);
 		
 		return $data['likes'];

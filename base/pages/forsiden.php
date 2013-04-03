@@ -85,7 +85,7 @@ class page_forsiden extends pages_player
 		
 		// hent JSON
 		$json = @file_get_contents("https://graph.facebook.com/kofradia/posts?access_token={$info['access_token']}");
-		$data = json_decode($json);
+		$data = json_decode($json, true);
 		cache::store("facebook_posts", $data);
 		
 		return $data;
