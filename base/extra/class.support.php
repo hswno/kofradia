@@ -448,12 +448,12 @@ td.support_important {
 					while ($row = mysql_fetch_assoc($result))
 					{
 						$content = trim(strip_tags(game::bb_to_html($row['sum_text'])));
-						$length = strlen($content);
+						$length = mb_strlen($content);
 						
 						$max = 60;
-						if (strlen($content) > $max)
+						if (mb_strlen($content) > $max)
 						{
-							$content = substr($content, 0, $max - 4)." ...";
+							$content = mb_substr($content, 0, $max - 4)." ...";
 						}
 						
 						echo '
@@ -668,14 +668,14 @@ td.support_important {
 		}
 		
 		// for kort tittel?
-		if (strlen($tittel) < 1)
+		if (mb_strlen($tittel) < 1)
 		{
 			ess::$b->page->add_message("Du må fylle ut en tittel.", "error");
 			return;
 		}
 		
 		// for lang tittel?
-		if (strlen($tittel) > 80)
+		if (mb_strlen($tittel) > 80)
 		{
 			ess::$b->page->add_message("Tittelen kan maksimalt inneholde 80 tegn.", "error");
 			return;

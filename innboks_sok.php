@@ -273,12 +273,12 @@ if (isset($_POST['search']))
 			while ($row = mysql_fetch_assoc($result))
 			{
 				$content = trim(strip_tags(game::bb_to_html($row['id_text'])));
-				$length = strlen($content);
+				$length = mb_strlen($content);
 				
 				$max = 60;
-				if (strlen($content) > $max)
+				if (mb_strlen($content) > $max)
 				{
-					$content = substr($content, 0, $max - 4) . " ...";
+					$content = mb_substr($content, 0, $max - 4) . " ...";
 				}
 				
 				echo '

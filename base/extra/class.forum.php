@@ -325,7 +325,7 @@ class forum
 		
 		// kontroller tekstlengde (tittel)
 		$title = trim($title);
-		if (strlen($title) < forum::TOPIC_TITLE_MIN_LENGTH || strlen($title) > forum::TOPIC_TITLE_MAX_LENGTH)
+		if (mb_strlen($title) < forum::TOPIC_TITLE_MIN_LENGTH || mb_strlen($title) > forum::TOPIC_TITLE_MAX_LENGTH)
 		{
 			$this->add_topic_error_length_title();
 			return;
@@ -918,7 +918,7 @@ class forum
 		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/u", '', $plain);
 		
 		// sjekk lengden
-		return strlen($plain);
+		return mb_strlen($plain);
 	}
 	
 	/**
@@ -1312,7 +1312,7 @@ class forum_topic
 		
 		// kontroller tekstlengde (tittel)
 		$title = trim($title);
-		if ($title != $this->info['ft_title'] && (strlen($title) < forum::TOPIC_TITLE_MIN_LENGTH || strlen($title) > forum::TOPIC_TITLE_MAX_LENGTH))
+		if ($title != $this->info['ft_title'] && (mb_strlen($title) < forum::TOPIC_TITLE_MIN_LENGTH || mb_strlen($title) > forum::TOPIC_TITLE_MAX_LENGTH))
 		{
 			$this->edit_error_length_title();
 			return;

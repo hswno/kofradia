@@ -234,7 +234,7 @@ class nodes
 		if (access::has("crewet"))
 		{
 			$url = $_SERVER['REQUEST_URI'];
-			if (($pos = strpos($url, "?")) !== false) $url = substr($url, 0, $pos);
+			if (($pos = mb_strpos($url, "?")) !== false) $url = mb_substr($url, 0, $pos);
 			
 			echo '
 <p style="color:#AAA;text-align:right;font-size:10px">[<a href="'.ess::$s['relative_path'].'/node/a?node_id='.self::$node_id.'">rediger side</a>]'.(isset($_GET['show_disabled_units']) ? ' [<a href="'.game::address($url, $_GET, array("show_disabled_units")).'">skjul deaktiverte enheter</a>]' : ' [<a href="'.game::address($url, $_GET, array(), array("show_disabled_units" => true)).'">vis deaktiverte enheter</a>]').'</p>';
@@ -311,7 +311,7 @@ class nodes
 <div class="p">'.game::format_data($row['n_intro']).'</div>';
 						
 						// mer info?
-						if (strlen($row['n_content']) > 0)
+						if (mb_strlen($row['n_content']) > 0)
 						{
 							$content .= '
 <p><a href="'.game::address(PHP_SELF, $_GET, array(), array("show_n" => $row['n_id'])).'">Les mer &raquo;</a></p>';

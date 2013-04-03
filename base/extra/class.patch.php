@@ -46,7 +46,7 @@ class patch
 					
 					// legg til elementene
 					$items = array_slice($diff, $key+1, $range);
-					foreach ($items as &$item) $item = substr($item, 2);
+					foreach ($items as &$item) $item = mb_substr($item, 2);
 					array_splice($original, $x0, 0, $items);
 					
 					break;
@@ -74,7 +74,7 @@ class patch
 					
 					// legg til elementene
 					$items = array_slice($diff, $key+$range_d+2, $range_a);
-					foreach ($items as &$item) $item = substr($item, 2);
+					foreach ($items as &$item) $item = mb_substr($item, 2);
 					array_splice($original, $x0-1, 0, $items);
 					
 					break;

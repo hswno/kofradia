@@ -70,9 +70,9 @@ class params
 		if (empty($text)) return 0;
 		
 		// forenklet?
-		if (substr($text, 0, 1) == "*")
+		if (mb_substr($text, 0, 1) == "*")
 		{
-			$items = explode(";", substr($text, 1));
+			$items = explode(";", mb_substr($text, 1));
 			foreach ($items as $info)
 			{
 				$x = explode("=", $info, 2);
@@ -135,7 +135,7 @@ class params
 	 */
 	private function encode($string, $delimiter = ":")
 	{
-		return strlen($string) . $delimiter . $string;
+		return mb_strlen($string) . $delimiter . $string;
 	}
 	
 	/**
@@ -150,11 +150,11 @@ class params
 		$data = array();
 		
 		// finn delimiter
-		while (($pos = strpos($string, $delimiter)) !== false)
+		while (($pos = mb_strpos($string, $delimiter)) !== false)
 		{
-			$len = intval(substr($string, 0, $pos));
-			$data[] = substr($string, $pos+1, $len);
-			$string = substr($string, $pos+$len+1);
+			$len = intval(mb_substr($string, 0, $pos));
+			$data[] = mb_substr($string, $pos+1, $len);
+			$string = mb_substr($string, $pos+$len+1);
 		}
 		
 		return $data;

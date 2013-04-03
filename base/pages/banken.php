@@ -256,7 +256,7 @@ class page_banken extends pages_player
 				ess::$b->page->add_message("Passordene var ikke like.", "error");
 			}
 			
-			elseif (strlen($pass1) < 6)
+			elseif (mb_strlen($pass1) < 6)
 			{
 				ess::$b->page->add_message("Passordet må inneholde 6 eller flere tegn.", "error");
 			}
@@ -348,7 +348,7 @@ class page_banken extends pages_player
 					ess::$b->page->add_message("De nye passordene var ikke like.", "error");
 				}
 				
-				elseif (strlen($pass1) < 6)
+				elseif (mb_strlen($pass1) < 6)
 				{
 					ess::$b->page->add_message("Det nye passordet må inneholde 6 eller flere tegn.", "error");
 				}
@@ -555,7 +555,7 @@ document.getElementById("b_pass").focus();
 		}
 		
 		// nøkkelen
-		$hash = substr(md5(uniqid("", true)), 0, 10);
+		$hash = mb_substr(md5(uniqid("", true)), 0, 10);
 		
 		// gyldig i 30 minutter
 		$expire = time() + 3600;
@@ -802,7 +802,7 @@ www.kofradia.no';
 			return;
 		}
 		
-		$note = substr(postval("note"), 0, 100);
+		$note = mb_substr(postval("note"), 0, 100);
 		
 		// hoppe over overføringstapet?
 		$skip_bog = false;

@@ -148,7 +148,7 @@ class base
 			$matches = false;
 			if (preg_match('~(https?://([^/\n\r\t]+))(/[^\n\r\t]*)?$~u', $referer, $matches))
 			{
-				$addr = strtolower($matches[1]);
+				$addr = mb_strtolower($matches[1]);
 				if ($addr == $__server['http_path']) return;
 				if ($__server['https_support'] && $addr == $__server['https_path']) return;
 				if (isset($_SESSION[$GLOBALS['__server']['session_prefix'].'last_ref']) && $_SESSION[$GLOBALS['__server']['session_prefix'].'last_ref'] < time()-5) return;

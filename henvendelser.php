@@ -354,7 +354,7 @@ Denne e-posten kan ikke besvares.";
 		}
 		
 		// ingen endring (kan ikke være "ny" (id = 0))
-		if ($h['h_status'] != 0) array_unshift($boxes, '<input type="radio" name="status" value="-1" id="status_none"'.(!$checked ? ' checked="checked"' : '').' /><label for="status_none"> Ingen endring ('.htmlspecialchars(strtolower($status['crew'][$h['h_status']])).')</label>');
+		if ($h['h_status'] != 0) array_unshift($boxes, '<input type="radio" name="status" value="-1" id="status_none"'.(!$checked ? ' checked="checked"' : '').' /><label for="status_none"> Ingen endring ('.htmlspecialchars(mb_strtolower($status['crew'][$h['h_status']])).')</label>');
 		
 		echo '
 			<p class="h_boxes">
@@ -601,7 +601,7 @@ if (isset($_POST['new']) && (isset($_POST['add']) || isset($_POST['preview'])))
 	}
 	
 	// sjekk navn
-	elseif (strlen($name) == 0)
+	elseif (mb_strlen($name) == 0)
 	{
 		$_base->page->add_message("Du må fylle ut et navn.", "error");
 	}
@@ -613,13 +613,13 @@ if (isset($_POST['new']) && (isset($_POST['add']) || isset($_POST['preview'])))
 	}
 	
 	// sjekk emne
-	elseif (strlen($subject) == 0)
+	elseif (mb_strlen($subject) == 0)
 	{
 		$_base->page->add_message("Du må fylle ut et emne.", "error");
 	}
 	
 	// sjekk innhold
-	elseif (strlen($content) < 20)
+	elseif (mb_strlen($content) < 20)
 	{
 		$_base->page->add_message("Henvendelsen kan ikke inneholde mindre enn 20 tegn.", "error");
 	}
@@ -785,7 +785,7 @@ echo '
 		{
 			$content = trim(postval("content"));
 			
-			if (strlen($content) == 0)
+			if (mb_strlen($content) == 0)
 			{
 				$_base->page->add_message("Mangler innhold.", "error");
 			}
@@ -993,13 +993,13 @@ Du kan når som helst logge inn og lese dine henvendelse og legge til ytterliger
 IP-adresse benyttet for denne henvendelsen: {$_SERVER['REMOTE_ADDR']} ({$_SERVER['HTTP_USER_AGENT']})
 
 Direktelink:
-{$__server['path']}/henvendelser?id={$random}&email=".urlencode(strtolower($email))."
+{$__server['path']}/henvendelser?id={$random}&email=".urlencode(mb_strtolower($email))."
 
 Denne e-posten kan ikke besvares.
 Takk for din henvendelse.";
-			$mail->send(strtolower($email), "Dine henvendelser");
+			$mail->send(mb_strtolower($email), "Dine henvendelser");
 			
-			$_base->page->add_message("E-post er nå sendt til <b>".htmlspecialchars(strtolower($email))."</b> med detaljer.");
+			$_base->page->add_message("E-post er nå sendt til <b>".htmlspecialchars(mb_strtolower($email))."</b> med detaljer.");
 			redirect::handle("henvendelser");
 		}
 	}

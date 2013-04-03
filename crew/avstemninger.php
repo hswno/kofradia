@@ -58,7 +58,7 @@ if (isset($pages[2]) && preg_match("/^\\d+\$/Du", $pages[2]))
 			$time_end = trim(postval("time_end"));
 			$error = false;
 			
-			if (strlen($title) < 3)
+			if (mb_strlen($title) < 3)
 			{
 				$_base->page->add_message("Tittelen må inneholde minst 3 tegn.", "error");
 				$error = true;
@@ -306,7 +306,7 @@ function setNow(elm, event)
 		if (isset($_POST['text']) && verify_sid())
 		{
 			$text = trim(postval("text"));
-			if (strlen($text) < 1)
+			if (mb_strlen($text) < 1)
 			{
 				$_base->page->add_message("Alternativet må inneholde minst 1 tegn.", "error");
 			}
@@ -361,7 +361,7 @@ function setNow(elm, event)
 		if (isset($_POST['text']) && verify_sid())
 		{
 			$text = trim(postval("text"));
-			if (strlen($text) < 1)
+			if (mb_strlen($text) < 1)
 			{
 				$_base->page->add_message("Alternativet må inneholde minst 1 tegn.", "error");
 			}
@@ -521,7 +521,7 @@ if (isset($pages[2]) && $pages[2] == "new")
 		$text = trim(postval("text"));
 		
 		// minimum lengde = 3 tegn
-		if (strlen($title) < 3)
+		if (mb_strlen($title) < 3)
 		{
 			$_base->page->add_message("Tittel må inneholde minst 3 tegn.", "error");
 		}

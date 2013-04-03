@@ -40,11 +40,11 @@ class page_min_side
 			case "stats":
 				if (!self::$active_own) $addr .= "?u_id=".self::$active_user->id;
 				elseif (self::$active_player->active) $addr .= "?u";
-				if ($check_type == "stats") $addr .= (strpos($addr, "?") !== false ? "&" : "?") . "stats";
+				if ($check_type == "stats") $addr .= (mb_strpos($addr, "?") !== false ? "&" : "?") . "stats";
 				break;
 		}
-		if ($name != "") $addr .= (strpos($addr, "?") !== false ? "&" : "?") . "a=$name";
-		if ($addr_suffix != "") $addr .= (strpos($addr, "?") !== false ? "&" : "?") . $addr_suffix;
+		if ($name != "") $addr .= (mb_strpos($addr, "?") !== false ? "&" : "?") . "a=$name";
+		if ($addr_suffix != "") $addr .= (mb_strpos($addr, "?") !== false ? "&" : "?") . $addr_suffix;
 		
 		return $addr;
 	}

@@ -43,10 +43,10 @@ class crewfiles
 	 */
 	public static function get_info($tag)
 	{
-		$pos = strpos($tag, "-");
+		$pos = mb_strpos($tag, "-");
 		if ($pos === false) return false;
 		
-		return array(substr($tag, 0, $pos), substr($tag, $pos+1));
+		return array(mb_substr($tag, 0, $pos), mb_substr($tag, $pos+1));
 	}
 	
 	/**
@@ -61,7 +61,7 @@ class crewfiles
 		$title = preg_replace("/[^a-zA-Z0-9_\\-\\.,]/u", "", $title);
 		
 		// lowercase
-		$title = strtolower($title);
+		$title = mb_strtolower($title);
 		
 		return $title;
 	}

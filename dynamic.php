@@ -8,9 +8,9 @@ require "base.php";
 
 // finn riktig adresse
 $url = isset($_SERVER['REDIR_URL']) ? $_SERVER['REDIR_URL'] : '';
-if (substr($url, 0, strlen($root)) === $root)
+if (mb_substr($url, 0, mb_strlen($root)) === $root)
 {
-	$url = substr($url, strlen($root));
+	$url = mb_substr($url, mb_strlen($root));
 }
 
 $pages = explode("/", $url);

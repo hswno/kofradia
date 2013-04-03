@@ -466,13 +466,13 @@ class page_ff_panel
 			}
 			
 			// navnet kan ikke være kortere enn 2 tegn
-			elseif (strlen($name) < 2)
+			elseif (mb_strlen($name) < 2)
 			{
 				ess::$b->page->add_message("Minimum lengde for navnet er 2 tegn.", "error");
 			}
 			
 			// navnet kan ikke være lengre enn 20 tegn
-			elseif (strlen($name) > 20)
+			elseif (mb_strlen($name) > 20)
 			{
 				ess::$b->page->add_message("Maksimal lengde for navnet er 20 tegn.", "error");
 			}
@@ -591,13 +591,13 @@ class page_ff_panel
 				}
 				
 				// navnet kan ikke være kortere enn 2 tegn
-				elseif (strlen($name) < 2)
+				elseif (mb_strlen($name) < 2)
 				{
 					ess::$b->page->add_message("Minimum lengde for navnet er 2 tegn.", "error");
 				}
 				
 				// navnet kan ikke være lengre enn 20 tegn
-				elseif (strlen($name) > 20)
+				elseif (mb_strlen($name) > 20)
 				{
 					ess::$b->page->add_message("Maksimal lengde for navnet er 20 tegn.", "error");
 				}
@@ -841,7 +841,7 @@ class page_ff_panel
 				$amount = game::intval(postval("amount"));
 				
 				// for høyt beløp?
-				if (strlen($amount) > 12)
+				if (mb_strlen($amount) > 12)
 				{
 					ess::$b->page->add_message("Salgsbeløpet er for høyt.", "error");
 				}
@@ -986,9 +986,9 @@ class page_ff_panel
 				
 				// forsøk å slett fra disk
 				$old_path = mysql_result($result, 0, 1);
-				if (MAIN_SERVER && substr($old_path, 0, 2) == "l:")
+				if (MAIN_SERVER && mb_substr($old_path, 0, 2) == "l:")
 				{
-					$path = PROFILE_IMAGES_FOLDER . "/" . substr($old_path, 2);
+					$path = PROFILE_IMAGES_FOLDER . "/" . mb_substr($old_path, 2);
 					if (file_exists($path)) unlink($path);
 				}
 			}
@@ -1056,9 +1056,9 @@ class page_ff_panel
 				
 				// forsøk å slett fra disk
 				$old_path = mysql_result($result, 0, 1);
-				if (MAIN_SERVER && substr($old_path, 0, 2) == "l:")
+				if (MAIN_SERVER && mb_substr($old_path, 0, 2) == "l:")
 				{
-					$path = PROFILE_IMAGES_FOLDER . "/" . substr($old_path, 2);
+					$path = PROFILE_IMAGES_FOLDER . "/" . mb_substr($old_path, 2);
 					if (file_exists($path)) unlink($path);
 				}
 			}

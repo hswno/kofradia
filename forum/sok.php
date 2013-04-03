@@ -90,7 +90,7 @@ if ($search_from_id == 4)
 		while ($row = mysql_fetch_assoc($result))
 		{
 			$players[$row['up_id']] = $row;
-			unset($names_lc[strtolower($row['up_name'])]);
+			unset($names_lc[mb_strtolower($row['up_name'])]);
 		}
 		
 		// noen vi ikke fant?

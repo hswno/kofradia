@@ -3,7 +3,7 @@
 // finn ut om vi skal enkelt- eller dobbeltkode tegnene i <title>
 // (Se http://www.xn--8ws00zhy3a.com/blog/2006/06/encoding-rss-titles)
 // kjør enkeltkoding kun for firefox
-define("RSS_SINGLE_ENCODE_TITLE", strpos(strtolower($_SERVER['HTTP_USER_AGENT']), "firefox") !== false);
+define("RSS_SINGLE_ENCODE_TITLE", mb_strpos(mb_strtolower($_SERVER['HTTP_USER_AGENT']), "firefox") !== false);
 
 class rss
 {

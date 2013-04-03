@@ -162,7 +162,7 @@ class page_forsiden extends pages_player
 			$date = ess::$b->date->get($row['ffn_published_time']);
 			
 			$data .= '
-		<li><span class="avis_time">'.$date->format("j. ").substr($date->format(date::FORMAT_MONTH), 0, 3).'</span> <a class="avis" href="'.ess::$s['relative_path'].'/ff/avis?ff_id='.$row['ff_id'].'&amp;ffn='.$row['ffn_id'].'">'.htmlspecialchars($row['ffn_title']).'</a><br />
+		<li><span class="avis_time">'.$date->format("j. ").mb_substr($date->format(date::FORMAT_MONTH), 0, 3).'</span> <a class="avis" href="'.ess::$s['relative_path'].'/ff/avis?ff_id='.$row['ff_id'].'&amp;ffn='.$row['ffn_id'].'">'.htmlspecialchars($row['ffn_title']).'</a><br />
 			<span class="avis_ff">av <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$row['ff_id'].'">'.htmlspecialchars($row['ff_name']).'</a></li>';
 		}
 		
@@ -219,7 +219,7 @@ class page_forsiden extends pages_player
 			
 			$data .= '
 		<li><a class="avis" href="'.ess::$s['relative_path'].'/ff/avis?ff_id='.$row['ff_id'].'&amp;ffn='.$row['ffn_id'].'">'.htmlspecialchars($row['ffn_title']).'</a><br />
-			<span class="avis_time">'.$date->format("j. ").substr($date->format(date::FORMAT_MONTH), 0, 3).'</span> <span class="avis_ff">av <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$row['ff_id'].'">'.htmlspecialchars($row['ff_name']).'</a></li>';
+			<span class="avis_time">'.$date->format("j. ").mb_substr($date->format(date::FORMAT_MONTH), 0, 3).'</span> <span class="avis_ff">av <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$row['ff_id'].'">'.htmlspecialchars($row['ff_name']).'</a></li>';
 		}
 		
 		$data .= '
@@ -265,7 +265,7 @@ class page_forsiden extends pages_player
 			$date = ess::$b->date->get($row['time']);
 			
 			$data .= '
-		<li><span class="blog_time">'.$date->format("j. ").substr($date->format(date::FORMAT_MONTH), 0, 3).': </span>'.$text.'</li>';
+		<li><span class="blog_time">'.$date->format("j. ").mb_substr($date->format(date::FORMAT_MONTH), 0, 3).': </span>'.$text.'</li>';
 		}
 		
 		$data .= '

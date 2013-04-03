@@ -101,7 +101,7 @@ class httpreq
 		}
 		
 		$headers[] = "Content-type: application/x-www-form-urlencoded";
-		$headers[] = "Content-length: " . strlen($post);
+		$headers[] = "Content-length: " . mb_strlen($post);
 		$headers[] = "Connection: close";
 		
 		// send spørring
@@ -127,11 +127,11 @@ class httpreq
 		}
 		
 		// del opp headers og innhold
-		$pos = strpos($data, "\r\n\r\n");
+		$pos = mb_strpos($data, "\r\n\r\n");
 		
 		// hent headers og innhold
-		$headers = substr($data, 0, $pos);
-		$content = substr($data, $pos+4);
+		$headers = mb_substr($data, 0, $pos);
+		$content = mb_substr($data, $pos+4);
 		
 		// send svar
 		return array("headers" => $headers, "content" => $content);

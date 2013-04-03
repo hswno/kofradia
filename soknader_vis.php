@@ -187,7 +187,7 @@ elseif ($applicant)
 						case "varchar":
 							// kontroller lengde
 							$maxlength = intval($info['params']->get("maxlength", 255));
-							if (strlen($value) > $maxlength) $value = substr($value, 0, $maxlength);
+							if (mb_strlen($value) > $maxlength) $value = mb_substr($value, 0, $maxlength);
 							break;
 						
 						case "number":
@@ -367,7 +367,7 @@ elseif ($applicant)
 					break;
 					
 					case "number":
-					$maxlength = strlen($info['params']->get("number_max", 999999999));
+					$maxlength = mb_strlen($info['params']->get("number_max", 999999999));
 					$class = "styled w100";
 					if ($maxlength < 5) $class = "styled w40";
 					elseif ($maxlength < 10) $class = "styled w80";

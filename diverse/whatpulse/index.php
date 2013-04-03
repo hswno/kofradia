@@ -187,14 +187,14 @@ else
 			$felt = postval("wpFelt");
 			
 			// ugyldig?
-			if (substr($felt, 0, 5) != "felt:")
+			if (mb_substr($felt, 0, 5) != "felt:")
 			{
 				$_base->page->add_message("Det ser ut som du ikke har JavaScript aktivert i din nettleser.", "error");
 			}
 			
 			else
 			{
-				$felt = explode(",", substr($felt, 5));
+				$felt = explode(",", mb_substr($felt, 5));
 				$aktive = array();
 				
 				foreach ($felt as $name)

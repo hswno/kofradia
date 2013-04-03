@@ -72,7 +72,7 @@ class database_archive
 			$x = "-".($i++);
 		} while (file_exists($file));
 		
-		$host = substr(DBHOST, 0, 1) == "/" ? "" : " --host=".escapeshellarg(DBHOST);
+		$host = mb_substr(DBHOST, 0, 1) == "/" ? "" : " --host=".escapeshellarg(DBHOST);
 		$cmd = "mysqldump --add-drop-table=FALSE$host --user=".escapeshellarg(DBUSER)." --pass=".escapeshellarg(DBPASS)." ".escapeshellarg(DBNAME)." ".escapeshellarg($table)." >$file";
 		
 		// eksporter dataen

@@ -214,7 +214,7 @@ class theme_sm_default
 		$revision = self::get_revision_info();
 		if ($revision) {
 			echo '
-		<p>Versjon <a href="https://github.com/hswno/kofradia/commit/'.$revision['commit'].'" title="'.htmlspecialchars($revision['message']).'">'.substr($revision['commit'], 0, 8).'</a> oppdatert '.ess::$b->date->get($revision['date'])->format().'.</p>';
+		<p>Versjon <a href="https://github.com/hswno/kofradia/commit/'.$revision['commit'].'" title="'.htmlspecialchars($revision['message']).'">'.mb_substr($revision['commit'], 0, 8).'</a> oppdatert '.ess::$b->date->get($revision['date'])->format().'.</p>';
 		} else {
 			echo '
 		<p>Versjonsinformasjon er utilgjengelig.</p>';
@@ -794,8 +794,8 @@ class theme_sm_default
 		$data = @file_get_contents(ROOT."/.git/HEAD");
 		if (!$data) return null;
 
-		if (substr($data, 0, 3) == "ref") {
-			$ref = trim(substr($data, 5));
+		if (mb_substr($data, 0, 3) == "ref") {
+			$ref = trim(mb_substr($data, 5));
 			$commit = @file_get_contents(ROOT."/.git/$ref");
 			$branch = basename($ref);
 		} else {

@@ -626,7 +626,7 @@ class inbox_thread
 		// kontroller lengde
 		$plain = strip_tags(game::bb_to_html($text));
 		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/u", '', $plain);
-		if (strlen($plain) < 3)
+		if (mb_strlen($plain) < 3)
 		{
 			$this->handle_ret(self::RET_ERROR_CONTENT_SHORT);
 			return false;
@@ -679,7 +679,7 @@ class inbox_thread
 		
 		ess::$b->db->commit();
 		
-		putlog("LOG", "%c13%bMELDING%b%c: %u".login::$user->player->data['up_name']."%u sendte melding til it_id $this->id (%u{$this->data_thread['it_title']}%u). Lengde: ".strlen($plain)."/".strlen($text)." bytes! {$__server['path']}/innboks_les?id=$this->id");
+		putlog("LOG", "%c13%bMELDING%b%c: %u".login::$user->player->data['up_name']."%u sendte melding til it_id $this->id (%u{$this->data_thread['it_title']}%u). Lengde: ".mb_strlen($plain)."/".mb_strlen($text)." bytes! {$__server['path']}/innboks_les?id=$this->id");
 		
 		ess::$b->page->add_message("Meldingen ble lagt til.");
 		redirect::handle();

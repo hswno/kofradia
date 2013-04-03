@@ -144,7 +144,7 @@ www.kofradia.no';
 ');
 		
 		// generer unik nøkkel
-		$key = substr(md5(uniqid("")), 0, 8);
+		$key = mb_substr(md5(uniqid("")), 0, 8);
 		$_SESSION['glemtpassord_key'] = $key;
 		
 		ess::$b->page->add_js_domready('$("gp_epost").focus();');

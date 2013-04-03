@@ -153,21 +153,21 @@ class page_innboks_ny
 		}
 		
 		// for kort tittel?
-		if (strlen($title) < 2)
+		if (mb_strlen($title) < 2)
 		{
 			ess::$b->page->add_message("Tittelfeltet må inneholde minst 2 tegn.", "error");
 			return;
 		}
 		
 		// for lang tittel?
-		if (strlen($title) > 35)
+		if (mb_strlen($title) > 35)
 		{
 			ess::$b->page->add_message("Tittelfeltet kan ikke være lengre enn 35 tegn.", "error");
 			return;
 		}
 		
 		// for kort melding?
-		if (strlen($plain) < 10)
+		if (mb_strlen($plain) < 10)
 		{
 			ess::$b->page->add_message("Meldingen kan ikke inneholde færre enn 10 bokstaver/tall.", "error");
 			return;
@@ -383,10 +383,10 @@ class page_innboks_ny
 		// ID eller spillernavn? (javascript eller ikke)
 		$where = false;
 		$players_id = false;
-		if (substr($receivers, 0, 3) == "ID:")
+		if (mb_substr($receivers, 0, 3) == "ID:")
 		{
 			$players_id = true;
-			$players = array_unique(array_map("intval", explode(",", substr($receivers, 3))));
+			$players = array_unique(array_map("intval", explode(",", mb_substr($receivers, 3))));
 			if (count($players) > 0 && count($players) <= 100)
 			{
 				$this->players_by_id = true;

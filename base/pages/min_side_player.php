@@ -1690,7 +1690,7 @@ function rp_preview_profile_text()
 					if ($image['local'])
 					{
 						$src = PROFILE_IMAGES_FOLDER . "/" . $image['address'];
-						$suf = substr($src, strrpos($src, ".")+1);
+						$suf = mb_substr($src, mb_strrpos($src, ".")+1);
 						if (file_exists($src) && ($suf == "jpg" || $suf == "png"))
 						{
 							unlink($src);

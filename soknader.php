@@ -138,7 +138,7 @@ if (isset($_GET['admin']) && access::has("crewet"))
 				{
 					$comment = strip_tags($comment);
 					$max = 20;
-					$comment = strlen($comment) > $max ? substr($comment, 0, $max-4)." ..." : $comment;
+					$comment = mb_strlen($comment) > $max ? mb_substr($comment, 0, $max-4)." ..." : $comment;
 					$comment = htmlspecialchars($comment);
 				}
 				

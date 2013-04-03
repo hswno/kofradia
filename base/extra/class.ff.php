@@ -902,7 +902,7 @@ class ff
 	 */
 	public static function stats_update_static($ff_id, $type, $value, $skip_ff = null)
 	{
-		$type = strtolower($type);
+		$type = mb_strtolower($type);
 		$value = game::intval($value);
 		static $types = array("money_in", "money_out");
 		
@@ -2860,7 +2860,7 @@ class ff
 	 */
 	public static function attack_update($targeted, $type, $ff_id_list)
 	{
-		$type = strtolower($type);
+		$type = mb_strtolower($type);
 		static $types = array("failed", "damaged", "killed", "bleed");
 		
 		// ugyldig type
@@ -2928,7 +2928,7 @@ class ff
 		// har ikke noe bilde?
 		if (empty($ff_logo_path)) return STATIC_LINK."/firma/ff_default.png";
 		
-		if (substr($ff_logo_path, 0, 2) == "l:") return PROFILE_IMAGES_HTTP . "/" . substr($ff_logo_path, 2);
+		if (mb_substr($ff_logo_path, 0, 2) == "l:") return PROFILE_IMAGES_HTTP . "/" . mb_substr($ff_logo_path, 2);
 		return $ff_logo_path;
 	}
 	

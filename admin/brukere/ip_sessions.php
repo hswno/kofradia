@@ -36,7 +36,7 @@ function like_search($value)
 	return strtr($value, array('_' => '\\_', '%' => '\\%', '*' => '%', '?' => '_'));
 }
 
-$wc = strpos($ip, "*") !== false || strpos($ip, "?") !== false;
+$wc = mb_strpos($ip, "*") !== false || mb_strpos($ip, "?") !== false;
 
 // hent data
 $pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 200);

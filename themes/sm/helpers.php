@@ -20,14 +20,14 @@ class theme_helper
 		if (!login::$logged_in)
 		{
 			if (PHP_SELF != ess::$s['rpath'].'/index.php') $pages[] = '<a href="'.ess::$s['relative_path'].'/" class="login">Logg inn</a>';
-			if (strpos(PHP_SELF, "registrer") === false) $pages[] = '<a href="'.ess::$s['relative_path'].'/registrer" class="register">Registrer deg</a>';
-			if (strpos(PHP_SELF, "glemt_passord") === false) $pages[] = '<a href="'.ess::$s['relative_path'].'/glemt_passord" class="forgot">Glemt passord</a>';
+			if (mb_strpos(PHP_SELF, "registrer") === false) $pages[] = '<a href="'.ess::$s['relative_path'].'/registrer" class="register">Registrer deg</a>';
+			if (mb_strpos(PHP_SELF, "glemt_passord") === false) $pages[] = '<a href="'.ess::$s['relative_path'].'/glemt_passord" class="forgot">Glemt passord</a>';
 		}
 		else
 		{
 			$pages[] = '<a href="'.ess::$s['relative_path'].'/" class="frontpage">Forsiden</a>';
 		}
-		if (strpos(PHP_SELF, "henvendelser") === false) $pages[] = '<a href="'.ess::$s['relative_path'].'/henvendelser" class="contact">Kontakt oss</a>';
+		if (mb_strpos(PHP_SELF, "henvendelser") === false) $pages[] = '<a href="'.ess::$s['relative_path'].'/henvendelser" class="contact">Kontakt oss</a>';
 		
 		$data .= implode('
 			', $pages) . '

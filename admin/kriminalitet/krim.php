@@ -77,7 +77,7 @@ if (isset($_POST['title']))
 {
 	$title = trim(postval("title"));
 	
-	if (strlen($title) < 5)
+	if (mb_strlen($title) < 5)
 	{
 		$_base->page->add_message("Tittelen må være på 4 eller flere tegn.", "error");
 	}

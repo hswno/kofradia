@@ -31,7 +31,7 @@ class container
 	 */
 	private function encode($string, $delimiter = ":")
 	{
-		return strlen($string) . $delimiter . $string;
+		return mb_strlen($string) . $delimiter . $string;
 	}
 	
 	/**
@@ -46,11 +46,11 @@ class container
 		$data = array();
 		
 		// finn delimiter
-		while (($pos = strpos($string, $delimiter)) !== false)
+		while (($pos = mb_strpos($string, $delimiter)) !== false)
 		{
-			$len = intval(substr($string, 0, $pos));
-			$data[] = substr($string, $pos+1, $len);
-			$string = substr($string, $pos+$len+1);
+			$len = intval(mb_substr($string, 0, $pos));
+			$data[] = mb_substr($string, $pos+1, $len);
+			$string = mb_substr($string, $pos+$len+1);
 		}
 		
 		return $data;

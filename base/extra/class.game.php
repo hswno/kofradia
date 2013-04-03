@@ -207,11 +207,11 @@ class game
 	public static function format_nok($cash)
 	{
 		/*$end = ",00";
-		if (($pos = strpos($cash, ".")) !== false)
+		if (($pos = mb_strpos($cash, ".")) !== false)
 		{
-			$decimal = substr($cash, $pos+1, 2);
+			$decimal = mb_substr($cash, $pos+1, 2);
 			$end = "," . str_pad($decimal, 2, "0", STR_PAD_RIGHT);
-			$cash = substr($cash, 0, $pos);
+			$cash = mb_substr($cash, 0, $pos);
 		}
 		return "kr. " . strrev(chunk_split(strrev($cash), 3, " ")).$end;*/
 		return "kr. ".game::number_format_large($cash, 2);
@@ -221,14 +221,14 @@ class game
 	public static function format_number($float, $decimals = 0)
 	{
 		/*$end = "";
-		if (($pos = strpos($float, ".")) !== false)
+		if (($pos = mb_strpos($float, ".")) !== false)
 		{
 			if ($decimals > 0)
 			{
-				$decimal = substr($float, $pos+1, $decimals);
+				$decimal = mb_substr($float, $pos+1, $decimals);
 				$end = "," . str_pad($decimal, $decimals, "0", STR_PAD_RIGHT);
 			}
-			$float = ($pos == 0 ? '0' : '').substr($float, 0, $pos);
+			$float = ($pos == 0 ? '0' : '').mb_substr($float, 0, $pos);
 		}
 		return strrev(chunk_split(strrev($float), 3, " ")).$end;*/
 		return game::number_format_large($float, $decimals, ",", " ");
@@ -267,7 +267,7 @@ class game
 			$matches[2] = str_pad($matches[2], $e + $decimals, "0", STR_PAD_RIGHT);
 			for ($i = 0; $i < $e; $i++)
 			{
-				$number .= substr($matches[2], $i, 1);
+				$number .= mb_substr($matches[2], $i, 1);
 			}
 
 			// etter desimaltallet
@@ -277,19 +277,19 @@ class game
 				$len = $e + $decimals;
 				for (; $i < $len; $i++)
 				{
-					$number .= substr($matches[2], $i, 1);
+					$number .= mb_substr($matches[2], $i, 1);
 				}
 			}
 		}
 
 		$num = explode(".", $number, 2);
-		$number = substr(strrev(chunk_split(strrev($num[0]), 3, $tho_seperator)), 1);
+		$number = mb_substr(strrev(chunk_split(strrev($num[0]), 3, $tho_seperator)), 1);
 		if ($number == "") $number = 0;
 		if ($decimals > 0)
 		{
 			$num[1] = isset($num[1]) ? $num[1] : "";
 			$num[1] = str_pad($num[1], $decimals, "0", STR_PAD_RIGHT);
-			$number .= $dec_seperator . substr($num[1], 0, $decimals);
+			$number .= $dec_seperator . mb_substr($num[1], 0, $decimals);
 		}
 
 		if (empty($number)) $number = 0;
@@ -315,7 +315,7 @@ class game
 			$matches[2] = str_pad($matches[2], $e, "0", STR_PAD_RIGHT);
 			for ($i = 0; $i < $e; $i++)
 			{
-				$number .= substr($matches[2], $i, 1);
+				$number .= mb_substr($matches[2], $i, 1);
 			}
 		}
 
@@ -382,15 +382,15 @@ class game
 	// sikre adresser til bilder
 	public static function secure_img_addr($addr)
 	{
-		/*if (substr($addr, 0, 1) == "/" || substr($addr, 0, 1) == "\\" || substr($addr, 0, 1) == ".")
+		/*if (mb_substr($addr, 0, 1) == "/" || mb_substr($addr, 0, 1) == "\\" || mb_substr($addr, 0, 1) == ".")
 		{
-			if (($pos = strpos($addr, "?")) !== false)
+			if (($pos = mb_strpos($addr, "?")) !== false)
 			{
-				$name = substr($addr, 0, $pos);
+				$name = mb_substr($addr, 0, $pos);
 				$parts = explode("/", $name);
 				foreach ($parts as $part)
 				{
-					if (substr($part, -4) == ".php")
+					if (mb_substr($part, -4) == ".php")
 					{
 						return "IMG: Mulig exploit hindret";
 					}
@@ -432,7 +432,7 @@ class game
 	{
 		$key = "smafia_raw_html";
 		$text = preg_replace("/[\n\r\t ]/u", "", $text);
-		return substr(md5($key . $text), 0, 8);
+		return mb_substr(md5($key . $text), 0, 8);
 	}
 	
 	
@@ -797,7 +797,7 @@ class game
 				}
 				
 				// kontaktliste?
-				if (strpos($data, "[kontakter]") !== false)
+				if (mb_strpos($data, "[kontakter]") !== false)
 				{
 					// hent kontaktliste
 					$result = $_base->db->query("SELECT uc_contact_up_id, up_name, up_access_level, up_last_online FROM users_contacts LEFT JOIN users_players ON uc_contact_up_id = up_id WHERE uc_u_id = {$args->data['up_u_id']} AND uc_type = 1 ORDER BY up_name");
@@ -830,7 +830,7 @@ class game
 				}
 
 				// blokkeringliste?
-				if (strpos($data, "[blokkert]") !== false)
+				if (mb_strpos($data, "[blokkert]") !== false)
 				{
 					// hent blokkeringliste
 					$result = $_base->db->query("SELECT uc_contact_up_id, up_name, up_access_level, up_last_online FROM users_contacts LEFT JOIN users_players ON uc_contact_up_id = up_id WHERE uc_u_id = {$args->data['up_u_id']} AND uc_type = 2 ORDER BY up_name");
@@ -1017,7 +1017,7 @@ class game
 				
 				foreach ($row as $r)
 				{
-					$r = substr($r, 3);
+					$r = mb_substr($r, 3);
 					if (empty($r)) continue;
 					$html .= '<li>'.$r.'</li>';
 				}
@@ -1039,7 +1039,7 @@ class game
 				
 				foreach ($row as $r)
 				{
-					$r = substr($r, 3);
+					$r = mb_substr($r, 3);
 					if (empty($r)) continue;
 					$html .= '<li>'.$r.'</li>';
 				}
@@ -1219,9 +1219,9 @@ class game
 	public static function address($path, $get = array(), $exclude = array(), $add = array())
 	{
 		// fjern evt. querystring fra path
-		if (($pos = strpos($path, "?")) !== false)
+		if (($pos = mb_strpos($path, "?")) !== false)
 		{
-			$path = substr($path, 0, $pos);
+			$path = mb_substr($path, 0, $pos);
 		}
 		
 		foreach ($exclude as $name) unset($get[$name]);

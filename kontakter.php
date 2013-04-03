@@ -66,7 +66,7 @@ if (isset($_GET['add']))
 		$text = strip_tags(game::bb_to_html($info));
 		
 		// for lang?
-		if (strlen($text) > 200)
+		if (mb_strlen($text) > 200)
 		{
 			$_base->page->add_message("Informasjonen var for lang. Kan ikke være mer enn 200 tegn (uten BB koder).", "error");
 		}
@@ -157,7 +157,7 @@ if (isset($_GET['edit']))
 		$text = strip_tags(game::bb_to_html($info));
 		
 		// for lang?
-		if (strlen($text) > 200)
+		if (mb_strlen($text) > 200)
 		{
 			$_base->page->add_message(($row['uc_type'] == 1 ? 'Informasjonen' : 'Begrunnelsen')." var for lang. Kan ikke være mer enn 200 tegn (uten BB koder).", "error");
 		}

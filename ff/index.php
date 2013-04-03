@@ -1384,9 +1384,9 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$result = ess::$b->db->query("SELECT COUNT(up_id), SUM(up_bank) FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_bank_ff_id = {$this->ff->id}");
 		$num_klienter = mysql_result($result, 0);
 		$bank_value = (string) mysql_result($result, 0, 1);
-		if (strlen($bank_value) > 2)
+		if (mb_strlen($bank_value) > 2)
 		{
-			$bank_value = round(substr($bank_value, 0, 3), -1) . str_repeat("0", strlen($bank_value)-3);
+			$bank_value = round(mb_substr($bank_value, 0, 3), -1) . str_repeat("0", mb_strlen($bank_value)-3);
 		}
 		
 		// finn ut nåværende status

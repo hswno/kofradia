@@ -14,7 +14,7 @@ $htdigest = new htdigest(file_get_contents($passfile));
 
 if (isset($_POST['pass']))
 {
-	if (strlen($_POST['pass']) < 5)
+	if (mb_strlen($_POST['pass']) < 5)
 	{
 		$_base->page->add_message("Minst 5 tegn!", "error");
 	}

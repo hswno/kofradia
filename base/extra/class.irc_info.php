@@ -27,7 +27,7 @@ abstract class irc_info
 			$list = array();
 			foreach (get_class_methods($this) as $row)
 			{
-				if (substr($row, 0, 2) == "c_") $list[] = substr($row, 2);
+				if (mb_substr($row, 0, 2) == "c_") $list[] = mb_substr($row, 2);
 			}
 			sort($list);
 			
@@ -47,9 +47,9 @@ abstract class irc_info
 	/** Hent info for en spiller */
 	protected function hent_bruker_info($navn, $finn)
 	{
-		if (substr($navn, 0, 1) == "#" || substr($navn, 0, 1) == "%")
+		if (mb_substr($navn, 0, 1) == "#" || mb_substr($navn, 0, 1) == "%")
 		{
-			$where = "up_id = ".intval(substr($navn, 1));
+			$where = "up_id = ".intval(mb_substr($navn, 1));
 		}
 		else
 		{
@@ -486,9 +486,9 @@ abstract class irc_info
 		
 		else
 		{
-			if (substr($find, 0, 1) == "!" || substr($find, 0, 1) == "%")
+			if (mb_substr($find, 0, 1) == "!" || mb_substr($find, 0, 1) == "%")
 			{
-				$find = 'up_id = '.intval(substr($find, 1));
+				$find = 'up_id = '.intval(mb_substr($find, 1));
 			}
 			else
 			{
@@ -533,10 +533,10 @@ abstract class irc_info
 	{
 		$player = $this->cmd_x[1];
 		$toptoday = false;
-		if (substr($player, 0, 10) == "!toptoday ")
+		if (mb_substr($player, 0, 10) == "!toptoday ")
 		{
 			$toptoday = true;
-			$player = substr($player, 10);
+			$player = mb_substr($player, 10);
 		}
 		if (empty($player))
 		{
@@ -1051,23 +1051,23 @@ abstract class irc_info
 		$c = $data['content'];
 		
 		// finn antall requests pr sekund
-		$p1 = strpos($c, "CPU Usage");
+		$p1 = mb_strpos($c, "CPU Usage");
 		if ($p1 !== false)
 		{
-			$p2 = strpos($c, "\n", $p1)+1;
-			$p3 = strpos($c, "\n", $p2)-4;
+			$p2 = mb_strpos($c, "\n", $p1)+1;
+			$p3 = mb_strpos($c, "\n", $p2)-4;
 			
 			// finn ut cpu load
-			$p4 = strpos($c, "-", $p1)+2;
-			$p5 = strpos($c, "%", $p4)+1;
+			$p4 = mb_strpos($c, "-", $p1)+2;
+			$p5 = mb_strpos($c, "%", $p4)+1;
 			
 			// finn antall requests i dette øyeblikket
-			$req = explode(" ", substr($c, $p3+6, 10));
+			$req = explode(" ", mb_substr($c, $p3+6, 10));
 			$req = $req[0];
 			
-			$load = str_replace(array(".", "%"), array(",", " %"), substr($c, $p4, $p5-$p4));
+			$load = str_replace(array(".", "%"), array(",", " %"), mb_substr($c, $p4, $p5-$p4));
 			
-			$status = explode(" - ", substr($c, $p2, $p3-$p2));
+			$status = explode(" - ", mb_substr($c, $p2, $p3-$p2));
 			$status[0] = explode(" ", $status[0]);
 			$status[0] = str_replace(".", ",", $status[0][0]);
 			$status[1] = explode(" ", $status[1]);

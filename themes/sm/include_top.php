@@ -60,17 +60,17 @@ $list = array(
 	"gecko" => "gecko"
 );
 $class_browser = 'unknown_engine';
-$browser = strtolower($_SERVER['HTTP_USER_AGENT']);
+$browser = mb_strtolower($_SERVER['HTTP_USER_AGENT']);
 foreach ($list as $key => $item)
 {
-	if (strpos($browser, $key) !== false)
+	if (mb_strpos($browser, $key) !== false)
 	{
 		$class_browser = $item;
 		break;
 	}
 }
 
-if (!isset($_SERVER['HTTP_USER_AGENT']) || strpos($_SERVER['HTTP_USER_AGENT'], "MSIE 6") === false)
+if (!isset($_SERVER['HTTP_USER_AGENT']) || mb_strpos($_SERVER['HTTP_USER_AGENT'], "MSIE 6") === false)
 {
 	#header("Content-Type: application/xhtml+xml; charset=utf-8");
 	#header("Content-Type: text/html; charset=utf-8");

@@ -4,13 +4,13 @@
 $root = "/crewstuff/f/";
 
 $redirurl = $_SERVER['REQUEST_URI'];                                                                           
-if (($pos = strpos($redirurl, "?")) !== false) $redirurl = substr($redirurl, 0, $pos); 
+if (($pos = mb_strpos($redirurl, "?")) !== false) $redirurl = mb_substr($redirurl, 0, $pos); 
 
 // finn riktig adresse
 $url = isset($redirurl) ? $redirurl : '';
-if (substr($url, 0, strlen($root)) === $root)
+if (mb_substr($url, 0, mb_strlen($root)) === $root)
 {
-	$url = substr($url, strlen($root));
+	$url = mb_substr($url, mb_strlen($root));
 }
 
 // de ulike delene av adressen
@@ -226,9 +226,9 @@ if ($page == "map")
 				
 				// finn filetternavn
 				$ext = '';
-				if (($pos = strrpos($file['cfr_title'], ".")) !== false)
+				if (($pos = mb_strrpos($file['cfr_title'], ".")) !== false)
 				{
-					$ext = substr($file['cfr_title'], $pos+1);
+					$ext = mb_substr($file['cfr_title'], $pos+1);
 				}
 				
 				echo '
@@ -313,7 +313,7 @@ if ($page == "mappe")
 			}
 			
 			// kontroller tittel
-			if (strlen($title) < 3)
+			if (mb_strlen($title) < 3)
 			{
 				$_base->page->add_message("Tittelen kan ikke være mindre enn 3 tegn.", "error");
 			}
@@ -452,7 +452,7 @@ if ($page == "mappe")
 			}
 			
 			// kontroller tittel
-			if (strlen($title) < 3)
+			if (mb_strlen($title) < 3)
 			{
 				$_base->page->add_message("Tittelen kan ikke være mindre enn 3 tegn.", "error");
 			}
@@ -680,25 +680,25 @@ if ($page == "mappe")
 				{
 					// sett opp tittel basert på filnavnet uten etternavn og forkort om nødvendig
 					$title = $name;
-					if (($pos = strrpos($title, ".")) !== false)
+					if (($pos = mb_strrpos($title, ".")) !== false)
 					{
-						$title = substr($title, 0, $pos);
+						$title = mb_substr($title, 0, $pos);
 					}
-					if (strlen($title) > 100) $title = substr($title, 0, 100);
+					if (mb_strlen($title) > 100) $title = mb_substr($title, 0, 100);
 				}
 				
 				// forkort filnavn om nødvendig
-				if (strlen($name) > 100)
+				if (mb_strlen($name) > 100)
 				{
-					$pos = strrpos($title, ".");
+					$pos = mb_strrpos($title, ".");
 					if ($pos !== false)
 					{
-						$extlen = strlen($name) - $pos + 1;
-						$name = substr($name, 0, 100-$extlen) . "." . substr($name, $pos+1);
+						$extlen = mb_strlen($name) - $pos + 1;
+						$name = mb_substr($name, 0, 100-$extlen) . "." . mb_substr($name, $pos+1);
 					}
 					else
 					{
-						$name = substr($name, 0, 100);
+						$name = mb_substr($name, 0, 100);
 					}
 				}
 				
@@ -940,9 +940,9 @@ if ($page == "mappe")
 				
 				// finn filetternavn
 				$ext = '';
-				if (($pos = strrpos($row['cfr_title'], ".")) !== false)
+				if (($pos = mb_strrpos($row['cfr_title'], ".")) !== false)
 				{
-					$ext = substr($row['cfr_title'], $pos+1);
+					$ext = mb_substr($row['cfr_title'], $pos+1);
 				}
 				
 				echo '
@@ -1078,7 +1078,7 @@ elseif ($page == "fil")
 			}
 			
 			// kontroller tittel
-			if (strlen($title) < 3)
+			if (mb_strlen($title) < 3)
 			{
 				$_base->page->add_message("Tittelen kan ikke være mindre enn 3 tegn.", "error");
 			}
@@ -1257,17 +1257,17 @@ elseif ($page == "fil")
 				$set_active = isset($_POST['set_active']);
 				
 				// forkort filnavn om nødvendig
-				if (strlen($name) > 100)
+				if (mb_strlen($name) > 100)
 				{
-					$pos = strrpos($title, ".");
+					$pos = mb_strrpos($title, ".");
 					if ($pos !== false)
 					{
-						$extlen = strlen($name) - $pos + 1;
-						$name = substr($name, 0, 100-$extlen) . "." . substr($name, $pos+1);
+						$extlen = mb_strlen($name) - $pos + 1;
+						$name = mb_substr($name, 0, 100-$extlen) . "." . mb_substr($name, $pos+1);
 					}
 					else
 					{
-						$name = substr($name, 0, 100);
+						$name = mb_substr($name, 0, 100);
 					}
 				}
 				
@@ -1548,7 +1548,7 @@ elseif ($page == "rev")
 			$mime = trim(postval("mime"));
 			
 			// kontroller tittel
-			if (strlen($title) < 3)
+			if (mb_strlen($title) < 3)
 			{
 				$_base->page->add_message("Tittelen kan ikke være mindre enn 3 tegn.", "error");
 			}

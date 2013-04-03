@@ -303,7 +303,7 @@ class gamelog
 			
 			case "support":
 				// avsluttet?
-				if (substr($note, 0, 2) == "c:")
+				if (mb_substr($note, 0, 2) == "c:")
 				{
 					$info = explode(":", $note, 3); // c:sum_up_id:su_title
 					$html = true;

@@ -6,7 +6,7 @@ class page_node
 	{
 		// sett opp path enheter
 		$path = isset($_SERVER['REDIR_URL']) ? $_SERVER['REDIR_URL'] : "";
-		if (substr($path, 0, 1) == "/") $path = substr($path, 1);
+		if (mb_substr($path, 0, 1) == "/") $path = mb_substr($path, 1);
 		$path = explode("/", $path);
 		
 		$node_id = null;
@@ -772,7 +772,7 @@ class page_node_admin
 					ess::$b->db->query("UPDATE nodes SET node_priority = node_priority + 1 WHERE node_parent_node_id = {$parent_node} AND node_priority >= $priority");
 					
 					// legg til side
-					ess::$b->db->query("INSERT INTO nodes SET node_parent_node_id = $parent_node, node_title = ".ess::$b->db->quote($title).", node_type = ".ess::$b->db->quote(strtolower($type)).", node_priority = $priority, node_change = ".time());
+					ess::$b->db->query("INSERT INTO nodes SET node_parent_node_id = $parent_node, node_title = ".ess::$b->db->quote($title).", node_type = ".ess::$b->db->quote(mb_strtolower($type)).", node_priority = $priority, node_change = ".time());
 					
 					$iid = mysql_insert_id();
 					ess::$b->page->add_message("Siden ble lagt til.");

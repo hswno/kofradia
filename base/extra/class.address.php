@@ -143,9 +143,9 @@ class address
 	 */
 	private function set_path($path)
 	{
-		if (($pos = strpos($path, "?")) !== false)
+		if (($pos = mb_strpos($path, "?")) !== false)
 		{
-			$path = substr($path, 0, $pos);
+			$path = mb_substr($path, 0, $pos);
 		}
 		
 		self::$path = $path;

@@ -505,7 +505,7 @@ class antibot_generate
 	/** Sjekk for gyldig bildetype */
 	protected function image_type($name)
 	{
-		$ext = substr($name, strrpos($name, ".")+1);
+		$ext = mb_substr($name, mb_strrpos($name, ".")+1);
 		if ($ext == "jpg" || $ext == "jpeg") return "jpeg";
 		elseif ($ext == "png") return "png";
 		elseif ($ext == "gif") return "gif";

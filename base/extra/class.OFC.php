@@ -145,18 +145,18 @@ class OFC
 		
 		/// tooltip
 		$this->tooltip()->colour("#AAAAAA")->background("#EEEEEE");
-		if (!isset($this->tooltip->title) || strpos($this->tooltip->title, "font-size") === false) $this->tooltip->title .= "; font-size: 12px";
-		if (strpos($this->tooltip->title, "font-weight") === false) $this->tooltip->title .= "; font-weight: bold";
-		if (!isset($this->tooltip->text) || strpos($this->tooltip->text, "font-size") === false) $this->tooltip->text .= "; font-size: 12px";
+		if (!isset($this->tooltip->title) || mb_strpos($this->tooltip->title, "font-size") === false) $this->tooltip->title .= "; font-size: 12px";
+		if (mb_strpos($this->tooltip->title, "font-weight") === false) $this->tooltip->title .= "; font-weight: bold";
+		if (!isset($this->tooltip->text) || mb_strpos($this->tooltip->text, "font-size") === false) $this->tooltip->text .= "; font-size: 12px";
 		
 		// legends
-		if (isset($this->x_legend) && (!isset($this->x_legend->style) || strpos($this->x_legend->style, "color") === false)) $this->x_legend->style .= "; color: #EEEEEE";
-		if (isset($this->y_legend) && (!isset($this->y_legend->style) || strpos($this->y_legend->style, "color") === false)) $this->y_legend->style .= "; color: #EEEEEE";
-		if (isset($this->y2_legend) && (!isset($this->y2_legend->style) || strpos($this->y2_legend->style, "color") === false)) $this->y2_legend->style .= "; color: #EEEEEE";
+		if (isset($this->x_legend) && (!isset($this->x_legend->style) || mb_strpos($this->x_legend->style, "color") === false)) $this->x_legend->style .= "; color: #EEEEEE";
+		if (isset($this->y_legend) && (!isset($this->y_legend->style) || mb_strpos($this->y_legend->style, "color") === false)) $this->y_legend->style .= "; color: #EEEEEE";
+		if (isset($this->y2_legend) && (!isset($this->y2_legend->style) || mb_strpos($this->y2_legend->style, "color") === false)) $this->y2_legend->style .= "; color: #EEEEEE";
 		
 		// title
-		if (isset($this->title) && (!isset($this->title->style) || strpos($this->title->style, "color") === false)) $this->title->style .= "; color: #EEEEEE";
-		if (isset($this->title) && (!isset($this->title->style) || strpos($this->title->style, "font-size") === false)) $this->title->style .= "; font-size: 12px";
+		if (isset($this->title) && (!isset($this->title->style) || mb_strpos($this->title->style, "color") === false)) $this->title->style .= "; color: #EEEEEE";
+		if (isset($this->title) && (!isset($this->title->style) || mb_strpos($this->title->style, "font-size") === false)) $this->title->style .= "; font-size: 12px";
 		
 		return $this;
 	}
@@ -289,7 +289,7 @@ abstract class OFC_Axis
 	{
 		#if ($min != 0 || isset($this->min)) $this->min = $min;
 		if ($max <= 100 && $min >= -100) $l = 10;
-		else $l = (int) '10'.str_repeat("0", strlen(ceil($max)-floor($min))-3);
+		else $l = (int) '10'.str_repeat("0", mb_strlen(ceil($max)-floor($min))-3);
 		$this->min = floor(min(0, $min)/$l)*$l;
 		$this->max = ceil(max(1, $max)/$l)*$l;
 		$this->steps = ($this->max - $this->min) / $steps;

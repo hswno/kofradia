@@ -196,8 +196,8 @@ class registrer
 				// kontroller om e-postadressen eller domenet er blokkert
 				if ($email_valid)
 				{
-					$pos = strpos($epost1, "@");
-					$domain = strtolower(substr($epost1, $pos + 1));
+					$pos = mb_strpos($epost1, "@");
+					$domain = mb_strtolower(mb_substr($epost1, $pos + 1));
 					
 					$result = ess::$b->db->query("SELECT eb_id, eb_type FROM email_blacklist WHERE (eb_type = 'address' AND eb_value = ".ess::$b->db->quote($epost1).") OR (eb_type = 'domain' AND eb_value = ".ess::$b->db->quote($domain).") ORDER BY eb_type = 'address' LIMIT 1");
 					$error_email = mysql_fetch_assoc($result);
@@ -291,7 +291,7 @@ class registrer
 					else
 					{
 						// sett opp kode
-						$code = substr(md5(uniqid("kofradia_")), 0, 16);
+						$code = mb_substr(md5(uniqid("kofradia_")), 0, 16);
 						
 						// legg til i databasen
 						ess::$b->db->query("INSERT INTO registration SET time = ".time().", birth = '$birth', email = ".ess::$b->db->quote($epost1).", code = '$code', ip = '{$_SERVER['REMOTE_ADDR']}', expire = ".(time()+7200));

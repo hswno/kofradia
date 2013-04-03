@@ -212,15 +212,15 @@ class user_innboks
 				$d = preg_replace("/\\n/u", " ", $d);
 				$d = preg_replace("/  +/u", " ", $d);
 				$d = trim($d);
-				if (strlen($d) > $max)
+				if (mb_strlen($d) > $max)
 				{
 					// TODO: Flytt funksjon til en klasse/funksjon så den kan gjenbrukes av andre sider
 					// forsøk å bryt på et mellomrom
-					$pos = strpos($d, " ", $max - 10);
+					$pos = mb_strpos($d, " ", $max - 10);
 					if ($pos !== false && $pos < $max)
-						$d = substr($d, 0, $pos) . " ...";
+						$d = mb_substr($d, 0, $pos) . " ...";
 					else
-						$d = substr($d, 0, $max - 3) . "...";
+						$d = mb_substr($d, 0, $max - 3) . "...";
 				}
 				$meldinger[$im_id[$row['id_im_id']]]['id_text'] = $d;
 			}

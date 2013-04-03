@@ -54,7 +54,7 @@ class PasswordHash {
 			fclose($fh);
 		}
 
-		if (strlen($output) < $count) {
+		if (mb_strlen($output) < $count) {
 			$output = '';
 			for ($i = 0; $i < $count; $i += 16) {
 				$this->random_state =
@@ -62,7 +62,7 @@ class PasswordHash {
 				$output .=
 				    pack('H*', md5($this->random_state));
 			}
-			$output = substr($output, 0, $count);
+			$output = mb_substr($output, 0, $count);
 		}
 
 		return $output;
@@ -104,22 +104,22 @@ class PasswordHash {
 	function crypt_private($password, $setting)
 	{
 		$output = '*0';
-		if (substr($setting, 0, 2) == $output)
+		if (mb_substr($setting, 0, 2) == $output)
 			$output = '*1';
 
-		$id = substr($setting, 0, 3);
+		$id = mb_substr($setting, 0, 3);
 		# We use "$P$", phpBB3 uses "$H$" for the same thing
 		if ($id != '$P$' && $id != '$H$')
 			return $output;
 
-		$count_log2 = strpos($this->itoa64, $setting[3]);
+		$count_log2 = mb_strpos($this->itoa64, $setting[3]);
 		if ($count_log2 < 7 || $count_log2 > 30)
 			return $output;
 
 		$count = 1 << $count_log2;
 
-		$salt = substr($setting, 4, 8);
-		if (strlen($salt) != 8)
+		$salt = mb_substr($setting, 4, 8);
+		if (mb_strlen($salt) != 8)
 			return $output;
 
 		# We're kind of forced to use MD5 here since it's the only
@@ -140,7 +140,7 @@ class PasswordHash {
 			} while (--$count);
 		}
 
-		$output = substr($setting, 0, 12);
+		$output = mb_substr($setting, 0, 12);
 		$output .= $this->encode64($hash, 16);
 
 		return $output;
@@ -213,25 +213,25 @@ class PasswordHash {
 			$random = $this->get_random_bytes(16);
 			$hash =
 			    crypt($password, $this->gensalt_blowfish($random));
-			if (strlen($hash) == 60)
+			if (mb_strlen($hash) == 60)
 				return $hash;
 		}
 
 		if (CRYPT_EXT_DES == 1 && !$this->portable_hashes) {
-			if (strlen($random) < 3)
+			if (mb_strlen($random) < 3)
 				$random = $this->get_random_bytes(3);
 			$hash =
 			    crypt($password, $this->gensalt_extended($random));
-			if (strlen($hash) == 20)
+			if (mb_strlen($hash) == 20)
 				return $hash;
 		}
 
-		if (strlen($random) < 6)
+		if (mb_strlen($random) < 6)
 			$random = $this->get_random_bytes(6);
 		$hash =
 		    $this->crypt_private($password,
 		    $this->gensalt_private($random));
-		if (strlen($hash) == 34)
+		if (mb_strlen($hash) == 34)
 			return $hash;
 
 		# Returning '*' on error is safe here, but would _not_ be safe

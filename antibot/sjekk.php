@@ -3,13 +3,13 @@
 // hente bilde?
 if (isset($_GET['a']))
 {
-	if (strlen($_GET['a']) < 2) die("Mangler params.");
+	if (mb_strlen($_GET['a']) < 2) die("Mangler params.");
 	
 	require "../base/inc.innstillinger_pre.php";
 	session_start();
 	
-	$aid = (int) substr($_GET['a'], 0, -1);
-	$num = (int) substr($_GET['a'], -1);
+	$aid = (int) mb_substr($_GET['a'], 0, -1);
+	$num = (int) mb_substr($_GET['a'], -1);
 	
 	// mangler?
 	if (!isset($_SESSION[$GLOBALS['__server']['session_prefix'].'data']['antibot'][$aid][$num]))
@@ -23,7 +23,7 @@ if (isset($_GET['a']))
 	
 	// header
 	header("Content-Type: image/jpeg");
-	header("Content-Length: ".strlen($img));
+	header("Content-Length: ".mb_strlen($img));
 	
 	header("Expires: Mon, 18 Jul 2005 00:00:00 GMT");
 	header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");

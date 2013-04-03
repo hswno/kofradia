@@ -86,7 +86,7 @@ class email
 			break;
 			
 			case "quoted-printable":
-				$length = strlen($data);
+				$length = mb_strlen($data);
 				$result = '';
 				$linelength = 0;
 				
@@ -129,7 +129,7 @@ class email
 							}
 						}
 						
-						$result .= "=".str_pad(strtoupper(dechex($c)), 2, '0', STR_PAD_LEFT);
+						$result .= "=".str_pad(mb_strtoupper(dechex($c)), 2, '0', STR_PAD_LEFT);
 						$linelength += 3;
 					}
 					
@@ -303,6 +303,6 @@ class email
 		}
 		
 		// send e-posten
-		return @mail($receiver, $subject, $this->data[1], $headers, $this->params);
+		return @mb_send_mail($receiver, $subject, $this->data[1], $headers, $this->params);
 	}
 }

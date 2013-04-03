@@ -146,7 +146,7 @@ class login
 			}
 			
 			// sjekk at vi har alle cookies
-			if (isset($_COOKIE[$__server['cookie_prefix'] . "id"]) && substr_count($_COOKIE[$__server['cookie_prefix'] . "id"], ":") == 1 && isset($_COOKIE[$__server['cookie_prefix'] . "h"]))
+			if (isset($_COOKIE[$__server['cookie_prefix'] . "id"]) && mb_substr_count($_COOKIE[$__server['cookie_prefix'] . "id"], ":") == 1 && isset($_COOKIE[$__server['cookie_prefix'] . "h"]))
 			{
 				// finn sid, uid og hash
 				list($sid, $uid) = explode(":", $_COOKIE[$__server['cookie_prefix'] . "id"]);
@@ -166,7 +166,7 @@ class login
 				if (mysql_num_rows($result) > 0)
 				{
 					$row = mysql_fetch_assoc($result);
-					if ($hash != $row['ses_hash'] && $hash != substr(md5($row['ses_hash']), 0, 13))
+					if ($hash != $row['ses_hash'] && $hash != mb_substr(md5($row['ses_hash']), 0, 13))
 					{
 						$row = null;
 					}
@@ -221,7 +221,7 @@ class login
 								$ok = true;
 							}
 							
-							elseif (substr(md5($row['ses_hash']), 0, 13) == $hash)
+							elseif (mb_substr(md5($row['ses_hash']), 0, 13) == $hash)
 							{
 								// må bruke HTTPS?
 								if (!HTTPS)
@@ -645,7 +645,7 @@ class login
 		
 		// lag unik id
 		$hash = uniqid("");
-		$hash_pub = substr(md5($hash), 0, 13);
+		$hash_pub = mb_substr(md5($hash), 0, 13);
 		
 		// timeout tid
 		$timeout = 900;
@@ -800,18 +800,18 @@ class login
 		
 		// finn adressen for denne siden
 		global $__server;
-		$path = substr($_SERVER['REQUEST_URI'], 0);
-		$prefix = strlen($__server['relative_path']);
+		$path = mb_substr($_SERVER['REQUEST_URI'], 0);
+		$prefix = mb_strlen($__server['relative_path']);
 		if ($prefix > 0)
 		{
-			if (substr($path, 0, $prefix) != $__server['relative_path'])
+			if (mb_substr($path, 0, $prefix) != $__server['relative_path'])
 			{
 				redirect::handle("lock", redirect::ROOT);
 			}
 			
-			$path = substr($path, $prefix);
+			$path = mb_substr($path, $prefix);
 		}
-		$path = substr($path, 1);
+		$path = mb_substr($path, 1);
 		
 		// er vi på en side vi ikke har tillatelse til å være?
 		if (!preg_match($allowed, $path))

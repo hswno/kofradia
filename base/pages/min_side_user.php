@@ -707,7 +707,7 @@ class page_min_side_user
 					}
 					
 					// kontroller krav (minst 6 tegn)
-					elseif (strlen($pass_new) < 6)
+					elseif (mb_strlen($pass_new) < 6)
 					{
 						ess::$b->page->add_message("Det nye passordet må inneholde minimum 6 tegn.", "error");
 					}
@@ -972,7 +972,7 @@ class page_min_side_user
 					if (isset($_POST['continue']) && validate_sid(false))
 					{
 						// generer kode
-						$hash = substr(md5(uniqid("kofradia_")), 0, 16);
+						$hash = mb_substr(md5(uniqid("kofradia_")), 0, 16);
 						
 						// sett status
 						page_min_side::$active_user->params->update("change_email_step", 2);
@@ -1108,8 +1108,8 @@ www.kofradia.no';
 						// kontroller om e-postadressen eller domenet er blokkert
 						if ($email_valid)
 						{
-							$pos = strpos($email_addr, "@");
-							$domain = strtolower(substr($email_addr, $pos + 1));
+							$pos = mb_strpos($email_addr, "@");
+							$domain = mb_strtolower(mb_substr($email_addr, $pos + 1));
 							
 							$result = ess::$b->db->query("SELECT eb_id, eb_type FROM email_blacklist WHERE (eb_type = 'address' AND eb_value = ".ess::$b->db->quote($email_addr).") OR (eb_type = 'domain' AND eb_value = ".ess::$b->db->quote($domain).") ORDER BY eb_type = 'address' LIMIT 1");
 							$error_email = mysql_fetch_assoc($result);
@@ -1144,7 +1144,7 @@ www.kofradia.no';
 						else
 						{
 							// generer kode
-							$hash = substr(md5(uniqid("kofradia_")), 0, 16);
+							$hash = mb_substr(md5(uniqid("kofradia_")), 0, 16);
 							
 							// sett status
 							page_min_side::$active_user->params->update("change_email_step", 1);
@@ -3340,7 +3340,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				$log = trim(postval("log"));
 				
 				// for kort?
-				if (strlen($bank_auth) < 6)
+				if (mb_strlen($bank_auth) < 6)
 				{
 					ess::$b->page->add_message("Passordet må inneholde minst 6 tegn.", "error");
 				}

@@ -44,7 +44,7 @@ class mailer
 		while ($row = mysql_fetch_assoc($result))
 		{
 			// send e-posten
-			if (mail($row['m_receiver'], $row['m_subject'], $row['m_body'], $row['m_headers'], $row['m_params']))
+			if (mb_send_mail($row['m_receiver'], $row['m_subject'], $row['m_body'], $row['m_headers'], $row['m_params']))
 			{
 				// fjern fra databasen
 				$_base->db->query("DELETE FROM mailer WHERE m_id = {$row['m_id']}");

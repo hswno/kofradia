@@ -145,17 +145,17 @@ class page_ff_avis
 			$text_plain = strip_tags(game::format_data($text));
 			
 			// sjekk tittel
-			if (strlen($title) < 5)
+			if (mb_strlen($title) < 5)
 			{
 				ess::$b->page->add_message("Tittelen må inneholde minimum 5 tegn.", "error");
 			}
-			elseif (strlen($title) > 30)
+			elseif (mb_strlen($title) > 30)
 			{
 				ess::$b->page->add_message("Tittelen kan ikke inneholde mer enn 30 tegn.", "error");
 			}
 			
 			// sjekk tekst
-			elseif (strlen($text_plain) > 10000)
+			elseif (mb_strlen($text_plain) > 10000)
 			{
 				ess::$b->page->add_message("Innholdet kan ikke inneholde mer enn 10 000 bokstaver/tall.", "error");
 			}
@@ -265,17 +265,17 @@ class page_ff_avis
 			$text_plain = strip_tags(game::format_data($text));
 			
 			// sjekk tittel
-			if (strlen($title) < 5)
+			if (mb_strlen($title) < 5)
 			{
 				ess::$b->page->add_message("Tittelen må inneholde minimum 5 tegn.", "error");
 			}
-			elseif (strlen($title) > 30)
+			elseif (mb_strlen($title) > 30)
 			{
 				ess::$b->page->add_message("Tittelen kan ikke inneholde mer enn 30 tegn.", "error");
 			}
 			
 			// sjekk tekst
-			elseif (strlen($text_plain) > 10000)
+			elseif (mb_strlen($text_plain) > 10000)
 			{
 				ess::$b->page->add_message("Innholdet kan ikke inneholde mer enn 10 000 bokstaver/tall.", "error");
 			}
@@ -383,7 +383,7 @@ class page_ff_avis
 		$text_plain = strip_tags(game::format_data($text));
 		
 		// sjekk tekst
-		if (strlen($text_plain) < 20)
+		if (mb_strlen($text_plain) < 20)
 		{
 			ess::$b->page->add_message("Innholdet må inneholde minimum 20 bokstaver/tall før artikkelen kan publiseres.", "error");
 			redirect::handle();
@@ -736,21 +736,21 @@ class page_ff_avis
 			$template = postval("template");
 			
 			// sjekk tittel
-			if (strlen($title) < 5)
+			if (mb_strlen($title) < 5)
 			{
 				ess::$b->page->add_message("Tittelen må inneholde minimum 5 tegn.", "error");
 			}
-			elseif (strlen($title) > 35)
+			elseif (mb_strlen($title) > 35)
 			{
 				ess::$b->page->add_message("Tittelen kan ikke inneholde mer enn 35 tegn.", "error");
 			}
 			
 			// sjekk beskrivelse
-			/*elseif (strlen($desc_plain) < 30)
+			/*elseif (mb_strlen($desc_plain) < 30)
 			{
 				ess::$b->page->add_message("Beskrivelsen må inneholde minimum 30 tegn.", "error");
 			}*/
-			elseif (strlen($desc_plain) > 200)
+			elseif (mb_strlen($desc_plain) > 200)
 			{
 				ess::$b->page->add_message("Beskrivelsen kan ikke inneholde mer enn 200 tegn.", "error");
 			}
@@ -928,17 +928,17 @@ class page_ff_avis
 			$price = game::intval(postval("price"));
 			
 			// sjekk tittel
-			if (strlen($title) < 5)
+			if (mb_strlen($title) < 5)
 			{
 				ess::$b->page->add_message("Tittelen må inneholde minimum 5 tegn.", "error");
 			}
-			elseif (strlen($title) > 35)
+			elseif (mb_strlen($title) > 35)
 			{
 				ess::$b->page->add_message("Tittelen kan ikke inneholde mer enn 35 tegn.", "error");
 			}
 			
 			// sjekk beskrivelse
-			elseif (strlen($desc_plain) > 200)
+			elseif (mb_strlen($desc_plain) > 200)
 			{
 				ess::$b->page->add_message("Beskrivelsen kan ikke inneholde mer enn 200 tegn.", "error");
 			}
@@ -1252,7 +1252,7 @@ function vis_bilde(elm)
 			if (isset($_POST['theme_position']))
 			{
 				$position = postval("theme_position");
-				if (($pos = strpos($position, ":")) === false)
+				if (($pos = mb_strpos($position, ":")) === false)
 				{
 					ess::$b->page->add_message("Du må velge en plassering.", "error");
 				}
@@ -1260,8 +1260,8 @@ function vis_bilde(elm)
 				else
 				{
 					// kontroller verdier
-					$area = substr($position, 0, $pos);
-					$priority = intval(substr($position, $pos+1));
+					$area = mb_substr($position, 0, $pos);
+					$priority = intval(mb_substr($position, $pos+1));
 					
 					if (!isset($template['areas'][$area]) || $priority <= 0)
 					{
@@ -1493,7 +1493,7 @@ function vis_bilde(elm)
 		if (isset($_POST['theme_position']))
 		{
 			$position = postval("theme_position");
-			if (($pos = strpos($position, ":")) === false)
+			if (($pos = mb_strpos($position, ":")) === false)
 			{
 				ess::$b->page->add_message("Du må velge en plassering.", "error");
 			}
@@ -1501,8 +1501,8 @@ function vis_bilde(elm)
 			else
 			{
 				// kontroller verdier
-				$area = substr($position, 0, $pos);
-				$priority = intval(substr($position, $pos+1));
+				$area = mb_substr($position, 0, $pos);
+				$priority = intval(mb_substr($position, $pos+1));
 				$add = $area == $ffna['ffna_theme_position'] ? 0 : 1;
 				
 				if (!isset($template['areas'][$area]) || $priority <= 0)
@@ -1659,7 +1659,7 @@ function vis_bilde(elm)
 		// kontroller beskrivelse
 		$desc_plain = strip_tags(game::format_data($ffn->data['ffn_description']));
 		
-		if (strlen($desc_plain) < 30)
+		if (mb_strlen($desc_plain) < 30)
 		{
 			ess::$b->page->add_message("Beskrivelsen for utgivelsen må inneholde minimum 30 bokstaver/tall før den kan publiseres.", "error");
 			redirect::handle();

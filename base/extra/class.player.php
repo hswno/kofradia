@@ -372,7 +372,7 @@ class player
 			WHERE up_id IN (".implode(",", $id_list).") AND up_u_id = u_id");
 		
 		// logg
-		putlog("LOG", "%c13%bMELDING%b%c: %u".$this->data['up_name']."%u opprettet ny meldingstråd med it_id {$it_id} (%u{$title}%u). Lengde: ".strlen($text)." bytes! ".ess::$s['path']."/innboks_les?id={$it_id}");
+		putlog("LOG", "%c13%bMELDING%b%c: %u".$this->data['up_name']."%u opprettet ny meldingstråd med it_id {$it_id} (%u{$title}%u). Lengde: ".mb_strlen($text)." bytes! ".ess::$s['path']."/innboks_les?id={$it_id}");
 		
 		return $it_id;
 	}
@@ -2062,7 +2062,7 @@ www.kofradia.no';
 	{
 		if (!$url) return PROFILE_IMAGES_DEFAULT;
 		
-		if (substr($url, 0, 2) == "l:") return PROFILE_IMAGES_HTTP . "/" . substr($url, 2);
+		if (mb_substr($url, 0, 2) == "l:") return PROFILE_IMAGES_HTTP . "/" . mb_substr($url, 2);
 		return $url;
 	}
 	

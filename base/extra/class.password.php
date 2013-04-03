@@ -48,21 +48,21 @@ class password
 				}
 				
 			case self::LEVEL_LONG:
-				if (strlen($password) < 8)
+				if (mb_strlen($password) < 8)
 				{
 					$error |= self::ERROR_SHORT;
 				}
 			case self::LEVEL_LOGIN:
-				if (strlen($password) < 6) $error |= self::ERROR_SHORT;
-				if (strpos($password, "12345") !== false) $error |= self::ERROR_EASY;
+				if (mb_strlen($password) < 6) $error |= self::ERROR_SHORT;
+				if (mb_strpos($password, "12345") !== false) $error |= self::ERROR_EASY;
 			break;
 				
 			case self::LEVEL_WEAK:
-				if (strlen($password) < 3) $error |= self::ERROR_SHORT;
+				if (mb_strlen($password) < 3) $error |= self::ERROR_SHORT;
 			break;
 			
 			case self::LEVEL_LOGIN:
-				if (strlen($password) < 3) $error |= self::ERROR_SHORT;
+				if (mb_strlen($password) < 3) $error |= self::ERROR_SHORT;
 		}
 		
 		return $error;

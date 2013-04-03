@@ -37,8 +37,8 @@ if (($count = (string)$count) < 1000)
 
 // Split the combination to an array
 $comb = array();
-for ($i = 0; $i < strlen($count); $i++) {
-	$comb[] = substr($count, $i, 1);
+for ($i = 0; $i < mb_strlen($count); $i++) {
+	$comb[] = mb_substr($count, $i, 1);
 }
 
 

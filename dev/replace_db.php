@@ -43,7 +43,7 @@ if (isset($_FILES['sqlfile']))
 	$fh = fopen($src, "r");
 	if (!$fh) die("Filen $src kunne ikke bli åpnet.");
 	$first = fgets($fh, 1024);
-	if (strpos($first, "MySQL dump") === false)
+	if (mb_strpos($first, "MySQL dump") === false)
 	{
 		die("Dette ser ikke ut som en 'MySQL dump'-fil");
 	}

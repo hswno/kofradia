@@ -76,7 +76,7 @@ class page
 		@ob_clean();
 		
 		// sjekk om vi har en placeholder (der for standard meldinger skal plasseres)
-		$placeholder = strpos($this->content, '<boxes />');
+		$placeholder = mb_strpos($this->content, '<boxes />');
 		
 		// informasjonsmeldinger
 		if (count($this->messages) > 0)
@@ -124,9 +124,9 @@ class page
 			{
 				// sørg for korrekt posisjon hvor den skal plasseres i tilfelle innholdet har blitt endret
 				// sjekk om vi har en placeholder (der for standard meldinger skal plasseres)
-				$placeholder = strpos($this->content, '<boxes />');
+				$placeholder = mb_strpos($this->content, '<boxes />');
 				
-				$this->content = substr($this->content, 0, $placeholder) . $msgs . substr($this->content, $placeholder);
+				$this->content = mb_substr($this->content, 0, $placeholder) . $msgs . mb_substr($this->content, $placeholder);
 			}
 			else
 			{

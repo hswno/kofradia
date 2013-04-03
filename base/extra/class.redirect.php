@@ -55,14 +55,14 @@ class redirect
 		// fra sideroot
 		if ($from == self::ROOT)
 		{
-			if (substr($location, 0, 1) != "/") $location = "/" . $location;
+			if (mb_substr($location, 0, 1) != "/") $location = "/" . $location;
 			$location = $prefix . $__server['relative_path'] . $location;
 		}
 		
 		// fra serverroot
 		elseif ($from == self::SERVER)
 		{
-			if (substr($location, 0, 1) != "/") $location = "/" . $location;
+			if (mb_substr($location, 0, 1) != "/") $location = "/" . $location;
 			$location = $prefix.$location;
 		}
 		
@@ -71,7 +71,7 @@ class redirect
 		{
 			$p = str_replace("\\", "/", dirname(PHP_SELF));
 			if ($p == "/") $p = "";
-			if (substr($location, 0, 1) != "/") $location = "/" . $location;
+			if (mb_substr($location, 0, 1) != "/") $location = "/" . $location;
 			$location = $prefix . $p . $location;
 		}
 		

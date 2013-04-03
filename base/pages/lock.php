@@ -619,7 +619,7 @@ class page_lock
 			}
 			
 			// kontroller krav (minst 6 tegn)
-			elseif (strlen($pass_new) < 6)
+			elseif (mb_strlen($pass_new) < 6)
 			{
 				ess::$b->page->add_message("Det nye passordet må inneholde minimum 6 tegn.", "error");
 			}

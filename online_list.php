@@ -86,7 +86,7 @@ $result = $_base->db->query("SELECT up_id, up_name, up_access_level FROM users_p
 $liste = array();
 while ($row = mysql_fetch_assoc($result))
 {
-	$liste[strtolower(substr($row['up_name'], 0, 1))][] = game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']);
+	$liste[mb_strtolower(mb_substr($row['up_name'], 0, 1))][] = game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']);
 }
 
 echo '

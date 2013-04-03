@@ -48,7 +48,7 @@ class available
 		$description = trim($description);
 		
 		// kontroller tittel
-		if (strlen($title) < 3)
+		if (mb_strlen($title) < 3)
 		{
 			return 'Tittelen må inneholde minimum 3 tegn.';
 		}
@@ -109,7 +109,7 @@ class available_group
 		$description = trim($description);
 		
 		// kontroller tittel
-		if (strlen($title) < 3)
+		if (mb_strlen($title) < 3)
 		{
 			return 'Tittelen må inneholde minimum 3 tegn.';
 		}

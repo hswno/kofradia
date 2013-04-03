@@ -57,7 +57,7 @@ else
 	$data = $data['content'];
 	
 	// offset
-	$data = substr($data, strpos($data, '<b>Request</b></td></tr>'));
+	$data = mb_substr($data, mb_strpos($data, '<b>Request</b></td></tr>'));
 	
 	/*
 	

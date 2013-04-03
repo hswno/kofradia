@@ -115,7 +115,7 @@ class essentials
 		
 		// egen versjon av REDIRECT_URL (som ikke er tilgjengelig via CGI)
 		$_SERVER['REDIR_URL'] = $_SERVER['REQUEST_URI'];
-		if (($pos = strpos($_SERVER['REDIR_URL'], "?")) !== false) $_SERVER['REDIR_URL'] = substr($_SERVER['REDIR_URL'], 0, $pos);
+		if (($pos = mb_strpos($_SERVER['REDIR_URL'], "?")) !== false) $_SERVER['REDIR_URL'] = mb_substr($_SERVER['REDIR_URL'], 0, $pos);
 		
 		// hent innstillinger
 		require "inc.innstillinger_pre.php";
@@ -250,9 +250,9 @@ class essentials
 		$loaded[] = $name;
 		
 		// en side-klasse?
-		if (substr($name, 0, 5) == "page_")
+		if (mb_substr($name, 0, 5) == "page_")
 		{
-			$name = substr($name, 5);
+			$name = mb_substr($name, 5);
 			require ROOT."/base/pages/$name.php";
 		}
 		

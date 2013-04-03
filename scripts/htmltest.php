@@ -18,15 +18,15 @@ function checkTabEnter(e, textarea)
 	{
 		if (textarea.setSelectionRange)
 		{
-			var begin = textarea.value.substr(0, textarea.selectionStart);
-			var end = textarea.value.substr(textarea.selectionEnd);
+			var begin = textarea.value.mb_substr(0, textarea.selectionStart);
+			var end = textarea.value.mb_substr(textarea.selectionEnd);
 			
 			// finn forrige \n før begin
 			var tabs = "";
 			var line_start = begin.lastIndexOf("\n");
 			//if (line_start != -1) {
 				var str_pos = line_start+1;
-				while (begin.substr(str_pos++, 1) == "\t") {
+				while (begin.mb_substr(str_pos++, 1) == "\t") {
 					tabs += "\t";
 				}
 				end = tabs + end;
@@ -68,8 +68,8 @@ function checkTabEnter(e, textarea)
 	{
 		if (textarea.setSelectionRange)
 		{
-			var begin = textarea.value.substr(0, textarea.selectionStart);
-			var end = textarea.value.substr(textarea.selectionEnd);
+			var begin = textarea.value.mb_substr(0, textarea.selectionStart);
+			var end = textarea.value.mb_substr(textarea.selectionEnd);
 
 			textarea.value = begin + "\t" + end;
 

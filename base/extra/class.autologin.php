@@ -20,7 +20,7 @@ class autologin
 		$type = $type === null ? null : (int) $type;
 		
 		// generer hash
-		$hash = substr(sha1(sha1($u_id . $expire . uniqid()) . ($redirect ? $redirect : "doh")), 0, 16);
+		$hash = mb_substr(sha1(sha1($u_id . $expire . uniqid()) . ($redirect ? $redirect : "doh")), 0, 16);
 		
 		// opprett
 		$redirect = $redirect ? ", al_redirect = ".ess::$b->db->quote($redirect) : "";

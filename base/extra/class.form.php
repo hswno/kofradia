@@ -71,10 +71,10 @@ class form
 	// formen er utført med denne hashen
 	function validate($hash, $info = "")
 	{
-		if (strlen($hash) > 13)
+		if (mb_strlen($hash) > 13)
 		{
 			putlog("ABUSE", "%b%c13BOT-ABUSE:%c%b %u".login::$user->player->data['up_name']."%u sendte hash %u$hash%u til %u{$_SERVER['REQUEST_URI']}%u (har ikke javascript?)");
-			$hash = substr($hash, 0, 13);
+			$hash = mb_substr($hash, 0, 13);
 		}
 		
 		global $_base;
