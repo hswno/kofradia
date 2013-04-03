@@ -12,12 +12,12 @@ class page_bomberom
 	protected $ff;
 	
 	/**
-	 * Avgift for å kaste ut en spiller av bomberommet
+	 * Avgift for Ã¥ kaste ut en spiller av bomberommet
 	 */
 	const KICK_PLAYER_COST = 50000000;
 	
 	/**
-	 * Avgift for å kaste ut en spiller av bomberommet til familie
+	 * Avgift for Ã¥ kaste ut en spiller av bomberommet til familie
 	 */
 	const KICK_PLAYER_COST_FAMILIE = 2000000;
 	
@@ -48,11 +48,11 @@ class page_bomberom
 		redirect::store("bomberom?ff_id={$this->ff->id}");
 		ess::$b->page->add_title("Bomberommet");
 		
-		// sjekk om vi kan kaste ut nå
+		// sjekk om vi kan kaste ut nÃ¥
 		$this->check_kick_hour();
 		$this->kick_access = $this->ff->access($this->ff->type['type'] == "familie" ? 2 : true);
 		
-		// behandle forespørselen
+		// behandle forespÃ¸rselen
 		$this->page_handle();
 		
 		// last inn siden
@@ -60,11 +60,11 @@ class page_bomberom
 	}
 	
 	/**
-	 * Sjekk om vi kan kaste ut spillere nå
+	 * Sjekk om vi kan kaste ut spillere nÃ¥
 	 */
 	protected function check_kick_hour()
 	{
-		// kan ikke kaste ut på julaften og nyttår
+		// kan ikke kaste ut pÃ¥ julaften og nyttÃ¥r
 		$d = array("12-24", "12-31");
 		if (in_array(ess::$b->date->get()->format("m-d"), $d))
 		{
@@ -84,7 +84,7 @@ class page_bomberom
 	}
 	
 	/**
-	 * Behandle forespørsel
+	 * Behandle forespÃ¸rsel
 	 */
 	protected function page_handle()
 	{
@@ -120,7 +120,7 @@ class page_bomberom
 		if (count($players) == 0)
 		{
 			echo '
-		<p>Ingen spillere befinner seg i bomberommet'.($this->fam ? ' til broderskapet' : '').' for øyeblikket.</p>';
+		<p>Ingen spillere befinner seg i bomberommet'.($this->fam ? ' til broderskapet' : '').' for Ã¸yeblikket.</p>';
 		}
 		
 		else
@@ -154,7 +154,7 @@ class page_bomberom
 			echo '
 				</tbody>
 			</table>'.(!$this->kick_access ? '' : (!$this->kick_hour_ok ? '
-			<p class="c">Det er kun mulig å kaste ut spillere mellom kl. '.self::KICK_HOUR_START.' og kl. '.self::KICK_HOUR_END.'.</p>' : (login::$user->player->fengsel_check() ? '
+			<p class="c">Det er kun mulig Ã¥ kaste ut spillere mellom kl. '.self::KICK_HOUR_START.' og kl. '.self::KICK_HOUR_END.'.</p>' : (login::$user->player->fengsel_check() ? '
 			<p class="c">Du befinner deg i fengsel og kan ikke kaste ut spillere.</p>' : (login::$user->player->bomberom_check() ? '
 			<p class="c">Du befinner deg i bomberom og kan ikke kaste ut spillere.</p>' : (login::$user->player->data['up_b_id'] != $this->ff->data['br_b_id'] ? '
 			<p class="c">Du befinner deg i en annen bydel enn bomberommet og kan ikke kaste ut spillere.</p>' : '
@@ -175,7 +175,7 @@ class page_bomberom
 		// valider sid
 		validate_sid();
 		
-		// kan vi ikke kaste ut noen spillere nå?
+		// kan vi ikke kaste ut noen spillere nÃ¥?
 		if (login::$user->player->fengsel_check() || login::$user->player->bomberom_check() || login::$user->player->data['up_b_id'] != $this->ff->data['br_b_id'] || !$this->kick_hour_ok)
 		{
 			redirect::handle();
@@ -184,7 +184,7 @@ class page_bomberom
 		// mangler spillervalg?
 		if (!isset($_POST['player']))
 		{
-			ess::$b->page->add_message("Du må velge en spiller du vil kaste ut.", "error");
+			ess::$b->page->add_message("Du mÃ¥ velge en spiller du vil kaste ut.", "error");
 			redirect::handle();
 		}
 		
@@ -206,7 +206,7 @@ class page_bomberom
 		// sett opp skjema
 		$form = new form("other");
 		
-		// har vi bekreftet ønsket om å kaste ut en spiller?
+		// har vi bekreftet Ã¸nsket om Ã¥ kaste ut en spiller?
 		if (isset($_POST['confirm']))
 		{
 			// bekreft skjema
@@ -214,7 +214,7 @@ class page_bomberom
 			
 			ess::$b->db->begin();
 			
-			// forsøk å trekk fra pengene
+			// forsÃ¸k Ã¥ trekk fra pengene
 			if (!$this->ff->bank(ff::BANK_BETALING, $cost, "Kaste ut spilleren [user id={$up['up_id']}] fra bomberommet"))
 			{
 				ess::$b->page->add_message("Det er ikke nok penger i ".($this->fam ? "broderskapbanken" : "firmabanken").".", "error");
@@ -223,11 +223,11 @@ class page_bomberom
 			
 			else
 			{
-				// finn en tilfeldig bydel å plassere spilleren
+				// finn en tilfeldig bydel Ã¥ plassere spilleren
 				$result = ess::$b->db->query("SELECT id, name FROM bydeler WHERE active != 0 ORDER BY RAND() LIMIT 1");
 				$b_id = mysql_result($result, 0);
 				
-				// forsøk å trekk ut spilleren fra bomberommet
+				// forsÃ¸k Ã¥ trekk ut spilleren fra bomberommet
 				ess::$b->db->query("
 					UPDATE users_players
 					SET up_brom_expire = 0, up_b_id = {$b_id}
@@ -263,7 +263,7 @@ www.kofradia.no';
 					// logg
 					putlog("DF", "BOMBEROM: {$up['up_name']} ble kastet ut av bomberommet {$this->ff->data['ff_name']} av ".login::$user->player->data['up_name']." ".ess::$s['spath']."/min_side?up_id={$up['up_id']}");
 					
-					ess::$b->page->add_message('Du kastet ut <user id="'.$up['up_id'].'" /> fra bomberommet. '.($this->fam ? 'Broderskapet' : 'Firmaet').' betalte et gebyr på '.game::format_cash($cost).'.');
+					ess::$b->page->add_message('Du kastet ut <user id="'.$up['up_id'].'" /> fra bomberommet. '.($this->fam ? 'Broderskapet' : 'Firmaet').' betalte et gebyr pÃ¥ '.game::format_cash($cost).'.');
 					ess::$b->db->commit();
 					redirect::handle();
 				}
@@ -277,22 +277,22 @@ www.kofradia.no';
 <div class="bg1_c xsmall">
 	<h1 class="bg1">Kaste ut spiller fra bomberommet<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Du er i ferd med å kaste ut '.game::profile_link($up['up_id'], $up['up_name'], $up['up_access_level']).' fra bomberommet.</p>
-		<p>Spilleren skal i utgangspunktet sitte i bomberommet til '.ess::$b->date->get($up['up_brom_expire'])->format(date::FORMAT_SEC).' ('.game::counter($up['up_brom_expire']-time()).' gjenstår).</p>
-		<p>For å kaste ut spilleren må det betales en avgift på <b>'.game::format_cash($cost).'</b> som betales fra '.($this->fam ? 'broderskapkontoen' : 'firmakontoen').'.</p>';
+		<p>Du er i ferd med Ã¥ kaste ut '.game::profile_link($up['up_id'], $up['up_name'], $up['up_access_level']).' fra bomberommet.</p>
+		<p>Spilleren skal i utgangspunktet sitte i bomberommet til '.ess::$b->date->get($up['up_brom_expire'])->format(date::FORMAT_SEC).' ('.game::counter($up['up_brom_expire']-time()).' gjenstÃ¥r).</p>
+		<p>For Ã¥ kaste ut spilleren mÃ¥ det betales en avgift pÃ¥ <b>'.game::format_cash($cost).'</b> som betales fra '.($this->fam ? 'broderskapkontoen' : 'firmakontoen').'.</p>';
 		
 		// har vi ikke nok penger i firmakontoen?
 		if ($this->ff->data['ff_bank'] < $cost)
 		{
 			echo '
-		<p>'.($this->fam ? 'Broderskapet' : 'Firmaet').' har for øyeblikket kun '.game::format_cash($this->ff->data['ff_bank']).' på konto, noe som ikke er nok. '.($this->ff->access(1) ? '<a href="'.ess::$s['relative_path'].'/ff/banken?ff_id='.$this->ff->id.'">Sett inn penger på '.($this->fam ? 'broderskapkontoen' : 'firmakontoen').'</a>' : '<a href="'.ess::$s['relative_path'].'/ff/panel?ff_id='.$this->ff->id.'">Donér til '.($this->fam ? 'broderskapet' : 'firmaet').'</a>').' først for å kunne kaste ut spilleren.</p>
+		<p>'.($this->fam ? 'Broderskapet' : 'Firmaet').' har for Ã¸yeblikket kun '.game::format_cash($this->ff->data['ff_bank']).' pÃ¥ konto, noe som ikke er nok. '.($this->ff->access(1) ? '<a href="'.ess::$s['relative_path'].'/ff/banken?ff_id='.$this->ff->id.'">Sett inn penger pÃ¥ '.($this->fam ? 'broderskapkontoen' : 'firmakontoen').'</a>' : '<a href="'.ess::$s['relative_path'].'/ff/panel?ff_id='.$this->ff->id.'">DonÃ©r til '.($this->fam ? 'broderskapet' : 'firmaet').'</a>').' fÃ¸rst for Ã¥ kunne kaste ut spilleren.</p>
 		<p class="c"><a href="bomberom?ff_id='.$this->ff->id.'">Tilbake</a></p>';
 		}
 		
 		else
 		{
 			echo '
-		<p>'.($this->fam ? 'Broderskapet' : 'Firmaet').' har for øyeblikket '.game::format_cash($this->ff->data['ff_bank']).' på konto.</p>
+		<p>'.($this->fam ? 'Broderskapet' : 'Firmaet').' har for Ã¸yeblikket '.game::format_cash($this->ff->data['ff_bank']).' pÃ¥ konto.</p>
 		<form action="" method="post">
 			<input type="hidden" name="h" value="'.$form->create().'" />
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />

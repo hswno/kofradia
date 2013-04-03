@@ -24,7 +24,7 @@ if (isset($_POST['ip']))
 		
 		if (isset($_POST['confirm']))
 		{
-			// legg til oppføring
+			// legg til oppfÃ¸ring
 			ess::$b->db->query("INSERT INTO ban_ip SET bi_ip_start = $ip, bi_ip_end = $ip, bi_time_start = ".time().", bi_time_end = ".($time == 0 ? 'NULL' : ($time+time())).", bi_reason = ".ess::$b->db->quote($begrunnelse).", bi_info = ".ess::$b->db->quote($interninfo));
 			
 			// fjern mulig cache
@@ -33,14 +33,14 @@ if (isset($_POST['ip']))
 			// IRC melding
 			putlog("CREWCHAN", "%bNY IP-BAN:%b ".login::$user->player->data['up_name']." la til IP-ban for $ip_str ".ess::$s['spath']."/admin/brukere/ip_sessions?ip=$ip_str");
 			
-			ess::$b->page->add_message('IP-adressen '.$ip_str.' er nå blokkert/utestengt.');
+			ess::$b->page->add_message('IP-adressen '.$ip_str.' er nÃ¥ blokkert/utestengt.');
 			redirect::handle();
 		}
 		
 		echo '
 <h1>IP-ban</h1>
 <p align="center" class="dark">
-	Du har valgt følgende info:
+	Du har valgt fÃ¸lgende info:
 </p>
 <table class="table center">
 	<tbody class="r">
@@ -116,7 +116,7 @@ echo '
 			</tr>
 		</tbody>
 	</table>
-	<h1>Utfør</h1>
+	<h1>UtfÃ¸r</h1>
 	<p align="center">
 		'.show_sbutton("Fortsett").'
 	</p>

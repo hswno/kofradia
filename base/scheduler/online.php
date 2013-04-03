@@ -33,7 +33,7 @@ while ($row = mysql_fetch_assoc($result))
 }
 
 
-// antall pÂlogget siste 30 sekunder
+// antall p√•logget siste 30 sekunder
 $result = $_base->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online > ".($now-30));
 $ant = mysql_result($result, 0);
 
@@ -41,18 +41,18 @@ $ant = mysql_result($result, 0);
 if ($ant > $sitestats_max['max_online_30']['value'])
 {
 	$result = $_base->db->query("UPDATE sitestats SET value = $ant, time = $now WHERE name = 'max_online_30' AND extra = $hour");
-	putlog("INFO", "Ny all-time rekord for antall pÂlogget i l¯pet av %u30%u sekunder! Rekorden lyder pÂ %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats_max['max_online_30']['time'])->format()."%u og l¯d pÂ %u".game::format_number($sitestats_max['max_online_30']['value'])."%u spillere!");
+	putlog("INFO", "Ny all-time rekord for antall p√•logget i l√∏pet av %u30%u sekunder! Rekorden lyder p√• %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats_max['max_online_30']['time'])->format()."%u og l√∏d p√• %u".game::format_number($sitestats_max['max_online_30']['value'])."%u spillere!");
 }
 
-// h¯yere enn rekorden for denne timen?
+// h√∏yere enn rekorden for denne timen?
 elseif ($ant > $sitestats['max_online_30'][$hour]['value'])
 {
 	$result = $_base->db->query("UPDATE sitestats SET value = $ant, time = $now WHERE name = 'max_online_30' AND extra = $hour");
-	putlog("INFO", "Ny rekord for antall pÂlogget i l¯pet av %u30%u sekunder for denne timen! Rekorden lyder pÂ %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats['max_online_30'][$hour]['time'])->format()."%u og l¯d pÂ %u".game::format_number($sitestats['max_online_30'][$hour]['value'])."%u spillere!");
+	putlog("INFO", "Ny rekord for antall p√•logget i l√∏pet av %u30%u sekunder for denne timen! Rekorden lyder p√• %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats['max_online_30'][$hour]['time'])->format()."%u og l√∏d p√• %u".game::format_number($sitestats['max_online_30'][$hour]['value'])."%u spillere!");
 }
 
 
-// antall pÂlogget siste 60 sekunder
+// antall p√•logget siste 60 sekunder
 $result = $_base->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online > ".($now-60));
 $ant = mysql_result($result, 0);
 
@@ -60,18 +60,18 @@ $ant = mysql_result($result, 0);
 if ($ant > $sitestats_max['max_online_60']['value'])
 {
 	$result = $_base->db->query("UPDATE sitestats SET value = $ant, time = $now WHERE name = 'max_online_60' AND extra = $hour");
-	putlog("INFO", "Ny all-time rekord for antall pÂlogget i l¯pet av %u1%u minutt! Rekorden lyder pÂ %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats_max['max_online_60']['time'])->format()."%u og l¯d pÂ %u".game::format_number($sitestats_max['max_online_60']['value'])."%u spillere!");
+	putlog("INFO", "Ny all-time rekord for antall p√•logget i l√∏pet av %u1%u minutt! Rekorden lyder p√• %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats_max['max_online_60']['time'])->format()."%u og l√∏d p√• %u".game::format_number($sitestats_max['max_online_60']['value'])."%u spillere!");
 }
 
-// h¯yere enn rekorden for denne timen?
+// h√∏yere enn rekorden for denne timen?
 elseif ($ant > $sitestats['max_online_60'][$hour]['value'])
 {
 	$result = $_base->db->query("UPDATE sitestats SET value = $ant, time = $now WHERE name = 'max_online_60' AND extra = $hour");
-	putlog("INFO", "Ny rekord for antall pÂlogget i l¯pet av %u1%u minutt for denne timen! Rekorden lyder pÂ %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats['max_online_60'][$hour]['time'])->format()."%u og l¯d pÂ %u".game::format_number($sitestats['max_online_60'][$hour]['value'])."%u spillere!");
+	putlog("INFO", "Ny rekord for antall p√•logget i l√∏pet av %u1%u minutt for denne timen! Rekorden lyder p√• %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats['max_online_60'][$hour]['time'])->format()."%u og l√∏d p√• %u".game::format_number($sitestats['max_online_60'][$hour]['value'])."%u spillere!");
 }
 
 
-// antall pÂlogget siste 300 sekunder
+// antall p√•logget siste 300 sekunder
 $result = $_base->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online > ".($now-300));
 $ant = mysql_result($result, 0);
 
@@ -79,18 +79,18 @@ $ant = mysql_result($result, 0);
 if ($ant > $sitestats_max['max_online_300']['value'])
 {
 	$result = $_base->db->query("UPDATE sitestats SET value = $ant, time = $now WHERE name = 'max_online_300' AND extra = $hour");
-	putlog("INFO", "Ny all-time rekord for antall pÂlogget i l¯pet av %u5%u minutter! Rekorden lyder pÂ %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats_max['max_online_300']['time'])->format()."%u og l¯d pÂ %u".game::format_number($sitestats_max['max_online_300']['value'])."%u spillere!");
+	putlog("INFO", "Ny all-time rekord for antall p√•logget i l√∏pet av %u5%u minutter! Rekorden lyder p√• %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats_max['max_online_300']['time'])->format()."%u og l√∏d p√• %u".game::format_number($sitestats_max['max_online_300']['value'])."%u spillere!");
 }
 
-// h¯yere enn rekorden for denne timen?
+// h√∏yere enn rekorden for denne timen?
 elseif ($ant > $sitestats['max_online_300'][$hour]['value'])
 {
 	$result = $_base->db->query("UPDATE sitestats SET value = $ant, time = $now WHERE name = 'max_online_300' AND extra = $hour");
-	putlog("INFO", "Ny rekord for antall pÂlogget i l¯pet av %u5%u minutter for denne timen! Rekorden lyder pÂ %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats['max_online_300'][$hour]['time'])->format()."%u og l¯d pÂ %u".game::format_number($sitestats['max_online_300'][$hour]['value'])."%u spillere!");
+	putlog("INFO", "Ny rekord for antall p√•logget i l√∏pet av %u5%u minutter for denne timen! Rekorden lyder p√• %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats['max_online_300'][$hour]['time'])->format()."%u og l√∏d p√• %u".game::format_number($sitestats['max_online_300'][$hour]['value'])."%u spillere!");
 }
 
 
-// antall pÂlogget siste 900 sekunder
+// antall p√•logget siste 900 sekunder
 $result = $_base->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online > ".($now-900));
 $ant = mysql_result($result, 0);
 
@@ -98,12 +98,12 @@ $ant = mysql_result($result, 0);
 if ($ant > $sitestats_max['max_online_900']['value'])
 {
 	$result = $_base->db->query("UPDATE sitestats SET value = $ant, time = $now WHERE name = 'max_online_900' AND extra = $hour");
-	putlog("INFO", "Ny all-time rekord for antall pÂlogget i l¯pet av %u15%u minutter! Rekorden lyder pÂ %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats_max['max_online_900']['time'])->format()."%u og l¯d pÂ %u".game::format_number($sitestats_max['max_online_900']['value'])."%u spillere!");
+	putlog("INFO", "Ny all-time rekord for antall p√•logget i l√∏pet av %u15%u minutter! Rekorden lyder p√• %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats_max['max_online_900']['time'])->format()."%u og l√∏d p√• %u".game::format_number($sitestats_max['max_online_900']['value'])."%u spillere!");
 }
 
-// h¯yere enn rekorden for denne timen?
+// h√∏yere enn rekorden for denne timen?
 elseif ($ant > $sitestats['max_online_900'][$hour]['value'])
 {
 	$result = $_base->db->query("UPDATE sitestats SET value = $ant, time = $now WHERE name = 'max_online_900' AND extra = $hour");
-	putlog("INFO", "Ny rekord for antall pÂlogget i l¯pet av %u15%u minutter for denne timen! Rekorden lyder pÂ %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats['max_online_900'][$hour]['time'])->format()."%u og l¯d pÂ %u".game::format_number($sitestats['max_online_900'][$hour]['value'])."%u spillere!");
+	putlog("INFO", "Ny rekord for antall p√•logget i l√∏pet av %u15%u minutter for denne timen! Rekorden lyder p√• %u".game::format_number($ant)."%u spillere! Forrige rekord ble satt %u".$_base->date->get($sitestats['max_online_900'][$hour]['time'])->format()."%u og l√∏d p√• %u".game::format_number($sitestats['max_online_900'][$hour]['value'])."%u spillere!");
 }

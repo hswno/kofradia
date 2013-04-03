@@ -2,11 +2,11 @@
 
 class sysreport
 {
-	/** For å hindre exceptions i å printe parametere */
+	/** For Ã¥ hindre exceptions i Ã¥ printe parametere */
 	const EXCEPTION_ANONYMOUS = -1;
 	
 	/**
-	 * Sende e-post med div info før data
+	 * Sende e-post med div info fÃ¸r data
 	 */
 	public static function log($data, $title = "Kofradia Email Log")
 	{
@@ -14,7 +14,7 @@ class sysreport
 		
 		$msg = "Date: ".$_base->date->get()->format("r")."\n";
 		
-		// forsøk å hent brukerID fra cookie
+		// forsÃ¸k Ã¥ hent brukerID fra cookie
 		$uid = "ukjent";
 		if (isset($_COOKIE[$GLOBALS['__server']['cookie_prefix'] . "id"]))
 		{
@@ -144,7 +144,7 @@ class sysreport
 		
 		$text = '
 Fanget unntak '.get_class($exception).' med melding '.$exception->getMessage().'.
-Kastet i '.$exception->getFile().' på linje '.$exception->getLine().'
+Kastet i '.$exception->getFile().' pÃ¥ linje '.$exception->getLine().'
 
 Stabel:
 
@@ -166,7 +166,7 @@ Stabel:
 		// filtrer bort evt. databaseinfo
 		$html = '
 <p><b>Fatal feil:</b> Uoppfanget unntak &laquo;'.htmlspecialchars(get_class($exception)).'&raquo;.</p>
-<p><b>Kastet i</b> '.htmlspecialchars($exception->getFile()).' <b>på linje</b> '.$exception->getLine().'.</p>
+<p><b>Kastet i</b> '.htmlspecialchars($exception->getFile()).' <b>pÃ¥ linje</b> '.$exception->getLine().'.</p>
 <div style="margin: 1em 0; border: 2px solid #BBB; padding: 5px; background-color: #EEE"><b>Melding:</b> <pre>'.htmlspecialchars($exception->getMessage()).'</pre></div>';
 		
 		if (!MAIN_SERVER)
@@ -192,7 +192,7 @@ Stabel:
 		}
 		
 		$text = 'Fatal feil: Uoppfanget unntak '.get_class($exception).'.
-Kastet i '.$exception->getFile().' på linje '.$exception->getLine().'
+Kastet i '.$exception->getFile().' pÃ¥ linje '.$exception->getLine().'
 
 Melding: '.$exception->getMessage().'
 
@@ -245,8 +245,8 @@ INNODB STATUS:
 		}
 		
 		header("HTTP/1.0 503 Service Unavailiable");
-		echo self::html_template('En feil har oppstått', '
-<h1>En feil har oppstått</h1>'.$html.'
+		echo self::html_template('En feil har oppstÃ¥tt', '
+<h1>En feil har oppstÃ¥tt</h1>'.$html.'
 <p>Feilen er automatisk rapportert.</p>');
 		
 		die;
@@ -260,7 +260,7 @@ INNODB STATUS:
 		return '<!DOCTYPE html>
 <html lang="no">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="Henrik Steen; http://www.henrist.net" />
 <title>'.$title.'</title>
 <style>

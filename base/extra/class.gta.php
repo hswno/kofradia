@@ -8,7 +8,7 @@ class gta
 	/** Energi ved biltyveri */
 	const ENERGY_BILTYVERI = 100;
 	
-	/** Rank man får av biltyveri */
+	/** Rank man fÃ¥r av biltyveri */
 	const RANK_BILTYVERI = 12;
 	
 	/**
@@ -33,7 +33,7 @@ class gta
 	{
 		if (access::has("mod")) return array(0, 0);
 		
-		// når utførte vi sist biltyveri?
+		// nÃ¥r utfÃ¸rte vi sist biltyveri?
 		$result = ess::$b->db->query("SELECT MAX(time_last) FROM gta_options_status WHERE gos_up_id = ".$this->up->id);
 		$last = mysql_result($result, 0);
 		
@@ -52,7 +52,7 @@ class gta
 	/** Kontroller rank */
 	public function check_rank()
 	{
-		// har vi høy nok rank til å utføre biltyveri?
+		// har vi hÃ¸y nok rank til Ã¥ utfÃ¸re biltyveri?
 		$result = ess::$b->db->query("SELECT MIN(min_rank) FROM gta");
 		$min_rank = mysql_result($result, 0);
 		
@@ -84,7 +84,7 @@ class gta
 	}
 	
 	/**
-	 * Utfør biltyveri
+	 * UtfÃ¸r biltyveri
 	 */
 	public function biltyveri_utfor($option_id)
 	{
@@ -103,7 +103,7 @@ class gta
 			"success" => $rand <= $option['percent'] * 10
 		);
 		
-		// traff vi på sannsynligheten?
+		// traff vi pÃ¥ sannsynligheten?
 		if ($ret['success'])
 		{
 			// hent alle bilene vi kan skaffe
@@ -136,7 +136,7 @@ class gta
 			// hent bilen
 			$result = ess::$b->db->query("SELECT id, brand, model, min_rank, img_mini, probability FROM gta WHERE id = $bil");
 			
-			// finn en tilfeldig bil bassert på sannsynligheten for bilen
+			// finn en tilfeldig bil bassert pÃ¥ sannsynligheten for bilen
 			$bil = mysql_fetch_assoc($result);
 			
 			// beregn skade ut i fra sannsynligheten vi hadde
@@ -171,13 +171,13 @@ class gta
 			}
 		}
 		
-		// wanted nivå
+		// wanted nivÃ¥
 		$ret['wanted_change'] = $this->up->fengsel_rank(self::RANK_BILTYVERI, $ret['success']);
 		
 		// oppdater prosenter osv
 		$increase = rand(0, $option['max_pos_change'] * 10) / 10;
 		
-		// for høy prosent?
+		// for hÃ¸y prosent?
 		$percent = $option['percent'];
 		if ($percent + $increase > $option['max_percent'])
 		{
@@ -301,22 +301,22 @@ class gta
 	}
 	
 	/**
-	 * Sjekk om vi kan utføre betaling nå
+	 * Sjekk om vi kan utfÃ¸re betaling nÃ¥
 	 */
 	public static function can_pay($ugg_time_next)
 	{
-		// må være under 3 dager til neste betaling
+		// mÃ¥ vÃ¦re under 3 dager til neste betaling
 		$expire = time() + 86400 * 3;
 		
 		return $expire > $ugg_time_next;
 	}
 	
 	/**
-	 * Juster ned sannsynligheten for å utføre biltyveri for spillere
+	 * Juster ned sannsynligheten for Ã¥ utfÃ¸re biltyveri for spillere
 	 */
 	public static function biltyveri_prob_decrease()
 	{
-		// setter ned sannsynligheten med 1 % av nåværende prosentverdi
+		// setter ned sannsynligheten med 1 % av nÃ¥vÃ¦rende prosentverdi
 		ess::$b->db->query("
 			UPDATE gta_options_status gos
 				JOIN users_players ON up_id = gos.gos_up_id AND up_access_level != 0

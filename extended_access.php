@@ -15,13 +15,13 @@ if (!isset(login::$extended_access))
 
 function extended_access_verify_password($password)
 {
-	// test mot ny l¯sning
+	// test mot ny l√∏sning
 	if (password::verify_hash($password, login::$extended_access['passkey']))
 	{
 		return true;
 	}
 	
-	// for kompatibilitet mot gammel l¯sning
+	// for kompatibilitet mot gammel l√∏sning
 	if (password::verify_hash(md5(sha1($password . login::$user->id, $stored_hash) . login::$user->id), login::$extended_access['passkey']))
 	{
 		return true;
@@ -57,28 +57,28 @@ if (!login::extended_access_is_authed())
 			$error = password::validate($_POST['password'], password::LEVEL_STRONG);
 			if ($error != 0)
 			{
-				$_base->page->add_message("Passordet oppnÂdde ikke f¯lgende krav: ".ucfirst(implode(", ", password::format_errors($error))), "error");
+				$_base->page->add_message("Passordet oppn√•dde ikke f√∏lgende krav: ".ucfirst(implode(", ", password::format_errors($error))), "error");
 				redirect::handle("extended_access?create");
 			}
 			
 			// samme som brukerpassordet?
 			if (password::verify_hash($_POST['password'], login::$user->data['u_pass'], "user"))
 			{
-				$_base->page->add_message("Passordet kan ikke vÊre det samme som passordet til brukeren.", "error");
+				$_base->page->add_message("Passordet kan ikke v√¶re det samme som passordet til brukeren.", "error");
 				redirect::handle("extended_access?create");
 			}
 			
 			// samme som bankpassordet?
 			if (password::verify_hash($_POST['password'], login::$user->data['u_bank_auth'], "bank_auth"))
 			{
-				$_base->page->add_message("Passordet kan ikke vÊre det samme som passordet til banken.", "error");
+				$_base->page->add_message("Passordet kan ikke v√¶re det samme som passordet til banken.", "error");
 				redirect::handle("extended_access?create");
 			}
 			
 			// er passordene like?
 			if ($_POST['password'] != $_POST['password_repeat'])
 			{
-				$_base->page->add_message("Passordene mÂ vÊre like.", "error");
+				$_base->page->add_message("Passordene m√• v√¶re like.", "error");
 				redirect::handle("extended_access?create");
 			}
 			
@@ -86,7 +86,7 @@ if (!login::extended_access_is_authed())
 			$hash = password::hash($_POST['password']);
 			login::$user->params->update("extended_access_passkey", $hash, true);
 			
-			$_base->page->add_message("Du har nÂ opprettet et passord og kan logge inn for crewauth.");
+			$_base->page->add_message("Du har n√• opprettet et passord og kan logge inn for crewauth.");
 			redirect::handle();
 		}
 		
@@ -94,13 +94,13 @@ if (!login::extended_access_is_authed())
 <h1>Opprette passord for crewauth</h1>
 <form action="extended_access?create'.(isset($_GET['orign']) ? '&amp;orign='.urlencode($_GET['orign']) : '').'" method="post">
 	<dl class="dd_right w300">
-		<dt>ÿnsket passord</dt>
+		<dt>√ònsket passord</dt>
 		<dd><input type="password" class="styled w100" name="password" /></dd>
 		<dt>Gjenta passord</dt>
 		<dd><input type="password" class="styled w100" name="password_repeat" /></dd>
 		<dd><input type="submit" value="Opprett passord" class="button" /></dd>
 	</dl>
-	<p>ÿnsket passord mÂ oppfylle kravet til password::LEVEL_STRONG.</p>
+	<p>√ònsket passord m√• oppfylle kravet til password::LEVEL_STRONG.</p>
 </form>';
 		
 		$_base->page->load();
@@ -112,7 +112,7 @@ if (!login::extended_access_is_authed())
 		echo '
 <h1>Glemt passord for crewauth</h1>
 <p class="h_right"><a href="extended_access'.(isset($_GET['orign']) ? '?orign='.urlencode($_GET['orign']) : '').'">Tilbake</a></p>
-<p>Hvis du har glemt passordet ditt mÂ du ta kontakt med <user id="1" /> for Â fÂ det nullstilt.</p>';
+<p>Hvis du har glemt passordet ditt m√• du ta kontakt med <user id="1" /> for √• f√• det nullstilt.</p>';
 		
 		$_base->page->load();
 	}
@@ -126,7 +126,7 @@ if (!login::extended_access_is_authed())
 	// logge inn?
 	if (isset($_GET['login']) && isset($_POST['password']))
 	{
-		// kontroller nÂvÊrende passord
+		// kontroller n√•v√¶rende passord
 		if (!extended_access_verify_password($_POST['password']))
 		{
 			$_base->page->add_message("Passordet stemte ikke.", "error");
@@ -142,7 +142,7 @@ if (!login::extended_access_is_authed())
 		// spesiell side?
 		if (isset($_GET['orign']))
 		{
-			$_base->page->add_message("Du er nÂ logget inn for utvidede tilganger (crewauth).");
+			$_base->page->add_message("Du er n√• logget inn for utvidede tilganger (crewauth).");
 			redirect::handle($_GET['orign'], redirect::SERVER);
 		}
 		
@@ -189,7 +189,7 @@ if (isset($_GET['logout']))
 	// spesiell side?
 	if (isset($_GET['orign']))
 	{
-		$_base->page->add_message("Du er nÂ logget ut og har ikke lengre utvidede tilganger (crewauth).");
+		$_base->page->add_message("Du er n√• logget ut og har ikke lengre utvidede tilganger (crewauth).");
 		redirect::handle($_GET['orign'], redirect::SERVER);
 	}
 	
@@ -204,10 +204,10 @@ if (isset($_GET['change']))
 	{
 		redirect::store("extended_access?change");
 		
-		// kontroller nÂvÊrende passord
+		// kontroller n√•v√¶rende passord
 		if (!extended_access_verify_password($_POST['password_current']))
 		{
-			$_base->page->add_message("NÂvÊrende passord stemte ikke.", "error");
+			$_base->page->add_message("N√•v√¶rende passord stemte ikke.", "error");
 			redirect::handle();
 		}
 		
@@ -215,28 +215,28 @@ if (isset($_GET['change']))
 		$error = password::validate($_POST['password'], password::LEVEL_STRONG);
 		if ($error != 0)
 		{
-			$_base->page->add_message("Passordet oppnÂdde ikke f¯lgende krav: ".ucfirst(implode(", ", password::format_errors($error))), "error");
+			$_base->page->add_message("Passordet oppn√•dde ikke f√∏lgende krav: ".ucfirst(implode(", ", password::format_errors($error))), "error");
 			redirect::handle();
 		}
 		
 		// samme som brukerpassordet?
 		if (password::verify_hash($_POST['password'], login::$user->data['u_pass'], "user"))
 		{
-			$_base->page->add_message("Passordet kan ikke vÊre det samme som passordet til brukeren.", "error");
+			$_base->page->add_message("Passordet kan ikke v√¶re det samme som passordet til brukeren.", "error");
 			redirect::handle();
 		}
 		
 		// samme som bankpassordet?
 		if (password::verify_hash($_POST['password'], login::$user->data['u_bank_auth'], "bank_auth"))
 		{
-			$_base->page->add_message("Passordet kan ikke vÊre det samme som passordet til banken.", "error");
+			$_base->page->add_message("Passordet kan ikke v√¶re det samme som passordet til banken.", "error");
 			redirect::handle();
 		}
 		
 		// er passordene like?
 		if ($_POST['password'] != $_POST['password_repeat'])
 		{
-			$_base->page->add_message("Passordene mÂ vÊre like.", "error");
+			$_base->page->add_message("Passordene m√• v√¶re like.", "error");
 			redirect::handle();
 		}
 		
@@ -246,7 +246,7 @@ if (isset($_GET['change']))
 		
 		putlog("NOTICE", "CREWAUTH: ".login::$user->player->data['up_name']." endret sitt passord for utvidede tilganger");
 		
-		$_base->page->add_message("Du har nÂ oppdatert ditt passord for crewauth.");
+		$_base->page->add_message("Du har n√• oppdatert ditt passord for crewauth.");
 		redirect::store("extended_access");
 	}
 	
@@ -255,21 +255,21 @@ if (isset($_GET['change']))
 <p class="h_right"><a href="extended_access">Tilbake</a></p>
 <form action="extended_access?change" method="post">
 	<dl class="dd_right w300">
-		<dt>NÂvÊrende passord</dt>
+		<dt>N√•v√¶rende passord</dt>
 		<dd><input type="password" class="styled w100" name="password_current" /></dd>
-		<dt>ÿnsket passord</dt>
+		<dt>√ònsket passord</dt>
 		<dd><input type="password" class="styled w100" name="password" /></dd>
 		<dt>Gjenta passord</dt>
 		<dd><input type="password" class="styled w100" name="password_repeat" /></dd>
 		<dd><input type="submit" value="Endre passord" class="button" /></dd>
 	</dl>
-	<p>ÿnsket passord mÂ oppfylle kravet til password::LEVEL_STRONG.</p>
+	<p>√ònsket passord m√• oppfylle kravet til password::LEVEL_STRONG.</p>
 </form>';
 	
 	$_base->page->load();
 }
 
-// har vi noen orign Â gÂ til?
+// har vi noen orign √• g√• til?
 if (isset($_GET['orign']))
 {
 	redirect::handle($_GET['orign'], redirect::SERVER);

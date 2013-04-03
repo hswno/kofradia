@@ -6,7 +6,7 @@ new page_forum_topic();
 class page_forum_topic
 {
 	/**
-	 * Forumtråden
+	 * ForumtrÃ¥den
 	 * @var forum_topic
 	 */
 	protected $topic;
@@ -33,7 +33,7 @@ class page_forum_topic
 			redirect::handle(game::address("topic", $_GET, array("show_signature", "hide_signature")));
 		}
 		
-		// hent forumtråd
+		// hent forumtrÃ¥d
 		essentials::load_module("forum");
 		$this->topic = new forum_topic(getval("id"));
 		$this->fmod = $this->topic->forum->fmod;
@@ -41,18 +41,18 @@ class page_forum_topic
 		// sett standard redirect
 		redirect::store("topic?id={$this->topic->id}");
 		
-		// slette forumtråden?
+		// slette forumtrÃ¥den?
 		if (isset($_POST['delete']))
 		{
-			// forsøk å slette forumtråden
+			// forsÃ¸k Ã¥ slette forumtrÃ¥den
 			validate_sid();
 			$this->topic->delete();
 		}
 		
-		// gjenopprette forumtråden?
+		// gjenopprette forumtrÃ¥den?
 		if (isset($_POST['restore']))
 		{
-			// forsøk å gjenopprette forumtråden
+			// forsÃ¸k Ã¥ gjenopprette forumtrÃ¥den
 			validate_sid();
 			$this->topic->restore();
 		}
@@ -65,7 +65,7 @@ class page_forum_topic
 			// finn forumsvaret
 			if ($reply = $this->topic->get_reply($_GET['delete_reply']))
 			{
-				// forsøk å slett forumsvaret
+				// forsÃ¸k Ã¥ slett forumsvaret
 				$reply->delete();
 			}
 			
@@ -84,7 +84,7 @@ class page_forum_topic
 			// finn forumsvaret
 			if ($reply = $this->topic->get_reply($_GET['restore_reply']))
 			{
-				// forsøk å gjenopprett forumsvaret
+				// forsÃ¸k Ã¥ gjenopprett forumsvaret
 				$reply->restore();
 			}
 			
@@ -98,7 +98,7 @@ class page_forum_topic
 		// legge til nytt svar?
 		if (isset($_GET['reply']) && isset($_POST['post']) && isset($_POST['text']))
 		{
-			// ikke slå sammen?
+			// ikke slÃ¥ sammen?
 			$no_concatenate = isset($_POST['no_concatenate']) && access::has("forum_mod");
 			
 			// annonsere?
@@ -111,12 +111,12 @@ class page_forum_topic
 				redirect::handle();
 			}
 			
-			// forsøk å legg til svaret
+			// forsÃ¸k Ã¥ legg til svaret
 			$this->topic->add_reply($_POST['text'], $no_concatenate, $announce);
 		}
 		
 		
-		// den aktuelle siden (sjekk for replyid før vi retter sidetall)
+		// den aktuelle siden (sjekk for replyid fÃ¸r vi retter sidetall)
 		$pagei = new pagei(pagei::ACTIVE_GET, "p", pagei::PER_PAGE, $this->topic->replies_per_page);
 		
 		
@@ -160,7 +160,7 @@ class page_forum_topic
 				$deleted = "";
 			}
 			
-			// finn ut antall forumsvar før
+			// finn ut antall forumsvar fÃ¸r
 			$result = ess::$b->db->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < $reply_id$deleted");
 			$reply_num = mysql_result($result, 0) + 1;
 			
@@ -168,21 +168,21 @@ class page_forum_topic
 			$pagei->__construct(pagei::ACTIVE, ceil($reply_num / $this->topic->replies_per_page));
 		}
 		
-		// skal vi gå til nyeste melding?
+		// skal vi gÃ¥ til nyeste melding?
 		elseif (isset($_GET['fs']) && forum::$fs_check)
 		{
 			// har vi ikke status?
 			if (empty($this->topic->info['fs_time']))
 			{
-				// sørg for at vi er på side 1
+				// sÃ¸rg for at vi er pÃ¥ side 1
 				if ($pagei->active != 1)
 				{
-					// gå til første side
+					// gÃ¥ til fÃ¸rste side
 					redirect::handle(game::address(PHP_SELF, $_GET, array("p")), redirect::SERVER);
 				}
 			}
 			
-			// kontroller at vi er på riktig side
+			// kontroller at vi er pÃ¥ riktig side
 			else
 			{
 				// finn neste forumsvar etter fs_time
@@ -197,25 +197,25 @@ class page_forum_topic
 					$row = mysql_fetch_assoc($result);
 				}
 				
-				// fremdeles ingen forumsvar å gå til?
+				// fremdeles ingen forumsvar Ã¥ gÃ¥ til?
 				if (!$row)
 				{
-					// sørg for at vi er på side 1
+					// sÃ¸rg for at vi er pÃ¥ side 1
 					if ($pagei->active != 1)
 					{
-						// gå til første side
+						// gÃ¥ til fÃ¸rste side
 						redirect::handle(game::address(PHP_SELF, $_GET, array("p")), redirect::SERVER);
 					}
 				}
 				
-				// gå til nyeste forumsvar
+				// gÃ¥ til nyeste forumsvar
 				else
 				{
-					// finn ut antall forumsvar før det vi skal gå til
+					// finn ut antall forumsvar fÃ¸r det vi skal gÃ¥ til
 					$result = ess::$b->db->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < {$row['fr_id']}$deleted");
 					$reply_num = mysql_result($result, 0) + 1;
 					
-					// sett opp sidetallet og kontroller at vi er på riktig side
+					// sett opp sidetallet og kontroller at vi er pÃ¥ riktig side
 					$page = ceil($reply_num / $this->topic->replies_per_page);
 					if ($pagei->active != $page)
 					{
@@ -236,11 +236,11 @@ class page_forum_topic
 			$result = ess::$b->db->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_deleted != 0");
 			$count = mysql_result($result, 0);
 			
-			ess::$b->page->add_message("Du viser slettede forumsvar. Denne forumtråden har <b>$count</b> ".fword("slettet forumsvar", "slettede forumsvar", $count).".", NULL, "top");
+			ess::$b->page->add_message("Du viser slettede forumsvar. Denne forumtrÃ¥den har <b>$count</b> ".fword("slettet forumsvar", "slettede forumsvar", $count).".", NULL, "top");
 		}
 		
 		
-		// øk visningstelleren hvis vi ikke har besøkt denne forumtråden de siste 10 min
+		// Ã¸k visningstelleren hvis vi ikke har besÃ¸kt denne forumtrÃ¥den de siste 10 min
 		if (!isset($_SESSION[$GLOBALS['__server']['session_prefix'].'forum_topics_visited'][$this->topic->id]) || $_SESSION[$GLOBALS['__server']['session_prefix'].'forum_topics_visited'][$this->topic->id] + 600 <= time())
 		{
 			ess::$b->db->query("UPDATE forum_topics SET ft_views = ft_views + 1 WHERE ft_id = {$this->topic->id}");
@@ -250,7 +250,7 @@ class page_forum_topic
 		$_SESSION[$GLOBALS['__server']['session_prefix'].'forum_topics_visited'][$this->topic->id] = time();
 		
 		
-		// tittel på siden
+		// tittel pÃ¥ siden
 		$this->topic->forum->add_title();
 		ess::$b->page->add_title($this->topic->info['ft_title']);
 		
@@ -273,7 +273,7 @@ class page_forum_topic
 		$reply_form = login::$logged_in && isset($_GET['reply']) && !$reply_id;
 		if ($reply_form)
 		{
-			// sørg for at vi er på siste siden
+			// sÃ¸rg for at vi er pÃ¥ siste siden
 			$pagei->__construct(pagei::ACTIVE_LAST);
 		}
 		
@@ -283,7 +283,7 @@ class page_forum_topic
 	<h1 class="bg1">'.htmlspecialchars($this->topic->info['ft_title']).'<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="forum?id='.$this->topic->forum->id.'">'.htmlspecialchars($this->topic->forum->get_name()).'</a></p>
 	<p class="h_right">'.($this->topic->info['ft_locked'] == 1 ? '
-		Låst emne!' : '').(login::$logged_in && $this->topic->info['ft_deleted'] == 0 && ($this->topic->info['ft_locked'] != 1 || $this->fmod) ? '
+		LÃ¥st emne!' : '').(login::$logged_in && $this->topic->info['ft_deleted'] == 0 && ($this->topic->info['ft_locked'] != 1 || $this->fmod) ? '
 		<a href="'.htmlspecialchars(game::address(PHP_SELF, $_GET, array("replyid"), array("reply" => true))).'" class="forum_link_replyform">Opprett svar</a>' : '').($this->fmod ? ($show_deleted ? '
 		<a href="'.htmlspecialchars(game::address(PHP_SELF, $_GET, array("show_deleted", "replyid"))).'">Skjul slettede svar</a>' : '
 		<a href="'.htmlspecialchars(game::address(PHP_SELF, $_GET, array(), array("show_deleted" => true))).'">Vis slettede svar</a>') : '').'
@@ -292,7 +292,7 @@ class page_forum_topic
 <div class="forum" id="forum_topic_container">';
 		
 		
-		// vise sidetall øverst?
+		// vise sidetall Ã¸verst?
 		if ($pagei->pages > 1)
 		{
 			echo '
@@ -347,7 +347,7 @@ class page_forum_topic
 		// vis forumsvar
 		if (count($replies) > 0)
 		{
-			// scrolle til første forumsvar på andre enn første side
+			// scrolle til fÃ¸rste forumsvar pÃ¥ andre enn fÃ¸rste side
 			if ($pagei->active > 1 && !$reply_form && !$reply_id && !$fs_id)
 			{
 				echo '
@@ -419,7 +419,7 @@ class page_forum_topic
 			$no_concat = isset($_POST['no_concatenate']) || ($_SERVER['REQUEST_METHOD'] != "POST" && $this->topic->forum->id >= 5 && $this->topic->forum->id <= 7);
 			$announce_text = $this->topic->forum->id >= 5 && $this->topic->forum->id <= 7
 				? 'Legg til logg i spilleloggen til medlemmer av Crewet.'
-				: 'Annonser på #kofradia kanalen';
+				: 'Annonser pÃ¥ #kofradia kanalen';
 			
 			echo '
 				<dt>Ekstra</dt>
@@ -433,12 +433,12 @@ class page_forum_topic
 			</dl>
 			<p class="c">
 				'.show_sbutton("Legg til svar", 'name="post" accesskey="s" id="forum_reply_button_add"').'
-				'.show_sbutton("Forhåndsvis", 'name="preview" accesskey="p" id="forum_reply_button_preview"').'
+				'.show_sbutton("ForhÃ¥ndsvis", 'name="preview" accesskey="p" id="forum_reply_button_preview"').'
 			</p>
 		</div>
 		<div id="reply_preview" class="forum">';
 		
-		// forhåndsvise?
+		// forhÃ¥ndsvise?
 		if (login::$logged_in && isset($_POST['preview']))
 		{
 			$data = array(
@@ -515,7 +515,7 @@ class page_forum_topic
 		
 		
 		// div javascript
-		// sørg for at meldingene blir oppdatert og at nye meldinger blr hentet hvis vi er på siste side
+		// sÃ¸rg for at meldingene blir oppdatert og at nye meldinger blr hentet hvis vi er pÃ¥ siste side
 		ess::$b->page->add_js_file(ess::$s['relative_path']."/js/forum.js");
 		ess::$b->page->add_js('
 		sm_scripts.report_links();');

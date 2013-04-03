@@ -3,7 +3,7 @@
 class auksjon
 {
 	const MAKS_BUD = 99999999999999;
-	const MAX_TIME_REMOVE = 600; // hvor lang tid det kan gå etter budet før det blir endelig
+	const MAX_TIME_REMOVE = 600; // hvor lang tid det kan gÃ¥ etter budet fÃ¸r det blir endelig
 	
 	/** ID */
 	public $id;
@@ -20,7 +20,7 @@ class auksjon
 	 */
 	public $params;
 	
-	/** Venter på å bli åpnet */
+	/** Venter pÃ¥ Ã¥ bli Ã¥pnet */
 	const STATUS_WAIT = 0;
 	
 	/** Avsluttet */
@@ -29,10 +29,10 @@ class auksjon
 	/** Aktiv */
 	const STATUS_ACTIVE = 2;
 	
-	/** Minste antall kuler som kan selges på en auksjon på en gang */
+	/** Minste antall kuler som kan selges pÃ¥ en auksjon pÃ¥ en gang */
 	const BULLETS_MIN = 3;
 	
-	/** Høyeste antall kuler som kan selges på en auksjon på en gang */
+	/** HÃ¸yeste antall kuler som kan selges pÃ¥ en auksjon pÃ¥ en gang */
 	const BULLETS_MAX = 10;
 	
 	/** Minste varighet for kuleauksjon i minutter */
@@ -93,7 +93,7 @@ class auksjon
 		// skal vi sette gamle bud som inaktive?
 		if ($this->status == self::STATUS_ACTIVE)
 		{
-			// hent det budet som har stått lenger enn tiden som man kan trekke seg og som er aktivt
+			// hent det budet som har stÃ¥tt lenger enn tiden som man kan trekke seg og som er aktivt
 			$expire = time() - self::MAX_TIME_REMOVE;
 			$result = ess::$b->db->query("
 				SELECT ab_id, ab_bid
@@ -120,11 +120,11 @@ class auksjon
 	}
 	
 	/**
-	 * Behandle auksjonen når den er ferdig
+	 * Behandle auksjonen nÃ¥r den er ferdig
 	 */
 	protected function handle_complete()
 	{
-		// forsøk å sett som behandlet
+		// forsÃ¸k Ã¥ sett som behandlet
 		$this->data['a_completed'] = 1;
 		ess::$b->db->query("UPDATE auksjoner SET a_completed = 1 WHERE a_id = {$this->id} AND a_completed = 0");
 		
@@ -150,7 +150,7 @@ class auksjon
 			{
 				// firma
 				case self::TYPE_FIRMA:
-					// forleng auksjonen med 3 timer fra nå
+					// forleng auksjonen med 3 timer fra nÃ¥
 					$this->data['a_end'] = time() + 10800;
 					$this->data['a_completed'] = 0;
 					$this->status = self::STATUS_ACTIVE;
@@ -187,7 +187,7 @@ class auksjon
 						$ff->player_set_priority($bud['ab_up_id'], 1);
 						$ff->reset_date_reg(true);
 						
-						// første firma av denne typen i spillet?
+						// fÃ¸rste firma av denne typen i spillet?
 						hall_of_fame::trigger("ff_owner", $ff);
 					}
 				break;
@@ -265,7 +265,7 @@ class auksjon
 	 */
 	public function handle_delete()
 	{
-		// forsøk å sett som behandlet
+		// forsÃ¸k Ã¥ sett som behandlet
 		$this->data['a_completed'] = 1;
 		ess::$b->db->query("UPDATE auksjoner SET a_completed = 1 WHERE a_id = $this->id AND a_completed = 0");
 		
@@ -359,7 +359,7 @@ class auksjon
 	}
 	
 	/**
-	 * Frigjør en spiller fra aktive auksjoner
+	 * FrigjÃ¸r en spiller fra aktive auksjoner
 	 * @param player $up
 	 * @param int $up_id
 	 * @param int $type skal dette kun gjelde en bestemt type auksjon?

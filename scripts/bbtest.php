@@ -20,7 +20,7 @@ echo '
 <div class="bg1_c large">
 	<h1 class="bg1">BB-testing<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p>Her kan du teste diverse BB-koder. Du kan også forhåndsvise profilen din på <a href="'.$__server['relative_path'].'/min_side?a=profil">rediger profil</a>.</p>
+		<p>Her kan du teste diverse BB-koder. Du kan ogsÃ¥ forhÃ¥ndsvise profilen din pÃ¥ <a href="'.$__server['relative_path'].'/min_side?a=profil">rediger profil</a>.</p>
 		<form action="" method="post">
 			<p><b>BB-kode</b>: (<a href="'.ess::$s['relative_path'].'/node/11">Hjelp</a>)</p>
 			<p><textarea name="bb" rows="13" cols="100" style="width: 97%" id="textcontent">'.htmlspecialchars(postval("bb")).'</textarea></p>

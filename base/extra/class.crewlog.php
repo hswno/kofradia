@@ -27,7 +27,7 @@ class crewlog
 		// syntax: action => array(lca_id, lcg_id, have_a_up_id, have_log, description, data array(data id => array(data name, data type, data summary, data optional), ...))
 		"user_password" => array(2, 1, 1, 1, "Endre passord", array(1 => array("pass_old", "text", 0, 0), 2 => array("pass_new", "text", 0, 0))),
 		"user_email" => array(3, 1, 1, 1, "Endre e-postadresse", array(1 => array("email_old", "text", 1, 0), 2 => array("email_new", "text", 1, 0))),
-		"user_birth" => array(6, 1, 1, 1, "Endre fødselsdato", array(1 => array("birth_old", "text", 1, 0), 2 => array("birth_new", "text", 1, 0))),
+		"user_birth" => array(6, 1, 1, 1, "Endre fÃ¸dselsdato", array(1 => array("birth_old", "text", 1, 0), 2 => array("birth_new", "text", 1, 0))),
 		"user_phone" => array(7, 1, 1, 1, "Endre mobilnummer", array(1 => array("phone_old", "text", 1, 0), 2 => array("phone_new", "text", 1, 0))),
 		"user_bank_auth" => array(8, 1, 1, 1, "Endre bankpassord", array(1 => array("pass_old", "text", 0, 0), 2 => array("pass_new", "text", 0, 0))),
 		"user_activate" => array(16, 1, 1, 1, "Aktiver bruker", array(1 => array("email_sent", "int", 1, 1), 2 => array("email_note", "text", 0, 1))),
@@ -46,7 +46,7 @@ class crewlog
 		"user_warning_invalidated" => array(66, 1, 1, 0, "Advarsel (fjernet)", array(1 => array("lc_id", "int", 1, 0), 2 => array("type", "text", 1, 0), 3 => array("priority", "int", 1, 0))),
 		"user_deactivate_change" => array(80, 1, 1, 0, "Deaktivering endret", array(1 => array("log_old", "text", 1, 0), 2 => array("log_new", "text", 1, 1), 3 => array("note_old", "text", 0, 0), 4 => array("note_new", "text", 0, 1))),
 		"user_send_email" => array(81, 1, 1, 0, "Send e-post", array(1 => array("email", "text", 1, 0), 2 => array("email_subject", "text", 1, 0), 3 => array("email_content", "text", 1, 0))),
-		"user_level" => array(82, 1, 1, 1, "Endre tilgangsnivå", array(1 => array("level_old", "int", 0, 0), 2 => array("level_old_text", "text", 1, 0), 3 => array("level_new", "int", 0, 0), 4 => array("level_new_text", "text", 1, 0), 5 => array("up_id", "int", 1, 1), 6 => array("money", "text", 0, 0), 7 => array("points", "int", 0, 0))),
+		"user_level" => array(82, 1, 1, 1, "Endre tilgangsnivÃ¥", array(1 => array("level_old", "int", 0, 0), 2 => array("level_old_text", "text", 1, 0), 3 => array("level_new", "int", 0, 0), 4 => array("level_new_text", "text", 1, 0), 5 => array("up_id", "int", 1, 1), 6 => array("money", "text", 0, 0), 7 => array("points", "int", 0, 0))),
 		"forum_topic_delete" => array(30, 2, 1, 2, "Slett emne", array(1 => array("topic_id", "int", 1, 0), 2 => array("topic_title", "text", 1, 0))),
 		"forum_topic_restore" => array(31, 2, 1, 2, "Gjenopprett emne", array(1 => array("topic_id", "int", 1, 0), 2 => array("topic_title", "text", 1, 0))),
 		"forum_topic_edit" => array(32, 2, 1, 0, "Rediger emne", array(1 => array("topic_id", "int", 1, 0), 2 => array("topic_title_old", "text", 1, 0), 3 => array("topic_title_new", "text", 1, 1), 4 => array("topic_content_old", "text", 0, 0), 5 => array("topic_content_diff", "text", 0, 1))),
@@ -71,7 +71,7 @@ class crewlog
 		"player_name" => array(1, 5, 1, 1, "Endre spillernavn", array(1 => array("user_old", "text", 1, 0), 2 => array("user_new", "text", 1, 0))),
 		"player_profile_text" => array(4, 5, 1, 2, "Endre profiltekst", array(1 => array("profile_text_old", "text", 0, 0), 2 => array("profile_text_diff", "text", 0, 0))),
 		"player_signature" => array(5, 5, 1, 2, "Endre signatur", array(1 => array("signature_old", "text", 0, 0), 2 => array("signature_diff", "text", 0, 0))),
-		"player_rank_inc" => array(9, 5, 1, 1, "Øke rank", array(1 => array("points", "int", 1, 0))),
+		"player_rank_inc" => array(9, 5, 1, 1, "Ã˜ke rank", array(1 => array("points", "int", 1, 0))),
 		"player_rank_dec" => array(10, 5, 1, 1, "Senke rank", array(1 => array("points", "int", 1, 0))),
 		"player_image_add" => array(11, 5, 1, 0, "Last opp profilbilde", array(1 => array("image_id", "int", 1, 0))),
 		"player_image_del" => array(12, 5, 1, 0, "Slett profilbilde", array(1 => array("image_id", "int", 1, 0), 2 => array("image_data", "text", 0, 0))),
@@ -84,7 +84,7 @@ class crewlog
 		"player_deactivate_change" => array(63, 5, 1, 0, "Deaktivering endret", array(1 => array("log_old", "text", 1, 0), 2 => array("log_new", "text", 1, 1), 3 => array("note_old", "text", 0, 0), 4 => array("note_new", "text", 0, 1))),
 		"player_message_delete" => array(83, 5, 1, 0, "Slettet melding", array(1 => array("it_id", "int", 1, 0), 2 => array("im_id", "int", 1, 0), 3 => array("it_title", "text", 1, 0))),
 		"player_message_restore" => array(84, 5, 1, 0, "Gjenopprettet melding", array(1 => array("it_id", "int", 1, 0), 2 => array("im_id", "int", 1, 0), 3 => array("it_title", "text", 1, 0))),
-		"player_thread_delete" => array(85, 5, 0, 0, "Slettet meldingstråd", array(1 => array("it_id", "int", 1, 0), 2 => array("it_title", "text", 1, 0)))
+		"player_thread_delete" => array(85, 5, 0, 0, "Slettet meldingstrÃ¥d", array(1 => array("it_id", "int", 1, 0), 2 => array("it_title", "text", 1, 0)))
 	);
 	
 	/** ID->Navn-referanse for de forskjellige handlingene */
@@ -120,7 +120,7 @@ class crewlog
 	 * @param integer $a_up_id
 	 * @param string $log
 	 * @param array $data
-	 * @param integer $up_id hvem som utfører denne handlingen
+	 * @param integer $up_id hvem som utfÃ¸rer denne handlingen
 	 * @return integer
 	 */
 	public static function log($action, $a_up_id = NULL, $log = NULL, $data = array(), $up_id = NULL)
@@ -175,15 +175,15 @@ class crewlog
 			if (is_null($a_up_id))
 			{
 				// feil: mangler
-				throw new HSException("Mangler berørt bruker ID (action: $action)");
+				throw new HSException("Mangler berÃ¸rt bruker ID (action: $action)");
 			}
 			
 			$a_up_id = intval($a_up_id);
 		}
 		elseif (!is_null($a_up_id))
 		{
-			// feil: skal ikke være med
-			throw new HSException("Berørt bruker ID skal ikke være med (action: $action)");
+			// feil: skal ikke vÃ¦re med
+			throw new HSException("BerÃ¸rt bruker ID skal ikke vÃ¦re med (action: $action)");
 		}
 		else
 		{
@@ -198,8 +198,8 @@ class crewlog
 		}
 		if ($a[3] == 0 && !is_null($log))
 		{
-			// feil: skal ikke være med
-			throw new HSException("Begrunnelse (logg) skal ikke være med (action: $action)");
+			// feil: skal ikke vÃ¦re med
+			throw new HSException("Begrunnelse (logg) skal ikke vÃ¦re med (action: $action)");
 		}
 		elseif ($a[3] == 1 && is_null($log))
 		{
@@ -243,7 +243,7 @@ class crewlog
 		// har vi noe ekstra inndata (ugyldig)
 		if (count($data) > 0)
 		{
-			throw new HSException("Overflødig inndata: ".implode(", ", array_map("htmlspecialchars", array_keys($data)))." (action: $action)");
+			throw new HSException("OverflÃ¸dig inndata: ".implode(", ", array_map("htmlspecialchars", array_keys($data)))." (action: $action)");
 		}
 		
 		// legg til i loggen
@@ -280,7 +280,7 @@ class crewlog
 		}
 		$ids = array_unique($ids);
 		
-		// ingenting å hente?
+		// ingenting Ã¥ hente?
 		if (count($ids) == 0) return $rows;
 		
 		// hent data
@@ -298,7 +298,7 @@ class crewlog
 	 * Sett opp tekst for handlinger
 	 * @param array $row
 	 * @param array $data
-	 * @param boolean $show_a_up vise hvem handlingen ble utført på?
+	 * @param boolean $show_a_up vise hvem handlingen ble utfÃ¸rt pÃ¥?
 	 * @return string
 	 */
 	public static function make_summary($row, $data = NULL, $show_a_up = true)
@@ -319,8 +319,8 @@ class crewlog
 		
 		switch ($action)
 		{
-			// TODO: hent inn mer data for oppføringene (spesielt i forhold til player_* hvor mye har ubrukt data)
-			// TODO: sette hvem som utførte handlingen bakerst, fjerne hvem handlingen ble utført på om det ikke skal være med ($show_a_up)
+			// TODO: hent inn mer data for oppfÃ¸ringene (spesielt i forhold til player_* hvor mye har ubrukt data)
+			// TODO: sette hvem som utfÃ¸rte handlingen bakerst, fjerne hvem handlingen ble utfÃ¸rt pÃ¥ om det ikke skal vÃ¦re med ($show_a_up)
 			case "user_password":
 				return 'Bruker: Endret passordet'.$up_til.'. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
 				
@@ -331,7 +331,7 @@ class crewlog
 				return 'Bruker: E-post sendt til '.htmlspecialchars($data['email']).'. (<user id="'.$row['lc_up_id'].'" />)<br /><div class="crewlog_note"><b>Emne: '.game::bb_to_html($data['email_subject']).'</b><br /><span style="font-family: monospace">'.nl2br(htmlspecialchars($data['email_content'])).'</span></div>';
 				
 			case "user_birth":
-				return 'Bruker: Endret fødselsdatoen'.$up_til.' fra '.$data['birth_old'].' til '.$data['birth_new'].'. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
+				return 'Bruker: Endret fÃ¸dselsdatoen'.$up_til.' fra '.$data['birth_old'].' til '.$data['birth_new'].'. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
 				
 			case "user_phone":
 				return 'Bruker: Endret mobilnummeret'.$up_til.' fra '.(empty($data['phone_old']) ? '<i>tomt</i>' : $data['phone_old']).' til '.(empty($data['phone_new']) ? '<i>tomt</i>' : $data['phone_new']).'. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
@@ -355,7 +355,7 @@ class crewlog
 				return 'Bruker: Endret crewnotatet'.$up_til.'. '.$more_link.' (<user id="'.$row['lc_up_id'].'" />)';
 				
 			case "user_level":
-				return 'Bruker: Endret tilgangsnivået'.$up_til.' fra '.htmlspecialchars($data['level_old_text']).' til '.htmlspecialchars($data['level_new_text']).'.'.(empty($data['up_id']) ? ' Spilleren ble ikke berørt.' : ' Spilleren ble også oppdatert.').' (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
+				return 'Bruker: Endret tilgangsnivÃ¥et'.$up_til.' fra '.htmlspecialchars($data['level_old_text']).' til '.htmlspecialchars($data['level_new_text']).'.'.(empty($data['up_id']) ? ' Spilleren ble ikke berÃ¸rt.' : ' Spilleren ble ogsÃ¥ oppdatert.').' (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
 				
 			case "user_activate":
 				return 'Bruker: Aktiverte brukeren'.$up.'.'.(isset($data['email_sent']) ? ' E-post ble sendt til brukeren.' : ' E-post ikke sendt.').' (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
@@ -378,7 +378,7 @@ class crewlog
 				
 			case "user_forum_ban_delete":
 				// TODO: Legge til mer info
-				return 'Bruker: Fjernet forum ban'.$up_til.'. Ville utløpt '.$_base->date->get($data['time_end'])->format().' ('.game::timespan($data['time_end']-$row['lc_time']).'). (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
+				return 'Bruker: Fjernet forum ban'.$up_til.'. Ville utlÃ¸pt '.$_base->date->get($data['time_end'])->format().' ('.game::timespan($data['time_end']-$row['lc_time']).'). (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
 				
 			case "user_add_note":
 				return 'Bruker: Tilegnet et notat'.$up_til.': (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
@@ -395,18 +395,18 @@ class crewlog
 			case "user_ban_delete":
 				// TODO: Legge til mer info
 				$type = blokkeringer::get_type($data['type']);
-				return 'Blokkering: Fjernet blokkeringen ('.htmlspecialchars($type['title']).''.$up_til.'. Ville utløpt '.$_base->date->get($data['time_end'])->format().' ('.game::timespan($data['time_end']-$row['lc_time'], game::TIME_ALL, 5).' gjensto). (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
+				return 'Blokkering: Fjernet blokkeringen ('.htmlspecialchars($type['title']).''.$up_til.'. Ville utlÃ¸pt '.$_base->date->get($data['time_end'])->format().' ('.game::timespan($data['time_end']-$row['lc_time'], game::TIME_ALL, 5).' gjensto). (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
 				
 			case "user_warning":
-				$priority = $data['priority'] == 1 ? 'Lav' : ($data['priority'] == 3 ? 'Høy' : 'Moderat');
+				$priority = $data['priority'] == 1 ? 'Lav' : ($data['priority'] == 3 ? 'HÃ¸y' : 'Moderat');
 				return 'Advarsel: Tilegnet en advarsel'.$up_til.' (kategori: '.$data['type'].'). Prioritet: '.$priority.'.'.(isset($data['notified']) && $data['notified'] != 0 ? ' Brukeren ble varslet med logg.' : ' Brukerne ble ikke varslet.').(isset($data['invalidated']) && $data['invalidated'] != 0 ? ' Advarselen har blitt markert som ugyldig.' : ' <a href="'.ess::$s['relative_path'].'/crew/crewlogg?lc_id='.$row['lc_id'].'&amp;edit">Rediger advarsel</a>').' (<user id="'.$row['lc_up_id'].'" />)'.$log_info.'<span class="crewlog_note">'.game::bb_to_html($data['note']).'</span>';
 				
 			case "user_warning_edit":
-				$priority = $data['priority_new'] == 1 ? 'Lav' : ($data['priority_new'] == 3 ? 'Høy' : 'Moderat');
+				$priority = $data['priority_new'] == 1 ? 'Lav' : ($data['priority_new'] == 3 ? 'HÃ¸y' : 'Moderat');
 				return 'Advarsel: Redigerte en <a href="'.ess::$s['relative_path'].'/crew/crewlogg?lc_id='.$data['lc_id'].'">tidligere gitt advarsel</a>'.$up_til.' (kategori: '.$data['type_new'].'). Prioritet: '.$priority.'. (<user id="'.$row['lc_up_id'].'" />)';
 				
 			case "user_warning_invalidated":
-				$priority = $data['priority'] == 1 ? 'Lav' : ($data['priority'] == 3 ? 'Høy' : 'Moderat');
+				$priority = $data['priority'] == 1 ? 'Lav' : ($data['priority'] == 3 ? 'HÃ¸y' : 'Moderat');
 				return 'Advarsel: Slettet en <a href="'.ess::$s['relative_path'].'/crew/crewlogg?lc_id='.$data['lc_id'].'">tidligere gitt advarsel</a>'.$up_til.' (kategori: '.$data['type'].'). Prioritet: '.$priority.'. (<user id="'.$row['lc_up_id'].'" />)';
 				
 			case "player_name":
@@ -419,7 +419,7 @@ class crewlog
 				return 'Spiller: Endret signaturen'.$up_til.'. '.$more_link.' (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
 				
 			case "player_rank_inc":
-				return 'Spiller: Økte ranken'.$up_til.' med '.game::format_number($data['points']).' poeng. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
+				return 'Spiller: Ã˜kte ranken'.$up_til.' med '.game::format_number($data['points']).' poeng. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
 				
 			case "player_rank_dec":
 				return 'Spiller: Senket ranken'.$up_til.' med '.game::format_number($data['points']).' poeng. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
@@ -437,13 +437,13 @@ class crewlog
 				return 'Spiller: Endret crewnotatet'.$up_til.'. '.$more_link.' (<user id="'.$row['lc_up_id'].'" />)';
 				
 			case "player_message_delete":
-				return 'Spiller: Slettet melding'.$up_av.' i meldingstråden <a href="'.$__server['relative_path'].'/innboks_les?id='.$data['it_id'].'&amp;goto='.$data['im_id'].'">'.htmlspecialchars($data['it_title']).'</a>. (<user id="'.$row['lc_up_id'].'" />)';
+				return 'Spiller: Slettet melding'.$up_av.' i meldingstrÃ¥den <a href="'.$__server['relative_path'].'/innboks_les?id='.$data['it_id'].'&amp;goto='.$data['im_id'].'">'.htmlspecialchars($data['it_title']).'</a>. (<user id="'.$row['lc_up_id'].'" />)';
 				
 			case "player_message_restore":
-				return 'Spiller: Gjenopprettet melding'.$up_av.' i meldingstråden <a href="'.$__server['relative_path'].'/innboks_les?id='.$data['it_id'].'&amp;goto='.$data['im_id'].'">'.htmlspecialchars($data['it_title']).'</a>. (<user id="'.$row['lc_up_id'].'" />)';
+				return 'Spiller: Gjenopprettet melding'.$up_av.' i meldingstrÃ¥den <a href="'.$__server['relative_path'].'/innboks_les?id='.$data['it_id'].'&amp;goto='.$data['im_id'].'">'.htmlspecialchars($data['it_title']).'</a>. (<user id="'.$row['lc_up_id'].'" />)';
 				
 			case "player_thread_delete":
-				return 'Spiller: Slettet meldingstråden <a href="'.$__server['relative_path'].'/innboks_les?id='.$data['it_id'].'">'.htmlspecialchars($data['it_title']).'</a>. (<user id="'.$row['lc_up_id'].'" />)';
+				return 'Spiller: Slettet meldingstrÃ¥den <a href="'.$__server['relative_path'].'/innboks_les?id='.$data['it_id'].'">'.htmlspecialchars($data['it_title']).'</a>. (<user id="'.$row['lc_up_id'].'" />)';
 				
 			case "forum_topic_delete":
 				return 'Forum: Slettet emnet <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'">'.htmlspecialchars($data['topic_title']).'</a>'.$up_av.'. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
@@ -497,38 +497,38 @@ class crewlog
 			case "ip_ban_delete":
 				// TODO: Mer info
 				$info = $data['ip_start_new'] == $data['ip_end_new'] ? 'IP-en '.long2ip($data['ip_start_new']) : 'IP-adressene '.long2ip($data['ip_start_new']).'-'.long2ip($data['ip_end_new']);
-				return 'IP-ban: Fjernet IP-ban for '.$info.' som skulle gått ut '.$_base->date->get($data['time_end'])->format().'. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
+				return 'IP-ban: Fjernet IP-ban for '.$info.' som skulle gÃ¥tt ut '.$_base->date->get($data['time_end'])->format().'. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
 			
 			case "f_forum_topic_delete":
 				if (!isset($data['ff_type']) || $data['ff_type'] == "f" || $data['ff_type'] == "fa")
-					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> slettet forumtråden '.htmlspecialchars($data['topic_title']).'.');
-				return self::make_summary_ff($row, $data, 'Slettet forumtråden <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
+					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> slettet forumtrÃ¥den '.htmlspecialchars($data['topic_title']).'.');
+				return self::make_summary_ff($row, $data, 'Slettet forumtrÃ¥den <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
 			
 			case "f_forum_topic_restore":
 				if (!isset($data['ff_type']) || $data['ff_type'] == "f" || $data['ff_type'] == "fa")
-					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> gjenopprettet forumtråden '.htmlspecialchars($data['topic_title']).'.');
-				return self::make_summary_ff($row, $data, 'Gjenopprettet forumtråden <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
+					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> gjenopprettet forumtrÃ¥den '.htmlspecialchars($data['topic_title']).'.');
+				return self::make_summary_ff($row, $data, 'Gjenopprettet forumtrÃ¥den <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
 			
 			case "f_forum_topic_edit":
 				$title = isset($data['topic_title_new']) ? $data['topic_title_new'] : $data['topic_title_old'];
 				if (!isset($data['ff_type']) || $data['ff_type'] == "f" || $data['ff_type'] == "fa")
-					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> redigerte forumtråden '.htmlspecialchars($title).(isset($data['topic_title_new']) ? ' (tidligere '.htmlspecialchars($data['topic_title_old']).')' : '').'.');
-				return self::make_summary_ff($row, $data, 'Redigerte forumtråden <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'">'.htmlspecialchars($title).'</a>'.(isset($data['topic_title_new']) ? ' (tidligere '.htmlspecialchars($data['topic_title_old']).')' : '').'.').' (<user id="'.$row['lc_up_id'].'" />)';
+					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> redigerte forumtrÃ¥den '.htmlspecialchars($title).(isset($data['topic_title_new']) ? ' (tidligere '.htmlspecialchars($data['topic_title_old']).')' : '').'.');
+				return self::make_summary_ff($row, $data, 'Redigerte forumtrÃ¥den <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'">'.htmlspecialchars($title).'</a>'.(isset($data['topic_title_new']) ? ' (tidligere '.htmlspecialchars($data['topic_title_old']).')' : '').'.').' (<user id="'.$row['lc_up_id'].'" />)';
 			
 			case "f_forum_reply_delete":
 				if (!isset($data['ff_type']) || $data['ff_type'] == "f" || $data['ff_type'] == "fa")
-					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> slettet forumsvaret med ID '.$data['reply_id'].' fra forumtråden '.htmlspecialchars($data['topic_title']).'.');
-				return self::make_summary_ff($row, $data, 'Slettet forumsvaret med ID '.$data['reply_id'].' fra forumtråden <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'&amp;replyid='.$data['reply_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
+					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> slettet forumsvaret med ID '.$data['reply_id'].' fra forumtrÃ¥den '.htmlspecialchars($data['topic_title']).'.');
+				return self::make_summary_ff($row, $data, 'Slettet forumsvaret med ID '.$data['reply_id'].' fra forumtrÃ¥den <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'&amp;replyid='.$data['reply_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
 			
 			case "f_forum_reply_restore":
 				if (!isset($data['ff_type']) || $data['ff_type'] == "f" || $data['ff_type'] == "fa")
-					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> gjenopprettet forumsvaret med ID '.$data['reply_id'].' i forumtråden '.htmlspecialchars($data['topic_title']).'.');
-				return self::make_summary_ff($row, $data, 'Gjenopprettet forumsvaret med ID '.$data['reply_id'].' i forumtråden <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'&amp;replyid='.$data['reply_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
+					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> gjenopprettet forumsvaret med ID '.$data['reply_id'].' i forumtrÃ¥den '.htmlspecialchars($data['topic_title']).'.');
+				return self::make_summary_ff($row, $data, 'Gjenopprettet forumsvaret med ID '.$data['reply_id'].' i forumtrÃ¥den <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'&amp;replyid='.$data['reply_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
 			
 			case "f_forum_reply_edit":
 				if (!isset($data['ff_type']) || $data['ff_type'] == "f" || $data['ff_type'] == "fa")
-					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> redigerte forumsvaret med ID '.$data['reply_id'].' i forumtråden '.htmlspecialchars($data['topic_title']).'.');
-				return self::make_summary_ff($row, $data, 'Redigerte forumsvaret med ID '.$data['reply_id'].' i forumtråden <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'&amp;replyid='.$data['reply_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
+					return self::make_summary_ff($row, $data, '<user id="'.$row['lc_up_id'].'" /> redigerte forumsvaret med ID '.$data['reply_id'].' i forumtrÃ¥den '.htmlspecialchars($data['topic_title']).'.');
+				return self::make_summary_ff($row, $data, 'Redigerte forumsvaret med ID '.$data['reply_id'].' i forumtrÃ¥den <a href="'.$__server['relative_path'].'/forum/topic?id='.$data['topic_id'].'&amp;replyid='.$data['reply_id'].'">'.htmlspecialchars($data['topic_title']).'</a>.').' (<user id="'.$row['lc_up_id'].'" />)';
 		}
 		
 		return "missing template ($action)";
@@ -566,7 +566,7 @@ class crewlog
 		return $prefix . $text;
 	}
 	
-	/** Eksporter lista over actions så den kan legges i scriptet */
+	/** Eksporter lista over actions sÃ¥ den kan legges i scriptet */
 	public static function generate_action_list()
 	{
 		global $_base;

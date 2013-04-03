@@ -3,7 +3,7 @@
 class page_banken extends pages_player
 {
 	/**
-	 * Startkapital ved opprettelse av første bankkontoen
+	 * Startkapital ved opprettelse av fÃ¸rste bankkontoen
 	 */
 	const STARTKAPITAL = 200000;
 	
@@ -27,14 +27,14 @@ class page_banken extends pages_player
 	}
 	
 	/**
-	 * Behandle forespørsel
+	 * Behandle forespÃ¸rsel
 	 */
 	protected function page_handle()
 	{
 		// hent inn bankinfo
 		$this->bank = page_banken_bank::get($this->up->data['up_bank_ff_id']);
 		
-		// må vi velge en bankkonto?
+		// mÃ¥ vi velge en bankkonto?
 		if (!$this->bank)
 		{
 			$this->bank_set();
@@ -53,7 +53,7 @@ class page_banken extends pages_player
 		if (isset($_GET['logout']) && !isset(login::$extended_access['authed']))
 		{
 			login::data_set("banken_last_view", 0);
-			ess::$b->page->add_message("Du er nå logget ut av banken.");
+			ess::$b->page->add_message("Du er nÃ¥ logget ut av banken.");
 			redirect::handle();
 		}
 		
@@ -81,7 +81,7 @@ class page_banken extends pages_player
 			$this->ta_ut();
 		}
 		
-		// overføre penger?
+		// overfÃ¸re penger?
 		if (isset($_POST['mottaker']) && !isset($_POST['abort']))
 		{
 			$this->overfor();
@@ -92,24 +92,24 @@ class page_banken extends pages_player
 	}
 	
 	/**
-	 * Velge første eller bytte bankkonto
+	 * Velge fÃ¸rste eller bytte bankkonto
 	 */
 	protected function bank_set($switch = null)
 	{
 		// bytte bank?
 		if ($switch)
 		{
-			// kan vi bytte bank nå?
+			// kan vi bytte bank nÃ¥?
 			$expire = $this->up->data['up_bank_ff_time'] + 604800;
 			if ($expire > time())
 			{
 				if (access::is_nostat())
 				{
-					ess::$b->page->add_message("Du må egentlig vente til ".ess::$b->date->get($expire)->format(date::FORMAT_SEC)." før du kan bytte bank, men som nostat kan du bytte når som helst.");
+					ess::$b->page->add_message("Du mÃ¥ egentlig vente til ".ess::$b->date->get($expire)->format(date::FORMAT_SEC)." fÃ¸r du kan bytte bank, men som nostat kan du bytte nÃ¥r som helst.");
 				}
 				else
 				{
-					ess::$b->page->add_message("Du må vente til ".ess::$b->date->get($expire)->format(date::FORMAT_SEC)." før du kan bytte bank på nytt.", "error");
+					ess::$b->page->add_message("Du mÃ¥ vente til ".ess::$b->date->get($expire)->format(date::FORMAT_SEC)." fÃ¸r du kan bytte bank pÃ¥ nytt.", "error");
 					redirect::handle();
 				}
 			}
@@ -123,7 +123,7 @@ class page_banken extends pages_player
 		{
 			if (!isset($_POST['ff_id']))
 			{
-				ess::$b->page->add_message("Du må velge en bank.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge en bank.", "error");
 			}
 			
 			else
@@ -144,7 +144,7 @@ class page_banken extends pages_player
 					$more_fields = '';
 					$more_info = '';
 					
-					// er dette vår første konto? startkapital!
+					// er dette vÃ¥r fÃ¸rste konto? startkapital!
 					if (!$switch && $this->up->data['up_bank_ff_id'] === NULL && self::STARTKAPITAL)
 					{
 						$this->up->data['up_bank'] = bcadd($this->up->data['up_bank'], self::STARTKAPITAL);
@@ -153,7 +153,7 @@ class page_banken extends pages_player
 					}
 					
 					ess::$b->db->query("UPDATE users_players SET up_bank_ff_id = $ff_id, up_bank_ff_time = ".time()."$more_fields WHERE up_id = ".$this->up->id);
-					ess::$b->page->add_message("Du har opprettet en bankkonto hos firmaet <b>".htmlspecialchars($bank->data['ff_name'])."</b> og har nå <b>".game::format_cash($this->up->data['up_bank'])."</b> i din bankkonto.$more_info");
+					ess::$b->page->add_message("Du har opprettet en bankkonto hos firmaet <b>".htmlspecialchars($bank->data['ff_name'])."</b> og har nÃ¥ <b>".game::format_cash($this->up->data['up_bank'])."</b> i din bankkonto.$more_info");
 					
 					redirect::handle();
 				}
@@ -173,16 +173,16 @@ class page_banken extends pages_player
 	<h1 class="bg1">'.($switch ? 'Bytte bank' : 'Opprett bankkonto').'<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<form action="" method="post">'.($switch ? '
-			<p>Mellom hver gang du bytter bank må det gå én uke.</p>' : '
-			<p>Det ser ikke ut til at du eier noen bankkonto! Derfor må du velge en bank du ønsker å opprette konto i.</p>'.($this->up->data['up_bank'] > 0 ? '
-			<p>Du har sannsynligvis hatt en bankkonto tidligere, da du vil få '.game::format_cash($this->up->data['up_bank']).' tilgjengelig etter du oppretter bankkontoen.' : '')).'
+			<p>Mellom hver gang du bytter bank mÃ¥ det gÃ¥ Ã©n uke.</p>' : '
+			<p>Det ser ikke ut til at du eier noen bankkonto! Derfor mÃ¥ du velge en bank du Ã¸nsker Ã¥ opprette konto i.</p>'.($this->up->data['up_bank'] > 0 ? '
+			<p>Du har sannsynligvis hatt en bankkonto tidligere, da du vil fÃ¥ '.game::format_cash($this->up->data['up_bank']).' tilgjengelig etter du oppretter bankkontoen.' : '')).'
 			<input type="hidden" name="'.($switch ? 'switch' : 'bank_first').'" />
 			<table class="table center tablemt" width="100%">
 				<thead>
 					<tr>
 						<th>Bydel</th>
 						<th>Bank</th>
-						<th>Overføringstap</th>
+						<th>OverfÃ¸ringstap</th>
 					</tr>
 				</thead>
 				<tbody>';
@@ -213,7 +213,7 @@ class page_banken extends pages_player
 			$active = $switch && $row['ff_id'] == $this->bank->id;
 			if ($active)
 			{
-				$bydel .= ' <span class="dark">(Nåværende)</span>';
+				$bydel .= ' <span class="dark">(NÃ¥vÃ¦rende)</span>';
 			}
 			
 			$params = new params($row['ff_params']);
@@ -258,13 +258,13 @@ class page_banken extends pages_player
 			
 			elseif (strlen($pass1) < 6)
 			{
-				ess::$b->page->add_message("Passordet må inneholde 6 eller flere tegn.", "error");
+				ess::$b->page->add_message("Passordet mÃ¥ inneholde 6 eller flere tegn.", "error");
 			}
 			
 			// for lett passord?
 			elseif ($error > 0)
 			{
-				ess::$b->page->add_message("Du må velge et vanskeligere passord.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge et vanskeligere passord.", "error");
 			}
 			
 			else
@@ -275,7 +275,7 @@ class page_banken extends pages_player
 				// samme som brukerpassordet?
 				if (password::verify_hash($pass1, $this->up->user->data['u_pass'], "user"))
 				{
-					ess::$b->page->add_message("Bankpassordet kan ikke være det samme som passordet til brukerkontoen.", "error");
+					ess::$b->page->add_message("Bankpassordet kan ikke vÃ¦re det samme som passordet til brukerkontoen.", "error");
 				}
 				
 				else
@@ -283,7 +283,7 @@ class page_banken extends pages_player
 					// bytt passordet
 					ess::$b->db->query("UPDATE users SET u_bank_auth = ".ess::$b->db->quote($hash)." WHERE u_id = ".$this->up->user->id);
 					
-					ess::$b->page->add_message("Ditt bankpassord er nå opprettet.");
+					ess::$b->page->add_message("Ditt bankpassord er nÃ¥ opprettet.");
 					login::data_set("banken_last_view", time());
 					redirect::handle();
 				}
@@ -298,8 +298,8 @@ class page_banken extends pages_player
 	<h1 class="bg1">Banken<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<boxes />
-		<p>For å få tilgang til banken må du opprette et passord som kun brukes for å få tilgang til banken.</p>
-		<p>Dette er for å sikre at uvedkommende ikke skal få tilgang til dine penger selv om de kommer inn på kontoen din.</p>
+		<p>For Ã¥ fÃ¥ tilgang til banken mÃ¥ du opprette et passord som kun brukes for Ã¥ fÃ¥ tilgang til banken.</p>
+		<p>Dette er for Ã¥ sikre at uvedkommende ikke skal fÃ¥ tilgang til dine penger selv om de kommer inn pÃ¥ kontoen din.</p>
 		<h2 class="bg1">Opprett bank passord<span class="left2"></span><span class="right2"></span></h2>
 		<div class="bg1">
 			<form action="" method="post">
@@ -350,27 +350,27 @@ class page_banken extends pages_player
 				
 				elseif (strlen($pass1) < 6)
 				{
-					ess::$b->page->add_message("Det nye passordet må inneholde 6 eller flere tegn.", "error");
+					ess::$b->page->add_message("Det nye passordet mÃ¥ inneholde 6 eller flere tegn.", "error");
 				}
 				
 				// for lett passord?
 				elseif ($error > 0)
 				{
-					ess::$b->page->add_message("Du må velge et vanskeligere passord.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge et vanskeligere passord.", "error");
 				}
 				
 				else
 				{
-					// samme som nåværende?
+					// samme som nÃ¥vÃ¦rende?
 					if ($pass0 == $pass1)
 					{
-						ess::$b->page->add_message("Passordene var identisk med det forrige passordet. Du må velge et nytt passord.", "error");
+						ess::$b->page->add_message("Passordene var identisk med det forrige passordet. Du mÃ¥ velge et nytt passord.", "error");
 					}
 					
 					// samme som brukerpassordet?
 					elseif (password::verify_hash($pass1, $this->up->user->data['u_pass'], "user"))
 					{
-						ess::$b->page->add_message("Bankpassordet kan ikke være det samme som passordet til brukerkontoen.", "error");
+						ess::$b->page->add_message("Bankpassordet kan ikke vÃ¦re det samme som passordet til brukerkontoen.", "error");
 					}
 					
 					else
@@ -397,7 +397,7 @@ class page_banken extends pages_player
 		<form action="" method="post">'.(isset(login::$extended_access['authed']) ? '
 			<p>Du er logget inn med utvidere tilganger. Dette passordet brukes kun hvis du er logget ut av utvidere tilganger.</p>' : '').'
 			<dl class="dd_right dl_2x">'.(!isset(login::$extended_access['authed']) ? '
-				<dt>Nåværende passord</dt>
+				<dt>NÃ¥vÃ¦rende passord</dt>
 				<dd><input type="password" class="styled w100" name="passord_old" id="passold" /></dd>
 				' : '').'
 				<dt>Nytt Passord</dt>
@@ -419,12 +419,12 @@ class page_banken extends pages_player
 	 */
 	protected function auth_verify()
 	{
-		// alltid logget inn i banken når man er logget inn som crew
+		// alltid logget inn i banken nÃ¥r man er logget inn som crew
 		if (isset(login::$extended_access['authed'])) return;
 		
 		// sjekk om vi er logget inn i banken
 		$last = login::data_get("banken_last_view", 0);
-		$idle = 1800; // hvor lenge vi kan være inaktiv
+		$idle = 1800; // hvor lenge vi kan vÃ¦re inaktiv
 		$exceed = max(0, time() - $last - $idle);
 		
 		// allerede logget inn?
@@ -441,14 +441,14 @@ class page_banken extends pages_player
 			if (!password::verify_hash($_POST['passord'], $this->up->user->data['u_bank_auth'], "bank_auth"))
 			{
 				ess::$b->page->add_message("Passordet var ikke riktig. Husk at dette er bank passordet og ikke passordet til brukerkontoen.", "error");
-				putlog("ABUSE", "%c4%bUGYLDIG PASSORD I BANKEN:%b%c %u".$this->up->data['up_name']."%u ({$_SERVER['REMOTE_ADDR']}) brukte feil passord for å logge inn i banken");
+				putlog("ABUSE", "%c4%bUGYLDIG PASSORD I BANKEN:%b%c %u".$this->up->data['up_name']."%u ({$_SERVER['REMOTE_ADDR']}) brukte feil passord for Ã¥ logge inn i banken");
 			}
 			
 			else
 			{
 				// logget inn
 				login::data_set("banken_last_view", time());
-				ess::$b->page->add_message("Du er nå logget inn i banken. Du blir logget ut etter ".game::timespan($idle, game::TIME_FULL)." uten å besøke banken.");
+				ess::$b->page->add_message("Du er nÃ¥ logget inn i banken. Du blir logget ut etter ".game::timespan($idle, game::TIME_FULL)." uten Ã¥ besÃ¸ke banken.");
 			}
 			
 			redirect::handle();
@@ -475,14 +475,14 @@ class page_banken extends pages_player
 	<h1 class="bg1">Nullstill bankpassord<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<boxes />
-		<p>For å nullstille passordet til banken må du bekrefte din identitet via e-posten din.</p>';
+		<p>For Ã¥ nullstille passordet til banken mÃ¥ du bekrefte din identitet via e-posten din.</p>';
 			
 			// allerede sendt e-post?
 			if ($expire > time())
 			{
 				echo '
-		<p>Du ba om e-post '.ess::$b->date->get($requested)->format().' for å nullstille ditt passord. Forespørselen er gyldig til '.ess::$b->date->get($expire)->format().'.</p>
-		<p>Du må vente til dette klokkeslettet for å be om ny e-post.</p>';
+		<p>Du ba om e-post '.ess::$b->date->get($requested)->format().' for Ã¥ nullstille ditt passord. ForespÃ¸rselen er gyldig til '.ess::$b->date->get($expire)->format().'.</p>
+		<p>Du mÃ¥ vente til dette klokkeslettet for Ã¥ be om ny e-post.</p>';
 			}
 			
 			else
@@ -516,7 +516,7 @@ class page_banken extends pages_player
 		{
 			login::data_set("banken_last_view", 0);
 			echo '
-		<p>Det gikk for lang tid siden du viste banken og du må logge inn på nytt. Du var '.game::timespan($exceed, game::TIME_FULL).' over tiden.</p>';
+		<p>Det gikk for lang tid siden du viste banken og du mÃ¥ logge inn pÃ¥ nytt. Du var '.game::timespan($exceed, game::TIME_FULL).' over tiden.</p>';
 		}
 		
 		// javascript for fokus til passord feltet
@@ -525,8 +525,8 @@ document.getElementById("b_pass").focus();
 </script>');
 		
 		echo '
-		<p>Du må logge inn for å få tilgang til bankkontoen din.</p>
-		<p>Denne sikkerheten er her for å hindre uvedkommende i å kvitte seg med pengene dine, selv om de kommer inn på spilleren din.</p>
+		<p>Du mÃ¥ logge inn for Ã¥ fÃ¥ tilgang til bankkontoen din.</p>
+		<p>Denne sikkerheten er her for Ã¥ hindre uvedkommende i Ã¥ kvitte seg med pengene dine, selv om de kommer inn pÃ¥ spilleren din.</p>
 		<form action="" method="post">
 			<dl class="dd_right dl_2x">
 				<dt>Bankpassord</dt>
@@ -542,19 +542,19 @@ document.getElementById("b_pass").focus();
 	}
 	
 	/**
-	 * Send lenke for å endre bankpassordet
+	 * Send lenke for Ã¥ endre bankpassordet
 	 */
 	protected function auth_send_link()
 	{
-		// er det noen aktive nå?
+		// er det noen aktive nÃ¥?
 		$expire = $this->up->user->params->get("bankauth_change_expire");
 		if ($expire > time())
 		{
-			ess::$b->page->add_message("Du må vente ".game::timespan($expire, game::TIME_ABS | game::TIME_FULL)." før du kan be om ny e-post for å bytte bankpassordet ditt.", "error");
+			ess::$b->page->add_message("Du mÃ¥ vente ".game::timespan($expire, game::TIME_ABS | game::TIME_FULL)." fÃ¸r du kan be om ny e-post for Ã¥ bytte bankpassordet ditt.", "error");
 			redirect::handle();
 		}
 		
-		// nøkkelen
+		// nÃ¸kkelen
 		$hash = substr(md5(uniqid("", true)), 0, 10);
 		
 		// gyldig i 30 minutter
@@ -564,7 +564,7 @@ document.getElementById("b_pass").focus();
 		$email = new email();
 		$email->text = 'Hei,
 
-For å bytte ditt bankpassord for spilleren '.$this->up->data['up_name'].' må du åpne denne adressen:
+For Ã¥ bytte ditt bankpassord for spilleren '.$this->up->data['up_name'].' mÃ¥ du Ã¥pne denne adressen:
 '.ess::$s['path'].'/banken?rp='.$hash.'
 
 --
@@ -587,17 +587,17 @@ www.kofradia.no';
 	 */
 	protected function auth_reset($hash)
 	{
-		// har vi ikke bedt om å bytte passord?
+		// har vi ikke bedt om Ã¥ bytte passord?
 		if (!$this->up->user->params->exists("bankauth_change_hash"))
 		{
-			ess::$b->page->add_message("Du har ikke bedt om å bytte passordet i banken din.", "error");
+			ess::$b->page->add_message("Du har ikke bedt om Ã¥ bytte passordet i banken din.", "error");
 			redirect::handle();
 		}
 		
 		// feil hash?
 		if ($hash !== $this->up->user->params->get("bankauth_change_hash"))
 		{
-			ess::$b->page->add_message("Ugyldig nøkkel.", "error");
+			ess::$b->page->add_message("Ugyldig nÃ¸kkel.", "error");
 			redirect::handle();
 		}
 		
@@ -615,7 +615,7 @@ www.kofradia.no';
 			redirect::handle();
 		}
 		
-		// fjern nåværende passord
+		// fjern nÃ¥vÃ¦rende passord
 		$this->up->user->params->remove("bankauth_change_expire");
 		$this->up->user->params->remove("bankauth_change_rtime");
 		$this->up->user->params->remove("bankauth_change_hash");
@@ -624,7 +624,7 @@ www.kofradia.no';
 		
 		putlog("NOTICE", "NULLSTILLE BANKPASSORD: {$this->up->data['up_name']} nullstilte sitt bankpassord.");
 		
-		ess::$b->page->add_message("Ditt bankpassord er nå nullstilt og du må opprette nytt passord.");
+		ess::$b->page->add_message("Ditt bankpassord er nÃ¥ nullstilt og du mÃ¥ opprette nytt passord.");
 		redirect::handle();
 	}
 	
@@ -638,13 +638,13 @@ www.kofradia.no';
 		// negativt?
 		if ($amount < 0)
 		{
-			ess::$b->page->add_message("Ugyldig beløp!", "error");
+			ess::$b->page->add_message("Ugyldig belÃ¸p!", "error");
 		}
 		
 		// mer enn det vi har?
 		elseif ($amount > $this->up->data['up_cash'])
 		{
-			ess::$b->page->add_message("Du har ikke så mye penger på hånda!", "error");
+			ess::$b->page->add_message("Du har ikke sÃ¥ mye penger pÃ¥ hÃ¥nda!", "error");
 		}
 		
 		// okay
@@ -655,12 +655,12 @@ www.kofradia.no';
 			if (ess::$b->db->affected_rows() == 0)
 			{
 				// mislykket
-				ess::$b->page->add_message("Du har ikke så mye penger på hånda!", "error");
+				ess::$b->page->add_message("Du har ikke sÃ¥ mye penger pÃ¥ hÃ¥nda!", "error");
 			}
 			else
 			{
-				ess::$b->page->add_message("Du satt inn ".game::format_cash($amount)." på bankkontoen.");
-				putlog("INT", "BANK SETT INN: (".$this->up->data['up_name'].") satt inn (".game::format_cash($amount).") (før handling: kontant: ".game::format_cash($this->up->data['up_cash'])."; bank: ".game::format_cash($this->up->data['up_bank']).")!");
+				ess::$b->page->add_message("Du satt inn ".game::format_cash($amount)." pÃ¥ bankkontoen.");
+				putlog("INT", "BANK SETT INN: (".$this->up->data['up_name'].") satt inn (".game::format_cash($amount).") (fÃ¸r handling: kontant: ".game::format_cash($this->up->data['up_cash'])."; bank: ".game::format_cash($this->up->data['up_bank']).")!");
 			}
 		}
 		
@@ -677,13 +677,13 @@ www.kofradia.no';
 		// negativt?
 		if ($amount < 0)
 		{
-			ess::$b->page->add_message("Ugyldig beløp!", "error");
+			ess::$b->page->add_message("Ugyldig belÃ¸p!", "error");
 		}
 		
 		// mer enn det vi har?
 		elseif ($amount > $this->up->data['up_bank'])
 		{
-			ess::$b->page->add_message("Du har ikke så mye penger i banken!", "error");
+			ess::$b->page->add_message("Du har ikke sÃ¥ mye penger i banken!", "error");
 		}
 		
 		// okay
@@ -694,12 +694,12 @@ www.kofradia.no';
 			if (ess::$b->db->affected_rows() == 0)
 			{
 				// mislykket
-				ess::$b->page->add_message("Du har ikke så mye penger i banken!", "error");
+				ess::$b->page->add_message("Du har ikke sÃ¥ mye penger i banken!", "error");
 			}
 			else
 			{
 				ess::$b->page->add_message("Du tok ut ".game::format_cash($amount)." fra bankkontoen.");
-				putlog("INT", "BANK TA UT: (".$this->up->data['up_name'].") tok ut (".game::format_cash($amount).") (før handling: kontant: ".game::format_cash($this->up->data['up_cash'])."; bank: ".game::format_cash($this->up->data['up_bank']).")!");
+				putlog("INT", "BANK TA UT: (".$this->up->data['up_name'].") tok ut (".game::format_cash($amount).") (fÃ¸r handling: kontant: ".game::format_cash($this->up->data['up_cash'])."; bank: ".game::format_cash($this->up->data['up_bank']).")!");
 			}
 		}
 		
@@ -707,7 +707,7 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Overføre penger
+	 * OverfÃ¸re penger
 	 */
 	protected function overfor()
 	{
@@ -718,22 +718,22 @@ www.kofradia.no';
 		$result = ess::$b->db->query("SELECT $amount <= up_bank FROM users_players WHERE up_id = ".$this->up->id);
 		$amount_ok = mysql_result($result, 0) == 1;
 		
-		// sjekk beløpet
+		// sjekk belÃ¸pet
 		if ($amount <= 0)
 		{
-			ess::$b->page->add_message("Ugyldig beløp.", "error");
+			ess::$b->page->add_message("Ugyldig belÃ¸p.", "error");
 			return;
 		}
 		
 		if ($amount < 50)
 		{
-			ess::$b->page->add_message("Du må sende minimum 50 kr.", "error");
+			ess::$b->page->add_message("Du mÃ¥ sende minimum 50 kr.", "error");
 			return;
 		}
 		
 		if (!$amount_ok)
 		{
-			ess::$b->page->add_message("Du har ikke så mye penger i banken.", "error");
+			ess::$b->page->add_message("Du har ikke sÃ¥ mye penger i banken.", "error");
 			return;
 		}
 		
@@ -747,7 +747,7 @@ www.kofradia.no';
 		// sjekk session
 		if (postval("sid") != login::$info['ses_id'])
 		{
-			ess::$b->page->add_message("Startet du ikke overføringen selv? :o", "error");
+			ess::$b->page->add_message("Startet du ikke overfÃ¸ringen selv? :o", "error");
 			return;
 		}
 		
@@ -770,10 +770,10 @@ www.kofradia.no';
 			return;
 		}
 		
-		// død mottaker?
+		// dÃ¸d mottaker?
 		if ($player['up_access_level'] == 0)
 		{
-			ess::$b->page->add_message('<user id="'.$player['up_id'].'" /> er død. Hvem skal motta pengene?!');
+			ess::$b->page->add_message('<user id="'.$player['up_id'].'" /> er dÃ¸d. Hvem skal motta pengene?!');
 			return;
 		}
 		
@@ -804,7 +804,7 @@ www.kofradia.no';
 		
 		$note = substr(postval("note"), 0, 100);
 		
-		// hoppe over overføringstapet?
+		// hoppe over overfÃ¸ringstapet?
 		$skip_bog = false;
 		if (isset($_POST['skip_bog']) && access::is_nostat())
 		{
@@ -819,10 +819,10 @@ www.kofradia.no';
 		// 0 -> tap sender
 		// 1 -> tap mottaker
 		// 2 -> tap totalt
-		// 3 -> til overs (det som mottakeren får)
-		// 4 -> mellombeløp (utgangsbeløpet - tap sender)
+		// 3 -> til overs (det som mottakeren fÃ¥r)
+		// 4 -> mellombelÃ¸p (utgangsbelÃ¸pet - tap sender)
 		
-		// kontrollere at overføringen ikke blir utført flere ganger
+		// kontrollere at overfÃ¸ringen ikke blir utfÃ¸rt flere ganger
 		$form = new form("banken_".$player['up_id']);
 		
 		// bekreftet?
@@ -831,7 +831,7 @@ www.kofradia.no';
 			// kontroller at skjemaet ikke har blitt sendt inn allerede
 			$form->validate(postval('hash'));
 			
-			// kontroller overføringstapene (slik at det ikke har skjedd noen endringer)
+			// kontroller overfÃ¸ringstapene (slik at det ikke har skjedd noen endringer)
 			$ovt_s = postval("ovt_s");
 			$ovt_m = postval("ovt_m");
 			
@@ -852,14 +852,14 @@ www.kofradia.no';
 				// mislykket?
 				if (ess::$b->db->affected_rows() == 0)
 				{
-					ess::$b->page->add_message("Noe gikk galt under overføringen.", "error");
+					ess::$b->page->add_message("Noe gikk galt under overfÃ¸ringen.", "error");
 					ess::$b->db->commit();
 				}
 				
 				// vellykket!
 				else
 				{
-					// lagre overføringslogg
+					// lagre overfÃ¸ringslogg
 					ess::$b->db->query("INSERT INTO bank_log SET bl_sender_up_id = ".$this->up->id.", bl_receiver_up_id = {$player['up_id']}, amount = {$info[4]}, time = ".time());
 					
 					// oppdater senderen
@@ -877,9 +877,9 @@ www.kofradia.no';
 					if ($info[1] > 0) ess::$b->db->query("INSERT INTO ff_bank_transactions SET ffbt_ff_id = {$bank->id}, ffbt_time = ".time().", ffbt_amount = $amount, ffbt_profit = {$info[1]}");
 					
 					// IRC logg
-					putlog("LOG", "%c9%uBANKOVERFØRING:%u%c (%u".$this->up->data['up_name']."%u) sendte (%u".game::format_cash($amount)."%u (%u{$info[3]}%u)) til (%u{$player['up_name']}%u) (TAP: ".game::format_cash($info[2]).") ".(!empty($note) ? 'Melding: ('.$note.')' : 'Ingen melding.'));
+					putlog("LOG", "%c9%uBANKOVERFÃ˜RING:%u%c (%u".$this->up->data['up_name']."%u) sendte (%u".game::format_cash($amount)."%u (%u{$info[3]}%u)) til (%u{$player['up_name']}%u) (TAP: ".game::format_cash($info[2]).") ".(!empty($note) ? 'Melding: ('.$note.')' : 'Ingen melding.'));
 					
-					ess::$b->page->add_message('Du overførte <b>'.game::format_cash($info[4]).'</b> til <user id="'.$player['up_id'].'" />.' . ($info[0] > 0 ? ' Banken din tok <b>'.game::format_cash($info[0]).'</b> i overføringsgebyr.' : ''));
+					ess::$b->page->add_message('Du overfÃ¸rte <b>'.game::format_cash($info[4]).'</b> til <user id="'.$player['up_id'].'" />.' . ($info[0] > 0 ? ' Banken din tok <b>'.game::format_cash($info[0]).'</b> i overfÃ¸ringsgebyr.' : ''));
 					ess::$b->db->commit();
 					
 					// trigger
@@ -895,7 +895,7 @@ www.kofradia.no';
 		
 		// vis godkjenn form
 		echo '
-<h1>Banken - overføring</h1>
+<h1>Banken - overfÃ¸ring</h1>
 <form action="" method="post">
 	<input type="hidden" name="mottaker" value="'.htmlspecialchars($mottaker).'" />
 	<input type="hidden" name="amount" value="'.$amount.'" />
@@ -904,7 +904,7 @@ www.kofradia.no';
 	<input type="hidden" name="ovt_m" value="'.$bank->overforingstap.'" />
 	<input type="hidden" name="hash" value="'.$form->create().'" />';
 		
-		// hoppe over overføringstapet?
+		// hoppe over overfÃ¸ringstapet?
 		if ($skip_bog)
 		{
 			echo '
@@ -923,7 +923,7 @@ www.kofradia.no';
 				<dt>Bankfirma</dt>
 				<dd><a href="ff/?ff_id='.$this->bank->id.'">'.htmlspecialchars($this->bank->data['ff_name']).'</a></dd>
 				
-				<dt><abbr title="Overføringstap">Overf.tap</abbr></dt>
+				<dt><abbr title="OverfÃ¸ringstap">Overf.tap</abbr></dt>
 				<dd>'.($this->bank->overforingstap * 100).' %</dd>
 				
 				<dt>Plassering</dt>
@@ -941,7 +941,7 @@ www.kofradia.no';
 				<dt>Bankfirma</dt>
 				<dd><a href="ff/?ff_id='.$bank->id.'">'.htmlspecialchars($bank->data['ff_name']).'</a></dd>
 				
-				<dt><abbr title="Overføringstap">Overf.tap</abbr></dt>
+				<dt><abbr title="OverfÃ¸ringstap">Overf.tap</abbr></dt>
 				<dd>'.($bank->overforingstap * 100).' %</dd>
 				
 				<dt>Plassering</dt>
@@ -951,36 +951,36 @@ www.kofradia.no';
 	</div>
 	<div class="clear" style="width: 420px; margin-left: 100px">
 		<div class="section">
-			<h2>Overføringsinformasjon</h2>
+			<h2>OverfÃ¸ringsinformasjon</h2>
 			<dl class="dl_40 dl_bank">
-				<dt>Overføringsbeløp</dt>
+				<dt>OverfÃ¸ringsbelÃ¸p</dt>
 				<dd>'.game::format_cash($amount).'</dd>';
 		
-		// hopper over overføringstapet?
+		// hopper over overfÃ¸ringstapet?
 		if ($skip_bog)
 		{
 			echo '
 				
-				<dt>Hopper over overføringstapet</dt>
+				<dt>Hopper over overfÃ¸ringstapet</dt>
 				<dd>NoStat</dd>';
 		}
 		
 		echo '
 				
-				<dt>Overføringstap for avsender</dt>
+				<dt>OverfÃ¸ringstap for avsender</dt>
 				<dd>'.game::format_cash($info[0]).'</dd>
 				
-				<dt>Overføringstap for mottaker</dt>
+				<dt>OverfÃ¸ringstap for mottaker</dt>
 				<dd>'.game::format_cash($info[1]).'</dd>
 				
-				<dt>Mottaker får</dt>
+				<dt>Mottaker fÃ¥r</dt>
 				<dd>'.game::format_cash($info[3]).'</dd>
 				
 				<dt>Melding</dt>
 				<dd>'.(empty($note) ? 'Ingen melding.' : game::bb_to_html($note)).'</dd>
 			</dl>
 			<h4>
-				'.show_sbutton("Utfør overføring", 'name="confirm"').'
+				'.show_sbutton("UtfÃ¸r overfÃ¸ring", 'name="confirm"').'
 				'.show_sbutton("Avbryt/endre", 'name="abort"').'
 			</h4>
 		</div>
@@ -1036,7 +1036,7 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 					<dd>'.game::profile_link().'</dd>
 					<dt>Bankfirma</dt>
 					<dd><a href="ff/?ff_id='.$this->bank->id.'">'.htmlspecialchars($this->bank->data['ff_name']).'</a></dd>
-					<dt><abbr title="Overføringstap">Overf.tap</abbr></dt>
+					<dt><abbr title="OverfÃ¸ringstap">Overf.tap</abbr></dt>
 					<dd>'.($this->bank->overforingstap * 100).' %</dd>
 					<dt>Plassering</dt>
 					<dd>'.(!isset(game::$bydeler[$this->bank->data['br_b_id']]) ? '<span style="color: #777777">Ukjent</span>' : htmlspecialchars(game::$bydeler[$this->bank->data['br_b_id']]['name'])).'</dd>
@@ -1062,7 +1062,7 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 						<dd>'.game::format_cash($this->up->data['up_bank_profit']).'</dd>
 					</dl>
 					<dl class="dd_right">
-						<dt><abbr title="Overføringstap">Overf.tap</abbr></dt>
+						<dt><abbr title="OverfÃ¸ringstap">Overf.tap</abbr></dt>
 						<dd>'.game::format_cash($this->up->data['up_bank_charge']).'</dd>
 					</dl>
 					<dl class="dd_right">
@@ -1104,13 +1104,13 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 							</select>
 						</dd>
 		
-						<dt class="bank_amount_set" rel="bank,transf_amount">Beløp</dt>
+						<dt class="bank_amount_set" rel="bank,transf_amount">BelÃ¸p</dt>
 						<dd><input type="text" id="transf_amount" name="amount" class="styled w100" value="'.game::format_cash(postval("amount", 0)).'" /></dd>
 		
 						<dt>Melding?</dt>
 						<dd><input type="text" name="note" value="'.htmlspecialchars(postval("note")).'" class="styled w100" maxlength="100" /></dd>';
 		
-		// hoppe over overføringsgebyret?
+		// hoppe over overfÃ¸ringsgebyret?
 		if (access::is_nostat())
 		{
 			echo '
@@ -1132,7 +1132,7 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 			<div class="bg1">
 				<form action="" method="post">
 					<dl class="dd_right">
-						<dt class="bank_amount_set" rel="cash,bank_sett_inn">Beløp</dt>
+						<dt class="bank_amount_set" rel="cash,bank_sett_inn">BelÃ¸p</dt>
 						<dd><input type="text" name="sett_inn" id="bank_sett_inn" class="styled w100" value="0" /></dd>
 					</dl>
 					<p class="c">'.show_sbutton("Sett inn").'</p>
@@ -1146,7 +1146,7 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 			<div class="bg1">
 				<form action="" method="post">
 					<dl class="dd_right">
-						<dt class="bank_amount_set" rel="bank,bank_ta_ut">Beløp</dt>
+						<dt class="bank_amount_set" rel="bank,bank_ta_ut">BelÃ¸p</dt>
 						<dd><input type="text" name="ta_ut" id="bank_ta_ut" class="styled w100" value="0" /></dd>
 					</dl>
 					<p class="c">'.show_sbutton("Ta ut").'</p>
@@ -1165,14 +1165,14 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 			<h2 class="bg1">Sendte penger<span class="left2"></span><span class="right2"></span></h2>
 			<div class="bg1">';
 		
-		// sideinformasjon - hent sendte overføringer
+		// sideinformasjon - hent sendte overfÃ¸ringer
 		$pagei = new pagei(pagei::ACTIVE_GET, "side_sendte", pagei::PER_PAGE, 8, pagei::TOTAL, $this->up->data['up_bank_num_sent']);
 		$result = ess::$b->db->query("SELECT bl_receiver_up_id, amount, time FROM bank_log WHERE bl_sender_up_id = ".$this->up->id." ORDER BY time DESC LIMIT $pagei->start, $pagei->per_page");
 		if (mysql_num_rows($result) == 0)
 		{
 			echo '
 				<p>
-					Ingen sendte overføringer.
+					Ingen sendte overfÃ¸ringer.
 				</p>';
 		}
 		
@@ -1183,7 +1183,7 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 					<thead>
 						<tr>
 							<th>Mottaker</th>
-							<th>Beløp</th>
+							<th>BelÃ¸p</th>
 							<th>Tidspunkt</th>
 						</tr>
 					</thead>
@@ -1217,14 +1217,14 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 			<h2 class="bg1">Mottatte penger<span class="left2"></span><span class="right2"></span></h2>
 			<div class="bg1">';
 		
-		// sideinformasjon - hent mottatte overføringer
+		// sideinformasjon - hent mottatte overfÃ¸ringer
 		$pagei = new pagei(pagei::ACTIVE_GET, "side_mottatte", pagei::PER_PAGE, 8, pagei::TOTAL, $this->up->data['up_bank_num_received']);
 		$result = ess::$b->db->query("SELECT bl_sender_up_id, amount, time FROM bank_log WHERE bl_receiver_up_id = ".$this->up->id." ORDER BY time DESC LIMIT $pagei->start, $pagei->per_page");
 		if (mysql_num_rows($result) == 0)
 		{
 			echo '
 				<p>
-					Ingen mottatte overføringer.
+					Ingen mottatte overfÃ¸ringer.
 				</p>';
 		}
 		
@@ -1235,7 +1235,7 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 					<thead>
 						<tr>
 							<th>Sender</th>
-							<th>Beløp</th>
+							<th>BelÃ¸p</th>
 							<th>Tidspunkt</th>
 						</tr>
 					</thead>
@@ -1291,7 +1291,7 @@ class page_banken_bank
 	public $data;
 	
 	/**
-	 * Overføringstapet
+	 * OverfÃ¸ringstapet
 	 */
 	public $overforingstap;
 	

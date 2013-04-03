@@ -3,7 +3,7 @@
 require "../../base.php";
 global $_base;
 
-$_base->page->add_title("Bankoverføringer - Sammenlikne spillere");
+$_base->page->add_title("BankoverfÃ¸ringer - Sammenlikne spillere");
 
 // init
 $player1 = false;
@@ -12,7 +12,7 @@ $player_1 = "";
 $player_2 = "";
 $where = false;
 
-// skal vi sammenlikne nå?
+// skal vi sammenlikne nÃ¥?
 if (isset($_GET['u1']))
 {
 	$player_1 = (int) getval("u1");
@@ -49,7 +49,7 @@ if (isset($_GET['u1']))
 
 
 echo '
-<h1>Bankoverføringer</h1>
+<h1>BankoverfÃ¸ringer</h1>
 <form action="" method="get">
 	<table class="table center tablemb">
 		<tbody>
@@ -62,7 +62,7 @@ echo '
 				<td><input type="text" name="u2" class="styled w80" value="'.($player_2 ? $player_2 : "").'" /></td>
 			</tr>
 			<tr>
-				<th colspan="2" style="text-align: center">'.show_sbutton("Vis overføringer").'</th>
+				<th colspan="2" style="text-align: center">'.show_sbutton("Vis overfÃ¸ringer").'</th>
 			</tr>
 		</tbody>
 	</table>
@@ -101,7 +101,7 @@ if ($where)
 			<td>ID</td>
 			<td>Sender</td>
 			<td>Mottaker</td>
-			<td>Beløp</td>
+			<td>BelÃ¸p</td>
 			<td>Dato</td>
 		</tr>
 	</thead>
@@ -111,7 +111,7 @@ if ($where)
 	{
 		echo '
 		<tr>
-			<td colspan="5">Ingen overføringer</td>
+			<td colspan="5">Ingen overfÃ¸ringer</td>
 		</tr>';
 	}
 	

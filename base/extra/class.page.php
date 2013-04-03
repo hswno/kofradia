@@ -22,7 +22,7 @@ class page
 	public $messages = false;
 	
 	/**
-	 * Ikke legge til javascript på siden
+	 * Ikke legge til javascript pÃ¥ siden
 	 */
 	public $js_disable;
 	
@@ -31,7 +31,7 @@ class page
 	{
 		global $__page, $__server;
 		
-		// sørg for at session er startet
+		// sÃ¸rg for at session er startet
 		sess_start();
 		
 		// standardverdier
@@ -40,7 +40,7 @@ class page
 		$this->description = $__page['description_default'];
 		$this->theme = $__page['theme'];
 		
-		// sørg for at sessions/page_settings/messages er satt opp
+		// sÃ¸rg for at sessions/page_settings/messages er satt opp
 		if (!isset($_SESSION[$__server['session_prefix'].'page_settings']['messages']))
 		{
 			$_SESSION[$__server['session_prefix'].'page_settings']['messages'] = array();
@@ -49,7 +49,7 @@ class page
 		$this->messages = &$_SESSION[$__server['session_prefix'].'page_settings']['messages'];
 	}
 	
-	/** Last inn siden (kalles til slutten av scriptet for å hente themet */
+	/** Last inn siden (kalles til slutten av scriptet for Ã¥ hente themet */
 	public function load()
 	{
 		global $_base;
@@ -85,7 +85,7 @@ class page
 			$msgs_top = '';
 			$msgs_bottom = '';
 			
-			// gå gjennom hver melding
+			// gÃ¥ gjennom hver melding
 			foreach ($this->messages as $row)
 			{
 				// sett opp html
@@ -94,7 +94,7 @@ class page
 				// spesiell plassering?
 				$force = isset($row['force']) ? $row['force'] : false;
 				
-				// på toppen
+				// pÃ¥ toppen
 				if ($force == "top" && $placeholder !== false)
 				{
 					$msgs_top .= $msg;
@@ -122,7 +122,7 @@ class page
 			// plasser standard meldinger
 			if ($placeholder !== false)
 			{
-				// sørg for korrekt posisjon hvor den skal plasseres i tilfelle innholdet har blitt endret
+				// sÃ¸rg for korrekt posisjon hvor den skal plasseres i tilfelle innholdet har blitt endret
 				// sjekk om vi har en placeholder (der for standard meldinger skal plasseres)
 				$placeholder = strpos($this->content, '<boxes />');
 				
@@ -133,7 +133,7 @@ class page
 				$this->content = $msgs . $this->content;
 			}
 			
-			// tøm meldingene
+			// tÃ¸m meldingene
 			$this->messages = array();
 		}
 		
@@ -150,7 +150,7 @@ class page
 		$content = ob_get_contents();
 		@ob_clean();
 		
-		// gå gjennom HTML og sjekk for brukerlinker (<user../>) osv. og vis innholdet
+		// gÃ¥ gjennom HTML og sjekk for brukerlinker (<user../>) osv. og vis innholdet
 		echo parse_html($content);
 		
 		if (defined("SHOW_QUERIES_INFO"))
@@ -194,14 +194,14 @@ class page
 		return implode($__page['title_split'], ($__page['title_direction'] == "right" ? $this->title : array_reverse($this->title)));
 	}
 	
-	/** Generer nøkkelord */
+	/** Generer nÃ¸kkelord */
 	public function generate_keywords()
 	{
 		// sett sammen keywords og send resultatet
 		return implode(", ", $this->keywords);
 	}
 	
-	/** Generer innhold på høyre siden */
+	/** Generer innhold pÃ¥ hÃ¸yre siden */
 	public function generate_content_right()
 	{
 		$content = "";
@@ -213,7 +213,7 @@ class page
 		return $content;
 	}
 	
-	/** Legg til innhold på høyre siden */
+	/** Legg til innhold pÃ¥ hÃ¸yre siden */
 	public function add_content_right($content, $priority = NULL)
 	{
 		// bestem prioritering
@@ -274,7 +274,7 @@ class page
 		$this->js .= $value."\r\n";
 	}
 	
-	/** Legg til javascript som kjøres i domready event */
+	/** Legg til javascript som kjÃ¸res i domready event */
 	public function add_js_domready($value)
 	{
 		$this->js_domready .= $value."\r\n";
@@ -295,13 +295,13 @@ class page
 		$this->body_start .= $value."\r\n";
 	}
 	
-	/** Legg til HTML rett før </body> */
+	/** Legg til HTML rett fÃ¸r </body> */
 	public function add_body_post($value)
 	{
 		$this->body_end .= $value."\r\n";
 	}
 	
-	/** Legg til nøkkelord */
+	/** Legg til nÃ¸kkelord */
 	public function add_keyword()
 	{
 		foreach (func_get_args() as $value) {
@@ -309,7 +309,7 @@ class page
 		}
 	}
 	
-	/** Nullstill alle nøkkelordene (sletter dem) */
+	/** Nullstill alle nÃ¸kkelordene (sletter dem) */
 	public function reset_keywords()
 	{	
 		$this->keywords = array();
@@ -343,7 +343,7 @@ class page
 		// skal den plasseres et bestemt sted?
 		if ($force !== NULL) $row['force'] = $force;
 		
-		// for å muliggjøre overskriving/sletting
+		// for Ã¥ muliggjÃ¸re overskriving/sletting
 		if ($name)
 		{
 			$this->messages[$name] = $row;

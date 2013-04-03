@@ -22,7 +22,7 @@ if (!isset($_GET['show']) || ($_GET['show'] != "changeset" && $_GET['show'] != "
 
 $other = $_GET['show'] == "other";
 
-// første besøk?
+// fÃ¸rste besÃ¸k?
 $last = login::$user->params->get("trac_last_".($other ? 'other' : 'changeset'));
 login::$user->params->update("trac_last_".($other ? 'other' : 'changeset'), time(), true);
 if (!$last)
@@ -48,7 +48,7 @@ if (isset($_trac_rss))
 	$last = $l;
 }
 
-// antall dager vi skal vise (sett avvik i tidspunkt så vi kan beregne antall dager uavhengig av sommertid)
+// antall dager vi skal vise (sett avvik i tidspunkt sÃ¥ vi kan beregne antall dager uavhengig av sommertid)
 $start = ess::$b->date->get($last)->setTime(3, 0, 0);
 $end = ess::$b->date->get()->setTime(0, 0, 0);
 

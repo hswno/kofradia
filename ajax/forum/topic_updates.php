@@ -6,13 +6,13 @@ ajax::essentials();
 /**
  * Feilmeldinger:
  * ERROR:MISSING
- * ERROR:404-TOPIC (hvis tråden har blitt slettet)
+ * ERROR:404-TOPIC (hvis trÃ¥den har blitt slettet)
  * 
  * Inndata:
- * id: TrådID
- * r_id_list: Liste over ID-ene til svarene vi har på siden
+ * id: TrÃ¥dID
+ * r_id_list: Liste over ID-ene til svarene vi har pÃ¥ siden
  * r_last_id: Siste svar-ID som er hentet
- * topic_last_edit: Når ble tråden oppdatert siste
+ * topic_last_edit: NÃ¥r ble trÃ¥den oppdatert siste
  * [optional] get_new: Hent nye meldinger fra siste ID i ID-listen
  */
 
@@ -25,7 +25,7 @@ if (!isset($_POST['topic_id']))
 }
 $id = (int) $_POST['topic_id'];
 
-// mangler når forumtråden sist ble oppdatert?
+// mangler nÃ¥r forumtrÃ¥den sist ble oppdatert?
 if (!isset($_POST['topic_last_edit']))
 {
 	ajax::text("ERROR:MISSING");
@@ -136,7 +136,7 @@ if (count($id_list) > 0)
 		
 		$updated[$row['fr_id']] = $forum->template_topic_reply($data);
 		
-		// lagre tidspunktet for sist endret slik at man unngår å skrive over endringer uten å være klar over det når man redigerer
+		// lagre tidspunktet for sist endret slik at man unngÃ¥r Ã¥ skrive over endringer uten Ã¥ vÃ¦re klar over det nÃ¥r man redigerer
 		$updated_last_edit[$row['fr_id']] = $data['fr_last_edit'];
 	}
 }
@@ -174,7 +174,7 @@ if ($get_new)
 		$new[$row['fr_id']] = $forum->template_topic_reply($data);
 		$time_last = $row['fr_time'];
 		
-		// lagre tidspunktet for sist endret slik at man unngår å skrive over endringer uten å være klar over det når man redigerer
+		// lagre tidspunktet for sist endret slik at man unngÃ¥r Ã¥ skrive over endringer uten Ã¥ vÃ¦re klar over det nÃ¥r man redigerer
 		$new_last_edit[$row['fr_id']] = $data['fr_last_edit'];
 	}
 	
@@ -190,7 +190,7 @@ if ($get_new)
 $xml = '
 <topic id="'.$id.'" time="'.time().'">';
 
-// forumtråden oppdatert?
+// forumtrÃ¥den oppdatert?
 if (((int)$topic['ft_last_edit']) != $topic_last_edit)
 {
 	$topic_obj = new forum_topic_ajax($id, $forum);

@@ -16,7 +16,7 @@ echo '
 if (mysql_num_rows($result) == 0)
 {
 	echo '
-<p>Ingen blokkeringer for øyeblikket satt.</p>';
+<p>Ingen blokkeringer for Ã¸yeblikket satt.</p>';
 }
 
 else

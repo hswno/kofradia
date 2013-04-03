@@ -21,7 +21,7 @@ if (isset($_POST['title']))
 	// for kort?
 	if (strlen($title) < 4)
 	{
-		$_base->page->add_message("Tittelen mÂ vÊre pÂ 4 eller flere tegn.", "error");
+		$_base->page->add_message("Tittelen m√• v√¶re p√• 4 eller flere tegn.", "error");
 	}
 	
 	else

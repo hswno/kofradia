@@ -9,18 +9,18 @@ $_base->page->add_title("Finn spiller");
 
 $more = false;
 
-// hvor man skal kunne søke
+// hvor man skal kunne sÃ¸ke
 $search_status = array(
 	1 => array("Alle", ""),
 	array("Levende", " AND up_access_level != 0"),
-	array("Død/deaktivert", " AND up_access_level = 0")
+	array("DÃ¸d/deaktivert", " AND up_access_level = 0")
 );
 $id = requestval("status");
 $search_status_id = isset($search_status[$id]) ? $id : 1;
 if ($search_status_id != 1) $more = true;
 
 
-// siste pålogget
+// siste pÃ¥logget
 $search_online_sort = array(
 	1 => array("mindre enn", ">"),
 	array("mer enn", "<")
@@ -105,10 +105,10 @@ else
 $sort = new sorts("sort");
 $sort->append("asc", "Spiller", "up_name, up_last_online DESC");
 $sort->append("desc", "Spiller", "up_name DESC, up_last_online");
-$sort->append("asc", "Lengde på spiller", "LENGTH(up_name), up_name, up_last_online DESC");
-$sort->append("desc", "Lengde på spiller", "LENGTH(up_name) DESC, up_name DESC, up_last_online");
-$sort->append("asc", "Sist pålogget", "up_last_online");
-$sort->append("desc", "Sist pålogget", "up_last_online DESC");
+$sort->append("asc", "Lengde pÃ¥ spiller", "LENGTH(up_name), up_name, up_last_online DESC");
+$sort->append("desc", "Lengde pÃ¥ spiller", "LENGTH(up_name) DESC, up_name DESC, up_last_online");
+$sort->append("asc", "Sist pÃ¥logget", "up_last_online");
+$sort->append("desc", "Sist pÃ¥logget", "up_last_online DESC");
 $sort->append("asc", "Plassering", "up_points DESC");
 $sort->append("desc", "Plassering", "up_points");
 $sort->set_active(requestval("sort"), 2);
@@ -131,12 +131,12 @@ function shrinkForm()
 	return false;
 }');
 
-// søkeform
+// sÃ¸keform
 echo '
 <h1>Finn spiller</h1>
 <form action="'.PHP_SELF.'" method="get">
 	<div class="section" style="width: 460px; margin-left: auto; margin-right: auto">
-		<h2>Søk</h2>
+		<h2>SÃ¸k</h2>
 		<p class="h_right">
 			<a href="#" id="more_false"'.($more ? ' style="display: none"' : '').' onclick="return expandForm()">Avansert skjema</a>
 			<a href="#" id="more_true1"'.($more ? '' : ' style="display: none"').' onclick="return shrinkForm()">Enkelt skjema</a>
@@ -177,7 +177,7 @@ foreach ($search_status as $key => $item)
 echo '
 				</dd>
 				
-				<dt>Sist pålogget</dt>
+				<dt>Sist pÃ¥logget</dt>
 				<dd>
 					<input type="checkbox" name="online" id="online" value="1"'.($search_online_id == 1 ? ' checked="checked"' : '').' />
 					<label for="online">For</label>
@@ -204,22 +204,22 @@ echo '
 				</dd>
 			</dl>
 		</div>
-		<h4>'.show_sbutton("Utfør søk").'</h4>
+		<h4>'.show_sbutton("UtfÃ¸r sÃ¸k").'</h4>
 	</div>
 </form>';
 
 
-// søke?
+// sÃ¸ke?
 if (isset($_REQUEST['finn']))
 {
 	$user_search = requestval("finn");
 	$text_search = requestval("profiletext");
 	
-	// finn ut delene av spørringen
+	// finn ut delene av spÃ¸rringen
 	$user_parts = search_query($user_search, false);
 	$text_parts = search_query($text_search);
 	
-	// sett opp søkespørringen
+	// sett opp sÃ¸kespÃ¸rringen
 	$search = "";
 	if (count($user_parts[0]) > 0)
 	{
@@ -270,7 +270,7 @@ if (isset($_REQUEST['finn']))
 	}
 	if ($search_online_id == 1)
 	{
-		$info[] = '<b>Pålogget:</b> '.htmlspecialchars($search_online_sort[$search_online_sort_id][0]).' '.htmlspecialchars($search_online_time[$search_online_time_id][0]).' siden';
+		$info[] = '<b>PÃ¥logget:</b> '.htmlspecialchars($search_online_sort[$search_online_sort_id][0]).' '.htmlspecialchars($search_online_time[$search_online_time_id][0]).' siden';
 	}
 	
 	if (count($info) == 0)
@@ -283,8 +283,8 @@ if (isset($_REQUEST['finn']))
 	}
 	
 	echo '
-<h2>Søkeresultater</h2>
-<p class="h_right">Søker etter: '.$info.'</p>';
+<h2>SÃ¸keresultater</h2>
+<p class="h_right">SÃ¸ker etter: '.$info.'</p>';
 	
 	// fant vi noe?
 	if ($pagei->total == 0)
@@ -305,7 +305,7 @@ if (isset($_REQUEST['finn']))
 	<thead>
 		<tr>
 			<th class="name">Spiller '.$sort->show_link(0, 1).' ('.$sort->show_link(2, 3).')</th>
-			<th>Sist pålogget '.$sort->show_link(4, 5).'</th>
+			<th>Sist pÃ¥logget '.$sort->show_link(4, 5).'</th>
 			<th>Rank</th>
 			<th>Plassering '.$sort->show_link(6, 7).'</th>
 		</tr>

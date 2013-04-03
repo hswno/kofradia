@@ -10,14 +10,14 @@ class db_wrap_debug extends db_wrap
 	public $lastq_s = false;
 	public $lastq_r = false;
 	
-	/** Utfør spørring */
+	/** UtfÃ¸r spÃ¸rring */
 	public function query($query, $critical = true, $debug = false)
 	{
 		// hent data
 		$result = parent::query($query, $critical, $debug);
 		$info = mysql_info($this->link);
 		
-		// tid siden forrige spørring
+		// tid siden forrige spÃ¸rring
 		if ($this->lastquery)
 		{
 			$time = $this->time_last_begin - $this->lastquery;
@@ -69,6 +69,8 @@ class db_wrap
 		{
 			throw new SQLConnectException(mysql_error(), mysql_errno());
 		}
+
+		mysql_set_charset("utf8", $this->link);
 		
 		if ($dbname)
 		{
@@ -104,7 +106,7 @@ class db_wrap
 		}
 	}
 	
-	/** Utfør spørring */
+	/** UtfÃ¸r spÃ¸rring */
 	public function query($query, $critical = true, $debug = false)
 	{
 		// ikke tilkoblet?
@@ -113,10 +115,10 @@ class db_wrap
 			throw new SQLNoConnectionException();
 		}
 		
-		// øk teller
+		// Ã¸k teller
 		++$this->queries;
 		
-		// utfør spørring
+		// utfÃ¸r spÃ¸rring
 		$this->time_last_begin = microtime(true);
 		$result = @mysql_query($query, $this->link);
 		$this->time_last_end = microtime(true);
@@ -124,7 +126,7 @@ class db_wrap
 		$this->time_last = $this->time_last_end - $this->time_last_begin;
 		$this->time += $this->time_last;
 		
-		// feil ved spørring (ikke vis dersom $critical = false)
+		// feil ved spÃ¸rring (ikke vis dersom $critical = false)
 		if (!$result && $critical)
 		{
 			$err = mysql_error($this->link);
@@ -161,7 +163,7 @@ class db_wrap
 		return "'".mysql_real_escape_string($text)."'";
 	}
 	
-	/** Antall rader berørt */
+	/** Antall rader berÃ¸rt */
 	public function affected_rows()
 	{
 		return mysql_affected_rows($this->link);
@@ -176,7 +178,7 @@ class db_wrap
 		return true;
 	}
 	
-	/** Avslutt (fullfør) transaksjon */
+	/** Avslutt (fullfÃ¸r) transaksjon */
 	public function commit()
 	{
 		$this->query("COMMIT");
@@ -190,7 +192,7 @@ class db_wrap
 		$this->transaction = false;
 	}
 	
-	/** Debug spørring */
+	/** Debug spÃ¸rring */
 	public function debug($result, $query = "")
 	{
 		// fjern det som allerede har blitt sendt til buffer
@@ -200,7 +202,7 @@ class db_wrap
 		echo '<!DOCTYPE html>
 <html lang="no">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="Henrik Steen; HenriSt.net" />
 <title>Query Debug</title>
 <style type="text/css">
@@ -239,7 +241,7 @@ class db_wrap
 			<td colspan="'.mysql_num_fields($result).'">No row exists.</td>
 		</tr>';
 		} else {
-			// gå til første rad
+			// gÃ¥ til fÃ¸rste rad
 			mysql_data_seek($result, 0);
 			
 			// vis hver rad
@@ -247,7 +249,7 @@ class db_wrap
 				echo '
 		<tr>';
 				
-				// gå gjennom hvert felt
+				// gÃ¥ gjennom hvert felt
 				foreach ($row as $value) {
 					echo '
 			<td>'.($value == NULL ? '<i style="color: #CCC">NULL</i>' : ($value === "" ? '<i style="color: #CCC">TOMT</i>' : nl2br(htmlspecialchars($value)))).'</td>';
@@ -322,11 +324,11 @@ class SQLSelectDatabaseException extends SQLConnectionException
 	}
 }
 
-/** Exception: Databasespørring */
+/** Exception: DatabasespÃ¸rring */
 class SQLQueryException extends SQLException {
 	public function __construct($err, $errnum)
 	{
 		parent::__construct($err, $errnum);
-		$this->message = "Kunne ikke utføre spørring: ($errnum) $err";
+		$this->message = "Kunne ikke utfÃ¸re spÃ¸rring: ($errnum) $err";
 	}
 }

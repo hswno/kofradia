@@ -14,14 +14,14 @@ if (!isset($_GET['ip']))
 $ip = $_GET['ip'];
 
 echo '
-<h1>Økter på IP</h1>
+<h1>Ã˜kter pÃ¥ IP</h1>
 <p class="h_right"><a href="finn?ip='.urlencode($ip).'">Tilbake</a></p>
 <p><span class="dark">IP-adresse:</span> '.htmlspecialchars($ip).'</p>
-<p>IP-adressen kan inneholde ? og * for å søke etter ukjente siffer.</p>';
+<p>IP-adressen kan inneholde ? og * for Ã¥ sÃ¸ke etter ukjente siffer.</p>';
 
 // sortering
 $sort = new sorts("sort");
-$sort->append("asc", "Økt ID", "ses_id");				$sort->append("desc", "Økt ID", "ses_sid DESC");
+$sort->append("asc", "Ã˜kt ID", "ses_id");				$sort->append("desc", "Ã˜kt ID", "ses_sid DESC");
 $sort->append("asc", "Bruker ID", "ses_u_id");			$sort->append("desc", "Bruker ID", "ses_u_id DESC");
 $sort->append("asc", "IP-adresse", "ses_last_ip");		$sort->append("desc", "IP-adresse", "ses_last_ip DESC");
 #$sort->append("asc", "Brukernavn", "user");	$sort->append("desc", "Brukernavn", "user DESC");
@@ -57,7 +57,7 @@ else
 <table class="table nowrap" width="100%" style="font-size: 11px">
 	<thead>
 		<tr>
-			<th>Økt ID '.$sort->show_link(0, 1).'</th>
+			<th>Ã˜kt ID '.$sort->show_link(0, 1).'</th>
 			<th>Bruker ID '.$sort->show_link(2, 3).'</th>'.($wc ? '
 			<th>IP-adresse '.$sort->show_link(4, 5).'</th>' : '').'
 			<th>Brukerens aktive spiller</th>

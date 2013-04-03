@@ -32,7 +32,7 @@ class page_innboks
 	
 	protected function check_reply()
 	{
-		// svare på en melding?
+		// svare pÃ¥ en melding?
 		if (isset($_POST['reply']) && isset($_POST['it_id']) && is_array($_POST['it_id']))
 		{
 			$it_id = postval("it_id");
@@ -44,7 +44,7 @@ class page_innboks
 	
 	protected function load_page()
 	{
-		if ($this->show_deleted) ess::$b->page->add_message("Du viser meldingene som tilhører ".$this->inbox->u->player->profile_link().".");
+		if ($this->show_deleted) ess::$b->page->add_message("Du viser meldingene som tilhÃ¸rer ".$this->inbox->u->player->profile_link().".");
 		
 		$data = @ob_get_contents(); @ob_clean();
 		
@@ -111,24 +111,24 @@ class page_innboks
 	<a href="innboks_ny">Opprett ny melding</a>
 	<a href="'.htmlspecialchars($this->addr(array("utboks", "fiks"), array("alle" => true))).'">Tilbake</a>
 </p>
-<p>Antall nye meldinger boksen er nå fikset.</p>';
+<p>Antall nye meldinger boksen er nÃ¥ fikset.</p>';
 		
 		$this->load_page();
 	}
 	
 	/**
-	 * Slette enkelttråder
+	 * Slette enkelttrÃ¥der
 	 */
 	protected function delete_specific()
 	{
 		// ingen merket?
 		if (!isset($_POST['it_id']) || !is_array($_POST['it_id']))
 		{
-			ess::$b->page->add_message("Du må velge noen meldinger du ønsker å slette.", "error");
+			ess::$b->page->add_message("Du mÃ¥ velge noen meldinger du Ã¸nsker Ã¥ slette.", "error");
 			redirect::handle();
 		}
 		
-		// hvilke meldingstråder?
+		// hvilke meldingstrÃ¥der?
 		$it = array();
 		foreach ($_POST['it_id'] as $id)
 		{
@@ -139,16 +139,16 @@ class page_innboks
 		// ingen gyldige funnet?
 		if (count($it) == 0)
 		{
-			// ingen meldingstråder
+			// ingen meldingstrÃ¥der
 			redirect::handle();
 		}
 		
-		// forsøk å slett
+		// forsÃ¸k Ã¥ slett
 		$deleted = $this->inbox->delete_specific($it);
 		if ($deleted > 0)
 		{
 			// melding
-			ess::$b->page->add_message("Du slettet <b>" . $deleted . "</b> meldingstråd" . ($deleted == 1 ? '' : 'er') . ".");
+			ess::$b->page->add_message("Du slettet <b>" . $deleted . "</b> meldingstrÃ¥d" . ($deleted == 1 ? '' : 'er') . ".");
 		}
 		
 		else
@@ -168,7 +168,7 @@ class page_innboks
 		// avbryte?
 		if (isset($_POST['abort'])) redirect::handle();
 		
-		// utføre sletting?
+		// utfÃ¸re sletting?
 		if (isset($_POST['confirm']))
 		{
 			$this->delete_older_handle();
@@ -210,7 +210,7 @@ class page_innboks
 			if ($deleted > 0)
 			{
 				// melding
-				ess::$b->page->add_message("Du slettet <b>" . $deleted . "</b> meldingstråd" . ($deleted == 1 ? '' : 'er') . ".");
+				ess::$b->page->add_message("Du slettet <b>" . $deleted . "</b> meldingstrÃ¥d" . ($deleted == 1 ? '' : 'er') . ".");
 			}
 			
 			else
@@ -234,10 +234,10 @@ class page_innboks
 <div class="section" style="width: 300px; margin-left: auto; margin-right: auto">
 	<h3>Slett alle meldinger</h3>
 	<p>
-		Her kan du slette alle meldingene du har. Alternativt kan du slette alle meldingene som du har mottatt før et visst klokkeslett.
+		Her kan du slette alle meldingene du har. Alternativt kan du slette alle meldingene som du har mottatt fÃ¸r et visst klokkeslett.
 	</p>
 	<p>
-		Slett alle meldinger som er mottatt <u>før</u>:
+		Slett alle meldinger som er mottatt <u>fÃ¸r</u>:
 	</p>
 	<form action="" method="post">
 		<input type="hidden" name="slettalle" />
@@ -288,19 +288,19 @@ class page_innboks
 	<h1' . ($pagei->active > 1 && $show_deleted = false ? ' id="scroll_here"' : '') . ' style="float: left; margin-top: 0">Meldinger</h1>
 	<p class="h_right" style="margin: 10px 0 0 0 !important">
 		<a href="innboks_ny">Opprett ny melding</a>'.($pagei->total > 0 ? '
-		<a href="'.htmlspecialchars($this->addr(null, null, "innboks_sok")).'">Søk</a>' : '').'
+		<a href="'.htmlspecialchars($this->addr(null, null, "innboks_sok")).'">SÃ¸k</a>' : '').'
 	</p>
 </div>';
 		
-		// ingen meldinger å vise?
+		// ingen meldinger Ã¥ vise?
 		if (!$meldinger)
 		{
 			echo '
 <p class="clear">Du har ingen meldinger i din innboks eller utboks.</p>
-<p>Så fort du sender eller mottar en melding vil den komme opp på denne siden.</p>';
+<p>SÃ¥ fort du sender eller mottar en melding vil den komme opp pÃ¥ denne siden.</p>';
 		}
 		
-		// har vi noen meldinger å vise?
+		// har vi noen meldinger Ã¥ vise?
 		else
 		{
 			$this->js();
@@ -318,7 +318,7 @@ class page_innboks
 		<thead>
 			<tr>
 				<th>Emne (<a href="#" class="box_handle_toggle" rel="it_id[]">Merk alle</a>)</th>
-				<th><abbr title="Antall meldinger i meldingstråden">Ant.</abbr></th>
+				<th><abbr title="Antall meldinger i meldingstrÃ¥den">Ant.</abbr></th>
 				<th><abbr title="Antall deltakere utenom deg selv">De.</abbr></th>
 				<th>Siste</th>
 				<th class="nowrap" colspan="1">Tid siste (<a id="skift_tid">veksle</a>)</th>
@@ -331,21 +331,21 @@ class page_innboks
 			foreach ($meldinger as $row)
 			{
 				$o = $row['up_prev_other']
-					? '<user id="'.$row['up_prev_other']['im_up_id'].'" /> <span class="im_utg">(utgående)</span>'
+					? '<user id="'.$row['up_prev_other']['im_up_id'].'" /> <span class="im_utg">(utgÃ¥ende)</span>'
 					: ($row['up_prev'] && !$row['up_prev'][0]
 						? '<user id="'.$row['up_prev'][1].'" />'
 						: (count($row['receivers']) > 1
-							? '<user id="'.$row['receivers'][0]['ir_up_id'].'" /> <span class="im_utg">(utgående)</span>'
+							? '<user id="'.$row['receivers'][0]['ir_up_id'].'" /> <span class="im_utg">(utgÃ¥ende)</span>'
 							: '<span class="dark">Ingen</span>'));
 				
-				// låst?
-				// TODO: Skal ikke tråden se ut som den er låst når man er i crewet? Man har uansett mulighet til å svare når man går inn i tråden
+				// lÃ¥st?
+				// TODO: Skal ikke trÃ¥den se ut som den er lÃ¥st nÃ¥r man er i crewet? Man har uansett mulighet til Ã¥ svare nÃ¥r man gÃ¥r inn i trÃ¥den
 				$locked = false;
 				if (!$row['receivers_ok']) // ingen mottakere
 				{
 					$locked = true;
 				}
-				elseif ($row['ir_up_id'] != $this->inbox->u->player->id || (!$this->inbox->u->player->active && !$row['receivers_crew'])) // ikke samme spiller som sendte meldingen, evt. spilleren vår er deaktivert og mottakere er ikke crew
+				elseif ($row['ir_up_id'] != $this->inbox->u->player->id || (!$this->inbox->u->player->active && !$row['receivers_crew'])) // ikke samme spiller som sendte meldingen, evt. spilleren vÃ¥r er deaktivert og mottakere er ikke crew
 				{
 					$locked = true;
 				}
@@ -360,8 +360,8 @@ class page_innboks
 							? ' <span class="ny">(Ny!)</span>' : ($row['ir_unread'] > 1
 							? ' <span class="ny">('.$row['ir_unread'].' nye!)</span>' : '')).($row['ir_deleted'] != 0
 							? ' <span class="slettet">(Slettet)</span>' : '').($locked
-							? ' <span class="it_locked">(Låst)</span>' : '').($row['ir_marked'] != 0
-							? '<span class="ir_marked"> (Til oppfølging)</span>' : '').'
+							? ' <span class="it_locked">(LÃ¥st)</span>' : '').($row['ir_marked'] != 0
+							? '<span class="ir_marked"> (Til oppfÃ¸lging)</span>' : '').'
 						</span>'.($row['id_text'] != "" ? '<br />
 						<span class="id_text_w"><span class="id_text">'.$row['id_text'].'</span> <span class="id_up">('.($row['up_prev'][0] ? 'meg' : '<user id="'.$row['up_prev'][1].'" nolink />').')</span></span>' : '').'
 					</a>
@@ -391,7 +391,7 @@ class page_innboks
 									<td class="r">'.$r['num_messages'].'</td>
 									<td class="r">'.($r['ir_unread'] > 0 ? '<b>'.$r['ir_unread'].'</b>' : $r['ir_unread']).'</td>'.(access::has("mod") ? '
 									<td>'.$r['ir_views'].'</td>' : '').'
-									<td>'.($r['up_access_level'] == 0 ? '<span class="dark">Død'.($c && $r['u_access_level'] != 0 && $r['u_active_up_id'] == $r['ir_up_id'] ? ', men bruker aktiv' : '').'</span>' : ($r['ir_deleted'] != 0 ? '<span class="dark">Slettet meldingen</span>' : 'Mottar nye meldinger')).'</td>
+									<td>'.($r['up_access_level'] == 0 ? '<span class="dark">DÃ¸d'.($c && $r['u_access_level'] != 0 && $r['u_active_up_id'] == $r['ir_up_id'] ? ', men bruker aktiv' : '').'</span>' : ($r['ir_deleted'] != 0 ? '<span class="dark">Slettet meldingen</span>' : 'Mottar nye meldinger')).'</td>
 								</tr>';
 				}
 				
@@ -411,7 +411,7 @@ class page_innboks
 		</tbody>
 	</table>
 	<p style="float: right; line-height: 25px" class="r red">
-		' . show_sbutton("Slett merkede meldinger", 'name="slett" onclick="return confirm(\'Er du sikker på at du vil slette de merkede meldingene?\')"') . '<br />
+		' . show_sbutton("Slett merkede meldinger", 'name="slett" onclick="return confirm(\'Er du sikker pÃ¥ at du vil slette de merkede meldingene?\')"') . '<br />
 		' . show_sbutton("Slett alle meldingene", 'name="slettalle"') . '
 	</p>
 </form>
@@ -505,13 +505,13 @@ class page_innboks
 		b.create_box(t.dispose());
 		b.autoclose();
 		
-		// marker for oppfølging
+		// marker for oppfÃ¸lging
 		var d = t.get("rel").split(","), w = elm.getParent().getElement(".it_t_w");
 		if (d.length != 2) return;
 		
 		var cw = new Element("p", {
 			"class": "ir_mark",
-			"html": \'<input type="checkbox" id="im_mark_b_\'+d[0]+\'" /><label for="im_mark_b_\'+d[0]+\'"> Marker for oppfølging</label>\'
+			"html": \'<input type="checkbox" id="im_mark_b_\'+d[0]+\'" /><label for="im_mark_b_\'+d[0]+\'"> Marker for oppfÃ¸lging</label>\'
 		}).inject(t, "top")
 		var c = cw.getElement("input");
 		var xhr;
@@ -543,7 +543,7 @@ class page_innboks
 					if (text == "MARK-TRUE")
 					{
 						c.set("checked", true);
-						if (!m) new Element("span", { "class": "ir_marked", "text": " (Til oppfølging)" }).inject(w);
+						if (!m) new Element("span", { "class": "ir_marked", "text": " (Til oppfÃ¸lging)" }).inject(w);
 					}
 					else if (text == "MARK-FALSE")
 					{

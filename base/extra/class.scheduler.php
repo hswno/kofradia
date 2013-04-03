@@ -17,7 +17,7 @@ class scheduler
 	private $minute;
 	private $second;
 	
-	/** Utfør rutiner */
+	/** UtfÃ¸r rutiner */
 	public function __construct()
 	{
 		global $_base;
@@ -34,7 +34,7 @@ class scheduler
 		$this->date_midnight = clone $this->date_now;
 		$this->date_midnight->setTime(0, 0, 0);
 		
-		// sørg for samme avvik fra GMT (tidssone)
+		// sÃ¸rg for samme avvik fra GMT (tidssone)
 		$gmt_offset_now = $_base->date->timezone->getOffset($this->date_now);
 		$gmt_offset_midnight = $_base->date->timezone->getOffset($this->date_midnight);
 		$gmt_offset = $gmt_offset_midnight - $gmt_offset_now;
@@ -46,10 +46,10 @@ class scheduler
 		$this->minute = (int) $this->date_now->format("i");
 		$this->second = (int) $this->date_now->format("s");
 		
-		// hent rutiner som skal utføres nå
+		// hent rutiner som skal utfÃ¸res nÃ¥
 		$result = $_base->db->query("SELECT s_name, s_hours, s_minutes, s_seconds, s_file, s_count, s_previous, s_next FROM scheduler WHERE s_active = 1 AND s_next <= ".$this->start." AND s_expire < ".$this->start);
 		
-		// kjør rutiner som ble funnet
+		// kjÃ¸r rutiner som ble funnet
 		while ($row = mysql_fetch_assoc($result))
 		{
 			$this->run($row);
@@ -58,11 +58,11 @@ class scheduler
 		// lagre logg hvis noe ble oppdatert
 		if ($this->count > 0)
 		{
-			putlog("LOG", "%bScheduler:%b Ferdig utført (ant: $this->count) (".number_format(round(microtime(true)-$this->start_exact, 6), 6, ",", ".")." sekunder) (script: ".number_format(round(microtime(true)-SCRIPT_START, 6), 6, ",", ".")." sekunder)");
+			putlog("LOG", "%bScheduler:%b Ferdig utfÃ¸rt (ant: $this->count) (".number_format(round(microtime(true)-$this->start_exact, 6), 6, ",", ".")." sekunder) (script: ".number_format(round(microtime(true)-SCRIPT_START, 6), 6, ",", ".")." sekunder)");
 		}
 	}
 	
-	/** Finn tidspunkt for når en rutine kan utføres neste gang  */
+	/** Finn tidspunkt for nÃ¥r en rutine kan utfÃ¸res neste gang  */
 	public function next($hours, $minutes, $seconds)
 	{
 		$parts = array(
@@ -78,7 +78,7 @@ class scheduler
 			$max = $h ? 24 : 60;
 			$r = array();
 			
-			// gå gjennom hver del av denne enheten
+			// gÃ¥ gjennom hver del av denne enheten
 			foreach (explode(",", $part) as $u)
 			{
 				// alle tidspunktene?
@@ -118,16 +118,16 @@ class scheduler
 			$parts[$name] = count($r) == 0 ? array(0) : $r;
 		}
 		
-		// antall sekunder etter midnatt denne rutinen kan utføres første gang
+		// antall sekunder etter midnatt denne rutinen kan utfÃ¸res fÃ¸rste gang
 		$first = $parts['hours'][0]*3600 + $parts['minutes'][0]*60 + $parts['seconds'][0];
 		
-		// har vi ikke kommet til første gang enda?
+		// har vi ikke kommet til fÃ¸rste gang enda?
 		if ($first > $this->offset_midnight)
 		{
 			return $this->time_midnight + $first;
 		}
 		
-		// finn første innenfor tiden
+		// finn fÃ¸rste innenfor tiden
 		foreach ($parts['hours'] as $hour)
 		{
 			if ($hour < $this->hour) continue;
@@ -144,13 +144,13 @@ class scheduler
 			}
 		}
 		
-		// vi er etter siste mulighet - benytt første
+		// vi er etter siste mulighet - benytt fÃ¸rste
 		$date = clone $this->date_midnight;
 		$date->modify("+1 day");
 		return $date->format("U") + $first;
 	}
 	
-	/** Kjør rutine */
+	/** KjÃ¸r rutine */
 	private function run($row)
 	{
 		global $_base;
@@ -158,7 +158,7 @@ class scheduler
 		// marker som opptatt
 		$_base->db->query("UPDATE scheduler SET s_count = s_count + 1, s_previous = $this->start, s_expire = ".($this->start+600)." WHERE s_name = ".$_base->db->quote($row['s_name'])." AND s_count = {$row['s_count']}");
 		
-		// ikke oppdater - hopp over (en annen holder mest sannsynlig på)
+		// ikke oppdater - hopp over (en annen holder mest sannsynlig pÃ¥)
 		if ($_base->db->affected_rows() == 0)
 		{
 			return;
@@ -166,7 +166,7 @@ class scheduler
 		
 		++$this->count;
 		
-		// finn ut når rutinen skal utføres neste gang
+		// finn ut nÃ¥r rutinen skal utfÃ¸res neste gang
 		$next = $this->next($row['s_hours'], $row['s_minutes'], $row['s_seconds']);
 		
 		// sjekk om filen finnes
@@ -183,14 +183,14 @@ class scheduler
 		{
 			$start = microtime(true);
 			
-			// benytt egen funksjon for å hindre overskriving av variabler
+			// benytt egen funksjon for Ã¥ hindre overskriving av variabler
 			if ($this->load($path) == "skip_next")
 			{
 				$scheduler_skip_next = true;
 			}
 			
 			$next_r = isset($scheduler_skip_next) ? '' : " - neste: ".$_base->date->get($next)->format(date::FORMAT_SEC)." (".game::timespan($next, game::TIME_ABS | game::TIME_NOBOLD).")";
-			putlog("SPAM", "%bScheduler:%b Rutinen %u{$row['s_name']}%u ble utført (".number_format(round(microtime(true)-$start, 6), 6, ",", ".")." sekunder)$next_r");
+			putlog("SPAM", "%bScheduler:%b Rutinen %u{$row['s_name']}%u ble utfÃ¸rt (".number_format(round(microtime(true)-$start, 6), 6, ",", ".")." sekunder)$next_r");
 		}
 		
 		$s_next = isset($scheduler_skip_next) ? '' : ', s_next = '.$next;

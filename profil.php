@@ -34,7 +34,7 @@ if (isset($_GET['name']))
 {
 	$name = $_GET['name'];
 	
-	// søke med ID også?
+	// sÃ¸ke med ID ogsÃ¥?
 	if (isset($_GET['id']))
 	{
 		$up_id = (int) $_GET['id'];
@@ -115,7 +115,7 @@ if (access::has("crewet", NULL, NULL, true))
 	});');
 }
 
-// loggfør visning
+// loggfÃ¸r visning
 if (!login::$logged_in)
 {
 	putlog("PROFILVIS", "%c6%bVIS-PROFIL:%b%c Ikke-innlogget-person viste profilen til %u{$player->data['up_name']}%u (up_id: ".$player->id.")");
@@ -126,7 +126,7 @@ elseif (login::$user->player->id != $player->id)
 }
 
 
-// legg til som besøkende til denne profilen
+// legg til som besÃ¸kende til denne profilen
 if (!login::$logged_in || (!access::is_nostat() && login::$user->id != $player->data['up_u_id']))
 {
 	// anonym
@@ -140,7 +140,7 @@ if (!login::$logged_in || (!access::is_nostat() && login::$user->id != $player->
 	// innlogget
 	elseif (!access::is_nostat() && login::$user->id != $player->data['up_u_id'])
 	{
-		// når besøkte vi profilen sist?
+		// nÃ¥r besÃ¸kte vi profilen sist?
 		$siste = 0;
 		$result = ess::$b->db->query("SELECT time FROM users_views WHERE uv_up_id = $player->id AND uv_visitor_up_id = ".login::$user->player->id);
 		if (mysql_num_rows($result))
@@ -154,7 +154,7 @@ if (!login::$logged_in || (!access::is_nostat() && login::$user->id != $player->
 	}
 	
 	// oppdater antall visninger -- kun hvis det er en annen bruker som viser profilen
-	// oppdater kun hvis det har gått mer enn 90 sekunder siden forrige visning (30 sekunder for anonyme)
+	// oppdater kun hvis det har gÃ¥tt mer enn 90 sekunder siden forrige visning (30 sekunder for anonyme)
 	if ($siste + (login::$logged_in ? 90 : 30) < time())
 	{
 		ess::$b->db->query("UPDATE users_players SET up_profile_hits = up_profile_hits + 1 WHERE up_id = $player->id");
@@ -162,7 +162,7 @@ if (!login::$logged_in || (!access::is_nostat() && login::$user->id != $player->
 	}
 }
 
-// hent siste besøkende
+// hent siste besÃ¸kende
 $expire = time() - 604800; // 1 uke
 $last_visitors_limit = 7;
 $last_visitors = ess::$b->db->query("
@@ -179,7 +179,7 @@ $name = htmlspecialchars($player->data['up_name']);
 // drept?
 if ($player->data['up_access_level'] == 0 && $player->data['up_deactivated_dead'] != 0)
 {
-	$name .= ' <span class="c_deactivated">[Død]</span>';
+	$name .= ' <span class="c_deactivated">[DÃ¸d]</span>';
 }
 
 else
@@ -229,7 +229,7 @@ $num_recruited = mysql_result($result, 0);
 
 // html
 echo (access::has("crewet", NULL, NULL, true) ? '
-<h1><a href="'.$__server['relative_path'].'/min_side?up_id='.$player->id.'&amp;a=crew" title="Gå til spillerens side -- Tips: Trykk ESC+M+ESC for å gå til siden automatisk">'.htmlspecialchars($player->data['up_name']).'</a></h1>' : '
+<h1><a href="'.$__server['relative_path'].'/min_side?up_id='.$player->id.'&amp;a=crew" title="GÃ¥ til spillerens side -- Tips: Trykk ESC+M+ESC for Ã¥ gÃ¥ til siden automatisk">'.htmlspecialchars($player->data['up_name']).'</a></h1>' : '
 <h1>'.htmlspecialchars($player->data['up_name']).'</h1>').'
 <p class="h_right">
 	<a href="'.$__server['relative_path'].'/profil?random">Tilfeldig spiller</a>
@@ -328,7 +328,7 @@ ess::$b->page->add_css('
 
 if (login::$logged_in && login::$user->id != $player->data['up_u_id'])
 {
-	// sørg for at rapporteringslenkene blir prosessert
+	// sÃ¸rg for at rapporteringslenkene blir prosessert
 	ess::$b->page->add_js('sm_scripts.report_links();');
 }
 
@@ -342,7 +342,7 @@ $result_other_up = $pagei_other_up->query("
 	ORDER BY up_last_online DESC");
 $has_other_up = mysql_num_rows($result_other_up) > 1;
 
-// antall angrep man har utført
+// antall angrep man har utfÃ¸rt
 $attacks = $player->data['up_attack_failed_num'] + $player->data['up_attack_damaged_num'] + $player->data['up_attack_killed_num'];
 
 echo '
@@ -380,12 +380,12 @@ echo '
 					<dt>Prestasjonspoeng</dt>
 					<dd>'.game::format_num($player->data['up_achievements_points']).'</dd>'.($attacks == 0 ? '' : '
 					
-					<dt>Utført <b>'.$attacks.'</b> angrep, hvorav '.fwords("<b>%d</b> spiller", "<b>%d</b> spillere", $player->data['up_attack_killed_num']+$player->data['up_attack_bleed_num']).' har blitt drept og '.fwords("<b>%d</b> spiller", "<b>%d</b> spillere", $player->data['up_attack_damaged_num']-$player->data['up_attack_bleed_num']).' har blitt skadet.</dt>').'
+					<dt>UtfÃ¸rt <b>'.$attacks.'</b> angrep, hvorav '.fwords("<b>%d</b> spiller", "<b>%d</b> spillere", $player->data['up_attack_killed_num']+$player->data['up_attack_bleed_num']).' har blitt drept og '.fwords("<b>%d</b> spiller", "<b>%d</b> spillere", $player->data['up_attack_damaged_num']-$player->data['up_attack_bleed_num']).' har blitt skadet.</dt>').'
 				</dl>
 			</div>
 			<div id="profileinfo_right">
 				<dl class="dd_right">
-					<dt>Pengenivå</dt>
+					<dt>PengenivÃ¥</dt>
 					<dd><a href="'.ess::$s['rpath'].'/node/27">'.game::cash_name($player->data['up_cash']+$player->data['up_bank']).'</a></dd>
 					
 					<dt>Pengerank</dt>
@@ -393,7 +393,7 @@ echo '
 					
 					<dd>&nbsp;</dd>
 					
-					<dt>Wanted nivå</dt>
+					<dt>Wanted nivÃ¥</dt>
 					<dd>'.game::format_number($player->data['up_wanted_level']/10, 1).' %</dd>
 					
 					<dd>&nbsp;</dd>
@@ -406,7 +406,7 @@ echo '
 					
 					<dd>&nbsp;</dd>
 					
-					<dt>Forumtråder</dt>
+					<dt>ForumtrÃ¥der</dt>
 					<dd>'.game::format_number($player->data['up_forum_num_topics']).($player->data['up_forum_ff_num_topics'] > 0 ? ' (<abbr title="Firma/broderskap">+'.game::format_number($player->data['up_forum_ff_num_topics']).'</abbr>)' : '').'</dd>
 					
 					<dt>Forumsvar</dt>
@@ -459,9 +459,9 @@ if ($has_other_up)
 						<td>'.($player->id == $row['up_id'] ? htmlspecialchars($row['up_name']) : game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level'])).'<br /><span style="font-size: 10px">'.$rank['name'].'</span></td>
 						<td style="font-size: 10px">
 							Opprettet: '.ess::$b->date->get($row['up_created_time'])->format().'<br />'.($row['up_access_level'] == 0 ? '
-							Status: '.($row['up_deactivated_dead'] == 0 ? 'Deaktivert' : 'Død').'<br />' : '
+							Status: '.($row['up_deactivated_dead'] == 0 ? 'Deaktivert' : 'DÃ¸d').'<br />' : '
 							Status: I live<br />').'
-							Sist pålogget: '.ess::$b->date->get($row['up_last_online'])->format().'
+							Sist pÃ¥logget: '.ess::$b->date->get($row['up_last_online'])->format().'
 						</td>
 					</tr>';
 	}
@@ -493,7 +493,7 @@ if (mysql_num_rows($result) > 0)
 	echo '
 		<div class="section">
 			<h2>Broderskap og firma</h2>'.(!$player->active ? '
-			<p>Da spilleren døde:</p>' : '').'
+			<p>Da spilleren dÃ¸de:</p>' : '').'
 			<dl class="dd_right">';
 	
 	$i = 0;
@@ -513,7 +513,7 @@ if (mysql_num_rows($result) > 0)
 		</div>';
 }
 
-// lenke for å vise tidligere/andre spillere
+// lenke for Ã¥ vise tidligere/andre spillere
 if ($has_other_up && !isset($_GET['side_up']))
 {
 	echo '
@@ -525,10 +525,10 @@ if ($has_other_up && !isset($_GET['side_up']))
 
 echo '
 		<div class="section">
-			<h2>Siste besøkende</h2>';
+			<h2>Siste besÃ¸kende</h2>';
 
 if (mysql_num_rows($last_visitors) == 0 && !$last_visitor_anon) echo '
-			<p>Ingen besøkende enda.</p>';
+			<p>Ingen besÃ¸kende enda.</p>';
 
 else
 {
@@ -569,7 +569,7 @@ echo '
 // prestasjoner
 echo '
 		<div class="section">
-			<h2>Prestasjoner <img src="'.STATIC_LINK.'/icon/ruby.png" alt="" title="Oppnådde prestasjoner" style="vertical-align: bottom; margin-top: -2px" /></h2>';
+			<h2>Prestasjoner <img src="'.STATIC_LINK.'/icon/ruby.png" alt="" title="OppnÃ¥dde prestasjoner" style="vertical-align: bottom; margin-top: -2px" /></h2>';
 
 // hent alle prestasjonene
 $rep_all = $player->achievements->get_rep_count();
@@ -579,7 +579,7 @@ $list = array();
 $times = array();
 foreach (achievements::$achievements as $a)
 {
-	// hopp over prestasjoner som ikke er utført
+	// hopp over prestasjoner som ikke er utfÃ¸rt
 	if (!isset($rep_all[$a->id])) continue;
 	
 	$list[] = $a;
@@ -609,7 +609,7 @@ if (count($list) > 0)
 			
 			$limit_active = true;
 			echo '
-				<li>Kun siste oppnådd vist - <a href="#" id="prestasjoner_vis_alle">vis alle</a></li>';
+				<li>Kun siste oppnÃ¥dd vist - <a href="#" id="prestasjoner_vis_alle">vis alle</a></li>';
 		}
 		
 		$prefix = '';
@@ -630,7 +630,7 @@ if (count($list) > 0)
 else
 {
 	echo '
-			<p>Spilleren har ikke oppnådd noen prestasjoner.</p>';
+			<p>Spilleren har ikke oppnÃ¥dd noen prestasjoner.</p>';
 }
 
 echo '
@@ -674,12 +674,12 @@ if (isset($_GET['signature']))
 }
 
 
-// forhåndsvisning?
+// forhÃ¥ndsvisning?
 $preview = false;
 $text = $player->data['up_profile_text'];
 if (isset($_POST['preview']) && (login::$logged_in && (login::$user->id == $player->data['up_u_id'] || access::has("crewet"))))
 {
-	ess::$b->page->add_message("Denne profilen er en forhåndsvisning av teksten du redigerer.<br /><br />For å lagre teksten må du lukke dette vinduet og gå tilbake til redigeringen.");
+	ess::$b->page->add_message("Denne profilen er en forhÃ¥ndsvisning av teksten du redigerer.<br /><br />For Ã¥ lagre teksten mÃ¥ du lukke dette vinduet og gÃ¥ tilbake til redigeringen.");
 	$text = $_POST['preview'];
 	$preview = true;
 }
@@ -695,7 +695,7 @@ echo '
 if ($preview)
 {
 	echo '
-<p class="dark" style="border-top: 2px solid #1F1F1F; padding: 5px 2px"><b>Dette er en forhåndsvisning.</b></p>';
+<p class="dark" style="border-top: 2px solid #1F1F1F; padding: 5px 2px"><b>Dette er en forhÃ¥ndsvisning.</b></p>';
 }
 
 // sjekk for whatpulse
@@ -707,7 +707,7 @@ if ($wp->load_user($player->id) && $wp->update())
 	if (empty($fields)) $fields = array(); //"UserID,AccountName,GeneratedTime,DateJoined,TotalKeyCount,AvKPS,TotalMouseClicks,AvCPS";
 	else $fields = explode(",", $fields);
 	
-	// har vi noe å vise?
+	// har vi noe Ã¥ vise?
 	if (count($fields) > 0)
 	{
 		ess::$b->page->add_css('.wp dl { margin: 8px 0 }');

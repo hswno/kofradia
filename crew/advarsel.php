@@ -2,11 +2,11 @@
 
 require "config.php";
 
-ess::$b->page->add_title("Oversikt over brukere med høy advarselpoeng");
+ess::$b->page->add_title("Oversikt over brukere med hÃ¸y advarselpoeng");
 
 /*
  * Poengberegning:
- * poeng regnes linjært med utgangspunkt i maksimalt antall poeng og varigheten
+ * poeng regnes linjÃ¦rt med utgangspunkt i maksimalt antall poeng og varigheten
  *   p = aktuelle poeng
  *   m = maksimale antall poeng
  *   s = maksimal tid
@@ -74,7 +74,7 @@ ess::$b->db->query("
 // vis oversikt
 echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Oversikt over brukere med høy advarselpoeng<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">Oversikt over brukere med hÃ¸y advarselpoeng<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">';
 
 $pagei = new pagei(pagei::PER_PAGE, 30, pagei::ACTIVE_GET, "side");

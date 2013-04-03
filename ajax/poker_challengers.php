@@ -3,7 +3,7 @@
 require "../base/ajax.php";
 ajax::require_user();
 
-// kontroller lås
+// kontroller lÃ¥s
 ajax::validate_lock();
 
 // hent alle utfordringer

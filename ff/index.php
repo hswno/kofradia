@@ -53,7 +53,7 @@ class page_ff extends pages_player
 		}
 		$faf = mysql_fetch_assoc($result);
 		
-		ess::$b->page->add_title("Viser konkurranse om å danne broderskap");
+		ess::$b->page->add_title("Viser konkurranse om Ã¥ danne broderskap");
 		
 		// hent familier som deltar eller har deltatt i denne konkurransen
 		$result = ess::$b->db->query("
@@ -70,17 +70,17 @@ class page_ff extends pages_player
 		
 		$create_link = $this->up
 			? ($this->up->rank['number'] < ff::$types[1]['priority_rank'][1]
-				? ' - Du har ikke høy nok rank til å opprette broderskap'
-				: ' - Du har høy nok rank - <a href="./?create">Opprett broderskap &raquo;</a>') : '';
+				? ' - Du har ikke hÃ¸y nok rank til Ã¥ opprette broderskap'
+				: ' - Du har hÃ¸y nok rank - <a href="./?create">Opprett broderskap &raquo;</a>') : '';
 		
 		// vis informasjon
 		echo '
 <div class="bg1_c medium">
-	<h1 class="bg1">Konkurranse om å danne broderskap<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">Konkurranse om Ã¥ danne broderskap<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="./">&laquo; Tilbake</a></p>
 	<div class="bg1">
-		<p>Du viser en konkurranse om å danne et broderskap.</p>'.($faf['fff_time_start'] > time() && $faf['fff_active'] == 1 ? '
-		<p>Denne konkurransen er ikke åpen enda. Starter '.ess::$b->date->get($faf['fff_time_start'])->format(date::FORMAT_SEC).' og varer til '.ess::$b->date->get($faf['fff_time_expire'])->format(date::FORMAT_SEC).'.</p>' : ($faf['fff_time_expire'] < time() && $faf['fff_active'] != 1 ? '
+		<p>Du viser en konkurranse om Ã¥ danne et broderskap.</p>'.($faf['fff_time_start'] > time() && $faf['fff_active'] == 1 ? '
+		<p>Denne konkurransen er ikke Ã¥pen enda. Starter '.ess::$b->date->get($faf['fff_time_start'])->format(date::FORMAT_SEC).' og varer til '.ess::$b->date->get($faf['fff_time_expire'])->format(date::FORMAT_SEC).'.</p>' : ($faf['fff_time_expire'] < time() && $faf['fff_active'] != 1 ? '
 		<p>Denne konkurransen ble avsluttet '.ess::$b->date->get($faf['fff_time_expire'])->format(date::FORMAT_SEC).' (startet '.ess::$b->date->get($faf['fff_time_start'])->format(date::FORMAT_SEC).').</p>' : ($faf['fff_active'] != 1 ? '
 		<p>Konkurransen er ikke aktivert.</p>' : '
 		<p>Konkurransen startet '.ess::$b->date->get($faf['fff_time_start'])->format(date::FORMAT_SEC).' og blir avsluttet '.ess::$b->date->get($faf['fff_time_expire'])->format().' ('.game::counter(max(0, $faf['fff_time_expire']-time())).').</p>'.(count($ff) < ff::MAX_FFF_FF_COUNT ? '
@@ -136,17 +136,17 @@ class page_ff extends pages_player
 	 */
 	protected function ff_create()
 	{
-		// har ikke høy nok rank?
+		// har ikke hÃ¸y nok rank?
 		if ($this->up->rank['number'] < ff::$types[1]['priority_rank'][1])
 		{
-			ess::$b->page->add_message("Du må ha oppnådd ranken <b>".game::$ranks['items_number'][ff::$types[1]['priority_rank'][1]]['name']."</b> for å kunne danne et broderskap.", "error");
+			ess::$b->page->add_message("Du mÃ¥ ha oppnÃ¥dd ranken <b>".game::$ranks['items_number'][ff::$types[1]['priority_rank'][1]]['name']."</b> for Ã¥ kunne danne et broderskap.", "error");
 			redirect::handle();
 		}
 		
 		// har for lav helse?
 		if ($this->up->get_health_percent() < player::FF_HEALTH_LOW*100)
 		{
-			ess::$b->page->add_message("Du har for lite helse til å kunne danne et broderskap. Du må ha minimium ".(player::FF_HEALTH_LOW*100)." % helse.", "error");
+			ess::$b->page->add_message("Du har for lite helse til Ã¥ kunne danne et broderskap. Du mÃ¥ ha minimium ".(player::FF_HEALTH_LOW*100)." % helse.", "error");
 			redirect::handle();
 		}
 		
@@ -172,7 +172,7 @@ class page_ff extends pages_player
 			LIMIT 1");
 		if (mysql_num_rows($result) > 0)
 		{
-			ess::$b->page->add_message("Du opprettet et broderskap i denne konkurransen ".ess::$b->date->get(mysql_result($result, 0))->format()." som ble lagt ned ".ess::$b->date->get(mysql_result($result, 0, 1))->format().". Du må vente på en ny konkurranse for å opprette nytt broderskap.", "error");
+			ess::$b->page->add_message("Du opprettet et broderskap i denne konkurransen ".ess::$b->date->get(mysql_result($result, 0))->format()." som ble lagt ned ".ess::$b->date->get(mysql_result($result, 0, 1))->format().". Du mÃ¥ vente pÃ¥ en ny konkurranse for Ã¥ opprette nytt broderskap.", "error");
 			redirect::handle();
 		}
 		
@@ -206,12 +206,12 @@ class page_ff extends pages_player
 			// ble ikke brukeren oppdatert?
 			if (ess::$b->db->affected_rows() == 0)
 			{
-				ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
+				ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda.", "error");
 			}
 			
 			else
 			{
-				// forsøk å danne familie
+				// forsÃ¸k Ã¥ danne familie
 				$fff_id = NULL;
 				foreach ($fafs as $faf)
 				{
@@ -243,7 +243,7 @@ class page_ff extends pages_player
 					ess::$b->db->query("INSERT INTO ff_members SET ffm_up_id = ".$this->up->id.", ffm_ff_id = $ff_id, ffm_date_created = ".time().", ffm_date_join = ".time().", ffm_priority = 1, ffm_status = 1, ffm_pay_points = ".$this->up->data['up_points']);
 					
 					// logg
-					putlog("INFO", "Broderskap: %u".$this->up->data['up_name']."%u opprettet et broderskap og er nå del av en konkurranse ".ess::$s['path']."/ff/?ff_id=$ff_id");
+					putlog("INFO", "Broderskap: %u".$this->up->data['up_name']."%u opprettet et broderskap og er nÃ¥ del av en konkurranse ".ess::$s['path']."/ff/?ff_id=$ff_id");
 					
 					// fiks forum link for boss
 					$ff = ff::get_ff($ff_id, ff::LOAD_SCRIPT);
@@ -269,15 +269,15 @@ class page_ff extends pages_player
 	<p class="h_left"><a href="./">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<boxes />
-		<p>For øyeblikket er det '.$total_free.' '.fword("ledig broderskapplass", "ledige broderskapplasser", $total_free).'.</p>
+		<p>For Ã¸yeblikket er det '.$total_free.' '.fword("ledig broderskapplass", "ledige broderskapplasser", $total_free).'.</p>
 		<dl class="dd_right">
 			<dt>Broderskapnavn</dt>
 			<dd>'.$this->up->data['up_name'].'\'s broderskap</dd>
-			<dt>Kostnad å opprette</dt>
+			<dt>Kostnad Ã¥ opprette</dt>
 			<dd>'.game::format_cash(ff::CREATE_COST).'</dd>
 		</dl>
-		<p>Du vil kunne sende søknad om å endre navnet på broderskapet etter den er opprettet.</p>
-		<p>Dette vil danne et konkurrende broderskap. I løpet av en gitt periode vil broderskapet få i oppdrag om å ranke mer enn to andre broderskap. Broderskapet som oppnår mest samlet rank får beholde broderskapet, mens de to andre broderskapene dør ut.</p>
+		<p>Du vil kunne sende sÃ¸knad om Ã¥ endre navnet pÃ¥ broderskapet etter den er opprettet.</p>
+		<p>Dette vil danne et konkurrende broderskap. I lÃ¸pet av en gitt periode vil broderskapet fÃ¥ i oppdrag om Ã¥ ranke mer enn to andre broderskap. Broderskapet som oppnÃ¥r mest samlet rank fÃ¥r beholde broderskapet, mens de to andre broderskapene dÃ¸r ut.</p>
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<p class="c">
@@ -304,18 +304,18 @@ class page_ff_id extends pages_player
 	protected $ff;
 	
 	/**
-	 * Hvor lang tid man har på å utføre anti-bot etter man har kjøpt kuler
+	 * Hvor lang tid man har pÃ¥ Ã¥ utfÃ¸re anti-bot etter man har kjÃ¸pt kuler
 	 */
 	const BULLET_FREEZE_WAIT = 15;
 	
 	/**
-	 * Skjema for kjøp av kuler
+	 * Skjema for kjÃ¸p av kuler
 	 * @var form
 	 */
 	protected $bullets_form;
 	
 	/**
-	 * Anti-bot for kulekjøp
+	 * Anti-bot for kulekjÃ¸p
 	 * @var antibot
 	 */
 	protected $bullets_antibot;
@@ -338,7 +338,7 @@ class page_ff_id extends pages_player
 		
 		redirect::store("?ff_id={$this->ff->id}");
 		
-		// godta/avslå invitasjon
+		// godta/avslÃ¥ invitasjon
 		if ($this->up && (isset($_POST['invite_apply']) || isset($_POST['invite_decline'])))
 		{
 			$this->invite_handle();
@@ -383,11 +383,11 @@ class page_ff_id extends pages_player
 	}
 	
 	/**
-	 * Godta/avslå invitasjon
+	 * Godta/avslÃ¥ invitasjon
 	 */
 	protected function invite_handle()
 	{
-		// godta/avslå invitasjon?
+		// godta/avslÃ¥ invitasjon?
 		if (!isset($this->ff->members['invited'][$this->up->id]))
 		{
 			ess::$b->page->add_message("Du er ikke invitert til {$this->ff->type['refobj']}.", "error");
@@ -402,21 +402,21 @@ class page_ff_id extends pages_player
 			// har vi ikke nok helse?
 			if ($this->up->get_health_percent() < player::FF_HEALTH_LOW*100)
 			{
-				ess::$b->page->add_message("Du har ikke nok helse til å bli med i ".$this->ff->type['refobj']." nå. Du må ha minimum ".(player::FF_HEALTH_LOW*100)." % helse.", "error");
+				ess::$b->page->add_message("Du har ikke nok helse til Ã¥ bli med i ".$this->ff->type['refobj']." nÃ¥. Du mÃ¥ ha minimum ".(player::FF_HEALTH_LOW*100)." % helse.", "error");
 			}
 			
 			else
 			{
 				$this->ff->members['invited'][$this->up->id]->invite_accept();
-				ess::$b->page->add_message("Du er nå <b>$stilling</b> for <b>{$this->ff->data['ff_name']}</b>!");
+				ess::$b->page->add_message("Du er nÃ¥ <b>$stilling</b> for <b>{$this->ff->data['ff_name']}</b>!");
 			}
 		}
 		
-		// avslå
+		// avslÃ¥
 		else
 		{
 			$this->ff->members['invited'][$this->up->id]->invite_decline();
-			ess::$b->page->add_message("Du avslo invitasjonen for å bli <b>$stilling</b> for <b>{$this->ff->data['ff_name']}</b>!");
+			ess::$b->page->add_message("Du avslo invitasjonen for Ã¥ bli <b>$stilling</b> for <b>{$this->ff->data['ff_name']}</b>!");
 		}
 		
 		$this->ff->redirect();
@@ -451,10 +451,10 @@ class page_ff_id extends pages_player
 		// hent inn statistikk over dagene
 		if ($this->ff->data['ff_time_reset'] && !$this->ff->mod && $this->ff->data['ff_time_reset'])
 		{
-			// hvis statistikken ble nullstilt må vi hoppe 1 dag frem fra tidspunktet det ble nullstillt for å ikke ta med noe statistikk fra tidligere periode
+			// hvis statistikken ble nullstilt mÃ¥ vi hoppe 1 dag frem fra tidspunktet det ble nullstillt for Ã¥ ikke ta med noe statistikk fra tidligere periode
 			$d = ess::$b->date->get($this->ff->data['ff_time_reset']);
 			$d->modify("+1 day");
-			if ($d->format("U") > $date->format("U")) $date = $d; // sørg for at tidspunktet er i perioden
+			if ($d->format("U") > $date->format("U")) $date = $d; // sÃ¸rg for at tidspunktet er i perioden
 		}
 		$first = $date->format("Y-m-d");
 		$result = ess::$b->db->query("
@@ -477,7 +477,7 @@ class page_ff_id extends pages_player
 	<div class="bg1">
 		<p>Her er en oversikt over litt daglig statistikk for '.$this->ff->type['refobj'].'. Statistikken gjelder 30 dager tilbake i tid, inkludert i dag.</p>
 		<p class="c"><a href="./?ff_id='.$this->ff->id.'">Tilbake</a></p>'.($this->ff->type['type'] == "familie" || $this->ff->mod ? '
-		<p>Angrep utført av '.$this->ff->type['refobj'].':</p>'.$this->stats_attack($stats).'
+		<p>Angrep utfÃ¸rt av '.$this->ff->type['refobj'].':</p>'.$this->stats_attack($stats).'
 		<p>Angrep mot '.$this->ff->type['refobj'].':</p>'.$this->stats_attacked($stats) : '').($this->ff->uinfo ? '
 		<p>Pengeflyt: <span class="dark">(Ikke medberegnet innskudd og uttak fra banken til '.$this->ff->type['refobj'].'.)</span></p>'.$this->stats_pengeflyt($stats) : '').'
 		<p class="c"><a href="./?ff_id='.$this->ff->id.'">Tilbake</a></p>
@@ -488,7 +488,7 @@ class page_ff_id extends pages_player
 	}
 	
 	/**
-	 * Sett opp stats over angrep FF har utført
+	 * Sett opp stats over angrep FF har utfÃ¸rt
 	 */
 	protected function stats_attack(&$stats)
 	{
@@ -499,7 +499,7 @@ class page_ff_id extends pages_player
 				array("Mislykkede angrep", "#x_label#<br>#val# mislykkede", array_values($stats['ffsd_attack_failed_num']), OFC_Colours::$colours[0]),
 				array("Spiller skadet", "#x_label#<br>#val# skadet", array_values($stats['ffsd_attack_damaged_num']), OFC_Colours::$colours[1]),
 				array("Spiller drept", "#x_label#<br>#val# drept", array_values($stats['ffsd_attack_killed_num']), OFC_Colours::$colours[2]),
-				array("Spiller blødd ihjel", "#x_label#<br>#val# blødd ihjel", array_values($stats['ffsd_attack_bleed_num']), OFC_Colours::$colours[3]),
+				array("Spiller blÃ¸dd ihjel", "#x_label#<br>#val# blÃ¸dd ihjel", array_values($stats['ffsd_attack_bleed_num']), OFC_Colours::$colours[3]),
 			),
 			array_keys($stats['ffsd_money_in']));
 		
@@ -508,7 +508,7 @@ class page_ff_id extends pages_player
 	}
 	
 	/**
-	 * Sett opp stats over angrep som har blitt utført mot FF
+	 * Sett opp stats over angrep som har blitt utfÃ¸rt mot FF
 	 */
 	protected function stats_attacked(&$stats)
 	{
@@ -517,7 +517,7 @@ class page_ff_id extends pages_player
 				array("Mislykkede angrep", "#x_label#<br>#val# mislykkede", array_values($stats['ffsd_attacked_failed_num']), OFC_Colours::$colours[0]),
 				array("Spiller skadet", "#x_label#<br>#val# skadet", array_values($stats['ffsd_attacked_damaged_num']), OFC_Colours::$colours[1]),
 				array("Spiller drept", "#x_label#<br>#val# drept", array_values($stats['ffsd_attacked_killed_num']), OFC_Colours::$colours[2]),
-				array("Spiller blødd ihjel", "#x_label#<br>#val# blødd ihjel", array_values($stats['ffsd_attacked_bleed_num']), OFC_Colours::$colours[3]),
+				array("Spiller blÃ¸dd ihjel", "#x_label#<br>#val# blÃ¸dd ihjel", array_values($stats['ffsd_attacked_bleed_num']), OFC_Colours::$colours[3]),
 			),
 			array_keys($stats['ffsd_money_in']));
 		
@@ -605,7 +605,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				$this->type_bank();
 			break;
 			
-			// våpen/beskyttelse
+			// vÃ¥pen/beskyttelse
 			case "vapbes":
 				$this->type_vapbes();
 			break;
@@ -667,7 +667,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			if ($attacks > 0)
 			{
 				echo '
-		<p>De siste 7 dagene har medlemmene av '.$this->ff->type['refobj'].' utført <b>'.$attacks.'</b> angrep, hvorav '.fwords("<b>%d</b> spiller", "<b>%d</b> spillere", $stats['akilled']+$stats['ableed']).' har blitt drept og '.fwords("<b>%d</b> spiller", "<b>%d</b> spillere", $stats['adamaged']-$stats['ableed']).' har blitt skadet.</p>';
+		<p>De siste 7 dagene har medlemmene av '.$this->ff->type['refobj'].' utfÃ¸rt <b>'.$attacks.'</b> angrep, hvorav '.fwords("<b>%d</b> spiller", "<b>%d</b> spillere", $stats['akilled']+$stats['ableed']).' har blitt drept og '.fwords("<b>%d</b> spiller", "<b>%d</b> spillere", $stats['adamaged']-$stats['ableed']).' har blitt skadet.</p>';
 			}
 			
 			// antall ganger angrepet
@@ -675,7 +675,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			if ($attacked + $stats['dbleed'] > 0)
 			{
 				echo '
-		<p>De siste 7 dagene har medlemmene av '.$this->ff->type['refobj'].' blitt angrepet <b>'.$attacked.'</b> '.fword("gang", "ganger", $attacked).', hvorav '.fwords("<b>%d</b> medlem", "<b>%d</b> medlemmer", $stats['dkilled']).' har blitt drept, '.fwords("<b>%d</b> medlem", "<b>%d</b> medlemmer", $stats['dbleed']).' har dødd av skader og medlemmene har ellers blitt skadet '.fwords("<b>%d</b> gang", "<b>%d</b> ganger", max(0, $stats['ddamaged']-$stats['dbleed'])).'.</p>';
+		<p>De siste 7 dagene har medlemmene av '.$this->ff->type['refobj'].' blitt angrepet <b>'.$attacked.'</b> '.fword("gang", "ganger", $attacked).', hvorav '.fwords("<b>%d</b> medlem", "<b>%d</b> medlemmer", $stats['dkilled']).' har blitt drept, '.fwords("<b>%d</b> medlem", "<b>%d</b> medlemmer", $stats['dbleed']).' har dÃ¸dd av skader og medlemmene har ellers blitt skadet '.fwords("<b>%d</b> gang", "<b>%d</b> ganger", max(0, $stats['ddamaged']-$stats['dbleed'])).'.</p>';
 			}
 			
 			echo '
@@ -744,7 +744,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	</div>
 </div>
 <p class="familie_right familie_bilde">'.($this->ff->data['br_b_id'] ? '
-	<a href="'.ess::$s['relative_path'].'/bydeler"><img src="./?ff_id='.$this->ff->id.'&amp;draw" alt="Område" title="Tilholdssted: '.htmlspecialchars(game::$bydeler[$this->ff->data['br_b_id']]['name']).'" /></a><br />' : '').'
+	<a href="'.ess::$s['relative_path'].'/bydeler"><img src="./?ff_id='.$this->ff->id.'&amp;draw" alt="OmrÃ¥de" title="Tilholdssted: '.htmlspecialchars(game::$bydeler[$this->ff->data['br_b_id']]['name']).'" /></a><br />' : '').'
 	<img src="'.htmlspecialchars($this->ff->get_logo_path()).'" alt="Logo" class="familie_logo" />
 </p>
 </div>';
@@ -806,29 +806,29 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				echo '
 		<h3>Sammenlikning med de andre broderskapene</h3>';
 				
-				// skjema for å kjøpe ny info
+				// skjema for Ã¥ kjÃ¸pe ny info
 				if (isset($_GET['buy']) && $this->ff->access(1))
 				{
-					// har det ikke gått lang nok tid siden sist?
+					// har det ikke gÃ¥tt lang nok tid siden sist?
 					if ($info && $info['time'] > time()-3600*6)
 					{
-						ess::$b->page->add_message("Ny informasjon kan ikke kjøpes før det har gått 6 timer siden forrige kjøp.", "error");
+						ess::$b->page->add_message("Ny informasjon kan ikke kjÃ¸pes fÃ¸r det har gÃ¥tt 6 timer siden forrige kjÃ¸p.", "error");
 						redirect::handle("?ff_id={$this->ff->id}&fff_compare");
 					}
 					
-					// utføre kjøpet?
+					// utfÃ¸re kjÃ¸pet?
 					if (isset($_POST['confirm']) && validate_sid(false))
 					{
 						$result = $this->ff->buy_competition_info();
 						if (is_array($result))
 						{
-							ess::$b->page->add_message("Informasjon om de andre broderskapene ble kjøpt.");
+							ess::$b->page->add_message("Informasjon om de andre broderskapene ble kjÃ¸pt.");
 							redirect::handle("?ff_id={$this->ff->id}&fff_compare");
 						}
 						
 						switch ($result)
 						{
-							case "wait": ess::$b->page->add_message("Du må vente minimum 6 timer mellom hvert kjøp.", "error"); break;
+							case "wait": ess::$b->page->add_message("Du mÃ¥ vente minimum 6 timer mellom hvert kjÃ¸p.", "error"); break;
 							case "none": ess::$b->page->add_message("Det er ingen andre broderskap i konkurransen.", "error"); break;
 							case "familie_cash": ess::$b->page->add_message("Det er ikke nok penger i broderskapbanken.", "error"); break;
 							default: ess::$b->page->add_message("Ukjent feil.", "error");
@@ -839,15 +839,15 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			<p><a href="./?ff_id='.$this->ff->id.'&amp;buy">&laquo; Tilbake</a></p>
 			<form action="" method="post">
 				<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
-				<p>Informasjonen som blir kjøpt gjelder <u>kun</u> for det øyeblikket kjøpet blir gjennomført, og blir ikke oppdatert før ny informasjon blir kjøpt.</p>
+				<p>Informasjonen som blir kjÃ¸pt gjelder <u>kun</u> for det Ã¸yeblikket kjÃ¸pet blir gjennomfÃ¸rt, og blir ikke oppdatert fÃ¸r ny informasjon blir kjÃ¸pt.</p>
 				<dl class="dd_right">
 					<dt>Penger i broderskapbanken</dt>
 					<dd>'.game::format_cash($this->ff->data['ff_bank']).'</dd>
 					<dt>Kostnad for informasjon</dt>
 					<dd>'.game::format_cash(ff::COMPETITION_INFO_COST).'</dd>
 				</dl>
-				<p>Beløpet blir trukket fra broderskapbanken.</p>
-				<p class="c">'.show_sbutton("Kjøp informasjon", 'name="confirm"').' <a href="./?ff_id='.$this->ff->id.'&amp;buy">Tilbake</a></p>
+				<p>BelÃ¸pet blir trukket fra broderskapbanken.</p>
+				<p class="c">'.show_sbutton("KjÃ¸p informasjon", 'name="confirm"').' <a href="./?ff_id='.$this->ff->id.'&amp;buy">Tilbake</a></p>
 			</form>';
 				}
 				
@@ -856,20 +856,20 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				{
 					echo '
 			<p><a href="./?ff_id='.$this->ff->id.'">&laquo; Tilbake</a></p>
-			<p>For å kunne se informasjonen om de andre broderskapene, må det betales et beløp på '.game::format_cash(ff::COMPETITION_INFO_COST).'. Da får man vite hvor mye de andre broderskapene har ranket i forhold til ditt broderskap.</p>
-			<p>Denne informasjonen gjelder kun det tidspunktet informasjonen ble kjøpt. Etter det har gått 6 timer kan ny informasjon kjøpes.</p>
-			<p>Kun boss har mulighet til å kjøpe denne informasjonen. Alle medlemmene i broderskapet kan se oversikten når den er kjøpt.</p>';
+			<p>For Ã¥ kunne se informasjonen om de andre broderskapene, mÃ¥ det betales et belÃ¸p pÃ¥ '.game::format_cash(ff::COMPETITION_INFO_COST).'. Da fÃ¥r man vite hvor mye de andre broderskapene har ranket i forhold til ditt broderskap.</p>
+			<p>Denne informasjonen gjelder kun det tidspunktet informasjonen ble kjÃ¸pt. Etter det har gÃ¥tt 6 timer kan ny informasjon kjÃ¸pes.</p>
+			<p>Kun boss har mulighet til Ã¥ kjÃ¸pe denne informasjonen. Alle medlemmene i broderskapet kan se oversikten nÃ¥r den er kjÃ¸pt.</p>';
 					
 					if ($this->ff->access(1))
 					{
 						echo '
-			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_compare&amp;buy">Kjøp informasjon &raquo;</a></p>';
+			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_compare&amp;buy">KjÃ¸p informasjon &raquo;</a></p>';
 					}
 					
 					if (access::has("mod"))
 					{
 						echo '
-			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_compare&amp;override">Vis nåværende informasjon som moderator &raquo;</a></p>';
+			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_compare&amp;override">Vis nÃ¥vÃ¦rende informasjon som moderator &raquo;</a></p>';
 					}
 				}
 				
@@ -882,14 +882,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 						$info = $this->ff->get_competition_info();
 					}
 					
-					// tidsgraf for det øyeblikket informasjonen ble kjøpt
+					// tidsgraf for det Ã¸yeblikket informasjonen ble kjÃ¸pt
 					$time_status = ($info['time']-$this->ff->data['fff_time_start']) / ($this->ff->data['fff_time_expire']-$this->ff->data['fff_time_start']);
 					$time_status = min(100, max(0, $time_status*100));
 					
 					// vis informasjon
 					echo '
 			<p><a href="./?ff_id='.$this->ff->id.'">&laquo; Tilbake</a></p>
-			<p>Informasjon om de andre broderskapene ble kjøpt '.ess::$b->date->get($info['time'])->format().'. Det er '.game::timespan($info['time'], game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).'.</p>
+			<p>Informasjon om de andre broderskapene ble kjÃ¸pt '.ess::$b->date->get($info['time'])->format().'. Det er '.game::timespan($info['time'], game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).'.</p>
 			<div class="progressbar" style="margin: 1em 0">
 				<div class="progress" style="width: '.round($time_status).'%">
 					<p>Tidsstatus for informasjon: '.game::format_number($time_status, 1).' %</p>
@@ -948,13 +948,13 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 					if ($this->ff->access(1))
 					{
 						echo '
-			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_compare&amp;buy">Kjøp ny informasjon &raquo;</a></p>';
+			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_compare&amp;buy">KjÃ¸p ny informasjon &raquo;</a></p>';
 					}
 					
 					if (access::has("mod") && !isset($_GET['override']))
 					{
 						echo '
-			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_compare&amp;override">Vis nåværende informasjon som moderator &raquo;</a></p>';
+			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_compare&amp;override">Vis nÃ¥vÃ¦rende informasjon som moderator &raquo;</a></p>';
 					}
 				}
 			}
@@ -969,7 +969,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 .familie_panel_pay .progressbar .progress { background-color: #434343 }');
 				
 				echo '
-			<p>Bidrag fordelt på medlemmer:</p>
+			<p>Bidrag fordelt pÃ¥ medlemmer:</p>
 			<div class="familie_panel_pay">';
 				
 				if (count($rank_info['players']) == 0)
@@ -1009,10 +1009,10 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			{
 				echo '
 			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_compare">Sammenlikne med de andre broderskapene &raquo;</a></p>
-			<p>Hvis et av medlemmene forlater broderskapet i konkurranseperioden, vil broderskapet <u>miste</u> ranken dette medlemmet har opptjent. Inviteres en spiller på nytt telles ranken fra det tidspunktet spilleren ble medlem på nytt.</p>
-			<p>Minstekravet for rank <u>må</u> klares. Selv om minstekravet blir oppnådd, er det broderskapet i konkurransen som har opptjent <u>mest rank som overlever</u>.</p>
-			<p>Hvis broderskapet ikke vinner konkurransen, vil broderskapet dø ut.</p>
-			<p>Hvis broderskapet vinner konkurransen, må leder/nestleder velge en bygning broderskapet skal ha som tilholdssted innen <u>24 timer</u> etter konkurransen er avsluttet for ikke å miste broderskapet.</p>
+			<p>Hvis et av medlemmene forlater broderskapet i konkurranseperioden, vil broderskapet <u>miste</u> ranken dette medlemmet har opptjent. Inviteres en spiller pÃ¥ nytt telles ranken fra det tidspunktet spilleren ble medlem pÃ¥ nytt.</p>
+			<p>Minstekravet for rank <u>mÃ¥</u> klares. Selv om minstekravet blir oppnÃ¥dd, er det broderskapet i konkurransen som har opptjent <u>mest rank som overlever</u>.</p>
+			<p>Hvis broderskapet ikke vinner konkurransen, vil broderskapet dÃ¸ ut.</p>
+			<p>Hvis broderskapet vinner konkurransen, mÃ¥ leder/nestleder velge en bygning broderskapet skal ha som tilholdssted innen <u>24 timer</u> etter konkurransen er avsluttet for ikke Ã¥ miste broderskapet.</p>
 			<p><a href="./?ff_id='.$this->ff->id.'&amp;fff_rank">Vis oversikt over medlemmers bidrag &raquo;</a></p>';
 			}
 			
@@ -1046,8 +1046,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		<div class="section">
 			<h2>Mangler bygning</h2>
 			<p class="h_right">Kun synlig for broderskapmedlemmer</p>
-			<p>Broderskapet vant broderskapkonkurransen, men leder/nestleder må fremdeles velge bygning for at broderskapet ikke skal dø ut.</p>
-			<p>Valg av bygning må skje innen '.game::timespan($this->ff->data['fff_time_expire_br'], game::TIME_ABS).'.</p>'.($this->ff->access(2) ? '
+			<p>Broderskapet vant broderskapkonkurransen, men leder/nestleder mÃ¥ fremdeles velge bygning for at broderskapet ikke skal dÃ¸ ut.</p>
+			<p>Valg av bygning mÃ¥ skje innen '.game::timespan($this->ff->data['fff_time_expire_br'], game::TIME_ABS).'.</p>'.($this->ff->access(2) ? '
 			<p><a href="panel?ff_id='.$this->ff->id.'&amp;a=br">Velg bygning &raquo;</a></p>' : '').'
 		</div>';
 		}
@@ -1062,7 +1062,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		<div class="section">
 			<h2>Broderskapkostnaden er ikke betalt</h2>
 			<p class="h_right">Kun synlig for broderskapmedlemmer</p>
-			<p>Broderskapkostnaden ble ikke betalt i tide. '.ucfirst($this->ff->type['priority'][1]).'/'.$this->ff->type['priority'][2].' må betales dette innen '.ess::$b->date->get($pay_info['next'])->format().' for at broderskapet ikke skal dø ut.</p>
+			<p>Broderskapkostnaden ble ikke betalt i tide. '.ucfirst($this->ff->type['priority'][1]).'/'.$this->ff->type['priority'][2].' mÃ¥ betales dette innen '.ess::$b->date->get($pay_info['next'])->format().' for at broderskapet ikke skal dÃ¸ ut.</p>
 		</div>';
 			}
 		}
@@ -1078,13 +1078,13 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$status = $this->ff->sell_status();
 		if (!$status) return;
 		
-		// er vi kjøperen?
+		// er vi kjÃ¸peren?
 		if ($status['up_id'] == $this->ff->uinfo->id)
 		{
 			echo '
 		<div class="section">
 			<h2>Salg av broderskap</h2>
-			<p><user id="'.$status['init_up_id'].'" /> har åpnet salg av broderskapet til deg. <a href="panel?ff_id='.$this->ff->id.'&amp;a=sell">Godta/avslå kjøp &raquo;</a></p>
+			<p><user id="'.$status['init_up_id'].'" /> har Ã¥pnet salg av broderskapet til deg. <a href="panel?ff_id='.$this->ff->id.'&amp;a=sell">Godta/avslÃ¥ kjÃ¸p &raquo;</a></p>
 		</div>';
 		}
 		
@@ -1094,7 +1094,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			echo '
 		<div class="section">
 			<h2>Salg av broderskapet</h2>
-			<p>Du har åpnet salg av broderskapet med <user id="'.$status['up_id'].'" /> for '.game::format_cash($status['amount']).'. <a href="panel?ff_id='.$this->ff->id.'&amp;a=sell">Detaljer &raquo;</a></p>
+			<p>Du har Ã¥pnet salg av broderskapet med <user id="'.$status['up_id'].'" /> for '.game::format_cash($status['amount']).'. <a href="panel?ff_id='.$this->ff->id.'&amp;a=sell">Detaljer &raquo;</a></p>
 		</div>';
 		}
 		
@@ -1104,7 +1104,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		<div class="section">
 			<h2>Salg av broderskapet</h2>
 			<p class="h_right">Kun synlig for broderskapmedlemmer</p>
-			<p><user id="'.$status['init_up_id'].'" /> har åpnet salg av broderskapet til <user id="'.$status['up_id'].'" /> for '.game::format_cash($status['amount']).'. <a href="panel?ff_id='.$this->ff->id.'&amp;a=sell">Detaljer &raquo;</a></p>
+			<p><user id="'.$status['init_up_id'].'" /> har Ã¥pnet salg av broderskapet til <user id="'.$status['up_id'].'" /> for '.game::format_cash($status['amount']).'. <a href="panel?ff_id='.$this->ff->id.'&amp;a=sell">Detaljer &raquo;</a></p>
 		</div>';
 		}
 	}
@@ -1132,7 +1132,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				<form action="?ff_id='.$this->ff->id.'" method="post">
 					<p class="c">
 						<input type="submit" class="button" name="invite_apply" value="Godta" />
-						<input type="submit" class="button" name="invite_decline" value="Avslå" />
+						<input type="submit" class="button" name="invite_decline" value="AvslÃ¥" />
 					</p>
 				</form>
 			</div>
@@ -1241,10 +1241,10 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 					<span class="ff_priority">'.ucfirst($this->ff->type['priority'][4]).'</span>' : '').'
 				</p>';
 			
-			// lag en midlertidig array for å finne ut om noen soldiers mangler capo
+			// lag en midlertidig array for Ã¥ finne ut om noen soldiers mangler capo
 			$parents = $this->ff->members['members_parent'];
 			
-			// vis hver capo med tilhørende soldiers
+			// vis hver capo med tilhÃ¸rende soldiers
 			foreach ($this->ff->members['members_priority'][3] as $capo)
 			{
 				$soldiers = array();
@@ -1358,8 +1358,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		<dd>'.game::format_number($row['ffn_sold']).'</dd>
 		<dt>Pris</dt>
 		<dd>'.game::format_cash($row['ffn_cost']).'</dd>
-		<dt>Kjøpt?</dt>
-		<dd>'.($row['ffnp_time'] ? '<a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$row['ffn_id'].'">Ja</a> ('.ess::$b->date->get($row['ffnp_time'])->format().')' : 'Nei [<a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$row['ffn_id'].'">Kjøp</a>]').'</dd>
+		<dt>KjÃ¸pt?</dt>
+		<dd>'.($row['ffnp_time'] ? '<a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$row['ffn_id'].'">Ja</a> ('.ess::$b->date->get($row['ffnp_time'])->format().')' : 'Nei [<a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$row['ffn_id'].'">KjÃ¸p</a>]').'</dd>
 	</dl>
 	<div class="p">'.$this->ff->format_description($row['ffn_description']).'</div>
 </div>';
@@ -1389,11 +1389,11 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			$bank_value = round(substr($bank_value, 0, 3), -1) . str_repeat("0", strlen($bank_value)-3);
 		}
 		
-		// finn ut nåværende status
+		// finn ut nÃ¥vÃ¦rende status
 		$status = $this->ff->params->get("bank_overforing_tap_change", 0);
-		$status_text = $status == 0 ? 'Ingen endring' : ($status > 0 ? 'Øke '.game::format_number($status*100, 2).' %' : 'Synke '.game::format_number(abs($status)*100, 2).' %');
+		$status_text = $status == 0 ? 'Ingen endring' : ($status > 0 ? 'Ã˜ke '.game::format_number($status*100, 2).' %' : 'Synke '.game::format_number(abs($status)*100, 2).' %');
 		
-		// nåværende overføringsgebyr
+		// nÃ¥vÃ¦rende overfÃ¸ringsgebyr
 		$overforing_tap = $this->ff->params->get("bank_overforing_tap", 0);
 		
 		// finn ut hvor lang tid det er til neste endring
@@ -1407,7 +1407,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			$next_update = 3600 - $date->format("i")*60 - $date->format("s");
 		}
 		
-		// finn "tilgjengelige" overføringer
+		// finn "tilgjengelige" overfÃ¸ringer
 		$expire = time() - 3600;
 		$result = ess::$b->db->query("SELECT COUNT(ffbt_id), SUM(ffbt_amount), SUM(ffbt_profit) FROM ff_bank_transactions WHERE ffbt_ff_id = {$this->ff->id} AND ffbt_up_id = 0 AND ffbt_time > $expire");
 		$info = mysql_fetch_row($result);
@@ -1416,11 +1416,11 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 <div class="section" style="width: 250px; margin-left: auto; margin-right: auto">
 	<h2>Bankinformasjon</h2>
 	<dl class="dd_right">
-		<dt>Overføringsgebyr</dt>
+		<dt>OverfÃ¸ringsgebyr</dt>
 		<dd>'.game::format_number($overforing_tap*100, 2).' %</dd>'.($next_update != 0 ? '
 		<dt>Neste endring</dt>
 		<dd>'.$status_text.'</dd>
-		<dt>Tid før neste endring</dt>
+		<dt>Tid fÃ¸r neste endring</dt>
 		<dd>'.game::counter($next_update).'</dd>' : '').'
 	</dl>
 	<dl class="dd_right">
@@ -1430,7 +1430,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		<dd>'.game::format_cash($bank_value).'</dd>
 	</dl>
 	<dl class="dd_right">
-		<dt>Uhentede overføringer</dt>
+		<dt>Uhentede overfÃ¸ringer</dt>
 		<dd>'.game::format_number($info[0]).'</dd>
 		
 		<dt>&nbsp;</dt>
@@ -1443,7 +1443,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	}
 	
 	/**
-	 * Informasjon om våpen/beskyttelse
+	 * Informasjon om vÃ¥pen/beskyttelse
 	 */
 	protected function type_vapbes()
 	{
@@ -1453,14 +1453,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			// i fengsel eller bomberom?
 			if ($this->up->fengsel_require_no(false) || $this->up->bomberom_require_no(false)) return;
 			
-			// vise informasjon om våpen?
+			// vise informasjon om vÃ¥pen?
 			if (isset($_GET['vap']))
 			{
 				$this->type_vapbes_vap();
 				$this->ff->load_page();
 			}
 			
-			// kjøpe våpen?
+			// kjÃ¸pe vÃ¥pen?
 			if (isset($_GET['vap_kjop']))
 			{
 				$this->type_vapbes_vap_kjop();
@@ -1474,24 +1474,24 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				$this->ff->load_page();
 			}
 			
-			// kjøpe beskyttelse?
+			// kjÃ¸pe beskyttelse?
 			if (isset($_GET['bes_kjop']))
 			{
 				$this->type_vapbes_bes_kjop();
 				$this->ff->load_page();
 			}
 			
-			// kontroller anti-bot for kjøp av kuler
+			// kontroller anti-bot for kjÃ¸p av kuler
 			$this->bullets_antibot = antibot::get("kuler", 1);
 			$this->bullets_antibot->check_required(ess::$s['relative_path']."/ff/?ff_id={$this->ff->id}");
 			
-			// kan vi kjøpe kuler?
+			// kan vi kjÃ¸pe kuler?
 			if ($this->up->weapon)
 			{
-				// sett opp skjema for å kjøpe kuler
+				// sett opp skjema for Ã¥ kjÃ¸pe kuler
 				$this->bullets_form = new form("bullets");
 				
-				// skal vi kjøpe kuler?
+				// skal vi kjÃ¸pe kuler?
 				if (isset($_POST['buy_bullets']))
 				{
 					$this->bullets_buy();
@@ -1512,19 +1512,19 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	<div class="col_w left">
 		<div class="col" style="margin-right: 15px">';
 		
-		// vis informasjon om våpen
+		// vis informasjon om vÃ¥pen
 		echo '
 <div class="bg1_c">
-	<h1 class="bg1">Våpen<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">VÃ¥pen<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>For å angripe en annen spiller behøver du våpen og kuler. Å angripe en spiller kan gi gevinst på flere måter, men kan også bli en kostbar affære hvis man stadig er uheldig med drapsforsøkene.</p>';
+		<p>For Ã¥ angripe en annen spiller behÃ¸ver du vÃ¥pen og kuler. Ã… angripe en spiller kan gi gevinst pÃ¥ flere mÃ¥ter, men kan ogsÃ¥ bli en kostbar affÃ¦re hvis man stadig er uheldig med drapsforsÃ¸kene.</p>';
 		
-		// har ikke noe våpen?
+		// har ikke noe vÃ¥pen?
 		if ($this->up && !$this->up->weapon)
 		{
 			echo '
-		<p><b>Du har ingen våpen og kan ikke angripe noen andre spillere!</b></p>
-		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;vap_kjop">Kjøp våpen</a></p>';
+		<p><b>Du har ingen vÃ¥pen og kan ikke angripe noen andre spillere!</b></p>
+		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;vap_kjop">KjÃ¸p vÃ¥pen</a></p>';
 		}
 		
 		elseif ($this->up)
@@ -1534,19 +1534,19 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			// vis detaljer
 			echo '
 		<dl class="dd_right">
-			<dt>Ditt våpen</dt>
+			<dt>Ditt vÃ¥pen</dt>
 			<dd>'.$this->up->weapon->data['name'].'</dd>
 		</dl>
 		<div class="progressbar p'.($training < 28 ? ' levelcrit' : ($training < 35 ? ' levelwarn' : '')).'">
 			<div class="progress" style="width: '.round(min(100, $training)).'%">
-				<p>Våpentrening: '.($training == 100 ? '100' : game::format_num($training, 2)).' %</p>
+				<p>VÃ¥pentrening: '.($training == 100 ? '100' : game::format_num($training, 2)).' %</p>
 			</div>
 		</div>
-		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;vap_kjop">Oppgrader våpen</a></p>';
+		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;vap_kjop">Oppgrader vÃ¥pen</a></p>';
 		}
 		
 		echo '
-		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;vap">Vis oversikt over og generell informasjon om våpen</a></p>
+		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;vap">Vis oversikt over og generell informasjon om vÃ¥pen</a></p>
 	</div>
 </div>';
 		
@@ -1555,14 +1555,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 <div class="bg1_c" style="margin-top: 20px">
 	<h1 class="bg1">Kuler<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Når man angriper en spiller må man bestemme antall kuler man ønsker å angripe spilleren med.</p>
-		<p>Flere kuler gir større sannsynlighet for å treffe en spiller, men ved bruk av mange kuler risikerer man at en del kuler ikke treffer spilleren.</p>';
+		<p>NÃ¥r man angriper en spiller mÃ¥ man bestemme antall kuler man Ã¸nsker Ã¥ angripe spilleren med.</p>
+		<p>Flere kuler gir stÃ¸rre sannsynlighet for Ã¥ treffe en spiller, men ved bruk av mange kuler risikerer man at en del kuler ikke treffer spilleren.</p>';
 		
-		// har vi ikke noe våpen?
+		// har vi ikke noe vÃ¥pen?
 		if ($this->up && !$this->up->weapon)
 		{
 			echo '
-		<p>Du har ikke noe våpen og kan ikke kjøpe kuler.</p>';
+		<p>Du har ikke noe vÃ¥pen og kan ikke kjÃ¸pe kuler.</p>';
 		}
 		
 		elseif ($this->up)
@@ -1590,22 +1590,22 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			if (!$time_ok)
 			{
 				echo '
-		<p>Kuler kan kun kjøpes dersom det er tilgjengelig mellom kl. 20:00 og 22:00.</p>';
+		<p>Kuler kan kun kjÃ¸pes dersom det er tilgjengelig mellom kl. 20:00 og 22:00.</p>';
 			}
 			
 			elseif ($ant == 0)
 			{
 				echo '
-		<p>Ingen kuler er for øyeblikket tilgjengelig å kjøpe.</p>';
+		<p>Ingen kuler er for Ã¸yeblikket tilgjengelig Ã¥ kjÃ¸pe.</p>';
 			}
 			
 			else
 			{
 				echo '
-		<p>Det er for øyeblikket '.fwords("<b>%d</b> kule", "<b>%d</b> kuler", $ant).' til salgs.</p>
+		<p>Det er for Ã¸yeblikket '.fwords("<b>%d</b> kule", "<b>%d</b> kuler", $ant).' til salgs.</p>
 		<form action="" method="post">
 			<input type="hidden" name="h" value="'.$this->bullets_form->create().'"  />
-			<p class="c">Antall kuler: <input type="text" name="bullets" value="'.htmlspecialchars(postval("bullets", 1)).'" class="styled w30" /> '.show_sbutton("Kjøp", 'name="buy_bullets"').'</p>
+			<p class="c">Antall kuler: <input type="text" name="bullets" value="'.htmlspecialchars(postval("bullets", 1)).'" class="styled w30" /> '.show_sbutton("KjÃ¸p", 'name="buy_bullets"').'</p>
 		</form>';
 			}
 		}
@@ -1627,15 +1627,15 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 <div class="bg1_c">
 	<h1 class="bg1">Beskyttelse<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Beskyttelsen passer på helsen din når du blir angrepet. En bedre beskyttelse fører til at du mister mindre helse ved et angrep.</p>
+		<p>Beskyttelsen passer pÃ¥ helsen din nÃ¥r du blir angrepet. En bedre beskyttelse fÃ¸rer til at du mister mindre helse ved et angrep.</p>
 		<p>Beskyttelsen din blir svekket ved et angrep. Om beskyttelsen skulle falle under 20 % vil den bli erstattet med det forrige alternativet, hvis et slikt alternativ finnes.</p>';
 		
 		// har ikke noe beskyttelse?
 		if ($this->up && !$this->up->protection->data)
 		{
 			echo '
-		<p><b>Du har ingen beskyttelse og vil være ekstra utsatt ved et angrep!</b></p>
-		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;bes_kjop">Kjøp beskyttelse</a></p>';
+		<p><b>Du har ingen beskyttelse og vil vÃ¦re ekstra utsatt ved et angrep!</b></p>
+		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;bes_kjop">KjÃ¸p beskyttelse</a></p>';
 		}
 		
 		elseif ($this->up)
@@ -1661,7 +1661,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	</div>
 </div>';
 		
-		// slutt på kolonneoppsett
+		// slutt pÃ¥ kolonneoppsett
 		echo '
 		</div>
 	</div>
@@ -1669,13 +1669,13 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	}
 	
 	/**
-	 * Vise informasjon om våpen
+	 * Vise informasjon om vÃ¥pen
 	 */
 	protected function type_vapbes_vap()
 	{
 		echo '
 <div class="bg1_c xmedium">
-	<h1 class="bg1">Oversikt over våpen<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Oversikt over vÃ¥pen<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<table class="table tablemt center">
 			<thead>
@@ -1707,45 +1707,45 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		echo '
 			</tbody>
 		</table>
-		<p>Gevinster man kan oppnå ved å gjennomføre drapsforsøk:</p>
+		<p>Gevinster man kan oppnÃ¥ ved Ã¥ gjennomfÃ¸re drapsforsÃ¸k:</p>
 		<ul class="spacer">
-			<li>Telleren på profilen øker ved både vellykket og mislykket drapsforsøk. Dette kan gi deg økte muligheter til å bli med i et broderskap og på den måten få økt beskyttelse</li>
-			<li>Hvis du klarer å skade eller drepe en spiller mottar du mye rank som blir overført fra den du angriper (mer rank ved mer skade på offeret)</li>
-			<li>Ved et vellykket drap mottar du pengene spilleren har på hånda, i tillegg til det som måtte ligge på etterlyst</li>
+			<li>Telleren pÃ¥ profilen Ã¸ker ved bÃ¥de vellykket og mislykket drapsforsÃ¸k. Dette kan gi deg Ã¸kte muligheter til Ã¥ bli med i et broderskap og pÃ¥ den mÃ¥ten fÃ¥ Ã¸kt beskyttelse</li>
+			<li>Hvis du klarer Ã¥ skade eller drepe en spiller mottar du mye rank som blir overfÃ¸rt fra den du angriper (mer rank ved mer skade pÃ¥ offeret)</li>
+			<li>Ved et vellykket drap mottar du pengene spilleren har pÃ¥ hÃ¥nda, i tillegg til det som mÃ¥tte ligge pÃ¥ etterlyst</li>
 		</ul>
 		<p>Annen informasjon</p>
 		<ul class="spacer">
-			<li>Styrken du klarer å angripe med blir svekket av at en spiller har forskjellig rank enn deg. Dessto lengre unna deg i rank en spiller er desto mindre styrke klarer du å angripe med</li>
-			<li>Hvis man ikke opprettholder en våpentrening på minst 25 % risikerer man å miste våpenet sitt og må kjøpe det dårligste våpenet først</li>
+			<li>Styrken du klarer Ã¥ angripe med blir svekket av at en spiller har forskjellig rank enn deg. Dessto lengre unna deg i rank en spiller er desto mindre styrke klarer du Ã¥ angripe med</li>
+			<li>Hvis man ikke opprettholder en vÃ¥pentrening pÃ¥ minst 25 % risikerer man Ã¥ miste vÃ¥penet sitt og mÃ¥ kjÃ¸pe det dÃ¥rligste vÃ¥penet fÃ¸rst</li>
 		</ul> 
-		<p>Våpenet kan du trene opp på samme side som du <a href="'.ess::$s['relative_path'].'/angrip">angriper en annen spiller</a>.</p>
+		<p>VÃ¥penet kan du trene opp pÃ¥ samme side som du <a href="'.ess::$s['relative_path'].'/angrip">angriper en annen spiller</a>.</p>
 		<p class="c"><a href="./?ff_id='.$this->ff->id.'">Tilbake til firmaet</a></p>
 	</div>
 </div>';
 	}
 	
 	/**
-	 * Kjøpe våpen
+	 * KjÃ¸pe vÃ¥pen
 	 */
 	protected function type_vapbes_vap_kjop()
 	{
 		// i feil bydel?
 		if ($this->up->data['up_b_id'] != $this->ff->data['br_b_id'])
 		{
-			ess::$b->page->add_message("Du må befinne deg i samme bydel som firmaet for å kunne kjøpe/oppgradere våpenet ditt.", "error");
+			ess::$b->page->add_message("Du mÃ¥ befinne deg i samme bydel som firmaet for Ã¥ kunne kjÃ¸pe/oppgradere vÃ¥penet ditt.", "error");
 			redirect::handle();
 		}
 		
-		// kan vi ikke kjøpe våpen for øyeblikket?
+		// kan vi ikke kjÃ¸pe vÃ¥pen for Ã¸yeblikket?
 		if (DISABLE_BUY_VAP && !access::has("mod"))
 		{
-			ess::$b->page->add_message("Kjøp av våpen er for øyeblikket deaktivert.", "error");
+			ess::$b->page->add_message("KjÃ¸p av vÃ¥pen er for Ã¸yeblikket deaktivert.", "error");
 			redirect::handle();
 		}
 		
 		redirect::store("?ff_id={$this->ff->id}&vap_kjop");
 		
-		// finn ut hvilket våpen vi kan kjøpe
+		// finn ut hvilket vÃ¥pen vi kan kjÃ¸pe
 		$training = $this->up->data['up_weapon_training'];
 		if (!$this->up->weapon)
 		{
@@ -1756,17 +1756,17 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			$next_id = $this->up->data['up_weapon_id'] + 1;
 		}
 		
-		// det neste våpenet
+		// det neste vÃ¥penet
 		$next = isset(weapon::$weapons[$next_id]) ? weapon::$weapons[$next_id] : false;
 		
 		// sjekk ventetid
-		$expire = time() - 86400 * 2; // 48 timer mellom hvert kjøp
+		$expire = time() - 86400 * 2; // 48 timer mellom hvert kjÃ¸p
 		$wait = max(0, $this->up->data['up_weapon_time'] - $expire);
 		
 		// rank ok?
 		$rank_ok = $next && $next['rank'] <= $this->up->rank['number'];
 		
-		// kjøpe våpen?
+		// kjÃ¸pe vÃ¥pen?
 		if (isset($_POST['buy']))
 		{
 			if (!$next || !isset($_POST['weap_id']) || $_POST['weap_id'] != $next_id || $wait > 0 || ($training < 0.4 && $next_id != 1) || !$rank_ok || $this->up->data['up_weapon_bullets_auksjon'] > 0) redirect::handle();
@@ -1774,11 +1774,11 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			// har vi ikke nok penger?
 			if ($next['price'] > $this->up->data['up_cash'])
 			{
-				ess::$b->page->add_message("Du har ikke nok penger på hånda til å kjøpe dette våpenet.", "error");
+				ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda til Ã¥ kjÃ¸pe dette vÃ¥penet.", "error");
 				redirect::handle();
 			}
 			
-			// forsøk å trekk fra pengene og gi våpen
+			// forsÃ¸k Ã¥ trekk fra pengene og gi vÃ¥pen
 			ess::$b->db->query("
 				UPDATE users_players
 				SET up_weapon_id = $next_id, up_weapon_training = ".($next_id == 1 ? '0.1' : 'up_weapon_training * 0.7').", up_weapon_training_next = NULL, up_weapon_bullets = 0, up_weapon_time = ".time().", up_cash = up_cash - {$next['price']}
@@ -1787,14 +1787,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			// noe gikk galt?
 			if (ess::$b->db->affected_rows() == 0)
 			{
-				ess::$b->page->add_message("Kunne ikke kjøpe våpen.", "error");
+				ess::$b->page->add_message("Kunne ikke kjÃ¸pe vÃ¥pen.", "error");
 			}
 			
-			// nytt våpen kjøpt
+			// nytt vÃ¥pen kjÃ¸pt
 			else
 			{
-				// sett tidspunkt for kjøp
-				ess::$b->page->add_message("Du har kjøpt våpenet <b>".htmlspecialchars($next['name'])."</b>. Din våpentrening er nå på ".game::format_num($next_id == 1 ? 10 : $this->up->data['up_weapon_training']*0.7*100, 1)." % og du har 0 kuler.");
+				// sett tidspunkt for kjÃ¸p
+				ess::$b->page->add_message("Du har kjÃ¸pt vÃ¥penet <b>".htmlspecialchars($next['name'])."</b>. Din vÃ¥pentrening er nÃ¥ pÃ¥ ".game::format_num($next_id == 1 ? 10 : $this->up->data['up_weapon_training']*0.7*100, 1)." % og du har 0 kuler.");
 			}
 			
 			redirect::handle();
@@ -1802,65 +1802,65 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		
 		echo '
 <div class="bg1_c xxsmall">
-	<h1 class="bg1">'.($this->up->weapon ? 'Oppgrader våpen' : 'Kjøp våpen').'<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">'.($this->up->weapon ? 'Oppgrader vÃ¥pen' : 'KjÃ¸p vÃ¥pen').'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1"><boxes />'.($this->up->weapon ? '
-		<p>Ditt våpen:<br /><b>'.htmlspecialchars($this->up->weapon->data['name']).'</b> med '.fwords("<b>%d</b> kule", "<b>%d</b> kuler", $this->up->data['up_weapon_bullets']).' og <b>'.game::format_num($training*100, 1).' %</b> våpentrening</p>' : '');
+		<p>Ditt vÃ¥pen:<br /><b>'.htmlspecialchars($this->up->weapon->data['name']).'</b> med '.fwords("<b>%d</b> kule", "<b>%d</b> kuler", $this->up->data['up_weapon_bullets']).' og <b>'.game::format_num($training*100, 1).' %</b> vÃ¥pentrening</p>' : '');
 		
-		// har vi et bedre våpen vi kan kjøpe?
+		// har vi et bedre vÃ¥pen vi kan kjÃ¸pe?
 		if (!$next)
 		{
 			echo '
-		<p>Du har det beste våpenet som kan kjøpes for øyeblikket.</p>
-		<p>Husk at hvis våpentreningen din faller under 25 %, risikerer du å miste våpenet ditt.</p>';
+		<p>Du har det beste vÃ¥penet som kan kjÃ¸pes for Ã¸yeblikket.</p>
+		<p>Husk at hvis vÃ¥pentreningen din faller under 25 %, risikerer du Ã¥ miste vÃ¥penet ditt.</p>';
 		}
 		
-		// har vi ikke høy nok rank til å kjøpe høyere beskyttelse?
+		// har vi ikke hÃ¸y nok rank til Ã¥ kjÃ¸pe hÃ¸yere beskyttelse?
 		elseif (!$rank_ok)
 		{
 			echo '
-		<p>Du har ikke høy nok rank til å oppgradere til <b>'.htmlspecialchars($next['name']).'</b>. Du må oppnå ranken <b>'.game::$ranks['items_number'][$next['rank']]['name'].'</b>.</p>';
+		<p>Du har ikke hÃ¸y nok rank til Ã¥ oppgradere til <b>'.htmlspecialchars($next['name']).'</b>. Du mÃ¥ oppnÃ¥ ranken <b>'.game::$ranks['items_number'][$next['rank']]['name'].'</b>.</p>';
 		}
 		
-		// har ikke høy nok våpentrening?
+		// har ikke hÃ¸y nok vÃ¥pentrening?
 		elseif ($training < 0.4 && $next_id != 1)
 		{
 			echo '
-		<p>Du må oppnå en våpentrening på minst 40 % før du kan oppgradere til et bedre våpen.</p>';
+		<p>Du mÃ¥ oppnÃ¥ en vÃ¥pentrening pÃ¥ minst 40 % fÃ¸r du kan oppgradere til et bedre vÃ¥pen.</p>';
 		}
 		
-		// har kuler på auksjon?
+		// har kuler pÃ¥ auksjon?
 		elseif ($this->up->data['up_weapon_bullets_auksjon'] > 0)
 		{
 			echo '
-		<p>Du har kuler på auksjon eller har bydd på en auksjon for kuler og må vente til auksjonene har blitt avsluttet før du kan oppgradere våpen.</p>';
+		<p>Du har kuler pÃ¥ auksjon eller har bydd pÃ¥ en auksjon for kuler og mÃ¥ vente til auksjonene har blitt avsluttet fÃ¸r du kan oppgradere vÃ¥pen.</p>';
 		}
 		
 		else
 		{
-			// har bedre våpen tilgjengelig
+			// har bedre vÃ¥pen tilgjengelig
 			echo '
-		<p>Følgende våpen er tilgjengelig:<br /><b>'.htmlspecialchars($next['name']).'</b> ('.game::format_cash($next['price']).')</p>';
+		<p>FÃ¸lgende vÃ¥pen er tilgjengelig:<br /><b>'.htmlspecialchars($next['name']).'</b> ('.game::format_cash($next['price']).')</p>';
 			
-			// må vente?
+			// mÃ¥ vente?
 			if ($wait > 0)
 			{
 				echo '
-		<p>Du må vente '.game::counter($wait, true).' før du kan oppgradere våpenet ditt.</p>';
+		<p>Du mÃ¥ vente '.game::counter($wait, true).' fÃ¸r du kan oppgradere vÃ¥penet ditt.</p>';
 			}
 			
 			else
 			{
 				echo ($next_id > 1 ? '
-		<p>Når du oppgraderer våpenet ditt vil du miste alle kulene dine og våpentreningen vil synke.</p>' : '').'
+		<p>NÃ¥r du oppgraderer vÃ¥penet ditt vil du miste alle kulene dine og vÃ¥pentreningen vil synke.</p>' : '').'
 		<form action="" method="post">
 			<input type="hidden" name="weap_id" value="'.$next_id.'" />
-			<p class="c">'.show_sbutton("Kjøp dette våpenet", 'name="buy"').'</p>
+			<p class="c">'.show_sbutton("KjÃ¸p dette vÃ¥penet", 'name="buy"').'</p>
 		</form>';
 			}
 		}
 		
 		echo '
-		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;vap">Vis oversikt over våpen</a></p>
+		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;vap">Vis oversikt over vÃ¥pen</a></p>
 		<p class="c"><a href="./?ff_id='.$this->ff->id.'">Tilbake til firmaet</a></p>
 	</div>
 </div>';
@@ -1901,12 +1901,12 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		echo '
 			</tbody>
 		</table>
-		<p>Du må ha en beskyttelse på minst 80 % for å kunne oppgradere til den neste beskyttelsen. Har du under 80 % må du først fornye den beskyttelsen du har.</p>
-		<p>Andre fordeler som gir økt beskyttelse:</p>
+		<p>Du mÃ¥ ha en beskyttelse pÃ¥ minst 80 % for Ã¥ kunne oppgradere til den neste beskyttelsen. Har du under 80 % mÃ¥ du fÃ¸rst fornye den beskyttelsen du har.</p>
+		<p>Andre fordeler som gir Ã¸kt beskyttelse:</p>
 		<ul class="spacer">
-			<li>Være medlem av en familie, høyere medlemskap gir økt beskyttelse</li>
-			<li>Bli angrepet av en spiller med en rank annerledes enn egen, større avstand betyr svakere angrep</li>
-			<li>Oppnådd en av de 3 topp-plassering-rankene (men denne fordelen forsvinner hvis en spiller med høyere eller tilsvarende topp-plassering-rank angriper deg og blir svakere dersom angriper har lavere topp-plassering-rank)</li>
+			<li>VÃ¦re medlem av en familie, hÃ¸yere medlemskap gir Ã¸kt beskyttelse</li>
+			<li>Bli angrepet av en spiller med en rank annerledes enn egen, stÃ¸rre avstand betyr svakere angrep</li>
+			<li>OppnÃ¥dd en av de 3 topp-plassering-rankene (men denne fordelen forsvinner hvis en spiller med hÃ¸yere eller tilsvarende topp-plassering-rank angriper deg og blir svakere dersom angriper har lavere topp-plassering-rank)</li>
 		</ul> 
 		<p class="c"><a href="./?ff_id='.$this->ff->id.'">Tilbake til firmaet</a></p>
 	</div>
@@ -1914,27 +1914,27 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	}
 	
 	/**
-	 * Kjøpe beskyttelse
+	 * KjÃ¸pe beskyttelse
 	 */
 	protected function type_vapbes_bes_kjop()
 	{
 		// i feil bydel?
 		if ($this->up->data['up_b_id'] != $this->ff->data['br_b_id'])
 		{
-			ess::$b->page->add_message("Du må befinne deg i samme bydel som firmaet for å kunne kjøpe/oppgradere beskyttelsen din.", "error");
+			ess::$b->page->add_message("Du mÃ¥ befinne deg i samme bydel som firmaet for Ã¥ kunne kjÃ¸pe/oppgradere beskyttelsen din.", "error");
 			redirect::handle();
 		}
 		
-		// kan vi ikke kjøpe beskyttelse for øyeblikket?
+		// kan vi ikke kjÃ¸pe beskyttelse for Ã¸yeblikket?
 		if (DISABLE_BUY_PROT && !access::has("mod"))
 		{
-			ess::$b->page->add_message("Kjøp av beskyttelse er for øyeblikket deaktivert.", "error");
+			ess::$b->page->add_message("KjÃ¸p av beskyttelse er for Ã¸yeblikket deaktivert.", "error");
 			redirect::handle();
 		}
 		
 		redirect::store("?ff_id={$this->ff->id}&bes_kjop");
 		
-		// finn ut hvilken beskyttelse vi kan kjøpe
+		// finn ut hvilken beskyttelse vi kan kjÃ¸pe
 		$protection = $this->up->get_protection_percent();
 		if (!$this->up->protection->data)
 		{
@@ -1956,7 +1956,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// rank ok?
 		$rank_ok = $next && $next['rank'] <= $this->up->rank['number'];
 		
-		// kjøpe beskyttelse?
+		// kjÃ¸pe beskyttelse?
 		if (isset($_POST['buy']))
 		{
 			if (!$next || !isset($_POST['prot_id']) || $_POST['prot_id'] != $next_id || $wait > 0 || !$rank_ok) redirect::handle();
@@ -1964,11 +1964,11 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			// har vi ikke nok penger?
 			if ($next['price'] > $this->up->data['up_cash'])
 			{
-				ess::$b->page->add_message("Du har ikke nok penger på hånda til å kjøpe denne beskyttelsen.", "error");
+				ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda til Ã¥ kjÃ¸pe denne beskyttelsen.", "error");
 				redirect::handle();
 			}
 			
-			// forsøk å trekk fra pengene og gi beskyttelse
+			// forsÃ¸k Ã¥ trekk fra pengene og gi beskyttelse
 			ess::$b->db->query("
 				UPDATE users_players
 				SET up_protection_id = $next_id, up_protection_state = 1, up_protection_time = ".time().", up_cash = up_cash - {$next['price']}
@@ -1977,14 +1977,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			// noe gikk galt?
 			if (ess::$b->db->affected_rows() == 0)
 			{
-				ess::$b->page->add_message("Kunne ikke kjøpe beskyttelse.", "error");
+				ess::$b->page->add_message("Kunne ikke kjÃ¸pe beskyttelse.", "error");
 			}
 			
-			// ny beskyttelse kjøpt
+			// ny beskyttelse kjÃ¸pt
 			else
 			{
-				// sett tidspunkt for kjøp
-				ess::$b->page->add_message("Du har kjøpt beskyttelsen <b>".htmlspecialchars($next['name'])."</b> og er nå beskyttet av denne.");
+				// sett tidspunkt for kjÃ¸p
+				ess::$b->page->add_message("Du har kjÃ¸pt beskyttelsen <b>".htmlspecialchars($next['name'])."</b> og er nÃ¥ beskyttet av denne.");
 			}
 			
 			redirect::handle();
@@ -1992,42 +1992,42 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		
 		echo '
 <div class="bg1_c xxsmall">
-	<h1 class="bg1">'.($this->up->protection->data ? 'Oppgrader beskyttelse' : 'Kjøp beskyttelse').'<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">'.($this->up->protection->data ? 'Oppgrader beskyttelse' : 'KjÃ¸p beskyttelse').'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1"><boxes />'.($this->up->protection->data ? '
 		<p>Din beskyttelse:<br />'.htmlspecialchars($this->up->protection->data['name']).' ('.game::format_num($protection, 2).' %)</p>' : '');
 		
-		// har vi en høyere beskyttelse vi kan kjøpe?
+		// har vi en hÃ¸yere beskyttelse vi kan kjÃ¸pe?
 		if (!$next)
 		{
 			echo '
-		<p>Du har den beste beskyttelsen som kan kjøpes for øyeblikket. Beskyttelsen din er på 100 %.</p>';
+		<p>Du har den beste beskyttelsen som kan kjÃ¸pes for Ã¸yeblikket. Beskyttelsen din er pÃ¥ 100 %.</p>';
 		}
 		
-		// har vi ikke høy nok rank til å kjøpe høyere beskyttelse?
+		// har vi ikke hÃ¸y nok rank til Ã¥ kjÃ¸pe hÃ¸yere beskyttelse?
 		elseif (!$rank_ok)
 		{
 			echo '
-		<p>Du har ikke høy nok rank til å oppgradere til <b>'.htmlspecialchars($next['name']).'</b>. Du må oppnå ranken <b>'.game::$ranks['items_number'][$next['rank']]['name'].'</b>.</p>';
+		<p>Du har ikke hÃ¸y nok rank til Ã¥ oppgradere til <b>'.htmlspecialchars($next['name']).'</b>. Du mÃ¥ oppnÃ¥ ranken <b>'.game::$ranks['items_number'][$next['rank']]['name'].'</b>.</p>';
 		}
 		
 		else
 		{
 			// har bedre beskyttelse tilgjengelig
 			echo '
-		<p>Følgende beskyttelse er tilgjengelig:<br /><b>'.htmlspecialchars($next['name']).'</b> ('.game::format_cash($next['price']).')</p>';
+		<p>FÃ¸lgende beskyttelse er tilgjengelig:<br /><b>'.htmlspecialchars($next['name']).'</b> ('.game::format_cash($next['price']).')</p>';
 			
 			// samme som den vi allerede har?
 			if ($this->up->protection->data && $this->up->data['up_protection_id'] == $next_id)
 			{
 				echo '
-		<p>Du må ha over 80 % beskyttelse for å kunne oppgradere til en bedre type beskyttelse.</p>';
+		<p>Du mÃ¥ ha over 80 % beskyttelse for Ã¥ kunne oppgradere til en bedre type beskyttelse.</p>';
 			}
 			
-			// må vente?
+			// mÃ¥ vente?
 			if ($wait > 0)
 			{
 				echo '
-		<p>Du må vente '.game::counter($wait, true).' før du kan oppgradere beskyttelsen din.</p>';
+		<p>Du mÃ¥ vente '.game::counter($wait, true).' fÃ¸r du kan oppgradere beskyttelsen din.</p>';
 			}
 			
 			else
@@ -2035,7 +2035,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				echo '
 		<form action="" method="post">
 			<input type="hidden" name="prot_id" value="'.$next_id.'" />
-			<p class="c">'.show_sbutton("Kjøp denne beskyttelsen", 'name="buy"').'</p>
+			<p class="c">'.show_sbutton("KjÃ¸p denne beskyttelsen", 'name="buy"').'</p>
 		</form>';
 			}
 		}
@@ -2048,25 +2048,25 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	}
 	
 	/**
-	 * Behandle kjøp av kuler
+	 * Behandle kjÃ¸p av kuler
 	 */
 	protected function bullets_buy()
 	{
 		// kontroller skjema
-		$this->bullets_form->validate(postval("h"), "Kjøpe kuler");
+		$this->bullets_form->validate(postval("h"), "KjÃ¸pe kuler");
 		
-		// kan vi ikke kjøpe kuler for øyeblikket?
+		// kan vi ikke kjÃ¸pe kuler for Ã¸yeblikket?
 		if (DISABLE_BUY_VAP && !access::has("mod"))
 		{
-			ess::$b->page->add_message("Kjøp av kuler er for øyeblikket deaktivert.", "error");
+			ess::$b->page->add_message("KjÃ¸p av kuler er for Ã¸yeblikket deaktivert.", "error");
 			redirect::handle();
 		}
 		
-		// har vi ikke valgt antall kuler som skal kjøpes
+		// har vi ikke valgt antall kuler som skal kjÃ¸pes
 		$buy_ant = (int) postval("bullets");
 		if ($buy_ant <= 0)
 		{
-			ess::$b->page->add_message("Du må skrive inn antall kuler du ønsker å kjøpe.", "error");
+			ess::$b->page->add_message("Du mÃ¥ skrive inn antall kuler du Ã¸nsker Ã¥ kjÃ¸pe.", "error");
 			redirect::handle();
 		}
 		
@@ -2074,18 +2074,18 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$result = ess::$b->db->query("SELECT COUNT(*) FROM bullets WHERE bullet_ff_id = {$this->ff->id} AND bullet_time <= ".time()." AND (bullet_freeze_time = 0 OR bullet_freeze_time <= ".time().")");
 		$ant = mysql_result($result, 0);
 		
-		// for mange kuler vi ønsker å kjøpe?
+		// for mange kuler vi Ã¸nsker Ã¥ kjÃ¸pe?
 		$h = ess::$b->date->get()->format("H");
 		if ($buy_ant > $ant || $h < 20 || $h >= 22) // eller klokka er ikke mellom 20 og 22
 		{
-			ess::$b->page->add_message("Det er ikke så mange kuler til salgs.", "error");
+			ess::$b->page->add_message("Det er ikke sÃ¥ mange kuler til salgs.", "error");
 			return;
 		}
 		
-		// vil dette føre til at vi får for mange kuler?
+		// vil dette fÃ¸re til at vi fÃ¥r for mange kuler?
 		if ($this->up->data['up_weapon_bullets'] + $this->up->data['up_weapon_bullets_auksjon'] + $buy_ant > $this->up->weapon->data['bullets'])
 		{
-			ess::$b->page->add_message("Du har ikke plass til så mange kuler. Du kan maksimalt ha <b>".$this->up->weapon->data['bullets']."</b>.".($this->up->data['up_weapon_bullets_auksjon'] > 0 ? " (Teller også med kuler du forsøker å selge/kjøpe på auksjon.)" : ""), "error");
+			ess::$b->page->add_message("Du har ikke plass til sÃ¥ mange kuler. Du kan maksimalt ha <b>".$this->up->weapon->data['bullets']."</b>.".($this->up->data['up_weapon_bullets_auksjon'] > 0 ? " (Teller ogsÃ¥ med kuler du forsÃ¸ker Ã¥ selge/kjÃ¸pe pÃ¥ auksjon.)" : ""), "error");
 			return;
 		}
 		
@@ -2094,14 +2094,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		
 		if ($this->up->data['up_cash'] < $price)
 		{
-			ess::$b->page->add_message("Du har ikke nok penger på hånda. For å kjøpe $buy_ant ".fword("kule", "kuler", $buy_ant)." må du ha ".game::format_cash($price)." på hånda.", "error");
+			ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda. For Ã¥ kjÃ¸pe $buy_ant ".fword("kule", "kuler", $buy_ant)." mÃ¥ du ha ".game::format_cash($price)." pÃ¥ hÃ¥nda.", "error");
 			return;
 		}
 		
 		
 		ess::$b->db->begin();
 		
-		// forsøk å skaff alle kulene
+		// forsÃ¸k Ã¥ skaff alle kulene
 		ess::$b->db->query("
 			UPDATE bullets
 			SET bullet_freeze_up_id = ".$this->up->id.", bullet_freeze_time = ".(time()+self::BULLET_FREEZE_WAIT)."
@@ -2116,14 +2116,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			ess::$b->db->rollback();
 			
 			// informer
-			ess::$b->page->add_message("Det er ikke så mange kuler til salgs.", "error");
+			ess::$b->page->add_message("Det er ikke sÃ¥ mange kuler til salgs.", "error");
 			
 			return;
 		}
 		
 		ess::$b->db->commit();
 		
-		// kjør anti-bot
+		// kjÃ¸r anti-bot
 		$this->bullets_antibot->increase_counter();
 		$this->bullets_antibot->check_required(ess::$s['relative_path']."/ff/?ff_id={$this->ff->id}");
 		
@@ -2139,9 +2139,9 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 <div class="bg1_c xsmall">
 	<h1 class="bg1">Informasjon om kuler<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>For å kunne kjøpe og oppbevare kuler må man være i besittelse av et våpen.</p>
-		<p>Antall kuler som blir produsert hver dag er avhengig av hvor mange spillere som har vært aktive de siste dagene.</p>
-		<p>Kuler er kun mulig å kjøpe mellom kl. 20:00 og 22:00. Når kuler blir lagt ut for salg er tilfeldig, så det er viktig å følge med om man ønsker å få tak i noen kuler!</p>
+		<p>For Ã¥ kunne kjÃ¸pe og oppbevare kuler mÃ¥ man vÃ¦re i besittelse av et vÃ¥pen.</p>
+		<p>Antall kuler som blir produsert hver dag er avhengig av hvor mange spillere som har vÃ¦rt aktive de siste dagene.</p>
+		<p>Kuler er kun mulig Ã¥ kjÃ¸pe mellom kl. 20:00 og 22:00. NÃ¥r kuler blir lagt ut for salg er tilfeldig, sÃ¥ det er viktig Ã¥ fÃ¸lge med om man Ã¸nsker Ã¥ fÃ¥ tak i noen kuler!</p>
 		<p class="c"><a href="./?ff_id='.$this->ff->id.'">Tilbake til firmaet</a></p>
 	</div>
 </div>';
@@ -2158,7 +2158,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// deaktivert?
 		if (!$this->ff->active) return;
 		
-		// ønsker vi å endre spilleren som er ansvarlig for vår spiller?
+		// Ã¸nsker vi Ã¥ endre spilleren som er ansvarlig for vÃ¥r spiller?
 		if ($this->ff->type['type'] != "familie" && $this->up && isset($_GET['brom_ans']))
 		{
 			$this->type_bomberom_ans();
@@ -2177,7 +2177,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// finn ut hvor mange ledige plasser det er
 		$places = $this->ff->get_bomberom_places();
 		
-		// ønsker vi å forlate bomberommet?
+		// Ã¸nsker vi Ã¥ forlate bomberommet?
 		if ($this->up && isset($_POST['leave_brom']))
 		{
 			$this->type_bomberom_leave();
@@ -2209,8 +2209,8 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 	</div>' : '').'
 	<div class="bg1" id="brom_visible">
 		<boxes />
-		<p>Ved å gå i bomberom beskytter du deg selv mot å bli angrepet. Så lenge du sitter i et bomberom kan ingen andre spillere angripe deg.</p>
-		<p>'.($fam ? ucfirst($this->ff->type['priority'][1]).' og '.ucfirst($this->ff->type['priority'][2]) : 'Bomberommet').' kan kaste deg ut hvis de ønsker, så helt trygg vil du ikke være. Hvis du blir kastet ut vil du bli flyttet til en tilfeldig bydel.</p>';
+		<p>Ved Ã¥ gÃ¥ i bomberom beskytter du deg selv mot Ã¥ bli angrepet. SÃ¥ lenge du sitter i et bomberom kan ingen andre spillere angripe deg.</p>
+		<p>'.($fam ? ucfirst($this->ff->type['priority'][1]).' og '.ucfirst($this->ff->type['priority'][2]) : 'Bomberommet').' kan kaste deg ut hvis de Ã¸nsker, sÃ¥ helt trygg vil du ikke vÃ¦re. Hvis du blir kastet ut vil du bli flyttet til en tilfeldig bydel.</p>';
 		
 		if ($this->up && $this->ff->type['type'] != "familie")
 		{
@@ -2218,7 +2218,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		<div class="section">
 			<h2>Ansvar for din spiller</h2>'.($this->up->data['up_brom_up_id'] ? '
 			<p><user id="'.$this->up->data['up_brom_up_id'].'" /> kan plassere din spiller i bomberom og se hvor du oppholder deg.</p>' : '
-			<p>Du har ikke gitt noen spillere mulighet for å sette deg i bomberom.</p>').'
+			<p>Du har ikke gitt noen spillere mulighet for Ã¥ sette deg i bomberom.</p>').'
 			<p><a href="./?ff_id='.$this->ff->id.'&amp;brom_ans">Endre</a></p>
 			<p><a href="./?ff_id='.$this->ff->id.'&amp;brom_list">Vis spillere du kan sette i bomberom &raquo;</a></p>
 		</div>';
@@ -2234,7 +2234,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			if ($this->up->fengsel_check())
 			{
 				echo '
-			<p>Du er for øyeblikket i fengsel og kan ikke plassere deg selv eller andre i bomberom.</p>';
+			<p>Du er for Ã¸yeblikket i fengsel og kan ikke plassere deg selv eller andre i bomberom.</p>';
 			}
 			
 			else
@@ -2246,7 +2246,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 				{
 					$ok = false;
 					echo '
-			<p>Du befinner deg for øyeblikket i en annen bydel enn '.($fam ? 'broderskapet' : 'bomberommet').' og kan ikke plassere deg selv eller andre i '.($fam ? 'bomberommet til broderskapet' : 'det').'.</p>';
+			<p>Du befinner deg for Ã¸yeblikket i en annen bydel enn '.($fam ? 'broderskapet' : 'bomberommet').' og kan ikke plassere deg selv eller andre i '.($fam ? 'bomberommet til broderskapet' : 'det').'.</p>';
 				}
 				
 				// ingen ledige plasser?
@@ -2281,7 +2281,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 	</div>
 </div>';
 		
-		// er vi for øyeblikket i bomberom?
+		// er vi for Ã¸yeblikket i bomberom?
 		if ($this->up && $this->up->bomberom_check())
 		{
 			$wait = $this->up->bomberom_wait();
@@ -2294,7 +2294,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		<!--<p style="float: right; margin: 10px 0 10px 10px"><img src="'.STATIC_LINK.'/other/bomberom.jpg" alt="I bomberom" style="border: 2px solid #333333" /></p>-->
 		<p style="margin-top: 30px; text-align: center; font-size: 150%">I bomberom</p>
 		<p style="margin-top: 20px">Du befinner deg i bomberom frem til '.ess::$b->date->get($this->up->data['up_brom_expire'])->format(date::FORMAT_SEC).'.</p>
-		<p style="margin-top: 20px">'.game::counter($wait, true).' gjenstår</p>
+		<p style="margin-top: 20px">'.game::counter($wait, true).' gjenstÃ¥r</p>
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<p style="margin-top: 20px">'.show_sbutton("Forlat bomberom", 'name="leave_brom"').'</p>
@@ -2364,7 +2364,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			// kan ikke sette som ansvarlig?
 			elseif (!login::$user->player->can_set_brom(player::get($player['up_id'])))
 			{
-				ess::$b->page->add_message('<user id="'.$player['up_id'].'" /> kan ikke settes som ansvarlig for din spiller. Les mer <a href="/node">på hjelpesidene</a>.', "error");
+				ess::$b->page->add_message('<user id="'.$player['up_id'].'" /> kan ikke settes som ansvarlig for din spiller. Les mer <a href="/node">pÃ¥ hjelpesidene</a>.', "error");
 			}
 			
 			else
@@ -2374,7 +2374,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 				
 				putlog("LOG", "BOMBEROM ANSVARLIG: ".$this->up->data['up_name']." satt ".$player['up_name']." som ansvarlig for spilleren sin");
 				
-				ess::$b->page->add_message('<user id="'.$player['up_id'].'" /> har nå mulighet til å sette deg i bomberom.');
+				ess::$b->page->add_message('<user id="'.$player['up_id'].'" /> har nÃ¥ mulighet til Ã¥ sette deg i bomberom.');
 				redirect::handle();
 			}
 		}
@@ -2386,7 +2386,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 	<h1 class="bg1">Endre ansvarlig spiller<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<boxes />
-		<p>Hvis du er bortreist kan du velge en annen spiller som får mulighet til å plassere deg i bomberom. Hvis den spilleren dør, vil ansvaret bli gitt videre til spilleren som hadde ansvar for den spilleren.</p>
+		<p>Hvis du er bortreist kan du velge en annen spiller som fÃ¥r mulighet til Ã¥ plassere deg i bomberom. Hvis den spilleren dÃ¸r, vil ansvaret bli gitt videre til spilleren som hadde ansvar for den spilleren.</p>
 		<p>Spilleren som kan plassere deg i bomberom vil til enhver tid kunne se hvor du oppholder deg.</p>
 		<p>En spiller kan ikke sette deg i bomberom dersom rankforskjellen mellom dere er mer enn 3 trinn. Unntak hvis man er i samme broderskap.</p>';
 		
@@ -2394,7 +2394,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		{
 			echo '
 		<form action="" method="post">
-			<p>For øyeblikket kan <user id="'.$this->up->data['up_brom_up_id'].'" /> plassere deg i bomberom. Spilleren vil også kunne flytte deg til en annen bydel samtidig som du blir plassert i et bomberom.</p>
+			<p>For Ã¸yeblikket kan <user id="'.$this->up->data['up_brom_up_id'].'" /> plassere deg i bomberom. Spilleren vil ogsÃ¥ kunne flytte deg til en annen bydel samtidig som du blir plassert i et bomberom.</p>
 			<p class="c">'.show_sbutton("Fjern spiller", 'name="brom_ans_remove"').'</p>
 		</form>';
 		}
@@ -2407,7 +2407,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		
 		echo '
 		<form action="" method="post">
-			<p class="c">Gi ansvar til: <input type="text" name="player" class="styled w100" value="'.htmlspecialchars(postval("player")).'" /> '.show_sbutton("Utfør", 'name="brom_ans_set"').'</p>
+			<p class="c">Gi ansvar til: <input type="text" name="player" class="styled w100" value="'.htmlspecialchars(postval("player")).'" /> '.show_sbutton("UtfÃ¸r", 'name="brom_ans_set"').'</p>
 		</form>';
 		
 		// hent ut medlemmer av familier som kan sette spilleren i bomberom
@@ -2432,7 +2432,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			
 			echo '
 		</ul>
-		<p>Spillere som er med i broderskapet du er med i kan også sette deg i bomberom. De kan derimot ikke flytte deg til en annen bydel for å gjøre det.</p>';
+		<p>Spillere som er med i broderskapet du er med i kan ogsÃ¥ sette deg i bomberom. De kan derimot ikke flytte deg til en annen bydel for Ã¥ gjÃ¸re det.</p>';
 		}
 		
 		echo '
@@ -2457,7 +2457,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			// mangler spiller?
 			if (!isset($_POST['player']))
 			{
-				ess::$b->page->add_message("Du må velge en spiller.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge en spiller.", "error");
 				redirect::handle();
 			}
 			
@@ -2490,7 +2490,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 				redirect::handle();
 			}
 			
-			// har vi valgt en spiller det skal overføres til?
+			// har vi valgt en spiller det skal overfÃ¸res til?
 			if (isset($_POST['player_new']) || isset($_POST['player_new_id']))
 			{
 				// finn spilleren
@@ -2539,7 +2539,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 						
 						putlog("LOG", "BOMBEROM ANSVARLIG: ".$this->up->data['up_name']." satt ".$player_new['up_name']." som ansvarlig for {$player['up_name']}");
 						
-						ess::$b->page->add_message('Du gav bort muligheten for å sette <user id="'.$player['up_id'].'" /> i bomberom til <user id="'.$player_new['up_id'].'" />.');
+						ess::$b->page->add_message('Du gav bort muligheten for Ã¥ sette <user id="'.$player['up_id'].'" /> i bomberom til <user id="'.$player_new['up_id'].'" />.');
 						redirect::handle();
 					}
 					
@@ -2550,14 +2550,14 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 	<h1 class="bg1">Gi bort ansvar for spiller<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<boxes />
-		<p>Du er i ferd med å gi bort ansvaret for å kunne sette <user id="'.$player['up_id'].'" /> i bomberom til <user id="'.$player_new['up_id'].'" />.</p>
+		<p>Du er i ferd med Ã¥ gi bort ansvaret for Ã¥ kunne sette <user id="'.$player['up_id'].'" /> i bomberom til <user id="'.$player_new['up_id'].'" />.</p>
 		<p>Dette vil resultere i at du ikke lenger kan sette spilleren i bomberom.</p>
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="player" value="'.$player['up_id'].'" />
 			<input type="hidden" name="player_new_id" value="'.$player_new['up_id'].'" />
 			<input type="hidden" name="brom_ans_move" />
-			<p class="c">'.show_sbutton("Bekreft overføring", 'name="confirm"').'</p>
+			<p class="c">'.show_sbutton("Bekreft overfÃ¸ring", 'name="confirm"').'</p>
 		</form>
 		<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;brom_list">Tilbake</a></p>
 	</div>
@@ -2574,7 +2574,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 	<h1 class="bg1">Gi bort ansvar for spiller<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<boxes />
-		<p>Du er i ferd med å gi bort ansvaret for å kunne sette <user id="'.$player['up_id'].'" /> i bomberom til en annen spiller.</p>
+		<p>Du er i ferd med Ã¥ gi bort ansvaret for Ã¥ kunne sette <user id="'.$player['up_id'].'" /> i bomberom til en annen spiller.</p>
 		<p>Dette vil resultere i at du ikke lenger kan sette spilleren i bomberom.</p>
 		<form action="" method="post">
 			<input type="hidden" name="player" value="'.$player['up_id'].'" />
@@ -2594,7 +2594,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 	<h1 class="bg1">Oversikt over ansvar<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<boxes />
-		<p>Denne listen viser hvilke spillere som har gitt deg mulighet til å sette dem i bomberom. Du har muligheten til å gi ansvaret videre til en annen spiller.</p>';
+		<p>Denne listen viser hvilke spillere som har gitt deg mulighet til Ã¥ sette dem i bomberom. Du har muligheten til Ã¥ gi ansvaret videre til en annen spiller.</p>';
 		
 		// hent spillere vi har ansvar for
 		$result = ess::$b->db->query("
@@ -2611,7 +2611,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		if (count($ansvar) == 0)
 		{
 			echo '
-		<p>Det er ingen spillere som har gitt deg muligheten til å sette spilleren i bomberom.</p>';
+		<p>Det er ingen spillere som har gitt deg muligheten til Ã¥ sette spilleren i bomberom.</p>';
 		}
 		
 		else
@@ -2637,7 +2637,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 				echo '
 					<tr class="box_handle'.(++$i % 2 == 0 ? ' color' : '').'">
 						<td><input type="radio" name="player" value="'.$row['up_id'].'" />'.game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']).'</td>
-						<td>Oppholder seg på '.htmlspecialchars($bydel['name']);
+						<td>Oppholder seg pÃ¥ '.htmlspecialchars($bydel['name']);
 				
 				if ($i_bomberom)
 				{
@@ -2765,7 +2765,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="price" id="brom_price_p" value="" />
 			<p>Det er '.fwords("%d spiller", "%d spillere", $ant_i_bomberommet).' i bomberommet og '.fwords("%d ledig plass", "%d ledige plasser", $ledige_plasser).'.</p>
-			<p>Prisen er avhenig av hvor stor etterspørsel det er for bomberommet for øyeblikket.</p>
+			<p>Prisen er avhenig av hvor stor etterspÃ¸rsel det er for bomberommet for Ã¸yeblikket.</p>
 			<div class="center" style="background-color: #161616; padding: 5px; width: 70%; border: 2px solid #1F1F1F">
 				<dl class="dd_right" style="margin: 0">
 					<dt>Antall timer</dt>
@@ -2793,7 +2793,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			{
 				echo '
 					<tr>
-						<th colspan="2" style="border-top: 10px solid #181818">Spillere du har fått ansvar for:</th>
+						<th colspan="2" style="border-top: 10px solid #181818">Spillere du har fÃ¥tt ansvar for:</th>
 					</tr>';
 				
 				$i = 0;
@@ -2830,7 +2830,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		{
 			echo '
 		<p>Du plasserte et broderskapmedlem i bomberom '.ess::$b->date->get($this->up->data['up_brom_ff_time'])->format().'.</p>
-		<p>Du må vente '.game::counter($familie_wait).' før du kan plassere et nytt familiemedlem i bomberom.</p>';
+		<p>Du mÃ¥ vente '.game::counter($familie_wait).' fÃ¸r du kan plassere et nytt familiemedlem i bomberom.</p>';
 		}
 	}
 	
@@ -2856,7 +2856,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		
 		elseif ($feil_bydel)
 		{
-			$info = 'Oppholder seg på '.htmlspecialchars($bydel['name']).'<br />(kan ikke flytte)';
+			$info = 'Oppholder seg pÃ¥ '.htmlspecialchars($bydel['name']).'<br />(kan ikke flytte)';
 		}
 		
 		echo '
@@ -2881,7 +2881,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			// ingen ledige plasser?
 			if ($ledige_plasser == 0)
 			{
-				ess::$b->page->add_message("Det er ingen ledige plasser til å plassere andre spillere i bomberommet.", "error", null, "bomberom_set");
+				ess::$b->page->add_message("Det er ingen ledige plasser til Ã¥ plassere andre spillere i bomberommet.", "error", null, "bomberom_set");
 				redirect::handle();
 			}
 			
@@ -2925,7 +2925,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			// kan vi ikke flytte spilleren?
 			if ($familie && $player->data['up_b_id'] != $this->ff->data['br_b_id'])
 			{
-				ess::$b->page->add_message('<user id="'.$player->id.'" /> er ikke i samme bydel som bomberommet. Du har ikke mulighet til å flytte spilleren og kan dermed ikke plassere spilleren i dette bomberommt.', "error", null, "bomberom_set");
+				ess::$b->page->add_message('<user id="'.$player->id.'" /> er ikke i samme bydel som bomberommet. Du har ikke mulighet til Ã¥ flytte spilleren og kan dermed ikke plassere spilleren i dette bomberommt.', "error", null, "bomberom_set");
 				redirect::handle();
 			}
 			
@@ -2938,7 +2938,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			$familie_wait = max(0, $this->up->data['up_brom_ff_time'] + bomberom::FAMILIY_MEMBERS_WAIT - time());
 			if ($familie_wait > 0)
 			{
-				ess::$b->page->add_message("Du kan ikke plassere medlemmer av noen broderskap du er med i for øyeblikket, fordi du plasserte forrige spiller fra broderskap ".ess::$b->date->get($this->up->data['up_brom_ff_time'])->format().". Du må vente ".game::counter($familie_wait).".", "error", null, "bomberom_set");
+				ess::$b->page->add_message("Du kan ikke plassere medlemmer av noen broderskap du er med i for Ã¸yeblikket, fordi du plasserte forrige spiller fra broderskap ".ess::$b->date->get($this->up->data['up_brom_ff_time'])->format().". Du mÃ¥ vente ".game::counter($familie_wait).".", "error", null, "bomberom_set");
 				redirect::handle();
 			}
 		}
@@ -2952,7 +2952,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		$hours = (int) $_POST['hours'];
 		if ($hours <= 0)
 		{
-			ess::$b->page->add_message("Du må skrive inn et gyldig antall timer.", "error", null, "bomberom_set");
+			ess::$b->page->add_message("Du mÃ¥ skrive inn et gyldig antall timer.", "error", null, "bomberom_set");
 		}
 		
 		elseif ($hours > bomberom::MAX_HOURS)
@@ -2973,7 +2973,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 				// har prisen endret seg?
 				if (postval("price") != $price)
 				{
-					ess::$b->page->add_message("Prisen har endret seg og du må bekrefte på nytt.", "error", null, "bomberom_set");
+					ess::$b->page->add_message("Prisen har endret seg og du mÃ¥ bekrefte pÃ¥ nytt.", "error", null, "bomberom_set");
 				}
 				
 				else
@@ -2984,7 +2984,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 					ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = ".$this->up->id." AND up_cash >= $price");
 					if (ess::$b->db->affected_rows() == 0)
 					{
-						ess::$b->page->add_message("Du har ikke så mye penger på hånda.", "error", null, "bomberom_set");
+						ess::$b->page->add_message("Du har ikke sÃ¥ mye penger pÃ¥ hÃ¥nda.", "error", null, "bomberom_set");
 					}
 					
 					else
@@ -3021,7 +3021,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 							
 							putlog("DF", "BOMBEROM ANSVARLIG: ".$this->up->data['up_name']." satt%c3 ".($self ? 'seg selv' : $player->data['up_name'])."%c i bomberom i firmaet {$this->ff->data['ff_name']} for $hours timer ".$player->generate_minside_url());
 							
-							ess::$b->page->add_message("Du plasserte ".($self ? 'deg selv' : '<user id="'.$player->id.'" />')." i bomberommet med en varighet på <b>$hours</b> ".fword("time", "timer", $hours).". Det kostet deg <b>".game::format_cash($price)."</b>.", null, null, "bomberom_set");
+							ess::$b->page->add_message("Du plasserte ".($self ? 'deg selv' : '<user id="'.$player->id.'" />')." i bomberommet med en varighet pÃ¥ <b>$hours</b> ".fword("time", "timer", $hours).". Det kostet deg <b>".game::format_cash($price)."</b>.", null, null, "bomberom_set");
 							
 							ess::$b->db->commit();
 							redirect::handle("?ff_id={$this->ff->id}");
@@ -3034,7 +3034,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			
 			echo '
 		'.ess::$b->page->message_get("bomberom_set", true, true).'
-		<p>Du er i ferd med å plassere '.($self ? 'deg selv' : $player->profile_link()).' i dette bomberommet.</p>
+		<p>Du er i ferd med Ã¥ plassere '.($self ? 'deg selv' : $player->profile_link()).' i dette bomberommet.</p>
 		<p>For tiden er det '.fwords("%d spiller", "%d spillere", $ant_i_bomberommet).' i bomberommet og '.fwords("%d ledig plass", "%d ledige plasser", $ledige_plasser).'.'.($ledige_plasser == 0 ? ' Du har alikevel plass i bomberommet som medlem av firmaet.' : '').'</p>
 		<dl class="dd_right">
 			<dt>Antall timer</dt>
@@ -3073,7 +3073,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		// bekreftet?
 		if (isset($_POST['confirm']))
 		{
-			// gå ut av bomberommet
+			// gÃ¥ ut av bomberommet
 			ess::$b->db->query("UPDATE users_players SET up_brom_expire = 0 WHERE up_id = ".$this->up->id);
 			
 			ess::$b->page->add_message("Du har forlatt bomberommet.");
@@ -3087,8 +3087,8 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 <div class="bg1_c xsmall">
 	<h1 class="bg1">Forlat bomberommet<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Du er i ferd med å forlate bomberommet. Du skal egentlig sitte i bomberommet til '.ess::$b->date->get($this->up->data['up_brom_expire'])->format(date::FORMAT_SEC).'.</p>
-		<p>Ved å forlate bomberommet får du ikke igjen noe av det har blitt betalt for å bli satt i bomberommet.</p>
+		<p>Du er i ferd med Ã¥ forlate bomberommet. Du skal egentlig sitte i bomberommet til '.ess::$b->date->get($this->up->data['up_brom_expire'])->format(date::FORMAT_SEC).'.</p>
+		<p>Ved Ã¥ forlate bomberommet fÃ¥r du ikke igjen noe av det har blitt betalt for Ã¥ bli satt i bomberommet.</p>
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="leave_brom" />
@@ -3146,7 +3146,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		if ($this->ff->access())
 		{
 			echo '
-		<p class="c">Firmaet får innbetalt '.(ff::GTA_PERCENT*100).' % av det spillerne betaler i leie til firmabanken.</p>';
+		<p class="c">Firmaet fÃ¥r innbetalt '.(ff::GTA_PERCENT*100).' % av det spillerne betaler i leie til firmabanken.</p>';
 		}
 		
 		echo '
@@ -3164,7 +3164,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		$expire = time() - 86400*3;
 		if ($last > $expire && !access::has("mod"))
 		{
-			ess::$b->page->add_message("Leieprisen ble sist forandret ".ess::$b->date->get($last)->format().". Du må vente ".game::counter($last - $expire, true)." før leieprisen kan endres på nytt.");
+			ess::$b->page->add_message("Leieprisen ble sist forandret ".ess::$b->date->get($last)->format().". Du mÃ¥ vente ".game::counter($last - $expire, true)." fÃ¸r leieprisen kan endres pÃ¥ nytt.");
 			$this->ff->redirect();
 		}
 		
@@ -3174,17 +3174,17 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			$price_new = game::intval($_POST['price']);
 			if ($price_new == $price)
 			{
-				ess::$b->page->add_message("Du må skrive inn en ny pris.", "error");
+				ess::$b->page->add_message("Du mÃ¥ skrive inn en ny pris.", "error");
 			}
 			
 			elseif ($price_new < ff::GTA_GARAGE_PRICE_LOW)
 			{
-				ess::$b->page->add_message("Leieprisen kan ikke være under ".game::format_cash(ff::GTA_GARAGE_PRICE_LOW).".", "error");
+				ess::$b->page->add_message("Leieprisen kan ikke vÃ¦re under ".game::format_cash(ff::GTA_GARAGE_PRICE_LOW).".", "error");
 			}
 			
 			elseif ($price_new > ff::GTA_GARAGE_PRICE_HIGH)
 			{
-				ess::$b->page->add_message("Leieprisen kan ikke være over ".game::format_cash(ff::GTA_GARAGE_PRICE_HIGH).".", "error");
+				ess::$b->page->add_message("Leieprisen kan ikke vÃ¦re over ".game::format_cash(ff::GTA_GARAGE_PRICE_HIGH).".", "error");
 			}
 			
 			else
@@ -3206,7 +3206,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		<boxes />
 		<form action="" method="post">
 			<dl class="dd_right">
-				<dt>Nåværende pris per plass</dt>
+				<dt>NÃ¥vÃ¦rende pris per plass</dt>
 				<dd>'.game::format_cash($price).'</dd>
 				<dt>Ny leiepris per plass</dt>
 				<dd><input type="text" class="styled w80" name="price" value="'.game::format_cash(game::intval(postval("price", $price))).'" /></dd>
@@ -3264,11 +3264,11 @@ class page_ff_sykehus extends pages_player
 	const ENERGY_MAX = 3; // 300 %
 	
 	/**
-	 * Ventetid mellom hver gang man utfører et alternativ
+	 * Ventetid mellom hver gang man utfÃ¸rer et alternativ
 	 */
 	const WAIT = 300; // 5 minutter ventetid
 	
-	/** Prosent energi for å kunne utføre sykebil valget */
+	/** Prosent energi for Ã¥ kunne utfÃ¸re sykebil valget */
 	const ENERGY_SYKEBIL_REQ = 25;
 	
 	/**
@@ -3295,13 +3295,13 @@ class page_ff_sykehus extends pages_player
 			// sett opp skjema
 			$this->form = new form("sykehus");
 			
-			// utføre et alternativ?
+			// utfÃ¸re et alternativ?
 			if (isset($_POST['sykehus']))
 			{
 				$this->action();
 			}
 			
-			// utføre sykebil
+			// utfÃ¸re sykebil
 			if (isset($_POST['sykebil']) && $this->sykebil())
 			{
 				return;
@@ -3314,30 +3314,30 @@ class page_ff_sykehus extends pages_player
 	<h1 class="bg1">Sykehus<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<boxes />
-		<p>Sykehus gir deg muligheten til å øke din energi slik at helsen din går mye fortere opp enn hva den ville gjort utenom. Energien kan ved hjelp av sykehus gå over 100 %.</p>';
+		<p>Sykehus gir deg muligheten til Ã¥ Ã¸ke din energi slik at helsen din gÃ¥r mye fortere opp enn hva den ville gjort utenom. Energien kan ved hjelp av sykehus gÃ¥ over 100 %.</p>';
 		
 		// ventetid?
 		$wait = $this->calc_wait();
 		if ($wait > 0)
 		{
 			echo '
-		<p>Du må vente '.game::counter($wait, true).' før du kan benytte deg av sykehus på nytt.</p>';
+		<p>Du mÃ¥ vente '.game::counter($wait, true).' fÃ¸r du kan benytte deg av sykehus pÃ¥ nytt.</p>';
 		}
 		
 		// i feil bydel?
 		elseif ($show && $this->up->data['up_b_id'] != $this->ff->data['br_b_id'])
 		{
 			echo '
-		<p>Du må befinne deg i samme bydel som sykehuset for å kunne benytte deg av det.</p>';
+		<p>Du mÃ¥ befinne deg i samme bydel som sykehuset for Ã¥ kunne benytte deg av det.</p>';
 			
-			// har vi lite nok energi til å ta sykebil?
+			// har vi lite nok energi til Ã¥ ta sykebil?
 			if ($this->up->get_energy_percent() < self::ENERGY_SYKEBIL_REQ)
 			{
 				echo '
 		<div style="background-color: #533; padding: 1px 10px">
-			<p>Du har svært lite energi. Hvis du føler du står i fare for å dø og ikke har nok energi for å reise via bydeler, kan du få en sykebil til å hente deg.</p>
-			<p>Når du blir hentet av en sykebil, vil du bli fraktet til bydelen sykehuset befinner seg i uten å miste noe helse eller energi. Du vil deretter kunne utføre alternativene for å få energi.</p>
-			<p>Ved å benytte seg av dette alternativet <b>må du ofre 25 % av din totale rank</b>.</p>
+			<p>Du har svÃ¦rt lite energi. Hvis du fÃ¸ler du stÃ¥r i fare for Ã¥ dÃ¸ og ikke har nok energi for Ã¥ reise via bydeler, kan du fÃ¥ en sykebil til Ã¥ hente deg.</p>
+			<p>NÃ¥r du blir hentet av en sykebil, vil du bli fraktet til bydelen sykehuset befinner seg i uten Ã¥ miste noe helse eller energi. Du vil deretter kunne utfÃ¸re alternativene for Ã¥ fÃ¥ energi.</p>
+			<p>Ved Ã¥ benytte seg av dette alternativet <b>mÃ¥ du ofre 25 % av din totale rank</b>.</p>
 			<form action="" method="post">
 				<p class="c">'.show_sbutton("Be om sykebil", 'name="sykebil"').'</p>
 			</form>
@@ -3374,7 +3374,7 @@ class page_ff_sykehus extends pages_player
 			echo '
 				</tbody>
 			</table>
-			<p class="c">'.show_sbutton("Utfør handling", 'name="sykehus"').'</p>
+			<p class="c">'.show_sbutton("UtfÃ¸r handling", 'name="sykehus"').'</p>
 		</form>';
 		}
 		
@@ -3385,7 +3385,7 @@ class page_ff_sykehus extends pages_player
 	}
 	
 	/**
-	 * Utfør en handling
+	 * UtfÃ¸r en handling
 	 */
 	protected function action()
 	{
@@ -3395,7 +3395,7 @@ class page_ff_sykehus extends pages_player
 		// mangler vi alternativ?
 		if (!isset($_POST['id']) || !isset(self::$options[$_POST['id']]))
 		{
-			ess::$b->page->add_message("Du må velge et alternativ.", "error");
+			ess::$b->page->add_message("Du mÃ¥ velge et alternativ.", "error");
 			redirect::handle();
 		}
 		$opt = self::$options[$_POST['id']];
@@ -3407,14 +3407,14 @@ class page_ff_sykehus extends pages_player
 			redirect::handle();
 		}
 		
-		// må vi vente?
+		// mÃ¥ vi vente?
 		$wait = $this->calc_wait();
 		if ($wait > 0)
 		{
 			redirect::handle();
 		}
 		
-		// trekk fra pengene og øk energien
+		// trekk fra pengene og Ã¸k energien
 		ess::$b->db->query("
 			UPDATE users_players
 			SET up_cash = up_cash - {$opt['price']}, up_energy = up_energy + (".self::ENERGY_MAX." - up_energy / up_energy_max) * {$opt['increase']} * up_energy_max * GREATEST(0.2, LEAST(1, up_energy / up_energy_max)), up_sykehus_time = ".time()."
@@ -3423,13 +3423,13 @@ class page_ff_sykehus extends pages_player
 		// ble ikke oppdatert?
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Du har ikke nok penger til å utføre dette alternativet.", "error");
+			ess::$b->page->add_message("Du har ikke nok penger til Ã¥ utfÃ¸re dette alternativet.", "error");
 			redirect::handle();
 		}
 		
-		putlog("LOG", "SYKEHUS: ".$this->up->data['up_name']." utførte alternativet {$opt['name']}. Hadde ".round($this->up->get_energy_percent(), 4)." % energi før handlingen. ".$this->up->generate_minside_url());
+		putlog("LOG", "SYKEHUS: ".$this->up->data['up_name']." utfÃ¸rte alternativet {$opt['name']}. Hadde ".round($this->up->get_energy_percent(), 4)." % energi fÃ¸r handlingen. ".$this->up->generate_minside_url());
 		
-		ess::$b->page->add_message("Du utførte alternativet &laquo;".htmlspecialchars($opt['name'])."&raquo;.");
+		ess::$b->page->add_message("Du utfÃ¸rte alternativet &laquo;".htmlspecialchars($opt['name'])."&raquo;.");
 		redirect::handle();
 	}
 	
@@ -3447,7 +3447,7 @@ class page_ff_sykehus extends pages_player
 			// ikke bekreftet?
 			if (!isset($_POST['c']))
 			{
-				ess::$b->page->add_message("Du må bekrefte at du mister 25 % rank for å kunne benytte deg av alternativet.", "error");
+				ess::$b->page->add_message("Du mÃ¥ bekrefte at du mister 25 % rank for Ã¥ kunne benytte deg av alternativet.", "error");
 			}
 			
 			else
@@ -3464,7 +3464,7 @@ class page_ff_sykehus extends pages_player
 				unset($this->up->bydel);
 				
 				// gi  melding
-				ess::$b->page->add_message("Du ble hentet av en sykebil og ble fraktet til <b>".htmlspecialchars($this->up->bydel['name'])."</b>. Du kan nå kjøpe energi hos sykehuset. Du mistet ".game::format_num($p)." poeng (".game::format_rank($p)." rank).");
+				ess::$b->page->add_message("Du ble hentet av en sykebil og ble fraktet til <b>".htmlspecialchars($this->up->bydel['name'])."</b>. Du kan nÃ¥ kjÃ¸pe energi hos sykehuset. Du mistet ".game::format_num($p)." poeng (".game::format_rank($p)." rank).");
 				
 				putlog("DF", "%c4%bSYKEBIL:%b%c ".$this->up->data['up_name']." benyttet seg av sykebil og mistet ".game::format_number($p)." rankpoeng. ".$this->up->generate_minside_url());
 				
@@ -3478,9 +3478,9 @@ class page_ff_sykehus extends pages_player
 	<div class="bg1">
 		<boxes />
 		<p class="c"><a href="./?ff_id='.$this->ff->id.'">Tilbake</a></p>
-		<p>Du har svært lite energi. Hvis du føler du står i fare for å dø og ikke har nok energi for å reise via bydeler, kan du få en sykebil til å hente deg.</p>
-		<p>Når du blir hentet av en sykebil, vil du bli fraktet til bydelen sykehuset befinner seg i uten å miste noe helse eller energi. Du vil deretter kunne utføre alternativene for å få energi.</p>
-		<p>Ved å benytte seg av dette alternativet <b>må du ofre 25 % av din totale rank</b>.</p>
+		<p>Du har svÃ¦rt lite energi. Hvis du fÃ¸ler du stÃ¥r i fare for Ã¥ dÃ¸ og ikke har nok energi for Ã¥ reise via bydeler, kan du fÃ¥ en sykebil til Ã¥ hente deg.</p>
+		<p>NÃ¥r du blir hentet av en sykebil, vil du bli fraktet til bydelen sykehuset befinner seg i uten Ã¥ miste noe helse eller energi. Du vil deretter kunne utfÃ¸re alternativene for Ã¥ fÃ¥ energi.</p>
+		<p>Ved Ã¥ benytte seg av dette alternativet <b>mÃ¥ du ofre 25 % av din totale rank</b>.</p>
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="sykebil" />
@@ -3496,7 +3496,7 @@ class page_ff_sykehus extends pages_player
 	}
 	
 	/**
-	 * Finn ut ventetid før neste gang vi kan utføre funksjonen
+	 * Finn ut ventetid fÃ¸r neste gang vi kan utfÃ¸re funksjonen
 	 */
 	protected function calc_wait()
 	{

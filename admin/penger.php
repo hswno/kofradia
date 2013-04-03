@@ -21,15 +21,15 @@ if (isset($_POST['cash']))
 	else
 	{
 		$_base->db->query("UPDATE users_players SET up_cash = $cash, up_bank = 0 WHERE up_id = ".login::$user->player->id." AND $cash <= 10000000000");
-		$_base->page->add_message("Du har nå nøyaktig <b>".game::format_cash($cash)."</b> på hånda og <b>0 kr</b> i banken!");
+		$_base->page->add_message("Du har nÃ¥ nÃ¸yaktig <b>".game::format_cash($cash)."</b> pÃ¥ hÃ¥nda og <b>0 kr</b> i banken!");
 		
-		putlog("LOG", "%b%c8MODERATOR PENGER:%c%b %u".login::$user->player->data['up_name']."%u endret penene sine til nøyaktig %u".game::format_cash($cash)."%u. Tidligere kontant: ".game::format_cash(login::$user->player->data['up_cash']).". Tidligere i banken: ".game::format_cash(login::$user->player->data['up_bank']).".");
+		putlog("LOG", "%b%c8MODERATOR PENGER:%c%b %u".login::$user->player->data['up_name']."%u endret penene sine til nÃ¸yaktig %u".game::format_cash($cash)."%u. Tidligere kontant: ".game::format_cash(login::$user->player->data['up_cash']).". Tidligere i banken: ".game::format_cash(login::$user->player->data['up_bank']).".");
 	}
 	redirect::handle();
 }
 
 
-// har vi over 1 bill nå?
+// har vi over 1 bill nÃ¥?
 $result = $_base->db->query("SELECT ".login::$user->player->data['up_cash']."+".login::$user->player->data['up_bank']." > 10000000000, ".login::$user->player->data['up_cash']."+".login::$user->player->data['up_bank'].", 100000000-".login::$user->player->data['up_cash']."-".login::$user->player->data['up_bank']);
 $over = mysql_result($result, 0);
 $cash = mysql_result($result, 0, 1);
@@ -38,7 +38,7 @@ $igjen = mysql_result($result, 0, 2);
 echo '
 <h1>Penger</h1>
 <p>
-	Som en moderator kan du nå gi deg selv penger, og kan maksimalt ha 10 mrd ved hjelp av denne funksjonen. Ønsker du mer må du spille deg opp på for eksempel pokerfunksjonen.
+	Som en moderator kan du nÃ¥ gi deg selv penger, og kan maksimalt ha 10 mrd ved hjelp av denne funksjonen. Ã˜nsker du mer mÃ¥ du spille deg opp pÃ¥ for eksempel pokerfunksjonen.
 </p>';
 
 
@@ -59,7 +59,7 @@ else*/
 		Du har <b>'.game::format_cash($cash).'</b>.
 	</p>
 	<p>
-		Når du bruker denne funksjonen vil du ende opp med så mye penger du spesifiserer nedenfor.
+		NÃ¥r du bruker denne funksjonen vil du ende opp med sÃ¥ mye penger du spesifiserer nedenfor.
 	</p>
 	<table class="table tablemb">
 		<tr>

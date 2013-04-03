@@ -50,7 +50,7 @@ $result = $pagei->query("
 if ($pagei->total == 0)
 {
 	ajax::html(parse_html($data . '
-<p class="c">Ingen oppføringer ble funnet.</p>'));
+<p class="c">Ingen oppfÃ¸ringer ble funnet.</p>'));
 }
 
 $raps = array();

@@ -70,11 +70,11 @@ class pagenumbers
 				// finn sidetallet vi skal hoppe til (minus 1)
 				$n = $i > $high ? $this->pages - 1 : $low - 1;
 				
-				// hopp kun over hvis det er mer enn én side
+				// hopp kun over hvis det er mer enn Ã©n side
 				if ($n - $i >= 1)
 				{
 					$i = $n;
-					$ret[] = '<a href="#" onclick="var value=parseInt(prompt(\'Ønsket sidetall? (1 til '.$this->pages.')\','.$this->page.'));if(value>1&&value<'.$this->pages.'){setTimeout(function(){window.location=unescape(\''.rawurlencode($this->page_x).'\').replace(/_pageid_/g,value)},1)}else if(value==1){setTimeout(function(){window.location=unescape(\''.rawurlencode($this->page_1).'\')},1)}return false">..</a>';
+					$ret[] = '<a href="#" onclick="var value=parseInt(prompt(\'Ã˜nsket sidetall? (1 til '.$this->pages.')\','.$this->page.'));if(value>1&&value<'.$this->pages.'){setTimeout(function(){window.location=unescape(\''.rawurlencode($this->page_x).'\').replace(/_pageid_/g,value)},1)}else if(value==1){setTimeout(function(){window.location=unescape(\''.rawurlencode($this->page_1).'\')},1)}return false">..</a>';
 					continue;
 				}
 			}

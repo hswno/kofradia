@@ -28,7 +28,7 @@ class user_innboks
 			SET u_inbox_new = c
 			WHERE u_id = up_u_id");
 		
-		// hent og lagre i objektet vårt
+		// hent og lagre i objektet vÃ¥rt
 		$result = ess::$b->db->query("
 			SELECT u_inbox_new
 			FROM users
@@ -42,10 +42,10 @@ class user_innboks
 	 */
 	public function delete_specific(array $it_list)
 	{
-		if (count($it_list) == 0) throw new HSException("Ingen meldinger å slette.");
+		if (count($it_list) == 0) throw new HSException("Ingen meldinger Ã¥ slette.");
 		$it_list = array_map("intval", $it_list);
 		
-		// forsøk å slette meldingstråder
+		// forsÃ¸k Ã¥ slette meldingstrÃ¥der
 		ess::$b->db->query("
 			UPDATE inbox_rel JOIN users_players ON up_u_id = {$this->u->id} AND ir_up_id = up_id
 			SET ir_deleted = 1
@@ -72,7 +72,7 @@ class user_innboks
 		if ((int) $time != $time) throw new HSException("Ugyldig tid.");
 		$time = (int) $time;
 		
-		// forsøk og slett meldingstråder
+		// forsÃ¸k og slett meldingstrÃ¥der
 		ess::$b->db->query("
 			UPDATE inbox_rel JOIN users_players ON up_u_id = {$this->u->id} AND ir_up_id = up_id
 			SET ir_deleted = 1
@@ -122,7 +122,7 @@ class user_innboks
 			$meldinger[$row['it_id']] = $row;
 		}
 		
-		// hent alle deltakerene i meldingstrådene som skal listes opp
+		// hent alle deltakerene i meldingstrÃ¥dene som skal listes opp
 		$result = ess::$b->db->query("
 			SELECT ir_it_id, ir_up_id, ir_unread, ir_views, ir_deleted, ir_restrict_im_time, ir_marked, COUNT(im_id) AS num_messages, up_access_level, up_u_id, u_access_level, u_active_up_id
 			FROM inbox_rel
@@ -214,8 +214,8 @@ class user_innboks
 				$d = trim($d);
 				if (strlen($d) > $max)
 				{
-					// TODO: Flytt funksjon til en klasse/funksjon så den kan gjenbrukes av andre sider
-					// forsøk å bryt på et mellomrom
+					// TODO: Flytt funksjon til en klasse/funksjon sÃ¥ den kan gjenbrukes av andre sider
+					// forsÃ¸k Ã¥ bryt pÃ¥ et mellomrom
 					$pos = strpos($d, " ", $max - 10);
 					if ($pos !== false && $pos < $max)
 						$d = substr($d, 0, $pos) . " ...";

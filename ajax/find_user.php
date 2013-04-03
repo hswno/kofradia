@@ -40,7 +40,7 @@ $result2 = $_base->db->query("SELECT FOUND_ROWS()");
 $num = mysql_result($result2, 0);
 
 // logg
-putlog("LOG", "%c3%bFINN-SPILLER:%b%c %u".login::$user->player->data['up_name']."%u søkte etter %u{$q}%u!");
+putlog("LOG", "%c3%bFINN-SPILLER:%b%c %u".login::$user->player->data['up_name']."%u sÃ¸kte etter %u{$q}%u!");
 
 // xml
 $data = '<userlist query="'.htmlspecialchars($q).'" limit="'.$limit.'" results="'.$num.'">';

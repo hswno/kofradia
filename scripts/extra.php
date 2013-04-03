@@ -23,7 +23,7 @@ elseif (isset($_POST['hide_online2'])) { $_SESSION[$GLOBALS['__server']['session
 echo '<!DOCTYPE html>
 <html lang="no">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Extra</title>
 </head>
 <body>';

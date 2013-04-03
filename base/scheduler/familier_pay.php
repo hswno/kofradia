@@ -3,18 +3,18 @@
 global $_base;
 
 /*
- * Dette scriptet tar ut betalinger fra familier som må betale for å overleve
+ * Dette scriptet tar ut betalinger fra familier som mÃ¥ betale for Ã¥ overleve
  * Se "Holde familien oppe" i familiedokumentet
  * 
- * Familier med Crewstatus slipper å betale
+ * Familier med Crewstatus slipper Ã¥ betale
  */
 
 /*
- * Dette scriptet skal kjøres hver dag kl. 12.00
- * Scriptet skal ikke kjøres før kl. 12.00
+ * Dette scriptet skal kjÃ¸res hver dag kl. 12.00
+ * Scriptet skal ikke kjÃ¸res fÃ¸r kl. 12.00
  */
 
-// hent oversikt over familier som skulle ha betalt nå
+// hent oversikt over familier som skulle ha betalt nÃ¥
 $time = time();
 $result = $_base->db->query("
 	SELECT ff_id
@@ -24,7 +24,7 @@ while ($row = mysql_fetch_assoc($result))
 {
 	$familie = ff::get_ff($row['ff_id'], ff::LOAD_SCRIPT);
 	
-	putlog("CREWCHAN", "Broderskapet %u{$familie->data['ff_name']}%u har ikke betalt inn broderskapkostnad og blir nå lagt ned.");
+	putlog("CREWCHAN", "Broderskapet %u{$familie->data['ff_name']}%u har ikke betalt inn broderskapkostnad og blir nÃ¥ lagt ned.");
 	
 	// legg ned familien
 	$familie->dies();
@@ -39,6 +39,6 @@ while ($row = mysql_fetch_assoc($result))
 {
 	$familie = ff::get_ff($row['ff_id'], ff::LOAD_SCRIPT);
 	
-	// forsøk å trekk fra familiekostnaden
+	// forsÃ¸k Ã¥ trekk fra familiekostnaden
 	$familie->pay_scheduler();
 }

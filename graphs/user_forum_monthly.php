@@ -17,7 +17,7 @@ if (isset($_GET['up_id']) && access::has("mod"))
 	$up_name = mysql_result($result, 0, "up_name");
 }
 
-// annen måned?
+// annen mÃ¥ned?
 $date = $_base->date->get();
 if (isset($_GET['date']))
 {
@@ -70,8 +70,8 @@ $bar->colour(OFC_Colours::$colours[1]);
 $ofc->add_element($bar);
 
 $bar = new OFC_Charts_Area();
-$bar->text("Antall forumtråder");
-$bar->dot_style()->type("solid-dot")->dot_size(3)->halo_size(2)->tip("#x_label#<br>#val# tråder");
+$bar->text("Antall forumtrÃ¥der");
+$bar->dot_style()->type("solid-dot")->dot_size(3)->halo_size(2)->tip("#x_label#<br>#val# trÃ¥der");
 $bar->values(array_values($stats1));
 $bar->colour(OFC_Colours::$colours[0]);
 $ofc->add_element($bar);

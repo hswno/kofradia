@@ -3,7 +3,7 @@
 require "../../base.php";
 global $_base, $_game;
 
-// hent alle krimoppføringene
+// hent alle krimoppfÃ¸ringene
 $result = $_base->db->query("SELECT k.id, k.name, k.b_id, COUNT(IF(t.outcome=1,1,NULL)) AS vellykkede, COUNT(IF(t.outcome=2,1,NULL)) AS mislykkede FROM kriminalitet k LEFT JOIN kriminalitet_text t ON k.id = t.krimid GROUP BY k.id ORDER BY name");
 $krims = array();
 
@@ -49,7 +49,7 @@ foreach (game::$bydeler as $id => $bydel)
 	else
 	{
 		echo '
-	<p>Ingen oppføringer.</p>';
+	<p>Ingen oppfÃ¸ringer.</p>';
 	}
 	
 	echo '

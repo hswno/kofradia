@@ -22,7 +22,7 @@ if (isset($_GET['forum']))
 $forums = array(
 	1 => "Game",
 	2 => "Off-topic",
-	3 => "Salg/søknad",
+	3 => "Salg/sÃ¸knad",
 	4 => "Support"
 );
 
@@ -32,13 +32,13 @@ foreach ($ids as $id) $forums_active[] = $forums[$id];
 // sett opp beskrivelse
 $desc = array_map("strtolower", $forums_active);
 $last = count($desc) > 1 ? array_pop($desc) : false;
-$description = "Forumtråder i ".implode(", ", $desc).($last ? " og $last" : '').' forum'.($last ? 'ene' : 'et').'.';
+$description = "ForumtrÃ¥der i ".implode(", ", $desc).($last ? " og $last" : '').' forum'.($last ? 'ene' : 'et').'.';
 
 // sett opp RSS
-$rss = new rss("Forumtråder - Kofradia", "https://www.kofradia.no/", $description);
+$rss = new rss("ForumtrÃ¥der - Kofradia", "https://www.kofradia.no/", $description);
 $rss->ttl(1);
 
-// hent trådene
+// hent trÃ¥dene
 $result = $_base->db->query("
 	SELECT up_name, ft_id, ft_type, ft_title, ft_text, ft_fse_id, ft_time
 	FROM forum_topics t
@@ -58,5 +58,5 @@ while ($row = mysql_fetch_assoc($result))
 	$rss->item($item);
 }
 
-header("Content-Type: application/rss+xml; charset=ISO-8859-1");
+header("Content-Type: application/rss+xml; charset=utf-8");
 echo $rss->generate();

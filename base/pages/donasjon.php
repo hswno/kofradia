@@ -29,7 +29,7 @@ class page_donasjon
 	{
 		ess::$b->page->add_title("Donasjoner");
 		
-		// hent donasjonene på denne siden
+		// hent donasjonene pÃ¥ denne siden
 		$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 30);
 		// d_time > ".(time()-2678400)."
 		$result = $pagei->query("SELECT d_up_id, d_amount, d_time FROM donations ORDER BY d_time DESC");
@@ -40,7 +40,7 @@ class page_donasjon
 	<p class="h_left"><a href="donasjon">&laquo; Tilbake</a></p>'.($pagei->total > 0 ? '
 	<p class="h_right">Side '.$pagei->active.' av '.$pagei->pages.'</p>' : '').'
 	<div class="bg1">
-		<p>Denne siden viser en komplett oversikt over alle som har donert og gitt sin støtte til Kofradia.</p>';
+		<p>Denne siden viser en komplett oversikt over alle som har donert og gitt sin stÃ¸tte til Kofradia.</p>';
 		
 		if (mysql_num_rows($result) == 0)
 		{
@@ -64,7 +64,7 @@ class page_donasjon
 			
 			echo '
 		</dl>
-		<p class="c">Vil du også bidra? Trykk <a href="donasjon">her</a>!</p>'.($pagei->pages > 1 ? '
+		<p class="c">Vil du ogsÃ¥ bidra? Trykk <a href="donasjon">her</a>!</p>'.($pagei->pages > 1 ? '
 		<p class="c">'.$pagei->pagenumbers().'</p>' : '');
 		}
 		
@@ -85,23 +85,23 @@ class page_donasjon
 	<h1 class="bg1">Donasjon<span class="left"></span><span class="right"></span></h1>
 	<p class="h_right"><a href="donasjon?vis">Vis donasjoner &raquo;</a></p>
 	<div class="bg1">
-		<p class="c" style="margin: 20px 0"><img src="'.STATIC_LINK.'/other/stott_kofradia_donasjon.png" alt="Støtt Kofradia - doner!" /></p>
-		<p>Kofradia driver per i dag på frivillig basis og har ingen inntekt. Samtidig har vi en del utgifter for server, domene og liknende.</p>
-		<p>For at vi skal kunne fortsette å tilby denne tjenesten og utvide med nye funksjoner, håper vi at folk ønsker å donere en liten pengesum til oss.</p>
-		<p>Selv små donasjoner hjelper. Merk alikevel at donasjoner under <b>kr. 20</b> ikke vil bli ført opp i listen over brukere som har donert.</p>
+		<p class="c" style="margin: 20px 0"><img src="'.STATIC_LINK.'/other/stott_kofradia_donasjon.png" alt="StÃ¸tt Kofradia - doner!" /></p>
+		<p>Kofradia driver per i dag pÃ¥ frivillig basis og har ingen inntekt. Samtidig har vi en del utgifter for server, domene og liknende.</p>
+		<p>For at vi skal kunne fortsette Ã¥ tilby denne tjenesten og utvide med nye funksjoner, hÃ¥per vi at folk Ã¸nsker Ã¥ donere en liten pengesum til oss.</p>
+		<p>Selv smÃ¥ donasjoner hjelper. Merk alikevel at donasjoner under <b>kr. 20</b> ikke vil bli fÃ¸rt opp i listen over brukere som har donert.</p>
 		<p><a href="donasjon?vis">Vis oversikt over donasjoner &raquo;</a></p>
-		<p><u>Donasjonsløsninger:</u></p>
+		<p><u>DonasjonslÃ¸sninger:</u></p>
 		<ol>
-			<li><b>Bank/nettbank:</b> Dette er løsningen som er foretrukket. Det blir som regel ikke trukket fra noe overføringsgebyr, og det er lett å overføre penger på en sikker måte.</li>
-			<li style="margin-top: 10px"><b>Visa/PayPal:</b> For de som ikke har egen nettbank, men som kanskje har Visakort/MasterCard, er dette en alternativ løsning. PayPal tar noen få prosent i overføringsgebyr, så bankoverføring foretrekkes.</li>
+			<li><b>Bank/nettbank:</b> Dette er lÃ¸sningen som er foretrukket. Det blir som regel ikke trukket fra noe overfÃ¸ringsgebyr, og det er lett Ã¥ overfÃ¸re penger pÃ¥ en sikker mÃ¥te.</li>
+			<li style="margin-top: 10px"><b>Visa/PayPal:</b> For de som ikke har egen nettbank, men som kanskje har Visakort/MasterCard, er dette en alternativ lÃ¸sning. PayPal tar noen fÃ¥ prosent i overfÃ¸ringsgebyr, sÃ¥ bankoverfÃ¸ring foretrekkes.</li>
 		</ol>
 		<div class="col2_w">
 			<div class="col_w left">
 				<div class="col">
 					<div class="section">
 						<h2>Bank/nettbank</h2>
-						<p>Beløp overføres til kontonummer: <b>1503.02.25691</b></p>
-						<p>Før opp e-postadressen din som melding hvis du ønsker ditt brukernavn oppført ved donasjonen.</p>
+						<p>BelÃ¸p overfÃ¸res til kontonummer: <b>1503.02.25691</b></p>
+						<p>FÃ¸r opp e-postadressen din som melding hvis du Ã¸nsker ditt brukernavn oppfÃ¸rt ved donasjonen.</p>
 					</div>
 				</div>
 			</div>
@@ -124,7 +124,7 @@ class page_donasjon
 							<input type="hidden" name="custom" value="'.(login::$logged_in ? login::$info['ses_id'].':'.htmlspecialchars(login::$user->data['u_email']) : 'gjest-'.$_SERVER['REMOTE_ADDR']).'" />'.(login::$logged_in ? '
 							<input type="hidden" name="on0" value="show_donator" />' : '').'
 							<dl class="dd_right dl_2x">
-								<dt>Beløp</dt>
+								<dt>BelÃ¸p</dt>
 								<dd>NOK <input type="text" align="right" name="amount" size="3" value="50" class="styled w40" /></dd>'.(login::$logged_in ? '
 								<dt><label for="os0">Vis mitt nick ved donasjonen</label></dt>
 								<dd><input type="checkbox" name="os0" id="os0" value="1" checked="checked" /></dd>' : '').'

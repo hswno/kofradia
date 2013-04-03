@@ -6,7 +6,7 @@
  */
 class bullets_scheduler
 {
-	/** Hvor mange ganger skal kuler legges ut for salg i løpet av en dag */
+	/** Hvor mange ganger skal kuler legges ut for salg i lÃ¸pet av en dag */
 	const GROUPS = 40;
 	
 	/** Antall kuler produsert avhengig av antall aktive 48 timer tidligere */
@@ -22,7 +22,7 @@ class bullets_scheduler
 	
 	public function __construct()
 	{
-		// fjern alle kulene som ikke er kjøpt allerede
+		// fjern alle kulene som ikke er kjÃ¸pt allerede
 		ess::$b->db->query("TRUNCATE bullets");
 		
 		// sett opp tidsperiode
@@ -83,7 +83,7 @@ class bullets_scheduler
 	}
 	
 	/**
-	 * Antall kuler som skal fordeles, fordel også antall omganger kulene skal gis ut i
+	 * Antall kuler som skal fordeles, fordel ogsÃ¥ antall omganger kulene skal gis ut i
 	 */
 	protected function get_count()
 	{
@@ -91,7 +91,7 @@ class bullets_scheduler
 		$result = ess::$b->db->query("SELECT COUNT(*) FROM users_players WHERE up_last_online > ".(time()-86400*2)." AND up_access_level != 0");
 		$this->count_total = round(max(self::PRODUCE_MIN, mysql_result($result, 0) * self::PRODUCE_ACTIVE));
 		
-		// fordel antallet på firmaene
+		// fordel antallet pÃ¥ firmaene
 		$ff_count = count($this->ff_list);
 		$each = floor($this->count_total / $ff_count);
 		$each_groups = floor(self::GROUPS / $ff_count);

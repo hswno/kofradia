@@ -13,7 +13,7 @@
 require "../../base/ajax.php";
 ajax::validate_sid();
 
-// kontroller lås
+// kontroller lÃ¥s
 ajax::validate_lock(true);
 
 global $_base, $_game;
@@ -46,7 +46,7 @@ if (!$reply->info)
 	ajax::text("ERROR:404-REPLY", ajax::TYPE_INVALID);
 }
 
-// hent forumtråden til forumsvaret
+// hent forumtrÃ¥den til forumsvaret
 $reply->get_topic();
 
 // kontroller at svaret ikke har blitt endret siden sist oppdatert
@@ -56,5 +56,5 @@ if ($reply->info['fr_last_edit'] && $reply->info['fr_last_edit'] > $last_edit)
 	ajax::text("ERROR:REPLY-ALREADY-EDITED:{$reply->info['fr_last_edit']}", ajax::TYPE_INVALID);
 }
 
-// forsøk å utfør endringer
+// forsÃ¸k Ã¥ utfÃ¸r endringer
 $reply->edit($_POST['text']);

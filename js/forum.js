@@ -3,8 +3,8 @@
  * Skrevet av Henrik Steen
  * www.henrist.net
  *
- * Beskyttet av åndsverkloven
- * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ * Beskyttet av Ã¥ndsverkloven
+ * Alle rettigheter tilhÃ¸rer Henrik Steen dersom ikke annet er oppgitt
  *
  * Copyright (c) 2010 All rights reserved
  */
@@ -18,7 +18,7 @@ function forum_format_error(data, no_html)
 }
 
 /**
- * Opprette ny forumtråd
+ * Opprette ny forumtrÃ¥d
  */
 var NewForumTopic = new Class({
 	/** Construct */
@@ -42,19 +42,19 @@ var NewForumTopic = new Class({
 		{
 			event.stop();
 			
-			// forsøk å legg til
+			// forsÃ¸k Ã¥ legg til
 			self.add();
 		});	
 		this.info.preview.addEvent("click", function(event)
 		{
 			event.stop();
 			
-			// forhåndsvis
+			// forhÃ¥ndsvis
 			self.preview();
 		});
 	},
 	
-	/** Forhåndsvise forumtråden */
+	/** ForhÃ¥ndsvise forumtrÃ¥den */
 	preview: function()
 	{
 		// ajax objekt
@@ -89,18 +89,18 @@ var NewForumTopic = new Class({
 		
 		// sett info
 		var height = Math.max(0, this.container.getSize().y - 20);
-		this.container.setOpacity(0).set("html", '<div class="forum_preview_info">Henter forhåndsvisning..</div>').fade(0.5);
+		this.container.setOpacity(0).set("html", '<div class="forum_preview_info">Henter forhÃ¥ndsvisning..</div>').fade(0.5);
 		this.container.getElement("div").setStyle("min-height", height);
 		
-		// hent forhåndsvisning
+		// hent forhÃ¥ndsvisning
 		this.preview_xhr.options.data = {"text": this.info.text.get("value")};
 		this.preview_xhr.send();
 	},
 	
-	/** Legg til forumtråden */
+	/** Legg til forumtrÃ¥den */
 	add: function()
 	{
-		// avbryt mulig forhåndsvisning
+		// avbryt mulig forhÃ¥ndsvisning
 		if (this.preview_xhr) this.preview_xhr.cancel();
 		this.container.empty();
 		
@@ -124,7 +124,7 @@ var NewForumTopic = new Class({
 						navigateTo(text.substring(9));
 					}
 					
-					self.container_add.set("html", '<div class="forum_preview_info"><b>Forumtråden ble lagt til.</b></div>').fade("in");
+					self.container_add.set("html", '<div class="forum_preview_info"><b>ForumtrÃ¥den ble lagt til.</b></div>').fade("in");
 				},
 				
 				// mislykket
@@ -136,7 +136,7 @@ var NewForumTopic = new Class({
 		}
 		
 		// sett info
-		this.container_add.setOpacity(0).set("html", '<div class="forum_preview_info"><b>Oppretter forumtråd..</b></div>').fade(0.5);
+		this.container_add.setOpacity(0).set("html", '<div class="forum_preview_info"><b>Oppretter forumtrÃ¥d..</b></div>').fade(0.5);
 		
 		// legg til svaret
 		this.add_xhr.options.data["title"] = this.info.title.get("value");
@@ -150,7 +150,7 @@ var NewForumTopic = new Class({
 });
 
 /**
- * Redigering av en forumtråd
+ * Redigering av en forumtrÃ¥d
  */
 var EditForumTopic = new Class({
 	/** Construct */
@@ -176,19 +176,19 @@ var EditForumTopic = new Class({
 		{
 			event.stop();
 			
-			// forsøk å lagre endringer
+			// forsÃ¸k Ã¥ lagre endringer
 			self.edit();
 		});	
 		this.info.preview.addEvent("click", function(event)
 		{
 			event.stop();
 			
-			// forhåndsvis
+			// forhÃ¥ndsvis
 			self.preview();
 		});
 	},
 
-	/** Forhåndsvise forumtråden */
+	/** ForhÃ¥ndsvise forumtrÃ¥den */
 	preview: function()
 	{
 		// ajax objekt
@@ -224,18 +224,18 @@ var EditForumTopic = new Class({
 		
 		// sett info
 		var height = Math.max(0, this.container_preview.getSize().y - 20);
-		this.container_preview.setOpacity(0).set("html", '<div class="forum_preview_info">Henter forhåndsvisning..</div>').fade(0.5);
+		this.container_preview.setOpacity(0).set("html", '<div class="forum_preview_info">Henter forhÃ¥ndsvisning..</div>').fade(0.5);
 		this.container_preview.getElement("div").setStyle("min-height", height);
 		
-		// hent forhåndsvisning
+		// hent forhÃ¥ndsvisning
 		this.preview_xhr.options.data["text"] = this.info.text.get("value");
 		this.preview_xhr.send();
 	},
 	
-	/** Lagre endringer for forumtråden */
+	/** Lagre endringer for forumtrÃ¥den */
 	edit: function()
 	{
-		// avbryt mulig forhåndsvisning
+		// avbryt mulig forhÃ¥ndsvisning
 		if (this.preview_xhr) this.preview_xhr.cancel();
 		this.container_preview.empty();
 		
@@ -271,8 +271,8 @@ var EditForumTopic = new Class({
 					if (text.substring(0, 27) == "ERROR:TOPIC-ALREADY-EDITED:")
 					{
 						self.last_edit = text.substring(27);
-						text = "Denne forumtråden har blitt redigert av noen andre etter du begynte å redigere. Trykk lagre på nytt for å overstyre."
-							+'<br /><a href="'+relative_path+'/forum/topic?id='+self.topic_id+'" target="_blank">Vis forumtråden i nytt vindu for å sammenlikne.</a>';
+						text = "Denne forumtrÃ¥den har blitt redigert av noen andre etter du begynte Ã¥ redigere. Trykk lagre pÃ¥ nytt for Ã¥ overstyre."
+							+'<br /><a href="'+relative_path+'/forum/topic?id='+self.topic_id+'" target="_blank">Vis forumtrÃ¥den i nytt vindu for Ã¥ sammenlikne.</a>';
 					}
 					else text = forum_format_error(text);
 					
@@ -282,7 +282,7 @@ var EditForumTopic = new Class({
 		}
 		
 		// sett info
-		this.container_edit.setOpacity(0).set("html", '<div class="forum_preview_info"><b>Lagrer endringer i forumtråden..</b></div>').fade(0.5);
+		this.container_edit.setOpacity(0).set("html", '<div class="forum_preview_info"><b>Lagrer endringer i forumtrÃ¥den..</b></div>').fade(0.5);
 		this.info.save.set("disabled", true);
 		
 		// legg til svaret
@@ -299,7 +299,7 @@ var EditForumTopic = new Class({
 });
 
 /**
- * Visning av forumtråd
+ * Visning av forumtrÃ¥d
  */
 var ForumTopic = new Class({
 	options: {
@@ -357,7 +357,7 @@ var ForumTopic = new Class({
 		// redigere lenker
 		this.container.getElements(".forum_link_reply_edit").each(function(elm)
 		{
-			// allerede gått gjennom?
+			// allerede gÃ¥tt gjennom?
 			if (elm.retrieve("forum_parsed")) return;
 			elm.store("forum_parsed", true);
 			
@@ -372,7 +372,7 @@ var ForumTopic = new Class({
 		// slette lenker
 		this.container.getElements(".forum_link_reply_delete").each(function(elm)
 		{
-			// allerede gått gjennom?
+			// allerede gÃ¥tt gjennom?
 			if (elm.retrieve("forum_parsed")) return;
 			elm.store("forum_parsed", true);
 			
@@ -387,7 +387,7 @@ var ForumTopic = new Class({
 		// gjenopprette lenker
 		this.container.getElements(".forum_link_reply_restore").each(function(elm)
 		{
-			// allerede gått gjennom?
+			// allerede gÃ¥tt gjennom?
 			if (elm.retrieve("forum_parsed")) return;
 			elm.store("forum_parsed", true);
 			
@@ -402,7 +402,7 @@ var ForumTopic = new Class({
 		// annonsere svar
 		this.container.getElements(".forum_link_reply_announce").each(function(elm)
 		{
-			// allerede gått gjennom?
+			// allerede gÃ¥tt gjennom?
 			if (elm.retrieve("forum_parsed")) return;
 			elm.store("forum_parsed", true);
 			
@@ -440,7 +440,7 @@ var ForumTopic = new Class({
 				self.reply_add();
 			});
 			
-			// forhåndsvis svar
+			// forhÃ¥ndsvis svar
 			$("forum_reply_button_preview").addEvent("click", function(event)
 			{
 				event.stop();
@@ -449,11 +449,11 @@ var ForumTopic = new Class({
 			});
 		}
 		
-		// hindre kjøring flere ganger
+		// hindre kjÃ¸ring flere ganger
 		this.detectLinksOnce = $empty;
 	},
 	
-	/** Legge til events på bildene i forumet */
+	/** Legge til events pÃ¥ bildene i forumet */
 	handleImages: function()
 	{
 		var self = this;
@@ -471,7 +471,7 @@ var ForumTopic = new Class({
 		});
 	},
 	
-	/** Sørger for at siden blir scrollet ned når et bilde ovenfor det synlige området blir lastet inn */
+	/** SÃ¸rger for at siden blir scrollet ned nÃ¥r et bilde ovenfor det synlige omrÃ¥det blir lastet inn */
 	addImage: function(container, img)
 	{
 		// [img]?
@@ -487,19 +487,19 @@ var ForumTopic = new Class({
 			var height = container.getSize().y;
 			var prev_height = container.retrieve("prev_height");
 			
-			// høyden har forandret seg
+			// hÃ¸yden har forandret seg
 			if (height != prev_height)
 			{
 				var pos_y = img.getPosition().y;
 				var scroll = window.getScroll();
 				
-				// lagre høyden
+				// lagre hÃ¸yden
 				container.store("prev_height", height);
 				
-				// scroll dersom det synlige området er nedenfor bildet
+				// scroll dersom det synlige omrÃ¥det er nedenfor bildet
 				if (scroll.y > pos_y)
 				{
-					// scroll tilsvarende som høyden endret seg
+					// scroll tilsvarende som hÃ¸yden endret seg
 					window.scrollTo(scroll.x, scroll.y+height-prev_height);
 				}
 			}
@@ -507,8 +507,8 @@ var ForumTopic = new Class({
 	},
 	
 	/**
-	 * Start oppdatering av endringer i forum tråden:
-	 * - Henter nye svar hvis man er på siste sider
+	 * Start oppdatering av endringer i forum trÃ¥den:
+	 * - Henter nye svar hvis man er pÃ¥ siste sider
 	 * - Oppdaterer svar med nye endringer
 	 * - Fjernet svar hvis noen blir slettet
 	 */
@@ -516,8 +516,8 @@ var ForumTopic = new Class({
 	{
 		// legg til info om nye forumsvar
 		var text = this.get_new
-			? "Nye forumsvar i forumtråden vil automatisk bli lagt til nedenfor denne boksen."
-			: "Forumsvarene på denne siden blir automatisk oppdatert ved endringer.";
+			? "Nye forumsvar i forumtrÃ¥den vil automatisk bli lagt til nedenfor denne boksen."
+			: "Forumsvarene pÃ¥ denne siden blir automatisk oppdatert ved endringer.";
 		
 		this.info = this.addInfo(text);
 		this.info_span = new Element("span", {"style": "float: right; color: #666"}).inject(this.info, "top");
@@ -614,8 +614,8 @@ var ForumTopic = new Class({
 				this.reply_in_edit[reply_id][0] = obj;
 				new Element("div", {
 					"class": "forum_reply_info info_box",
-					"html": "Dette forumsvaret har blitt redigert av noen andre etter du begynte å redigere."
-						+'<br /><a href="'+relative_path+'/forum/topic?id='+this.topic_id+'&amp;replyid='+reply_id+'" target="_blank">Vis forumsvaret i nytt vindu for å sammenlikne.</a>'
+					"html": "Dette forumsvaret har blitt redigert av noen andre etter du begynte Ã¥ redigere."
+						+'<br /><a href="'+relative_path+'/forum/topic?id='+this.topic_id+'&amp;replyid='+reply_id+'" target="_blank">Vis forumsvaret i nytt vindu for Ã¥ sammenlikne.</a>'
 				}).setOpacity(0).inject(this.reply_in_edit[reply_id][1], "top").fade("in");
 			}
 			
@@ -638,7 +638,7 @@ var ForumTopic = new Class({
 			this.last_edit_list.set(reply_id, rows[i].getAttribute("last_edit"));
 		};
 		
-		// sjekk om selve forumtråden er oppdatert
+		// sjekk om selve forumtrÃ¥den er oppdatert
 		var row = xml.getElementsByTagName("tupdated");
 		if (row.length > 0)
 		{
@@ -662,16 +662,16 @@ var ForumTopic = new Class({
 			// redigerer vi dette svaret?
 			if (this.reply_in_edit.has(reply_id))
 			{
-				// har vi tilgang til å redigere slettede svar?
+				// har vi tilgang til Ã¥ redigere slettede svar?
 				/*if (this.access)
 				{
-					alert("Svaret du redigerer har blitt slettet. Du kan alikevel utføre endringer.");
+					alert("Svaret du redigerer har blitt slettet. Du kan alikevel utfÃ¸re endringer.");
 				}
 				else
 				{
-					alert("Svaret ditt har blitt slettet. Du vil ikke ha mulighet til å lagre endringene du utfører.");
+					alert("Svaret ditt har blitt slettet. Du vil ikke ha mulighet til Ã¥ lagre endringene du utfÃ¸rer.");
 				}*/
-				new Element("div", {"class": "forum_reply_info"+(this.access ? " info_box" : " error_box"), "text": "Dette forumsvaret har blitt slettet."+(this.access ? '' : ' Du har ikke mulighet til å lagre endringene.')}).setOpacity(0).inject(this.reply_in_edit[reply_id][1], "top").fade("in");
+				new Element("div", {"class": "forum_reply_info"+(this.access ? " info_box" : " error_box"), "text": "Dette forumsvaret har blitt slettet."+(this.access ? '' : ' Du har ikke mulighet til Ã¥ lagre endringene.')}).setOpacity(0).inject(this.reply_in_edit[reply_id][1], "top").fade("in");
 			}
 			else
 			{
@@ -754,7 +754,7 @@ var ForumTopic = new Class({
 		(function(){ form.getElement("textarea").focus(); }).delay(100);
 	},
 	
-	/** Forhåndsvise svar */
+	/** ForhÃ¥ndsvise svar */
 	reply_preview: function(container, text, reply_id)
 	{
 		// eget ajax objekt for hver container
@@ -766,7 +766,7 @@ var ForumTopic = new Class({
 				"autoCancel": true
 			});
 			
-			// forhåndsviser vi et redigert svar?
+			// forhÃ¥ndsviser vi et redigert svar?
 			if (reply_id) container.xhr.options.data["reply_id"] = reply_id;
 			
 			container.xhr.addEvents({
@@ -792,10 +792,10 @@ var ForumTopic = new Class({
 		
 		// sett info
 		var height = Math.max(0, container.getSize().y - 20);
-		container.setOpacity(0).set("html", '<div class="forum_preview_info">Henter forhåndsvisning..</div>').fade(0.5);
+		container.setOpacity(0).set("html", '<div class="forum_preview_info">Henter forhÃ¥ndsvisning..</div>').fade(0.5);
 		container.getElement("div").setStyle("min-height", height);
 		
-		// hent forhåndsvisning
+		// hent forhÃ¥ndsvisning
 		container.xhr.options.data["text"] = text;
 		container.xhr.send();
 	},
@@ -803,7 +803,7 @@ var ForumTopic = new Class({
 	/** Legg til svar */
 	reply_add: function()
 	{
-		// opprett ajax objekt om vi ikke har det fra før
+		// opprett ajax objekt om vi ikke har det fra fÃ¸r
 		if (!this.reply_xhr)
 		{
 			this.reply_container = new Element("div").inject($("reply_preview"), "before");
@@ -836,7 +836,7 @@ var ForumTopic = new Class({
 			});
 		}
 		
-		// skjul evt. forhåndsvisning
+		// skjul evt. forhÃ¥ndsvisning
 		$("reply_preview").empty();
 		
 		// sett info
@@ -928,7 +928,7 @@ var ForumTopic = new Class({
 			}
 		});
 		
-		// forsøk å slette
+		// forsÃ¸k Ã¥ slette
 		xhr.send();
 	},
 	
@@ -969,7 +969,7 @@ var ForumTopic = new Class({
 				div.destroy();
 				self.check();
 				
-				// sørg for at forumsvaret er i listen
+				// sÃ¸rg for at forumsvaret er i listen
 				self.id_list.include(reply_id);
 			},
 			
@@ -985,7 +985,7 @@ var ForumTopic = new Class({
 			}
 		});
 		
-		// forsøk å gjenopprette
+		// forsÃ¸k Ã¥ gjenopprette
 		xhr.send();
 	},
 	
@@ -1048,7 +1048,7 @@ var ForumTopic = new Class({
 			}
 		});
 		
-		// forsøk å gjenopprette
+		// forsÃ¸k Ã¥ gjenopprette
 		xhr.send();
 	},
 	
@@ -1089,7 +1089,7 @@ var ForumTopic = new Class({
 		var save_xhr = null;
 		var save = function()
 		{
-			// sørg for xhr objekt
+			// sÃ¸rg for xhr objekt
 			if (!save_xhr)
 			{
 				save_xhr = new Request({
@@ -1107,12 +1107,12 @@ var ForumTopic = new Class({
 						preview_container.empty();
 						self.reply_in_edit.erase(reply_id);
 						
-						// svar skal være i xml: <data><reply id last_edit>html
+						// svar skal vÃ¦re i xml: <data><reply id last_edit>html
 						var elm = xml.getElementsByTagName("reply")[0];
 						reply = new Element("div", { "html": elm.firstChild.nodeValue }).getFirst().setOpacity(0);
 						self.last_edit_list.set(reply_id, elm.getAttribute("last_edit"));
 						
-						// bruk abort funksjonen for å fade ut og vise nytt innhold
+						// bruk abort funksjonen for Ã¥ fade ut og vise nytt innhold
 						abort();
 					},
 					
@@ -1123,8 +1123,8 @@ var ForumTopic = new Class({
 						if (text.substring(0, 27) == "ERROR:REPLY-ALREADY-EDITED:")
 						{
 							self.last_edit_list.set(reply_id, text.substring(27));
-							text = "Dette forumsvaret har blitt redigert av noen andre etter du begynte å redigere. Trykk lagre på nytt for å overstyre."
-								+'<br /><a href="'+relative_path+'/forum/topic?id='+self.topic_id+'&amp;replyid='+reply_id+'" target="_blank">Vis forumsvaret i nytt vindu for å sammenlikne.</a>';
+							text = "Dette forumsvaret har blitt redigert av noen andre etter du begynte Ã¥ redigere. Trykk lagre pÃ¥ nytt for Ã¥ overstyre."
+								+'<br /><a href="'+relative_path+'/forum/topic?id='+self.topic_id+'&amp;replyid='+reply_id+'" target="_blank">Vis forumsvaret i nytt vindu for Ã¥ sammenlikne.</a>';
 						}
 						else text = forum_format_error(text);
 						new Element("div", {"class": "forum_reply_info error_box", "html": text})
@@ -1141,13 +1141,13 @@ var ForumTopic = new Class({
 				.fade("in");
 			save_container.empty();
 			
-			// forsøk å lagre endringer
+			// forsÃ¸k Ã¥ lagre endringer
 			save_xhr.options.data["last_edit"] = self.last_edit_list.get(reply_id);
 			save_xhr.options.data["text"] = textarea.get("value");
 			save_xhr.send();
 		};
 		
-		// forhåndsvise endringer
+		// forhÃ¥ndsvise endringer
 		var preview = function()
 		{
 			self.reply_preview(preview_container, textarea.get("value"), reply_id);
@@ -1179,12 +1179,12 @@ var ForumTopic = new Class({
 			}
 			else show_reply();
 			
-			// avbryt mulig xhr og fjern lagre og forhåndsvismulighetene
+			// avbryt mulig xhr og fjern lagre og forhÃ¥ndsvismulighetene
 			if (save_xhr) save_xhr.cancel();
 			if (preview_container.xhr) preview_container.xhr.cancel();
 			save = preview = $empty;
 			
-			// sørg for at svaret er i ID-listen (slik at det blir oppdatert om nødvendig)
+			// sÃ¸rg for at svaret er i ID-listen (slik at det blir oppdatert om nÃ¸dvendig)
 			self.id_list.include(reply_id);
 		};
 		
@@ -1203,7 +1203,7 @@ var ForumTopic = new Class({
 			"success": function(text)
 			{
 				// sett opp skjema
-				div_edit.set("html", '<div class="forum_reply_edit_h">Rediger forumsvar</div><div class="forum_reply_edit_c"><dl class="dd_right"><dt>Innhold</dt><dd><textarea></textarea></dd></dl><p class="c"><input type="button" class="button" value="Lagre endringer" /> <input type="button" class="button" value="Forhåndsvis" /> <input type="button" class="button" value="Avbryt" /></p></div>');
+				div_edit.set("html", '<div class="forum_reply_edit_h">Rediger forumsvar</div><div class="forum_reply_edit_c"><dl class="dd_right"><dt>Innhold</dt><dd><textarea></textarea></dd></dl><p class="c"><input type="button" class="button" value="Lagre endringer" /> <input type="button" class="button" value="ForhÃ¥ndsvis" /> <input type="button" class="button" value="Avbryt" /></p></div>');
 				textarea = div_edit.getElement("textarea").set("value", text);
 				(function(){ textarea.focus(); }).delay(100);
 				

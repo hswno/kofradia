@@ -1,6 +1,6 @@
 <?php
 
-// sørg for sikker tilkobling pga. passord hvis FF skal legges ned
+// sÃ¸rg for sikker tilkobling pga. passord hvis FF skal legges ned
 if (isset($_GET['a']) && $_GET['a'] == "drop") define("FORCE_HTTPS", true);
 
 require "../base.php";
@@ -29,7 +29,7 @@ class page_ff_panel
 	}
 	
 	/**
-	 * Behandle forespørsel
+	 * Behandle forespÃ¸rsel
 	 */
 	protected function page_handle()
 	{
@@ -41,7 +41,7 @@ class page_ff_panel
 		}
 		
 		// selgen?
-		// må være medeier for å kunne kjøpe
+		// mÃ¥ vÃ¦re medeier for Ã¥ kunne kjÃ¸pe
 		if (getval("a") == "sell" && $this->ff->access(2))
 		{
 			$this->page_selge_handle();
@@ -53,7 +53,7 @@ class page_ff_panel
 			$this->page_logo_handle();
 		}
 		
-		// pri3 foreslår en spiller som medlem
+		// pri3 foreslÃ¥r en spiller som medlem
 		if (getval("a") == "suggestion" && $this->ff->uinfo->data['ffm_priority'] == 3)
 		{
 			$this->page_suggestion_handle();
@@ -65,7 +65,7 @@ class page_ff_panel
 			$this->page_description_handle();
 		}
 		
-		// øke medlemsbegrensning
+		// Ã¸ke medlemsbegrensning
 		if (getval("a") == "members_limit" && $this->ff->access(1) && $this->ff->type['type'] == "familie")
 		{
 			$this->page_members_limit_handle();
@@ -113,7 +113,7 @@ class page_ff_panel
 			$this->page_members_handle();
 		}
 		
-		// vise informasjon om å holde FF oppe
+		// vise informasjon om Ã¥ holde FF oppe
 		if (getval("a") == "pay" && $this->ff->data['ff_is_crew'] == 0 && $this->ff->type['type'] == "familie")
 		{
 			$this->page_pay_handle();
@@ -185,7 +185,7 @@ class page_ff_panel
 				<dd>'.$limits[0].' medlemmer</dd>
 			</dl>'.($this->ff->data['ff_is_crew'] ? '
 			<p>'.ucfirst($this->ff->type['refobj']).' har status som nostat. Den teller ikke med i spillstatistikken til spilleren.</p>' : '').($this->ff->uinfo->data['ffm_priority'] == 3 ? '
-			<p class="c"><a href="panel?ff_id='.$this->ff->id.'&amp;a=suggestion">Foreslå '.($this->ff->type['type'] == "familie" ? 'nytt medlem' : 'ny ansatt').' til '.$this->ff->type['refobj'].' &raquo;</a></p>' : '').'
+			<p class="c"><a href="panel?ff_id='.$this->ff->id.'&amp;a=suggestion">ForeslÃ¥ '.($this->ff->type['type'] == "familie" ? 'nytt medlem' : 'ny ansatt').' til '.$this->ff->type['refobj'].' &raquo;</a></p>' : '').'
 			<p class="c"><a href="./?ff_id='.$this->ff->id.'&amp;stats">Vis statistikk for '.$this->ff->type['refobj'].'</a></p>
 		</div>
 		
@@ -243,7 +243,7 @@ class page_ff_panel
 				if ($p > 3)
 				{
 					echo '
-			<p>Du kan ikke ta ut kuler, men kan få <user id="'.$this->ff->uinfo->data['ffm_parent_up_id'].'" /> til å gi deg kuler fra broderskapet.</p>';
+			<p>Du kan ikke ta ut kuler, men kan fÃ¥ <user id="'.$this->ff->uinfo->data['ffm_parent_up_id'].'" /> til Ã¥ gi deg kuler fra broderskapet.</p>';
 				}
 				
 				else
@@ -303,7 +303,7 @@ class page_ff_panel
 			else
 			{
 				echo '
-			<p>Du har ikke noe våpen og kan ikke sette inn/ta ut kuler.</p>';
+			<p>Du har ikke noe vÃ¥pen og kan ikke sette inn/ta ut kuler.</p>';
 			}
 			
 			echo '
@@ -314,15 +314,15 @@ class page_ff_panel
 		
 		<!-- donasjon til FF -->
 		<div class="section">
-			<h2>Donér til '.$this->ff->type['refobj'].'</h2>
+			<h2>DonÃ©r til '.$this->ff->type['refobj'].'</h2>
 			<form action="" method="post">
 				<dl class="dd_right">
-					<dt>Beløp</dt>
+					<dt>BelÃ¸p</dt>
 					<dd><input type="text" name="donate" value="'.game::format_cash(game::intval(postval("donate"))).'" class="styled w75" /></dd>
 					<dt>Melding/notat</dt>
 					<dd><input type="text" name="note" value="'.htmlspecialchars(postval("note")).'" maxlength="50" class="styled w100" /></dd>
 				</dl>
-				<p class="c">'.show_sbutton("Donér").'</p>
+				<p class="c">'.show_sbutton("DonÃ©r").'</p>
 			</form>
 		</div>
 		
@@ -332,26 +332,26 @@ class page_ff_panel
 		<!-- driftskostnad -->
 		<div class="section">
 			<h2>Driftskostnad</h2>
-			<p>For at '.$this->ff->type['refobj'].' ikke skal dø ut, må det betales inn et beløp på <u>100 mill</u> i tillegg til kostnad per ekstra medlemsplass til spillet hver 10. dag.</p>
-			<p>Når medlemmene i '.$this->ff->type['refobj'].' ranker, vil beløpet som må innbetales synke med 1 og 1 mill avhengig av hvor mye som rankes.</p>
+			<p>For at '.$this->ff->type['refobj'].' ikke skal dÃ¸ ut, mÃ¥ det betales inn et belÃ¸p pÃ¥ <u>100 mill</u> i tillegg til kostnad per ekstra medlemsplass til spillet hver 10. dag.</p>
+			<p>NÃ¥r medlemmene i '.$this->ff->type['refobj'].' ranker, vil belÃ¸pet som mÃ¥ innbetales synke med 1 og 1 mill avhengig av hvor mye som rankes.</p>
 			<p>'.ucfirst($this->ff->type['refobj']).' mister ikke ranken hvis et medlem forlater '.$this->ff->type['refobj'].'.</p>
-			<p>Beløpet vil bli trukket fra banken automatisk ved innbetalingstidspunkt. Hvis det ikke er nok penger i banken, vil '.$this->ff->type['refobj'].' få frist på å innbetale beløpet manuelt innen 24 timer. Beløpet vil da øke med 50 %.</p>'.(!$pay_info['in_time'] ? '
+			<p>BelÃ¸pet vil bli trukket fra banken automatisk ved innbetalingstidspunkt. Hvis det ikke er nok penger i banken, vil '.$this->ff->type['refobj'].' fÃ¥ frist pÃ¥ Ã¥ innbetale belÃ¸pet manuelt innen 24 timer. BelÃ¸pet vil da Ã¸ke med 50 %.</p>'.(!$pay_info['in_time'] ? '
 			<div class="section">
 				<h2>Betaling av driftskostnad</h2>
-				<p class="error_box">'.ucfirst($this->ff->type['refobj']).' har overskredet tidspunktet for innbetaling. Betaling må skje manuelt av '.$this->ff->type['priority'][1].'/'.$this->ff->type['priority'][2].'.</p>
+				<p class="error_box">'.ucfirst($this->ff->type['refobj']).' har overskredet tidspunktet for innbetaling. Betaling mÃ¥ skje manuelt av '.$this->ff->type['priority'][1].'/'.$this->ff->type['priority'][2].'.</p>
 				<dl class="dd_right">
 					<dt>Betalingsfrist</dt>
 					<dd>'.ess::$b->date->get($pay_info['next'])->format().'<br />'.game::timespan($pay_info['next'], game::TIME_ABS).'</dd>
-					<dt>Beløp</dt>
+					<dt>BelÃ¸p</dt>
 					<dd>'.game::format_cash($pay_info['price']).'</dd>
 				</dl>
 				<p class="c"><a href="panel?ff_id='.$this->ff->id.'&amp;a=pay" class="button">Fortsett/vis detaljer &raquo;</a></p>
-				<p>Hvis beløpet ikke blir betalt innen betalingsfristen vil '.$this->ff->type['refobj'].' dø ut.</p>
+				<p>Hvis belÃ¸pet ikke blir betalt innen betalingsfristen vil '.$this->ff->type['refobj'].' dÃ¸ ut.</p>
 			</div>' : '
 			<dl class="dd_right">
 				<dt>Neste innbetaling</dt>
 				<dd>'.ess::$b->date->get($pay_info['next'])->format().'</dd>
-				<dt>Foreløpig beløp</dt>
+				<dt>ForelÃ¸pig belÃ¸p</dt>
 				<dd>'.game::format_cash($pay_info['price']).'</dd>
 			</dl>
 			<p><a href="panel?ff_id='.$this->ff->id.'&amp;a=pay">Vis oversikt over medlemmers bidrag &raquo;</a></p>
@@ -377,7 +377,7 @@ class page_ff_panel
 			$eier = ucfirst($this->ff->type['priority'][1]);
 			
 			if ($high) $groups["Generelt"][] = '<a href="panel?ff_id='.$this->ff->id.'&amp;a=sell">Selg '.$this->ff->type['refobj'].' til '.$this->ff->type['priority'][2].'</a> ('.$eier.')';
-			if ($high) $groups["Generelt"][] = '<a href="panel?ff_id='.$this->ff->id.'&amp;a=navnbytte">'.($this->ff->mod ? 'Endre navn' : 'Søk om navnbytte').'</a> ('.$eier.')';
+			if ($high) $groups["Generelt"][] = '<a href="panel?ff_id='.$this->ff->id.'&amp;a=navnbytte">'.($this->ff->mod ? 'Endre navn' : 'SÃ¸k om navnbytte').'</a> ('.$eier.')';
 			$groups["Generelt"][] = '<a href="panel?ff_id='.$this->ff->id.'&amp;a=beskrivelse">Rediger beskrivelse</a>';
 			if ($high) $groups["Generelt"][] = '<a href="panel?ff_id='.$this->ff->id.'&amp;a=logo">Bytt logo</a> ('.$eier.')';
 			if ($high) $groups["Generelt"][] = '<a href="banken?ff_id='.$this->ff->id.'">Banken</a> ('.$eier.')';
@@ -434,14 +434,14 @@ class page_ff_panel
 	{
 		ess::$b->page->add_title("Navnbytte for moderator");
 		
-		// hent mulig søknad
+		// hent mulig sÃ¸knad
 		$result = ess::$b->db->query("SELECT ds_id, ds_up_id, ds_time, ds_reason, ds_params FROM div_soknader WHERE ds_type = ".soknader::TYPE_FF_NAME." AND ds_rel_id = {$this->ff->id} AND ds_reply_decision = 0");
 		$soknad = mysql_fetch_assoc($result);
 		
-		// har vi en aktiv søknad?
+		// har vi en aktiv sÃ¸knad?
 		if ($soknad)
 		{
-			ess::$b->page->add_message(ucfirst($this->ff->type['refobj']).' har allerede en søknad om navnbytte liggende som må behandles først.', "error");
+			ess::$b->page->add_message(ucfirst($this->ff->type['refobj']).' har allerede en sÃ¸knad om navnbytte liggende som mÃ¥ behandles fÃ¸rst.', "error");
 			redirect::handle();
 		}
 		
@@ -453,10 +453,10 @@ class page_ff_panel
 			$name = preg_replace("/  +/", " ", $name);
 			$_POST['name'] = $name;
 			
-			// samme navn som før?
+			// samme navn som fÃ¸r?
 			if ($name == $this->ff->data['ff_name'])
 			{
-				ess::$b->page->add_message("Du må velge et nytt navn å søke om.");
+				ess::$b->page->add_message("Du mÃ¥ velge et nytt navn Ã¥ sÃ¸ke om.");
 			}
 			
 			// kontroller at navnet ikke har noen ugyldige tegn
@@ -465,13 +465,13 @@ class page_ff_panel
 				ess::$b->page->add_message("Navnet kan kun inneholde bokstaver, tall og mellomrom.", "error");
 			}
 			
-			// navnet kan ikke være kortere enn 2 tegn
+			// navnet kan ikke vÃ¦re kortere enn 2 tegn
 			elseif (strlen($name) < 2)
 			{
 				ess::$b->page->add_message("Minimum lengde for navnet er 2 tegn.", "error");
 			}
 			
-			// navnet kan ikke være lengre enn 20 tegn
+			// navnet kan ikke vÃ¦re lengre enn 20 tegn
 			elseif (strlen($name) > 20)
 			{
 				ess::$b->page->add_message("Maksimal lengde for navnet er 20 tegn.", "error");
@@ -484,7 +484,7 @@ class page_ff_panel
 				// endre navnet
 				$this->ff->change_name($name, null, true);
 				
-				ess::$b->page->add_message("Navnet på {$this->ff->type['refobj']} ble endret fra ".htmlspecialchars($name_old)." til ".htmlspecialchars($name).".");
+				ess::$b->page->add_message("Navnet pÃ¥ {$this->ff->type['refobj']} ble endret fra ".htmlspecialchars($name_old)." til ".htmlspecialchars($name).".");
 				$this->ff->redirect();
 			}
 		}
@@ -496,7 +496,7 @@ class page_ff_panel
 	<form action="" method="post">
 		<p>Som moderator kan du fritt endre navnet til '.$this->ff->type['refobj'].'.</p>
 		<dl class="dd_right">
-			<dt>Ønsket navn</dt>
+			<dt>Ã˜nsket navn</dt>
 			<dd><input type="text" name="name" value="'.htmlspecialchars(postval("name", $this->ff->data['ff_name'])).'" class="styled w100" /></dd>
 		</dl>
 		<p class="c">'.show_sbutton("Endre navnet").'</p>
@@ -515,20 +515,20 @@ class page_ff_panel
 		ess::$b->page->add_title("Navnbytte");
 		
 		echo '
-<!-- søk om navnbytte -->
+<!-- sÃ¸k om navnbytte -->
 <div class="section w200">
-	<h2>Søk om navnbytte</h2><boxes />';
+	<h2>SÃ¸k om navnbytte</h2><boxes />';
 		
-		// hent mulig søknad
+		// hent mulig sÃ¸knad
 		$result = ess::$b->db->query("SELECT ds_id, ds_up_id, ds_time, ds_reason, ds_params FROM div_soknader WHERE ds_type = ".soknader::TYPE_FF_NAME." AND ds_rel_id = {$this->ff->id} AND ds_reply_decision = 0");
 		$soknad = mysql_fetch_assoc($result);
 		
-		// har vi en aktiv søknad?
+		// har vi en aktiv sÃ¸knad?
 		if ($soknad)
 		{
 			$params = unserialize($soknad['ds_params']);
 			
-			// trekke tilbake søknaden?
+			// trekke tilbake sÃ¸knaden?
 			if (isset($_POST['withdraw']))
 			{
 				if (soknader::delete($soknad['ds_id']))
@@ -538,37 +538,37 @@ class page_ff_panel
 					// gi tilbake penger?
 					if (isset($params['cost']) && $params['cost'] > 0)
 					{
-						$this->ff->bank(ff::BANK_TILBAKEBETALING, $params['cost'], 'Navnsøknad tilbaketrukket: '.$params['name']);
-						$extra = ' Beløpet på '.game::format_cash($params['cost']).' ble satt tilbake på bankkontoen.';
+						$this->ff->bank(ff::BANK_TILBAKEBETALING, $params['cost'], 'NavnsÃ¸knad tilbaketrukket: '.$params['name']);
+						$extra = ' BelÃ¸pet pÃ¥ '.game::format_cash($params['cost']).' ble satt tilbake pÃ¥ bankkontoen.';
 					}
 					
-					ess::$b->page->add_message("Søknaden ble trukket tilbake.$extra");
+					ess::$b->page->add_message("SÃ¸knaden ble trukket tilbake.$extra");
 				}
 				
 				redirect::handle("panel?ff_id={$this->ff->id}&a=navnbytte");
 			}
 			
 			echo '
-	<p>Søknad ble levert av <user id="'.$soknad['ds_up_id'].'" /> '.ess::$b->date->get($soknad['ds_time'])->format().'.</p>
+	<p>SÃ¸knad ble levert av <user id="'.$soknad['ds_up_id'].'" /> '.ess::$b->date->get($soknad['ds_time'])->format().'.</p>
 	<dl class="dd_right">
-		<dt>Navn som søkes</dt>
+		<dt>Navn som sÃ¸kes</dt>
 		<dd>'.htmlspecialchars($params['name']).'</dd>
 		<dt>Kostnad</dt>
 		<dd>'.(isset($params['cost']) ? game::format_cash($params['cost']) : '0 kr').'</dd>
 	</dl>
 	<p><u>Begrunnelse:</u><br />'.game::format_data($soknad['ds_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>
-	<p>Søknaden er under behandling.</p>
+	<p>SÃ¸knaden er under behandling.</p>
 	<form action="" method="post">
-		<p>'.show_sbutton("Trekk tilbake søknad", 'name="withdraw"').'</p>
+		<p>'.show_sbutton("Trekk tilbake sÃ¸knad", 'name="withdraw"').'</p>
 	</form>';
 		}
 		
 		else
 		{
-			// kan vi levere gratis søknad?
+			// kan vi levere gratis sÃ¸knad?
 			$soknad_free = $this->ff->mod || $this->ff->competition || !$this->ff->params->get("name_changed") || $this->ff->params->get("name_changed") < $this->ff->params->get("sold") || $this->ff->params->get("name_changed") < $this->ff->data['ff_time_reset'];
 			
-			// levere søknad?
+			// levere sÃ¸knad?
 			if (isset($_POST['name']) && isset($_POST['reason']))
 			{
 				$name = trim(postval("name"));
@@ -578,10 +578,10 @@ class page_ff_panel
 				$name = preg_replace("/  +/", " ", $name);
 				$_POST['name'] = $name;
 				
-				// samme navn som før?
+				// samme navn som fÃ¸r?
 				if ($name == $this->ff->data['ff_name'])
 				{
-					ess::$b->page->add_message("Du må velge et nytt navn å søke om.");
+					ess::$b->page->add_message("Du mÃ¥ velge et nytt navn Ã¥ sÃ¸ke om.");
 				}
 				
 				// kontroller at navnet ikke har noen ugyldige tegn
@@ -590,13 +590,13 @@ class page_ff_panel
 					ess::$b->page->add_message("Navnet kan kun inneholde bokstaver, tall og mellomrom.", "error");
 				}
 				
-				// navnet kan ikke være kortere enn 2 tegn
+				// navnet kan ikke vÃ¦re kortere enn 2 tegn
 				elseif (strlen($name) < 2)
 				{
 					ess::$b->page->add_message("Minimum lengde for navnet er 2 tegn.", "error");
 				}
 				
-				// navnet kan ikke være lengre enn 20 tegn
+				// navnet kan ikke vÃ¦re lengre enn 20 tegn
 				elseif (strlen($name) > 20)
 				{
 					ess::$b->page->add_message("Maksimal lengde for navnet er 20 tegn.", "error");
@@ -605,17 +605,17 @@ class page_ff_panel
 				// mangler begrunelse?
 				elseif (empty($reason))
 				{
-					ess::$b->page->add_message("Du må fylle inn en begrunnelse.", "error");
+					ess::$b->page->add_message("Du mÃ¥ fylle inn en begrunnelse.", "error");
 				}
 				
 				else
 				{
 					$success = $soknad_free;
 					
-					// forsøk å trekk fra pengene
+					// forsÃ¸k Ã¥ trekk fra pengene
 					if (!$soknad_free)
 					{
-						$success = $this->ff->bank(ff::BANK_BETALING, ff::NAME_CHANGE_COST, 'Navnsøknad: '.$name);
+						$success = $this->ff->bank(ff::BANK_BETALING, ff::NAME_CHANGE_COST, 'NavnsÃ¸knad: '.$name);
 					}
 					
 					// ikke nok penger i banken
@@ -626,13 +626,13 @@ class page_ff_panel
 					
 					else
 					{
-						// legg til søknaden
+						// legg til sÃ¸knaden
 						soknader::add(soknader::TYPE_FF_NAME, array(
 							"name" => $name,
 							"cost" => $soknad_free ? 0 : ff::NAME_CHANGE_COST
 						), $reason, $this->ff->id);
 						
-						ess::$b->page->add_message("Du har nå levert søknad om nytt navn til {$this->ff->type['refobj']}.".($soknad_free ? '' : ' '.game::format_cash(ff::NAME_CHANGE_COST).' ble trukket fra bankkontoen.'));
+						ess::$b->page->add_message("Du har nÃ¥ levert sÃ¸knad om nytt navn til {$this->ff->type['refobj']}.".($soknad_free ? '' : ' '.game::format_cash(ff::NAME_CHANGE_COST).' ble trukket fra bankkontoen.'));
 						redirect::handle("panel?ff_id={$this->ff->id}&a=navnbytte");
 					}
 				}
@@ -641,21 +641,21 @@ class page_ff_panel
 			echo '
 	<form action="" method="post">'.($soknad_free ? ($this->ff->competition
 			? '
-		<p>Du kan under hele konkurranseperioden sende inn gratis søknad om navnbytte for '.$this->ff->type['refobj'].'. Så snart konkurranseperioden er over, vil det koste '.game::format_cash(ff::NAME_CHANGE_COST).' å søke om navnbytte dersom navnet ble byttet under konkurranseperioden.</p>'
+		<p>Du kan under hele konkurranseperioden sende inn gratis sÃ¸knad om navnbytte for '.$this->ff->type['refobj'].'. SÃ¥ snart konkurranseperioden er over, vil det koste '.game::format_cash(ff::NAME_CHANGE_COST).' Ã¥ sÃ¸ke om navnbytte dersom navnet ble byttet under konkurranseperioden.</p>'
 			: ($this->ff->mod
 				? '
-		<p>Som moderator kan du sende inn gratis søknader på vegne av '.$this->ff->type['refobj'].'.</p>'
+		<p>Som moderator kan du sende inn gratis sÃ¸knader pÃ¥ vegne av '.$this->ff->type['refobj'].'.</p>'
 				: '
-		<p>Du kan sende inn gratis søknad om navnbytte for '.$this->ff->type['refobj'].' én gang (søknaden må innvilges for å telle). Neste gang vil det koste '.game::format_cash(ff::NAME_CHANGE_COST).'.</p>')) : '').'
+		<p>Du kan sende inn gratis sÃ¸knad om navnbytte for '.$this->ff->type['refobj'].' Ã©n gang (sÃ¸knaden mÃ¥ innvilges for Ã¥ telle). Neste gang vil det koste '.game::format_cash(ff::NAME_CHANGE_COST).'.</p>')) : '').'
 		<dl class="dd_right">
-			<dt>Ønsket navn</dt>
+			<dt>Ã˜nsket navn</dt>
 			<dd><input type="text" name="name" value="'.htmlspecialchars(postval("name", $this->ff->data['ff_name'])).'" class="styled w100" /></dd>
 			<dt>Kostnad (ved innvilgelse)</dt>
 			<dd>'.($soknad_free ? '0 kr' : game::format_cash(ff::NAME_CHANGE_COST)).'</dd>
 		</dl>
 		<p>Begrunnelse</p>
 		<p class="c"><textarea name="reason" rows="5" cols="30">'.htmlspecialchars(postval("reason")).'</textarea></p>
-		<p class="c">'.show_sbutton("Send inn søknad").'</p>
+		<p class="c">'.show_sbutton("Send inn sÃ¸knad").'</p>
 	</form>';
 		}
 		
@@ -674,11 +674,11 @@ class page_ff_panel
 		// crewtilgang?
 		if ($this->ff->uinfo->crew || $this->ff->uinfo->data['ffm_priority'] > 2)
 		{
-			ess::$b->page->add_message("Du kan ikke benytte deg av denne handlingen som moderator. Må være {$this->ff->type['priority'][1]} eller {$this->ff->type['priority'][2]}.", "error");
+			ess::$b->page->add_message("Du kan ikke benytte deg av denne handlingen som moderator. MÃ¥ vÃ¦re {$this->ff->type['priority'][1]} eller {$this->ff->type['priority'][2]}.", "error");
 			redirect::handle();
 		}
 		
-		// finn status på salg av FF
+		// finn status pÃ¥ salg av FF
 		$status = $this->ff->sell_status();
 		
 		// tittel
@@ -708,15 +708,15 @@ class page_ff_panel
 	<p class="h_left"><a href="panel?ff_id='.$this->ff->id.'">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<boxes />'.($seller ? '
-		<p>Når '.$this->ff->type['priority'][2].' godtar kjøpet, vil hele beløpet bli satt inn i banken din.</p>' : '
-		<p>Når '.$this->ff->type['priority'][2].' godtar kjøpet, vil hele beløpet bli satt inn i banken til <user id="'.$status['init_up_id'].'" />.</p>').'
-		<p>Salgsgebyret vil bli trukket fra banken, og det må være til stede i banken for at kjøperen skal kunne fullføre.</p>
+		<p>NÃ¥r '.$this->ff->type['priority'][2].' godtar kjÃ¸pet, vil hele belÃ¸pet bli satt inn i banken din.</p>' : '
+		<p>NÃ¥r '.$this->ff->type['priority'][2].' godtar kjÃ¸pet, vil hele belÃ¸pet bli satt inn i banken til <user id="'.$status['init_up_id'].'" />.</p>').'
+		<p>Salgsgebyret vil bli trukket fra banken, og det mÃ¥ vÃ¦re til stede i banken for at kjÃ¸peren skal kunne fullfÃ¸re.</p>
 		<dl class="dd_right">'.($seller ? '' : '
 			<dt>Selger</dt>
 			<dd><user id="'.$status['init_up_id'].'" /></dd>').'
-			<dt>Kjøper ('.$this->ff->type['priority'][2].')</dt>
+			<dt>KjÃ¸per ('.$this->ff->type['priority'][2].')</dt>
 			<dd><user id="'.$status['up_id'].'" /></dd>
-			<dt>Tid salget ble åpnet</dt>
+			<dt>Tid salget ble Ã¥pnet</dt>
 			<dd>'.ess::$b->date->get($status['time'])->format(date::FORMAT_SEC).'</dd>
 		</dl>
 		<dl class="dd_right">
@@ -724,7 +724,7 @@ class page_ff_panel
 			<dd>'.game::format_cash($this->ff->data['ff_bank']).'</dd>
 			<dt>Salgsgebyr (trekkes fra banken)</dt>
 			<dd>'.game::format_cash($status['fee']).'</dd>
-			<dt>Salgsbeløp (overføres fra kjøper)</dt>
+			<dt>SalgsbelÃ¸p (overfÃ¸res fra kjÃ¸per)</dt>
 			<dd>'.game::format_cash($status['amount']).'</dd>
 		</dl>
 		<form action="" method="post">
@@ -737,51 +737,51 @@ class page_ff_panel
 			
 			elseif ($status['up_id'] == $this->ff->uinfo->id)
 			{
-				// kjøpe FF?
+				// kjÃ¸pe FF?
 				if (isset($_POST['approve']) && validate_sid(false))
 				{
-					// forsøk å kjøp FF
+					// forsÃ¸k Ã¥ kjÃ¸p FF
 					$result = $this->ff->sell_approve();
 					if ($result === true)
 					{
 						// vellykket
-						ess::$b->page->add_message(($status['amount'] == 0 ? 'Du overtok '.$this->ff->type['refobj'] : 'Du kjøpte '.$this->ff->type['refobj'].' for <b>'.game::format_cash($status['amount']).'</b>').', og er nå satt som '.$this->ff->type['priority'][1].'. <user id="'.$status['init_up_id'].'" /> ble satt som '.$this->ff->type['priority'][2].'.');
+						ess::$b->page->add_message(($status['amount'] == 0 ? 'Du overtok '.$this->ff->type['refobj'] : 'Du kjÃ¸pte '.$this->ff->type['refobj'].' for <b>'.game::format_cash($status['amount']).'</b>').', og er nÃ¥ satt som '.$this->ff->type['priority'][1].'. <user id="'.$status['init_up_id'].'" /> ble satt som '.$this->ff->type['priority'][2].'.');
 						redirect::handle("?ff_id={$this->ff->id}");
 					}
 					
 					// har ikke nok penger
 					elseif ($result == "player_cash")
 					{
-						ess::$b->page->add_message("Du har ikke nok penger på hånda for å gjennomføre kjøpet.");
+						ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda for Ã¥ gjennomfÃ¸re kjÃ¸pet.");
 					}
 					
 					// banken har ikke nok penger
 					elseif ($result == "ff_cash")
 					{
-						ess::$b->page->add_message('Det er ikke nok penger i banken til å dekke salgsgebyret. Donér til '.$this->ff->type['refobj'].' eller be <user id="'.$status['init_up_id'].'" /> sette inn penger. Salgsgebyret er på '.game::format_cash($status['fee']).'.', "error");
+						ess::$b->page->add_message('Det er ikke nok penger i banken til Ã¥ dekke salgsgebyret. DonÃ©r til '.$this->ff->type['refobj'].' eller be <user id="'.$status['init_up_id'].'" /> sette inn penger. Salgsgebyret er pÃ¥ '.game::format_cash($status['fee']).'.', "error");
 					}
 					
 					else
 					{
-						ess::$b->page->add_message("Ukjent feil. Prøv på nytt.", "error");
+						ess::$b->page->add_message("Ukjent feil. PrÃ¸v pÃ¥ nytt.", "error");
 					}
 				}
 				
-				// avslå kjøp?
+				// avslÃ¥ kjÃ¸p?
 				if (isset($_POST['reject']) && validate_sid(false))
 				{
-					// forsøk å avbryt
+					// forsÃ¸k Ã¥ avbryt
 					$result = $this->ff->sell_reject();
 					
 					if ($result)
 					{
-						ess::$b->page->add_message("Du avslo kjøpet av {$this->ff->type['refobj']}.");
+						ess::$b->page->add_message("Du avslo kjÃ¸pet av {$this->ff->type['refobj']}.");
 						redirect::handle("?ff_id={$this->ff->id}");
 					}
 					
 					else
 					{
-						ess::$b->page->add_message("Ukjent feil. Prøv på nytt.", "error");
+						ess::$b->page->add_message("Ukjent feil. PrÃ¸v pÃ¥ nytt.", "error");
 					}
 				}
 				
@@ -791,11 +791,11 @@ class page_ff_panel
 	<p class="h_left"><a href="panel?ff_id='.$this->ff->id.'">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<boxes />
-		<p><user id="'.$status['init_up_id'].'" /> har startet salg av '.$this->ff->type['refobj'].' til deg. Du må enten godta eller avslå salget.</p>
-		<p>Salgsgebyret vil bli trukket fra banken. Salgsbeløpet vil bli overført direkte fra deg til <user id="'.$status['init_up_id'].'" /> sin bank.</p>
+		<p><user id="'.$status['init_up_id'].'" /> har startet salg av '.$this->ff->type['refobj'].' til deg. Du mÃ¥ enten godta eller avslÃ¥ salget.</p>
+		<p>Salgsgebyret vil bli trukket fra banken. SalgsbelÃ¸pet vil bli overfÃ¸rt direkte fra deg til <user id="'.$status['init_up_id'].'" /> sin bank.</p>
 		<p>Du vil bli satt til '.$this->ff->type['priority'][1].', mens <user id="'.$status['init_up_id'].'" /> vil bli satt til '.$this->ff->type['priority'][2].'.</p>
 		<dl class="dd_right">
-			<dt>Tid salget ble åpnet</dt>
+			<dt>Tid salget ble Ã¥pnet</dt>
 			<dd>'.ess::$b->date->get($status['time'])->format(date::FORMAT_SEC).'</dd>
 		</dl>
 		<dl class="dd_right">
@@ -803,14 +803,14 @@ class page_ff_panel
 			<dd>'.game::format_cash($this->ff->data['ff_bank']).'</dd>
 			<dt>Salgsgebyr</dt>
 			<dd>'.game::format_cash($status['fee']).'</dd>
-			<dt>Salgsbeløp</dt>
+			<dt>SalgsbelÃ¸p</dt>
 			<dd>'.game::format_cash($status['amount']).'</dd>
 		</dl>
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<p class="c">
-				'.show_sbutton("Gjennomfør kjøp", 'name="approve"').'
-				<span class="red">'.show_sbutton("Avslå kjøp", 'name="reject"').'</span>
+				'.show_sbutton("GjennomfÃ¸r kjÃ¸p", 'name="approve"').'
+				<span class="red">'.show_sbutton("AvslÃ¥ kjÃ¸p", 'name="reject"').'</span>
 			</p>
 		</form>
 	</div>
@@ -819,7 +819,7 @@ class page_ff_panel
 			
 			else
 			{
-				ess::$b->page->add_message("Du har ikke tilgang til å se detaljer for salget av {$this->ff->type['refobj']}.", "error");
+				ess::$b->page->add_message("Du har ikke tilgang til Ã¥ se detaljer for salget av {$this->ff->type['refobj']}.", "error");
 				redirect::handle();
 			}
 		}
@@ -830,7 +830,7 @@ class page_ff_panel
 			// medeier har ikke tilgang her
 			if (!$this->ff->access(1))
 			{
-				ess::$b->page->add_message(ucfirst($this->ff->type['refobj'])." er ikke til salgs for øyeblikket.", "error");
+				ess::$b->page->add_message(ucfirst($this->ff->type['refobj'])." er ikke til salgs for Ã¸yeblikket.", "error");
 				redirect::handle();
 			}
 			
@@ -840,41 +840,41 @@ class page_ff_panel
 				$up_id = intval(postval("up_id"));
 				$amount = game::intval(postval("amount"));
 				
-				// for høyt beløp?
+				// for hÃ¸yt belÃ¸p?
 				if (strlen($amount) > 12)
 				{
-					ess::$b->page->add_message("Salgsbeløpet er for høyt.", "error");
+					ess::$b->page->add_message("SalgsbelÃ¸pet er for hÃ¸yt.", "error");
 				}
 				
-				// negativt beløp?
+				// negativt belÃ¸p?
 				elseif ($amount < 0)
 				{
-					ess::$b->page->add_message("Salgsbeløpet kan ikke være negativt.", "error");
+					ess::$b->page->add_message("SalgsbelÃ¸pet kan ikke vÃ¦re negativt.", "error");
 				}
 				
 				else
 				{
 					if (($result = $this->ff->sell_init($up_id, $amount)) === true)
 					{
-						ess::$b->page->add_message('Du har nå startet salg av '.$this->ff->type['refobj'].' til <user id="'.$up_id.'" /> for '.game::format_cash($amount).'. Salgsgebyret blir trukket fra banken når kjøperen godtar kjøpet.');
+						ess::$b->page->add_message('Du har nÃ¥ startet salg av '.$this->ff->type['refobj'].' til <user id="'.$up_id.'" /> for '.game::format_cash($amount).'. Salgsgebyret blir trukket fra banken nÃ¥r kjÃ¸peren godtar kjÃ¸pet.');
 						redirect::handle("panel?ff_id={$this->ff->id}&a=sell");
 					}
 					
-					// har ikke høy nok rank
+					// har ikke hÃ¸y nok rank
 					elseif ($result == "player_rank")
 					{
-						ess::$b->page->add_message('<user id="'.$up_id.'" /> har ikke høy nok rank til å kunne bli '.$this->ff->type['priority'][1].'. Må være minst '.game::$ranks['items_number'][$this->ff->get_priority_rank(1)]['name'].'.', "error");
+						ess::$b->page->add_message('<user id="'.$up_id.'" /> har ikke hÃ¸y nok rank til Ã¥ kunne bli '.$this->ff->type['priority'][1].'. MÃ¥ vÃ¦re minst '.game::$ranks['items_number'][$this->ff->get_priority_rank(1)]['name'].'.', "error");
 					}
 					
 					else
 					{
-						ess::$b->page->add_message("Noe gikk galt. Prøv igjen.", "error");
+						ess::$b->page->add_message("Noe gikk galt. PrÃ¸v igjen.", "error");
 					}
 				}
 			}
 			
 			// vis skjema
-			ess::$b->page->add_title("Velg salgsbeløp");
+			ess::$b->page->add_title("Velg salgsbelÃ¸p");
 			
 			echo '
 <div class="bg1_c small">
@@ -884,8 +884,8 @@ class page_ff_panel
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<boxes />
-			<p>Du er i ferd med å starte salg av '.$this->ff->type['refobj'].'. '.ucfirst($this->ff->type['refobj']).' kan kun selges til '.$this->ff->type['priority'][2].'. Når '.$this->ff->type['priority'][2].' har godtatt kjøpet og betalt pengene, vil hele beløpet bli satt inn i banken din.</p>
-			<p>Salgsgebyret vil bli trukket fra bankkontoen til '.$this->ff->type['refobj'].' i det '.$this->ff->type['priority'][2].' godtar kjøpet. '.ucfirst($this->ff->type['priority'][2]).' vil ikke kunne godta kjøpet hvis pengene ikke er i banken.</p>';
+			<p>Du er i ferd med Ã¥ starte salg av '.$this->ff->type['refobj'].'. '.ucfirst($this->ff->type['refobj']).' kan kun selges til '.$this->ff->type['priority'][2].'. NÃ¥r '.$this->ff->type['priority'][2].' har godtatt kjÃ¸pet og betalt pengene, vil hele belÃ¸pet bli satt inn i banken din.</p>
+			<p>Salgsgebyret vil bli trukket fra bankkontoen til '.$this->ff->type['refobj'].' i det '.$this->ff->type['priority'][2].' godtar kjÃ¸pet. '.ucfirst($this->ff->type['priority'][2]).' vil ikke kunne godta kjÃ¸pet hvis pengene ikke er i banken.</p>';
 			
 			// er det ingen medeier
 			if (!isset($this->ff->members['members_priority'][2]) || count($this->ff->members['members_priority'][2]) == 0)
@@ -906,7 +906,7 @@ class page_ff_panel
 				<thead>
 					<tr>
 						<th>Spiller</th>
-						<th>Sist pålogget</th>
+						<th>Sist pÃ¥logget</th>
 						<th>Ble medlem</th>
 					</tr>
 				</thead>
@@ -937,7 +937,7 @@ class page_ff_panel
 					{
 						echo '
 				<input type="hidden" name="up_id" value="'.$member->id.'" />
-				<dt>'.ucfirst($this->ff->type['priority'][2]).' (kjøper)</dt>
+				<dt>'.ucfirst($this->ff->type['priority'][2]).' (kjÃ¸per)</dt>
 				<dd>'.game::profile_link($member->id, $member->data['up_name'], $member->data['up_access_level']).'</dd>';
 					}
 				}
@@ -945,9 +945,9 @@ class page_ff_panel
 				echo '
 				<dt>Penger i banken</dt>
 				<dd>'.game::format_cash($this->ff->data['ff_bank']).'</dd>
-				<dt>Salgsgebyr (trekkes fra banken ved kjøp)</dt>
+				<dt>Salgsgebyr (trekkes fra banken ved kjÃ¸p)</dt>
 				<dd>'.game::format_cash(ff::SELL_COST).'</dd>
-				<dt>Salgsbeløp (overføres fra kjøper til deg)</dt>
+				<dt>SalgsbelÃ¸p (overfÃ¸res fra kjÃ¸per til deg)</dt>
 				<dd><input type="text" name="amount" class="styled w100" value="'.game::format_cash(postval("amount", "1 000 000")).'" /></dd>
 			</dl>
 			<p class="c">'.show_sbutton("Start salg", 'name="sell_init"').' <a href="panel?ff_id='.$this->ff->id.'">Avbryt</a></p>';
@@ -984,7 +984,7 @@ class page_ff_panel
 			{
 				$this->ff->add_log("logo", login::$user->player->id.":removed", base64_encode($old));
 				
-				// forsøk å slett fra disk
+				// forsÃ¸k Ã¥ slett fra disk
 				$old_path = mysql_result($result, 0, 1);
 				if (MAIN_SERVER && substr($old_path, 0, 2) == "l:")
 				{
@@ -1006,7 +1006,7 @@ class page_ff_panel
 			// kontroller fil
 			if (!is_uploaded_file($_FILES['logo']['tmp_name']))
 			{
-				ess::$b->page->add_message("Noe gikk galt. Prøv på nytt.", "error");
+				ess::$b->page->add_message("Noe gikk galt. PrÃ¸v pÃ¥ nytt.", "error");
 				redirect::handle();
 			}
 			
@@ -1014,19 +1014,19 @@ class page_ff_panel
 			$data = file_get_contents($_FILES['logo']['tmp_name']);
 			if ($data === false)
 			{
-				ess::$b->page->add_message("Noe gikk galt. Prøv på nytt.", "error");
+				ess::$b->page->add_message("Noe gikk galt. PrÃ¸v pÃ¥ nytt.", "error");
 				redirect::handle();
 			}
 			
-			// åpne med GD
+			// Ã¥pne med GD
 			$img = imagecreatefromstring($data);
 			if ($img === false)
 			{
-				ess::$b->page->add_message("Bildet kunne ikke bli lest. Prøv et annet bilde av type JPEG, PNG, GIF eller WBMP.", "error");
+				ess::$b->page->add_message("Bildet kunne ikke bli lest. PrÃ¸v et annet bilde av type JPEG, PNG, GIF eller WBMP.", "error");
 				redirect::handle();
 			}
 			
-			// kontroller bredde/høyde (skal være 110x110) og resize hvis nødvendig
+			// kontroller bredde/hÃ¸yde (skal vÃ¦re 110x110) og resize hvis nÃ¸dvendig
 			if (imagesx($img) != 110 || imagesy($img) != 110)
 			{
 				$new = imagecreatetruecolor(110, 110);
@@ -1054,7 +1054,7 @@ class page_ff_panel
 			{
 				$this->ff->add_log("logo", login::$user->player->id, base64_encode($old));
 				
-				// forsøk å slett fra disk
+				// forsÃ¸k Ã¥ slett fra disk
 				$old_path = mysql_result($result, 0, 1);
 				if (MAIN_SERVER && substr($old_path, 0, 2) == "l:")
 				{
@@ -1063,7 +1063,7 @@ class page_ff_panel
 				}
 			}
 			
-			// lagre bildet på disk
+			// lagre bildet pÃ¥ disk
 			$url = null;
 			if (MAIN_SERVER)
 			{
@@ -1098,15 +1098,15 @@ function vis_bilde(elm)
 <div class="section" style="width: 300px">
 	<h2>Ny logo</h2>
 	<p class="h_right"><a href="panel?ff_id='.$this->ff->id.'">Tilbake</a></p>
-	<p>Her kan du laste opp en ny logo for '.$this->ff->type['refobj'].'. Størrelsen på logoen vil bli gjort om til 110px i bredde og 110px i høyden. Du får derfor best kvalitet ved å laste opp et bilde som er i denne størrelsen.</p>
-	<p>Den gamle logoen vil bli oppført i loggen sammen med ditt spillernavn.</p>
+	<p>Her kan du laste opp en ny logo for '.$this->ff->type['refobj'].'. StÃ¸rrelsen pÃ¥ logoen vil bli gjort om til 110px i bredde og 110px i hÃ¸yden. Du fÃ¥r derfor best kvalitet ved Ã¥ laste opp et bilde som er i denne stÃ¸rrelsen.</p>
+	<p>Den gamle logoen vil bli oppfÃ¸rt i loggen sammen med ditt spillernavn.</p>
 	<form action="" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 		<dl class="dd_right dl_2x">
 			<dt>Velg bilde</dt>
 			<dd><input type="file" name="logo" onchange="vis_bilde(this)" /></dd>
 			
-			<dt>Forhåndsvisning</dt>
+			<dt>ForhÃ¥ndsvisning</dt>
 			<dd><div id="img_preview">Venter</div></dd>
 		</dl>
 		<h4>'.show_sbutton("Last opp logo").($this->ff->data['has_ff_logo'] ? ' '.show_sbutton("Fjern logo", 'name="remove"') : '').'</h4>
@@ -1121,10 +1121,10 @@ function vis_bilde(elm)
 	 */
 	protected function page_suggestion_handle()
 	{
-		ess::$b->page->add_title("Foreslå en spiller som medlem");
+		ess::$b->page->add_title("ForeslÃ¥ en spiller som medlem");
 		$player = false;
 		
-		// hvilken posisjon kan vi foreslå til?
+		// hvilken posisjon kan vi foreslÃ¥ til?
 		$limits = $this->ff->get_limits();
 		$priority = isset($limits[4]) && $limits[4] >= 0 ? 4 : 3;
 		
@@ -1160,13 +1160,13 @@ function vis_bilde(elm)
 				// er i FF?
 				if (isset($this->ff->members['list'][$row['up_id']]))
 				{
-					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> er allerede foreslått, invitert eller medlem av '.$this->ff->type['refobj'].'.', "error");
+					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> er allerede foreslÃ¥tt, invitert eller medlem av '.$this->ff->type['refobj'].'.', "error");
 				}
 				
-				// død/deaktivert?
+				// dÃ¸d/deaktivert?
 				elseif ($row['up_access_level'] == 0)
 				{
-					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> er død og kan ikke foreslås til '.$this->ff->type['refobj'].'.', "error");
+					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> er dÃ¸d og kan ikke foreslÃ¥s til '.$this->ff->type['refobj'].'.', "error");
 				}
 				
 				// blokkert?
@@ -1174,13 +1174,13 @@ function vis_bilde(elm)
 				{
 					$reason = game::bb_to_html($row['uc_info']);
 					$reason = empty($reason) ? '' : ' Begrunnelse: '.$reason;
-					ess::$b->page->add_message('Denne spilleren blokkerte deg '.ess::$b->date->get($row['uc_time'])->format().'. Du kan derfor ikke foreslå spilleren til '.$this->ff->type['refobj'].'.'.$reason, "error");
+					ess::$b->page->add_message('Denne spilleren blokkerte deg '.ess::$b->date->get($row['uc_time'])->format().'. Du kan derfor ikke foreslÃ¥ spilleren til '.$this->ff->type['refobj'].'.'.$reason, "error");
 				}
 				
-				// har ikke høy nok rank?
+				// har ikke hÃ¸y nok rank?
 				elseif ($rank_info['number'] < $this->ff->get_priority_rank($priority))
 				{
-					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> har ikke høy nok rank for å bli '.$this->ff->type['priority'][$priority].'. Må være minst '.game::$ranks['items_number'][$this->ff->get_priority_rank($priority)]['name'].'.', "error");
+					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> har ikke hÃ¸y nok rank for Ã¥ bli '.$this->ff->type['priority'][$priority].'. MÃ¥ vÃ¦re minst '.game::$ranks['items_number'][$this->ff->get_priority_rank($priority)]['name'].'.', "error");
 				}
 				
 				else
@@ -1193,17 +1193,17 @@ function vis_bilde(elm)
 		// har ikke funnet spiller?
 		if (!$player || $_SERVER['REQUEST_METHOD'] == "GET")
 		{
-			// vis skjema for å finne spiller
+			// vis skjema for Ã¥ finne spiller
 			ess::$b->page->add_title("Velg spiller");
 			
 			echo '
 <div class="section" style="width: 200px">
-	<h1>Foreslå medlem til '.$this->ff->type['refobj'].'</h1>
+	<h1>ForeslÃ¥ medlem til '.$this->ff->type['refobj'].'</h1>
 	<p class="h_right"><a href="panel?ff_id='.$this->ff->id.'">Tilbake</a></p>
 	<boxes />
 	<form action="" method="post">
-		<p>Skriv inn navnet på spilleren du ønsker å foreslå som medlem til '.$this->ff->type['refobj'].'.</p>
-		<p>'.ucfirst($this->ff->type['priority'][1]).'/'.$this->ff->type['priority'][2].' vil få opp dette forslaget, og kan akseptere det slik at spilleren blir invitert som '.$this->ff->type['priority'][$priority].($this->ff->type['parent'] ? ' underordnet deg' : '').'.</p>
+		<p>Skriv inn navnet pÃ¥ spilleren du Ã¸nsker Ã¥ foreslÃ¥ som medlem til '.$this->ff->type['refobj'].'.</p>
+		<p>'.ucfirst($this->ff->type['priority'][1]).'/'.$this->ff->type['priority'][2].' vil fÃ¥ opp dette forslaget, og kan akseptere det slik at spilleren blir invitert som '.$this->ff->type['priority'][$priority].($this->ff->type['parent'] ? ' underordnet deg' : '').'.</p>
 		<dl class="dd_right">
 			<dt>Spiller</dt>
 			<dd><input type="text" name="player" value="'.htmlspecialchars(postval("player", $player ? $player['up_name'] : '')).'" class="styled w100" /></dd>
@@ -1224,12 +1224,12 @@ function vis_bilde(elm)
 			// legg til forslag
 			if ($this->ff->player_suggest($player['up_id']))
 			{
-				ess::$b->page->add_message('<user id="'.$player['up_id'].'" /> ble foreslått til '.$this->ff->type['refobj'].' som '.$this->ff->type['priority'][$priority].($this->ff->type['parent'] ? ' underordnet deg' : '').'.');
+				ess::$b->page->add_message('<user id="'.$player['up_id'].'" /> ble foreslÃ¥tt til '.$this->ff->type['refobj'].' som '.$this->ff->type['priority'][$priority].($this->ff->type['parent'] ? ' underordnet deg' : '').'.');
 				redirect::handle();
 			}
 			else
 			{
-				ess::$b->page->add_message("Noe gikk galt. Kunne ikke foreslå spilleren.", "error");
+				ess::$b->page->add_message("Noe gikk galt. Kunne ikke foreslÃ¥ spilleren.", "error");
 			}
 		}
 		
@@ -1325,7 +1325,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			// oppdater
 			ess::$b->db->query("UPDATE ff SET ff_description = ".ess::$b->db->quote($_POST['description'])." WHERE ff_id = {$this->ff->id}");
 			
-			ess::$b->page->add_message("Beskrivelsen er nå oppdatert.");
+			ess::$b->page->add_message("Beskrivelsen er nÃ¥ oppdatert.");
 			$this->ff->add_log("description", login::$user->player->id, $this->ff->data['ff_description']);
 			redirect::handle("panel?ff_id={$this->ff->id}");
 		}
@@ -1333,7 +1333,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		ess::$b->page->add_js_domready('
 	$("previewButton").addEvent("click", function()
 	{
-		$("previewContainer").set("html", "<p>Laster inn forhåndsvisning..</p>");
+		$("previewContainer").set("html", "<p>Laster inn forhÃ¥ndsvisning..</p>");
 		$("previewOuter").setStyle("display", "block");
 		if ($("previewOuter").getPosition().y > window.getScroll().y + window.getSize().y)
 		{
@@ -1348,16 +1348,16 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 		<h2>Beskrivelse av '.$this->ff->type['refobj'].'</h2>
 		<p class="h_right"><a href="panel?ff_id='.$this->ff->id.'">Tilbake</a></p>
-		<p>Dette er hva som vil stå øverst på forsiden av '.$this->ff->type['refobj'].' og er ment som en beskrivelse av '.$this->ff->type['refobj'].'.</p>
+		<p>Dette er hva som vil stÃ¥ Ã¸verst pÃ¥ forsiden av '.$this->ff->type['refobj'].' og er ment som en beskrivelse av '.$this->ff->type['refobj'].'.</p>
 		<p><textarea name="description" rows="20" cols="75" style="width: 490px" id="textContent">'.htmlspecialchars(postval("description", $this->ff->data['ff_description'])).'</textarea></p>
 		<p>
 			'.show_sbutton("Lagre", 'name="save" accesskey="s"').'
-			'.show_button("Forhåndsvis", 'accesskey="p" id="previewButton"').'
+			'.show_button("ForhÃ¥ndsvis", 'accesskey="p" id="previewButton"').'
 		</p>
 	</form>
 </div>
 <div style="display: none" id="previewOuter">
-	<p class="c">Forhåndsvisning:</p>
+	<p class="c">ForhÃ¥ndsvisning:</p>
 	<div class="p" style="'.($this->ff->type['type'] == "familie" ? 'background-color: #1A1A1A; width: 408px; border: 5px solid #292929; padding: 5px 5px; margin: 10px auto' : 'margin: 10px 0; padding: 5px 0; border: 5px solid #292929; border-left: 0; border-right: 0').'" id="previewContainer"></div>
 </div>';
 		
@@ -1375,7 +1375,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// hent tall
 		$max = $this->ff->members_limit_max_info();
 		
-		// øke begrensningen?
+		// Ã¸ke begrensningen?
 		if (isset($_POST['increase']) && validate_sid())
 		{
 			// ingen grense?
@@ -1384,21 +1384,21 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				ess::$b->page->add_message("Det er ingen medlemsbegrensning.", "error");
 			}
 			
-			// har vi allerede nådd grensa?
+			// har vi allerede nÃ¥dd grensa?
 			elseif ($max['active'] >= $max['max'])
 			{
-				ess::$b->page->add_message("Det er ikke mulig å øke medlemsbegrensningen noe mer.".($this->ff->competition ? ' Etter konkurranseperioden vil det være mulig å øke antall medlemmer ytterligere.' : ''), "error");
+				ess::$b->page->add_message("Det er ikke mulig Ã¥ Ã¸ke medlemsbegrensningen noe mer.".($this->ff->competition ? ' Etter konkurranseperioden vil det vÃ¦re mulig Ã¥ Ã¸ke antall medlemmer ytterligere.' : ''), "error");
 			}
 			
 			// forandret seg?
 			elseif (postval("count") != $max['active'])
 			{
-				ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. Prøv på nytt om du fremdeles ønsker.", "error");
+				ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. PrÃ¸v pÃ¥ nytt om du fremdeles Ã¸nsker.", "error");
 			}
 			
 			else
 			{
-				// forsøk å øk begrensningen
+				// forsÃ¸k Ã¥ Ã¸k begrensningen
 				if ($this->ff->members_limit_increase()) redirect::handle();
 			}
 		}
@@ -1412,27 +1412,27 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				ess::$b->page->add_message("Det er ingen medlemsbegrensning.", "error");
 			}
 			
-			// har vi allerede nådd grensa?
+			// har vi allerede nÃ¥dd grensa?
 			elseif ($max['active'] <= $max['min'])
 			{
-				ess::$b->page->add_message("Det er ikke mulig å senke medlemsbegrensningen noe mer.", "error");
+				ess::$b->page->add_message("Det er ikke mulig Ã¥ senke medlemsbegrensningen noe mer.", "error");
 			}
 			
 			// har for mange medlemmer?
 			elseif (count($this->ff->members['members']) + count($this->ff->members['invited']) >= $max['active'])
 			{
-				ess::$b->page->add_message("Det er for mange medlemmer/inviterte til broderskapet, og medlemsbegrensningen kan ikke senkes mer uten å kaste ut/trekke tilbake invitasjon til en spiller.", "error");
+				ess::$b->page->add_message("Det er for mange medlemmer/inviterte til broderskapet, og medlemsbegrensningen kan ikke senkes mer uten Ã¥ kaste ut/trekke tilbake invitasjon til en spiller.", "error");
 			}
 			
 			// forandret seg?
 			elseif (postval("count") != $max['active'])
 			{
-				ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. Prøv på nytt om du fremdeles ønsker.", "error");
+				ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. PrÃ¸v pÃ¥ nytt om du fremdeles Ã¸nsker.", "error");
 			}
 			
 			else
 			{
-				// forsøk å senk begrensningen
+				// forsÃ¸k Ã¥ senk begrensningen
 				if ($this->ff->members_limit_decrease()) redirect::handle();
 			}
 		}
@@ -1460,7 +1460,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		<boxes />
 		<p>Medlemsbegrensningen bestemmer hvor mange medlemmer du kan ha i '.$this->ff->type['refobj'].'.</p>
 		<dl class="dd_right">
-			<dt>Nåværende begrensning</dt>
+			<dt>NÃ¥vÃ¦rende begrensning</dt>
 			<dd><b>'.$max['active'].'</b></dd>
 			<dt>Antall medlemmer og inviterte</dt>
 			<dd><b>'.(count($this->ff->members['members']) + count($this->ff->members['invited'])).'</b></dd>
@@ -1471,9 +1471,9 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			<dt>Begrensning for driftskostnad</dt>
 			<dd>'.($max['min'] + $max['extra_max']).'</dd>
 		</dl>'.($this->ff->competition ? '
-		<p>Etter broderskapkonkurransen er ferdig vil du kunne øke medlemsbegrensningen ytterligere.</p>' : '').'
-		<p>Når medlemsbegrensningen øker, vil utgangspunktet til driftskostnaden øke med <b>'.game::format_cash(ff::PAY_COST_INCREASE_FFM).'</b> per medlem. I tillegg må det betales <b>'.game::format_cash(ff::MEMBERS_LIMIT_INCREASE_COST).'</b> fra banken til '.$this->ff->type['refobj'].' i det begrensningen økes.</p>
-		<p>Når medlemsbegrensningen settes ned må man vente til neste periode for driftskostnad før dette antallet blir satt ned igjen.</p>
+		<p>Etter broderskapkonkurransen er ferdig vil du kunne Ã¸ke medlemsbegrensningen ytterligere.</p>' : '').'
+		<p>NÃ¥r medlemsbegrensningen Ã¸ker, vil utgangspunktet til driftskostnaden Ã¸ke med <b>'.game::format_cash(ff::PAY_COST_INCREASE_FFM).'</b> per medlem. I tillegg mÃ¥ det betales <b>'.game::format_cash(ff::MEMBERS_LIMIT_INCREASE_COST).'</b> fra banken til '.$this->ff->type['refobj'].' i det begrensningen Ã¸kes.</p>
+		<p>NÃ¥r medlemsbegrensningen settes ned mÃ¥ man vente til neste periode for driftskostnad fÃ¸r dette antallet blir satt ned igjen.</p>
 		<dl class="dd_right">
 			<dt>Penger i <a href="banken?ff_id='.$this->ff->id.'">banken</a> til '.$this->ff->type['refobj'].'</dt>
 			<dd>'.game::format_cash($this->ff->data['ff_bank']).'</dd>
@@ -1481,8 +1481,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="count" value="'.$max['active'].'" />'.($max['active'] < $max['max'] ? '
-			<p class="c">'.show_sbutton("Øk med én plass (".game::format_cash(ff::MEMBERS_LIMIT_INCREASE_COST).")", 'name="increase"').'</p>' : '').($max['active'] > $max['min'] ? '
-			<p class="c">'.show_sbutton("Senk med én plass", 'name="decrease"').'</p>' : '').'
+			<p class="c">'.show_sbutton("Ã˜k med Ã©n plass (".game::format_cash(ff::MEMBERS_LIMIT_INCREASE_COST).")", 'name="increase"').'</p>' : '').($max['active'] > $max['min'] ? '
+			<p class="c">'.show_sbutton("Senk med Ã©n plass", 'name="decrease"').'</p>' : '').'
 		</form>
 		<p class="c"><a href="panel?ff_id='.$this->ff->id.'">Tilbake</a></p>
 	</div>
@@ -1536,20 +1536,20 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				ess::$b->db->query("UPDATE ff SET ff_br_id = $br_id WHERE ff_id = {$this->ff->id}");
 				
 				global $__server;
-				putlog("INFO", ucfirst($this->ff->type['refobj'])." %u{$this->ff->data['ff_name']}%u har nå valgt".($this->ff->data['br_id'] ? ' ny' : '')." bygning på {$bydel['name']}. {$__server['path']}/ff/?ff_id={$this->ff->id}");
-				putlog("CREWCHAN", ucfirst($this->ff->type['refobj'])." %u{$this->ff->data['ff_name']}%u har nå valgt".($this->ff->data['br_id'] ? ' ny' : '')." bygning på {$bydel['name']}. {$__server['path']}/ff/?ff_id={$this->ff->id}");
+				putlog("INFO", ucfirst($this->ff->type['refobj'])." %u{$this->ff->data['ff_name']}%u har nÃ¥ valgt".($this->ff->data['br_id'] ? ' ny' : '')." bygning pÃ¥ {$bydel['name']}. {$__server['path']}/ff/?ff_id={$this->ff->id}");
+				putlog("CREWCHAN", ucfirst($this->ff->type['refobj'])." %u{$this->ff->data['ff_name']}%u har nÃ¥ valgt".($this->ff->data['br_id'] ? ' ny' : '')." bygning pÃ¥ {$bydel['name']}. {$__server['path']}/ff/?ff_id={$this->ff->id}");
 				
 				// live-feed
-				livefeed::add_row(ucfirst($this->ff->refstring).' <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->ff->id.'">'.htmlspecialchars($this->ff->data['ff_name']).'</a> har valgt bygning på '.htmlspecialchars($bydel['name']).'.');
+				livefeed::add_row(ucfirst($this->ff->refstring).' <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->ff->id.'">'.htmlspecialchars($this->ff->data['ff_name']).'</a> har valgt bygning pÃ¥ '.htmlspecialchars($bydel['name']).'.');
 				
-				// første familien i spillet?
+				// fÃ¸rste familien i spillet?
 				if ($this->ff->type['type'] == "familie")
 				{
 					hall_of_fame::trigger("familie", $this->ff);
 					hall_of_fame::trigger("ff_owner", $this->ff);
 				}
 				
-				ess::$b->page->add_message("Du har valgt bygning for {$this->ff->type['refobj']} på {$bydel['name']}.");
+				ess::$b->page->add_message("Du har valgt bygning for {$this->ff->type['refobj']} pÃ¥ {$bydel['name']}.");
 				redirect::handle("?ff_id={$this->ff->id}");
 			}
 		}
@@ -1599,7 +1599,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	
 	var select_br = function()
 	{
-		if (confirm("Er du sikker på at du vil velge denne bygningen for '.$this->ff->type['refobj'].'? Dette kan ikke endres senere."))
+		if (confirm("Er du sikker pÃ¥ at du vil velge denne bygningen for '.$this->ff->type['refobj'].'? Dette kan ikke endres senere."))
 		{
 			$("br_id").set("value", this.options.data["br_id"]).form.submit();
 		}
@@ -1612,7 +1612,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		
 		echo '
 <div class="bg1_c" style="width: '.($bydel['b_size_x']+30).'px; margin: 40px auto">
-	<h1 class="bg1">Du er på '.$bydel['name'].'<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">Du er pÃ¥ '.$bydel['name'].'<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="./?ff_id='.$this->ff->id.'">&laquo; Tilbake</a></p>
 	<div class="bg1" style="overflow: visible; padding-top: 1px; margin-top: -1px">
 		<form action="" method="post">
@@ -1636,7 +1636,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// allerede lagt ned?
 		if (!$this->ff->active)
 		{
-			ess::$b->page->add_message(ucfirst($this->ff->type['refobj'])." er allerde oppløst.");
+			ess::$b->page->add_message(ucfirst($this->ff->type['refobj'])." er allerde opplÃ¸st.");
 			redirect::handle();
 		}
 		
@@ -1647,14 +1647,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			$params = new params($row['a_params']);
 			if ($params->get("ff_id") == $this->ff->id)
 			{
-				ess::$b->page->add_message(ucfirst($this->ff->type['refobj']).' ligger allerede ute på auksjon og kan ikke legges ned på nytt nå.', "error");
+				ess::$b->page->add_message(ucfirst($this->ff->type['refobj']).' ligger allerede ute pÃ¥ auksjon og kan ikke legges ned pÃ¥ nytt nÃ¥.', "error");
 				redirect::handle("/auksjoner?a_id={$row['a_id']}", redirect::ROOT);
 			}
 		}
 		
 		ess::$b->page->add_title("Legg ned {$this->ff->type['refobj']}");
 		
-		// godkjent å legge ned FF?
+		// godkjent Ã¥ legge ned FF?
 		if (isset($_POST['confirm']) && (isset($_POST['pass']) || $this->ff->mod) && validate_sid())
 		{
 			// kontroller passordet
@@ -1683,11 +1683,11 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	<boxes />
 	<form action="" method="post">
 		<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
-		<p>Du er i ferd med å <u>legge ned '.$this->ff->type['refobj'].'</u>. Når du legger ned '.$this->ff->type['refobj'].' vil '.$this->ff->type['refobj'].' bli oppløst. Du og alle medlemmer vil miste tilgang til '.$this->ff->type['refobj'].' og dets forum.</p>'.($this->ff->type['type'] == 'familie' ? ($this->ff->competition || $this->ff->params->get("die_no_new") ? '' : '
-		<p>En ny broderskapkonkurranse vil bli opprettet som vil gjøre det mulig om å konkurrere om et nytt broderskap som tar denne sin plass.') : '
-		<p>Firmaet vil bli lagt ut på en auksjon, og vinneren av auksjonen vil fortsette driften av firmaet. Du vil ikke motta noe fra denne auksjonen.</p>').'
+		<p>Du er i ferd med Ã¥ <u>legge ned '.$this->ff->type['refobj'].'</u>. NÃ¥r du legger ned '.$this->ff->type['refobj'].' vil '.$this->ff->type['refobj'].' bli opplÃ¸st. Du og alle medlemmer vil miste tilgang til '.$this->ff->type['refobj'].' og dets forum.</p>'.($this->ff->type['type'] == 'familie' ? ($this->ff->competition || $this->ff->params->get("die_no_new") ? '' : '
+		<p>En ny broderskapkonkurranse vil bli opprettet som vil gjÃ¸re det mulig om Ã¥ konkurrere om et nytt broderskap som tar denne sin plass.') : '
+		<p>Firmaet vil bli lagt ut pÃ¥ en auksjon, og vinneren av auksjonen vil fortsette driften av firmaet. Du vil ikke motta noe fra denne auksjonen.</p>').'
 		<p>Du kan alternativt <a href="panel?ff_id='.$this->ff->id.'&amp;a=sell">selge</a> '.$this->ff->type['refobj'].'.</p>'.($this->ff->competition ? '
-		<p><b>Merk:</b> Du har ikke mulighet til å opprette ny '.$this->ff->type['refobj'].' i samme konkurranse etter at du har lagt ned '.$this->ff->type['refobj'].'.</p>' : '').'
+		<p><b>Merk:</b> Du har ikke mulighet til Ã¥ opprette ny '.$this->ff->type['refobj'].' i samme konkurranse etter at du har lagt ned '.$this->ff->type['refobj'].'.</p>' : '').'
 		<dl class="dd_right">
 			<dt>Penger i banken</dt>
 			<dd>'.game::format_cash($this->ff->data['ff_bank']).'</dd>
@@ -1713,7 +1713,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	 */
 	protected function forum_link_add()
 	{
-		// har vi allerede forum lenken på plass?
+		// har vi allerede forum lenken pÃ¥ plass?
 		if ($this->ff->uinfo->forum_link() !== null)
 		{
 			ess::$b->page->add_message("Lenken er allerede lagt til.");
@@ -1723,7 +1723,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// legg til lenken
 		$this->ff->uinfo->forum_link(true);
 		
-		ess::$b->page->add_message("Lenke i menyen til forumet for {$this->ff->type['refobj']} er nå opprettet.");
+		ess::$b->page->add_message("Lenke i menyen til forumet for {$this->ff->type['refobj']} er nÃ¥ opprettet.");
 		redirect::handle();
 	}
 	
@@ -1735,14 +1735,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// er ikke forum lenken lagt til?
 		if ($this->ff->uinfo->forum_link() === null)
 		{
-			ess::$b->page->add_message("Lenken finnes ikke fra før av.");
+			ess::$b->page->add_message("Lenken finnes ikke fra fÃ¸r av.");
 			redirect::handle();
 		}
 		
 		// fjern linken
 		$this->ff->uinfo->forum_link(false);
 		
-		ess::$b->page->add_message("Lenke i menyen til forumet for {$this->ff->type['refobj']} er nå fjernet.");
+		ess::$b->page->add_message("Lenke i menyen til forumet for {$this->ff->type['refobj']} er nÃ¥ fjernet.");
 		redirect::handle();
 	}
 	
@@ -1754,14 +1754,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// crew?
 		if ($this->ff->uinfo->crew)
 		{
-			ess::$b->page->add_message("Du har crewtilgang til denne {$this->ff->type['refobj']} og må logge ut av utvidede tilganger for å midlertidig forlate {$this->ff->type['refobj']}.", "error");
+			ess::$b->page->add_message("Du har crewtilgang til denne {$this->ff->type['refobj']} og mÃ¥ logge ut av utvidede tilganger for Ã¥ midlertidig forlate {$this->ff->type['refobj']}.", "error");
 			redirect::handle();
 		}
 		
 		// eier av FF?
 		if ($this->ff->uinfo->data['ffm_priority'] == 1)
 		{
-			ess::$b->page->add_message("Du kan ikke forlate som eier. Det eneste valget du har er å selge {$this->ff->type['refobj']}.", "error");
+			ess::$b->page->add_message("Du kan ikke forlate som eier. Det eneste valget du har er Ã¥ selge {$this->ff->type['refobj']}.", "error");
 			redirect::handle();
 		}
 		
@@ -1783,8 +1783,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 <!-- forlat FF -->
 <div class="section w200">
 	<h2>Forlat '.$this->ff->type['refobj'].'</h2>
-	<p>Er du sikker på at du ønsker å forlate denne '.$this->ff->type['refobj'].'?</p>
-	<p>Dette tilsvarer å bli sparket fra '.$this->ff->type['refobj'].'.</p>
+	<p>Er du sikker pÃ¥ at du Ã¸nsker Ã¥ forlate denne '.$this->ff->type['refobj'].'?</p>
+	<p>Dette tilsvarer Ã¥ bli sparket fra '.$this->ff->type['refobj'].'.</p>
 	<form action="" method="post">
 		<input type="hidden" name="leave" />
 		<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
@@ -1806,49 +1806,49 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// nostat?
 		if (access::is_nostat())
 		{
-			ess::$b->page->add_message("Du er nostat og har ikke tilgang til å donere til {$this->ff->type['refobj']}.", "error");
+			ess::$b->page->add_message("Du er nostat og har ikke tilgang til Ã¥ donere til {$this->ff->type['refobj']}.", "error");
 		}
 		
-		// negativt beløp?
+		// negativt belÃ¸p?
 		elseif ($amount < 0)
 		{
-			ess::$b->page->add_message("Beløpet kan ikke være negativt..", "error");
+			ess::$b->page->add_message("BelÃ¸pet kan ikke vÃ¦re negativt..", "error");
 		}
 		
 		// minimum: 15 000 kr
 		elseif ($amount < 15000)
 		{
-			ess::$b->page->add_message("Minstebeløp å donere er 15 000 kr.", "error");
+			ess::$b->page->add_message("MinstebelÃ¸p Ã¥ donere er 15 000 kr.", "error");
 		}
 		
 		// godkjent?
 		else
 		{
-			// finn ut når vi donerte siste gang - kan ikke donere oftere enn en gang i timen
+			// finn ut nÃ¥r vi donerte siste gang - kan ikke donere oftere enn en gang i timen
 			$result = ess::$b->db->query("SELECT ffbl_time FROM ff_bank_log WHERE ffbl_ff_id = {$this->ff->id} AND ffbl_type = 3 AND ffbl_up_id = ".login::$user->player->id." ORDER BY ffbl_time DESC LIMIT 1");
 			$last = mysql_fetch_assoc($result);
 			
 			if ($last && $last['ffbl_time']+3600 > time())
 			{
-				ess::$b->page->add_message("Du kan ikke donere oftere enn én gang per time. Du må vente ".game::counter($last['ffbl_time']+3600-time())." før du kan donere på nytt.", "error");
+				ess::$b->page->add_message("Du kan ikke donere oftere enn Ã©n gang per time. Du mÃ¥ vente ".game::counter($last['ffbl_time']+3600-time())." fÃ¸r du kan donere pÃ¥ nytt.", "error");
 			}
 			
 			// ikke nok penger?
 			elseif ($amount > login::$user->player->data['up_cash'])
 			{
-				ess::$b->page->add_message("Du har ikke nok penger på hånda til å donere ".game::format_cash($amount)." til {$this->ff->type['refobj']}.", "error");
+				ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda til Ã¥ donere ".game::format_cash($amount)." til {$this->ff->type['refobj']}.", "error");
 			}
 			
 			// godkjent?
 			elseif (isset($_POST['approve']) && validate_sid(false))
 			{
-				// forsøk å donere
+				// forsÃ¸k Ã¥ donere
 				ess::$b->db->query("UPDATE ff, users_players SET ff_bank = ff_bank + $amount, up_cash = up_cash - $amount WHERE ff_id = {$this->ff->id} AND up_id = ".login::$user->player->id." AND up_cash >= $amount");
 				
 				// hadde ikke nok penger?
 				if (ess::$b->db->affected_rows() == 0)
 				{
-					ess::$b->page->add_message("Du har ikke nok penger på hånda til å donere ".game::format_cash($amount)." til {$this->ff->type['refobj']}.", "error");
+					ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda til Ã¥ donere ".game::format_cash($amount)." til {$this->ff->type['refobj']}.", "error");
 				}
 				
 				else
@@ -1873,22 +1873,22 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			
 			elseif (!isset($_POST['skip']))
 			{
-				ess::$b->page->add_title("Donér til {$this->ff->type['refobj']}");
+				ess::$b->page->add_title("DonÃ©r til {$this->ff->type['refobj']}");
 				
 				// vis skjema for godkjenning
 				echo '
 <!-- donasjon -->
 <div class="section w200">
-	<h2>Donér til '.$this->ff->type['refobj'].'</h2>
-	<p>Du er i ferd med å donére til '.$this->ff->type['refobj'].'.</p>
-	<p>Beløp: '.game::format_cash($amount).'</p>
+	<h2>DonÃ©r til '.$this->ff->type['refobj'].'</h2>
+	<p>Du er i ferd med Ã¥ donÃ©re til '.$this->ff->type['refobj'].'.</p>
+	<p>BelÃ¸p: '.game::format_cash($amount).'</p>
 	<p>Melding/notat: '.game::format_data($note, "bb-opt", "Uten melding").'</p>
 	<form action="" method="post">
 		<input type="hidden" name="donate" value="'.$amount.'" />
 		<input type="hidden" name="note" value="'.htmlspecialchars($note).'" />
 		<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 		<p class="c">
-			'.show_sbutton("Utfør donasjon", 'name="approve"').'
+			'.show_sbutton("UtfÃ¸r donasjon", 'name="approve"').'
 			'.show_sbutton("Avbryt", 'name="skip"').'
 		</p>
 	</form>
@@ -1907,31 +1907,31 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		
 		if (isset($_POST['pay']))
 		{
-			// har vi ikke gått over tiden
+			// har vi ikke gÃ¥tt over tiden
 			if ($pay_info['in_time'])
 			{
-				ess::$b->page->add_message("Du har ikke mulighet til å betale nå.");
+				ess::$b->page->add_message("Du har ikke mulighet til Ã¥ betale nÃ¥.");
 			}
 			
 			// har vi nok penger?
 			elseif (login::$user->player->data['up_cash'] <= $pay_info['price'])
 			{
-				ess::$b->page->add_message("Du har ikke nok penger på hånda.");
+				ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda.");
 			}
 			
 			else
 			{
-				// utfør betalingen
+				// utfÃ¸r betalingen
 				$result = $this->ff->pay_action();
 				if ($result !== false)
 				{
-					ess::$b->page->add_message("Du har betalt driftskostnaden på <b>".game::format_cash($result)."</b>. Neste gang driftskostnaden skal trekkes er ".ess::$b->date->get($this->ff->data['ff_pay_next'])->format().".");
+					ess::$b->page->add_message("Du har betalt driftskostnaden pÃ¥ <b>".game::format_cash($result)."</b>. Neste gang driftskostnaden skal trekkes er ".ess::$b->date->get($this->ff->data['ff_pay_next'])->format().".");
 					$this->ff->redirect();
 				}
 				
 				else
 				{
-					ess::$b->page->add_message("Noe gikk galt ved betaling. Prøv på nytt.");
+					ess::$b->page->add_message("Noe gikk galt ved betaling. PrÃ¸v pÃ¥ nytt.");
 					redirect::handle("panel?ff_id={$this->ff->id}&a=pay");
 				}
 			}
@@ -1953,30 +1953,30 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	<h2>Driftskostnad</h2>
 	<p class="h_right"><a href="panel?ff_id='.$this->ff->id.'">Tilbake</a></p>
 	<boxes />
-	<p>For at '.$this->ff->type['refobj'].' ikke skal dø ut, må det betales inn et beløp på <u>100 mill</u> i tillegg til kostnad per ekstra medlemsplass til spillet hver 10. dag.</p>
-	<p>Når medlemmene i '.$this->ff->type['refobj'].' ranker, vil beløpet som må innbetales synke med 1 og 1 mill avhengig av hvor mye som rankes.</p>
+	<p>For at '.$this->ff->type['refobj'].' ikke skal dÃ¸ ut, mÃ¥ det betales inn et belÃ¸p pÃ¥ <u>100 mill</u> i tillegg til kostnad per ekstra medlemsplass til spillet hver 10. dag.</p>
+	<p>NÃ¥r medlemmene i '.$this->ff->type['refobj'].' ranker, vil belÃ¸pet som mÃ¥ innbetales synke med 1 og 1 mill avhengig av hvor mye som rankes.</p>
 	<p>'.ucfirst($this->ff->type['refobj']).' mister ikke ranken hvis et medlem forlater '.$this->ff->type['refobj'].'.</p>
-	<p>Beløpet vil bli trukket fra banken for '.$this->ff->type['refobj'].' automatisk ved innbetalingstidspunkt. Hvis det ikke er nok penger i banken, vil '.$this->ff->type['refobj'].' få frist på å innbetale beløpet manuelt innen 24 timer. Beløpet vil da øke med 50 %.</p>'.(!$pay_info['in_time'] ? '
+	<p>BelÃ¸pet vil bli trukket fra banken for '.$this->ff->type['refobj'].' automatisk ved innbetalingstidspunkt. Hvis det ikke er nok penger i banken, vil '.$this->ff->type['refobj'].' fÃ¥ frist pÃ¥ Ã¥ innbetale belÃ¸pet manuelt innen 24 timer. BelÃ¸pet vil da Ã¸ke med 50 %.</p>'.(!$pay_info['in_time'] ? '
 	<div class="section" style="width: 220px">
 		<h2>Betaling av driftskostnad</h2>
-		<p class="error_box">'.ucfirst($this->ff->type['refobj']).' har overskredet tidspunktet for innbetaling. Betaling må skje manuelt av '.$this->ff->type['priority'][1].'/'.$this->ff->type['priority'][2].'.</p>
+		<p class="error_box">'.ucfirst($this->ff->type['refobj']).' har overskredet tidspunktet for innbetaling. Betaling mÃ¥ skje manuelt av '.$this->ff->type['priority'][1].'/'.$this->ff->type['priority'][2].'.</p>
 		<dl class="dd_right">
 			<dt>Betalingsfrist</dt>
 			<dd>'.ess::$b->date->get($pay_info['next'])->format().'<br />'.game::timespan($pay_info['next'], game::TIME_ABS).'</dd>
-			<dt>Beløp</dt>
+			<dt>BelÃ¸p</dt>
 			<dd>'.game::format_cash($pay_info['price']).'</dd>
 		</dl>'.($this->ff->access(2) ? '
 		<form action="panel?ff_id='.$this->ff->id.'&amp;a=pay" method="post">
 			<p class="c">'.show_sbutton("Betal driftskostnaden", 'name="pay"').'</p>
 		</form>' : '').'
-		<p>Hvis beløpet ikke blir betalt innen betalingsfristen vil '.$this->ff->type['refobj'].' bli oppløst.</p>
+		<p>Hvis belÃ¸pet ikke blir betalt innen betalingsfristen vil '.$this->ff->type['refobj'].' bli opplÃ¸st.</p>
 	</div>' : '
 	<dl class="dd_right">
 		<dt>Neste innbetaling</dt>
 		<dd>'.ess::$b->date->get($pay_info['next'])->format().'</dd>
-		<dt>Utgangspunkt for beløp ('.fwords("%d eksta spillerplass", "%d ekstra spillerplasser", $pay_info['members_limit']).')</dt>
+		<dt>Utgangspunkt for belÃ¸p ('.fwords("%d eksta spillerplass", "%d ekstra spillerplasser", $pay_info['members_limit']).')</dt>
 		<dd>'.game::format_cash($pay_info['price_max']).'</dd>
-		<dt>Foreløpig beløp</dt>
+		<dt>ForelÃ¸pig belÃ¸p</dt>
 		<dd>'.game::format_cash($pay_info['price']).'</dd>
 	</dl>').'
 	<p>Medlemmers bidrag:</p>';
@@ -2053,7 +2053,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		// ingen statistikk?
 		if (count($periods) == 0)
 		{
-			ess::$b->page->add_message("Det er ikke utført noen betalinger enda og ingen statistikk foreligger.", "error");
+			ess::$b->page->add_message("Det er ikke utfÃ¸rt noen betalinger enda og ingen statistikk foreligger.", "error");
 			redirect::handle();
 		}
 		
@@ -2064,7 +2064,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$labels = array();
 		$cost = array();
 		$up_limit = array();
-		$points_max = 0; // for å finne 100 %
+		$points_max = 0; // for Ã¥ finne 100 %
 		foreach ($periods as $row)
 		{
 			$stats[0][$row['ffsp_id']] = 0;
@@ -2090,7 +2090,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		
 		$pay_info = $this->ff->pay_info();
 		
-		$labels[] = "Inneværende periode";
+		$labels[] = "InnevÃ¦rende periode";
 		$cost[] = round($pay_info['price'] / 1000000);
 		$up_limit[] = $limit_data['min'] + $limit_data['extra_max'];
 		$stats[0][] = (int) $this->ff->data['ff_pay_points'];
@@ -2155,7 +2155,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 <div class="bg1_c">
 	<h1 class="bg1">Statistikk over driftskostnad for '.$this->ff->type['refobj'].'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Denne siden viser hvor mye en spiller i '.$this->ff->type['refobj'].' har ranket mellom hver driftsperiode. Statistikken gjelder for maksimalt 15 driftskostnader tilbake i tid, i tillegg til driftskostnaden så langt i nåværende periode.</p>
+		<p>Denne siden viser hvor mye en spiller i '.$this->ff->type['refobj'].' har ranket mellom hver driftsperiode. Statistikken gjelder for maksimalt 15 driftskostnader tilbake i tid, i tillegg til driftskostnaden sÃ¥ langt i nÃ¥vÃ¦rende periode.</p>
 		<p class="c"><a href="panel?ff_id='.$this->ff->id.'">Tilbake</a></p>
 		<p>Rankutvikling:</p>
 		<div style="margin: 10px 0"><div id="'.$elm_id_rank.'"></div></div>
@@ -2206,7 +2206,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			<thead>
 				<tr>
 					<th>Spiller</th>
-					<th>Sist pålogget</th>
+					<th>Sist pÃ¥logget</th>
 					<th>Plassering</th>
 					<th>I bomberom?</th>
 					<th>Helse</th>
@@ -2254,8 +2254,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$ret = $this->ff->bullets_in($num, login::$user->player);
 		switch ($ret)
 		{
-			case "missing": ess::$b->page->add_message("Du har ikke så mange kuler.", "error"); break;
-			case "full": ess::$b->page->add_message("Det er ikke plass til så mange kuler i broderskapet.", "error"); break;
+			case "missing": ess::$b->page->add_message("Du har ikke sÃ¥ mange kuler.", "error"); break;
+			case "full": ess::$b->page->add_message("Det er ikke plass til sÃ¥ mange kuler i broderskapet.", "error"); break;
 			default: ess::$b->page->add_message("Du satt inn ".fwords("%d kule", "%d kuler", $num)." i kulelageret til broderskapet."); redirect::handle();
 		}
 	}
@@ -2269,7 +2269,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$num = (int) postval("bullets_out", 0);
 		if ($num <= 0) redirect::handle();
 		
-		// på vegne av en spiller?
+		// pÃ¥ vegne av en spiller?
 		$up = login::$user->player;
 		$real_up = null;
 		
@@ -2288,10 +2288,10 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			$real_up = $up;
 			$up = player::get($id);
 			
-			// har ikke våpen?
+			// har ikke vÃ¥pen?
 			if (!$up->weapon)
 			{
-				ess::$b->page->add_message('Spilleren <user id="'.$up->id.'" /> har ikke noe våpen og har derfor ikke plass til noen kuler.', "error");
+				ess::$b->page->add_message('Spilleren <user id="'.$up->id.'" /> har ikke noe vÃ¥pen og har derfor ikke plass til noen kuler.', "error");
 				redirect::handle();
 			}
 		}
@@ -2299,14 +2299,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$ret = $this->ff->bullets_out($num, $up, $real_up);
 		switch ($ret)
 		{
-			case "missing": ess::$b->page->add_message("Det er ikke så mange kuler i broderskapet.", "error"); break;
+			case "missing": ess::$b->page->add_message("Det er ikke sÃ¥ mange kuler i broderskapet.", "error"); break;
 			case "full":
 				if ($real_up)
 				{
 					$f = max(0, $up->weapon->data['bullets']-$up->data['up_weapon_bullets']-$up->data['up_weapon_bullets_auksjon']);
 					ess::$b->page->add_message('<user id="'.$up->id.'" /> har '.($f == 0 ? 'ikke plass til flere kuler' : 'bare plass til '.fwords("%d kule til", "%d kuler til", $f)).'.', "error");
 				}
-				else ess::$b->page->add_message("Du har ikke plass til så mange kuler.", "error");
+				else ess::$b->page->add_message("Du har ikke plass til sÃ¥ mange kuler.", "error");
 			break;
 			default:
 				if ($real_up) ess::$b->page->add_message("Du gav ".fwords("%d kule", "%d kuler", $num).' til <user id="'.$up->id.'" /> fra kulelageret til broderskapet.');

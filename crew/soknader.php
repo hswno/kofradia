@@ -3,9 +3,9 @@
 require "config.php";
 
 global $_base;
-$_base->page->add_title("Diverse søknader");
+$_base->page->add_title("Diverse sÃ¸knader");
 
-// har vi valgt en søknad?
+// har vi valgt en sÃ¸knad?
 if (isset($_GET['ds_id']))
 {
 	$ds_id = (int) $_GET['ds_id'];
@@ -16,12 +16,12 @@ if (isset($_GET['ds_id']))
 	// fant ikke?
 	if (!$soknad)
 	{
-		$_base->page->add_message("Fant ikke søknaden.", "error");
+		$_base->page->add_message("Fant ikke sÃ¸knaden.", "error");
 		redirect::handle();
 	}
 	
 	$type = soknader::get_type($soknad['ds_type']);
-	$_base->page->add_title("Søknad: ".$type['title']);
+	$_base->page->add_title("SÃ¸knad: ".$type['title']);
 	
 	// skal vi behandle den?
 	if (isset($_POST['reason']) && (isset($_POST['approve']) || isset($_POST['decline'])))
@@ -29,7 +29,7 @@ if (isset($_GET['ds_id']))
 		// allerede behandlet?
 		if ($soknad['ds_reply_decision'] != 0)
 		{
-			$_base->page->add_message("Søknaden er allerede behandlet.", "error");
+			$_base->page->add_message("SÃ¸knaden er allerede behandlet.", "error");
 			redirect::handle();
 		}
 		
@@ -44,13 +44,13 @@ if (isset($_GET['ds_id']))
 		
 		else
 		{
-			// forsøk å behandle
+			// forsÃ¸k Ã¥ behandle
 			$result = soknader::decide($decision, $ds_id, $_POST['reason']);
 			if (!is_array($result))
 			{
 				if ($result === false)
 				{
-					$_base->page->add_message("Fant ikke søknaden.", "error");
+					$_base->page->add_message("Fant ikke sÃ¸knaden.", "error");
 				}
 				
 				else
@@ -62,7 +62,7 @@ if (isset($_GET['ds_id']))
 			
 			else
 			{
-				$_base->page->add_message("Søknaden er nå behandlet.");
+				$_base->page->add_message("SÃ¸knaden er nÃ¥ behandlet.");
 			}
 			
 			redirect::handle();
@@ -76,23 +76,23 @@ if (isset($_GET['ds_id']))
 	// vis info
 	echo '
 <div class="bg1_c small">
-	<h1 class="bg1">Diverse søknader: '.htmlspecialchars($type['title']).'<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">Diverse sÃ¸knader: '.htmlspecialchars($type['title']).'<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="soknader">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<dl class="dd_right">
-			<dt>Søker</dt>
+			<dt>SÃ¸ker</dt>
 			<dd><user id="'.$soknad['ds_up_id'].'" /></dd>
 			<dt>Tidspunkt sendt inn</dt>
 			<dd>'.$_base->date->get($soknad['ds_time'])->format().'</dd>
-			<dt>Type søknad</dt>
+			<dt>Type sÃ¸knad</dt>
 			<dd>'.htmlspecialchars($type['title']).'</dd>
 		</dl>
 		<p>
-			<b>Søknadsbeskrivelse</b><br />
+			<b>SÃ¸knadsbeskrivelse</b><br />
 			'.$info['html'].'
 		</p>
 		<p>
-			<b>Begrunnelse for søknad:</b><br />
+			<b>Begrunnelse for sÃ¸knad:</b><br />
 			'.game::format_data($soknad['ds_reason'], "bb-opt", "Ingen begrunnelse gitt.").'
 		</p>';
 	
@@ -109,18 +109,18 @@ if (isset($_GET['ds_id']))
 			if (mysql_num_rows($result) == 0)
 			{
 				echo '
-		<p>Ingen tidligere søknader om navnbytte er registrert for dette firmaet.</p>';
+		<p>Ingen tidligere sÃ¸knader om navnbytte er registrert for dette firmaet.</p>';
 			}
 			else
 			{
 				echo '
-		<p>Siste registrerte søknader for navnbytte for firmaet:</p>
+		<p>Siste registrerte sÃ¸knader for navnbytte for firmaet:</p>
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Tidspunkt</th>
-					<th>Søknad</th>
-					<th>Søker</th>
+					<th>SÃ¸knad</th>
+					<th>SÃ¸ker</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -133,7 +133,7 @@ if (isset($_GET['ds_id']))
 					<td><a href="soknader?ds_id=' . $row['ds_id'] . '">' . ess::$b->date->get($row['ds_time'])->format() . '</a></td>
 					<td>' . ($row['ds_reply_decision'] == 1 ? 'Fra: ' . htmlspecialchars($params['name_old']) . '<br />Til: ' . htmlspecialchars($params['name']) : 'Til: ' . htmlspecialchars($params['name'])) . '</td>
 					<td><user id="' . $row['ds_up_id'] . '" /><br />
-						' . ($row['ds_reply_decision'] == 1 ? 'Innvilget' : ($row['ds_reply_decision'] == -1 ? 'Avslått' : 'Under behandling')) . '</td>
+						' . ($row['ds_reply_decision'] == 1 ? 'Innvilget' : ($row['ds_reply_decision'] == -1 ? 'AvslÃ¥tt' : 'Under behandling')) . '</td>
 				</tr>';
 				}
 				
@@ -154,18 +154,18 @@ if (isset($_GET['ds_id']))
 			if (mysql_num_rows($result) == 0)
 			{
 				echo '
-		<p>Ingen tidligere søknader om navnbytte er registrert for dette broderskapet.</p>';
+		<p>Ingen tidligere sÃ¸knader om navnbytte er registrert for dette broderskapet.</p>';
 			}
 			else
 			{
 				echo '
-		<p>Siste registrerte søknader for navnbytte for broderskapet:</p>
+		<p>Siste registrerte sÃ¸knader for navnbytte for broderskapet:</p>
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Tidspunkt</th>
-					<th>Søknad</th>
-					<th>Søker</th>
+					<th>SÃ¸knad</th>
+					<th>SÃ¸ker</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -178,7 +178,7 @@ if (isset($_GET['ds_id']))
 					<td><a href="soknader?ds_id=' . $row['ds_id'] . '">' . ess::$b->date->get($row['ds_time'])->format() . '</a></td>
 					<td>' . ($row['ds_reply_decision'] == 1 ? 'Fra: ' . htmlspecialchars($params['name_old']) . '<br />Til: ' . htmlspecialchars($params['name']) : 'Til: ' . htmlspecialchars($params['name'])) . '</td>
 					<td><user id="' . $row['ds_up_id'] . '" /><br />
-						' . ($row['ds_reply_decision'] == 1 ? 'Innvilget' : ($row['ds_reply_decision'] == -1 ? 'Avslått' : 'Under behandling')) . '</td>
+						' . ($row['ds_reply_decision'] == 1 ? 'Innvilget' : ($row['ds_reply_decision'] == -1 ? 'AvslÃ¥tt' : 'Under behandling')) . '</td>
 				</tr>';
 				}
 				
@@ -193,15 +193,15 @@ if (isset($_GET['ds_id']))
 	if ($soknad['ds_reply_decision'] != 0)
 	{
 		echo '
-		<p>Søknaden ble <b>'.($soknad['ds_reply_decision'] == -1 ? 'avslått' : 'godtatt').'</b> '.$_base->date->get($soknad['ds_reply_time'])->format().' av <user id="'.$soknad['ds_reply_up_id'].'" />.</p>
-		<p><b>Begrunnelse for '.($soknad['ds_reply_decision'] == -1 ? 'avslag' : 'godtatt søknad').':</b><br />'.game::format_data($soknad['ds_reply_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>';
+		<p>SÃ¸knaden ble <b>'.($soknad['ds_reply_decision'] == -1 ? 'avslÃ¥tt' : 'godtatt').'</b> '.$_base->date->get($soknad['ds_reply_time'])->format().' av <user id="'.$soknad['ds_reply_up_id'].'" />.</p>
+		<p><b>Begrunnelse for '.($soknad['ds_reply_decision'] == -1 ? 'avslag' : 'godtatt sÃ¸knad').':</b><br />'.game::format_data($soknad['ds_reply_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>';
 	}
 	
-	// har vi tilgang til å behandle denne søknaden?
+	// har vi tilgang til Ã¥ behandle denne sÃ¸knaden?
 	elseif (!access::has($type['access']))
 	{
 		echo '
-		<p><u>Du har ikke tilgang til å behandle denne søknaden. Må behandles av en '.access::name($type['access']).'.</u></p>';
+		<p><u>Du har ikke tilgang til Ã¥ behandle denne sÃ¸knaden. MÃ¥ behandles av en '.access::name($type['access']).'.</u></p>';
 	}
 	
 	else
@@ -211,8 +211,8 @@ if (isset($_GET['ds_id']))
 			<p><b>Begrunnelse:</b> (Spilleren blir opplyst om denne begrunnelsen.)</p>
 			<p><textarea name="reason" rows="5" cols="40">'.htmlspecialchars(postval("reason")).'</textarea></p>
 			<p>
-				'.show_sbutton("Godta søknad", 'name="approve"').'
-				'.show_sbutton("Avslå søknad", 'name="decline"').'
+				'.show_sbutton("Godta sÃ¸knad", 'name="approve"').'
+				'.show_sbutton("AvslÃ¥ sÃ¸knad", 'name="decline"').'
 				<a href="soknader" class="button">Avbryt</a>
 			</p>
 		</form>';
@@ -225,24 +225,24 @@ if (isset($_GET['ds_id']))
 	$_base->page->load();
 }
 
-// vise alle søknadene?
+// vise alle sÃ¸knadene?
 $all = isset($_GET['all']);
 $where = $all ? '1' : 'ds_reply_decision = 0';
 
-// hent alle søknadene
+// hent alle sÃ¸knadene
 $pagei = new pagei(pagei::PER_PAGE, 5, pagei::ACTIVE_GET, "side");
 $result = $pagei->query("SELECT ds_id, ds_type, ds_up_id, ds_time, ds_reply_decision FROM div_soknader WHERE $where ORDER BY ds_time DESC");
 
 echo '
 <div class="bg1_c '.($all ? 'xmedium' : 'small').'">
-	<h1 class="bg1">Diverse søknader<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">Diverse sÃ¸knader<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">';
 
-// ingen søknader?
+// ingen sÃ¸knader?
 if (mysql_num_rows($result) == 0)
 {
 	echo '
-		<p>Det er ingen'.($all ? '' : ' ubehandlede').' søknader.</p>';
+		<p>Det er ingen'.($all ? '' : ' ubehandlede').' sÃ¸knader.</p>';
 }
 
 else
@@ -266,7 +266,7 @@ else
 		$link = htmlspecialchars($type['title']);
 		if (access::has($type['access']))
 		{
-			$link = '<a href="soknader?ds_id='.$row['ds_id'].'" title="Vis søknad">'.$link.'</a>';
+			$link = '<a href="soknader?ds_id='.$row['ds_id'].'" title="Vis sÃ¸knad">'.$link.'</a>';
 		}
 		else
 		{
@@ -281,7 +281,7 @@ else
 					<td>'.($row['ds_reply_decision'] == 1
 						? 'Innvilget'
 						: ($row['ds_reply_decision'] == -1
-							? 'Avslått'
+							? 'AvslÃ¥tt'
 							: 'Under behandling')).'</td>' : '').'
 				</tr>';
 	}
@@ -294,16 +294,16 @@ else
 		<p class="c">'.$pagei->pagenumbers().'</p>';
 }
 
-// link for å vise/skjule alle søknader
+// link for Ã¥ vise/skjule alle sÃ¸knader
 if ($all)
 {
 	echo '
-		<p><a href="soknader">Vis kun ubehandlede søknader &raquo;</a></p>';
+		<p><a href="soknader">Vis kun ubehandlede sÃ¸knader &raquo;</a></p>';
 }
 else
 {
 	echo '
-		<p><a href="soknader?all">Vis alle søknader &raquo;</a></p>';
+		<p><a href="soknader?all">Vis alle sÃ¸knader &raquo;</a></p>';
 }
 
 echo '

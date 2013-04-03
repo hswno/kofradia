@@ -47,7 +47,7 @@ class page_node
 					return;
 				}
 				
-				// søke?
+				// sÃ¸ke?
 				elseif ($node_id == "search")
 				{
 					self::search();
@@ -90,7 +90,7 @@ class page_node
 		
 		echo '
 <h1>Sidekart</h1>
-<p>På denne siden finner du en overskt over alle sidene du finner ved å bla deg rundt i menyen på disse sidene.</p>';
+<p>PÃ¥ denne siden finner du en overskt over alle sidene du finner ved Ã¥ bla deg rundt i menyen pÃ¥ disse sidene.</p>';
 		
 		// sett opp riktige referanser og lag tree
 		$sub = array();
@@ -205,12 +205,12 @@ class page_node
 		ess::$b->page->add_title("Innhold fra alle sidene");
 		nodes::add_node(0, "Alt innhold", ess::$s['relative_path']."/node/all");
 		
-		// hindre søkemotorer i å indeksere denne siden
+		// hindre sÃ¸kemotorer i Ã¥ indeksere denne siden
 		ess::$b->page->add_head('<meta name="robots" content="noindex" />');
 		
 		echo '
 <h1>Innhold fra alle sidene</h1>
-<p>Denne siden viser innholdet til alt som er synlig på siden.</p>';
+<p>Denne siden viser innholdet til alt som er synlig pÃ¥ siden.</p>';
 		
 		ess::$b->page->add_css('
 .nodes_all_node {
@@ -344,19 +344,19 @@ class page_node
 	}
 	
 	/**
-	 * Søke i alle nodene
+	 * SÃ¸ke i alle nodene
 	 */
 	protected static function search()
 	{
-		ess::$b->page->add_title("Søk");
-		nodes::add_node(0, "Søk", ess::$s['relative_path']."/node/search");
+		ess::$b->page->add_title("SÃ¸k");
+		nodes::add_node(0, "SÃ¸k", ess::$s['relative_path']."/node/search");
 		
-		// hindre søkemotorer i å indeksere denne siden om man har søkt etter noe
+		// hindre sÃ¸kemotorer i Ã¥ indeksere denne siden om man har sÃ¸kt etter noe
 		if (isset($_GET['q'])) ess::$b->page->add_head('<meta name="robots" content="noindex" />');
 		
 		echo '
-<h1>Søk</h1>
-<p>Denne siden lar deg søke gjennom alt innholdet som er synlig i hjelpesidene.</p>';
+<h1>SÃ¸k</h1>
+<p>Denne siden lar deg sÃ¸ke gjennom alt innholdet som er synlig i hjelpesidene.</p>';
 		
 		// hent all informasjon
 		$result = ess::$b->db->query("SELECT node_id, node_parent_node_id, node_title, node_type, node_params, node_show_menu, node_expand_menu, node_enabled, node_priority, node_change FROM nodes");
@@ -372,12 +372,12 @@ class page_node
 		if (count($nodes) == 0)
 		{
 			echo '
-<p>Ingen sider er opprettet som det er mulig å søke gjennom.</p>';
+<p>Ingen sider er opprettet som det er mulig Ã¥ sÃ¸ke gjennom.</p>';
 		}
 		
 		else
 		{
-			// skal vi søke?
+			// skal vi sÃ¸ke?
 			$search = null;
 			if (isset($_GET['q']))
 			{
@@ -388,25 +388,25 @@ class page_node
 				}
 			}
 			
-			// vise søkeboks
+			// vise sÃ¸keboks
 			ess::$b->page->add_js_domready('$("searchq").focus();');
 			echo '
 <div style="background-color: #222; padding: 1px 10px; margin: 1em 0">
 	<form action="" method="get">
 		<p class="c">
-			<strong>Søkestreng</strong>:
+			<strong>SÃ¸kestreng</strong>:
 			<input type="text" class="styled w200" name="q" id="searchq" value="'.htmlspecialchars(getval("q")).'" />
-			'.show_sbutton("Utfør søk").'
+			'.show_sbutton("UtfÃ¸r sÃ¸k").'
 			<a href="&rpath;/node/61">Hjelp</a>
 		</p>'.($search === false ? '
-		<p class="c">Du må fylle ut et søkekriterie.</p>' : '').'
+		<p class="c">Du mÃ¥ fylle ut et sÃ¸kekriterie.</p>' : '').'
 	</form>
 </div>';
 			
-			// søke?
+			// sÃ¸ke?
 			if (is_string($search))
 			{
-				// sett opp søkekriteriene
+				// sett opp sÃ¸kekriteriene
 				$search_list = search_query($search);
 				$search_list = $search_list[1];
 				$search_list2 = $search_list; // for delvise treff
@@ -416,13 +416,13 @@ class page_node
 					$q = '/(\\P{L}|^)'.preg_replace(array('/([\\/\\\\\\[\\]()$.+?|{}])/', '/\\*\\*+/', '/\\*/'), array('\\\\$1', '*', '\\S*'), $q).'(\\P{L}|$)/i';
 				}
 				
-				// sett opp søkeliste hvor vi søker med * på slutten av ordene
+				// sett opp sÃ¸keliste hvor vi sÃ¸ker med * pÃ¥ slutten av ordene
 				foreach ($search_list2 as &$q)
 				{
 					$q = '/'.preg_replace(array('/([\\/\\\\\\[\\]()$.+?|{}])/', '/\\*\\*+/', '/\\*/'), array('\\\\$1', '*', '\\S*'), $q).'/i';
 				}
 				
-				// gå over alle sidene og finn treff
+				// gÃ¥ over alle sidene og finn treff
 				self::search_handle($search_list, $search_list2, $nodes);
 			}
 		}
@@ -431,7 +431,7 @@ class page_node
 	}
 	
 	/**
-	 * Utfør et søk
+	 * UtfÃ¸r et sÃ¸k
 	 */
 	protected static function search_handle($search_list, $search_list2, $nodes)
 	{
@@ -511,7 +511,7 @@ class page_node
 			$number = $row['number'];
 		}
 		
-		// sett opp søkeresultater
+		// sett opp sÃ¸keresultater
 		$result = array();
 		$points = array();
 		$points2 = array();
@@ -520,7 +520,7 @@ class page_node
 		{
 			if ($row['data']['node_type'] != "container") continue;
 			
-			// utfør søk
+			// utfÃ¸r sÃ¸k
 			$found = true;
 			$p = 0;
 			$p2 = 0;
@@ -529,7 +529,7 @@ class page_node
 				$ok = false;
 				$matches = null;
 				
-				// søk i teksten
+				// sÃ¸k i teksten
 				if (preg_match_all($regex, $row['data']['plain'], $matches))
 				{
 					$ok = true;
@@ -542,7 +542,7 @@ class page_node
 					$p2 += count($matches[0]);
 				}
 				
-				// søk i tittelen
+				// sÃ¸k i tittelen
 				if (preg_match_all($regex, $row['data']['node_title'], $matches))
 				{
 					$ok = true;
@@ -568,7 +568,7 @@ class page_node
 			}
 		}
 		
-		// vis søkeresultater
+		// vis sÃ¸keresultater
 		if (count($result) == 0)
 		{
 			echo '
@@ -577,11 +577,11 @@ class page_node
 		
 		else
 		{
-			// sorter søkeresultatene
+			// sorter sÃ¸keresultatene
 			array_multisort($points, SORT_DESC, SORT_NUMERIC, $points2, SORT_DESC, SORT_NUMERIC, $result);
 			
 			echo '
-<h2>Søkeresultater</h2>';
+<h2>SÃ¸keresultater</h2>';
 			
 			ess::$b->page->add_css('
 .nodes_search_node {
@@ -661,7 +661,7 @@ class page_node
 			<form action="&rpath;/node/search" method="get">
 				<p class="c">
 					<input type="text" name="q" class="styled w80" style="width: 60%" />
-					'.show_sbutton("Søk").'
+					'.show_sbutton("SÃ¸k").'
 				</p>
 			</form>
 		</div>
@@ -704,7 +704,7 @@ class page_node_admin
 			// kontroller parent node
 			if ($parent_node != 0 && !isset(nodes::$nodes[$parent_node]))
 			{
-				ess::$b->page->add_message("Fant ikke forelder til elementet. Prøv på nytt.", "error");
+				ess::$b->page->add_message("Fant ikke forelder til elementet. PrÃ¸v pÃ¥ nytt.", "error");
 				redirect::handle();
 			}
 			
@@ -712,7 +712,7 @@ class page_node_admin
 			$siblings = isset(nodes::$nodes_sub[$parent_node]) ? nodes::$nodes_sub[$parent_node] : array();
 			if ($previous_node != 0 && !in_array($previous_node, $siblings))
 			{
-				ess::$b->page->add_message("Fant ikke forrige side. Prøv på nytt.", "error");
+				ess::$b->page->add_message("Fant ikke forrige side. PrÃ¸v pÃ¥ nytt.", "error");
 				redirect::handle();
 			}
 			
@@ -728,7 +728,7 @@ class page_node_admin
 				$result = ess::$b->db->query("SELECT node_priority FROM nodes WHERE node_parent_node_id = {$parent_node} AND node_id = {$previous_node} AND node_deleted = 0");
 				if (mysql_num_rows($result) == 0)
 				{
-					ess::$b->page->add_message("Noe gikk galt. Prøv igjen.", "error");
+					ess::$b->page->add_message("Noe gikk galt. PrÃ¸v igjen.", "error");
 					redirect::handle();
 				}
 				$priority = mysql_result($result, 0);
@@ -758,12 +758,12 @@ class page_node_admin
 				
 				if (empty($title))
 				{
-					ess::$b->page->add_message("Du må fylle ut en tittel.", "error");
+					ess::$b->page->add_message("Du mÃ¥ fylle ut en tittel.", "error");
 				}
 				
 				elseif (!isset(nodes::$types[$type]))
 				{
-					ess::$b->page->add_message("Ugyldig type. Prøv på nytt.", "error");
+					ess::$b->page->add_message("Ugyldig type. PrÃ¸v pÃ¥ nytt.", "error");
 				}
 				
 				else
@@ -780,7 +780,7 @@ class page_node_admin
 				}
 			}
 			
-			$parent_title = isset(nodes::$nodes[$parent_node]) ? nodes::$nodes[$parent_node]['node_title'] : 'Toppnivå';
+			$parent_title = isset(nodes::$nodes[$parent_node]) ? nodes::$nodes[$parent_node]['node_title'] : 'ToppnivÃ¥';
 			
 			echo '
 <h1>Ny side</h1>
@@ -847,7 +847,7 @@ class page_node_admin
 					"data" => array(
 						"node_id" => 0,
 						"node_parent_node_id" => 0,
-						"node_title" => "Innhold (toppnivå)",
+						"node_title" => "Innhold (toppnivÃ¥)",
 						"node_type" => NULL,
 						"node_params" => NULL,
 						"node_show_menu" => NULL,
@@ -897,7 +897,7 @@ class page_node_admin
 					// finnes?
 					if (!isset($data[$dest_node_id]))
 					{
-						ess::$b->page->add_message("Fant ikke målsiden.", "error");
+						ess::$b->page->add_message("Fant ikke mÃ¥lsiden.", "error");
 					}
 					
 					// kan plasseres her?
@@ -906,10 +906,10 @@ class page_node_admin
 						ess::$b->page->add_message("Du kan ikke plassere siden her.", "error");
 					}
 					
-					// samme som nå?
+					// samme som nÃ¥?
 					elseif ($type == $active[0] && $dest_node_id == $active[1])
 					{
-						ess::$b->page->add_message("Du må velge en ny plassering.", "error");
+						ess::$b->page->add_message("Du mÃ¥ velge en ny plassering.", "error");
 					}
 					
 					else
@@ -938,7 +938,7 @@ class page_node_admin
 					$items[] = $item['node_title'];
 					$parent_node = $item['node_parent_node_id'];
 				}
-				$items[] = "Toppnivå";
+				$items[] = "ToppnivÃ¥";
 				
 				// tittel
 				ess::$b->page->add_title("Flytt side");
@@ -951,7 +951,7 @@ class page_node_admin
 <h2>Flytt side</h2>
 <form action="" method="post">
 	<dl class="dl_2x dd_right">
-		<dt>Nåværende plassering</dt>
+		<dt>NÃ¥vÃ¦rende plassering</dt>
 		<dd>'.implode("\\", array_reverse($items)).'</dd>
 		
 		<dt>Ny plassering</dt>
@@ -1002,7 +1002,7 @@ class page_node_admin
 					$title = postval('title');
 					if (empty($title))
 					{
-						ess::$b->page->add_message("Du må skrive inn en tittel.", "error");
+						ess::$b->page->add_message("Du mÃ¥ skrive inn en tittel.", "error");
 					}
 					else
 					{
@@ -1017,7 +1017,7 @@ class page_node_admin
 <h1>Rediger tittel</h1>
 <form action="" method="post">
 	<dl class="dd_right dl_2x">
-		<dt>Nåværende tittel</dt>
+		<dt>NÃ¥vÃ¦rende tittel</dt>
 		<dd>'.htmlspecialchars(nodes::$node_info['node_title']).'</dd>
 		<dt>Ny tittel</dt>
 		<dd><input type="text" name="title" class="styled w100" value="'.htmlspecialchars(postval("title", nodes::$node_info['node_title'])).'" /></dd>
@@ -1038,7 +1038,7 @@ class page_node_admin
 					if (nodes::$node_info['node_enabled'] > 0)
 					{
 						$update = 0;
-						ess::$b->page->add_message("Siden er nå deaktivert. Alle undersider vil også være utilgjengelige.");
+						ess::$b->page->add_message("Siden er nÃ¥ deaktivert. Alle undersider vil ogsÃ¥ vÃ¦re utilgjengelige.");
 					}
 				}
 				else
@@ -1047,7 +1047,7 @@ class page_node_admin
 					if (nodes::$node_info['node_enabled'] == 0)
 					{
 						$update = 1;
-						ess::$b->page->add_message("Siden er nå aktivert. Alle undersider som ikke er deaktivert vil også være tilgjengelige.");
+						ess::$b->page->add_message("Siden er nÃ¥ aktivert. Alle undersider som ikke er deaktivert vil ogsÃ¥ vÃ¦re tilgjengelige.");
 					}
 				}
 				
@@ -1070,7 +1070,7 @@ class page_node_admin
 					if (nodes::$node_info['node_show_menu'] > 0)
 					{
 						$update = 0;
-						ess::$b->page->add_message("Siden blir ikke lengre vist i menyen. Alle undersider vil også bli skjult fra menyen.");
+						ess::$b->page->add_message("Siden blir ikke lengre vist i menyen. Alle undersider vil ogsÃ¥ bli skjult fra menyen.");
 					}
 				}
 				else
@@ -1079,7 +1079,7 @@ class page_node_admin
 					if (nodes::$node_info['node_show_menu'] == 0)
 					{
 						$update = 1;
-						ess::$b->page->add_message("Siden blir nå vist i menyen. Alle undersider som ikke er skjult vil også bli vist i menyen.");
+						ess::$b->page->add_message("Siden blir nÃ¥ vist i menyen. Alle undersider som ikke er skjult vil ogsÃ¥ bli vist i menyen.");
 					}
 				}
 				
@@ -1111,7 +1111,7 @@ class page_node_admin
 					if (nodes::$node_info['node_expand_menu'] == 0)
 					{
 						$update = 1;
-						ess::$b->page->add_message("Undersidene blir nå vist i menyen.");
+						ess::$b->page->add_message("Undersidene blir nÃ¥ vist i menyen.");
 					}
 				}
 				
@@ -1136,7 +1136,7 @@ class page_node_admin
 				
 				if ($ant > 0)
 				{
-					ess::$b->page->add_message("Du kan ikke slette en side som inneholder undersider. Flytt eller fjern undersidene og prøv på nytt.", "error");
+					ess::$b->page->add_message("Du kan ikke slette en side som inneholder undersider. Flytt eller fjern undersidene og prÃ¸v pÃ¥ nytt.", "error");
 					redirect::handle();
 				}
 				
@@ -1153,7 +1153,7 @@ class page_node_admin
 						
 						if ($ant > 0)
 						{
-							ess::$b->page->add_message("Du kan ikke slette en side som inneholder noen enheter. Fjern enhetene og prøv på nytt.", "error");
+							ess::$b->page->add_message("Du kan ikke slette en side som inneholder noen enheter. Fjern enhetene og prÃ¸v pÃ¥ nytt.", "error");
 							redirect::handle();
 						}
 						
@@ -1170,7 +1170,7 @@ class page_node_admin
 					
 					if (ess::$b->db->affected_rows() == 0)
 					{
-						ess::$b->page->add_message("Noe gikk galt. Prøv på nytt.", "error");
+						ess::$b->page->add_message("Noe gikk galt. PrÃ¸v pÃ¥ nytt.", "error");
 						redirect::handle();
 					}
 					
@@ -1204,7 +1204,7 @@ class page_node_admin
 						if (nodes::$node_params->get("hide_title"))
 						{
 							$hide = false;
-							ess::$b->page->add_message("Tittelen blir nå vist øverst på siden.");
+							ess::$b->page->add_message("Tittelen blir nÃ¥ vist Ã¸verst pÃ¥ siden.");
 						}
 					}
 					else
@@ -1213,7 +1213,7 @@ class page_node_admin
 						if (!nodes::$node_params->get("hide_title"))
 						{
 							$hide = true;
-							ess::$b->page->add_message("Tittelen blir ikke lengre vist øverst på siden.");
+							ess::$b->page->add_message("Tittelen blir ikke lengre vist Ã¸verst pÃ¥ siden.");
 						}
 					}
 					
@@ -1243,7 +1243,7 @@ class page_node_admin
 						if (nodes::$node_params->get("hide_time_change"))
 						{
 							$hide = false;
-							ess::$b->page->add_message("Dato for sist endret blir nå vist nederst på siden.");
+							ess::$b->page->add_message("Dato for sist endret blir nÃ¥ vist nederst pÃ¥ siden.");
 						}
 					}
 					else
@@ -1252,7 +1252,7 @@ class page_node_admin
 						if (!nodes::$node_params->get("hide_time_change"))
 						{
 							$hide = true;
-							ess::$b->page->add_message("Dato for sist endret blir ikke lengre vist nederst på siden.");
+							ess::$b->page->add_message("Dato for sist endret blir ikke lengre vist nederst pÃ¥ siden.");
 						}
 					}
 					
@@ -1278,13 +1278,13 @@ class page_node_admin
 					if (isset($_GET['unit_enable']))
 					{
 						$value = 1;
-						$msg = "Enheten er nå aktivert og blir vist.";
+						$msg = "Enheten er nÃ¥ aktivert og blir vist.";
 						$unit_id = intval($_GET['unit_enable']);
 					}
 					else
 					{
 						$value = 0;
-						$msg = "Enheten er nå deaktivert og blir ikke vist.";
+						$msg = "Enheten er nÃ¥ deaktivert og blir ikke vist.";
 						$unit_id = intval($_GET['unit_disable']);
 					}
 					
@@ -1309,7 +1309,7 @@ class page_node_admin
 					// fant ikke?
 					if (mysql_num_rows($result) == 0)
 					{
-						ess::$b->page->add_message("Fant ikke enheten. Prøv på nytt.", "error");
+						ess::$b->page->add_message("Fant ikke enheten. PrÃ¸v pÃ¥ nytt.", "error");
 						redirect::handle();
 					}
 					$unit = mysql_fetch_assoc($result);
@@ -1347,7 +1347,7 @@ class page_node_admin
 					// fant ikke?
 					if (mysql_num_rows($result) == 0)
 					{
-						ess::$b->page->add_message("Fant ikke enheten. Prøv på nytt.", "error");
+						ess::$b->page->add_message("Fant ikke enheten. PrÃ¸v pÃ¥ nytt.", "error");
 						redirect::handle();
 					}
 					$unit = mysql_fetch_assoc($result);
@@ -1367,7 +1367,7 @@ class page_node_admin
 						// ingenting endret?
 						if (trim($_POST['description']) == $unit['nir_description'] && trim($_POST['content']) == $unit['nir_content'])
 						{
-							ess::$b->page->add_message("Ingen endringer ble utført.", "error");
+							ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 						}
 						
 						else
@@ -1471,7 +1471,7 @@ class page_node_admin
 						$result = ess::$b->db->query("SELECT ni_priority FROM nodes_items WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $previous_unit AND ni_deleted = 0");
 						if (mysql_num_rows($result) == 0)
 						{
-							ess::$b->page->add_message("Noe gikk galt. Prøv igjen.", "error");
+							ess::$b->page->add_message("Noe gikk galt. PrÃ¸v igjen.", "error");
 							redirect::handle();
 						}
 						$priority = mysql_result($result, 0);
@@ -1500,7 +1500,7 @@ class page_node_admin
 						
 						if (!isset(nodes::$item_types[$type]) || !nodes::$item_types[$type][1])
 						{
-							ess::$b->page->add_message("Ugyldig type. Prøv på nytt.", "error");
+							ess::$b->page->add_message("Ugyldig type. PrÃ¸v pÃ¥ nytt.", "error");
 						}
 						
 						else
@@ -1589,11 +1589,11 @@ class page_node_admin
 <h1>Rediger adresse</h1>
 <form action="" method="post">
 	<dl class="dd_right dl_2x">
-		<dt>Nåværende adresse</dt>
+		<dt>NÃ¥vÃ¦rende adresse</dt>
 		<dd>'.htmlspecialchars(ess::$s['path']).htmlspecialchars(nodes::$node_params->get("url", " ???")).'</dd>
 		<dt>Ny adresse</dt>
 		<dd>'.htmlspecialchars(ess::$s['path']).' <input type="text" name="url" class="styled w150" value="'.htmlspecialchars(nodes::$node_params->get("url", "")).'" /></dd>
-		<dt>Åpne i nytt vindu</dt>
+		<dt>Ã…pne i nytt vindu</dt>
 		<dd><input type="checkbox" name="new_window"'.(nodes::$node_params->get("new_window") ? ' checked="checked"' : '').' /></dd>
 	</dl>
 	<p>'.show_sbutton("Lagre").' '.show_sbutton("Avbryt", 'name="abort"').'</p>
@@ -1606,11 +1606,11 @@ class page_node_admin
 <h1>Rediger adresse</h1>
 <form action="" method="post">
 	<dl class="dd_right dl_2x">
-		<dt>Nåværende adresse</dt>
+		<dt>NÃ¥vÃ¦rende adresse</dt>
 		<dd>'.htmlspecialchars(nodes::$node_params->get("url", "???")).'</dd>
 		<dt>Ny adresse</dt>
 		<dd><input type="text" name="url" class="styled w250" value="'.htmlspecialchars(nodes::$node_params->get("url", "")).'" /></Dd>
-		<dt>Åpne i nytt vindu</dt>
+		<dt>Ã…pne i nytt vindu</dt>
 		<dd><input type="checkbox" name="new_window"'.(nodes::$node_params->get("new_window") ? ' checked="checked"' : '').' /></dd>
 	</dl>
 	<p>'.show_sbutton("Lagre").' '.show_sbutton("Avbryt", 'name="abort"').'</p>
@@ -1696,7 +1696,7 @@ class page_node_admin
 					}
 			}
 			
-			// verktøy
+			// verktÃ¸y
 			$tools = array();
 			
 			// deaktivert?
@@ -1802,7 +1802,7 @@ class page_node_admin
 			echo '
 <h2>Innstillinger</h2>
 <dl class="dd_right">
-	<dt>Vis tittel på siden</dt>
+	<dt>Vis tittel pÃ¥ siden</dt>
 	<dd>'.(nodes::$node_params->get("hide_title") ? 'Nei [<a href="'.ess::$s['relative_path'].'/node/a?node_id='.nodes::$node_id.'&amp;hide_title=false">vis tittel</a>]' : 'Ja [<a href="'.ess::$s['relative_path'].'/node/a?node_id='.nodes::$node_id.'&amp;hide_title">skjul tittel</a>]').'</dd>
 	<dt>Vis sist endret</dt>
 	<dd>'.(nodes::$node_params->get("hide_time_change") ? 'Nei [<a href="'.ess::$s['relative_path'].'/node/a?node_id='.nodes::$node_id.'&amp;hide_time_change=false">vis dato</a>]' : 'Ja [<a href="'.ess::$s['relative_path'].'/node/a?node_id='.nodes::$node_id.'&amp;hide_time_change">skjul dato</a>]').'</dd>
@@ -1827,7 +1827,7 @@ class page_node_admin
 		<tr>
 			<th>Beskrivelse</th>
 			<th>Type</th>
-			<th>Vektøy</th>
+			<th>VektÃ¸y</th>
 		</tr>
 	</thead>
 	<tbody>';
@@ -1885,7 +1885,7 @@ class page_node_admin
 			echo '
 <h2>Adresseinformasjon</h2>
 <p>
-	Dette er en adresse internt på nettsiden som kun skal inneholde adressen under nettstedet det ønskes å linkes til.
+	Dette er en adresse internt pÃ¥ nettsiden som kun skal inneholde adressen under nettstedet det Ã¸nskes Ã¥ linkes til.
 </p>
 <dl class="dd_right">
 	<dt>Adresse</dt>

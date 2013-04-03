@@ -13,13 +13,13 @@ if (isset($_GET['id']) || isset($_GET['user']))
 	if (isset($_GET['user'])) { $_GET['name'] = $_GET['user']; unset($_GET['user']); }
 	
 	// send til korrekt adresse
-	$_base->page->add_message("Adressen du klikket på førte deg til en gammel versjon av denne siden. Du er sendt til korrekt adresse.");
+	$_base->page->add_message("Adressen du klikket pÃ¥ fÃ¸rte deg til en gammel versjon av denne siden. Du er sendt til korrekt adresse.");
 	redirect::handle(game::address("finn", $_GET));
 }
 
 // felt man skal kunne vise
 $fields = array("ip", "reg", "email", "onlinea", "onliner", "hits", "points", "banko", "cash", "birth");
-$fields_name = array("IP-adresse", "Registrert", "E-post adresse", "Sist pålogget (abs)", "Sist pålogget (rel)", "Hits", "Rank", "Bank overføringer", "Penger", "Fødselsdato");
+$fields_name = array("IP-adresse", "Registrert", "E-post adresse", "Sist pÃ¥logget (abs)", "Sist pÃ¥logget (rel)", "Hits", "Rank", "Bank overfÃ¸ringer", "Penger", "FÃ¸dselsdato");
 
 // lagre felt?
 if (isset($_POST['fields']))
@@ -48,7 +48,7 @@ if (isset($_POST['fields']))
 		login::$user->params->update("finn_bruker_felt", implode(",", $show), true);
 	}
 	
-	// send html kode for å oppdatere siden
+	// send html kode for Ã¥ oppdatere siden
 	ajax::html('<p>Innstillingene ble lagret. Oppdaterer..</p><script type="text/javascript">navigateTo()</script>');
 }
 
@@ -80,8 +80,8 @@ $_base->page->add_css('
 
 echo '
 <form action="finn" method="get">
-	<h1>Finn bruker/spiller - søkekriterier</h1>
-	<p>Alle brukere hvor det finnes treff for kun én av feltene nedenfor blir vist. Separer flere søkeparametere med komma.</p>
+	<h1>Finn bruker/spiller - sÃ¸kekriterier</h1>
+	<p>Alle brukere hvor det finnes treff for kun Ã©n av feltene nedenfor blir vist. Separer flere sÃ¸keparametere med komma.</p>
 	<p class="h_right">'.show_sbutton("Finn brukere").'</p>
 	<div class="ipc_col_f">
 		<div class="section">
@@ -167,7 +167,7 @@ if (isset($_GET['u_id']) || isset($_GET['up_id']) || isset($_GET['name']) || iss
 	
 	if (count($u_id) == 0 && count($up_id) == 0 && count($up_name) == 0 && count($ip) == 0 && count($email) == 0)
 	{
-		$_base->page->add_message("Ingen søkekriterier ble funnet!");
+		$_base->page->add_message("Ingen sÃ¸kekriterier ble funnet!");
 	}
 	
 	else
@@ -211,11 +211,11 @@ if (isset($_GET['u_id']) || isset($_GET['up_id']) || isset($_GET['name']) || iss
 		$sort->append("asc", "IP-adresse", "u_online_ip");			$sort->append("desc", "IP-adresse", "u_online_ip DESC");
 		$sort->append("asc", "Registrert", "up_created_time");		$sort->append("desc", "Registrert", "up_created_time DESC");
 		$sort->append("asc", "E-postadresse", "u_email");			$sort->append("desc", "E-postadresse", "u_email DESC");
-		$sort->append("asc", "Sist pålogget", "up_last_online");	$sort->append("desc", "Sist pålogget", "up_last_online DESC");
+		$sort->append("asc", "Sist pÃ¥logget", "up_last_online");	$sort->append("desc", "Sist pÃ¥logget", "up_last_online DESC");
 		$sort->append("asc", "Hits", "up_hits");					$sort->append("desc", "Hits", "up_hits DESC");
 		$sort->append("asc", "Rank", "up_points");					$sort->append("desc", "Rank", "up_points DESC");
 		$sort->append("asc", "Penger", "money");					$sort->append("desc", "Penger", "money DESC");
-		$sort->append("asc", "Fødselsdato", "u_birth");				$sort->append("desc", "Fødselsdato", "u_birth DESC");
+		$sort->append("asc", "FÃ¸dselsdato", "u_birth");				$sort->append("desc", "FÃ¸dselsdato", "u_birth DESC");
 		$sort->append("asc", "Spiller ID", "up_id");				$sort->append("desc", "Spiller ID", "up_id DESC");
 		$sort->set_active(getval("sort"), 11);
 		
@@ -281,12 +281,12 @@ if (isset($_GET['u_id']) || isset($_GET['up_id']) || isset($_GET['name']) || iss
 			if (isset($show['ip'])) $th[] = '<th>IP-Adresse '.$sort->show_link(4, 5).'</th>';
 			if (isset($show['reg'])) $th[] = '<th>Registert '.$sort->show_link(6, 7).'</th>';
 			if (isset($show['email'])) $th[] = '<th>E-post '.$sort->show_link(8, 9).'</th>';
-			if (isset($show['onlinea']) && isset($show['onliner'])) $th[] = '<th colspan="2">Sist pålogget '.$sort->show_link(10, 11).'</th>';
-			elseif (isset($show['onlinea']) || isset($show['onliner'])) $th[] = '<th>Sist pålogget '.$sort->show_link(10, 11).'</th>';
+			if (isset($show['onlinea']) && isset($show['onliner'])) $th[] = '<th colspan="2">Sist pÃ¥logget '.$sort->show_link(10, 11).'</th>';
+			elseif (isset($show['onlinea']) || isset($show['onliner'])) $th[] = '<th>Sist pÃ¥logget '.$sort->show_link(10, 11).'</th>';
 			if (isset($show['hits'])) $th[] = '<th>Hits '.$sort->show_link(12, 13).'</th>';
 			if (isset($show['points'])) $th[] = '<th>Rankpoeng '.$sort->show_link(14, 15).'</th>';
 			if (isset($show['cash'])) $th[] = '<th>Penger '.$sort->show_link(16, 17).'</th>';
-			if (isset($show['birth'])) $th[] = '<th>Fødselsdato '.$sort->show_link(18, 19).'</th>';
+			if (isset($show['birth'])) $th[] = '<th>FÃ¸dselsdato '.$sort->show_link(18, 19).'</th>';
 			if (isset($show['banko'])) $th[] = '<th colspan="2">Bankovf.</th>';
 			
 			echo '
@@ -341,7 +341,7 @@ function lagre_felt(root)
 				$ids[] = $row['u_id'];
 			}
 			
-			// hent inn ip-ban oppføringer
+			// hent inn ip-ban oppfÃ¸ringer
 			$time = time();
 			$result = ess::$b->db->query("
 				SELECT u_online_ip, bi_id, bi_reason
@@ -362,7 +362,7 @@ function lagre_felt(root)
 				$td[] = '<td class="r">'.($row['u_access_level'] == 0 ? '<span class="ipc_d" title="Brukeren er deaktivert">(D)</span> ' : '').'<a href="'.$__server['relative_path'].'/min_side?u_id='.$row['u_id'].'">'.$row['u_id'].'</a></td>';
 				$td[] = '<td class="r"><a href="'.$__server['relative_path'].'/min_side?up_id='.$row['up_id'].'">'.$row['up_id'].'</a></td>';
 				$td[] = '<td>'.game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']).'</td>';
-				if (isset($show['ip'])) $td[] = '<td><a href="ip_sessions?ip='.htmlspecialchars($row['u_online_ip']).'">IP økter</a> - <a href="http://www.ripe.net/fcgi-bin/whois?form_type=simple&full_query_string=&searchtext='.urlencode($row['u_online_ip']).'&do_search=Search">RIPE</a> - <a href="finn?ip='.urlencode($row['u_online_ip']).'">'.$row['u_online_ip'].'</a>'.(isset($ip_bans[$row['u_online_ip']]) ? ' <a href="../ip_ban?active" style="color:#FF0000" title="IP-Adresse blokkert'.(!empty($ip_bans[$row['u_online_ip']]['bi_reason']) ? ': '.htmlspecialchars($ip_bans[$row['u_online_ip']]['bi_reason']) : '').'">(Blokkert)</a>' : '').'</td>';
+				if (isset($show['ip'])) $td[] = '<td><a href="ip_sessions?ip='.htmlspecialchars($row['u_online_ip']).'">IP Ã¸kter</a> - <a href="http://www.ripe.net/fcgi-bin/whois?form_type=simple&full_query_string=&searchtext='.urlencode($row['u_online_ip']).'&do_search=Search">RIPE</a> - <a href="finn?ip='.urlencode($row['u_online_ip']).'">'.$row['u_online_ip'].'</a>'.(isset($ip_bans[$row['u_online_ip']]) ? ' <a href="../ip_ban?active" style="color:#FF0000" title="IP-Adresse blokkert'.(!empty($ip_bans[$row['u_online_ip']]['bi_reason']) ? ': '.htmlspecialchars($ip_bans[$row['u_online_ip']]['bi_reason']) : '').'">(Blokkert)</a>' : '').'</td>';
 				if (isset($show['reg'])) $td[] = '<td>'.$_base->date->get($row['up_created_time'])->format(date::FORMAT_SEC).'</td>';
 				if (isset($show['email'])) $td[] = '<td><a href="finn?email='.urlencode($row['u_email']).'">'.htmlspecialchars($row['u_email']).'</a></td>';
 				if (isset($show['onlinea'])) $td[] = '<td>'.$_base->date->get($row['up_last_online'])->format(date::FORMAT_SEC).'</td>';
@@ -392,11 +392,11 @@ function lagre_felt(root)
 		</tbody>
 	</table>';
 			
-			// vise bankoverføringer?
+			// vise bankoverfÃ¸ringer?
 			if (isset($show['banko']))
 			{
 				echo '
-	<p>'.show_sbutton("Vis bankoverføringer").'</p>';
+	<p>'.show_sbutton("Vis bankoverfÃ¸ringer").'</p>';
 			}
 			
 			echo '

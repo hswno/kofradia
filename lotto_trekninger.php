@@ -13,14 +13,14 @@ echo '
 	<div class="bg1">';
 
 
-// hent trekningene på nåværende side
+// hent trekningene pÃ¥ nÃ¥vÃ¦rende side
 $pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 12);
 $result = $pagei->query("SELECT CEILING((time-900)/1800)*1800+900 FROM smafia_database.lotto_vinnere WHERE time > ".(time()-259200)." GROUP BY CEILING((time-900)/1800)*1800+900 ORDER BY time DESC");
 
 if (mysql_num_rows($result) == 0)
 {
 	echo '
-		<p class="c">Ingen trekninger har blitt utført.</p>';
+		<p class="c">Ingen trekninger har blitt utfÃ¸rt.</p>';
 }
 
 else

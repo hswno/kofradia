@@ -93,7 +93,7 @@ class game
 
 		$rank = array("number" => 1, "id" => 0, "name" => "Ukjent", "points" => 0, "need_points" => 0, "number" => 0, "pos" => 0, "orig" => false, "pos_id" => 0);
 
-		// gå gjennom alle rankene baklengs til vi finner denne ranken
+		// gÃ¥ gjennom alle rankene baklengs til vi finner denne ranken
 		end(game::$ranks['items']);
 		while ($row = current(game::$ranks['items']))
 		{
@@ -108,7 +108,7 @@ class game
 		$rank['pos_id'] = 0;
 		$rank['pos'] = $pos;
 
-		// død?
+		// dÃ¸d?
 		if ($access_level == 0)
 		{
 			$rank['orig'] = $rank['name'];
@@ -144,7 +144,7 @@ class game
 
 		foreach (game::$ranks['items'] as $row)
 		{
-			// har denne ranken flere poeng enn vi så etter? -> neste rank
+			// har denne ranken flere poeng enn vi sÃ¥ etter? -> neste rank
 			if ($row['points'] > $points)
 			{
 				return $row;
@@ -159,7 +159,7 @@ class game
 	{
 		global $_game;
 
-		// gå gjennom alle pengebeløpene baklengs til vi finner riktig pengebeløp
+		// gÃ¥ gjennom alle pengebelÃ¸pene baklengs til vi finner riktig pengebelÃ¸p
 		end($_game['cash']);
 		while (($min = current($_game['cash'])) !== false)
 		{
@@ -180,7 +180,7 @@ class game
 	{
 		global $_game;
 		
-		// gå gjennom alle pengebeløpene baklengs til vi finner riktig pengebeløp
+		// gÃ¥ gjennom alle pengebelÃ¸pene baklengs til vi finner riktig pengebelÃ¸p
 		end($_game['cash']);
 		$i = count($_game['cash']);
 		while (($min = current($_game['cash'])) !== false)
@@ -197,13 +197,13 @@ class game
 		return 0;
 	}
 	
-	// formater pengebeløp til tekst
+	// formater pengebelÃ¸p til tekst
 	public static function format_cash($cash)
 	{
 		return game::number_format_large($cash) . " kr";
 	}
 
-	// formater pengebeløp til tekst
+	// formater pengebelÃ¸p til tekst
 	public static function format_nok($cash)
 	{
 		/*$end = ",00";
@@ -235,7 +235,7 @@ class game
 	}
 	
 	/**
-	 * Formattere små tall (tar ikke høyde for whitespace og er ment for output av integers og floats og ikke tekstinput
+	 * Formattere smÃ¥ tall (tar ikke hÃ¸yde for whitespace og er ment for output av integers og floats og ikke tekstinput
 	 * @param float $float
 	 * @param integer $decimals
 	 * @return string
@@ -250,7 +250,7 @@ class game
 	public static function number_format_large($number, $decimals = 0, $dec_seperator = ",", $tho_seperator = " ")
 	{
 		// funksjonen runder alltid tall NEDOVER
-		// brukes for svært store tall
+		// brukes for svÃ¦rt store tall
 
 		$negative = preg_match('/^\s*\-/', $number);
 		$number = preg_replace('/[^0-9\.Ee\+]/', '', $number);
@@ -262,7 +262,7 @@ class game
 		{
 			$number = $matches[1];
 
-			// før desimaltallet
+			// fÃ¸r desimaltallet
 			$e = intval($matches[3]);
 			$matches[2] = str_pad($matches[2], $e + $decimals, "0", STR_PAD_RIGHT);
 			for ($i = 0; $i < $e; $i++)
@@ -310,7 +310,7 @@ class game
 		{
 			$number = $matches[1];
 
-			// før desimaltallet
+			// fÃ¸r desimaltallet
 			$e = intval($matches[3]);
 			$matches[2] = str_pad($matches[2], $e, "0", STR_PAD_RIGHT);
 			for ($i = 0; $i < $e; $i++)
@@ -487,8 +487,8 @@ class game
 		
 		$rep = array(
 			// internettadresser
-			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~i' => '<a href="$1" target="_blank">$1</a>',
-			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~i' => '<a href="http://$1" target="_blank">$1</a>'
+			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+Ã¦Ã¸Ã¥\\~]|[,.](?! )|&amp;)+)~i' => '<a href="$1" target="_blank">$1</a>',
+			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+Ã¦Ã¸Ã¥\\~]|[,.](?! )|&amp;)+)~i' => '<a href="http://$1" target="_blank">$1</a>'
 		);
 		$code_from = array_keys($rep);
 		$code_to = array_values($rep);
@@ -520,7 +520,7 @@ class game
 		if (game::$bb_music_c == 0 && login::$logged_in && login::$user->data['u_music_auto'] == 1) $as = "&as=true";
 		else $as = "";
 		
-		// trykke for å laste inn?
+		// trykke for Ã¥ laste inn?
 		$manual = !login::$logged_in || login::$user->params->get("music_manual");
 		
 		// last inn swfobject
@@ -538,7 +538,7 @@ class game
 			ess::$b->page->add_js_domready('swfobject.embedSWF("'.$path.$as.'", "music_player_'.$num.'", 160, 60, "9.0.0", false);');
 		}
 		
-		return '<span id="music_player_'.$num.'"><img src="'.STATIC_LINK.'/other/musicplayer_press_to_play.png" style="cursor:pointer" alt="Musikkspiller - trykk for å spille av" /></span>';
+		return '<span id="music_player_'.$num.'"><img src="'.STATIC_LINK.'/other/musicplayer_press_to_play.png" style="cursor:pointer" alt="Musikkspiller - trykk for Ã¥ spille av" /></span>';
 	}
 	
 	public static function music_replace($text, $original = false)
@@ -617,7 +617,7 @@ class game
 				$match_rank = preg_match("~\\[rank_(neste_tid|neste_dato|tid|dato)\\]~i", $data);
 				if (preg_match("~\\[rankbar( type=(1|2))?\\]~i", $data, $type) || $match_rank)
 				{
-					// høyeste rank?
+					// hÃ¸yeste rank?
 					if ($rank['need_points'] == 0)
 					{
 						global $_game;
@@ -648,23 +648,23 @@ class game
 								$rankbar_total . $rankbar_total2,
 								$rankbar_total,
 								$rankbar_total,
-								"Oppnådd",
-								"Oppnådd",
-								"Oppnådd",
-								"Oppnådd"
+								"OppnÃ¥dd",
+								"OppnÃ¥dd",
+								"OppnÃ¥dd",
+								"OppnÃ¥dd"
 							),
 							$data
 						);
 					}
 					
-					// ikke høyeste rank
-					// må regne ut diverse tall
+					// ikke hÃ¸yeste rank
+					// mÃ¥ regne ut diverse tall
 					else
 					{
-						// i forhold til den høyeste ranken
+						// i forhold til den hÃ¸yeste ranken
 						global $_game;
 						
-						// antall poeng for den høyeste ranken
+						// antall poeng for den hÃ¸yeste ranken
 						$points_max = game::$ranks['items'];
 						end($points_max);
 						$points_max = current($points_max);
@@ -677,7 +677,7 @@ class game
 						
 						$rankbar_total = '
 <div class="progressbar">
-	<div class="progress" style="width: '.floor($percent_total).'%"><p>'.game::format_num($percent_total, 2).' % i forhold til høyeste rank.</p></div>
+	<div class="progress" style="width: '.floor($percent_total).'%"><p>'.game::format_num($percent_total, 2).' % i forhold til hÃ¸yeste rank.</p></div>
 </div>';
 						
 						// i forhold til neste rank
@@ -710,7 +710,7 @@ class game
 							$data
 						);
 						
-						// beregn antatt tid det tar å nå høyeste rank
+						// beregn antatt tid det tar Ã¥ nÃ¥ hÃ¸yeste rank
 						if ($match_rank)
 						{
 							// hent ut aktiviteten de siste X dagene
@@ -741,16 +741,16 @@ class game
 							
 							else
 							{
-								// antall sekunder poengene skal fordeles på
+								// antall sekunder poengene skal fordeles pÃ¥
 								$time_elapsed = time() - $expire;
 								
 								// beregn til neste rank og erstatt BB-kode
 								$need = $rank['points'] + $rank['need_points'] - $args->data['up_points'];
 								$time_left = $need / $points * $time_elapsed;
-								if ($time_left > 63072000) // 5 år frem i tid
+								if ($time_left > 63072000) // 5 Ã¥r frem i tid
 								{
-									$text_left = "over 2 år";
-									$text_date = "om over 2 år";
+									$text_left = "over 2 Ã¥r";
+									$text_date = "om over 2 Ã¥r";
 								}
 								else
 								{
@@ -768,13 +768,13 @@ class game
 									),
 									$data);
 								
-								// beregn til øverste rank og erstatt BB-kode
+								// beregn til Ã¸verste rank og erstatt BB-kode
 								$need = $points_max - $args->data['up_points'];
 								$time_left = $need / $points * $time_elapsed;
-								if ($time_left > 63072000) // 5 år frem i tid
+								if ($time_left > 63072000) // 5 Ã¥r frem i tid
 								{
-									$text_left = "over 2 år";
-									$text_date = "om over 2 år";
+									$text_left = "over 2 Ã¥r";
+									$text_date = "om over 2 Ã¥r";
 								}
 								else
 								{
@@ -807,7 +807,7 @@ class game
 	<thead>
 		<tr>
 			<th>Spiller</th>
-			<th>Sist pålogget</th>
+			<th>Sist pÃ¥logget</th>
 		</tr>
 	</thead>
 	<tbody>';
@@ -840,7 +840,7 @@ class game
 	<thead>
 		<tr>
 			<th>Spiller</th>
-			<th>Sist pålogget</th>
+			<th>Sist pÃ¥logget</th>
 		</tr>
 	</thead>
 	<tbody>';
@@ -872,7 +872,7 @@ class game
 		return false;
 	}
 
-	// gjør om bb koder til html
+	// gjÃ¸r om bb koder til html
 	public static function bb_to_html($bb)
 	{
 		static $code_from_cache_single = array();
@@ -887,7 +887,7 @@ class game
 		{
 			global $__server;
 			
-			// kode som kun skal kjøres en gang
+			// kode som kun skal kjÃ¸res en gang
 			$replaces_single = array(
 				// carrage returns
 				'~\r~' => '',
@@ -922,10 +922,10 @@ class game
 				'~\[img\]([^\["\'\n]+)\[/img\]~ie' => 'game::secure_img_addr(\'$1\')',
 				
 				// internettadresser
-				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~i' => '<a href="$1" target="_blank">$1</a>',
-				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~i' => '<a href="http://$1" target="_blank">$1</a>',
+				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+Ã¦Ã¸Ã¥\\~]|[,.](?! )|&amp;)+)~i' => '<a href="$1" target="_blank">$1</a>',
+				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+Ã¦Ã¸Ã¥\\~]|[,.](?! )|&amp;)+)~i' => '<a href="http://$1" target="_blank">$1</a>',
 				
-				// intern adresse på nettstedet
+				// intern adresse pÃ¥ nettstedet
 				'~\[iurl=/?([^\]\n]*)\](.+?)\[/iurl\]~ie' => '\'<a href="'.$__server['absolute_path'].'/$1">\'.stripslashes(\'$2\').\'</a>\'',
 				
 				// brukere
@@ -939,7 +939,7 @@ class game
 				'~\[hr\](\n)?~i' => '<div class="hr"></div>'
 			);
 			
-			// kode som kan kjøres flere ganger
+			// kode som kan kjÃ¸res flere ganger
 			$replaces_multiple = array(
 				// headers
 				'~(?:\n){0,2}\[h([1-6])\](.+?)\[/h\1\]\n{0,2}~i' => '<h$1>$2</h$1>',
@@ -991,7 +991,7 @@ class game
 				'~\[sub\](.+?)\[/sub\]~is' => '<sub>$1</sub>',
 				'~\[sup\](.+?)\[/sup\]~is' => '<sup>$1</sup>',
 				
-				// skriftstørrelse
+				// skriftstÃ¸rrelse
 				'~\[size=(1?[\d]{1,2}p[xt]|(?:x-)?small(?:er)?|(?:x-)?large[r]?)\](.+?)\[/size\]~is' => '<span style="font-size: $1;">$2</span>',
 				'~\[size=([\d])\](.+?)\[/size\]~is' => '<font size="$1">$2</font>',
 			);
@@ -1003,7 +1003,7 @@ class game
 			$code_to_cache_single = array_values($replaces_single);
 		}
 		
-		// fiks bb-koder som kun skal kjøres en gang
+		// fiks bb-koder som kun skal kjÃ¸res en gang
 		$bb = preg_replace($code_from_cache_single, $code_to_cache_single, $bb);
 		
 		// fiks liste med *
@@ -1050,7 +1050,7 @@ class game
 			}
 		}
 		
-		// fiks bb-koder som kan oppstå flere ganger inni hverandre (recursive)
+		// fiks bb-koder som kan oppstÃ¥ flere ganger inni hverandre (recursive)
 		$count = 0;
 		while (($bb = preg_replace($code_from_cache, $code_to_cache, $bb, -1, $count)) && $count > 0);
 		
@@ -1185,13 +1185,13 @@ class game
 		}
 		
 		$timetype = count($ret) > 0 && $modifiers & self::TIME_PAST ? ' siden' : '';
-		if (count($ret) == 0) $ret = array("akkurat nå");
+		if (count($ret) == 0) $ret = array("akkurat nÃ¥");
 		$last = array_pop($ret); 
 		$lastsplit = $type == "full" ? ' og ' : ' ';
 		return (count($ret) > 0 ? implode(" ", $ret) . $lastsplit : '') . $last . $timetype;
 	}
 	
-	// regne ut koordinatlengder fra et punkt til et annet, og legge til en margin hvis man ønsker..
+	// regne ut koordinatlengder fra et punkt til et annet, og legge til en margin hvis man Ã¸nsker..
 	public static function coord_distance($x1, $y1, $x2, $y2, $offset = 1)
 	{
 		$from_y = deg2rad($y1);
@@ -1299,7 +1299,7 @@ class game
 		$r1 = 0;
 		if ($up1->rank['pos_id'] != 0)
 		{
-			// beregn hvilket nummer spilleren er på spesialrank (0 = ingen, 1 = nest nederste osv)
+			// beregn hvilket nummer spilleren er pÃ¥ spesialrank (0 = ingen, 1 = nest nederste osv)
 			$r1 = count(game::$ranks['pos']) - game::$ranks['pos'][$up1->rank['pos_id']]['number'] + 1;
 		}
 		
@@ -1307,7 +1307,7 @@ class game
 		$r2 = 0;
 		if ($up2->rank['pos_id'] != 0)
 		{
-			// beregn hvilket nummer spilleren er på spesialrank (0 = ingen, 1 = nest nederste osv)
+			// beregn hvilket nummer spilleren er pÃ¥ spesialrank (0 = ingen, 1 = nest nederste osv)
 			$r2 = count(game::$ranks['pos']) - game::$ranks['pos'][$up2->rank['pos_id']]['number'] + 1;
 		}
 		

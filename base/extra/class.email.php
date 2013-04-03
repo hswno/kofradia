@@ -3,7 +3,7 @@
 /**
  * Sending av e-post
  * 
- * Støtter html og tekst, samt vanlige vedlegg og vedlegg for html
+ * StÃ¸tter html og tekst, samt vanlige vedlegg og vedlegg for html
  */
 class email
 {
@@ -109,11 +109,11 @@ class email
 						$linelength = 0;
 					}
 					
-					// tegn som må kodes om?
-					// kan forbedres litt for å stemme fullstendig med RFC 2045, men denne gjør jobben
+					// tegn som mÃ¥ kodes om?
+					// kan forbedres litt for Ã¥ stemme fullstendig med RFC 2045, men denne gjÃ¸r jobben
 					if (($c == 61 || $c < 33 || $c > 126) && ($c != 32 || $linelength > 73) && ($c != 9 || $linelength > 73))
 					{
-						// må vi over på ny linje?
+						// mÃ¥ vi over pÃ¥ ny linje?
 						if ($linelength+3 > 76)
 						{
 							$result .= "=\r\n";
@@ -187,10 +187,10 @@ class email
 	 */
 	public function format()
 	{
-		// for å sjekke om det blir opprettet noen grupper (multiparts)
+		// for Ã¥ sjekke om det blir opprettet noen grupper (multiparts)
 		$id = false;
 		
-		// ingenting å sende?
+		// ingenting Ã¥ sende?
 		if ($this->text == false && $this->html == false && count($this->html_attachments) == 0 && count($this->attachments) == 0)
 		{
 			throw new HSException("No content to send by email."); 
@@ -201,7 +201,7 @@ class email
 		if ($this->html)
 		{
 			$html = $this->encode($this->html, "quoted-printable");
-			$html[0] = "Content-Type: text/html; charset=ISO-8859-1\r\n".$html[0];
+			$html[0] = "Content-Type: text/html; charset=utf-8\r\n".$html[0];
 			
 			// vedlegg?
 			if (count($this->html_attachments) > 0)
@@ -226,10 +226,10 @@ class email
 		if ($this->text)
 		{
 			$text = $this->encode($this->text, "quoted-printable");
-			$text[0] = "Content-Type: text/plain; charset=ISO-8859-1\r\n".$text[0];
+			$text[0] = "Content-Type: text/plain; charset=utf-8\r\n".$text[0];
 		}
 		
-		// slå sammen med html
+		// slÃ¥ sammen med html
 		$data = !$text && $html ? $html : ($text && !$html ? $text : false);
 		if ($text && $html)
 		{
@@ -292,12 +292,12 @@ class email
 		
 		$headers = $this->data[0];
 		
-		// sørg for gyldig mottakeradresse (kun e-post, ikke navn)
+		// sÃ¸rg for gyldig mottakeradresse (kun e-post, ikke navn)
 		$matches = false;
 		preg_match("/([a-zA-Z_\\-][\\w\\.\\-_]*[a-zA-Z0-9_\\-]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z])/i", $receiver, $matches);
 		if (isset($matches[1]))
 		{
-			// kjør To: header
+			// kjÃ¸r To: header
 			$headers = "To: ".preg_replace("/[\\r\\n]/", "", $receiver).($headers !== "" ? "\r\n" : "").$headers;
 			$receiver = $matches[1];
 		}

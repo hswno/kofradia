@@ -7,7 +7,7 @@ class password
 	const LEVEL_WEAK = 3; // min 3
 	const LEVEL_LOGIN = 4; // minst 6 tegn
 	const ERROR_SHORT = 1; // kort passord
-	const ERROR_NONCAP = 2; // mangler små bokstaver
+	const ERROR_NONCAP = 2; // mangler smÃ¥ bokstaver
 	const ERROR_CAP = 4; // mangler store bokstaver
 	const ERROR_NUM = 8; // mangler nummer
 	const ERROR_EASY = 16; // for lett passord
@@ -21,7 +21,7 @@ class password
 	 * Kontroller passord sikkerhet
 	 *
 	 * @param string passodet $password
-	 * @param int nivået $level
+	 * @param int nivÃ¥et $level
 	 * @return errors
 	 */
 	public static function validate($password, $level = self::LEVEL_STRONG)
@@ -32,12 +32,12 @@ class password
 		switch ($level)
 		{
 			case self::LEVEL_STRONG:
-				if (!preg_match("/[a-zæøå]/", $password))
+				if (!preg_match("/[a-zÃ¦Ã¸Ã¥]/", $password))
 				{
 					$error |= self::ERROR_NONCAP;
 				}
 				
-				if (!preg_match("/[A-ZÆØÅ]/", $password))
+				if (!preg_match("/[A-ZÃ†Ã˜Ã…]/", $password))
 				{
 					$error |= self::ERROR_CAP;
 				}
@@ -79,7 +79,7 @@ class password
 		$errors = array();
 		
 		if ($error & self::ERROR_SHORT) $errors[] = 'lengde';
-		if ($error & self::ERROR_NONCAP) $errors[] = 'små bokstaver';
+		if ($error & self::ERROR_NONCAP) $errors[] = 'smÃ¥ bokstaver';
 		if ($error & self::ERROR_CAP) $errors[] = 'store bokstaver';
 		if ($error & self::ERROR_NUM) $errors[] = 'tall';
 		

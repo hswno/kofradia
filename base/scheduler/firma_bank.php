@@ -1,6 +1,6 @@
 <?php
 
-// sjekk alle bankene for forandringer som skal gjøres med overføringsgebyret
+// sjekk alle bankene for forandringer som skal gjÃ¸res med overfÃ¸ringsgebyret
 $result = ess::$b->db->query("SELECT ff_id, ff_name, ff_params FROM ff WHERE ff_type = 3");
 
 while ($row = mysql_fetch_assoc($result))
@@ -41,7 +41,7 @@ while ($row = mysql_fetch_assoc($result))
 	$params->commit();
 	
 	// logg
-	putlog("NOTICE", "Firma #{$row['ff_id']} ({$row['ff_name']}) - Nytt overføringsgebyr: $next ($change)");
+	putlog("NOTICE", "Firma #{$row['ff_id']} ({$row['ff_name']}) - Nytt overfÃ¸ringsgebyr: $next ($change)");
 	
 	// forumlogg
 	$action_id = intval(ff::$log['bank_overforing_tap_change'][0]);

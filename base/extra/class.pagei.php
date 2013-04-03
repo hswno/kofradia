@@ -119,7 +119,7 @@ class pagei
 		// innleggstart
 		$this->start = ($this->active - 1) * $this->per_page;
 		
-		// antall innlegg på siden
+		// antall innlegg pÃ¥ siden
 		$this->count_page = $this->active == $this->pages ? $this->total - ($this->pages - 1) * $this->per_page : $this->per_page;
 		
 		return $ok;
@@ -134,18 +134,18 @@ class pagei
 		$result = $_base->db->query("SELECT FOUND_ROWS()");
 		$this->total = mysql_result($result, 0);
 		
-		// sjekk om vi er på OK side
-		// hvis returnerer false betyr det at vi er på en tom side
+		// sjekk om vi er pÃ¥ OK side
+		// hvis returnerer false betyr det at vi er pÃ¥ en tom side
 		return $this->calc();
 	}
 	
-	/** Utfør spørring */
+	/** UtfÃ¸r spÃ¸rring */
 	public function query($query, $critical = true, $debug = false)
 	{
 		$query = preg_replace("/^\\s*SELECT\\s+/", "", $query);
 		$result = ess::$b->db->query("SELECT SQL_CALC_FOUND_ROWS $query LIMIT {$this->start}, {$this->per_page}", $critical, $debug);
 		
-		// hvis vi ikke er på en gyldig side
+		// hvis vi ikke er pÃ¥ en gyldig side
 		if (!$this->found_rows() && $this->total > 0)
 		{
 			$this->set_active(1);

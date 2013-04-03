@@ -9,7 +9,7 @@ class page_min_side_user
 	'.page_min_side::link('<img src="'.STATIC_LINK.'/icon/information.png" alt="" />Info', "").'
 	'.page_min_side::link('<img src="'.STATIC_LINK.'/icon/money.png" alt="" />Pluss-tjenester', "pluss").'
 	'.page_min_side::link('<img src="'.STATIC_LINK.'/icon/group.png" alt="" />Vervede', "vervede").(page_min_side::$active_own || access::has("mod") ? '
-	'.page_min_side::link('<img src="'.STATIC_LINK.'/icon/computer.png" alt="" />Økter', "ses").'
+	'.page_min_side::link('<img src="'.STATIC_LINK.'/icon/computer.png" alt="" />Ã˜kter', "ses").'
 	'.page_min_side::link('<img src="'.STATIC_LINK.'/icon/asterisk_orange.png" alt="" />Innstillinger', "set") : '');
 		
 		if (page_min_side::$active_user->active && (page_min_side::$active_own || access::has("mod")))
@@ -61,7 +61,7 @@ class page_min_side_user
 		elseif (page_min_side::$subpage == "vervede")
 			self::page_vervede();
 		
-		// økter
+		// Ã¸kter
 		elseif (page_min_side::$subpage == "ses" && (page_min_side::$active_own || access::has("mod")))
 			self::page_ses();
 		
@@ -93,7 +93,7 @@ class page_min_side_user
 		elseif (page_min_side::$subpage == "crew" && access::has("crewet", NULL, NULL, "login"))
 			self::page_crew();
 		
-		// spillere tilhørende brukeren
+		// spillere tilhÃ¸rende brukeren
 		elseif (page_min_side::$subpage == "up" && (page_min_side::$active_own || access::is_nostat()))
 			self::page_up();
 		
@@ -109,7 +109,7 @@ class page_min_side_user
 		global $_lang;
 		$mod = access::has("mod");
 		
-		// 	fødselsdato
+		// 	fÃ¸dselsdato
 		$birth = explode("-", page_min_side::$active_user->data['u_birth']);
 		
 		// alder
@@ -135,22 +135,22 @@ class page_min_side_user
 							<dd>#'.page_min_side::$active_user->id.'</dd>
 							<dt>Opprettet</dt>
 							<dd>'.ess::$b->date->get(page_min_side::$active_user->data['u_created_time'])->format().'</dd>'.(page_min_side::$active_user->id != login::$user->id ? '
-							<dt>Sist pålogget</dt>
+							<dt>Sist pÃ¥logget</dt>
 							<dd>'.ess::$b->date->get(page_min_side::$active_user->data['u_online_time'])->format().'</dd>' : '').'
 							<dt>E-postadresse</dt>
 							<dd>'.(page_min_side::$active_own || access::has("mod")
-								? '<a href="'.htmlspecialchars(page_min_side::addr("set", "b=email")).'" class="user_edit_box" rel="email">'.htmlspecialchars(page_min_side::$active_user->data['u_email']).'</a>'.($mod ? ' (<a href="admin/brukere/finn?email='.urlencode(page_min_side::$active_user->data['u_email']).'">søk</a>)' : '')
+								? '<a href="'.htmlspecialchars(page_min_side::addr("set", "b=email")).'" class="user_edit_box" rel="email">'.htmlspecialchars(page_min_side::$active_user->data['u_email']).'</a>'.($mod ? ' (<a href="admin/brukere/finn?email='.urlencode(page_min_side::$active_user->data['u_email']).'">sÃ¸k</a>)' : '')
 								: htmlspecialchars(page_min_side::$active_user->data['u_email'])).'</dd>
-							<dt>Fødselsdato</dt>
+							<dt>FÃ¸dselsdato</dt>
 							<dd>'.(access::has("mod") ? '<a href="'.htmlspecialchars(page_min_side::addr("crew", "b=birth")).'">' : '').(empty(page_min_side::$active_user->data['u_birth']) || page_min_side::$active_user->data['u_birth'] == "0000-00-00"
 								? 'Ukjent'
-								: intval($birth[2]).". ".$_lang['months'][intval($birth[1])]." ".$birth[0].' ('.$age.' år)').(access::has("mod") ? '</a>' : '').'</dd>'.(!empty(page_min_side::$active_user->data['u_phone']) || access::has("mod") ? '
+								: intval($birth[2]).". ".$_lang['months'][intval($birth[1])]." ".$birth[0].' ('.$age.' Ã¥r)').(access::has("mod") ? '</a>' : '').'</dd>'.(!empty(page_min_side::$active_user->data['u_phone']) || access::has("mod") ? '
 							<dt>Mobilnummer</dt>
 							<dd>'.(access::has("mod") ? '<a href="'.htmlspecialchars(page_min_side::addr("crew", "b=phone")).'" title="Endre nummer">' : '').(empty(page_min_side::$active_user->data['u_phone']) ? 'Ikke registrert' : htmlspecialchars(page_min_side::$active_user->data['u_phone'])).(access::has("mod") ? '</a>' : '').'</dd>' : '').'
 							<dt>IP-adresse registrert med</dt>'.(empty(page_min_side::$active_user->data['u_created_ip']) ? '
 							<dd class="dark">Ukjent</dd>' : '
 							<dd>'.($mod ? '<a href="admin/brukere/finn?ip='.urlencode(page_min_side::$active_user->data['u_created_ip']).'">'.htmlspecialchars(page_min_side::$active_user->data['u_created_ip']).'</a>' : htmlspecialchars(page_min_side::$active_user->data['u_created_ip'])).'</dd>').'
-							<dt>Nåværende IP-adresse</dt>
+							<dt>NÃ¥vÃ¦rende IP-adresse</dt>
 							<dd>'.($mod ? '<a href="admin/brukere/finn?ip='.urlencode(page_min_side::$active_user->data['u_online_ip']).'">'.htmlspecialchars(page_min_side::$active_user->data['u_online_ip']).'</a>' : htmlspecialchars(page_min_side::$active_user->data['u_online_ip'])).'</dd>';
 		
 		if (page_min_side::$active_user->data['u_created_referer'] != "")
@@ -177,7 +177,7 @@ class page_min_side_user
 			</div>
 		</div>';
 		
-		// høyre kolonne
+		// hÃ¸yre kolonne
 		echo '
 		<div class="col_w right">
 			<div class="col">';
@@ -203,7 +203,7 @@ class page_min_side_user
 						<p>Denne brukeren deaktiverte seg selv '.ess::$b->date->get(page_min_side::$active_user->data['u_deactivated_time'])->format(date::FORMAT_SEC).'.</p>' : '
 						<p>Denne brukeren ble deaktivert '.ess::$b->date->get(page_min_side::$active_user->data['u_deactivated_time'])->format(date::FORMAT_SEC).' av '.(empty(page_min_side::$active_user->data['u_deactivated_up_id']) ? 'en ukjent bruker' : '<user id="'.page_min_side::$active_user->data['u_deactivated_up_id'].'" />').'.</p>').'
 						<div class="p"><b>Begrunnelse:</b> '.(empty(page_min_side::$active_user->data['u_deactivated_reason']) ? 'Ingen begrunnelse oppgitt.' : game::bb_to_html(page_min_side::$active_user->data['u_deactivated_reason'])).'</div>'.(!$deact_self || !empty(page_min_side::$active_user->data['u_deactivated_note']) ? '
-						<div class="p"><b>Intern informasjon:</b> '.(access::has("mod") ? (empty(page_min_side::$active_user->data['u_deactivated_note']) ? 'Ingen intern informasjon oppgitt.' : game::bb_to_html(page_min_side::$active_user->data['u_deactivated_note'])) : 'Du har ikke tilgang til å se intern informasjon.').'</div>' : '').'
+						<div class="p"><b>Intern informasjon:</b> '.(access::has("mod") ? (empty(page_min_side::$active_user->data['u_deactivated_note']) ? 'Ingen intern informasjon oppgitt.' : game::bb_to_html(page_min_side::$active_user->data['u_deactivated_note'])) : 'Du har ikke tilgang til Ã¥ se intern informasjon.').'</div>' : '').'
 					</div>
 				</div>';
 		}
@@ -224,7 +224,7 @@ class page_min_side_user
 				{
 					case "birth":
 						echo '
-							<li>Brukeren har ikke lagt inn fødselsdatoen.</li>';
+							<li>Brukeren har ikke lagt inn fÃ¸dselsdatoen.</li>';
 					break;
 					
 					case "player":
@@ -240,7 +240,7 @@ class page_min_side_user
 				</div>';
 		}
 		
-		// hent spillerene tilhørende denne personen
+		// hent spillerene tilhÃ¸rende denne personen
 		$pagei = new pagei(pagei::ACTIVE_GET, "side_up", pagei::PER_PAGE, 7);
 		$result = $pagei->query("
 			SELECT up_id, up_name, up_access_level, up_created_time, up_last_online, up_points, up_deactivated_time, upr_rank_pos
@@ -251,7 +251,7 @@ class page_min_side_user
 		
 		echo '
 				<div class="bg1_c">
-					<h1 class="bg1">Spillere tilhørende brukeren<span class="left2"></span><span class="right2"></span></h1>'.(access::is_nostat() || page_min_side::$active_own ? '
+					<h1 class="bg1">Spillere tilhÃ¸rende brukeren<span class="left2"></span><span class="right2"></span></h1>'.(access::is_nostat() || page_min_side::$active_own ? '
 					<p class="h_right">'.page_min_side::link("Mer info &raquo;", "up").'</p>' : '').'
 					<div class="bg1">
 						<table class="table '.($pagei->pages == 1 ? 'tablem' : 'tablemt').'" style="width: 100%">
@@ -273,7 +273,7 @@ class page_min_side_user
 										Opprettet: '.ess::$b->date->get($row['up_created_time'])->format().'<br />'.($row['up_access_level'] == 0 ? '
 										Deaktivert: '.ess::$b->date->get($row['up_deactivated_time'])->format() : '
 										Status: I live<br />
-										Sist pålogget: '.ess::$b->date->get($row['up_last_online'])->format()).'
+										Sist pÃ¥logget: '.ess::$b->date->get($row['up_last_online'])->format()).'
 									</td>
 								</tr>';
 		}
@@ -310,8 +310,8 @@ class page_min_side_user
 		$sort = new sorts("sort");
 		$sort->append("asc", "Spillernavn", "rec.up_name");
 		$sort->append("desc", "Spillernavn", "rec.up_name DESC");
-		$sort->append("asc", "Sist pålogget", "rec.up_last_online");
-		$sort->append("desc", "Sist pålogget", "rec.up_last_online DESC");
+		$sort->append("asc", "Sist pÃ¥logget", "rec.up_last_online");
+		$sort->append("desc", "Sist pÃ¥logget", "rec.up_last_online DESC");
 		$sort->append("asc", "Registrert", "rec.up_created_time");
 		$sort->append("desc", "Registrert", "rec.up_created_time DESC");
 		$sort->append("asc", "Rankbonus", "u2.u_recruiter_points_bonus");
@@ -336,9 +336,9 @@ class page_min_side_user
 		<h1 class="bg1">Vervede spillere<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<ol>
-				<li>Du gir ut denne linken til en du ønsker å verve: <a href="'.$__server['path'].'/'.page_min_side::$active_player->id.'" target="_blank">'.$__server['path'].'/'.page_min_side::$active_player->id.'</a></li>
-				<li>Personen åpner linken</li>
-				<li>Når personen registrerer seg vil brukeren være vervet av deg</li>
+				<li>Du gir ut denne linken til en du Ã¸nsker Ã¥ verve: <a href="'.$__server['path'].'/'.page_min_side::$active_player->id.'" target="_blank">'.$__server['path'].'/'.page_min_side::$active_player->id.'</a></li>
+				<li>Personen Ã¥pner linken</li>
+				<li>NÃ¥r personen registrerer seg vil brukeren vÃ¦re vervet av deg</li>
 			</ol>
 			<p class="c"><a href="'.ess::$s['relative_path'].'/node/60">Mer informasjon om verving &raquo;</a></p>';
 		
@@ -356,7 +356,7 @@ class page_min_side_user
 				<thead>
 					<tr>
 						<td>Spiller <nobr>'.$sort->show_link(0, 1).'</nobr></td>
-						<td>Sist pålogget <nobr>'.$sort->show_link(2, 3).'</nobr></td>
+						<td>Sist pÃ¥logget <nobr>'.$sort->show_link(2, 3).'</nobr></td>
 						<td>Tid vervet <nobr>'.$sort->show_link(4, 5).'</nobr></td>
 						<td>Rankbonus <nobr>'.$sort->show_link(6, 7).'</nobr></td>
 					</tr>
@@ -387,7 +387,7 @@ class page_min_side_user
 	}
 	
 	/**
-	 * Økter
+	 * Ã˜kter
 	 */
 	protected static function page_ses()
 	{
@@ -408,7 +408,7 @@ class page_min_side_user
 			return implode("<br />\n", $list);
 		}
 		
-		// logge ut noen økter
+		// logge ut noen Ã¸kter
 		if (isset($_POST['delete']))
 		{
 			$delete = array();
@@ -423,29 +423,29 @@ class page_min_side_user
 			
 			if (count($delete) == 0)
 			{
-				ess::$b->page->add_message("Fant ingen økter å logge ut.", "error");
+				ess::$b->page->add_message("Fant ingen Ã¸kter Ã¥ logge ut.", "error");
 				redirect::handle(page_min_side::addr());
 			}
 			
 			else
 			{
-				// forsøk å logg ut de merkede øktene
+				// forsÃ¸k Ã¥ logg ut de merkede Ã¸ktene
 				$delete = implode(",", $delete);
 				ess::$b->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_active = 1 AND ses_expire_time > ".time()." AND ses_u_id = ".page_min_side::$active_user->id." AND ses_id != ".login::$info['ses_id']." AND FIND_IN_SET(ses_id, '$delete')");
 				
 				$dels = ess::$b->db->affected_rows();
-				ess::$b->page->add_message("<b>$dels</b> økt".($dels == 1 ? '' : 'er')." ble logget ut.");
+				ess::$b->page->add_message("<b>$dels</b> Ã¸kt".($dels == 1 ? '' : 'er')." ble logget ut.");
 				redirect::handle(page_min_side::addr());
 			}
 		}
 		
-		ess::$b->page->add_title("Økter");
+		ess::$b->page->add_title("Ã˜kter");
 		
 		echo '
 	<div class="bg1_c">
-		<h1 class="bg1">Aktive økter<span class="left2"></span><span class="right2"></span></h1>
+		<h1 class="bg1">Aktive Ã¸kter<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Her er en oversikt over alle stedene hvor brukeren er logget inn uten å ha blitt logget ut manuelt og som fortsatt er aktive.</p>';
+			<p>Her er en oversikt over alle stedene hvor brukeren er logget inn uten Ã¥ ha blitt logget ut manuelt og som fortsatt er aktive.</p>';
 		
 		$time = time();
 		$result = ess::$b->db->query("SELECT * FROM sessions WHERE ses_u_id = ".page_min_side::$active_user->id." AND ses_expire_time > $time AND ses_active = 1 ORDER BY ses_id DESC");
@@ -496,15 +496,15 @@ class page_min_side_user
 		</div>
 	</div>';
 		
-		// hent øktene på denne siden
+		// hent Ã¸ktene pÃ¥ denne siden
 		$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 7);
 		$result = $pagei->query("SELECT ses_id, ses_created_time, ses_ip_list, ses_expire_type, ses_expire_time, ses_active, ses_hits, ses_last_time, ses_last_ip FROM sessions WHERE ses_u_id = ".page_min_side::$active_user->id." ORDER BY ses_last_time DESC");
 		
 		echo '
 	<div class="bg1_c">
-		<h1 class="bg1">Tidligere økter<span class="left2"></span><span class="right2"></span></h1>
+		<h1 class="bg1">Tidligere Ã¸kter<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Dette er en oversikt over alle innlogginger på brukeren.</p>
+			<p>Dette er en oversikt over alle innlogginger pÃ¥ brukeren.</p>
 			<table class="table'.($pagei->pages == 1 ? ' tablemb' : '').' center">
 				<thead>
 					<tr>
@@ -569,7 +569,7 @@ class page_min_side_user
 		{
 			ess::$b->page->add_title("Endre passord");
 			
-			// må logge inn med utvidede tilganger
+			// mÃ¥ logge inn med utvidede tilganger
 			if (isset(login::$extended_access) && !login::$extended_access['authed'])
 			{
 				echo '
@@ -577,7 +577,7 @@ class page_min_side_user
 		<h1 class="bg1">Skift passord<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<boxes />
-			<p>Du må logge inn med utvidede tilganger for å få tilgang til denne funksjonen.</p>
+			<p>Du mÃ¥ logge inn med utvidede tilganger for Ã¥ fÃ¥ tilgang til denne funksjonen.</p>
 		</div>
 	</div>';
 			}
@@ -592,7 +592,7 @@ class page_min_side_user
 	<div class="bg1_c" style="width: 350px">
 		<h1 class="bg1">Skift passord<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du har ikke rettigheter til å endre passordet til denne brukeren. Kun senioradministrator kan gjøre det.</p>
+			<p>Du har ikke rettigheter til Ã¥ endre passordet til denne brukeren. Kun senioradministrator kan gjÃ¸re det.</p>
 		</div>
 	</div>';
 				}
@@ -612,12 +612,12 @@ class page_min_side_user
 							
 							if ($error & password::ERROR_SHORT)
 							{
-								$errors[] = 'Passordet er for kort. Må være minimum 8 tegn.';
+								$errors[] = 'Passordet er for kort. MÃ¥ vÃ¦re minimum 8 tegn.';
 							}
 							
 							if ($error & password::ERROR_NONCAP || $error & password::ERROR_CAP || $error & password::ERROR_NUM)
 							{
-								$errors[] = 'Passordet må inneholde både små bokstaver, store bokstaver og tall.';
+								$errors[] = 'Passordet mÃ¥ inneholde bÃ¥de smÃ¥ bokstaver, store bokstaver og tall.';
 							}
 							
 							ess::$b->page->add_message(implode('<br />', $errors), "error");
@@ -634,7 +634,7 @@ class page_min_side_user
 							// samme passord?
 							if (password::verify_hash($pass, page_min_side::$active_user->data['u_pass'], 'user'))
 							{
-								ess::$b->page->add_message("Passordet er det samme som nåværende. Velg et annet.", "error");
+								ess::$b->page->add_message("Passordet er det samme som nÃ¥vÃ¦rende. Velg et annet.", "error");
 							}
 							
 							else
@@ -656,7 +656,7 @@ class page_min_side_user
 	<div class="bg1_c" style="width: 350px">
 		<h1 class="bg1">Endre passord<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p class="r">Tilgangsnivå: Moderator</p>
+			<p class="r">TilgangsnivÃ¥: Moderator</p>
 			<p>Her endrer du passordet til '.page_min_side::$active_player->profile_link().'.</p>
 			<form action="" method="post" autocomplete="off">
 				<dl class="dd_right dl_2x">
@@ -685,7 +685,7 @@ class page_min_side_user
 					// kontroller at alle feltene er fylt ut
 					if ($pass_old == "" || $pass_new == "" || $pass_repeat == "")
 					{
-						ess::$b->page->add_message("Alle feltene må fylles ut.", "error");
+						ess::$b->page->add_message("Alle feltene mÃ¥ fylles ut.", "error");
 					}
 					
 					// kontroller gammelt passord
@@ -700,22 +700,22 @@ class page_min_side_user
 						ess::$b->page->add_message("De nye passordene var ikke like.", "error");
 					}
 					
-					// samme passord som før?
+					// samme passord som fÃ¸r?
 					elseif ($pass_old == $pass_new)
 					{
-						ess::$b->page->add_message("Du må velge et nytt passord.", "error");
+						ess::$b->page->add_message("Du mÃ¥ velge et nytt passord.", "error");
 					}
 					
 					// kontroller krav (minst 6 tegn)
 					elseif (strlen($pass_new) < 6)
 					{
-						ess::$b->page->add_message("Det nye passordet må inneholde minimum 6 tegn.", "error");
+						ess::$b->page->add_message("Det nye passordet mÃ¥ inneholde minimum 6 tegn.", "error");
 					}
 					
 					// for enkelt passord?
 					elseif (password::validate($pass_new, password::LEVEL_LOGIN) != 0)
 					{
-						ess::$b->page->add_message("Du må velge et vanskeligere passord.", "error");
+						ess::$b->page->add_message("Du mÃ¥ velge et vanskeligere passord.", "error");
 					}
 					
 					// samme passord som i banken?
@@ -730,8 +730,8 @@ class page_min_side_user
 						ess::$b->db->query("UPDATE users SET u_pass = ".ess::$b->db->quote(password::hash($pass_new, null, 'user'))." WHERE u_id = ".page_min_side::$active_user->id);
 						
 						// melding
-						ess::$b->page->add_message("Passordet ble endret. Alle andre steder brukeren var logget inn er nå logget ut.");
-						putlog("NOTICE", "%bPASSORD-ENDRING%b: %u".page_min_side::$active_player->data['up_name']."%u byttet passordet på sin bruker. {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
+						ess::$b->page->add_message("Passordet ble endret. Alle andre steder brukeren var logget inn er nÃ¥ logget ut.");
+						putlog("NOTICE", "%bPASSORD-ENDRING%b: %u".page_min_side::$active_player->data['up_name']."%u byttet passordet pÃ¥ sin bruker. {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
 						
 						// logg ut alle andre brukere
 						ess::$b->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_active = 1 AND ses_u_id = ".page_min_side::$active_user->id." AND ses_id != ".login::$info['ses_id']);
@@ -744,10 +744,10 @@ class page_min_side_user
 	<div class="bg1_c" style="width: 300px">
 		<h1 class="bg1">Skift passord<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>For å kunne skifte passord må alle 3 feltene være fylt ut.</p>
+			<p>For Ã¥ kunne skifte passord mÃ¥ alle 3 feltene vÃ¦re fylt ut.</p>
 			<form action="" method="post" autocomplete="off">
 				<dl class="dd_right dl_2x">
-					<dt>Nåværende passord</dt>
+					<dt>NÃ¥vÃ¦rende passord</dt>
 					<dd><input type="password" class="styled w100" name="pass_old" /></dd>
 					<dt>Nytt passord</dt>
 					<dd><input type="password" class="styled w100" name="pass_new" /></dd>
@@ -766,7 +766,7 @@ class page_min_side_user
 		{
 			// skifte e-postadresse?
 			/* Trinn i skifte e-postadresse:
-				1. Skriver inn ønsket e-postadresse man vil skifte til
+				1. Skriver inn Ã¸nsket e-postadresse man vil skifte til
 				2. E-post blir sendt til gammel e-postadresse med info og link til validering
 				3. Validering av gammel e-postadresse (step 1)
 				4. E-post blir sendt til ny e-postadresse med info og link til validering
@@ -775,7 +775,7 @@ class page_min_side_user
 			
 			ess::$b->page->add_title("Skifte e-postadresse");
 			
-			// må logge inn med utvidede tilganger
+			// mÃ¥ logge inn med utvidede tilganger
 			if (isset(login::$extended_access) && !login::$extended_access['authed'])
 			{
 				echo '
@@ -783,7 +783,7 @@ class page_min_side_user
 		<h1 class="bg1">Skifte e-postadresse<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<boxes />
-			<p>Du må logge inn med utvidede tilganger for å få tilgang til denne funksjonen.</p>
+			<p>Du mÃ¥ logge inn med utvidede tilganger for Ã¥ fÃ¥ tilgang til denne funksjonen.</p>
 		</div>
 	</div>';
 			}
@@ -798,7 +798,7 @@ class page_min_side_user
 	<div class="bg1_c" style="width: 350px">
 		<h1 class="bg1">Skifte e-postadresse<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du har ikke rettigheter til å skifte e-postadressen til denne brukeren. Kun senioradministrator kan gjøre det.</p>
+			<p>Du har ikke rettigheter til Ã¥ skifte e-postadressen til denne brukeren. Kun senioradministrator kan gjÃ¸re det.</p>
 		</div>
 	</div>';
 				}
@@ -825,19 +825,19 @@ class page_min_side_user
 						// mangler logg?
 						elseif (empty($log))
 						{
-							ess::$b->page->add_message("Du må fylle inn en loggmelding.", "error");
+							ess::$b->page->add_message("Du mÃ¥ fylle inn en loggmelding.", "error");
 						}
 						
 						// samme e-postadresse?
 						elseif ($email == page_min_side::$active_user->data['u_email'])
 						{
-							ess::$b->page->add_message("Du må skrive inn en ny e-postadresse.");
+							ess::$b->page->add_message("Du mÃ¥ skrive inn en ny e-postadresse.");
 						}
 						
 						// finnes e-posten allerede?
 						elseif ($email_ex && !isset($_POST['ignore_ex']))
 						{
-							ess::$b->page->add_message("Denne e-posten er allerede i bruk av ".game::profile_link($email_ex['up_id'], $email_ex['up_name'], $email_ex['up_access_level']).". Bekreft at du ønsker å la begge brukerene ha denne e-postadresse, evt. endre til en annen e-postadresse.");
+							ess::$b->page->add_message("Denne e-posten er allerede i bruk av ".game::profile_link($email_ex['up_id'], $email_ex['up_name'], $email_ex['up_access_level']).". Bekreft at du Ã¸nsker Ã¥ la begge brukerene ha denne e-postadresse, evt. endre til en annen e-postadresse.");
 						}
 						
 						else
@@ -866,7 +866,7 @@ class page_min_side_user
 			<boxes />
 			<form action="" method="post" autocomplete="off">
 				<dl class="dd_right dl_2x">
-					<dt>Nåværende e-postadresse</dt>
+					<dt>NÃ¥vÃ¦rende e-postadresse</dt>
 					<dd>'.htmlspecialchars(page_min_side::$active_user->data['u_email']).'</dd>
 					<dt>Ny e-postadresse</dt>
 					<dd><input type="text" value="'.htmlspecialchars(postval("email", page_min_side::$active_user->data['u_email'])).'" name="email" id="email" class="styled w150" /></dd>
@@ -882,11 +882,11 @@ class page_min_side_user
 			
 			else
 			{
-				// blokkert fra å skifte e-postadressen?
+				// blokkert fra Ã¥ skifte e-postadressen?
 				$blokkering = blokkeringer::check(blokkeringer::TYPE_EPOST);
 				if ($blokkering)
 				{
-					ess::$b->page->add_message("Du er blokkert fra å skifte e-postadressen din. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
+					ess::$b->page->add_message("Du er blokkert fra Ã¥ skifte e-postadressen din. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
 					redirect::handle(page_min_side::addr(""));
 				}
 				
@@ -913,7 +913,7 @@ class page_min_side_user
 					$in_use = mysql_result($result, 0) > 0;
 				}
 				
-				// gått for lang tid?
+				// gÃ¥tt for lang tid?
 				elseif ($status && page_min_side::$active_user->params->get("change_email_time")+86400 < time())
 				{
 					$expire = true;
@@ -937,13 +937,13 @@ class page_min_side_user
 						putlog("CREWCHAN", "%u".page_min_side::$active_player->data['up_name']."%u kunne ikke skifte e-postadresse fordi det ble brukt for lang tid (egentlig startet ".ess::$b->date->get(page_min_side::$active_user->params->get("change_email_time"))->format().") (ville skifte fra %u".page_min_side::$active_user->data['u_email']."%u til %u$email_addr%u) {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
 						
 						// info
-						ess::$b->page->add_message("Du brukte for lang tid med å bekrefte e-postadressen. Skifting av e-post er avbrutt.", "error");
+						ess::$b->page->add_message("Du brukte for lang tid med Ã¥ bekrefte e-postadressen. Skifting av e-post er avbrutt.", "error");
 					}
 					
 					else
 					{
 						// logg
-						putlog("CREWCHAN", "%u".page_min_side::$active_player->data['up_name']."%u avbrøt skifting av e-postadresse (ville skifte fra %u".page_min_side::$active_user->data['u_email']."%u til %u$email_addr%u) {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
+						putlog("CREWCHAN", "%u".page_min_side::$active_player->data['up_name']."%u avbrÃ¸t skifting av e-postadresse (ville skifte fra %u".page_min_side::$active_user->data['u_email']."%u til %u$email_addr%u) {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
 						
 						// info
 						ess::$b->page->add_message("Du har avbrutt skifting av e-postadresse.");
@@ -961,14 +961,14 @@ class page_min_side_user
 				// behandle trinn 1
 				if (isset($_GET['old']))
 				{
-					// er ikke på trinn 1 eller feil kode?
+					// er ikke pÃ¥ trinn 1 eller feil kode?
 					if ($status != 1 || page_min_side::$active_user->params->get("change_email_hash") != $_GET['old'])
 					{
 						ess::$b->page->add_message("E-posten du har blitt henvist fra gjelder ikke lenger.", "error");
 						redirect::handle();
 					}
 					
-					// gå videre til neste trinn?
+					// gÃ¥ videre til neste trinn?
 					if (isset($_POST['continue']) && validate_sid(false))
 					{
 						// generer kode
@@ -984,13 +984,13 @@ class page_min_side_user
 						$email = new email();
 						$email->text = 'Hei,
 
-Du har bedt om å skifte e-postadressen for din spiller '.page_min_side::$active_player->data['up_name'].' på '.$__server['path'].'.
+Du har bedt om Ã¥ skifte e-postadressen for din spiller '.page_min_side::$active_player->data['up_name'].' pÃ¥ '.$__server['path'].'.
 Den gamle e-postadressen har blitt bekreftet.
 
-Gammel/nåværende e-postadresse: '.page_min_side::$active_user->data['u_email'].'
+Gammel/nÃ¥vÃ¦rende e-postadresse: '.page_min_side::$active_user->data['u_email'].'
 Ny e-postadresse: '.$email_addr.'
 
-For å godta eller avslå dette gå inn på følgende adresse:
+For Ã¥ godta eller avslÃ¥ dette gÃ¥ inn pÃ¥ fÃ¸lgende adresse:
 '.$__server['path'].'/min_side?u&a=set&b=email&new='.$hash.'
 
 --
@@ -1000,7 +1000,7 @@ www.kofradia.no';
 						$email->send($email_addr, "Skifte e-postadresse (bekrefte ny adresse)");
 						
 						// logg
-						putlog("CREWCHAN", "%u".page_min_side::$active_player->data['up_name']."%u har bekreftet gammel e-postadresse (%u".page_min_side::$active_user->data['u_email']."%u) og skal nå bekrefte %u$email_addr%u {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
+						putlog("CREWCHAN", "%u".page_min_side::$active_player->data['up_name']."%u har bekreftet gammel e-postadresse (%u".page_min_side::$active_user->data['u_email']."%u) og skal nÃ¥ bekrefte %u$email_addr%u {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
 						
 						// info
 						ess::$b->page->add_message("En e-post har blitt sendt til <b>".htmlspecialchars($email_addr)."</b> for bekreftelse.");
@@ -1008,14 +1008,14 @@ www.kofradia.no';
 					}
 					
 					echo $html_pre . '
-		<p>Du har bekreftet nåværende e-postadresse.</p>
+		<p>Du har bekreftet nÃ¥vÃ¦rende e-postadresse.</p>
 		<dl class="dd_right">
-			<dt>Nåværende e-postadresse</dt>
+			<dt>NÃ¥vÃ¦rende e-postadresse</dt>
 			<dd>'.htmlspecialchars(page_min_side::$active_user->data['u_email']).'</dd>
-			<dt>Ny ønsket e-postadresse</dt>
+			<dt>Ny Ã¸nsket e-postadresse</dt>
 			<dd>'.htmlspecialchars($email_addr).'</dd>
 		</dl>
-		<p><u>Du må nå bekrefte den nye e-postadressen.</u></p>
+		<p><u>Du mÃ¥ nÃ¥ bekrefte den nye e-postadressen.</u></p>
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<p class="c">
@@ -1028,14 +1028,14 @@ www.kofradia.no';
 				// behandle trinn 2
 				elseif (isset($_GET['new']))
 				{
-					// er ikke på trinn 2 eller feil kode?
+					// er ikke pÃ¥ trinn 2 eller feil kode?
 					if ($status != 2 || page_min_side::$active_user->params->get("change_email_hash") != $_GET['new'])
 					{
 						ess::$b->page->add_message("E-posten du har blitt henvist fra gjelder ikke lenger.", "error");
 						redirect::handle();
 					}
 					
-					// fullføre skifting av e-postadresse?
+					// fullfÃ¸re skifting av e-postadresse?
 					if (isset($_POST['confirm']) && validate_sid(false))
 					{
 						$note = trim(postval("note"));
@@ -1071,11 +1071,11 @@ www.kofradia.no';
 					}
 					
 					echo $html_pre . '
-		<p>Du har bekreftet både den nåværende og den nye e-postadressen.</p>
+		<p>Du har bekreftet bÃ¥de den nÃ¥vÃ¦rende og den nye e-postadressen.</p>
 		<dl class="dd_right">
-			<dt>Nåværende e-postadresse</dt>
+			<dt>NÃ¥vÃ¦rende e-postadresse</dt>
 			<dd>'.htmlspecialchars(page_min_side::$active_user->data['u_email']).'</dd>
-			<dt>Ny ønsket e-postadresse</dt>
+			<dt>Ny Ã¸nsket e-postadresse</dt>
 			<dd><b><u>'.htmlspecialchars($email_addr).'</u></b></dd>
 		</dl>
 		<form action="" method="post">
@@ -1124,8 +1124,8 @@ www.kofradia.no';
 						// allerede i bruk?
 						elseif ($in_use)
 						{
-							putlog("CREWCHAN", "%u".page_min_side::$active_player->data['up_name']."%u forsøkte å skifte e-postadresse fra %u".page_min_side::$active_user->data['u_email']."%u til %u$email_addr%u som allerde er i bruk {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
-							ess::$b->page->add_message("E-posten du ønsker å skifte til er allerede benyttet av en annen bruker.");
+							putlog("CREWCHAN", "%u".page_min_side::$active_player->data['up_name']."%u forsÃ¸kte Ã¥ skifte e-postadresse fra %u".page_min_side::$active_user->data['u_email']."%u til %u$email_addr%u som allerde er i bruk {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
+							ess::$b->page->add_message("E-posten du Ã¸nsker Ã¥ skifte til er allerede benyttet av en annen bruker.");
 						}
 						
 						// blokkert e-postadresse?
@@ -1156,12 +1156,12 @@ www.kofradia.no';
 							$email = new email();
 							$email->text = 'Hei,
 
-Du har bedt om å skifte e-postadressen for din spiller '.page_min_side::$active_player->data['up_name'].' på '.$__server['path'].'.
+Du har bedt om Ã¥ skifte e-postadressen for din spiller '.page_min_side::$active_player->data['up_name'].' pÃ¥ '.$__server['path'].'.
 
-Gammel/nåværende e-postadresse: '.page_min_side::$active_user->data['u_email'].'
+Gammel/nÃ¥vÃ¦rende e-postadresse: '.page_min_side::$active_user->data['u_email'].'
 Ny e-postadresse: '.$email_addr.'
 
-For å godta eller avslå dette gå inn på følgende adresse:
+For Ã¥ godta eller avslÃ¥ dette gÃ¥ inn pÃ¥ fÃ¸lgende adresse:
 '.$__server['path'].'/min_side?u&a=set&b=email&old='.$hash.'
 
 --
@@ -1183,13 +1183,13 @@ www.kofradia.no';
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<dl class="dd_right">
-				<dt>Nåværende e-postadresse</dt>
+				<dt>NÃ¥vÃ¦rende e-postadresse</dt>
 				<dd>'.htmlspecialchars(page_min_side::$active_user->data['u_email']).'</dd>
-				<dt>Ny ønsket e-postadresse</dt>
+				<dt>Ny Ã¸nsket e-postadresse</dt>
 				<dd><input type="text" name="new_email" value="'.htmlspecialchars(postval("new_email", "")).'" class="styled w150" /></dd>
 			</dl>
-			<p>Du vil motta en e-post for bekreftelse på den gamle e-postadressen, for deretter å få en bekreftelse på den nye før e-postadressen blir skiftet.</p>
-			<p>Husk at du ikke har lov til å gi bort eller selge brukeren til andre personer. <u>Brukeren skal ikke brukes av andre enn deg.</u></p>
+			<p>Du vil motta en e-post for bekreftelse pÃ¥ den gamle e-postadressen, for deretter Ã¥ fÃ¥ en bekreftelse pÃ¥ den nye fÃ¸r e-postadressen blir skiftet.</p>
+			<p>Husk at du ikke har lov til Ã¥ gi bort eller selge brukeren til andre personer. <u>Brukeren skal ikke brukes av andre enn deg.</u></p>
 			<p class="c">'.show_sbutton("Fortsett").'</p>'.(access::has("mod") ? '
 			<p class="c"><a href="'.htmlspecialchars(page_min_side::addr("set", "b=email&o")).'">Endre e-postadresse som moderator</a></p>' : '').'
 		</form>' . $html_suf;
@@ -1199,15 +1199,15 @@ www.kofradia.no';
 				else
 				{
 					echo $html_pre . '
-		<p>Du er i ferd med å skifte e-postadresse for brukeren din.</p>
+		<p>Du er i ferd med Ã¥ skifte e-postadresse for brukeren din.</p>
 		<p>Informasjon:</p>
 		<dl class="dd_right">
-			<dt>Nåværende e-postadresse</dt>
+			<dt>NÃ¥vÃ¦rende e-postadresse</dt>
 			<dd>'.htmlspecialchars(page_min_side::$active_user->data['u_email']).'</dd>
-			<dt>Ny ønsket e-postadresse</dt>
+			<dt>Ny Ã¸nsket e-postadresse</dt>
 			<dd>'.htmlspecialchars($email_addr).'</dd>
 			<dt>Status</dt>
-			<dd>'.($status == 1 ? 'Venter på bekreftelse av <b>gammel</b> e-postadresse.' : 'Venter på bekreftelse av <b>ny</b> e-postadresse').'</dd>
+			<dd>'.($status == 1 ? 'Venter pÃ¥ bekreftelse av <b>gammel</b> e-postadresse.' : 'Venter pÃ¥ bekreftelse av <b>ny</b> e-postadresse').'</dd>
 		</dl>
 		<form action="" method="post">
 			<p class="c">'.show_sbutton("Avbryt", 'name="abort"').'</p>
@@ -1223,7 +1223,7 @@ www.kofradia.no';
 			{
 				if (page_min_side::$active_user->id != login::$user->id && !access::has("sadmin"))
 				{
-					ess::$b->page->add_message("Du har ikke tilgang til å redigere disse innstillingene for andre brukere.", "error");
+					ess::$b->page->add_message("Du har ikke tilgang til Ã¥ redigere disse innstillingene for andre brukere.", "error");
 					redirect::handle();
 				}
 				
@@ -1272,7 +1272,7 @@ www.kofradia.no';
 				}
 				else
 				{
-					ess::$b->page->add_message("Ingen endringer ble utført.");
+					ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.");
 				}
 				
 				redirect::handle();
@@ -1301,7 +1301,7 @@ www.kofradia.no';
 				
 				<p><b>Spillinnstillinger:</b></p>
 				<div class="minside_set">
-					<p><input type="checkbox" name="hide_progressbar_left" id="hide_progressbar_left"'.(page_min_side::$active_user->params->get("hide_progressbar_left") ? ' checked="checked"' : '').' /><label for="hide_progressbar_left"> Skjul &laquo;Rank&raquo; og &laquo;Wanted nivå&raquo; fra toppen av siden</label></p>
+					<p><input type="checkbox" name="hide_progressbar_left" id="hide_progressbar_left"'.(page_min_side::$active_user->params->get("hide_progressbar_left") ? ' checked="checked"' : '').' /><label for="hide_progressbar_left"> Skjul &laquo;Rank&raquo; og &laquo;Wanted nivÃ¥&raquo; fra toppen av siden</label></p>
 				</div>
 				
 				<p><b>Annet:</b></p>
@@ -1309,10 +1309,10 @@ www.kofradia.no';
 					<p>Musikkalternativer:<br />
 						<input type="radio" name="music" value="auto" id="music_auto"'.(!page_min_side::$active_user->params->get("music_manual") && page_min_side::$active_user->data['u_music_auto'] ? ' checked="checked"' : '').' /><label for="music_auto"> Spill av musikk automatisk</label><br />
 						<input type="radio" name="music" value="preload" id="music_preload"'.(!page_min_side::$active_user->params->get("music_manual") && !page_min_side::$active_user->data['u_music_auto'] ? ' checked="checked"' : '').' /><label for="music_preload"> Last inn musikkfil, men ikke spill av automatisk</label><br />
-						<input type="radio" name="music" value="manual" id="music_manual"'.(page_min_side::$active_user->params->get("music_manual") ? ' checked="checked"' : '').' /><label for="music_manual"> Ikke last inn musikkfil -- trykk på spiller for å laste inn</label>
+						<input type="radio" name="music" value="manual" id="music_manual"'.(page_min_side::$active_user->params->get("music_manual") ? ' checked="checked"' : '').' /><label for="music_manual"> Ikke last inn musikkfil -- trykk pÃ¥ spiller for Ã¥ laste inn</label>
 					</p>
 				</div>'.(page_min_side::$active_user->id != login::$user->id ? '
-				<p class="c">Du har ikke tilgang til å endre disse innstillingene</p>' : '
+				<p class="c">Du har ikke tilgang til Ã¥ endre disse innstillingene</p>' : '
 				<p class="c">'.show_sbutton("Lagre endringer", 'name="save"').'</p>').'
 			</form>
 		</div>
@@ -1372,7 +1372,7 @@ www.kofradia.no';
 		$i_bruk = $tilgjengelig;
 		$total = array_sum($count);
 		
-		// nye hendelser (viser også nye hendelser i firma/familie)?
+		// nye hendelser (viser ogsÃ¥ nye hendelser i firma/familie)?
 		if (page_min_side::$active_user->data['u_log_crew_new'] > 0 && login::$user->id == page_min_side::$active_user->id && count($i_bruk) > 0)
 		{
 			echo '
@@ -1494,7 +1494,7 @@ www.kofradia.no';
 			$i_bruk[] = "NULL";
 			$where = ' AND type IN ('.implode(",", $i_bruk).')';
 			
-			// sideinformasjon - hent loggene på denne siden
+			// sideinformasjon - hent loggene pÃ¥ denne siden
 			$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, max(50, page_min_side::$active_user->data['u_log_crew_new']));
 			$result = $pagei->query("SELECT time, type, note, num FROM users_log WHERE ul_up_id IN (0, ".page_min_side::$active_player->id.")$where ORDER BY time DESC, id DESC");
 			
@@ -1617,7 +1617,7 @@ www.kofradia.no';
 					if ($send_email) $data["email_sent"] = 1;
 					crewlog::log("user_deactivate", page_min_side::$active_player->id, $log, $data);
 					
-					// fullfør transaksjon
+					// fullfÃ¸r transaksjon
 					if (!$transaction_before) ess::$b->db->commit();
 					
 					// send e-post
@@ -1628,7 +1628,7 @@ www.kofradia.no';
 
 Din bruker har blitt deaktivert av Crewet.'.($player_deact ? '
 
-Dette har også medført at din spiller '.page_min_side::$active_player->data['up_name'].' har blitt deaktivert.' : '').'
+Dette har ogsÃ¥ medfÃ¸rt at din spiller '.page_min_side::$active_player->data['up_name'].' har blitt deaktivert.' : '').'
 
 Begrunnelse for deaktivering:
 '.strip_tags(game::bb_to_html($log)).'
@@ -1644,7 +1644,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 				
 				else
 				{
-					// fullfør transaksjon
+					// fullfÃ¸r transaksjon
 					if (!$transaction_before) ess::$b->db->commit();
 				}
 				
@@ -1657,8 +1657,8 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 		<h1 class="bg1">Deaktiver bruker<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<boxes />
-			<p>Du er i ferd med å deaktivere denne brukeren.</p>'.(page_min_side::$active_player->active ? '
-			<p>Dette vil også medføre at spilleren '.page_min_side::$active_player->profile_link().' vil bli deaktivert. Du kan alternativt kun <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "player")).'">deaktivere spilleren</a>.</p>' : '').'
+			<p>Du er i ferd med Ã¥ deaktivere denne brukeren.</p>'.(page_min_side::$active_player->active ? '
+			<p>Dette vil ogsÃ¥ medfÃ¸re at spilleren '.page_min_side::$active_player->profile_link().' vil bli deaktivert. Du kan alternativt kun <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "player")).'">deaktivere spilleren</a>.</p>' : '').'
 			<form action="" method="post">
 				<dl class="dd_right">
 					<dt>Begrunnelse for deaktivering</dt>
@@ -1734,7 +1734,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 		<div class="bg1">
 			<boxes />
 			<form action="" method="post">
-				<p>Brukeren vil ikke bli informert om disse endringene, annet enn at brukeren får oppgitt den nye begrunnelsen ved forsøk på innlogginger.</p>
+				<p>Brukeren vil ikke bli informert om disse endringene, annet enn at brukeren fÃ¥r oppgitt den nye begrunnelsen ved forsÃ¸k pÃ¥ innlogginger.</p>
 				<dl class="dd_right">
 					<dt>Begrunnelse for deaktivering</dt>
 					<dd><textarea name="log" id="log" cols="30" rows="5">'.htmlspecialchars(postval("log", page_min_side::$active_user->data['u_deactivated_reason'])).'</textarea></dd>
@@ -1762,7 +1762,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 			redirect::handle(page_min_side::addr(""));
 		}
 		
-		// blokkert fra å deaktivere brukeren?
+		// blokkert fra Ã¥ deaktivere brukeren?
 		$blokkering = blokkeringer::check(blokkeringer::TYPE_DEAKTIVER);
 		if ($blokkering)
 		{
@@ -1770,7 +1770,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 	<div class="bg1_c" style="width: 300px">
 		<h1 class="bg1">Deaktiver bruker<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du er blokkert fra å deaktivere brukeren din.</p>
+			<p>Du er blokkert fra Ã¥ deaktivere brukeren din.</p>
 			<p>Blokkeringen varer til '.ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).'.</p>
 			<p><b>Begrunnelse:</b> '.game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>
 		</div>
@@ -1795,12 +1795,12 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 			$deactivate_expire = page_min_side::$active_user->params->get("deactivate_expire");
 			$deactivate_expire_time = 3600;
 			
-			// må be om e-post?
+			// mÃ¥ be om e-post?
 			if (!$deactivate_expire || $deactivate_expire < time())
 			{
 				if (isset($_POST['deactivate']))
 				{
-					// opprett nøkkel
+					// opprett nÃ¸kkel
 					$key = uniqid();
 					$expire = time()+$deactivate_expire_time;
 					
@@ -1812,22 +1812,22 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 					$email = new email();
 					$email->text = 'Hei,
 
-Du har bedt om å deaktivere din bruker på Kofradia.
-For din egen skyld sender vi deg denne e-posten for å være sikker på at ingen uvedkommende forsøker å deaktivere brukeren din.
+Du har bedt om Ã¥ deaktivere din bruker pÃ¥ Kofradia.
+For din egen skyld sender vi deg denne e-posten for Ã¥ vÃ¦re sikker pÃ¥ at ingen uvedkommende forsÃ¸ker Ã¥ deaktivere brukeren din.
 
 Brukerinformasjon:
 Bruker ID: '.page_min_side::$active_user->id.'
 E-post: '.page_min_side::$active_user->data['u_email'].'
 Spiller: '.page_min_side::$active_player->data['up_name'].' (#'.page_min_side::$active_player->id.')
 
-For å godta eller avslå deaktivering:
+For Ã¥ godta eller avslÃ¥ deaktivering:
 '.$__server['path'].'/min_side?u&a=deact&key='.urlencode($key).'
 
 --
 www.kofradia.no';
 					$email->send(page_min_side::$active_user->data['u_email'], "Deaktiver bruker");
 					
-					putlog("CREWCHAN", "%bDeaktiveringsmulighet%b: ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].") ba om e-post for å deaktivere brukeren -- {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
+					putlog("CREWCHAN", "%bDeaktiveringsmulighet%b: ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].") ba om e-post for Ã¥ deaktivere brukeren -- {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
 					ess::$b->page->add_message("E-post med detaljer ble sendt til <b>".htmlspecialchars(page_min_side::$active_user->data['u_email'])."</b>.");
 					
 					redirect::handle();
@@ -1837,16 +1837,16 @@ www.kofradia.no';
 				{
 					if (isset($_GET['key']))
 					{
-						ess::$b->page->add_message("Du brukte for lang tid fra e-posten ble sendt. Alternativt er du logget inn på feil bruker.", "error");
+						ess::$b->page->add_message("Du brukte for lang tid fra e-posten ble sendt. Alternativt er du logget inn pÃ¥ feil bruker.", "error");
 					}
 					else
 					{
-						ess::$b->page->add_message("Du brukte for lang tid fra e-posten ble sendt om å deaktivere brukeren din. Alternativt er du logget inn på feil bruker.", "error");
+						ess::$b->page->add_message("Du brukte for lang tid fra e-posten ble sendt om Ã¥ deaktivere brukeren din. Alternativt er du logget inn pÃ¥ feil bruker.", "error");
 					}
 					
 					if ($deactivate_expire && $deactivate_expire < time())
 					{
-						// fjern oppføringene
+						// fjern oppfÃ¸ringene
 						page_min_side::$active_user->params->remove("deactivate_expire");
 						page_min_side::$active_user->params->remove("deactivate_key");
 						page_min_side::$active_user->params->remove("deactivate_time", true);
@@ -1863,7 +1863,7 @@ www.kofradia.no';
 				// ikke normal bruker
 				if (page_min_side::$active_user->data['u_access_level'] != 1 && false)
 				{
-					// fjern oppføringene
+					// fjern oppfÃ¸ringene
 					page_min_side::$active_user->params->remove("deactivate_expire");
 					page_min_side::$active_user->params->remove("deactivate_key");
 					page_min_side::$active_user->params->remove("deactivate_time", true);
@@ -1874,9 +1874,9 @@ www.kofradia.no';
 				// avbryte?
 				if (isset($_GET['abort']))
 				{
-					ess::$b->page->add_message("Du har trukket tilbake ditt ønske om deaktivering.", "error");
+					ess::$b->page->add_message("Du har trukket tilbake ditt Ã¸nske om deaktivering.", "error");
 					
-					// fjern oppføringene
+					// fjern oppfÃ¸ringene
 					page_min_side::$active_user->params->remove("deactivate_expire");
 					page_min_side::$active_user->params->remove("deactivate_key");
 					page_min_side::$active_user->params->remove("deactivate_time", true);
@@ -1891,7 +1891,7 @@ www.kofradia.no';
 					$key = getval("key");
 					if ($key != page_min_side::$active_user->params->get("deactivate_key"))
 					{
-						ess::$b->page->add_message("Lenken er feil. Sørg for at du kopierer hele lenken.", "error");
+						ess::$b->page->add_message("Lenken er feil. SÃ¸rg for at du kopierer hele lenken.", "error");
 						redirect::handle();
 					}
 					
@@ -1909,7 +1909,7 @@ www.kofradia.no';
 						
 						elseif ($pass == "")
 						{
-							ess::$b->page->add_message("Du må fylle inn passordet ditt.", "error");
+							ess::$b->page->add_message("Du mÃ¥ fylle inn passordet ditt.", "error");
 						}
 						
 						elseif (!password::verify_hash($pass, page_min_side::$active_user->data['u_pass'], 'user'))
@@ -1923,7 +1923,7 @@ www.kofradia.no';
 							$player_deact = page_min_side::$active_player->active;
 							if (page_min_side::$active_user->deactivate($note, NULL))
 							{
-								ess::$b->page->add_message("Brukeren er nå deaktivert.");
+								ess::$b->page->add_message("Brukeren er nÃ¥ deaktivert.");
 								
 								// send e-post
 								$email = new email();
@@ -1931,7 +1931,7 @@ www.kofradia.no';
 
 Du har deaktivert din bruker.'.($player_deact ? '
 
-Dette har også medført at din spiller '.page_min_side::$active_player->data['up_name'].' har blitt deaktivert.' : '').'
+Dette har ogsÃ¥ medfÃ¸rt at din spiller '.page_min_side::$active_player->data['up_name'].' har blitt deaktivert.' : '').'
 
 Din begrunnelse for deaktivering:
 '.game::bb_to_html($note).'
@@ -1948,7 +1948,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 				}
 			}
 			
-			// venter på kode
+			// venter pÃ¥ kode
 			if ($deactivate_expire !== false)
 			{
 				// har kode?
@@ -1959,8 +1959,8 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 		<h1 class="bg1">Deaktiver bruker<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<div class="warning">
-				<p>Du er i ferd med å deaktivere brukeren din. Når brukeren din blir deaktivert vil du ikke få tilgang til noe av dataen som er lagret i din bruker.</p>'.(page_min_side::$active_player->active ? '
-				<p>Spilleren '.page_min_side::$active_player->profile_link().' vil bli automatisk deaktivert siden denne tilhører deg.</p>' : '').'
+				<p>Du er i ferd med Ã¥ deaktivere brukeren din. NÃ¥r brukeren din blir deaktivert vil du ikke fÃ¥ tilgang til noe av dataen som er lagret i din bruker.</p>'.(page_min_side::$active_player->active ? '
+				<p>Spilleren '.page_min_side::$active_player->profile_link().' vil bli automatisk deaktivert siden denne tilhÃ¸rer deg.</p>' : '').'
 			</div>
 			<form action="" method="post">
 				<dl class="dd_right dl_2x">
@@ -1970,7 +1970,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 					<dd><textarea name="note" cols="30" rows="5">'.htmlspecialchars(postval("note")).'</textarea></dd>
 				</dl>
 				<p class="c">'.show_sbutton("Deaktiver bruker").'</p>
-				<p class="c"><a href="'.htmlspecialchars(page_min_side::addr(NULL, "abort")).'">Avbryt - ønsker ikke å deaktivere brukeren</a></p>
+				<p class="c"><a href="'.htmlspecialchars(page_min_side::addr(NULL, "abort")).'">Avbryt - Ã¸nsker ikke Ã¥ deaktivere brukeren</a></p>
 			</form>
 		</div>
 	</div>';
@@ -1982,8 +1982,8 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 	<div class="bg1_c" style="width: 300px">
 		<h1 class="bg1">Deaktiver bruker<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du skal ha mottatt en e-post med link til å deaktivere din bruker.</p>
-			<p><a href="'.htmlspecialchars(page_min_side::addr(NULL, "abort")).'">Avbryt - ønsker ikke å deaktivere brukeren</a></p>
+			<p>Du skal ha mottatt en e-post med link til Ã¥ deaktivere din bruker.</p>
+			<p><a href="'.htmlspecialchars(page_min_side::addr(NULL, "abort")).'">Avbryt - Ã¸nsker ikke Ã¥ deaktivere brukeren</a></p>
 		</div>
 	</div>';
 				}
@@ -1995,9 +1995,9 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 	<div class="bg1_c" style="width: 300px">
 		<h1 class="bg1">Deaktiver bruker<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Ved å deaktivere brukeren din mister du tilgang til all informasjon som er lagret i brukeren. Dette omfatter statistikk om tidligere spillere, meldinger m.v.</p>
-			<p>Av sikkerhetsmessige grunner vil du motta en e-post med nærmere instrukser for å deaktivere brukeren.</p>'.(page_min_side::$active_player->active ? '
-			<p>Hvis du ønsker å opprette en <u>ny spiller</u>, vil du ikke deaktivere brukeren din. Da vil du heller <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "player")).'">deaktivere spilleren din</a>!</p>' : '').'
+			<p>Ved Ã¥ deaktivere brukeren din mister du tilgang til all informasjon som er lagret i brukeren. Dette omfatter statistikk om tidligere spillere, meldinger m.v.</p>
+			<p>Av sikkerhetsmessige grunner vil du motta en e-post med nÃ¦rmere instrukser for Ã¥ deaktivere brukeren.</p>'.(page_min_side::$active_player->active ? '
+			<p>Hvis du Ã¸nsker Ã¥ opprette en <u>ny spiller</u>, vil du ikke deaktivere brukeren din. Da vil du heller <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "player")).'">deaktivere spilleren din</a>!</p>' : '').'
 			<form action="" method="post">
 				<p class="c">'.show_sbutton("Be om e-post", 'name="deactivate"').'</p>
 			</form>
@@ -2053,7 +2053,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 
 Din bruker har blitt aktivert igjen av Crewet.
 
-Du kan nå logge inn igjen på Kofradia:
+Du kan nÃ¥ logge inn igjen pÃ¥ Kofradia:
 '.$__server['path'].'/'.(!empty($note) ? '
 
 Begrunnelse for aktivering:
@@ -2084,8 +2084,8 @@ www.kofradia.no';
 	<div class="bg1_c" style="width: 400px">
 		<h1 class="bg1">Aktiver bruker<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du er i ferd med å aktivere denne brukeren.</p>
-			<p>Merk at dette <u>ikke</u> automatisk vil aktivere spilleren også. Du kan alternativt velge å <a href="'.htmlspecialchars(page_min_side::addr("activate", "", "player")).'">aktivere spilleren</a> ('.page_min_side::$active_player->profile_link().') slik at både brukeren og spilleren blir aktivert samtidig.</p>
+			<p>Du er i ferd med Ã¥ aktivere denne brukeren.</p>
+			<p>Merk at dette <u>ikke</u> automatisk vil aktivere spilleren ogsÃ¥. Du kan alternativt velge Ã¥ <a href="'.htmlspecialchars(page_min_side::addr("activate", "", "player")).'">aktivere spilleren</a> ('.page_min_side::$active_player->profile_link().') slik at bÃ¥de brukeren og spilleren blir aktivert samtidig.</p>
 			<form action="" method="post">
 				<dl class="dd_right">
 					<dt>Begrunnelse for aktivering<br />(internt for crewet)</dt>
@@ -2093,7 +2093,7 @@ www.kofradia.no';
 				</dl>
 				<p>
 					<input type="checkbox" id="email" name="email"'.($_SERVER['REQUEST_METHOD'] != "POST" || isset($_POST['email']) ? ' checked="checked"' : '').' />
-					<label for="email"> Send e-post til '.htmlspecialchars(page_min_side::$active_user->data['u_email']).' for å informere om at brukeren er aktivert igjen</label>
+					<label for="email"> Send e-post til '.htmlspecialchars(page_min_side::$active_user->data['u_email']).' for Ã¥ informere om at brukeren er aktivert igjen</label>
 				</p>
 				<dl class="dd_right">
 					<dt id="email-info"'.($_SERVER['REQUEST_METHOD'] == "POST" && !isset($_POST['email']) ? ' class="email-info-dis"' : '').'>Tilleggsinformasjon til spilleren<br />(ikke BB-kode)<br /><br />(Blir oppgitt som begrunnelse<br />for aktivering hvis fylt ut)</dt>
@@ -2124,9 +2124,9 @@ www.kofradia.no';
 		if (access::has("forum_mod")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=addlog")).'"'.($subpage2 == "addlog" ? ' class="active"' : '').'>Nytt notat</a>';
 		$links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=blokk")).'"'.($subpage2 == "blokk" ? ' class="active"' : '').'>Blokkeringer</a>';
 		if (access::has("mod")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=banka")).'"'.($subpage2 == "banka" ? ' class="active"' : '').'>Bankpassord</a>';
-		if (access::has("mod")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=birth")).'"'.($subpage2 == "birth" ? ' class="active"' : '').'>Fødselsdato</a>';
+		if (access::has("mod")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=birth")).'"'.($subpage2 == "birth" ? ' class="active"' : '').'>FÃ¸dselsdato</a>';
 		if (access::has("mod")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr("set", "b=pass")).'">Passord</a>';
-		if (access::has("admin")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=level")).'"'.($subpage2 == "level" ? ' class="active"' : '').'>Tilgangsnivå</a>';
+		if (access::has("admin")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=level")).'"'.($subpage2 == "level" ? ' class="active"' : '').'>TilgangsnivÃ¥</a>';
 		$links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=send_email")).'"'.($subpage2 == "send_email" ? ' class="active"' : '').'>Send e-post</a>';
 		$links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=warning")).'"'.($subpage2 == "warning" ? ' class="active"' : '').'>Gi advarsel</a>';
 		
@@ -2249,7 +2249,7 @@ www.kofradia.no';
 			}
 			
 			echo '
-						<p>Trykk deg inn på de forskjellige spillerene til brukeren for å se informasjon knyttet opp mot dem.</p>
+						<p>Trykk deg inn pÃ¥ de forskjellige spillerene til brukeren for Ã¥ se informasjon knyttet opp mot dem.</p>
 					</div>
 				</div>
 			</div>
@@ -2260,7 +2260,7 @@ www.kofradia.no';
 					<h1 class="bg1">Crewnotat for brukeren<span class="left2"></span><span class="right2"></span></h1>
 					<p class="h_right"><a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=enote")).'">rediger</a></p>
 					<div class="bg1">
-						<p>Her kan hvem som helst i crewet legge til eller endre et notat for denne brukeren for å memorere ting som har med <u>brukeren</u> å gjøre.</p>'.(empty(page_min_side::$active_user->data['u_note_crew']) ? '
+						<p>Her kan hvem som helst i crewet legge til eller endre et notat for denne brukeren for Ã¥ memorere ting som har med <u>brukeren</u> Ã¥ gjÃ¸re.</p>'.(empty(page_min_side::$active_user->data['u_note_crew']) ? '
 						<p>Ingen notat er registrert.</p>' : '
 						<div class="p">'.game::bb_to_html(page_min_side::$active_user->data['u_note_crew']).'</div>').'
 					</div>
@@ -2268,7 +2268,7 @@ www.kofradia.no';
 			</div>
 		</div>
 	</div>
-	<p class="c"><a class="minside_fane_link minside_fane_active" rel="minside_fane2">Loggoppføringer</a> | <a class="minside_fane_link" rel="minside_fane1">Rapporteringer</a></p>
+	<p class="c"><a class="minside_fane_link minside_fane_active" rel="minside_fane2">LoggoppfÃ¸ringer</a> | <a class="minside_fane_link" rel="minside_fane1">Rapporteringer</a></p>
 	<div id="minside_fane1" class="minside_fane">
 		<p class="c">Filter: <a id="minside_reports_from">Brukerens egne rapporteringer</a> | <a id="minside_reports_to">Andres rapporteringer</a> | <a id="minside_reports_all">Alle</a></p>
 		<div id="minside_reports">
@@ -2276,7 +2276,7 @@ www.kofradia.no';
 		</div>
 	</div>
 	<div id="minside_fane2" class="minside_fane">
-	<p class="c">Loggoppføringer for denne brukeren</p>';
+	<p class="c">LoggoppfÃ¸ringer for denne brukeren</p>';
 			
 			// hent loggene for denne brukeren
 			$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 50);
@@ -2286,7 +2286,7 @@ www.kofradia.no';
 			if (mysql_num_rows($result) == 0)
 			{
 				echo '
-	<p class="c">Ingen oppføringer eksisterer.</p>';
+	<p class="c">Ingen oppfÃ¸ringer eksisterer.</p>';
 			}
 			
 			else
@@ -2337,7 +2337,7 @@ www.kofradia.no';
 				
 				if (empty($notat_bb))
 				{
-					ess::$b->page->add_message("Notatet kan ikke være tomt.", "error");
+					ess::$b->page->add_message("Notatet kan ikke vÃ¦re tomt.", "error");
 				}
 				
 				else
@@ -2386,7 +2386,7 @@ www.kofradia.no';
 				{
 					$type = blokkeringer::$types[$type_id];
 					
-					// har vi tilgang til å gjøre noe med denne blokkeringen?
+					// har vi tilgang til Ã¥ gjÃ¸re noe med denne blokkeringen?
 					if (!access::has($type['access']))
 					{
 						ess::$b->page->add_message('Du har ikke tilgang til denne typen blokkering. ('.htmlspecialchars($type['title']).')', "error");
@@ -2411,7 +2411,7 @@ www.kofradia.no';
 				// handling: legg til blokkering
 				if (isset($_POST['add']) && $active)
 				{
-					ess::$b->page->add_message("Det er allerede en blokkering på brukeren som varer til ".ess::$b->date->get($active['ub_time_expire'])->format().".", "error");
+					ess::$b->page->add_message("Det er allerede en blokkering pÃ¥ brukeren som varer til ".ess::$b->date->get($active['ub_time_expire'])->format().".", "error");
 				}
 				elseif (isset($_POST['add']))
 				{
@@ -2458,25 +2458,25 @@ www.kofradia.no';
 						// sjekk uker
 						if ($rel_weeks < 0 || $rel_weeks > 9)
 						{
-							ess::$b->page->add_message('Antall uker kan ikke være under 0 eller over 9.', "error");
+							ess::$b->page->add_message('Antall uker kan ikke vÃ¦re under 0 eller over 9.', "error");
 						}
 						
 						// sjekk dager
 						elseif ($rel_days < 0 || $rel_days > 6)
 						{
-							ess::$b->page->add_message('Antall dager kan ikke være under 0 eller over 6.', "error");
+							ess::$b->page->add_message('Antall dager kan ikke vÃ¦re under 0 eller over 6.', "error");
 						}
 						
 						// sjekk timer
 						elseif ($rel_hours < 0 || $rel_hours > 23)
 						{
-							ess::$b->page->add_message('Antall timer kan ikke være under 0 eller over 23.', "error");
+							ess::$b->page->add_message('Antall timer kan ikke vÃ¦re under 0 eller over 23.', "error");
 						}
 						
 						// sjekk minutter
 						elseif ($rel_mins < 0 || $rel_mins > 59)
 						{
-							ess::$b->page->add_message('Antall minutter kan ikke være under 0 eller over 59.', "error");
+							ess::$b->page->add_message('Antall minutter kan ikke vÃ¦re under 0 eller over 59.', "error");
 						}
 						
 						else
@@ -2515,11 +2515,11 @@ www.kofradia.no';
 							
 							else
 							{
-								// forsøk å legg til blokkeringen
+								// forsÃ¸k Ã¥ legg til blokkeringen
 								$add = blokkeringer::add(page_min_side::$active_user->id, $type_id, $expire, $log, $note);
 								if ($add !== true)
 								{
-									ess::$b->page->add_message("Det er allerede en blokkering på brukeren som varer til ".ess::$b->date->get($add['ub_time_expire'])->format().".", "error");
+									ess::$b->page->add_message("Det er allerede en blokkering pÃ¥ brukeren som varer til ".ess::$b->date->get($add['ub_time_expire'])->format().".", "error");
 								}
 								
 								else
@@ -2527,7 +2527,7 @@ www.kofradia.no';
 									// legg til crewlogg
 									crewlog::log("user_ban_active", page_min_side::$active_player->id, $log, array("type" => $type_id, "time_end" => $expire, "note" => $note));
 									
-									ess::$b->page->add_message('Brukeren er nå blokkert til '.ess::$b->date->get($expire)->format().'. ('.htmlspecialchars($type['title']).')');
+									ess::$b->page->add_message('Brukeren er nÃ¥ blokkert til '.ess::$b->date->get($expire)->format().'. ('.htmlspecialchars($type['title']).')');
 									redirect::handle();
 								}
 							}
@@ -2538,7 +2538,7 @@ www.kofradia.no';
 				// handling: rediger blokkering
 				elseif (isset($_POST['edit']) && !$active)
 				{
-					// ingen blokkering å redigere?
+					// ingen blokkering Ã¥ redigere?
 					ess::$b->page->add_message("Brukeren har ikke lengre denne blokkeringen.", "error");
 				}
 				elseif (isset($_POST['edit']))
@@ -2604,7 +2604,7 @@ www.kofradia.no';
 								// ingen endringer?
 								elseif ($expire == $info['ub_time_expire'] && $log_ban == $info['ub_reason'] && $note == $info['ub_note'])
 								{
-									ess::$b->page->add_message('Ingen endringer ble utført.', "error");
+									ess::$b->page->add_message('Ingen endringer ble utfÃ¸rt.', "error");
 								}
 								
 								else
@@ -2639,7 +2639,7 @@ www.kofradia.no';
 										}
 										crewlog::log("user_ban_change", page_min_side::$active_player->id, $log_change, $data);
 										
-										ess::$b->page->add_message('Du har oppdatert blokkeringen. Brukeren er nå blokkert til '.ess::$b->date->get($expire)->format().'. ('.htmlspecialchars($type['title']).')');
+										ess::$b->page->add_message('Du har oppdatert blokkeringen. Brukeren er nÃ¥ blokkert til '.ess::$b->date->get($expire)->format().'. ('.htmlspecialchars($type['title']).')');
 										redirect::handle();
 									}
 								}
@@ -2651,7 +2651,7 @@ www.kofradia.no';
 				// handling: slett blokkering
 				elseif (isset($_POST['delete']) && !$active)
 				{
-					// ingen blokkering å slette?
+					// ingen blokkering Ã¥ slette?
 					ess::$b->page->add_message("Brukeren har ikke lengre denne blokkeringen.", "error");
 				}
 				
@@ -2694,7 +2694,7 @@ www.kofradia.no';
 		<h1 class="bg1">Blokkering: '.htmlspecialchars($type['title']).'<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<boxes />
-			<p class="r">Tilgangsnivå: '.access::name($type['access']).'</p>
+			<p class="r">TilgangsnivÃ¥: '.access::name($type['access']).'</p>
 			<p><u>Hensikt:</u> '.$type['description'].'</p>';
 				
 				// blokkert?
@@ -2719,7 +2719,7 @@ www.kofradia.no';
 					if (isset($_POST['edit']))
 					{
 						echo '
-			<p>Du er i ferd med å endre blokkeringen til brukeren.</p>
+			<p>Du er i ferd med Ã¥ endre blokkeringen til brukeren.</p>
 			<form action="" method="post">
 				<dl class="dd_right dl_2x">
 					<dt>Til</dt>
@@ -2746,7 +2746,7 @@ www.kofradia.no';
 					elseif (isset($_POST['delete']))
 					{
 						echo '
-			<p>Du er i ferd med å fjerne blokkeringen til brukeren.</p>
+			<p>Du er i ferd med Ã¥ fjerne blokkeringen til brukeren.</p>
 			<form action="" method="post">
 				<dl class="dd_right dl_2x">
 					<dt>Begrunnelse for fjerning</dt>
@@ -2774,7 +2774,7 @@ www.kofradia.no';
 					}
 				}
 				
-				// ingen blokkeringen finnes - vis skjema for å legge til blokkering
+				// ingen blokkeringen finnes - vis skjema for Ã¥ legge til blokkering
 				else
 				{
 					$date_type = isset($_POST['type']) && $_POST['type'] == "abs" ? "abs" : "rel";
@@ -2818,7 +2818,7 @@ www.kofradia.no';
 			
 			else
 			{
-				// filtrer ut de blokkeringene vi har tilgang til å sette
+				// filtrer ut de blokkeringene vi har tilgang til Ã¥ sette
 				$types = blokkeringer::$types;
 				$links = array();
 				foreach ($types as $id => $type)
@@ -2919,13 +2919,13 @@ www.kofradia.no';
 				// mangler emne?
 				if (empty($subject))
 				{
-					ess::$b->page->add_message("Du må fylle ut emnefeltet.", "error");
+					ess::$b->page->add_message("Du mÃ¥ fylle ut emnefeltet.", "error");
 				}
 				
 				// mangler meldingen?
 				elseif (empty($text))
 				{
-					ess::$b->page->add_message("Du må fylle ut innholdet.", "error");
+					ess::$b->page->add_message("Du mÃ¥ fylle ut innholdet.", "error");
 				}
 				
 				else
@@ -2937,7 +2937,7 @@ www.kofradia.no';
 ".login::$user->player->data['up_name']."
 www.kofradia.no
 
-Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." som tilhører ".page_min_side::$active_player->data['up_name'];
+Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." som tilhÃ¸rer ".page_min_side::$active_player->data['up_name'];
 					
 					// godkjent?
 					if (isset($_POST['send']))
@@ -2987,7 +2987,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 		<h1 class="bg1">Send e-post<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<boxes />
-			<p>Her sender du e-post til brukeren på vegne av Kofradia. Avsender vil være den normale avsendere all e-post fra Kofradia blir sendt fra.</p>
+			<p>Her sender du e-post til brukeren pÃ¥ vegne av Kofradia. Avsender vil vÃ¦re den normale avsendere all e-post fra Kofradia blir sendt fra.</p>
 			<form action="" method="post">
 				<dl class="dd_right dl_2x">
 					<dt>Mottaker</dt>
@@ -2996,7 +2996,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 					<dd><input type="text" value="'.htmlspecialchars(postval("subject")).'" name="subject" id="email_subject" class="styled w200" /></dd>
 					<dt>Innhold</dt>
 					<dd><textarea name="text" id="email_text" cols="50" rows="10">'.htmlspecialchars(postval("text", "Hei,\n\n")).'</textarea></dd>
-					<dd>'.show_sbutton("Forhåndsvis / fortsett").'</dd>
+					<dd>'.show_sbutton("ForhÃ¥ndsvis / fortsett").'</dd>
 				</dl>
 			</form>
 		</div>
@@ -3021,7 +3021,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				
 				if (empty($log) || empty($note))
 				{
-					ess::$b->page->add_message("Både begrunnelse og intern informasjon må fylles ut.", "error");
+					ess::$b->page->add_message("BÃ¥de begrunnelse og intern informasjon mÃ¥ fylles ut.", "error");
 				}
 				
 				elseif (!isset($types[$type]))
@@ -3068,8 +3068,8 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 		<div class="bg1">
 			<form action="" method="post">
 				<boxes />
-				<p>Dette kan benyttes som et verktøy for å gi advarsler til brukere. Det kan velges om brukeren skal motta advarselen eller ikke. Hvis man ikke velger å informere brukeren om noe, blir det alikevel søkbart i crewloggen for brukeren.</p>
-				<p>Alvorligheten av advarselen blir benyttet for å automatisere en poengsum brukeren får avhengig av antall advarseler. En advarsel med høy alvorlighet varer lenger og teller mer enn en med lav alvorlighet.</p>
+				<p>Dette kan benyttes som et verktÃ¸y for Ã¥ gi advarsler til brukere. Det kan velges om brukeren skal motta advarselen eller ikke. Hvis man ikke velger Ã¥ informere brukeren om noe, blir det alikevel sÃ¸kbart i crewloggen for brukeren.</p>
+				<p>Alvorligheten av advarselen blir benyttet for Ã¥ automatisere en poengsum brukeren fÃ¥r avhengig av antall advarseler. En advarsel med hÃ¸y alvorlighet varer lenger og teller mer enn en med lav alvorlighet.</p>
 				<dl class="dd_right">
 					<dt>Kategori</dt>
 					<dd>
@@ -3096,7 +3096,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 			echo '
 							<option value="1"'.($priority == 1 ? ' selected="selected"' : '').'>Lav</option>
 							<option value="2"'.($priority == 2 ? ' selected="selected"' : '').'>Moderat</option>
-							<option value="3"'.($priority == 3 ? ' selected="selected"' : '').'>Høy</option>
+							<option value="3"'.($priority == 3 ? ' selected="selected"' : '').'>HÃ¸y</option>
 						</select>
 					</dd>
 				</dl>
@@ -3149,7 +3149,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				
 				foreach ($data as $row)
 				{
-					$priority = $row['data']['priority'] == 1 ? "lav" : ($row['data']['priority'] == 2 ? "moderat" : "høy");
+					$priority = $row['data']['priority'] == 1 ? "lav" : ($row['data']['priority'] == 2 ? "moderat" : "hÃ¸y");
 					
 					echo '
 			<div class="advarsel">
@@ -3181,7 +3181,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				$notat = postval("notat");
 				if ($notat == page_min_side::$active_user->data['u_note_crew'])
 				{
-					ess::$b->page->add_message("Ingen endringer ble utført.", "error");
+					ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 				}
 				
 				else
@@ -3204,7 +3204,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 		<h1 class="bg1">Endre crewnotat for bruker<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<form action="" method="post">
-				<p>Dette endrer notatet som er tilknyttet brukeren. Du kan også tilknytte <a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=enote", "player")).'">informasjon til spilleren</a>, hvis det heller er ønskelig.</p>
+				<p>Dette endrer notatet som er tilknyttet brukeren. Du kan ogsÃ¥ tilknytte <a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=enote", "player")).'">informasjon til spilleren</a>, hvis det heller er Ã¸nskelig.</p>
 				<p>Notat:</p>
 				<p><textarea name="notat" rows="10" cols="30" style="width: 98%">'.htmlspecialchars(page_min_side::$active_user->data['u_note_crew']).'</textarea></p>
 				<p class="c">'.show_sbutton("Lagre").'</p>
@@ -3215,7 +3215,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 		
 		elseif ($subpage2 == "level" && access::has("admin"))
 		{
-			// nivåer man kan bytte til
+			// nivÃ¥er man kan bytte til
 			static $levels = array(
 				1 => "Vanlig bruker",
 				14 => "Skjult nostat (crewtilgang)",
@@ -3229,29 +3229,29 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 			if (access::has("sadmin")) $levels[7] = "Administrator";
 			if (access::has("sadmin")) $levels[8] = "Superadministrator";
 			
-			// kan vi ikke endre brukernivået til denne brukeren?
+			// kan vi ikke endre brukernivÃ¥et til denne brukeren?
 			if (!isset($levels[page_min_side::$active_user->data['u_access_level']]))
 			{
-				ess::$b->page->add_message("Du har ikke rettigheter til å endre tilgangsnivået til denne brukeren.", "error");
+				ess::$b->page->add_message("Du har ikke rettigheter til Ã¥ endre tilgangsnivÃ¥et til denne brukeren.", "error");
 				redirect::handle(page_min_side::addr());
 			}
 			
-			// endre brukernivå?
+			// endre brukernivÃ¥?
 			if (isset($_POST['level']))
 			{
 				$level = intval($_POST['level']);
 				$log = trim(postval("log"));
 				
-				// samme brukernivå?
+				// samme brukernivÃ¥?
 				if ($level == page_min_side::$active_user->data['u_access_level'])
 				{
-					ess::$b->page->add_message("Du må velge et nytt tilgangsnivå.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge et nytt tilgangsnivÃ¥.", "error");
 				}
 				
-				// ikke gyldig brukernivå?
+				// ikke gyldig brukernivÃ¥?
 				elseif (!isset($levels[$level]))
 				{
-					ess::$b->page->add_message("Ugyldig tilgangsnivå.");
+					ess::$b->page->add_message("Ugyldig tilgangsnivÃ¥.");
 				}
 				
 				// mangler begrunnelse?
@@ -3262,14 +3262,14 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				
 				else
 				{
-					// endre tilgangsnivå
+					// endre tilgangsnivÃ¥
 					$old = page_min_side::$active_user->data['u_access_level'];
 					if (page_min_side::$active_user->change_level($level, isset($_POST['no_update_up'])))
 					{
 						// e-post logg
-						sysreport::log("Endring av tilgangsnivå: ".login::$user->player->data['up_name']." endret tilgangsnivået til ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].") fra {$levels[$old]} til {$levels[$level]} {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id."\n\nBegrunnelse: ".strip_tags(game::format_data($log)), "Kofradia: Endring av tilgangsnivå for ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].")");
+						sysreport::log("Endring av tilgangsnivÃ¥: ".login::$user->player->data['up_name']." endret tilgangsnivÃ¥et til ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].") fra {$levels[$old]} til {$levels[$level]} {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id."\n\nBegrunnelse: ".strip_tags(game::format_data($log)), "Kofradia: Endring av tilgangsnivÃ¥ for ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].")");
 						
-						// finn totalt beløp spilleren har
+						// finn totalt belÃ¸p spilleren har
 						$result = ess::$b->db->query("SELECT up_cash + up_bank FROM users_players WHERE up_id = ".page_min_side::$active_player->id);
 						$money = mysql_result($result, 0);
 						
@@ -3285,12 +3285,12 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 						if (page_min_side::$active_player->active && !isset($_POST['no_update_up'])) $data['up_id'] = page_min_side::$active_player->id;
 						crewlog::log("user_level", page_min_side::$active_player->id, $log, $data);
 						
-						putlog("CREWCHAN", "%bEndring av tilgangsnivå%b: ".login::$user->player->data['up_name']." endret tilgangsnivået til ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].") fra {$levels[$old]} til {$levels[$level]} {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
-						ess::$b->page->add_message('Tilgangsnivået ble endret fra <b>'.htmlspecialchars($levels[$old]).'</b> til <b>'.htmlspecialchars($levels[$level]).'</b>.');
+						putlog("CREWCHAN", "%bEndring av tilgangsnivÃ¥%b: ".login::$user->player->data['up_name']." endret tilgangsnivÃ¥et til ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].") fra {$levels[$old]} til {$levels[$level]} {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
+						ess::$b->page->add_message('TilgangsnivÃ¥et ble endret fra <b>'.htmlspecialchars($levels[$old]).'</b> til <b>'.htmlspecialchars($levels[$level]).'</b>.');
 					}
 					else
 					{
-						ess::$b->page->add_message("Tilgangsnivået kunne ikke endres.", "error");
+						ess::$b->page->add_message("TilgangsnivÃ¥et kunne ikke endres.", "error");
 					}
 					redirect::handle();
 				}
@@ -3298,15 +3298,15 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 			
 			echo '
 	<div class="bg1_c" style="width: 350px">
-		<h1 class="bg1">Endre tilgangsnivå for bruker<span class="left2"></span><span class="right2"></span></h1>
+		<h1 class="bg1">Endre tilgangsnivÃ¥ for bruker<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">'.(page_min_side::$active_player->active ? '
-			<p>Dette vil automatisk berøre spilleren '.page_min_side::$active_player->profile_link().'.<p>' : '
-			<p>Dette vil kun ha innvirkning på brukeren, siden det ikke er noen aktiv spiller.</p>').'
+			<p>Dette vil automatisk berÃ¸re spilleren '.page_min_side::$active_player->profile_link().'.<p>' : '
+			<p>Dette vil kun ha innvirkning pÃ¥ brukeren, siden det ikke er noen aktiv spiller.</p>').'
 			<form action="" method="post">
 				<dl class="dd_right">
-					<dt>Nåværende tilgangsnivå</dt>
+					<dt>NÃ¥vÃ¦rende tilgangsnivÃ¥</dt>
 					<dd>'.$levels[page_min_side::$active_user->data['u_access_level']].'</dd>
-					<dt>Nytt tilgangsnivå</dt>
+					<dt>Nytt tilgangsnivÃ¥</dt>
 					<dd>
 						<select name="level">';
 					
@@ -3323,8 +3323,8 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 					<dt>Begrunnelse</dt>
 					<dd><textarea name="log" id="log" cols="30" rows="5">'.htmlspecialchars(postval("log")).'</textarea></dd>
 				</dl>'.(page_min_side::$active_player->active ? '
-				<p><input type="checkbox" id="no_update_up" name="no_update_up"'.(isset($_POST['no_update_up']) ? ' checked="checked"' : '').' /><label for="no_update_up"> Ikke oppdater det visuelle tilgangsnivået til '.page_min_side::$active_player->profile_link().'</label></p>' : '').'
-				<p class="c">'.show_sbutton("Endre tilgangsnivå").'</p>
+				<p><input type="checkbox" id="no_update_up" name="no_update_up"'.(isset($_POST['no_update_up']) ? ' checked="checked"' : '').' /><label for="no_update_up"> Ikke oppdater det visuelle tilgangsnivÃ¥et til '.page_min_side::$active_player->profile_link().'</label></p>' : '').'
+				<p class="c">'.show_sbutton("Endre tilgangsnivÃ¥").'</p>
 			</form>
 		</div>
 	</div>';
@@ -3342,13 +3342,13 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				// for kort?
 				if (strlen($bank_auth) < 6)
 				{
-					ess::$b->page->add_message("Passordet må inneholde minst 6 tegn.", "error");
+					ess::$b->page->add_message("Passordet mÃ¥ inneholde minst 6 tegn.", "error");
 				}
 				
-				// samme som nåværende?
+				// samme som nÃ¥vÃ¦rende?
 				elseif (password::verify_hash($bank_auth, page_min_side::$active_user->data['u_bank_auth'], 'bank_auth'))
 				{
-					ess::$b->page->add_message("Passordet er det samme som nåværende.", "error");
+					ess::$b->page->add_message("Passordet er det samme som nÃ¥vÃ¦rende.", "error");
 				}
 				
 				// mangler begrunnelse?
@@ -3401,12 +3401,12 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				$log = trim(postval("log"));
 				if (!preg_match("/^47\\d{8}$/D", $phone) && $phone != "")
 				{
-					ess::$b->page->add_message("Ugyldig telefonnummer. Må bestå av 10 tall inkludert 47 først.", "error");
+					ess::$b->page->add_message("Ugyldig telefonnummer. MÃ¥ bestÃ¥ av 10 tall inkludert 47 fÃ¸rst.", "error");
 				}
 				
 				else
 				{
-					// kontroller at nummeret ikke er lagt inn fra før
+					// kontroller at nummeret ikke er lagt inn fra fÃ¸r
 					$result = ess::$b->db->query("SELECT u_id, u_email, up_id, up_name, up_access_level FROM users, users_players WHERE u_phone = ".ess::$b->db->quote($phone)." AND u_id != ".page_min_side::$active_user->id." AND up_id = u_active_up_id LIMIT 1");
 					if (mysql_num_rows($result) > 0)
 					{
@@ -3417,7 +3417,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 					// samme nummer?
 					elseif ($phone == page_min_side::$active_user->data['u_phone'])
 					{
-						ess::$b->page->add_message("Nummeret er det samme som nåværende nummer.", "error");
+						ess::$b->page->add_message("Nummeret er det samme som nÃ¥vÃ¦rende nummer.", "error");
 					}
 					
 					// mangler logg?
@@ -3446,10 +3446,10 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 	<div class="bg1_c" style="width: 350px">
 		<h1 class="bg1">Endre mobilnummer<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Her endrer du mobilnummeret til brukeren. Dette kan bli brukt til å sende ut forskjellig informasjon.</p>
+			<p>Her endrer du mobilnummeret til brukeren. Dette kan bli brukt til Ã¥ sende ut forskjellig informasjon.</p>
 			<form action="" method="post">
 				<dl class="dd_right dl_2x">
-					<dt>Nåværende nummer</dt>
+					<dt>NÃ¥vÃ¦rende nummer</dt>
 					<dd>'.(empty(page_min_side::$active_user->data['u_phone']) ? 'Tomt' : htmlspecialchars(page_min_side::$active_user->data['u_phone'])).'</dd>
 					<dt>Nytt nummer</dt>
 					<dd><input type="text" maxlength="10" value="'.htmlspecialchars(postval("phone", page_min_side::$active_user->data['u_phone'])).'" name="phone" class="styled w80" /></dd>
@@ -3462,15 +3462,15 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 	</div>';
 		}
 		
-		// endre fødselsdato
+		// endre fÃ¸dselsdato
 		elseif ($subpage2 == "birth" && access::has("mod"))
 		{
-			// lagre ny fødselsdato?
+			// lagre ny fÃ¸dselsdato?
 			if (isset($_POST['birth_day']) && isset($_POST['birth_month']) && isset($_POST['birth_year']))
 			{
 				$birth = postval("birth");
 				
-				// sjekk fødselsdato
+				// sjekk fÃ¸dselsdato
 				$birth_day = intval(postval("birth_day"));
 				$birth_month = intval(postval("birth_month"));
 				$birth_year = intval(postval("birth_year"));
@@ -3483,7 +3483,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				$age = $n_year - $birth_year - (($n_month < $birth_month || ($birth_month == $n_month && $n_day < $birth_day)) ? 1 : 0);
 				$birth = $birth_year."-".str_pad($birth_month, 2, "0", STR_PAD_LEFT)."-".str_pad($birth_day, 2, "0", STR_PAD_LEFT);
 				
-				// sjekk om fødselsdatoen er gyldig
+				// sjekk om fÃ¸dselsdatoen er gyldig
 				$birth_date = ess::$b->date->get();
 				$birth_date->setDate($birth_year, $birth_month, $birth_day);
 				$birth_valid = $birth_date->format("Y-m-d") == $birth;
@@ -3493,31 +3493,31 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				// ugyldig dag?
 				if ($birth_day < 0 || $birth_day > 31)
 				{
-					ess::$b->page->add_message("Du må velge en gyldig dag.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge en gyldig dag.", "error");
 				}
 				
-				// ugyldig måned?
+				// ugyldig mÃ¥ned?
 				elseif ($birth_month < 0 || $birth_month > 12)
 				{
-					ess::$b->page->add_message("Du må velge en gyldig måned.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge en gyldig mÃ¥ned.", "error");
 				}
 				
-				// ugyldig år
+				// ugyldig Ã¥r
 				elseif (($birth_year < 1900 || $birth_year > $n_year) && $birth_year !== 0)
 				{
-					ess::$b->page->add_message("Du må velge et gyldig år.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge et gyldig Ã¥r.", "error");
 				}
 				
-				// ugyldig fødselsdato?
+				// ugyldig fÃ¸dselsdato?
 				elseif (!$birth_valid && $birth !== '0-00-00')
 				{
-					ess::$b->page->add_message("Datoen du fylte inn for fødselsdatoen din eksisterer ikke.");
+					ess::$b->page->add_message("Datoen du fylte inn for fÃ¸dselsdatoen din eksisterer ikke.");
 				}
 				
 				// samme som tidligere?
 				elseif ($birth == page_min_side::$active_user->data['u_birth'])
 				{
-					ess::$b->page->add_message("Fødselsdatoen ble ikke endret.", "error");
+					ess::$b->page->add_message("FÃ¸dselsdatoen ble ikke endret.", "error");
 				}
 				
 				// mangler begrunnelse?
@@ -3539,12 +3539,12 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 					// alder
 					if ($age < 13)
 					{
-						ess::$b->page->add_message("Fødselsdatoen ble satt til <b>$birth</b> ($age år). Brukeren oppfyller <u>ikke</u> kravet om alder jf. betingelsene.");
+						ess::$b->page->add_message("FÃ¸dselsdatoen ble satt til <b>$birth</b> ($age Ã¥r). Brukeren oppfyller <u>ikke</u> kravet om alder jf. betingelsene.");
 					}
 					
 					else
 					{
-						ess::$b->page->add_message("Fødselsdatoen ble satt til <b>$birth</b> ($age år).");
+						ess::$b->page->add_message("FÃ¸dselsdatoen ble satt til <b>$birth</b> ($age Ã¥r).");
 					}
 					
 					redirect::handle();
@@ -3556,17 +3556,17 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 			$birth_month = isset($birth[1]) ? intval($birth[1]) : 0;
 			$birth_year = isset($birth[0]) ? intval($birth[0]) : 0;
 			
-			ess::$b->page->add_title("Endre fødselsdato");
+			ess::$b->page->add_title("Endre fÃ¸dselsdato");
 			
 			echo '
 	<div class="bg1_c" style="width: 350px">
-		<h1 class="bg1">Endre fødselsdato<span class="left2"></span><span class="right2"></span></h1>
+		<h1 class="bg1">Endre fÃ¸dselsdato<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<form action="" method="post">
 				<dl class="dd_right dl_2x">
-					<dt>Nåværende fødselsdato</dt>
+					<dt>NÃ¥vÃ¦rende fÃ¸dselsdato</dt>
 					<dd>'.(empty(page_min_side::$active_user->data['u_birth']) ? 'Ikke registrert' : htmlspecialchars(page_min_side::$active_user->data['u_birth'])).'</dd>
-					<dt>Ny fødselsdato</dt>
+					<dt>Ny fÃ¸dselsdato</dt>
 					<dd>
 						<select name="birth_day">
 							<option value="">Dag</option>
@@ -3582,7 +3582,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 			echo '
 						</select>
 						<select name="birth_month">
-							<option value="">Måned</option>
+							<option value="">MÃ¥ned</option>
 							<option value="0">Tom</option>';
 			
 			$active = postval("birth_month", $birth_month);
@@ -3595,7 +3595,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 			echo '
 						</select>
 						<select name="birth_year">
-							<option value="">År</option>
+							<option value="">Ã…r</option>
 							<option value="0">0000</option>';
 			
 			$active = postval("birth_year", $birth_year);
@@ -3619,11 +3619,11 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 	}
 	
 	/**
-	 * Spillere tilhørende brukeren
+	 * Spillere tilhÃ¸rende brukeren
 	 */
 	protected static function page_up()
 	{
-		// hent spillerene tilhørende denne personen
+		// hent spillerene tilhÃ¸rende denne personen
 		$pagei = new pagei(pagei::ACTIVE_GET, "side_up", pagei::PER_PAGE, 15);
 		$result = $pagei->query("
 			SELECT up_id, up_name, up_access_level, up_created_time, up_points, up_deactivated_time, up_hits, up_cash+up_bank money, upr_rank_pos
@@ -3634,7 +3634,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 		
 		echo '
 		<div class="bg1_c">
-			<h1 class="bg1">Spillere tilhørende brukeren<span class="left2"></span><span class="right2"></span></h1>
+			<h1 class="bg1">Spillere tilhÃ¸rende brukeren<span class="left2"></span><span class="right2"></span></h1>
 			<div class="bg1">
 				<table class="table '.($pagei->pages == 1 ? 'tablem' : 'tablemt').'" style="width: 100%">
 					<thead>

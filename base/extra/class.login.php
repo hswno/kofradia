@@ -28,14 +28,14 @@ class login
 	
 	/**
 	 * Init funksjonen
-	 * Sjekker om brukeren er logget inn og henter nødvendig informasjon
+	 * Sjekker om brukeren er logget inn og henter nÃ¸dvendig informasjon
 	 */
 	public static function init()
 	{
-		// allerede kjørt? kjøres kun én gang
+		// allerede kjÃ¸rt? kjÃ¸res kun Ã©n gang
 		if (!is_null(self::$logged_in)) return;
 		
-		// tøm
+		// tÃ¸m
 		self::trash();
 		
 		// ajax?
@@ -44,7 +44,7 @@ class login
 		// skjekk om brukeren er logget inn
 		self::check_status($ajax);
 		
-		// sjekk lås
+		// sjekk lÃ¥s
 		self::check_lock();
 		
 		// ikke logget inn?
@@ -102,7 +102,7 @@ class login
 			// har vi ikke brukerinfo?
 			if (!isset($_SESSION[$GLOBALS['__server']['session_prefix'].'logged_in'])) return;
 			
-			// kontroller at brukeren fremdeles kan være logget inn
+			// kontroller at brukeren fremdeles kan vÃ¦re logget inn
 			if ($_SESSION[$GLOBALS['__server']['session_prefix'].'login_info']['ses_expire_time'] <= time())
 			{
 				self::logout();
@@ -118,7 +118,7 @@ class login
 			// kontroller extended access
 			if (isset(self::$extended_access['authed']))
 			{
-				// vært inaktiv for lenge?
+				// vÃ¦rt inaktiv for lenge?
 				$time = time();
 				if (self::$extended_access['auth_check']+1800 <= $time)
 				{
@@ -132,7 +132,7 @@ class login
 				}
 			}
 			
-			// ajax sjekk fullført
+			// ajax sjekk fullfÃ¸rt
 			return;
 		}
 		
@@ -186,7 +186,7 @@ class login
 					// deaktivert?
 					if (self::$info['u_access_level'] == 0)
 					{
-						// logg ut alle øktene
+						// logg ut alle Ã¸ktene
 						self::logout(true);
 						
 						// hent begrunnelse og info
@@ -213,7 +213,7 @@ class login
 							$ok = true;
 						}
 						
-						// har vi mulighet for å verifisere?
+						// har vi mulighet for Ã¥ verifisere?
 						elseif ($__server['https_support'])
 						{
 							if ($row['ses_hash'] == $hash && $secure)
@@ -223,14 +223,14 @@ class login
 							
 							elseif (substr(md5($row['ses_hash']), 0, 13) == $hash)
 							{
-								// må bruke HTTPS?
+								// mÃ¥ bruke HTTPS?
 								if (!HTTPS)
 								{
 									// _POST?
 									if ($_SERVER['REQUEST_METHOD'] == "POST")
 									{
 										header("HTTP/1.1 406 Not Acceptable");
-										die("Du forsøker å utføre en handling men må reautentisere deg på grunn av ny IP-adresse. Åpne siden i et nytt vindu og vend tilbake hit og oppdater siden for å fullføre handlingen.");
+										die("Du forsÃ¸ker Ã¥ utfÃ¸re en handling men mÃ¥ reautentisere deg pÃ¥ grunn av ny IP-adresse. Ã…pne siden i et nytt vindu og vend tilbake hit og oppdater siden for Ã¥ fullfÃ¸re handlingen.");
 									}
 									
 									// videresend til sikker kobling
@@ -251,16 +251,16 @@ class login
 								$ip_list[] = $_SERVER['REMOTE_ADDR'];
 								$extra .= ", ses_ip_list = ".ess::$b->db->quote(implode(";", $ip_list));
 								
-								putlog("ABUSE", "%c6%bAUTENTISERT-IP:%b%c #%u{$uid}%u har fått ny IP-adresse autentisert i økten (%u{$_SERVER['REMOTE_ADDR']}%u - forrige: ".self::$info['ses_last_ip'].") {$__server['path']}/min_side?u_id=$uid");
+								putlog("ABUSE", "%c6%bAUTENTISERT-IP:%b%c #%u{$uid}%u har fÃ¥tt ny IP-adresse autentisert i Ã¸kten (%u{$_SERVER['REMOTE_ADDR']}%u - forrige: ".self::$info['ses_last_ip'].") {$__server['path']}/min_side?u_id=$uid");
 							}
 						}
 						
 						if (!$ok)
 						{
-							// logg ut økten
+							// logg ut Ã¸kten
 							self::logout();
 							
-							putlog("CREWCHAN", "%c6%bMISLYKKET-AUTENTISERT-IP:%b%c #%u{$uid}%u har fått ny IP-adresse i økten (%u{$_SERVER['REMOTE_ADDR']}%u - forrige: ".self::$info['ses_last_ip'].") - %c4KUNNE IKKE VERIFISERES%c - {$__server['path']}/min_side?u_id=$uid");
+							putlog("CREWCHAN", "%c6%bMISLYKKET-AUTENTISERT-IP:%b%c #%u{$uid}%u har fÃ¥tt ny IP-adresse i Ã¸kten (%u{$_SERVER['REMOTE_ADDR']}%u - forrige: ".self::$info['ses_last_ip'].") - %c4KUNNE IKKE VERIFISERES%c - {$__server['path']}/min_side?u_id=$uid");
 							
 							// hent e-post
 							$result = $_base->db->query("SELECT u_email FROM users WHERE u_id = $uid");
@@ -270,7 +270,7 @@ class login
 							$_SESSION[$GLOBALS['__server']['session_prefix'].'logginn_id'] = $email;
 							
 							// info og redirect
-							$_base->page->add_message("Du har fått ny IP-adresse og har blitt automatisk logget ut av sikkerhetsmessige årsaker. Vi klarte ikke å verifisere din identitet. Du kan nå logge inn igjen.", "info");
+							$_base->page->add_message("Du har fÃ¥tt ny IP-adresse og har blitt automatisk logget ut av sikkerhetsmessige Ã¥rsaker. Vi klarte ikke Ã¥ verifisere din identitet. Du kan nÃ¥ logge inn igjen.", "info");
 							redirect::handle("?orign=".urlencode($_SERVER['REQUEST_URI']), redirect::ROOT);
 						}
 						
@@ -288,7 +288,7 @@ class login
 						force_https();
 					}
 					
-					// skal være tvunget til https?
+					// skal vÃ¦re tvunget til https?
 					if ($__server['https_support'] && !self::$info['ses_secure'] && ((self::$info['u_access_level'] != 0 && self::$info['u_access_level'] != 1) || self::$info['u_force_ssl'] != 0))
 					{
 						// endre secure cookie
@@ -324,7 +324,7 @@ class login
 								putlog("ABUSE", "%bHITS LIMIT%b (%u$tid%u-%u$periode%u) - %u$name%u ($uid) - COUNT: %u$c_now%u -- {$_SERVER['REQUEST_METHOD']} -- {$_SERVER['REQUEST_URI']} -- {$__server['path']}/min_side?u_id=$uid");
 								
 								header("HTTP/1.0 503 Service Unavailiable");
-								echo sysreport::html_template("For mange visninger", "<p>Du har hatt for mange visninger på siden i løpet av kort tid. Vent litt og prøv igjen.</p>");
+								echo sysreport::html_template("For mange visninger", "<p>Du har hatt for mange visninger pÃ¥ siden i lÃ¸pet av kort tid. Vent litt og prÃ¸v igjen.</p>");
 								die;
 							}
 						}
@@ -385,7 +385,7 @@ class login
 						if (self::$info['u_online_time'] > time() - 300)
 						{
 							$delay = time() - self::$info['u_online_time'];
-							putlog("ABUSE", "%c6%bSESSION-NY-IP:%b%c #%u{$uid}%u har ny IP (%u{$_SERVER['REMOTE_ADDR']}%u) i løpet av kort tid (%u{$delay}%u sekunder) (samme session) {$__server['path']}/min_side?u_id=$uid");
+							putlog("ABUSE", "%c6%bSESSION-NY-IP:%b%c #%u{$uid}%u har ny IP (%u{$_SERVER['REMOTE_ADDR']}%u) i lÃ¸pet av kort tid (%u{$delay}%u sekunder) (samme session) {$__server['path']}/min_side?u_id=$uid");
 						}
 					}
 					elseif ($_SERVER['REMOTE_ADDR'] != self::$info['u_online_ip'])
@@ -396,7 +396,7 @@ class login
 						if (self::$info['u_online_time'] > time() - 300)
 						{
 							$delay = time() - self::$info['u_online_time'];
-							putlog("ABUSE", "%c6%bNY-IP:%b%c #%u{$uid}%u har ny IP (%u{$_SERVER['REMOTE_ADDR']}%u) i løpet av kort tid (%u{$delay}%u sekunder) (egen session) {$__server['path']}/min_side?u_id=$uid");
+							putlog("ABUSE", "%c6%bNY-IP:%b%c #%u{$uid}%u har ny IP (%u{$_SERVER['REMOTE_ADDR']}%u) i lÃ¸pet av kort tid (%u{$delay}%u sekunder) (egen session) {$__server['path']}/min_side?u_id=$uid");
 						}
 					}
 					
@@ -406,7 +406,7 @@ class login
 					self::$user->data['u_online_time'] = $time;
 					$upd_u[] = "u_online_time = $time";
 					
-					// vise pålogget status for spilleren?
+					// vise pÃ¥logget status for spilleren?
 					if (self::$user->player->data['up_access_level'] != 0 && ($uid != SYSTEM_USER_ID || isset($_SESSION[$GLOBALS['__server']['session_prefix'].'show_online'])) && (!isset($_SESSION[$GLOBALS['__server']['session_prefix'].'hide_online']) || ($uid != 1 && $uid != SYSTEM_USER_ID)))
 					{
 						// oppdatere spilleren?
@@ -453,7 +453,7 @@ class login
 		// utvidede tilganger
 		if (self::$user->data['u_access_level'] != 1 && self::$user->data['u_access_level'] != 0 && in_array(self::$user->data['u_access_level'], $_game['access']['crewet']))
 		{
-			// logget inn, ikke inaktiv mer enn 30 min og samme tilgangsnøkkel?
+			// logget inn, ikke inaktiv mer enn 30 min og samme tilgangsnÃ¸kkel?
 			$time = time();
 			$key = self::$user->params->get("extended_access_passkey");
 			if (isset($_SESSION[$GLOBALS['__server']['session_prefix'].'extended_access']['authed']) && $_SESSION[$GLOBALS['__server']['session_prefix'].'extended_access']['auth_check']+1800 > $time && $_SESSION[$GLOBALS['__server']['session_prefix'].'extended_access']['passkey'] == $key)
@@ -473,7 +473,7 @@ class login
 			}
 		}
 		
-		// trenger vi å hente nye kontakter?
+		// trenger vi Ã¥ hente nye kontakter?
 		if (!isset($_SESSION[$GLOBALS['__server']['session_prefix'].'login_info']['contacts_update']) || $_SESSION[$GLOBALS['__server']['session_prefix'].'login_info']['contacts_update'] != self::$user->data['u_contacts_update_time'])
 		{
 			// kontakter
@@ -512,7 +512,7 @@ class login
 	/**
 	 * Logg ut en bruker
 	 * Fjernet alle sessions og cookies
-	 * @param boolean $all_sessions fjerne innlogginger fra andre steder også?
+	 * @param boolean $all_sessions fjerne innlogginger fra andre steder ogsÃ¥?
 	 * @return boolean sessions ble slettet?
 	 */
 	// logg ut en bruker (slett session og cookie)
@@ -533,7 +533,7 @@ class login
 		if (isset($_COOKIE[$__server['cookie_prefix'] . "id"])) setcookie($__server['cookie_prefix'] . "id", false, 0, $__server['cookie_path'], $__server['cookie_domain']);
 		if (isset($_COOKIE[$__server['cookie_prefix'] . "ra"])) setcookie($__server['cookie_prefix'] . "ra", false, 0, $__server['cookie_path'], $__server['cookie_domain']);
 		
-		// må være innlogget/ha sesjonsinfo for å slette sessions
+		// mÃ¥ vÃ¦re innlogget/ha sesjonsinfo for Ã¥ slette sessions
 		if (!isset(self::$info['ses_u_id'])) return false;
 		
 		// slett session
@@ -552,12 +552,12 @@ class login
 	}
 	
 	/**
-	 * Behandle logg inn forespørsel
-	 * @param string $email kan også være brukerid
+	 * Behandle logg inn forespÃ¸rsel
+	 * @param string $email kan ogsÃ¥ vÃ¦re brukerid
 	 * @param string $pass
 	 * @param integer $expire_type
 	 * @param boolean $md5 skal passordet krypteres?
-	 * @param boolean $secure_only skal vi fortsette å bruke ssl etter innlogging?
+	 * @param boolean $secure_only skal vi fortsette Ã¥ bruke ssl etter innlogging?
 	 * @return boolean
 	 */
 	public static function do_login($email, $pass, $expire_type = LOGIN_TYPE_TIMEOUT, $md5 = true, $secure_only = false, $skip_pass = null)
@@ -613,21 +613,21 @@ class login
 	
 	/**
 	 * Logg inn en bruker
-	 * @param string $email kan også være brukerid
+	 * @param string $email kan ogsÃ¥ vÃ¦re brukerid
 	 * @param string $pass
 	 * @param integer $expire_type
 	 * @param boolean $md5 skal passordet krypteres?
-	 * @param boolean $secure_only skal vi fortsette å bruke ssl etter innlogging?
+	 * @param boolean $secure_only skal vi fortsette Ã¥ bruke ssl etter innlogging?
 	 * @return boolean
 	 */
 	public static function do_login_handle($u_id, $user = NULL, $expire_type = LOGIN_TYPE_TIMEOUT, $secure_only = false)
 	{
 		global $__server;
 		
-		// prøver vi å sette cookies uten HTTPS?
+		// prÃ¸ver vi Ã¥ sette cookies uten HTTPS?
 		if ($__server['https_support'] && !HTTPS) throw new HSException("Kan ikke sette logg inn cookies uten sikret tilkobling.");
 		
-		// må hente data?
+		// mÃ¥ hente data?
 		$u_id = (int) $u_id;
 		if (!$user)
 		{
@@ -745,7 +745,7 @@ class login
 	}
 	
 	/**
-	 * Er brukeren låst?
+	 * Er brukeren lÃ¥st?
 	 */
 	public static function check_lock()
 	{
@@ -813,7 +813,7 @@ class login
 		}
 		$path = substr($path, 1);
 		
-		// er vi på en side vi ikke har tillatelse til å være?
+		// er vi pÃ¥ en side vi ikke har tillatelse til Ã¥ vÃ¦re?
 		if (!preg_match($allowed, $path))
 		{
 			// send til informasjonssiden for begrensninger
@@ -839,7 +839,7 @@ class login
 				{
 					case "birth":
 						echo '
-					<li><a href="'.$__server['relative_path'].'/lock?f=birth">Fødselsdato er ikke registrert.</a></li>';
+					<li><a href="'.$__server['relative_path'].'/lock?f=birth">FÃ¸dselsdato er ikke registrert.</a></li>';
 					break;
 					
 					case "player":
@@ -859,7 +859,7 @@ class login
 			
 			echo '
 				</ul>
-				<p><img src="/static/icon/error_go.png" class="icon" /><a href="'.$__server['relative_path'].'/lock">Trykk her</a> for å gå videre til neste trinn.</p>
+				<p><img src="/static/icon/error_go.png" class="icon" /><a href="'.$__server['relative_path'].'/lock">Trykk her</a> for Ã¥ gÃ¥ videre til neste trinn.</p>
 			</div>
 		</div>
 		<div class="col_w right" style="width: 40%">
@@ -880,7 +880,7 @@ class login
 	}
 	
 	/**
-	 * Sjekk om en spiller tilhører den aktive brukeren
+	 * Sjekk om en spiller tilhÃ¸rer den aktive brukeren
 	 * @param player $up
 	 */
 	public static function is_active_user(player $up)

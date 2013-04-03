@@ -21,12 +21,12 @@ class lotto
 	const PRICE_CHANGE_OLD = 1000;
 	
 	/**
-	 * Antall spillere hvor grensen mellom nedsettelse av bevinst går
+	 * Antall spillere hvor grensen mellom nedsettelse av bevinst gÃ¥r
 	 */
 	const PLAYERS_TOP = 10;
 	
 	/**
-	 * Finn prisen på lotto-lodd
+	 * Finn prisen pÃ¥ lotto-lodd
 	 */
 	public static function get_lodd_price()
 	{
@@ -37,7 +37,7 @@ class lotto
 	}
 	
 	/**
-	 * Kjør konkurranse
+	 * KjÃ¸r konkurranse
 	 */
 	public static function run_comp()
 	{
@@ -57,7 +57,7 @@ class lotto_konk
 	protected $premier;
 	
 	/**
-	 * Kjør konkurransen og trekk vinnere
+	 * KjÃ¸r konkurransen og trekk vinnere
 	 */
 	public function run()
 	{
@@ -131,7 +131,7 @@ class lotto_konk
 		$this->vinnere = array();
 		$this->vinnere_text = array();
 		
-		putlog("INFO", "%bLOTTO%b: ".game::format_number($this->brukere)." spiller".($this->brukere == 1 ? '' : 'e')." deltok i denne lottorunden med totalt ".game::format_number($this->antall)." lodd og en pott på ".game::format_cash($this->pott)."!");
+		putlog("INFO", "%bLOTTO%b: ".game::format_number($this->brukere)." spiller".($this->brukere == 1 ? '' : 'e')." deltok i denne lottorunden med totalt ".game::format_number($this->antall)." lodd og en pott pÃ¥ ".game::format_cash($this->pott)."!");
 		
 		$to = min(5, $this->brukere);
 		for ($i = 1; $i <= $to; $i++)
@@ -168,7 +168,7 @@ class lotto_konk
 			//livefeed::add_row('<user id="'.$this->vinnere[0].'" /> vant lottorunden.'.$ekstra_l);
 		}
 		
-		// fjern loddene som var kjøpt
+		// fjern loddene som var kjÃ¸pt
 		ess::$b->db->query("DELETE FROM lotto");
 	}
 	
@@ -213,7 +213,7 @@ class lotto_konk
 		// send brukeren penger
 		$up->update_money($this->premier[$id][2], false);
 		
-		// øk rank
+		// Ã¸k rank
 		$up->increase_rank($this->premier[$id][0], false, null, null, "lotto");
 		
 		// trigger

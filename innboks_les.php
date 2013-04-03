@@ -5,7 +5,7 @@ require "base.php";
 class page_innboks_les
 {
 	/**
-	 * Meldingstråden
+	 * MeldingstrÃ¥den
 	 * @var inbox_thread
 	 */
 	protected $thread;
@@ -16,22 +16,22 @@ class page_innboks_les
 	 */
 	protected $pagei;
 	
-	protected $can_reply;        // kan vi svare på meldingen?
+	protected $can_reply;        // kan vi svare pÃ¥ meldingen?
 	protected $num_messages;
 	protected $highlight_im_id;
 	protected $per_page = 15;    // antall meldinger per side
 	protected $new;
-	protected $limit;            // hvor mange som skal vises på akkurat denne siden
+	protected $limit;            // hvor mange som skal vises pÃ¥ akkurat denne siden
 	
 	public function __construct()
 	{
 		ess::$b->page->add_title("Meldinger");
 		
-		// finn meldingstråden
+		// finn meldingstrÃ¥den
 		$this->thread = inbox_thread::get(getval("id"));
 		if (!$this->thread)
 		{
-			ess::$b->page->add_message("Fant ikke meldingstråden.", "error");
+			ess::$b->page->add_message("Fant ikke meldingstrÃ¥den.", "error");
 			redirect::handle("innboks");
 		}
 		
@@ -81,12 +81,12 @@ class page_innboks_les
 			$this->limit = max($this->limit, $this->thread->data_rel['ir_unread']);
 		}
 		
-		// skal vi gå til en bestemt melding?
+		// skal vi gÃ¥ til en bestemt melding?
 		elseif (isset($_GET['goto']))
 		{
 			$im_id = intval(getval("goto"));
 			
-			// forsøk å finn meldingen
+			// forsÃ¸k Ã¥ finn meldingen
 			$ant = $this->thread->message_locate($im_id);
 			if (!$ant)
 			{
@@ -97,7 +97,7 @@ class page_innboks_les
 			// finn ut hvilken side vi skal til
 			$side = ceil($ant/$this->per_page);
 			
-			// gå til korrekt side
+			// gÃ¥ til korrekt side
 			if ($this->pagei->active != $side)
 			{
 				redirect::handle("innboks_les?id={$this->thread->id}&goto=$im_id&side=$side");
@@ -125,7 +125,7 @@ class page_innboks_les
 		{
 			if (isset($_POST['melding']) && isset($_POST['post']) && $this->thread->reply_test_wait())
 			{
-				// forsøk å legge til svaret
+				// forsÃ¸k Ã¥ legge til svaret
 				$this->thread->reply_add($_POST['melding']);
 			}
 		}
@@ -142,7 +142,7 @@ class page_innboks_les
 			$this->thread->reply_restore_try();
 		}
 		
-		// slette hele meldingstråden?
+		// slette hele meldingstrÃ¥den?
 		if (isset($_POST['slettalle']) && !$this->thread->restrict)
 		{
 			$this->thread->delete();
@@ -160,7 +160,7 @@ class page_innboks_les
 	
 	protected function add_js($last_id)
 	{
-		// sørg for at rapporteringslenkene blir prosessert
+		// sÃ¸rg for at rapporteringslenkene blir prosessert
 		ess::$b->page->add_js('sm_scripts.report_links();');
 		
 		ess::$b->page->add_js_domready('
@@ -183,7 +183,7 @@ class page_innboks_les
 			ess::$b->page->add_css('.icon2 { margin-left: 5px; line-height: 2px; vertical-align: bottom }');
 			ess::$b->page->add_js_domready('
 	var marked = '.($this->thread->data_rel['ir_marked'] != 0 ? 'true' : 'false').';
-	$("im_mark").set("html", \'<input type="checkbox" id="im_mark_b" /><label for="im_mark_b"> Marker for oppfølging</label>\');
+	$("im_mark").set("html", \'<input type="checkbox" id="im_mark_b" /><label for="im_mark_b"> Marker for oppfÃ¸lging</label>\');
 	var xhr, b = $("im_mark").getElement("input");
 	b.set("checked", marked);
 	
@@ -239,7 +239,7 @@ class page_innboks_les
 		b.offset_x = 5; b.offset_y = ["height", 5];
 		b.connect(w, true, false);
 		b.create_box();
-		b.populate(\'<p class="info_box" style="margin: 5px 2px; font-weight: 10px; max-width: 200px">Ved å merke av for denne boksen blir meldingstråden alltid sortert øverst i innboksen.</p>\');
+		b.populate(\'<p class="info_box" style="margin: 5px 2px; font-weight: 10px; max-width: 200px">Ved Ã¥ merke av for denne boksen blir meldingstrÃ¥den alltid sortert Ã¸verst i innboksen.</p>\');
 	})();');
 		}
 		
@@ -278,7 +278,7 @@ class page_innboks_les
 				<td class="r">'.$row['num_messages'].'</td>
 				<td class="r">'.($row['ir_unread'] > 0 ? '<b>'.$row['ir_unread'].'</b>' : $row['ir_unread']).'</td>'.(access::has("mod") ? '
 				<td>'.$row['ir_views'].'</td>' : '').'
-				<td>'.($row['up_access_level'] == 0 ? '<span class="dark">Død'.(access::has("crewet") && $row['u_access_level'] != 0 && $row['u_active_up_id'] == $row['ir_up_id'] ? ', men bruker aktiv' : '').'</span>' : ($row['ir_deleted'] != 0 ? '<span class="dark">Slettet meldingen</span>' : 'Mottar nye meldinger')).'</td>
+				<td>'.($row['up_access_level'] == 0 ? '<span class="dark">DÃ¸d'.(access::has("crewet") && $row['u_access_level'] != 0 && $row['u_active_up_id'] == $row['ir_up_id'] ? ', men bruker aktiv' : '').'</span>' : ($row['ir_deleted'] != 0 ? '<span class="dark">Slettet meldingen</span>' : 'Mottar nye meldinger')).'</td>
 			</tr>';
 		}
 		
@@ -291,7 +291,7 @@ class page_innboks_les
 	
 	protected function show()
 	{
-		// tittel på meldingstråden
+		// tittel pÃ¥ meldingstrÃ¥den
 		ess::$b->page->add_title($this->thread->data_thread['it_title']);
 		
 		// sett opp deltakere
@@ -317,18 +317,18 @@ class page_innboks_les
 		{
 			echo '
 <form action="" method="post">
-	<h1><span class="red">'.show_sbutton("Slett", 'name="slettalle" onclick="return confirm(\'Dette vil slette meldingstråden for alle deltakere. Denne handlingen kan ikke angres uten videre. Fortsette?\')"').'</span> Melding: '.htmlspecialchars($this->thread->data_thread['it_title']).'</h1>
+	<h1><span class="red">'.show_sbutton("Slett", 'name="slettalle" onclick="return confirm(\'Dette vil slette meldingstrÃ¥den for alle deltakere. Denne handlingen kan ikke angres uten videre. Fortsette?\')"').'</span> Melding: '.htmlspecialchars($this->thread->data_thread['it_title']).'</h1>
 </form>';
 		}
 		
-		// tittel og verktøy
+		// tittel og verktÃ¸y
 		echo '
 <form action="innboks" method="post">
 	<p class="im_tools top h_right">
 		<a href="innboks'.($this->thread->data_rel ? '' : '?user='.urlencode($this->thread->data_rel['up_name'])).'">Tilbake til meldinger</a>
 		<input type="hidden" name="it_id[]" value="'.$this->thread->id.'" />'.(!isset($_GET['reply']) && $this->can_reply ? '
 		'.show_sbutton("Opprett svar", 'name="reply" accesskey="s"', 'reply_link_form_show') : '').($this->thread->data_rel ? '
-		<span class="red">'.show_sbutton("Slett", 'name="slett"  accesskey="d" onclick="return confirm(\'Er du sikker på at du vil slette meldingen?\')"').'</span>' : '').'
+		<span class="red">'.show_sbutton("Slett", 'name="slett"  accesskey="d" onclick="return confirm(\'Er du sikker pÃ¥ at du vil slette meldingen?\')"').'</span>' : '').'
 	</p>
 </form>';
 		
@@ -341,7 +341,7 @@ class page_innboks_les
 			if (!$this->thread->can_reply_access)
 			{
 				echo '
-<p>Du har ikke mulighet til å svare i denne meldingen.</p>';
+<p>Du har ikke mulighet til Ã¥ svare i denne meldingen.</p>';
 			}
 			elseif (!$this->thread->can_reply_receivers)
 			{
@@ -352,7 +352,7 @@ class page_innboks_les
 		else
 		{
 			echo '
-<p>Det er ingen andre deltakere enn deg selv i denne meldingstråden.</p>';
+<p>Det er ingen andre deltakere enn deg selv i denne meldingstrÃ¥den.</p>';
 		}
 		
 		// flere sider?
@@ -371,12 +371,12 @@ class page_innboks_les
 			<dl class="dd_auto_100">
 				<dt>Innhold</dt>
 				<dd><textarea name="melding" rows="10" cols="75" id="textContent">'.htmlspecialchars(postval("melding")).'</textarea></dd>
-				<dt'.(isset($_POST['preview']) && isset($_POST['melding']) ? '' : ' style="display: none"').' id="previewDT">Forhåndsvisning</dt>
+				<dt'.(isset($_POST['preview']) && isset($_POST['melding']) ? '' : ' style="display: none"').' id="previewDT">ForhÃ¥ndsvisning</dt>
 				<dd'.(isset($_POST['preview']) && isset($_POST['melding']) ? '' : ' style="display: none"').' id="previewDD">'.(!isset($_POST['melding']) || empty($_POST['melding']) ? 'Tom melding?!' : game::bb_to_html($_POST['melding'])).'</dd>
 			</dl>
 			<h3 class="c">
 				'.show_sbutton("Send melding", 'name="post" accesskey="s"').'
-				'.show_sbutton("Forhåndsvis", 'name="preview" accesskey="p" id="reply_link_preview"').'
+				'.show_sbutton("ForhÃ¥ndsvis", 'name="preview" accesskey="p" id="reply_link_preview"').'
 			</h3>
 		</div>
 	</form>
@@ -386,7 +386,7 @@ class page_innboks_les
 		echo '
 <div id="innboks">';
 		
-		// hent meldingene på denne siden
+		// hent meldingene pÃ¥ denne siden
 		$result = $this->thread->get_messages($this->pagei->start, $this->limit);
 		
 		$i = 0;
@@ -412,7 +412,7 @@ class page_innboks_les
 	<p class="im_tools bottom left" id="im_mark"></p>' : '').'
 	<p class="im_tools bottom">'.(!isset($_GET['reply']) && $this->can_reply ? '
 		'.show_sbutton("Opprett svar", 'name="reply" accesskey="s"', 'reply_link_form_show') : '').($this->thread->data_rel ? '
-		<span class="red">'.show_sbutton("Slett", 'name="slett"  accesskey="d" onclick="return confirm(\'Er du sikker på at du vil slette meldingen?\')"').'</span>' : '').'
+		<span class="red">'.show_sbutton("Slett", 'name="slett"  accesskey="d" onclick="return confirm(\'Er du sikker pÃ¥ at du vil slette meldingen?\')"').'</span>' : '').'
 	</p>
 </form>';
 		}

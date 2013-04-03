@@ -4,13 +4,13 @@ define("KORT_URL", STATIC_LINK . "/kort/60x90/%d/%s.png");
 global $oppdrag, $trigger, $status, $expire, $_base;
 
 /*
- * 			chips (int): Antall chips man skal nÂ
+ * 			chips (int): Antall chips man skal n√•
  * 			chips_start (int): Hvor mange chips man starter med
  * 			time_limit (int): Hvor lang tid man har
- * 			STATUS chips (int): Hvor mange chips man har nÂ
+ * 			STATUS chips (int): Hvor mange chips man har n√•
  * 			STATUS cards (text): Hvilke kort brukeren har
  * 			STATUS cards_pc (text): Hvilke kort pcen har
- * 			STATUS bet (int): Hvor mye penger som satses nÂ eller forrige gang
+ * 			STATUS bet (int): Hvor mye penger som satses n√• eller forrige gang
  * 			STATUS finish (int): Vise resultat?
  */
 
@@ -35,13 +35,13 @@ if (isset($_POST['chips']) && !$cards)
 	$bet = game::intval($_POST['chips']);
 	if ($bet > $chips)
 	{
-		$_base->page->add_message("Du har ikke sÂ mange chips.", "error");
+		$_base->page->add_message("Du har ikke s√• mange chips.", "error");
 		redirect::handle();
 	}
 	
 	if ($bet < min(100, $chips))
 	{
-		$_base->page->add_message("Du mÂ minimum satse ".min(100, $chips)." chips.", "error");
+		$_base->page->add_message("Du m√• minimum satse ".min(100, $chips)." chips.", "error");
 		redirect::handle();
 	}
 	
@@ -136,11 +136,11 @@ if ($finish)
 		//$_base->page->add_message("Du har ingen flere chips igjen. Oppdraget ble mislykket.");
 	}
 	
-	// nÂdd mÂlet?
+	// n√•dd m√•let?
 	elseif ($chips >= $target)
 	{
 		$time_limit = $trigger->get("time_limit", oppdrag::DEFAULT_TIME_LIMIT_ACTIVE);
-		login::$user->player->oppdrag->success($oppdrag['o_id'], 'Du klarte Â spille deg opp til '.game::format_number($chips).' chips innen det hadde gÂtt '.game::timespan($time_limit, game::TIME_FULL).'. Du nÂdde mÂlet pÂ '.game::format_number($target).' chips. Oppdraget &laquo;$name&raquo; ble vellykket!');
+		login::$user->player->oppdrag->success($oppdrag['o_id'], 'Du klarte √• spille deg opp til '.game::format_number($chips).' chips innen det hadde g√•tt '.game::timespan($time_limit, game::TIME_FULL).'. Du n√•dde m√•let p√• '.game::format_number($target).' chips. Oppdraget &laquo;$name&raquo; ble vellykket!');
 		$success = true;
 	}
 }
@@ -162,14 +162,14 @@ echo '
 	<h1 class="bg1">'.htmlspecialchars($oppdrag['o_title']).'<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="oppdrag?force">&laquo; Tilbake</a></p>
 	<div class="bg1">'.(!$success ? '
-		<p>Du mÂ ha mer enn <b>'.game::format_number($target).'</b> chips om <u>'.game::counter($expire-time()).'</u>.<br />
-		Du har nÂ <b>'.game::format_number($chips).'</b> chips'.($chips < $target ? ' og mangler '.game::format_number($target-$chips).' chips' : '').'.</p>' : '
-		<p>Trykk <a href="oppdrag">her</a> for Â gÂ tilbake til oppdrag.</p>').'
+		<p>Du m√• ha mer enn <b>'.game::format_number($target).'</b> chips om <u>'.game::counter($expire-time()).'</u>.<br />
+		Du har n√• <b>'.game::format_number($chips).'</b> chips'.($chips < $target ? ' og mangler '.game::format_number($target-$chips).' chips' : '').'.</p>' : '
+		<p>Trykk <a href="oppdrag">her</a> for √• g√• tilbake til oppdrag.</p>').'
 		<div class="progressbar">
 			<div class="progress" style="width: '.round(min($chips, $target)/$target * 100).'%"><p>Du har '.game::format_number(min($chips, $target)/$target * 100, 1).' % av antall chips du trenger</p></div>
 		</div>
 		<div class="progressbar" style="margin-top: 3px">
-			<div class="progress" style="width: '.round($progress_time).'%" id="progress_time"><p>'.game::timespan($progress_time_limit-$progress_time_status, game::TIME_FULL).' gjenstÂr</p></div>
+			<div class="progress" style="width: '.round($progress_time).'%" id="progress_time"><p>'.game::timespan($progress_time_limit-$progress_time_status, game::TIME_FULL).' gjenst√•r</p></div>
 		</div>';
 
 // nytt spill?
@@ -196,7 +196,7 @@ if ($cards && !$finish)
 			<div class="bg1 c">
 				<form action="" method="post">
 					<p>Spiller om: <b>'.game::format_number($status->get("bet")).'</b> chips</p>
-					<p>Marker de kortene du ¯nsker Â <u>beholde</u>.</p>
+					<p>Marker de kortene du √∏nsker √• <u>beholde</u>.</p>
 					<p>';
 	
 	$poker = new CardsPoker(explode(",", $cards));
@@ -248,7 +248,7 @@ if ($finish)
 			if ($won[1])
 			{
 				echo '
-					<p>Dere fikk samme kombinasjon, men du hadde h¯yere highcard og <u>vant</u> <b>'.game::format_number($status->get("bet")).'</b> chips.</p>';
+					<p>Dere fikk samme kombinasjon, men du hadde h√∏yere highcard og <u>vant</u> <b>'.game::format_number($status->get("bet")).'</b> chips.</p>';
 				break;
 			}
 			echo '
@@ -259,7 +259,7 @@ if ($finish)
 			if ($won[1])
 			{
 				echo '
-					<p>Dere fikk samme kombinasjon, men motstanderen din hadde h¯yere highcard. Du <u>tapte</u> <b>'.game::format_number($status->get("bet")).'</b> chips.</p>';
+					<p>Dere fikk samme kombinasjon, men motstanderen din hadde h√∏yere highcard. Du <u>tapte</u> <b>'.game::format_number($status->get("bet")).'</b> chips.</p>';
 				break;
 			}
 			echo '
@@ -272,7 +272,7 @@ if ($finish)
 					<p>Du har ingen flere chips igjen. Oppdraget ble mislykket.</p>
 				</div>' : ($success ? '
 				<div class="information">
-					<p>Du klarte Â spille deg opp til '.game::format_number($chips).' chips og nÂdde derfor mÂlet pÂ '.game::format_number($target).' chips. Oppdraget ble vellykket!</p>
+					<p>Du klarte √• spille deg opp til '.game::format_number($chips).' chips og n√•dde derfor m√•let p√• '.game::format_number($target).' chips. Oppdraget ble vellykket!</p>
 				</div>' : '')).'
 				<p><b>Dine kort:</b><br />'.$poker->solve_text($solve).'</p>
 				<p>';

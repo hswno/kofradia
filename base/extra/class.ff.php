@@ -42,7 +42,7 @@ class ff
 				5 => "consigliere"
 			),
 			"priority_rank" => array(
-				0 => 4, // bølle
+				0 => 4, // bÃ¸lle
 				1 => 7, // forretningsmann - tidligere 11 gudfar
 				2 => 7, // forretningsmann - tidligere 10 italian stallion
 				3 => 6, // forhandler - tidligere 7 forretningsmann
@@ -58,14 +58,14 @@ class ff
 			"refobj" => "avisen",
 			"typename" => "avisfirma",
 			"priority" => array(
-				1 => "ansvarlig redaktør",
-				2 => "redaktør",
+				1 => "ansvarlig redaktÃ¸r",
+				2 => "redaktÃ¸r",
 				3 => "journalist",
 				4 => "VIP"
 			),
 			"priority_short" => array(
-				1 => "ansv. redaktør",
-				2 => "redaktør",
+				1 => "ansv. redaktÃ¸r",
+				2 => "redaktÃ¸r",
 				3 => "journalist",
 				4 => "VIP"
 			),
@@ -84,15 +84,15 @@ class ff
 			"refobj" => "banken",
 			"typename" => "bankfirma",
 			"priority" => array(
-				1 => "direktør",
-				2 => "assisterende direktør",
-				3 => "funksjonær",
+				1 => "direktÃ¸r",
+				2 => "assisterende direktÃ¸r",
+				3 => "funksjonÃ¦r",
 				4 => "VIP"
 			),
 			"priority_short" => array(
-				1 => "direktør",
-				2 => "asst. direktør",
-				3 => "funksjonær",
+				1 => "direktÃ¸r",
+				2 => "asst. direktÃ¸r",
+				3 => "funksjonÃ¦r",
 				4 => "VIP"
 			),
 			"priority_rank" => array(
@@ -112,12 +112,12 @@ class ff
 			"priority" => array(
 				1 => "eier",
 				2 => "medeier",
-				3 => "funksjonær"
+				3 => "funksjonÃ¦r"
 			),
 			"priority_short" => array(
 				1 => "eier",
 				2 => "medeier",
-				3 => "funksjonær"
+				3 => "funksjonÃ¦r"
 			),
 			"priority_rank" => array(
 				0 => 5, // pusher (0 = alle som ikke har egen spesifisert)
@@ -131,17 +131,17 @@ class ff
 		),
 		5 => array(
 			"type" => "vapbes",
-			"refobj" => "våpen/beskyttelse-firmaet",
-			"typename" => "våpen/beskyttelse-firma",
+			"refobj" => "vÃ¥pen/beskyttelse-firmaet",
+			"typename" => "vÃ¥pen/beskyttelse-firma",
 			"priority" => array(
 				1 => "eier",
 				2 => "medeier",
-				3 => "funksjonær"
+				3 => "funksjonÃ¦r"
 			),
 			"priority_short" => array(
 				1 => "eier",
 				2 => "medeier",
-				3 => "funksjonær"
+				3 => "funksjonÃ¦r"
 			),
 			"priority_rank" => array(
 				0 => 5, // pusher (0 = alle som ikke har egen spesifisert)
@@ -149,7 +149,7 @@ class ff
 				2 => 6 // forhandler
 			),
 			"bydeler_graphic" => "/imgs/bydeler/vapbes.png",
-			"bydeler_alt_pre" => "Våpen og beskyttelse: ",
+			"bydeler_alt_pre" => "VÃ¥pen og beskyttelse: ",
 			"parent" => false, // har denne typen parent mellom pri3 og pri4?
 			"pri2_takeover" => true // tar medeier over for eier?
 		),
@@ -160,12 +160,12 @@ class ff
 			"priority" => array(
 				1 => "eier",
 				2 => "medeier",
-				3 => "funksjonær"
+				3 => "funksjonÃ¦r"
 			),
 			"priority_short" => array(
 				1 => "eier",
 				2 => "medeier",
-				3 => "funksjonær"
+				3 => "funksjonÃ¦r"
 			),
 			"priority_rank" => array(
 				0 => 5, // pusher (0 = alle som ikke har egen spesifisert)
@@ -183,11 +183,11 @@ class ff
 			"typename" => "utleiefirma",
 			"priority" => array(
 				1 => "eier",
-				2 => "funksjonær"
+				2 => "funksjonÃ¦r"
 			),
 			"priority_short" => array(
 				1 => "eier",
-				2 => "funksjonær"
+				2 => "funksjonÃ¦r"
 			),
 			"priority_rank" => array(
 				0 => 5, // pusher (0 = alle som ikke har egen spesifisert)
@@ -201,46 +201,46 @@ class ff
 		)
 	);
 	
-	/** Maks broderskap en bruker kan være medlem av */
+	/** Maks broderskap en bruker kan vÃ¦re medlem av */
 	const MAX_FAMILIES = 1;
 	
-	/** Maks broderskap en konkurrende gruppe kan bestå av */
+	/** Maks broderskap en konkurrende gruppe kan bestÃ¥ av */
 	const MAX_FFF_FF_COUNT = 5;
 	
-	/** Beløp som må betales for å danne broderskap */
+	/** BelÃ¸p som mÃ¥ betales for Ã¥ danne broderskap */
 	const CREATE_COST = 20000000; // 20 mill
 	
-	/** Beløp som må betales for å bytte navn på broderskapet */
+	/** BelÃ¸p som mÃ¥ betales for Ã¥ bytte navn pÃ¥ broderskapet */
 	const NAME_CHANGE_COST = 50000000; // 50 mill
 	
-	/** Beløp som må betales for å selge broderskapet til underboss */
+	/** BelÃ¸p som mÃ¥ betales for Ã¥ selge broderskapet til underboss */
 	const SELL_COST = 125000000; // 125 mill
 	
-	/** Beløp som må betales for å kjøpe informasjon om rankstatus for broderskapene */
+	/** BelÃ¸p som mÃ¥ betales for Ã¥ kjÃ¸pe informasjon om rankstatus for broderskapene */
 	const COMPETITION_INFO_COST = 50000000;
 	
 	/** Antall medlemmer broderskapet kan ha etter den dannes */
 	const MEMBERS_LIMIT_DEFAULT = '0:5;1:1;2:1;3:3;4:0';
 	
-	/** Kostnad for å utvide broderskapet med en plass */
+	/** Kostnad for Ã¥ utvide broderskapet med en plass */
 	const MEMBERS_LIMIT_INCREASE_COST = 3000000;
 	
 	/** Minste antall medlemmer man kan ha i et broderskap */
 	const MEMBERS_LIMIT_TOTAL_MIN = 5;
 	
-	/** Maks antall medlemmer det er mulig å ha i et broderskap (databasefeltet overkjører dette) */
+	/** Maks antall medlemmer det er mulig Ã¥ ha i et broderskap (databasefeltet overkjÃ¸rer dette) */
 	const MEMBERS_LIMIT_TOTAL_MAX = 15;
 	
-	/** Maks antall medlemmer det er mulig å ha i et broderskap i konkurransemodus */
+	/** Maks antall medlemmer det er mulig Ã¥ ha i et broderskap i konkurransemodus */
 	const MEMBERS_LIMIT_TOTAL_MAX_COMP = 10;
 	
-	/** Hvor mye den periodiske betalinger øker per eksta medlemsplass */
+	/** Hvor mye den periodiske betalinger Ã¸ker per eksta medlemsplass */
 	const PAY_COST_INCREASE_FFM = 5000000;
 	
 	/** Hvor mye den periodiske betalingen koster som utgangspunkt */
 	const PAY_COST_DEFAULT = 50000000;
 	
-	/** Hvilket beløp den periodiske betalingen ikke kan gå under */
+	/** Hvilket belÃ¸p den periodiske betalingen ikke kan gÃ¥ under */
 	const PAY_COST_MIN = 10000000;
 	
 	/** Hvor mye rank som setter prisen ned med 1 mill */
@@ -279,20 +279,20 @@ class ff
 		// Spiller godtar invitasjon: INVITED_USER_ID
 		"member_invite_accept" => array(2, "Medlem: Godta invitasjon"),
 		
-		// En spiller avslår invitasjonen: INVITED_USER_ID
-		"member_invite_decline" => array(3, "Medlem: Avslå invitasjon"),
+		// En spiller avslÃ¥r invitasjonen: INVITED_USER_ID
+		"member_invite_decline" => array(3, "Medlem: AvslÃ¥ invitasjon"),
 		
 		// Invitasjonen til en spiller blir trukket tilbake: ACTION_USER_ID:INVITED_USER_ID
 		"member_invite_pullback" => array(4, "Medlem: Tilbaketrukket invitasjon"),
 		
-		// capo foreslår en soldier: ACTION_USER_ID:INVITED_USER_ID:PRIORITY
-		"member_suggest" => array(5, "Medlem: Foreslå medlem"),
+		// capo foreslÃ¥r en soldier: ACTION_USER_ID:INVITED_USER_ID:PRIORITY
+		"member_suggest" => array(5, "Medlem: ForeslÃ¥ medlem"),
 		
 		// Forslaget om et medlem blir godtatt; personen blir invitert: ACTION_USER_ID:INVITED_USER_ID:PRIORITY:PARENT
 		"member_suggest_accept" => array(6, "Medlem: Godta forslag"),
 		
-		// Forslaget om medlem blir avslått: ACTION_USER_ID:INVITED_USER_ID
-		"member_suggest_decline" => array(7, "Medlem: Avslå forslag"),
+		// Forslaget om medlem blir avslÃ¥tt: ACTION_USER_ID:INVITED_USER_ID
+		"member_suggest_decline" => array(7, "Medlem: AvslÃ¥ forslag"),
 		
 		// Et medlem forlater: USER_ID:PRIORITY
 		"member_leave" => array(8, "Medlem: Forlat"),
@@ -321,31 +321,31 @@ class ff
 		// Salgsrelaterte meldinger
 		"sell" => array(14, "Salg av FF"),
 		
-		// Forum: Forumtråd opprettet
-		"forum_topic_add" => array(30, "Forum: Ny tråd"),
+		// Forum: ForumtrÃ¥d opprettet
+		"forum_topic_add" => array(30, "Forum: Ny trÃ¥d"),
 		
-		// Forum: Forumtråd slettet
-		"forum_topic_delete" => array(31, "Forum: Tråd slettet"),
+		// Forum: ForumtrÃ¥d slettet
+		"forum_topic_delete" => array(31, "Forum: TrÃ¥d slettet"),
 		
-		// Forum: Forumtråd gjenopprettet
-		"forum_topic_restore" => array(32, "Forum: Tråd gjenopprettet"),
+		// Forum: ForumtrÃ¥d gjenopprettet
+		"forum_topic_restore" => array(32, "Forum: TrÃ¥d gjenopprettet"),
 		
-		// Forum: Forumtråd redigert
-		"forum_topic_edit" => array(33, "Forum: Tråd redigert"),
+		// Forum: ForumtrÃ¥d redigert
+		"forum_topic_edit" => array(33, "Forum: TrÃ¥d redigert"),
 		
 		// Navnet endret
 		"name" => array(15, "Nytt navn"),
 		
-		// endring av gebyr for bankoverføring
-		"bank_overforing_tap_change" => array(16, "Overføringstap"),
+		// endring av gebyr for bankoverfÃ¸ring
+		"bank_overforing_tap_change" => array(16, "OverfÃ¸ringstap"),
 		
-		// redaktør endrer publisert artikkel
+		// redaktÃ¸r endrer publisert artikkel
 		"article_edited" => array(17, "Rediger artikkel"),
 		
 		// kastet ut spiller fra bomberommet
 		"bomberom_kick" => array(20, "Bomberom utkastelse"),
 		
-		"dissolve" => array(22, "Oppløst"),
+		"dissolve" => array(22, "OpplÃ¸st"),
 		
 		// sette inn kuler
 		"bullets_in" => array(23, "Kuler inn"),
@@ -360,7 +360,7 @@ class ff
 	/** Hendelser i logg systemet (reverse, id til navn) */
 	public static $log_id = array();
 	
-	/** Maks antall firmaer man kan være medlem i */
+	/** Maks antall firmaer man kan vÃ¦re medlem i */
 	const FIRMS_MEMBERS_LIMIT = 3;
 	
 	/** Innstillinger for bankfirmaer */
@@ -375,7 +375,7 @@ class ff
 	);
 	
 	/**
-	 * Prosent man får ved innbetaling av garasjer for GTA
+	 * Prosent man fÃ¥r ved innbetaling av garasjer for GTA
 	 */
 	const GTA_PERCENT = 0.5;
 	
@@ -386,7 +386,7 @@ class ff
 	const GTA_GARAGE_PRICE_HIGH = 50000;
 	
 	/**
-	 * Prosent man får ved innbetaling for å sette spiller i bomberom
+	 * Prosent man fÃ¥r ved innbetaling for Ã¥ sette spiller i bomberom
 	 */
 	const BOMBEROM_PERCENT = 0.3;
 	
@@ -433,13 +433,13 @@ class ff
 	 */
 	public $params = null;
 	
-	/** Last inn FF på normal måte */
+	/** Last inn FF pÃ¥ normal mÃ¥te */
 	const LOAD_DEFAULT = 0;
 	
 	/** Ukke vis feilmeldinger */
 	const LOAD_SILENT = 1;
 	
-	/** I tillegg til LOAD_SILENT: ikke avbryt på inaktivt FF */
+	/** I tillegg til LOAD_SILENT: ikke avbryt pÃ¥ inaktivt FF */
 	const LOAD_IGNORE = 2;
 	
 	/** I tillegg til LOAD_SILENT og LOAD_IGNORE: hopp over mod info og sett mod tilgang */
@@ -538,7 +538,7 @@ class ff
 		// hent medlemmer
 		$this->load_members($members_data);
 		
-		// legg til navnet som tittel på siden
+		// legg til navnet som tittel pÃ¥ siden
 		if ($this->modifiers < self::LOAD_SILENT && !defined("SCRIPT_AJAX")) ess::$b->page->add_title($this->data['ff_name']);
 	}
 	
@@ -630,7 +630,7 @@ class ff
 		
 		$this->members_reset();
 		
-		// gå gjennom hvert medlem og legg til
+		// gÃ¥ gjennom hvert medlem og legg til
 		foreach ($members as $row)
 		{
 			// posisjonen
@@ -755,7 +755,7 @@ class ff
 		return false;
 	}
 	
-	/** Krev tilgang til å vise siden */
+	/** Krev tilgang til Ã¥ vise siden */
 	public function needaccess($name, $text = "Du har ikke tilgang!")
 	{
 		if (!$this->access($name))
@@ -785,7 +785,7 @@ class ff
 	{
 		$fse_id = $this->data['ff_fse_id'];
 		
-		// må vi opprette forumet?
+		// mÃ¥ vi opprette forumet?
 		if (!$fse_id)
 		{
 			$p = ess::$b->db->begin();
@@ -823,7 +823,7 @@ class ff
 	 * @param int $type self::BANK_*
 	 * @param int $amount
 	 * @param string $note
-	 * @param mixed $anonymous anonym handling (spillet utfører), evt. bestemt bruker som utfører
+	 * @param mixed $anonymous anonym handling (spillet utfÃ¸rer), evt. bestemt bruker som utfÃ¸rer
 	 * @return bool success
 	 */
 	public function bank($type, $amount, $note = NULL, $anonymous = false)
@@ -837,7 +837,7 @@ class ff
 	 * @param int $amount
 	 * @param int $ff_id FF-ID hvis statisk kall
 	 * @param string $note
-	 * @param mixed $anonymous anonym handling (spillet utfører), evt. bestemt bruker som utfører
+	 * @param mixed $anonymous anonym handling (spillet utfÃ¸rer), evt. bestemt bruker som utfÃ¸rer
 	 * @return bool success
 	 */
 	public static function bank_static($type, $amount, $ff_id, $note = NULL, $anonymous = false)
@@ -961,26 +961,26 @@ class ff
 		// sett opp data
 		switch (self::$log_id[$action])
 		{
-			// Forum: Ny forumtråd
+			// Forum: Ny forumtrÃ¥d
 			case "forum_topic_add":
 				$info = explode(":", $data);
 				$data = '<user id="'.$info[0].'" /> opprettet <a href="'.$__server['relative_path'].'/forum/topic?id='.$info[1].'">'.htmlspecialchars(urldecode($info[2])).'</a> i forumet.';
 			break;
 			
-			// Forum: Forumtråd slettet
+			// Forum: ForumtrÃ¥d slettet
 			case "forum_topic_delete":
 				$info = explode(":", $data);
 				$title = $this->mod ? '<a href="'.$__server['relative_path'].'/forum/topic?id='.$info[1].'">'.htmlspecialchars(urldecode($info[2])).'</a>' : htmlspecialchars(urldecode($info[2]));
 				$data = '<user id="'.$info[0].'" /> slettet '.$title.' fra forumet.';
 			break;
 			
-			// Forum: Forumtråd gjenopprettet
+			// Forum: ForumtrÃ¥d gjenopprettet
 			case "forum_topic_restore":
 				$info = explode(":", $data);
 				$data = '<user id="'.$info[0].'" /> gjenopprettet <a href="'.$__server['relative_path'].'/forum/topic?id='.$info[1].'">'.htmlspecialchars(urldecode($info[2])).'</a> i forumet.';
 			break;
 			
-			// Forum: Forumtråd redigert
+			// Forum: ForumtrÃ¥d redigert
 			case "forum_topic_edit":
 				$info = explode(":", $data);
 				$data = '<user id="'.$info[0].'" /> redigerte <a href="'.$__server['relative_path'].'/forum/topic?id='.$info[1].'">'.htmlspecialchars(urldecode($info[2])).'</a> i forumet.';
@@ -994,10 +994,10 @@ class ff
 			
 			// Medlem: Godta invitasjon
 			case "member_invite_accept":
-				$data = '<user id="'.$data.'" /> godtok invitasjonen og er nå medlem av '.$this->refstring.'.';
+				$data = '<user id="'.$data.'" /> godtok invitasjonen og er nÃ¥ medlem av '.$this->refstring.'.';
 			break;
 			
-			// Medlem: Avslå invitasjon
+			// Medlem: AvslÃ¥ invitasjon
 			case "member_invite_decline":
 				$data = '<user id="'.$data.'" /> avslo invitasjonen til '.$this->refstring.'.';
 			break;
@@ -1015,7 +1015,7 @@ class ff
 				}
 			break;
 			
-			// Medlem: Foreslå medlem
+			// Medlem: ForeslÃ¥ medlem
 			case "member_suggest":
 				$info = explode(":", $data);
 				$data = '<user id="'.$info[0].'" /> foreslo <user id="'.$info[1].'" /> som medlem av '.$this->refstring.' som <b>'.htmlspecialchars(urldecode($info[2])).'</b>.';
@@ -1024,19 +1024,19 @@ class ff
 			// Medlem: Godta forslag
 			case "member_suggest_accept":
 				$info = explode(":", $data);
-				$data = '<user id="'.$info[0].'" /> godtok forslaget'.($info[3] ? ' til <user id="'.$info[3].'" />' : '').' om å invitere <user id="'.$info[1].'" /> til '.$this->refstring.' som <b>'.htmlspecialchars(urldecode($info[2])).'</b>. <user id="'.$info[1].'" /> er nå invitert.';
+				$data = '<user id="'.$info[0].'" /> godtok forslaget'.($info[3] ? ' til <user id="'.$info[3].'" />' : '').' om Ã¥ invitere <user id="'.$info[1].'" /> til '.$this->refstring.' som <b>'.htmlspecialchars(urldecode($info[2])).'</b>. <user id="'.$info[1].'" /> er nÃ¥ invitert.';
 			break;
 			
-			// Medlem: Avslå forslag
+			// Medlem: AvslÃ¥ forslag
 			case "member_suggest_decline":
 				$info = explode(":", $data);
 				if ($info[0])
 				{
-					$data = '<user id="'.$info[0].'" /> avslo forslaget om å invitere <user id="'.$info[1].'" />.';
+					$data = '<user id="'.$info[0].'" /> avslo forslaget om Ã¥ invitere <user id="'.$info[1].'" />.';
 				}
 				else
 				{
-					$data = 'Forslaget om å invitere <user id="'.$info[1].'" /> ble avslått.';
+					$data = 'Forslaget om Ã¥ invitere <user id="'.$info[1].'" /> ble avslÃ¥tt.';
 				}
 			break;
 			
@@ -1049,7 +1049,7 @@ class ff
 			// Medlem: Drept/for lav helse
 			case "member_deactivated":
 				$info = explode(":", $data);
-				$data = '<user id="'.$info[0].'" /> fikk for lite helse til å kunne opprettholde sitt medlemskap.'.(isset($info[1]) ? ' Hadde posisjonen <b>'.htmlspecialchars(urldecode($info[1])).'</b>' : '').'.';
+				$data = '<user id="'.$info[0].'" /> fikk for lite helse til Ã¥ kunne opprettholde sitt medlemskap.'.(isset($info[1]) ? ' Hadde posisjonen <b>'.htmlspecialchars(urldecode($info[1])).'</b>' : '').'.';
 			break;
 			
 			// Medlem: Sparket
@@ -1127,7 +1127,7 @@ class ff
 					// starter salget:
 					// {TYPE=init}:BOSS:UBOSS:FEE:AMOUNT
 					case "init":
-						$data = '<user id="'.$info[1].'" /> åpnet salg av '.$this->refstring.' til <user id="'.$info[2].'" /> for '.game::format_cash($info[4]).'.';
+						$data = '<user id="'.$info[1].'" /> Ã¥pnet salg av '.$this->refstring.' til <user id="'.$info[2].'" /> for '.game::format_cash($info[4]).'.';
 					break;
 					
 					// avbryter salget (trekker det tilbake)
@@ -1136,13 +1136,13 @@ class ff
 						$data = '<user id="'.$info[1].'" /> trakk tilbake salg av '.$this->refstring.' til <user id="'.$info[2].'" /> for '.game::format_cash($info[4]).'.';
 					break;
 					
-					// godtar kjøpet (mottakeren)
+					// godtar kjÃ¸pet (mottakeren)
 					// {TYPE=approve}:BOSS:UBOSS:FEE:AMOUNT
 					case "approve":
-						$data = '<user id="'.$info[2].'" /> godtok salget av '.$this->refstring.' og har nå overtatt som '.htmlspecialchars($this->type['priority'][1]).'. <user id="'.$info[1].'" /> har blitt satt som '.htmlspecialchars($this->type['priority'][2]).'. Gebyr: '.game::format_cash($info[3]).'. Salgsbeløp: '.game::format_cash($info[4]).'.';
+						$data = '<user id="'.$info[2].'" /> godtok salget av '.$this->refstring.' og har nÃ¥ overtatt som '.htmlspecialchars($this->type['priority'][1]).'. <user id="'.$info[1].'" /> har blitt satt som '.htmlspecialchars($this->type['priority'][2]).'. Gebyr: '.game::format_cash($info[3]).'. SalgsbelÃ¸p: '.game::format_cash($info[4]).'.';
 					break;
 					
-					// avslår kjøpet (mottakeren)
+					// avslÃ¥r kjÃ¸pet (mottakeren)
 					// {TYPE=reject}:UBOSS:FEE:AMOUNT
 					case "reject":
 						$data = '<user id="'.$info[2].'" /> avslo salget av '.$this->refstring.' for '.game::format_cash($info[4]).'.';
@@ -1152,15 +1152,15 @@ class ff
 			
 			// Nytt navn
 			case "name":
-				// syntax: gammelt navn:nytt navn:spiller som sendte søknad:innvilget av
+				// syntax: gammelt navn:nytt navn:spiller som sendte sÃ¸knad:innvilget av
 				// syntax (abstrakt): ff_name:ff_name:up_id:up_id
 				$info = explode(":", $data);
-				$data = 'Navnet på '.$this->refstring.' ble endret fra '.htmlspecialchars(urldecode($info[0])).' til <b>'.htmlspecialchars(urldecode($info[1])).'</b>.';
+				$data = 'Navnet pÃ¥ '.$this->refstring.' ble endret fra '.htmlspecialchars(urldecode($info[0])).' til <b>'.htmlspecialchars(urldecode($info[1])).'</b>.';
 			break;
 			
 			case "bank_overforing_tap_change":
 				$info = explode(":", $data);
-				$data = 'Overføringsgebyret endret seg med '.game::format_number($info[1]*100, 2).' % til <b>'.game::format_number(($info[0] + $info[1])*100, 2).' %</b>.';
+				$data = 'OverfÃ¸ringsgebyret endret seg med '.game::format_number($info[1]*100, 2).' % til <b>'.game::format_number(($info[0] + $info[1])*100, 2).' %</b>.';
 			break;
 			
 			case "article_edited":
@@ -1171,16 +1171,16 @@ class ff
 			
 			// kastet ut spiller fra bomberommet
 			case "bomberom_kick":
-				// syntax: up_id(som utfører handlingen):up_id(som ble kastet ut):up_brom_expire(når vi egentlig skulle gå ut av bomberommet)
+				// syntax: up_id(som utfÃ¸rer handlingen):up_id(som ble kastet ut):up_brom_expire(nÃ¥r vi egentlig skulle gÃ¥ ut av bomberommet)
 				$info = explode(":", $data);
 				$data = '<user id="'.$info[0].'" /> kastet ut <user id="'.$info[1].'" /> fra bomberommet, som egentlig skulle sittet til '.ess::$b->date->get($info[2])->format().'.';
 			break;
 			
-			// oppløst
+			// opplÃ¸st
 			case "dissolve":
-				// syntax: up_id(som utfører handlingen):up_id(som ble kastet ut):up_brom_expire(når vi egentlig skulle gå ut av bomberommet)
+				// syntax: up_id(som utfÃ¸rer handlingen):up_id(som ble kastet ut):up_brom_expire(nÃ¥r vi egentlig skulle gÃ¥ ut av bomberommet)
 				$info = explode(":", $data);
-				$data = ucfirst($this->type['refobj']).' ble oppløst.';
+				$data = ucfirst($this->type['refobj']).' ble opplÃ¸st.';
 			break;
 			
 			// kuler inn
@@ -1206,7 +1206,7 @@ class ff
 			
 			// informasjon
 			case "info":
-				// behold data urørt
+				// behold data urÃ¸rt
 			break;
 			
 			// Dummy
@@ -1228,7 +1228,7 @@ class ff
 	 */
 	public function load_page($header = true, $footer = true)
 	{
-		// hent ut data som er sendt så langt
+		// hent ut data som er sendt sÃ¥ langt
 		$data = @ob_get_contents();
 		@ob_clean();
 		
@@ -1286,7 +1286,7 @@ class ff
 	 */
 	public function load_footer()
 	{
-		// har ikke tilgang til å administrere?
+		// har ikke tilgang til Ã¥ administrere?
 		if (!$this->access(true)) return;
 		
 		echo '
@@ -1346,7 +1346,7 @@ class ff
 	
 	/**
 	 * Inviter spiller
-	 * Utfører i hovedsak kun det å legge til spilleren i databasen, og sjekker ikke rankkrav osv
+	 * UtfÃ¸rer i hovedsak kun det Ã¥ legge til spilleren i databasen, og sjekker ikke rankkrav osv
 	 * @param int $up_id
 	 * @param int $priority
 	 * @param int $parent forelder til soldier
@@ -1362,7 +1362,7 @@ class ff
 		
 		if (!empty($parent) && $priority != 4) throw new HSException("Kun soldiers kan ha parent.");
 		
-		// sjekk at brukeren finnes og ikke allerede er medlem, invitert eller foreslått av capo
+		// sjekk at brukeren finnes og ikke allerede er medlem, invitert eller foreslÃ¥tt av capo
 		$result = ess::$b->db->query("
 			SELECT up_id, up_name, up_access_level, !ISNULL(ffm_ff_id) AS in_fa
 			FROM users_players
@@ -1401,7 +1401,7 @@ class ff
 	}
 	
 	/**
-	 * Foreslå soldier (kun en capo kan foreslå)
+	 * ForeslÃ¥ soldier (kun en capo kan foreslÃ¥)
 	 * @param int $up_id
 	 * @param int $priority
 	 */
@@ -1411,14 +1411,14 @@ class ff
 		$up_id = (int) $up_id;
 		
 		// sjekk for feil
-		if (!$this->uinfo || $this->uinfo->crew) throw new HSException("Spilleren må være medlem av FF for å kunne foreslå noen til den.");
-		if ($this->uinfo->data['ffm_priority'] != 3) throw new HSException("Kun pri3 kan foreslå en spiller.");
+		if (!$this->uinfo || $this->uinfo->crew) throw new HSException("Spilleren mÃ¥ vÃ¦re medlem av FF for Ã¥ kunne foreslÃ¥ noen til den.");
+		if ($this->uinfo->data['ffm_priority'] != 3) throw new HSException("Kun pri3 kan foreslÃ¥ en spiller.");
 		
-		// hvilken posisjon kan vi foreslå til?
+		// hvilken posisjon kan vi foreslÃ¥ til?
 		$limits = $this->get_limits();
 		$priority = isset($limits[4]) && $limits[4] >= 0 ? 4 : 3;
 		
-		// sjekk at brukeren finnes og ikke allerede er medlem, invitert eller foreslått av capo
+		// sjekk at brukeren finnes og ikke allerede er medlem, invitert eller foreslÃ¥tt av capo
 		$result = ess::$b->db->query("
 			SELECT up_id, up_name, up_access_level, !ISNULL(ffm_ff_id) AS in_ff
 			FROM users_players
@@ -1439,7 +1439,7 @@ class ff
 			return false;
 		}
 		
-		// foreslå
+		// foreslÃ¥
 		$time = time();
 		$parent = $this->type['parent'] ? ", ffm_parent_up_id = ".login::$user->player->id : "";
 		ess::$b->db->query("
@@ -1558,7 +1558,7 @@ class ff
 	 */
 	public function reset_forum()
 	{
-		// slett alle forumtrådene som ikke er slettet
+		// slett alle forumtrÃ¥dene som ikke er slettet
 		ess::$b->db->query("UPDATE forum_topics SET ft_deleted = ".time()." WHERE ft_fse_id = ".$this->get_fse_id()." AND ft_deleted = 0");
 	}
 	
@@ -1604,8 +1604,8 @@ class ff
 	}
 	
 	/**
-	 * FF dør ut
-	 * @param player $up_attack spilleren som angrep eier som førte til at FF ble lagt ned
+	 * FF dÃ¸r ut
+	 * @param player $up_attack spilleren som angrep eier som fÃ¸rte til at FF ble lagt ned
 	 */
 	public function dies(player $up_attack = null)
 	{
@@ -1630,11 +1630,11 @@ class ff
 		$this->remove_menu_entries();
 		
 		// logg
-		putlog("CREWCHAN", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u har blitt oppløst. {$__server['path']}/ff/?ff_id={$this->id}");
-		putlog("INFO", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u har blitt oppløst.");
+		putlog("CREWCHAN", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u har blitt opplÃ¸st. {$__server['path']}/ff/?ff_id={$this->id}");
+		putlog("INFO", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u har blitt opplÃ¸st.");
 		
 		// live-feed
-		livefeed::add_row(ucfirst($this->refstring)." ".htmlspecialchars($this->data['ff_name'])." ble oppløst.");
+		livefeed::add_row(ucfirst($this->refstring)." ".htmlspecialchars($this->data['ff_name'])." ble opplÃ¸st.");
 		
 		// broderskap?
 		if ($this->type['type'] == "familie")
@@ -1658,7 +1658,7 @@ class ff
 			{
 				self::create_competition();
 				
-				// sett params slik at det ikke blir lagt ut ny konkurranse dersom broderskapet blir aktivert og så deaktivert igjen
+				// sett params slik at det ikke blir lagt ut ny konkurranse dersom broderskapet blir aktivert og sÃ¥ deaktivert igjen
 				$this->params->update("die_no_new", 1, true);
 			}
 			
@@ -1754,7 +1754,7 @@ class ff
 		$time = ess::$b->date->get();
 		$created = $time->format("U");
 		
-		// hvis klokka nå er over 18:00 velg neste dag
+		// hvis klokka nÃ¥ er over 18:00 velg neste dag
 		if ($time->format("H") >= 18) $time->modify("+1 day");
 		
 		// velg et tilfeldig tidspunkt mellom 18:00 og 21:00
@@ -1768,11 +1768,11 @@ class ff
 		ess::$b->db->query("INSERT INTO ff_free SET fff_time_created = $created, fff_time_start = $start, fff_time_expire = $expire, fff_required_points = 105000");
 		putlog("CREWCHAN", "Ny konkurranse om broderskap planlagt - {$__server['path']}/ff/?fff_id=".ess::$b->db->insert_id());
 		
-		// sørg for at scheduler settes til første konkurranse som avsluttes
+		// sÃ¸rg for at scheduler settes til fÃ¸rste konkurranse som avsluttes
 		ess::$b->db->query("UPDATE scheduler SET s_next = IF(s_active = 0, $expire, LEAST(s_next, $expire)), s_active = 1 WHERE s_name = 'familier_free'");
 		
 		// live-feed
-		livefeed::add_row('Ny konkurranse for broderskap er planlagt og starter '.ess::$b->date->get($start)->format().'. Broderskapet opprettes via <a href="'.ess::$s['relative_path'].'/bydeler">bydeler</a> når konkurransen har startet.');
+		livefeed::add_row('Ny konkurranse for broderskap er planlagt og starter '.ess::$b->date->get($start)->format().'. Broderskapet opprettes via <a href="'.ess::$s['relative_path'].'/bydeler">bydeler</a> nÃ¥r konkurransen har startet.');
 	}
 	
 	/**
@@ -1786,7 +1786,7 @@ class ff
 		
 		foreach (array_keys($this->type['priority']) as $id)
 		{
-			// standard er at det ikke kan være noen i posisjonen
+			// standard er at det ikke kan vÃ¦re noen i posisjonen
 			$ret[$id] = -1;
 		}
 		
@@ -1815,7 +1815,7 @@ class ff
 	}
 	
 	/**
-	 * Finn ut begrensninger med tanke på medlemmer
+	 * Finn ut begrensninger med tanke pÃ¥ medlemmer
 	 * @param array $members liste over medlemmer som skal flyttes
 	 */
 	public function check_limits($members = null)
@@ -1881,7 +1881,7 @@ class ff
 		
 		$limits = $this->get_limits();
 		
-		// mangler maksimal verdi i løpet av perioden?
+		// mangler maksimal verdi i lÃ¸pet av perioden?
 		if (!$this->data['ff_up_limit_max'] && $limits[0] > 0)
 		{
 			$this->data['ff_up_limit_max'] = $limits[0];
@@ -1898,23 +1898,23 @@ class ff
 	}
 	
 	/**
-	 * Øk medlemsbegrensningen med 1
+	 * Ã˜k medlemsbegrensningen med 1
 	 */
 	public function members_limit_increase()
 	{
 		$max = $this->members_limit_max_info();
 		
 		// har ingen maks?
-		if ($max['active'] == 0) throw new HSException("Det finnes ingen begrensnings fra før.");
+		if ($max['active'] == 0) throw new HSException("Det finnes ingen begrensnings fra fÃ¸r.");
 		
-		// kan ikke økes mer?
-		if ($max['active'] == $max['max']) throw new HSException("Medlemsantallet kan ikke økes mer.");
+		// kan ikke Ã¸kes mer?
+		if ($max['active'] == $max['max']) throw new HSException("Medlemsantallet kan ikke Ã¸kes mer.");
 		
 		// sett opp ny begrensning
 		$new_max = $max['active'] + 1;
 		$new_limit = $this->members_limit_build($new_max);
 		
-		// forsøk å oppdater
+		// forsÃ¸k Ã¥ oppdater
 		ess::$b->db->query("
 			UPDATE ff
 			SET ff_up_limit = ".ess::$b->db->quote($new_limit)."
@@ -1923,12 +1923,12 @@ class ff
 		// endret seg?
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. Prøv på nytt om du fremdeles ønsker.", "error");
+			ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. PrÃ¸v pÃ¥ nytt om du fremdeles Ã¸nsker.", "error");
 			return false;
 		}
 		
-		// forsøk å trekk fra pengene
-		if ($this->bank(ff::BANK_BETALING, ff::MEMBERS_LIMIT_INCREASE_COST, 'Økte medlemsbegrensningen til '.$new_max.'.'))
+		// forsÃ¸k Ã¥ trekk fra pengene
+		if ($this->bank(ff::BANK_BETALING, ff::MEMBERS_LIMIT_INCREASE_COST, 'Ã˜kte medlemsbegrensningen til '.$new_max.'.'))
 		{
 			// lagre maks
 			$this->data['ff_up_limit'] = $new_limit;
@@ -1938,7 +1938,7 @@ class ff
 				SET ff_up_limit_max = $new_max
 				WHERE ff_id = $this->id AND ff_up_limit_max < $new_max");
 			
-			ess::$b->page->add_message("Maks antall medlemmer for {$this->type['refobj']} ble økt til ".($new_max).". ".game::format_cash(ff::MEMBERS_LIMIT_INCREASE_COST)." ble trukket fra bankkontoen.");
+			ess::$b->page->add_message("Maks antall medlemmer for {$this->type['refobj']} ble Ã¸kt til ".($new_max).". ".game::format_cash(ff::MEMBERS_LIMIT_INCREASE_COST)." ble trukket fra bankkontoen.");
 			return true;
 		}
 		
@@ -1948,7 +1948,7 @@ class ff
 			SET ff_up_limit = ".ess::$b->db->quote($this->data['ff_up_limit'])."
 			WHERE ff_id = $this->id AND ff_up_limit = ".ess::$b->db->quote($new_limit));
 		
-		ess::$b->page->add_message("Det er ikke nok penger i banken for {$this->type['refobj']} til å øke medlemsbegrensningen.", "error");
+		ess::$b->page->add_message("Det er ikke nok penger i banken for {$this->type['refobj']} til Ã¥ Ã¸ke medlemsbegrensningen.", "error");
 		return false;
 	}
 	
@@ -1960,7 +1960,7 @@ class ff
 		$max = $this->members_limit_max_info();
 		
 		// har ingen maks?
-		if ($max['active'] == 0) throw new HSException("Det finnes ingen begrensnings fra før.");
+		if ($max['active'] == 0) throw new HSException("Det finnes ingen begrensnings fra fÃ¸r.");
 		
 		// kan ikke senkes mer?
 		if ($max['active'] == $max['min']) throw new HSException("Medlemsantallet kan ikke senkes mer.");
@@ -1969,7 +1969,7 @@ class ff
 		$new_max = $max['active'] - 1;
 		$new_limit = $this->members_limit_build($new_max);
 		
-		// forsøk å oppdater
+		// forsÃ¸k Ã¥ oppdater
 		ess::$b->db->query("
 			UPDATE ff
 			SET ff_up_limit = ".ess::$b->db->quote($new_limit)."
@@ -1978,7 +1978,7 @@ class ff
 		// endret seg?
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. Prøv på nytt om du fremdeles ønsker.", "error");
+			ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. PrÃ¸v pÃ¥ nytt om du fremdeles Ã¸nsker.", "error");
 			return false;
 		}
 		
@@ -2010,7 +2010,7 @@ class ff
 	/**
 	 * Endre navnet
 	 * @param string $name nytt navn
-	 * @param integer $request_up_id hvem som ba om forespørselen
+	 * @param integer $request_up_id hvem som ba om forespÃ¸rselen
 	 * @param bool $mod moderator/spill-handling?
 	 */
 	public function change_name($name, $request_up_id = null, $mod = null)
@@ -2076,7 +2076,7 @@ class ff
 	}
 	
 	/**
-	 * Hent hvor mye rank medlemmene har fått under konkurransemodus
+	 * Hent hvor mye rank medlemmene har fÃ¥tt under konkurransemodus
 	 */
 	public function competition_rank_points()
 	{
@@ -2092,7 +2092,7 @@ class ff
 			
 			if ($member->data['ffm_pay_points'] === null)
 			{
-				// sørg for at brukeren har antall poeng ved join lagret
+				// sÃ¸rg for at brukeren har antall poeng ved join lagret
 				ess::$b->db->query("UPDATE ff_members, users_players SET ffm_pay_points = up_points_rel WHERE ffm_ff_id = {$this->id} AND ffm_up_id = {$member->id} AND ffm_up_id = up_id");
 				$this->data['ffm_pay_points'] = $this->data['up_points_rel'];
 			}
@@ -2111,7 +2111,7 @@ class ff
 		global $__server;
 		
 		// melding om at broderskapet vant
-		putlog("INFO", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u vant broderskapkonkurransen, og har nå muligheten til å etablere seg som et virkelig broderskap. {$__server['path']}/ff/?ff_id={$this->id}");
+		putlog("INFO", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u vant broderskapkonkurransen, og har nÃ¥ muligheten til Ã¥ etablere seg som et virkelig broderskap. {$__server['path']}/ff/?ff_id={$this->id}");
 		
 		// live-feed
 		livefeed::add_row(ucfirst($this->refstring).' <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->id.'">'.htmlspecialchars($this->data['ff_name']).'</a> vant broderskapkonkurransen.');
@@ -2136,12 +2136,12 @@ class ff
 			{
 				foreach ($this->members['members_priority'][$i] as $member)
 				{
-					$member->up->send_message($member->id, "Broderskapkonkurranse vunnet: {$this->data['ff_name']}", ucfirst($this->refstring)." [iurl=/ff/?ff_id={$this->id}]{$this->data['ff_name']}[/iurl] vant broderskapkonkurransen.\n\n".ucfirst($this->refstring)." må nå velge bygning innen 24 timer for at broderskapet ikke skal dø ut.", true);
+					$member->up->send_message($member->id, "Broderskapkonkurranse vunnet: {$this->data['ff_name']}", ucfirst($this->refstring)." [iurl=/ff/?ff_id={$this->id}]{$this->data['ff_name']}[/iurl] vant broderskapkonkurransen.\n\n".ucfirst($this->refstring)." mÃ¥ nÃ¥ velge bygning innen 24 timer for at broderskapet ikke skal dÃ¸ ut.", true);
 				}
 			}
 		}
 		
-		// utfør trigger hos spillere
+		// utfÃ¸r trigger hos spillere
 		foreach ($this->members['members'] as $member){
 			$member->up->trigger("ff_won_member", array(
 					"ff" => $this,
@@ -2188,10 +2188,10 @@ class ff
 		$price_max = self::PAY_COST_DEFAULT + $limits['extra_max'] * self::PAY_COST_INCREASE_FFM;
 		$price = max(self::PAY_COST_MIN, $price_max - floor($rank/self::PAY_COST_RANK)*1000000);
 		
-		// har vi gått over tidspunktet?
+		// har vi gÃ¥tt over tidspunktet?
 		if ($this->data['ff_pay_status'] == 1)
 		{
-			// øk prisen med 50 %
+			// Ã¸k prisen med 50 %
 			$price *= 1.5;
 		}
 		
@@ -2206,8 +2206,8 @@ class ff
 	}
 	
 	/**
-	 * Utfør manuell innbetaling
-	 * Trekker pengene fra det brukeren har på hånda
+	 * UtfÃ¸r manuell innbetaling
+	 * Trekker pengene fra det brukeren har pÃ¥ hÃ¥nda
 	 */
 	public function pay_action()
 	{
@@ -2222,13 +2222,13 @@ class ff
 			throw new HSException("Noe gikk galt.");
 		}
 		
-		// kan vi ikke betale manuelt nå
+		// kan vi ikke betale manuelt nÃ¥
 		if ($pay_info['in_time'])
 		{
-			throw new HSException("Kan ikke betale manuelt før første frist har gått ut.");
+			throw new HSException("Kan ikke betale manuelt fÃ¸r fÃ¸rste frist har gÃ¥tt ut.");
 		}
 		
-		// forsøk å trekk fra pengene
+		// forsÃ¸k Ã¥ trekk fra pengene
 		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - {$pay_info['price']} WHERE up_id = ".login::$user->player->id);
 		if (ess::$b->db->affected_rows() > 0)
 		{
@@ -2242,20 +2242,20 @@ class ff
 	}
 	
 	/**
-	 * Utfør automatisk innbetaling fra banken
+	 * UtfÃ¸r automatisk innbetaling fra banken
 	 */
 	public function pay_scheduler()
 	{
 		// hent info
 		$pay_info = $this->pay_info();
 		
-		// kan vi ikke betale automatisk nå?
+		// kan vi ikke betale automatisk nÃ¥?
 		if (!$pay_info['in_time'])
 		{
 			return false;
 		}
 		
-		// forsøk å trekk fra pengene fra kontoen
+		// forsÃ¸k Ã¥ trekk fra pengene fra kontoen
 		if ($this->bank(self::BANK_BETALING, $pay_info['price'], "Ukentlig kostnad for {$this->type['typename']}.", true))
 		{
 			// nullstill info
@@ -2341,7 +2341,7 @@ class ff
 	 */
 	public function sell_status($lock = false, $unlock = true)
 	{
-		// låse?
+		// lÃ¥se?
 		if ($lock) $this->params->lock();
 		
 		// aktivt?
@@ -2380,7 +2380,7 @@ class ff
 		$up_id = (int) $up_id;
 		$amount = game::intval($amount);
 		
-		// negativt beløp?
+		// negativt belÃ¸p?
 		if ($amount < 0)
 		{
 			return "negative_amount";
@@ -2389,10 +2389,10 @@ class ff
 		// har ikke tilgang?
 		if (!$this->access(1))
 		{
-			throw new HSException("Brukeren som starter salget må være boss.");
+			throw new HSException("Brukeren som starter salget mÃ¥ vÃ¦re boss.");
 		}
 		
-		// hent nåværende status
+		// hent nÃ¥vÃ¦rende status
 		$status = $this->sell_status(true, false);
 		if ($status !== false)
 		{
@@ -2416,12 +2416,12 @@ class ff
 			return "player_rank";
 		}
 		
-		// legg til oppføringen
+		// legg til oppfÃ¸ringen
 		$info = array($up_id, $this->uinfo->id, time(), self::SELL_COST, $amount);
 		$this->params->update("sell", implode(":", $info));
 		
 		// legg til logg hos underboss
-		player::add_log_static("ff_diverse", '<user id="'.$this->uinfo->id.'" /> har startet salg av '.$this->refstring.' <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->id.'">'.htmlspecialchars($this->data['ff_name']).'</a>. <a href="'.ess::$s['relative_path'].'/ff/panel?ff_id='.$this->id.'&amp;a=sell">Godta/avslå &raquo;</a>', $this->id, $up_id);
+		player::add_log_static("ff_diverse", '<user id="'.$this->uinfo->id.'" /> har startet salg av '.$this->refstring.' <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->id.'">'.htmlspecialchars($this->data['ff_name']).'</a>. <a href="'.ess::$s['relative_path'].'/ff/panel?ff_id='.$this->id.'&amp;a=sell">Godta/avslÃ¥ &raquo;</a>', $this->id, $up_id);
 		
 		// logg i FF: {TYPE=init}:BOSS:UBOSS:FEE:AMOUNT
 		$this->add_log("sell", "init:{$this->uinfo->id}:$up_id:".self::SELL_COST.":$amount");
@@ -2481,26 +2481,26 @@ class ff
 			return false;
 		}
 		
-		// sørg for at dette er brukeren som skulle selges til
+		// sÃ¸rg for at dette er brukeren som skulle selges til
 		if (!$this->uinfo || $status['up_id'] != $this->uinfo->id)
 		{
 			$this->params->commit();
 			throw new HSException("Kun brukeren som har mottatt salget kan behandle det.");
 		}
 			
-		// forsøk å trekk fra pengene fra brukeren
+		// forsÃ¸k Ã¥ trekk fra pengene fra brukeren
 		if ($status['amount'] > 0)
 		{
 			$result = ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - {$status['amount']}, up_bank_sent = up_bank_sent + {$status['amount']}, up_bank_num_sent = up_bank_num_sent + 1 WHERE up_id = {$status['up_id']} AND up_cash >= {$status['amount']}");
 			if (ess::$b->db->affected_rows() == 0)
 			{
-				// har ikke råd
+				// har ikke rÃ¥d
 				$this->params->commit();
 				return 'player_cash';
 			}
 		}
 		
-		// forsøk å trekk fra pengene fra banken
+		// forsÃ¸k Ã¥ trekk fra pengene fra banken
 		if (!$this->bank(self::BANK_BETALING, $status['fee'], "Gebyr for salg av {$this->refstring}.", true))
 		{
 			// FF dekker ikke gebyret
@@ -2527,7 +2527,7 @@ class ff
 		$init_u = $this->members['members'][$status['init_up_id']];
 		$init_u->change_priority(2, NULL, true);
 		
-		// sett kjøper som boss
+		// sett kjÃ¸per som boss
 		$buy_u = $this->members['members'][$status['up_id']];
 		$buy_u->change_priority(1, NULL, true);
 		
@@ -2538,7 +2538,7 @@ class ff
 		}
 		
 		// legg til logg hos selgeren
-		player::add_log_static("ff_diverse", '<user id="'.$this->uinfo->id.'" /> godtok salget av '.$this->refstring.' <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->id.'">'.htmlspecialchars($this->data['ff_name']).'</a> for '.game::format_cash($status['amount']).' og er nå satt som '.$this->type['priority'][1].'. Du ble satt som '.$this->type['priority'][2].'.', $this->id, $status['init_up_id']);
+		player::add_log_static("ff_diverse", '<user id="'.$this->uinfo->id.'" /> godtok salget av '.$this->refstring.' <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->id.'">'.htmlspecialchars($this->data['ff_name']).'</a> for '.game::format_cash($status['amount']).' og er nÃ¥ satt som '.$this->type['priority'][1].'. Du ble satt som '.$this->type['priority'][2].'.', $this->id, $status['init_up_id']);
 		
 		// logg i FF: {TYPE=approve}:BOSS:UBOSS:FEE:AMOUNT
 		$this->add_log("sell", "approve:{$status['init_up_id']}:{$status['up_id']}:{$status['fee']}:{$status['amount']}");
@@ -2553,7 +2553,7 @@ class ff
 	}
 	
 	/**
-	 * Avslå salg
+	 * AvslÃ¥ salg
 	 */
 	public function sell_reject()
 	{
@@ -2566,7 +2566,7 @@ class ff
 			return false;
 		}
 		
-		// sørg for at dette er brukeren som skulle selges til
+		// sÃ¸rg for at dette er brukeren som skulle selges til
 		if (!$this->uinfo || $status['up_id'] != $this->uinfo->id)
 		{
 			$this->params->commit();
@@ -2577,7 +2577,7 @@ class ff
 		$this->params->remove("sell");
 		
 		// legg til logg hos selgeren
-		player::add_log_static("ff_diverse", '<user id="'.$status['up_id'].'" /> avslo kjøpet av '.$this->refstring.' <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->id.'">'.htmlspecialchars($this->data['ff_name']).'</a> for '.game::format_cash($status['amount']).'.', $this->id, $status['init_up_id']);
+		player::add_log_static("ff_diverse", '<user id="'.$status['up_id'].'" /> avslo kjÃ¸pet av '.$this->refstring.' <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->id.'">'.htmlspecialchars($this->data['ff_name']).'</a> for '.game::format_cash($status['amount']).'.', $this->id, $status['init_up_id']);
 		
 		// logg i FF: {TYPE=reject}:BOSS:UBOSS:FEE:AMOUNT
 		$this->add_log("sell", "reject:{$status['init_up_id']}:{$status['up_id']}:{$status['fee']}:{$status['amount']}");
@@ -2722,7 +2722,7 @@ class ff
 	}
 	
 	/**
-	 * Kjøp informasjon om de andre FF i konkurransen
+	 * KjÃ¸p informasjon om de andre FF i konkurransen
 	 */
 	public function buy_competition_info()
 	{
@@ -2734,7 +2734,7 @@ class ff
 		// er ikke boss?
 		if (!$this->access(1)) throw new HSException("Ikke tilgang.");
 		
-		// hent nåværende info
+		// hent nÃ¥vÃ¦rende info
 		$info = $this->params->get("competition_info");
 		if ($info)
 		{
@@ -2754,14 +2754,14 @@ class ff
 			return 'none';
 		}
 		
-		// forsøk å trekk pengene fra banken
-		if (!$this->bank(self::BANK_BETALING, self::COMPETITION_INFO_COST, "Kostnad for å hente informasjon om de andre {$this->refstring} i konkurransen."))
+		// forsÃ¸k Ã¥ trekk pengene fra banken
+		if (!$this->bank(self::BANK_BETALING, self::COMPETITION_INFO_COST, "Kostnad for Ã¥ hente informasjon om de andre {$this->refstring} i konkurransen."))
 		{
 			return 'ff_cash';
 		}
 		
 		// logg
-		putlog("CREWCHAN", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u kjøpte rankinformasjon om de andre konkurransedeltakere. {$__server['path']}/ff/?ff_id={$this->id}");
+		putlog("CREWCHAN", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u kjÃ¸pte rankinformasjon om de andre konkurransedeltakere. {$__server['path']}/ff/?ff_id={$this->id}");
 		
 		// lagre informasjonen
 		$this->params->update("competition_info", serialize($data), true);
@@ -2770,13 +2770,13 @@ class ff
 	}
 	
 	/**
-	 * Marker en endring utført i forumet slik at den blir synlig i menyen
+	 * Marker en endring utfÃ¸rt i forumet slik at den blir synlig i menyen
 	 */
 	public function forum_changed()
 	{
 		$s = ess::$b->db->begin();
 		
-		// hent og lås params for alle medlemmer
+		// hent og lÃ¥s params for alle medlemmer
 		$result = ess::$b->db->query("
 			SELECT u_id, u_params
 			FROM ff_members
@@ -2812,12 +2812,12 @@ class ff
 			}
 		}
 		
-		// fullfør transaksjon
+		// fullfÃ¸r transaksjon
 		if ($s) ess::$b->db->commit();
 	}
 	
 	/**
-	 * Hent tilgangsnivå man må være for å få tilgang til banken
+	 * Hent tilgangsnivÃ¥ man mÃ¥ vÃ¦re for Ã¥ fÃ¥ tilgang til banken
 	 */
 	public function get_bank_write_priority()
 	{
@@ -2831,7 +2831,7 @@ class ff
 	}
 	
 	/**
-	 * Gi medeier tilgang til å endre banken
+	 * Gi medeier tilgang til Ã¥ endre banken
 	 * @param bool $b
 	 */
 	public function bank_write_pri2_change($b)
@@ -2892,8 +2892,8 @@ class ff
 	
 	/**
 	 * Forandre medlemskap i FF fra deaktivert til forlat
-	 * benyttes når helsen går over 40 % igjen og blir der i over 12 timer
-	 * eller når spilleren blir medlem av nytt FF
+	 * benyttes nÃ¥r helsen gÃ¥r over 40 % igjen og blir der i over 12 timer
+	 * eller nÃ¥r spilleren blir medlem av nytt FF
 	 */
 	public static function set_leave($up_id)
 	{
@@ -3001,7 +3001,7 @@ class ff
 	}
 	
 	/**
-	 * Forsøk å ta ut kuler av broderskap
+	 * ForsÃ¸k Ã¥ ta ut kuler av broderskap
 	 */
 	public function bullets_out($num, player $up, player $real_up = null)
 	{
@@ -3030,7 +3030,7 @@ class ff
 			return "full";
 		}
 		
-		// forsøk å trekk fra broderskapet
+		// forsÃ¸k Ã¥ trekk fra broderskapet
 		$this->params->lock();
 		if ($num > $this->params->get("bullets", 0))
 		{
@@ -3048,7 +3048,7 @@ class ff
 
 		$this->params->commit(false);
 		ess::$b->db->commit();
-		$this->params->commit(); // setter intern status i params_update til ulåst
+		$this->params->commit(); // setter intern status i params_update til ulÃ¥st
 		
 		// FF-logg
 		$this->add_log("bullets_out", "{$up->id}:$num".($real_up ? ":".$real_up->id : ""));
@@ -3057,7 +3057,7 @@ class ff
 	}
 	
 	/**
-	 * Forsøk å sett inn kuler i broderskapet
+	 * ForsÃ¸k Ã¥ sett inn kuler i broderskapet
 	 */
 	public function bullets_in($num, player $up)
 	{
@@ -3171,7 +3171,7 @@ class ff
 		$ff_points = array();
 		foreach ($ff_list as $ff)
 		{
-			$points_ff = 0;  // disse 3 er bare for å bryte ned statistikken
+			$points_ff = 0;  // disse 3 er bare for Ã¥ bryte ned statistikken
 			$points_up = 0;
 			$points_kill = 0;
 			foreach ($ff->members['members'] as $ffm)
@@ -3237,7 +3237,7 @@ class ff
 	}
 	
 	/**
-	 * Trigger når en spiller dreper en annen
+	 * Trigger nÃ¥r en spiller dreper en annen
 	 */
 	public static function handle_up_kill(player $up, $data)
 	{
@@ -3295,7 +3295,7 @@ class ff_member
 	public $params_player = NULL;
 	
 	/**
-	 * FF medlemmet tilhører
+	 * FF medlemmet tilhÃ¸rer
 	 * @var ff
 	 */
 	public $ff = NULL;
@@ -3327,7 +3327,7 @@ class ff_member
 	/** Konstant: Kastet ut av FF */
 	const STATUS_KICKED = 2;
 	
-	/** Konstant: Foreslått til FF */
+	/** Konstant: ForeslÃ¥tt til FF */
 	const STATUS_SUGGESTED = 3;
 	
 	/** Medlem av FF da spilleren ble drept */
@@ -3350,7 +3350,7 @@ class ff_member
 	}
 	
 	/**
-	 * Fiks objektet hvis det har vært serialized
+	 * Fiks objektet hvis det har vÃ¦rt serialized
 	 */
 	public function __wakeup($clean = NULL)
 	{
@@ -3358,7 +3358,7 @@ class ff_member
 	}
 	
 	/**
-	 * Last inn objekter først når de skal benyttes
+	 * Last inn objekter fÃ¸rst nÃ¥r de skal benyttes
 	 */
 	public function __get($name)
 	{
@@ -3589,7 +3589,7 @@ class ff_member
 			if ($row[0] != "ff") continue;
 			if ($row[1] != $this->ff->id) continue;
 			
-			// må oppdatere antallet?
+			// mÃ¥ oppdatere antallet?
 			if (isset($row[4]) && $row[4] > 0)
 			{
 				$this->params_user->lock();
@@ -3647,8 +3647,8 @@ class ff_member
 	}
 	
 	/**
-	 * Avslå invitasjon
-	 * @param bool $log legg til logg for at medlemmet avslår invitasjonen
+	 * AvslÃ¥ invitasjon
+	 * @param bool $log legg til logg for at medlemmet avslÃ¥r invitasjonen
 	 */
 	public function invite_decline($log = true)
 	{
@@ -3659,7 +3659,7 @@ class ff_member
 		ess::$b->db->query("UPDATE ff_members SET ffm_status = ".self::STATUS_KICKED." WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id AND ffm_date_join != ffm_date_created");
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			// brukeren har ikke vært fullverdg medlem - slett oppføringen
+			// brukeren har ikke vÃ¦rt fullverdg medlem - slett oppfÃ¸ringen
 			ess::$b->db->query("DELETE FROM ff_members WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
 			
 			// merk som slettet
@@ -3668,7 +3668,7 @@ class ff_member
 		
 		else
 		{
-			// brukeroppføringen blir beholdt
+			// brukeroppfÃ¸ringen blir beholdt
 			$this->data['ffm_status'] = self::STATUS_KICKED;
 		}
 		
@@ -3706,8 +3706,8 @@ class ff_member
 		if (!login::$logged_in) throw new HSNotLoggedIn();
 		global $_game;
 		
-		// ikke foreslått?
-		if ($this->status != self::STATUS_SUGGESTED) throw new HSException("Medlemmet er ikke foreslått til FF.");
+		// ikke foreslÃ¥tt?
+		if ($this->status != self::STATUS_SUGGESTED) throw new HSException("Medlemmet er ikke foreslÃ¥tt til FF.");
 		
 		// opppdater brukerinfo
 		$time = time();
@@ -3722,7 +3722,7 @@ class ff_member
 	}
 	
 	/**
-	 * Avslå forslag som medlem
+	 * AvslÃ¥ forslag som medlem
 	 * @param bool $anonymous skjules hvem som trakk tilbake invitasjonen (f.eks. systemet)
 	 */
 	public function suggestion_decline($anonymous = false)
@@ -3730,14 +3730,14 @@ class ff_member
 		if (!$anonymous && !login::$logged_in) throw new HSNotLoggedIn();
 		$action_player = $anonymous ? 0 : login::$user->player->id;
 		
-		// ikke foreslått?
-		if ($this->status != self::STATUS_SUGGESTED) throw new HSException("Medlemmet er ikke foreslått til FF.");
+		// ikke foreslÃ¥tt?
+		if ($this->status != self::STATUS_SUGGESTED) throw new HSException("Medlemmet er ikke foreslÃ¥tt til FF.");
 		
 		// oppdater brukerinfo
 		ess::$b->db->query("UPDATE ff_members SET ffm_status = ".self::STATUS_KICKED." WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id AND ffm_date_join != ffm_date_created");
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			// brukeren har ikke vært fullverdg medlem - slett oppføringen
+			// brukeren har ikke vÃ¦rt fullverdg medlem - slett oppfÃ¸ringen
 			ess::$b->db->query("DELETE FROM ff_members WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
 			
 			// merk som slettet
@@ -3746,7 +3746,7 @@ class ff_member
 		
 		else
 		{
-			// brukeroppføringen blir beholdt
+			// brukeroppfÃ¸ringen blir beholdt
 			$this->data['ffm_status'] = self::STATUS_KICKED;
 		}
 		
@@ -3781,7 +3781,7 @@ class ff_member
 	 * @param bool $log lagre logg for at medlemmet forlater FF
 	 * @param bool $kicked blir kastet ut
 	 * @param bool $deactivated ble spilleren deaktivert/drept?
-	 * @param player $up_attack spilleren som førte til hendelsen (angrep)
+	 * @param player $up_attack spilleren som fÃ¸rte til hendelsen (angrep)
 	 */
 	public function leave($log = true, $kicked = false, $deactivated = false, player $up_attack = null)
 	{
@@ -3801,7 +3801,7 @@ class ff_member
 		if ($this->data['up_access_level'] < $_game['access_noplay'] && $this->data['ffm_pay_points'] !== null)
 		{
 			$points = $this->data['up_points_rel'] - $this->data['ffm_pay_points'];
-			putlog("NOTICE", "FF RANK: FF {$this->ff->data['ff_name']} (#{$this->ff->id}), spilleren {$this->data['up_name']} (#{$this->id}) forlot FF. $points rankpoeng overført til ff_pay_points.");
+			putlog("NOTICE", "FF RANK: FF {$this->ff->data['ff_name']} (#{$this->ff->id}), spilleren {$this->data['up_name']} (#{$this->id}) forlot FF. $points rankpoeng overfÃ¸rt til ff_pay_points.");
 			ess::$b->db->query("UPDATE ff SET ff_pay_points = ff_pay_points + $points WHERE ff_id = {$this->ff->id}");
 		}
 		
@@ -3824,7 +3824,7 @@ class ff_member
 		$died = false;
 		
 		// boss og ingen andre er boss?
-		// hvis boss ble sparket (noe kun moderator kan gjøre), skjer ingenting
+		// hvis boss ble sparket (noe kun moderator kan gjÃ¸re), skjer ingenting
 		if (!$kicked && $this->data['ffm_priority'] == 1 && (!isset($this->ff->members['members_priority'][1]) || count($this->ff->members['members_priority'][1]) == 0))
 		{
 			// har vi medeier og medeier kan ta over?
@@ -3837,7 +3837,7 @@ class ff_member
 			
 			else
 			{
-				// FF dør ut
+				// FF dÃ¸r ut
 				$this->ff->dies($up_attack);
 				$died = true;
 			}
@@ -3851,7 +3851,7 @@ class ff_member
 			SET up_log_ff_new = GREATEST(0, up_log_ff_new - ffm_log_new), up_health_ff_time = {$up->data['up_health_ff_time']}
 			WHERE up_id = $this->id AND ffm_up_id = up_id AND ffm_ff_id = {$this->ff->id}");
 		
-		// slett evt. avisartikler som tilhørte spilleren
+		// slett evt. avisartikler som tilhÃ¸rte spilleren
 		new avis_slett_artikler();
 		
 		// trigger
@@ -3881,7 +3881,7 @@ class ff_member
 			}
 		}
 		
-		// foreslåtte?
+		// foreslÃ¥tte?
 		if (isset($this->ff->members['suggested_parent'][$this->id]))
 		{
 			// fjern invitasjonen til de valgte
@@ -3894,14 +3894,14 @@ class ff_member
 		// vanlige medlemmer?
 		if (isset($this->ff->members['members_parent'][$this->id]))
 		{
-			// finn ID på de andre capoene
+			// finn ID pÃ¥ de andre capoene
 			$capos = isset($this->ff->members['members_priority'][3]) ? $this->ff->members['members_priority'][3] : array();
 			unset($capos[$this->id]);
 			
-			// må vi sette en av soldierene til capo?
+			// mÃ¥ vi sette en av soldierene til capo?
 			if (count($capos) == 0)
 			{
-				// finn ut hvilken soldier som har vært medlem lengst
+				// finn ut hvilken soldier som har vÃ¦rt medlem lengst
 				$soldier_id = NULL;
 				$soldier_time = NULL;
 				foreach ($this->ff->members['members_parent'][$this->id] as $member)
@@ -3934,7 +3934,7 @@ class ff_member
 	 * Endre posisjon
 	 * @param int $priority hvilken posisjon
 	 * @param int $parent underordnet hvem
-	 * @param bool $anonymous anonym handling (med tanke på loggen til brukeren)
+	 * @param bool $anonymous anonym handling (med tanke pÃ¥ loggen til brukeren)
 	 */
 	public function change_priority($priority, $parent = NULL, $anonymous = false)
 	{
@@ -3994,7 +3994,7 @@ class ff_member
 			$this->ff->add_log("member_priority", "$action_player:$this->id:".urlencode($this->ff->type['priority'][$this->data['ffm_priority']]).":".urlencode($this->ff->type['priority'][$priority]).":{$this->data['ffm_parent_up_id']}:$parent");
 		}
 		
-		// var capo før?
+		// var capo fÃ¸r?
 		if ($this->data['ffm_priority'] == 3 && $priority != 3)
 		{
 			$this->leave_capo_priority();
@@ -4017,10 +4017,10 @@ class ff_member
 	}
 	
 	/**
-	 * Sørg for at spilleren forlater FF
-	 * Uavhengig om spilleren er foreslått, invitert eller medlem
+	 * SÃ¸rg for at spilleren forlater FF
+	 * Uavhengig om spilleren er foreslÃ¥tt, invitert eller medlem
 	 * @param bool $deactivated ble spilleren deaktivert/drept?
-	 * @param player $up_attack spilleren som angrep som førte til dette
+	 * @param player $up_attack spilleren som angrep som fÃ¸rte til dette
 	 */
 	public function remove_player($deactivated = false, player $up_attack = null)
 	{
@@ -4036,7 +4036,7 @@ class ff_member
 				$this->invite_pullback(true);
 			break;
 			
-			// foreslått?
+			// foreslÃ¥tt?
 			case self::STATUS_SUGGESTED:
 				$this->suggestion_decline(true);
 			break;
@@ -4052,7 +4052,7 @@ class ff_member
 		if ($sell_status){
 			if ($sell_status['up_id'] == $this->id)
 			{
-				// avslå salg
+				// avslÃ¥ salg
 				$this->ff->sell_reject();
 			}
 			elseif ($sell_status['init_up_id'] == $this->id)

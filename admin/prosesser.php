@@ -4,7 +4,7 @@ require "../base.php";
 global $_base;
 
 access::need("admin");
-$_base->page->add_title("Prosesser som kj¯rer pÂ serveren");
+$_base->page->add_title("Prosesser som kj√∏rer p√• serveren");
 
 #$result = shell_exec('ps aux|grep httpd|grep -v SCREEN|grep -v grep|grep -v ./40*|grep -v "ps aux"');
 $result = shell_exec('ps aux');
@@ -29,7 +29,7 @@ echo '
 <table class="table game tablemb" style="width: 100%">
 	<thead>
 		<tr>
-			<th colspan="11">Prosesser ('.count($prosesser).' oppf¯ring'.(count($prosesser) == 1 ? '' : 'er').')</th>
+			<th colspan="11">Prosesser ('.count($prosesser).' oppf√∏ring'.(count($prosesser) == 1 ? '' : 'er').')</th>
 		</tr>
 		<tr>
 			<td>USER</td>

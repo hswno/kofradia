@@ -40,7 +40,7 @@ if (isset($_POST['pass']))
 			throw new HSException("Kunne ikke lagre passordfilen.");
 		}
 		
-		$_base->page->add_message("Ditt passordet er nå endret. Logg inn med ditt brukernavn og passordet du endret til.");
+		$_base->page->add_message("Ditt passordet er nÃ¥ endret. Logg inn med ditt brukernavn og passordet du endret til.");
 		redirect::handle();
 	}
 }
@@ -50,7 +50,7 @@ echo '
 <div class="section center w200">
 	<h2>Endre HT-passord</h2>'.(!$htdigest->is_user(login::$user->player->data['up_name'], "HT-pass") ? '
 	<p class="error_box">Du har ingen aktiv HT-pass bruker.</p>' : '').'
-	<p>HT-passordet er det som brukes for å komme inn på enkelte undersider på webserveren som krever passord for hele mappen (for dokumenter osv).</p>
+	<p>HT-passordet er det som brukes for Ã¥ komme inn pÃ¥ enkelte undersider pÃ¥ webserveren som krever passord for hele mappen (for dokumenter osv).</p>
 	<form action="" method="post">
 		<dl class="dd_right dl_2x">
 			<dt>Nytt passord</dt>

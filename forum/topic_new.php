@@ -20,7 +20,7 @@ class page_topic_new
 		$this->forum = new forum(getval("f"));
 		$this->forum->require_access();
 		$this->forum->add_title();
-		ess::$b->page->add_title("Ny forumtråd");
+		ess::$b->page->add_title("Ny forumtrÃ¥d");
 		
 		$this->show();
 		
@@ -28,7 +28,7 @@ class page_topic_new
 	}
 	
 	/**
-	 * Skjema for å opprette ny tråd
+	 * Skjema for Ã¥ opprette ny trÃ¥d
 	 */
 	protected function show()
 	{
@@ -40,13 +40,13 @@ class page_topic_new
 			
 			echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Ny forumtråd i '.htmlspecialchars($this->forum->get_name()).'<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">Ny forumtrÃ¥d i '.htmlspecialchars($this->forum->get_name()).'<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="forum?id='.$this->forum->id.'">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<div class="error_box" style="padding: 10px 0">
-			<p>Du har for lav rank for å kunne opprette forumtråder i forumet.</p>
-			<p>For å kunne opprette en ny forumtråd må du ha nådd ranken <b>'.htmlspecialchars($rank_info['name']).'</b>.</p>
-			<p>Se også <a href="'.ess::$s['relative_path'].'/node/5">hjelp</a>.</p>
+			<p>Du har for lav rank for Ã¥ kunne opprette forumtrÃ¥der i forumet.</p>
+			<p>For Ã¥ kunne opprette en ny forumtrÃ¥d mÃ¥ du ha nÃ¥dd ranken <b>'.htmlspecialchars($rank_info['name']).'</b>.</p>
+			<p>Se ogsÃ¥ <a href="'.ess::$s['relative_path'].'/node/5">hjelp</a>.</p>
 			<p><a href="forum?id='.$this->forum->id.'">Tilbake</a></p>
 		</div>
 	</div>
@@ -58,13 +58,13 @@ class page_topic_new
 		// kontroller blokkeringer
 		$block = $this->forum->check_block();
 		
-		// opprette forumtråden?
+		// opprette forumtrÃ¥den?
 		if (!$block && isset($_POST['opprett']))
 		{
 			$title = postval("title");
 			$text = postval("text");
 			
-			// type forumtråd og låst/ulåst
+			// type forumtrÃ¥d og lÃ¥st/ulÃ¥st
 			$type = NULL;
 			$locked = NULL;
 			if ($this->forum->fmod)
@@ -73,13 +73,13 @@ class page_topic_new
 				$locked = isset($_POST['locked']);
 			}
 			
-			// forsøk å opprett forumtråden
+			// forsÃ¸k Ã¥ opprett forumtrÃ¥den
 			$this->forum->add_topic($title, $text, $type, $locked);
 		}
 		
 		echo '
 <div class="bg1_c forumw forumnewtopic">
-	<h1 class="bg1">Ny forumtråd i '.htmlspecialchars($this->forum->get_name()).'<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">Ny forumtrÃ¥d i '.htmlspecialchars($this->forum->get_name()).'<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="forum?id='.$this->forum->id.'">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<boxes />
@@ -97,29 +97,29 @@ class page_topic_new
 			
 			echo '
 					<select name="type" id="topic_type">
-						<option value="1"'.($type == 1 ? ' selected="selected"' : '').'>Normal forumtråd</option>
-						<option value="2"'.($type == 2 ? ' selected="selected"' : '').'>Sticky forumtråd</option>
-						<option value="3"'.($type == 3 ? ' selected="selected"' : '').'>Viktig forumtråd</option>
+						<option value="1"'.($type == 1 ? ' selected="selected"' : '').'>Normal forumtrÃ¥d</option>
+						<option value="2"'.($type == 2 ? ' selected="selected"' : '').'>Sticky forumtrÃ¥d</option>
+						<option value="3"'.($type == 3 ? ' selected="selected"' : '').'>Viktig forumtrÃ¥d</option>
 					</select>
 				</dd>
-				<dt>Låst</dt>
-				<dd><input type="checkbox" name="locked" id="topic_locked"'.(isset($_POST['locked']) ? ' checked="checked"' : '').' /><label for="topic_locked"> Lås forumtråden for endringer</label>';
+				<dt>LÃ¥st</dt>
+				<dd><input type="checkbox" name="locked" id="topic_locked"'.(isset($_POST['locked']) ? ' checked="checked"' : '').' /><label for="topic_locked"> LÃ¥s forumtrÃ¥den for endringer</label>';
 		}
 		
 		echo '</dd>
 				<dt>Innhold</dt>
 				<dd><textarea name="text" rows="20" cols="75" id="topic_text">'.htmlspecialchars(postval("text")).'</textarea></dd>
 			</dl>
-			<p class="c">Husk at <a href="'.ess::$s['relative_path'].'/node/6" target="_blank">forumreglene</a> til enhver tid skal følges.</p>
+			<p class="c">Husk at <a href="'.ess::$s['relative_path'].'/node/6" target="_blank">forumreglene</a> til enhver tid skal fÃ¸lges.</p>
 			<p class="c">
 				'.show_sbutton("Opprett", 'name="opprett" accesskey="s" id="topic_add"').'
-				'.show_sbutton("Forhåndsvis", 'name="preview" accesskey="p" id="topic_preview"').'
+				'.show_sbutton("ForhÃ¥ndsvis", 'name="preview" accesskey="p" id="topic_preview"').'
 			</p>
 		</form>
 		</div>
 		<div id="topic_info">';
 		
-		// forhåndsvisning
+		// forhÃ¥ndsvisning
 		if (isset($_POST['preview']))
 		{
 			$data = array("ft_text" => postval("text"));

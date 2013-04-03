@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Forhåndsvisning av forumtråd
+ * ForhÃ¥ndsvisning av forumtrÃ¥d
  * 
  * Inndata:
  * - topic_id [optional]
@@ -11,7 +11,7 @@
 require "../../base/ajax.php";
 ajax::require_user();
 
-// kontroller lås
+// kontroller lÃ¥s
 ajax::validate_lock(true);
 
 global $_base, $_game;
@@ -20,13 +20,13 @@ global $_base, $_game;
 $text = postval("text");
 if (empty($text)) $text = "Mangler innhold.";
 
-// forhåndsviser vi en redigert forumtråd?
+// forhÃ¥ndsviser vi en redigert forumtrÃ¥d?
 if (isset($_POST['topic_id']))
 {
 	// hent forum modulen
 	essentials::load_module("forum");
 	
-	// hent forumtråden
+	// hent forumtrÃ¥den
 	$topic = new forum_topic_ajax($_POST['topic_id']);
 	
 	// sett opp data
@@ -36,7 +36,7 @@ if (isset($_POST['topic_id']))
 	$data['ft_last_edit_up_id'] = login::$user->player->id;
 }
 
-// forhåndsviser ny forumtråd (bruk egen brukerdata)
+// forhÃ¥ndsviser ny forumtrÃ¥d (bruk egen brukerdata)
 else
 {
 	// sett opp data

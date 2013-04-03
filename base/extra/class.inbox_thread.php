@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Innboks tråd
+ * Innboks trÃ¥d
  */
 class inbox_thread
 {
 	/** MeldingsID-en */
 	public $id;
 	
-	/** Informasjon om meldingstråden */
+	/** Informasjon om meldingstrÃ¥den */
 	public $data_thread;
 	
 	/** Informasjon om relasjon ifm. bruker/spiller */
@@ -20,16 +20,16 @@ class inbox_thread
 	/** Mottakerene som kan motta meldinger */
 	public $receivers_accept = array();
 	
-	/** Har vi tilgang til å svare i meldingen? */
+	/** Har vi tilgang til Ã¥ svare i meldingen? */
 	public $can_reply_access = true;
 	
 	/** Er det noen mottakere som kan motta meldingen? */
 	public $can_reply_receivers = false;
 	
-	/** Kan vi sende til denne meldinstråden fordi mottaker er crew og vi er deaktivert? */
+	/** Kan vi sende til denne meldinstrÃ¥den fordi mottaker er crew og vi er deaktivert? */
 	public $can_reply_receivers_crew = false;
 	
-	/** Har vi ikke full tilgang til meldingstråden, så vi ikke kan se alle meldingene? */
+	/** Har vi ikke full tilgang til meldingstrÃ¥den, sÃ¥ vi ikke kan se alle meldingene? */
 	public $restrict = true;
 	
 	/** Ventetid mellom hver melding man sender */
@@ -46,7 +46,7 @@ class inbox_thread
 	}
 	
 	/**
-	 * Forsøk å hent meldingstråd
+	 * ForsÃ¸k Ã¥ hent meldingstrÃ¥d
 	 * @param integer $it_id
 	 * @return inbox_thread
 	 */
@@ -61,7 +61,7 @@ class inbox_thread
 		return $t;
 	}
 	
-	/** Sjekk om meldingstråden er eller har vært rappotert */
+	/** Sjekk om meldingstrÃ¥den er eller har vÃ¦rt rappotert */
 	public function reported()
 	{
 		// moderator+ har tilgang
@@ -86,7 +86,7 @@ class inbox_thread
 	const RET_ERROR_WAIT = 11;
 	const RET_ERROR_CONTENT_SHORT = 12;
 	
-	// markering av tråd
+	// markering av trÃ¥d
 	const RET_ERROR_MARK_NO_REL = 13;
 	const RET_INFO_MARK_ALREADY = 14;
 	const RET_INFO_MARK_TRUE = 15;
@@ -104,21 +104,21 @@ class inbox_thread
 			
 			case self::RET_INFO_DELETED:
 				echo '
-<p class="info_box">Denne meldingen tilhører ikke deg.</p>';
+<p class="info_box">Denne meldingen tilhÃ¸rer ikke deg.</p>';
 			break;
 			
 			case self::RET_INFO_REPORTED:
 				echo '
-<p class="info_box">Du har tilgang til denne meldingstråden fordi den er eller har vært rapportert.</p>';
+<p class="info_box">Du har tilgang til denne meldingstrÃ¥den fordi den er eller har vÃ¦rt rapportert.</p>';
 			break;
 			
 			case self::RET_ERROR_404:
-				ess::$b->page->add_message("Fant ikke meldingstråden.", "error");
+				ess::$b->page->add_message("Fant ikke meldingstrÃ¥den.", "error");
 				redirect::handle("innboks");
 			break;
 			
 			case self::RET_ERROR_CANNOT_REPLY:
-				ess::$b->page->add_message("Du kan ikke svare på denne meldingstråden.", "error");
+				ess::$b->page->add_message("Du kan ikke svare pÃ¥ denne meldingstrÃ¥den.", "error");
 				redirect::handle();
 			break;
 			
@@ -128,11 +128,11 @@ class inbox_thread
 			break;
 			
 			case self::RET_ERROR_BAN_CREW:
-				ess::$b->page->add_message("Du er blokkert fra å sende meldinger til andre enn Crewet. Du kan kun ha én mottaker. Blokkeringen varer til ".ess::$b->date->get($data['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($data['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
+				ess::$b->page->add_message("Du er blokkert fra Ã¥ sende meldinger til andre enn Crewet. Du kan kun ha Ã©n mottaker. Blokkeringen varer til ".ess::$b->date->get($data['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($data['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
 			break;
 			
 			case self::RET_ERROR_BAN:
-				ess::$b->page->add_message("Du er blokkert fra å sende meldinger til andre enn Crewet. Blokkeringen varer til ".ess::$b->date->get($data['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($data['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
+				ess::$b->page->add_message("Du er blokkert fra Ã¥ sende meldinger til andre enn Crewet. Blokkeringen varer til ".ess::$b->date->get($data['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($data['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
 			break;
 			
 			case self::RET_ERROR_BLOCKED:
@@ -141,7 +141,7 @@ class inbox_thread
 					$row = game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']).(($reason = game::bb_to_html($row['uc_info'])) == "" ? "" : ' - begrunnelse: '.$reason);
 				}
 				
-				ess::$b->page->add_message("Du kan ikke svaret på denne meldingstråden fordi følgende brukere har blokkert deg:<ul><li>".implode("</li><li>", $data)."</li></ul>", "error");
+				ess::$b->page->add_message("Du kan ikke svaret pÃ¥ denne meldingstrÃ¥den fordi fÃ¸lgende brukere har blokkert deg:<ul><li>".implode("</li><li>", $data)."</li></ul>", "error");
 			break;
 			
 			case self::RET_INFO_BLOCKED:
@@ -150,36 +150,36 @@ class inbox_thread
 					$row = game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']).(($reason = game::bb_to_html($row['uc_info'])) == "" ? "" : ' - begrunnelse: '.$reason);
 				}
 				
-				ess::$b->page->add_message("Følgende brukere har egentlig blokkert deg:<ul><li>".implode("</li><li>", $data)."</li></ul>");
+				ess::$b->page->add_message("FÃ¸lgende brukere har egentlig blokkert deg:<ul><li>".implode("</li><li>", $data)."</li></ul>");
 			break;
 			
 			case self::RET_ERROR_WAIT:
 				global $__server;
-				ess::$b->page->add_message('Du må vente '.game::counter($data).' før du kan sende en melding!', "error");
-				putlog("LOG", "%c13%bMELDING FORSØK%b%c: %u".login::$user->player->data['up_name']."%u forsøkte å svare på en melding til it_id $this->id (%u{$this->data_thread['it_title']}%u). Må vente $data sekunder. {$__server['path']}/innboks_les?id=$this->id");
+				ess::$b->page->add_message('Du mÃ¥ vente '.game::counter($data).' fÃ¸r du kan sende en melding!', "error");
+				putlog("LOG", "%c13%bMELDING FORSÃ˜K%b%c: %u".login::$user->player->data['up_name']."%u forsÃ¸kte Ã¥ svare pÃ¥ en melding til it_id $this->id (%u{$this->data_thread['it_title']}%u). MÃ¥ vente $data sekunder. {$__server['path']}/innboks_les?id=$this->id");
 			break;
 			
 			case self::RET_ERROR_CONTENT_SHORT:
-				ess::$b->page->add_message("Meldingen kan ikke inneholde færre enn 3 bokstaver/tall.", "error");
+				ess::$b->page->add_message("Meldingen kan ikke inneholde fÃ¦rre enn 3 bokstaver/tall.", "error");
 			break;
 			
 			case self::RET_ERROR_MARK_NO_REL:
-				ess::$b->page->add_message("Du har ikke mulighet til å markere denne meldingstråden da du ikke er en deltaker i den.", "error");
+				ess::$b->page->add_message("Du har ikke mulighet til Ã¥ markere denne meldingstrÃ¥den da du ikke er en deltaker i den.", "error");
 			break;
 			
 			case self::RET_INFO_MARK_ALREADY:
 				if ($this->data_rel['ir_marked'])
-					ess::$b->page->add_message("Meldingstråden er allerede markert som merket.");
+					ess::$b->page->add_message("MeldingstrÃ¥den er allerede markert som merket.");
 				else
-					ess::$b->page->add_message("Meldingstråden er ikke merket fra før.");
+					ess::$b->page->add_message("MeldingstrÃ¥den er ikke merket fra fÃ¸r.");
 			break;
 			
 			case self::RET_INFO_MARK_TRUE:
-				ess::$b->page->add_message("Meldingstråden er nå markert for oppfølging.");
+				ess::$b->page->add_message("MeldingstrÃ¥den er nÃ¥ markert for oppfÃ¸lging.");
 			break;
 			
 			case self::RET_INFO_MARK_FALSE:
-				ess::$b->page->add_message("Meldingstråden er ikke lenger markert for oppfølging.");
+				ess::$b->page->add_message("MeldingstrÃ¥den er ikke lenger markert for oppfÃ¸lging.");
 			break;
 			
 			default:
@@ -206,7 +206,7 @@ class inbox_thread
 		$deleted = $this->data_rel && $this->data_rel['ir_deleted'] != 0;
 		if (!$this->data_rel || $deleted)
 		{
-			// har vi tilgang til alle meldingstrådene?
+			// har vi tilgang til alle meldingstrÃ¥dene?
 			if (access::has("admin") && KOFRADIA_DEBUG)
 			{
 				$this->restrict = false;
@@ -235,7 +235,7 @@ class inbox_thread
 		
 		elseif (access::has("admin") && KOFRADIA_DEBUG) $this->restrict = false;
 		
-		// begrens mulighet til å svare hvis det er aktuelt
+		// begrens mulighet til Ã¥ svare hvis det er aktuelt
 		$this->can_reply_access = !$this->data_rel || (login::$logged_in && login::$user->player->id == $this->data_rel['ir_up_id']) || (access::has("admin") && KOFRADIA_DEBUG);
 	}
 	
@@ -284,7 +284,7 @@ class inbox_thread
 			$this->receivers[$row['ir_up_id']] = $row;
 		}
 		
-		// er spilleren deaktivert --> sjekk om det kun er én mottaker, og mottakeren er crew
+		// er spilleren deaktivert --> sjekk om det kun er Ã©n mottaker, og mottakeren er crew
 		if (!login::$user->player->active && !$c && $this->can_reply_access)
 		{
 			if ($n > 2) $this->can_reply_access = false;
@@ -321,10 +321,10 @@ class inbox_thread
 	{
 		if (!$this->data_rel) return;
 		
-		// ingen nye i denne meldingstråden?
+		// ingen nye i denne meldingstrÃ¥den?
 		if ($this->data_rel['ir_unread'] == 0) return;
 		
-		// oppdater uleste meldinger i denne tråden
+		// oppdater uleste meldinger i denne trÃ¥den
 		ess::$b->db->query("
 			UPDATE inbox_rel SET ir_unread = GREATEST(0, ir_unread - {$this->data_rel['ir_unread']})
 			WHERE ir_it_id = $this->id AND ir_up_id = {$this->data_rel['ir_up_id']}");
@@ -344,7 +344,7 @@ class inbox_thread
 	}
 	
 	/**
-	 * Finn ut antall meldinger i meldingstråden
+	 * Finn ut antall meldinger i meldingstrÃ¥den
 	 * @return integer
 	 */
 	public function num_messages()
@@ -364,7 +364,7 @@ class inbox_thread
 	{
 		$im_id = (int) $im_id;
 		
-		// forsøk å finn meldingen
+		// forsÃ¸k Ã¥ finn meldingen
 		$restrict_where = $this->restrict ? " AND im_time <= {$this->data_rel['ir_restrict_im_time']} AND im_deleted = 0" : "";
 		$result = ess::$b->db->query("SELECT im_it_id FROM inbox_messages WHERE im_id = $im_id AND im_it_id = $this->id$restrict_where");
 		if (mysql_num_rows($result) == 0)
@@ -406,7 +406,7 @@ class inbox_thread
 		
 		else
 		{
-			// forsøk å slett svaret
+			// forsÃ¸k Ã¥ slett svaret
 			ess::$b->db->query("UPDATE inbox_messages SET im_deleted = 1 WHERE im_id = $im_id AND im_deleted = 0");
 			if (ess::$b->db->affected_rows() > 0)
 			{
@@ -420,7 +420,7 @@ class inbox_thread
 			
 			else
 			{
-				// vi vet svaret finnes, så da må det har blitt slettet samtidig
+				// vi vet svaret finnes, sÃ¥ da mÃ¥ det har blitt slettet samtidig
 				ess::$b->page->add_message("Svaret er allerede slettet.", "error");
 			}
 		}
@@ -455,7 +455,7 @@ class inbox_thread
 		
 		else
 		{
-			// forsøk å slett svaret
+			// forsÃ¸k Ã¥ slett svaret
 			ess::$b->db->query("UPDATE inbox_messages SET im_deleted = 0 WHERE im_id = $im_id AND im_deleted != 0");
 			if (ess::$b->db->affected_rows() > 0)
 			{
@@ -469,7 +469,7 @@ class inbox_thread
 			
 			else
 			{
-				// vi vet svaret finnes, så da må det har blitt gjenopprettet samtidig
+				// vi vet svaret finnes, sÃ¥ da mÃ¥ det har blitt gjenopprettet samtidig
 				ess::$b->page->add_message("Svaret er ikke slettet.", "error");
 			}
 		}
@@ -478,7 +478,7 @@ class inbox_thread
 	}
 	
 	/**
-	 * Slett hele meldingstråden
+	 * Slett hele meldingstrÃ¥den
 	 */
 	public function delete()
 	{
@@ -498,23 +498,23 @@ class inbox_thread
 				NULL,
 				array("it_id" => $this->id, "it_title" => $this->data_thread['it_title']));
 			
-			putlog("LOG", "MELDINGSTRÅD SLETTET: ".login::$user->player->data['up_name']." slettet hele meldingstråden '{$this->data_thread['it_title']}' ".ess::$s['path']."/innboks_les?id=$this->id");
+			putlog("LOG", "MELDINGSTRÃ…D SLETTET: ".login::$user->player->data['up_name']." slettet hele meldingstrÃ¥den '{$this->data_thread['it_title']}' ".ess::$s['path']."/innboks_les?id=$this->id");
 			
 			// melding
-			ess::$b->page->add_message("Meldingstråden ble slettet.");
+			ess::$b->page->add_message("MeldingstrÃ¥den ble slettet.");
 		}
 		
 		else
 		{
 			// melding
-			ess::$b->page->add_message("Meldingstråden er allerede markert slettet.");
+			ess::$b->page->add_message("MeldingstrÃ¥den er allerede markert slettet.");
 		}
 		
 		redirect::handle("innboks_les?id=$this->id");
 	}
 	
 	/**
-	 * Kontroller mulighet til å svare på meldingentråden
+	 * Kontroller mulighet til Ã¥ svare pÃ¥ meldingentrÃ¥den
 	 * @return boolean true hvis vi kan fortsette sending
 	 */
 	public function reply_test()
@@ -522,7 +522,7 @@ class inbox_thread
 		// er ikke logget inn?
 		if (!login::$logged_in) throw new HSException("Ikke logget inn.");
 		
-		// kan vi ikke svare på denne meldingen?
+		// kan vi ikke svare pÃ¥ denne meldingen?
 		if (!$this->can_reply_access)
 		{
 			$this->handle_ret(self::RET_ERROR_CANNOT_REPLY);
@@ -551,7 +551,7 @@ class inbox_thread
 			}
 		}
 		
-		// blokkert fra å sende meldinger? (kan kun sende til Crewet og med 1 mottaker)
+		// blokkert fra Ã¥ sende meldinger? (kan kun sende til Crewet og med 1 mottaker)
 		$blokkering = blokkeringer::check(blokkeringer::TYPE_MELDINGER);
 		$blokkering_ok = true;
 		if ($blokkering && count($this->receivers_accept) == 1)
@@ -617,7 +617,7 @@ class inbox_thread
 		return true;
 	}
 	
-	/** Legg til svar i meldingstråden */
+	/** Legg til svar i meldingstrÃ¥den */
 	public function reply_add($text)
 	{
 		global $__server;
@@ -625,7 +625,7 @@ class inbox_thread
 		
 		// kontroller lengde
 		$plain = strip_tags(game::bb_to_html($text));
-		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/", '', $plain);
+		$plain = preg_replace("/[^a-zA-ZÃ¦Ã¸Ã¥Ã†Ã˜Ã…0-9]/", '', $plain);
 		if (strlen($plain) < 3)
 		{
 			$this->handle_ret(self::RET_ERROR_CONTENT_SHORT);
@@ -634,10 +634,10 @@ class inbox_thread
 		
 		$time = time();
 		
-		// sjekk om vi skal øke telleren til brukeren
-		// (ingen melding vil bli gitt til brukeren om at den blir økt eller ikke)
-		// skal kun gjøres dersom forrige svar var fra en annen bruker,
-		// ELLER dersom det har gått mer enn 1 time siden forrige svar
+		// sjekk om vi skal Ã¸ke telleren til brukeren
+		// (ingen melding vil bli gitt til brukeren om at den blir Ã¸kt eller ikke)
+		// skal kun gjÃ¸res dersom forrige svar var fra en annen bruker,
+		// ELLER dersom det har gÃ¥tt mer enn 1 time siden forrige svar
 		$result = ess::$b->db->query("SELECT im_up_id, im_time FROM inbox_messages WHERE im_it_id = $this->id ORDER BY im_time DESC LIMIT 1");
 		$add_count = true;
 		if ($row = mysql_fetch_assoc($result))
@@ -721,7 +721,7 @@ class inbox_thread
 	}
 	
 	/**
-	 * Hent meldinger på aktuell side
+	 * Hent meldinger pÃ¥ aktuell side
 	 * @return resultset
 	 */
 	public function get_messages($start = NULL, $limit = NULL, $where = NULL)
@@ -741,12 +741,12 @@ class inbox_thread
 	}
 	
 	/**
-	 * Markere meldingstråd for oppfølging
+	 * Markere meldingstrÃ¥d for oppfÃ¸lging
 	 * @param boolean $mark
 	 */
 	public function mark($mark)
 	{
-		// har vi ikke relasjoner mot denne tråden?
+		// har vi ikke relasjoner mot denne trÃ¥den?
 		if (!$this->data_rel)
 		{
 			$this->handle_ret(self::RET_ERROR_MARK_NO_REL);
@@ -761,7 +761,7 @@ class inbox_thread
 			}
 			else
 			{
-				// marker tråden
+				// marker trÃ¥den
 				ess::$b->db->query("
 					UPDATE inbox_rel
 					SET ir_marked = 1
@@ -779,7 +779,7 @@ class inbox_thread
 			}
 			else
 			{
-				// marker tråden
+				// marker trÃ¥den
 				ess::$b->db->query("
 					UPDATE inbox_rel
 					SET ir_marked = 0
@@ -796,7 +796,7 @@ class inbox_thread
 class inbox_thread_ajax extends inbox_thread
 {
 	/**
-	 * Forsøk å hent meldingstråd
+	 * ForsÃ¸k Ã¥ hent meldingstrÃ¥d
 	 * @param integer $it_id
 	 * @return inbox_thread_ajax
 	 */
@@ -822,7 +822,7 @@ class inbox_thread_ajax extends inbox_thread
 			break;
 			
 			case self::RET_ERROR_404:
-				ajax::text("Fant ikke meldingstråden.", ajax::TYPE_404);
+				ajax::text("Fant ikke meldingstrÃ¥den.", ajax::TYPE_404);
 			break;
 			
 			case self::RET_ERROR_MARK_NO_REL:

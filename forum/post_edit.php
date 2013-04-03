@@ -24,7 +24,7 @@ if ($edit_type == "emne")
 		$text = postval("text");
 		$section = postval("section");
 		
-		// type forumtråd og låst/ulåst
+		// type forumtrÃ¥d og lÃ¥st/ulÃ¥st
 		$type = NULL;
 		$locked = NULL;
 		if ($topic->forum->fmod)
@@ -33,17 +33,17 @@ if ($edit_type == "emne")
 			$locked = isset($_POST['locked']);
 		}
 		
-		// forsøk å utfør endringene
+		// forsÃ¸k Ã¥ utfÃ¸r endringene
 		$topic->edit($title, $text, $section, $type, $locked);
 	}
 	
 	// legg til tittel
-	$_base->page->add_title("Forum", "Rediger forumtråd", $topic->info['ft_title']);
+	$_base->page->add_title("Forum", "Rediger forumtrÃ¥d", $topic->info['ft_title']);
 	
 	echo '
 <div class="bg1_c forumw">
-	<h1 class="bg1">Rediger forumtråd<span class="left"></span><span class="right"></span></h1>
-	<p class="h_left"><a href="topic?id='.$topic->id.'">&laquo; Tilbake til forumtråden</a></p>
+	<h1 class="bg1">Rediger forumtrÃ¥d<span class="left"></span><span class="right"></span></h1>
+	<p class="h_left"><a href="topic?id='.$topic->id.'">&laquo; Tilbake til forumtrÃ¥den</a></p>
 	<div class="bg1">
 		<boxes />
 		<div id="topic_info_edit"></div>
@@ -79,19 +79,19 @@ if ($edit_type == "emne")
 		$type = isset($_POST['type']) ? $_POST['type'] : 0;
 		if ($type < 1 || $type > 3) $type = $topic->info['ft_type'];
 		
-		// låst/ulåst
+		// lÃ¥st/ulÃ¥st
 		$locked = isset($_POST['type']) ? isset($_POST['locked']) : ($topic->info['ft_locked'] != 0);
 		
 		echo '
 					<select name="type" id="topic_type">
-						<option value="1"'.($type == 1 ? ' selected="selected"' : '').'>Normal forumtråd</option>
-						<option value="2"'.($type == 2 ? ' selected="selected"' : '').'>Sticky forumtråd</option>
-						<option value="3"'.($type == 3 ? ' selected="selected"' : '').'>Viktig forumtråd</option>
+						<option value="1"'.($type == 1 ? ' selected="selected"' : '').'>Normal forumtrÃ¥d</option>
+						<option value="2"'.($type == 2 ? ' selected="selected"' : '').'>Sticky forumtrÃ¥d</option>
+						<option value="3"'.($type == 3 ? ' selected="selected"' : '').'>Viktig forumtrÃ¥d</option>
 					</select>
 				</dd>
-				<dt>Låst</dt>
+				<dt>LÃ¥st</dt>
 				<dd>
-					<input type="checkbox" name="locked" id="topic_locked"'.($locked ? ' checked="checked"' : '').' /><label for="topic_locked"> Lås forumtråden for endringer</label>';
+					<input type="checkbox" name="locked" id="topic_locked"'.($locked ? ' checked="checked"' : '').' /><label for="topic_locked"> LÃ¥s forumtrÃ¥den for endringer</label>';
 	}
 	
 	echo '
@@ -101,13 +101,13 @@ if ($edit_type == "emne")
 			</dl>
 			<p class="c">
 				'.show_sbutton("Lagre endringer", 'name="save" accesskey="s" id="topic_save"').'
-				'.show_sbutton("Forhåndsvis", 'name="preview" accesskey="p" id="topic_preview"').'
+				'.show_sbutton("ForhÃ¥ndsvis", 'name="preview" accesskey="p" id="topic_preview"').'
 			</p>
 		</form>
 		</div>
 		<div id="topic_info_preview" class="forum">';
 	
-	// forhåndsvise?
+	// forhÃ¥ndsvise?
 	if (isset($_POST['preview']))
 	{
 		// sett opp data
@@ -116,7 +116,7 @@ if ($edit_type == "emne")
 		$data['ft_last_edit'] = time();
 		$data['ft_last_edit_up_id'] = login::$user->player->id;
 		
-		// vis forhåndsvisning
+		// vis forhÃ¥ndsvisning
 		echo forum::template_topic_preview($data);
 	}
 	
@@ -154,7 +154,7 @@ elseif ($edit_type == "svar")
 	{
 		$text = postval("text");
 		
-		// forsøk å utfør endringene
+		// forsÃ¸k Ã¥ utfÃ¸r endringene
 		$reply->edit($text);
 	}
 	
@@ -174,12 +174,12 @@ elseif ($edit_type == "svar")
 			</dl>
 			<p class="c">
 				'.show_sbutton("Lagre endringer", 'name="save" accesskey="s"').'
-				'.show_sbutton("Forhåndsvis", 'name="preview" accesskey="p"').'
+				'.show_sbutton("ForhÃ¥ndsvis", 'name="preview" accesskey="p"').'
 			</p>
 		</form>
 		</div>';
 	
-	// forhåndsvise?
+	// forhÃ¥ndsvise?
 	if (isset($_POST['preview']))
 	{
 		// sett opp data
@@ -188,7 +188,7 @@ elseif ($edit_type == "svar")
 		$data['ft_last_edit'] = time();
 		$data['fr_last_edit_up_id'] = login::$user->player->id;
 		
-		// vis forhåndsvisning
+		// vis forhÃ¥ndsvisning
 		echo '
 		<div class="forum">'.forum::template_topic_reply_preview($data).'
 		</div>';

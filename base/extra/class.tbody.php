@@ -1,6 +1,6 @@
 <?php
 
-// for å mekke kolonner etc i tabeller
+// for Ã¥ mekke kolonner etc i tabeller
 class tbody
 {
 	public $cols = 0;

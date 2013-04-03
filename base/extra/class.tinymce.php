@@ -26,7 +26,7 @@ class tinymce
 	);
 	
 	/**
-	 * Holder orden på om js filen eer lasta inn eller ikke
+	 * Holder orden pÃ¥ om js filen eer lasta inn eller ikke
 	 */
 	protected static $loaded = false;
 	

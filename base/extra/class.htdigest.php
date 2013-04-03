@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Klasse for å modifisere/generere htdigest filer/passord
+ * Klasse for Ã¥ modifisere/generere htdigest filer/passord
  */
 class htdigest
 {

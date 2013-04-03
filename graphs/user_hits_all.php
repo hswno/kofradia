@@ -17,7 +17,7 @@ if (isset($_GET['up_id']) && access::has("mod"))
 	$up_name = mysql_result($result, 0, "up_name");
 }
 
-// finn første oppføring i statistikk
+// finn fÃ¸rste oppfÃ¸ring i statistikk
 /*
 // sett opp timestatistikk
 $days = $date->format("t");

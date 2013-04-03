@@ -6,12 +6,12 @@
 class bomberom
 {
 	/**
-	 * Antall plasser det blir gjort ledig i bomberom avhengig av antall pålogget siste 48 timer
+	 * Antall plasser det blir gjort ledig i bomberom avhengig av antall pÃ¥logget siste 48 timer
 	 */
 	const CAPACITY_FACTOR = 0.35;
 	
 	/**
-	 * Ventetid før vi kan sette et nytt broderskapmedlem i bomberom
+	 * Ventetid fÃ¸r vi kan sette et nytt broderskapmedlem i bomberom
 	 */
 	const FAMILIY_MEMBERS_WAIT = 43200; // 12 timer
 	
@@ -21,22 +21,22 @@ class bomberom
 	const MAX_HOURS = 48;
 	
 	/**
-	 * Pris per time å sitte i bomberommet
+	 * Pris per time Ã¥ sitte i bomberommet
 	 */
 	const PRICE_HOUR = 2000;
 	
 	/**
-	 * Hvor mye prisen øker per time multiplisert med antall i bomberommet 
+	 * Hvor mye prisen Ã¸ker per time multiplisert med antall i bomberommet 
 	 */
 	const PRICE_EACH_PLAYER = 2000;
 	
 	/**
-	 * Hvor mye prisen øker (faktor) når man plasserer en annen spiller i bomberom
+	 * Hvor mye prisen Ã¸ker (faktor) nÃ¥r man plasserer en annen spiller i bomberom
 	 */
 	const PRICE_FACTOR_OTHER = 3;
 	
 	/**
-	 * Prisfaktor når man setter seg selv i eget bomberom-firma
+	 * Prisfaktor nÃ¥r man setter seg selv i eget bomberom-firma
 	 */
 	const PRICE_FACTOR_OWN = 0.25;
 	
@@ -45,17 +45,17 @@ class bomberom
 	 */
 	public static function adjust_capacity()
 	{
-		// finn antall pålogget siste 48 timer
+		// finn antall pÃ¥logget siste 48 timer
 		$expire = time() - 86400 * 2;
 		$result = ess::$b->db->query("SELECT COUNT(*) FROM users_players WHERE up_access_level != 0 AND up_last_online > $expire");
 		$ant_online = mysql_result($result, 0);
 		
-		// for julaften og nyttår
+		// for julaften og nyttÃ¥r
 		$d = array("12-24", "12-30", "12-31");
 		$f = 1;
 		if (in_array(ess::$b->date->get()->format("m-d"), $d))
 		{
-			$f = 3; // 3 ganger så mange plasser
+			$f = 3; // 3 ganger sÃ¥ mange plasser
 		}
 		
 		// antall som skal fordeles (minimum 5 stk)
@@ -81,11 +81,11 @@ class bomberom
 			return;
 		}
 		
-		// fordel plasser på bomberommene
+		// fordel plasser pÃ¥ bomberommene
 		$per_bomberom = floor($ant_fordeles / $ant_bomberom);
 		$rest = $ant_fordeles % $ant_bomberom;
 		
-		// eksta å fordele tilfeldig?
+		// eksta Ã¥ fordele tilfeldig?
 		if ($rest > 0)
 		{
 			// plukk ut tilfeldige bomberom
@@ -102,7 +102,7 @@ class bomberom
 			// antall bomberommet skal ha plass til
 			$ant = $row['rest'] + $per_bomberom;
 			
-			// frihavnen får dobbelt så mange plasser
+			// frihavnen fÃ¥r dobbelt sÃ¥ mange plasser
 			if ($row['ff_id'] == 44) $ant += $per_bomberom;
 			
 			// oppdater

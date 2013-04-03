@@ -10,7 +10,7 @@ if (wordpress_entries::update_data() === false)
 
 else
 {
-	$_base->page->add_message("Wordpress RSS ble lest og data skal være oppdatert.");
+	$_base->page->add_message("Wordpress RSS ble lest og data skal vÃ¦re oppdatert.");
 }
 
 redirect::handle("");

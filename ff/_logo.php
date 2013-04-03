@@ -24,7 +24,7 @@ if ($ff_id != $_GET['ff_id'] || $ff_id == 0)
 require "../base/essentials.php";
 global $_base;
 
-// sørg for at den ikke cacher
+// sÃ¸rg for at den ikke cacher
 header("Expires: Mon, 18 Jul 2005 00:00:00 GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
 header("Cache-Control: post-check=0, pre-check=0", false);// HTTP/1.1

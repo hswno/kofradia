@@ -8,62 +8,62 @@
  * 			felt 1: antall kr
  * 		rank_points: Rank poeng
  * 			felt 1: rank poeng
- * 		bullets: Kuler, så fremt man har våpen med kapasitet
+ * 		bullets: Kuler, sÃ¥ fremt man har vÃ¥pen med kapasitet
  * 			felt 1: antall kuler
  * 
  * Triggere:
  *  ALLE TRIGGERE:
- * 		prize (container): Premie -- kan settes for både unlock og active
+ * 		prize (container): Premie -- kan settes for bÃ¥de unlock og active
  * 			[type_premie, info1, info2][..]
  * 
  * 
  * 	single_poker:
  * 		unlock: Ikke tilgjengelig
- * 		aktiv: Nå et bestemt beløp med penger innen en bestemt tid ved å spille poker mot en datamaskin
- * 			chips (int): Antall chips man skal nå
+ * 		aktiv: NÃ¥ et bestemt belÃ¸p med penger innen en bestemt tid ved Ã¥ spille poker mot en datamaskin
+ * 			chips (int): Antall chips man skal nÃ¥
  * 			chips_start (int): Hvor mange chips man starter med
  * 			time_limit (int): Hvor lang tid man har
- * 			STATUS chips (int): Hvor mange chips man har nå
+ * 			STATUS chips (int): Hvor mange chips man har nÃ¥
  * 			STATUS cards (text): Hvilke kort brukeren har
  * 			STATUS cards_pc (text): Hvilke kort pcen har
- * 			STATUS cards_used (text): Kort som allerede er brukt og som ikke skal være i kortstokken
- * 			STATUS bet (int): Hvor mye penger som satses nå eller forrige gang
+ * 			STATUS cards_used (text): Kort som allerede er brukt og som ikke skal vÃ¦re i kortstokken
+ * 			STATUS bet (int): Hvor mye penger som satses nÃ¥ eller forrige gang
  * 			STATUS finish (int): Vise resultat?
  * 
  * 	rank_points:
- * 		unlock: Få et bestemt antall rankpoeng i løpet av gitt antall minutter
+ * 		unlock: FÃ¥ et bestemt antall rankpoeng i lÃ¸pet av gitt antall minutter
  * 			points (int): Antall rankpoeng man skal skaffe
  * 			time_limit (int): Hvor mange minutter bak i tid skal telles
  * 			STATUS previous (array [time (int), points (int)]): Rankpoengene som blir skaffet (per gang)
- * 		aktiv: Oppnå et bestemt antall rankpoeng i løpet av gitt antall minutter
- * 			points (int): Antall rankpoeng man skal skaffe når man begynner på oppdraget
+ * 		aktiv: OppnÃ¥ et bestemt antall rankpoeng i lÃ¸pet av gitt antall minutter
+ * 			points (int): Antall rankpoeng man skal skaffe nÃ¥r man begynner pÃ¥ oppdraget
  * 			time_limit (int): Hvor lang tid man har
- * 			STATUS target_points (int): Antall rankpoeng totalt man skal oppnå
+ * 			STATUS target_points (int): Antall rankpoeng totalt man skal oppnÃ¥
  * 
  * 	kriminalitet_different:
- * 		unlock: Klare bestemt antall forskjellige kriminaliteter på rad
- * 			count (int): Antall forskjellige som må utføres
- * 			STATUS previous (array [time (int)]): Tidligere kriminaliter som har vært vellykkede
+ * 		unlock: Klare bestemt antall forskjellige kriminaliteter pÃ¥ rad
+ * 			count (int): Antall forskjellige som mÃ¥ utfÃ¸res
+ * 			STATUS previous (array [time (int)]): Tidligere kriminaliter som har vÃ¦rt vellykkede
  * 		aktiv: Samme som unlock, men med tidsgrense
  * 			time_limit (int): Hvor lang tid man har
  * 
  * 	poker_unique_people:
- * 		unlock: Vinne mot et bestemt antall forskjellige brukere i poker på rad (første teller)
+ * 		unlock: Vinne mot et bestemt antall forskjellige brukere i poker pÃ¥ rad (fÃ¸rste teller)
  * 			time_limit (int) optional: Hvor lang tid man har
- * 			user_count (int): Antall forskjellige brukere man må vinne mot
- * 			STATUS previous (array [time, won, cash, prize, opponent]): Forsøkene
- * 			STATUS previous_s (int): Status siste forsøk
+ * 			user_count (int): Antall forskjellige brukere man mÃ¥ vinne mot
+ * 			STATUS previous (array [time, won, cash, prize, opponent]): ForsÃ¸kene
+ * 			STATUS previous_s (int): Status siste forsÃ¸k
  * 		aktiv: Samme som unlock
  * 
  * 	wanted_level:
- * 		unlock: Oppnå gitt wanted nivå
- * 			wanted_level (int): Målet for wanted nivå (500 = 50 %)
+ * 		unlock: OppnÃ¥ gitt wanted nivÃ¥
+ * 			wanted_level (int): MÃ¥let for wanted nivÃ¥ (500 = 50 %)
  * 
  * 	fengsel_breakout:
  * 		aktiv:
  * 			user_count (int): Antall spillere man skal vinne mot
  * 			time_limit (int) optional: Hvor lang tid man har
- * 			STATUS user_count (int): Antall oppnådd
+ * 			STATUS user_count (int): Antall oppnÃ¥dd
  * 
  */
 
@@ -75,7 +75,7 @@ class oppdrag
 	/** Oppdragene (array) */
 	public $oppdrag = false;
 	
-	/** For å lagre params som er tilknyttet oppdragene */
+	/** For Ã¥ lagre params som er tilknyttet oppdragene */
 	public $params = false;
 	
 	/** Er alle oppdragene lastet inn (eller evt. kun aktivt) */
@@ -90,7 +90,7 @@ class oppdrag
 	/** Triggere (oppdrag id => trigger) */
 	public $triggers_id = array();
 	
-	/** Er det brukeren som viser siden som tilhører disse oppdragene? */
+	/** Er det brukeren som viser siden som tilhÃ¸rer disse oppdragene? */
 	public $user_active = NULL;
 	
 	/**
@@ -99,19 +99,19 @@ class oppdrag
 	 */
 	public $up;
 	
-	/** Antall oppdrag som skal være tilgjengelige for brukeren */
+	/** Antall oppdrag som skal vÃ¦re tilgjengelige for brukeren */
 	const AVAILIABLE = 1;
 	
-	/** Hvor lenge et aktivt oppdrag standard kan vare (når det ikke er bestemt) */
+	/** Hvor lenge et aktivt oppdrag standard kan vare (nÃ¥r det ikke er bestemt) */
 	const DEFAULT_TIME_LIMIT_ACTIVE = 600; // 10 minutter
 	
-	/** Hvor lenge man skal være i fengsel når oppdraget mislykkes */
+	/** Hvor lenge man skal vÃ¦re i fengsel nÃ¥r oppdraget mislykkes */
 	const TIME_FENGSEL = 900; // 15 minutter
 	
 	/**
 	 * Construct
 	 * @param player $up
-	 * @param int $up_id hvis man ikke har spillerobjekt fra før
+	 * @param int $up_id hvis man ikke har spillerobjekt fra fÃ¸r
 	 */
 	public function __construct(player $up = null, $up_id = null, &$ref = null)
 	{
@@ -134,7 +134,7 @@ class oppdrag
 		
 		$this->user_active = login::is_active_user($this->up);
 		
-		// sjekk om vi er på et aktivt oppdrag
+		// sjekk om vi er pÃ¥ et aktivt oppdrag
 		if ($this->up->params->get("oppdrag"))
 		{
 			// hent ut detaljer om oppdraget
@@ -148,18 +148,18 @@ class oppdrag
 			$this->active_set($oppdrag->get("o_id"));
 		}
 		
-		// sett opp triggere for oppdragene som er tilgjengelige nå
+		// sett opp triggere for oppdragene som er tilgjengelige nÃ¥
 		$this->load_triggers();
 	}
 	
 	/**
-	 * Sjekk for en mulig trigger (sjekker før den utfører kalkulasjoner)
+	 * Sjekk for en mulig trigger (sjekker fÃ¸r den utfÃ¸rer kalkulasjoner)
 	 * 
 	 * @return boolean
 	 */
 	public function is_trigger($name)
 	{
-		// finn ut triggeren finnes for øyeblikket
+		// finn ut triggeren finnes for Ã¸yeblikket
 		return isset($this->triggers[$name]);
 	}
 	
@@ -201,7 +201,7 @@ class oppdrag
 			switch ($trigger['trigger']->get("name"))
 			{
 				case "rank_points":
-					// oppdrag aktivt? (oppnå poeng på gitt tid)
+					// oppdrag aktivt? (oppnÃ¥ poeng pÃ¥ gitt tid)
 					if ($trigger['type'] == "active")
 					{
 						$target = $trigger['status']->get("target_points");
@@ -221,25 +221,25 @@ class oppdrag
 	new CountdownProgressbarTime($("progress_time"), '.$progress_time_status.', '.$time_limit.');');
 						
 						return '
-			<p>Du må oppnå '.game::format_num($target).' poeng og trenger <b>'.game::format_num($need).'</b> flere poeng for å fullføre oppdraget.</p>
+			<p>Du mÃ¥ oppnÃ¥ '.game::format_num($target).' poeng og trenger <b>'.game::format_num($need).'</b> flere poeng for Ã¥ fullfÃ¸re oppdraget.</p>
 			<div class="progressbar">
-				<div class="progress" style="width: '.round($progress < 0 ? 0 : $progress).'%"><p>'.game::format_number($progress, 1).' % (rank)'.($progress < 0 ? ' - du har færre poeng enn da du begynte på oppdraget' : '').'</p></div>
+				<div class="progress" style="width: '.round($progress < 0 ? 0 : $progress).'%"><p>'.game::format_number($progress, 1).' % (rank)'.($progress < 0 ? ' - du har fÃ¦rre poeng enn da du begynte pÃ¥ oppdraget' : '').'</p></div>
 			</div>
 			<div class="progressbar" style="margin-top: 3px">
-				<div class="progress" style="width: '.round($progress_time).'%" id="progress_time"><p>'.game::timespan($time_limit-$progress_time_status, game::TIME_FULL).' gjenstår</p></div>
+				<div class="progress" style="width: '.round($progress_time).'%" id="progress_time"><p>'.game::timespan($time_limit-$progress_time_status, game::TIME_FULL).' gjenstÃ¥r</p></div>
 			</div>';
 					}
 					
 					// unlock
 					elseif ($trigger['type'] == "unlock")
 					{
-						// hvor mange poeng må vi oppnå?
+						// hvor mange poeng mÃ¥ vi oppnÃ¥?
 						$target = $trigger['status']->get("points");
 						
 						// [] => array(time, points)
 						$previous = new container($trigger['status']->get("previous"));
 						
-						// finn ut hvor mange poeng vi har fått i løpet av tidsgrensen
+						// finn ut hvor mange poeng vi har fÃ¥tt i lÃ¸pet av tidsgrensen
 						$points_last = 0;
 						$deleted = false;
 						foreach ($previous as $key => $value)
@@ -262,20 +262,20 @@ class oppdrag
 							$this->update_status($trigger['o_id'], $trigger['status']);
 						}
 						
-						return '<p>Du må for øyeblikket nå '.game::format_num($target).' poeng.</p>';
+						return '<p>Du mÃ¥ for Ã¸yeblikket nÃ¥ '.game::format_num($target).' poeng.</p>';
 					}
 					
 				break;
 					
 				case "kriminalitet_different":
-					// sett opp forrige forsøk
+					// sett opp forrige forsÃ¸k
 					$previous = new container($trigger['status']->get("previous"));
 					
 					/*
 					 * 0 = time, 1 = krim id
 					 */
 					
-					// hvor mange forskjellige må vi oppnå?
+					// hvor mange forskjellige mÃ¥ vi oppnÃ¥?
 					$different = $trigger['trigger']->get("count", 5);
 					
 					// send status tekst
@@ -289,11 +289,11 @@ class oppdrag
 						}
 						
 						return '
-			<p>Du har ikke forsøkt å utføre noen kriminalitet enda.</p>';
+			<p>Du har ikke forsÃ¸kt Ã¥ utfÃ¸re noen kriminalitet enda.</p>';
 					}
 					
 					return '
-			<p>Du har utført '.count($previous->items).' av '.$different.' forskjellige kriminaliteter som har vært vellykkede.</p>';
+			<p>Du har utfÃ¸rt '.count($previous->items).' av '.$different.' forskjellige kriminaliteter som har vÃ¦rt vellykkede.</p>';
 				
 				case "poker_unique_people":
 					// sett opp tidligere utfordringer
@@ -303,12 +303,12 @@ class oppdrag
 					 * 0 = time, 1 = won, 2 = cash, 3 = prize, 4 = opponent
 					 */
 					
-					// sjekk hvor mange vi har vunnet på rad
+					// sjekk hvor mange vi har vunnet pÃ¥ rad
 					$won = array();
 					$new = array();
 					foreach ($previous->items as $value)
 					{
-						// gått ut på tid?
+						// gÃ¥tt ut pÃ¥ tid?
 						if ($value[0] < $time_expire) { continue; }
 						
 						$new[] = $value;
@@ -325,12 +325,12 @@ class oppdrag
 							// allerede vunnet?
 							if (isset($won[$value[4]]))
 							{
-								// har ikke noe å si
+								// har ikke noe Ã¥ si
 								continue;
 							}
 							
-							// må vinne 5 nye
-							// alle andre oppføringene før og inkludert denne kan fjernes
+							// mÃ¥ vinne 5 nye
+							// alle andre oppfÃ¸ringene fÃ¸r og inkludert denne kan fjernes
 							$new = array();
 							$won = array();
 						}
@@ -353,15 +353,15 @@ class oppdrag
 						if ($trigger['status']->get("previous_s", 1) == 0)
 						{
 							return '
-			<p>Du tapte siste runde og må vinne mot '.$user_count.' forskjellige spillere.</p>';
+			<p>Du tapte siste runde og mÃ¥ vinne mot '.$user_count.' forskjellige spillere.</p>';
 						}
 						
 						return '
-			<p>Du har ikke spilt mot noen enda og må vinne mot '.$user_count.' forskjellige spillere.</p>';
+			<p>Du har ikke spilt mot noen enda og mÃ¥ vinne mot '.$user_count.' forskjellige spillere.</p>';
 					}
 					
 					return '
-			<p>Du har vunnet '.count($won).' av '.$user_count.' runder, og må derfor vinne mot ytterligere '.fwords("%s annen spiller", "%s andre spillere", $user_count-count($won)).'.</p>';
+			<p>Du har vunnet '.count($won).' av '.$user_count.' runder, og mÃ¥ derfor vinne mot ytterligere '.fwords("%s annen spiller", "%s andre spillere", $user_count-count($won)).'.</p>';
 				
 				case "wanted_level":
 					return $this->status_wanted_level($o_id, $trigger, $time_limit, $time_expire);
@@ -379,7 +379,7 @@ class oppdrag
 	 */
 	protected function status_wanted_level($o_id, $trigger, $time_limit, $time_expire)
 	{
-		return '<p>Ditt wanted nivå er nå på '.game::format_number($this->up->data['up_wanted_level']/10, 1).' %. Du må nå '.game::format_number($trigger['trigger']->get("wanted_level", 500)/10, 1).' %.</p>';
+		return '<p>Ditt wanted nivÃ¥ er nÃ¥ pÃ¥ '.game::format_number($this->up->data['up_wanted_level']/10, 1).' %. Du mÃ¥ nÃ¥ '.game::format_number($trigger['trigger']->get("wanted_level", 500)/10, 1).' %.</p>';
 	}
 	
 	/**
@@ -387,10 +387,10 @@ class oppdrag
 	 */
 	protected function status_fengsel_breakout($o_id, $trigger, $time_limit, $time_expire)
 	{
-		// hvor mange vi har klart på rad til nå
+		// hvor mange vi har klart pÃ¥ rad til nÃ¥
 		$count = $trigger['status']->get("user_count", 0);
 		
-		// hvor man vi må klare
+		// hvor man vi mÃ¥ klare
 		$count_target = $trigger['trigger']->get("user_count", 3);
 		
 		// progress for tid
@@ -401,9 +401,9 @@ class oppdrag
 		ess::$b->page->add_js_domready('
 		new CountdownProgressbarTime($("progress_time"), '.$progress_time_status.', '.$time_limit.');');
 		
-		return '<p>Du har oppnådd '.$count.' av '.$count_target.' utbrytninger på rad.</p>
+		return '<p>Du har oppnÃ¥dd '.$count.' av '.$count_target.' utbrytninger pÃ¥ rad.</p>
 			<div class="progressbar">
-				<div class="progress" style="width: '.round($progress_time).'%" id="progress_time"><p>'.game::timespan($time_limit-$progress_time_status, game::TIME_FULL).' gjenstår</p></div>
+				<div class="progress" style="width: '.round($progress_time).'%" id="progress_time"><p>'.game::timespan($time_limit-$progress_time_status, game::TIME_FULL).' gjenstÃ¥r</p></div>
 			</div>';
 	}
 	
@@ -454,22 +454,22 @@ class oppdrag
 						 *   rank => int,
 						 *   pos => int
 						 * )
-						 * player objektet vil være oppdatert på forhånd
+						 * player objektet vil vÃ¦re oppdatert pÃ¥ forhÃ¥nd
 						 */
 						
-						// aktiv? (oppnå poeng på gitt tid)
+						// aktiv? (oppnÃ¥ poeng pÃ¥ gitt tid)
 						if ($trigger['type'] == "active")
 						{
-							// hvor mye skal vi oppnå?
+							// hvor mye skal vi oppnÃ¥?
 							$target = $trigger['status']->get("target_points", 0);
 							
 							// fikk vi rank fra lotto? (lotto teller ikke)
 							if ($data['source'] == "lotto")
 							{
 								// legg til melding i hendelser
-								$this->up->add_log("oppdrag", "Du vant i lotto og din rank har nå økt. Derfor har også målet i ditt nåværende oppdrag blitt høyere fordi lotto ikke er en del av oppdraget.");
+								$this->up->add_log("oppdrag", "Du vant i lotto og din rank har nÃ¥ Ã¸kt. Derfor har ogsÃ¥ mÃ¥let i ditt nÃ¥vÃ¦rende oppdrag blitt hÃ¸yere fordi lotto ikke er en del av oppdraget.");
 								
-								// legg til ranken man fikk til målet
+								// legg til ranken man fikk til mÃ¥let
 								$target = $target + $data['points'];
 								$trigger['status']->update("target_points", $target);
 								
@@ -483,10 +483,10 @@ class oppdrag
 								// legg til melding i hendelser
 								if ($data['points_rel'] > 0)
 								{
-									$this->up->add_log("oppdrag", "Du angrep en spiller og din rank har nå økt. Derfor har også målet i ditt nåværende oppdrag blitt høyere fordi angrep ikke er en del av oppdraget.");
+									$this->up->add_log("oppdrag", "Du angrep en spiller og din rank har nÃ¥ Ã¸kt. Derfor har ogsÃ¥ mÃ¥let i ditt nÃ¥vÃ¦rende oppdrag blitt hÃ¸yere fordi angrep ikke er en del av oppdraget.");
 								}
 								
-								// legg til ranken man fikk til målet
+								// legg til ranken man fikk til mÃ¥let
 								$target = $target + $data['points'];
 								$trigger['status']->update("target_points", $target);
 								
@@ -505,20 +505,20 @@ class oppdrag
 								$this->update_status($trigger['o_id'], $trigger['status']);
 							}
 							
-							// har vi nådd målet?
+							// har vi nÃ¥dd mÃ¥let?
 							if ($data['points_after'] >= $target)
 							{
 								$this->success($trigger['o_id']);
 							}
 						}
 						
-						// unlock -- lagre hvor mange poeng brukeren har fått
+						// unlock -- lagre hvor mange poeng brukeren har fÃ¥tt
 						else
 						{
 							// lotto og angrep teller ikke med
 							if ($data['source'] == "lotto" || $data['source'] == "attack") continue;
 							
-							// hvor mange poeng må vi oppnå?
+							// hvor mange poeng mÃ¥ vi oppnÃ¥?
 							$target = $trigger['status']->get("points");
 							
 							// [] => array(time, points)
@@ -527,7 +527,7 @@ class oppdrag
 							// legg til denne
 							$previous->items[] = array(time(), $data['points_rel']);
 							
-							// finn ut hvor mange poeng vi har fått i løpet av tidsgrensen
+							// finn ut hvor mange poeng vi har fÃ¥tt i lÃ¸pet av tidsgrensen
 							$points_last = 0;
 							foreach ($previous as $key => $value)
 							{
@@ -541,7 +541,7 @@ class oppdrag
 								$points_last += $value[1];
 							}
 							
-							// har vi nådd målet?
+							// har vi nÃ¥dd mÃ¥let?
 							if ($points_last >= $target)
 							{
 								$this->unlock($trigger['o_id']);
@@ -559,7 +559,7 @@ class oppdrag
 						
 					case "kriminalitet_different":
 						// $data: array(option => data, success => boolean)
-						// sett opp forrige forsøk
+						// sett opp forrige forsÃ¸k
 						$previous = new container($trigger['status']->get("previous"));
 						
 						/*
@@ -576,7 +576,7 @@ class oppdrag
 						
 						else
 						{
-							// finnes denne fra før?
+							// finnes denne fra fÃ¸r?
 							foreach ($previous->items as $key => $value)
 							{
 								if ($value[1] == $k_id)
@@ -589,7 +589,7 @@ class oppdrag
 							// legg til denne
 							$previous->items[] = array(time(), $k_id);
 							
-							// hvor mange forskjellige må vi oppnå?
+							// hvor mange forskjellige mÃ¥ vi oppnÃ¥?
 							$different = $trigger['trigger']->get("count", 5);
 							
 							// har vi mange nok?
@@ -622,12 +622,12 @@ class oppdrag
 						// legg til denne enheten
 						$previous->items[] = array(time(), $data['won'] == 1 ? 1 : 0, $data['cash'], $data['prize'], $data['opponent']->id);
 						
-						// sjekk hvor mange vi har vunnet på rad
+						// sjekk hvor mange vi har vunnet pÃ¥ rad
 						$won = array();
 						$new = array();
 						foreach ($previous->items as $key => $value)
 						{
-							// gått ut på tid?
+							// gÃ¥tt ut pÃ¥ tid?
 							if ($value[0] < $time_expire) { continue; }
 							
 							$new[] = $value;
@@ -644,12 +644,12 @@ class oppdrag
 								// allerede vunnet?
 								if (isset($won[$value[4]]))
 								{
-									// har ikke noe å si
+									// har ikke noe Ã¥ si
 									continue;
 								}
 								
-								// må vinne 5 nye
-								// alle andre oppføringene før og inkludert denne kan fjernes
+								// mÃ¥ vinne 5 nye
+								// alle andre oppfÃ¸ringene fÃ¸r og inkludert denne kan fjernes
 								$new = array();
 								$won = array();
 							}
@@ -660,7 +660,7 @@ class oppdrag
 						// vant vi mot nok antall motstandere
 						if (count($won) >= $trigger['trigger']->get("user_count", 10))
 						{
-							// ferdig utført
+							// ferdig utfÃ¸rt
 							if ($trigger['type'] == "unlock") $this->unlock($trigger['o_id']);
 							else $this->complete($trigger['o_id']);
 						}
@@ -687,11 +687,11 @@ class oppdrag
 	}
 	
 	/**
-	 * Trigger: Oppnå wanted nivå
+	 * Trigger: OppnÃ¥ wanted nivÃ¥
 	 */
 	protected function handle_trigger_wanted_level($name, $data, $trigger, $time_limit, $time_expire)
 	{
-		// oppnådd wanted nivå?
+		// oppnÃ¥dd wanted nivÃ¥?
 		if ($this->up->data['up_wanted_level'] >= $trigger['trigger']->get("wanted_level", 500))
 		{
 			if ($trigger['type'] == "unlock")
@@ -708,7 +708,7 @@ class oppdrag
 	{
 		/* $data: se pages/fengsel.php */
 		
-		// hvor mange vi har klart på rad til nå
+		// hvor mange vi har klart pÃ¥ rad til nÃ¥
 		$count = $trigger['status']->get("user_count", 0);
 		
 		// klarte ikke?
@@ -804,10 +804,10 @@ class oppdrag
 			$oppdrag = $this->oppdrag;
 		}
 		
-		// hvilke triggere skal være tilgjengelige nå?
+		// hvilke triggere skal vÃ¦re tilgjengelige nÃ¥?
 		$triggers = new container();
 		
-		// gå gjennom oppdragene og sett opp triggerinformasjonen
+		// gÃ¥ gjennom oppdragene og sett opp triggerinformasjonen
 		foreach ($oppdrag as $row)
 		{
 			// ingen triggere?
@@ -857,11 +857,11 @@ class oppdrag
 	/**
 	 * Les triggere fra brukeren og lagre
 	 * 
-	 * @param container $container for å bruke tidligere initialisert params objekt
+	 * @param container $container for Ã¥ bruke tidligere initialisert params objekt
 	 */
 	private function load_triggers($container = NULL)
 	{
-		// sett opp triggere for oppdragene som er tilgjengelige nå
+		// sett opp triggere for oppdragene som er tilgjengelige nÃ¥
 		if (!$this->up->params->exists("oppdrag_triggers"))
 		{
 			// triggers mangler hos brukeren -- sett opp
@@ -881,7 +881,7 @@ class oppdrag
 		 * 
 		 */
 		
-		// hvis vi har fått params servert ikke hent på nytt
+		// hvis vi har fÃ¥tt params servert ikke hent pÃ¥ nytt
 		if ($container)
 		{
 			$triggers = &$container;
@@ -929,7 +929,7 @@ class oppdrag
 		// allerede satt som aktivt?
 		if ($this->active && $this->active['o_id'] == $o_id) return false;
 		
-		// finnes ikke oppdraget? (må være hentet først for at vi kan fortsette)
+		// finnes ikke oppdraget? (mÃ¥ vÃ¦re hentet fÃ¸rst for at vi kan fortsette)
 		if (!isset($this->oppdrag[$o_id]))
 		{
 			return false;
@@ -955,7 +955,7 @@ class oppdrag
 					}
 					$this->active_set($uo['uo_o_id']);
 					
-					// må sette alle andre oppdrag som innaktive før vi kan begynne på et nytt oppdrag
+					// mÃ¥ sette alle andre oppdrag som innaktive fÃ¸r vi kan begynne pÃ¥ et nytt oppdrag
 					return false;
 				}
 				
@@ -1002,14 +1002,14 @@ class oppdrag
 				switch ($params->get("name"))
 				{
 					case "single_poker":
-						// nådde vi beløpet?
+						// nÃ¥dde vi belÃ¸pet?
 						if ($trigger['status']->get("chips") >= $trigger['trigger']->get("chips"))
 						{
-							$this->success($o_id, 'Du klarte å spille deg opp til '.game::format_number($trigger['status']->get("chips")).' chips i løpet av '.game::timespan($time_limit, game::TIME_FULL).', noe som var mer enn '.game::format_number($trigger['trigger']->get("chips")).' chips. Oppdraget &laquo;$name&raquo; ble vellykket!');
+							$this->success($o_id, 'Du klarte Ã¥ spille deg opp til '.game::format_number($trigger['status']->get("chips")).' chips i lÃ¸pet av '.game::timespan($time_limit, game::TIME_FULL).', noe som var mer enn '.game::format_number($trigger['trigger']->get("chips")).' chips. Oppdraget &laquo;$name&raquo; ble vellykket!');
 						}
 						else
 						{
-							$this->failed($o_id, 'Du spilte deg opp til '.game::format_number($trigger['status']->get("chips")).' chips i løpet av '.game::timespan($time_limit, game::TIME_FULL).'. Det var mindre enn '.game::format_cash($trigger['trigger']->get("chips")).' chips. Oppdraget &laquo;$name&raquo; ble mislykket.');
+							$this->failed($o_id, 'Du spilte deg opp til '.game::format_number($trigger['status']->get("chips")).' chips i lÃ¸pet av '.game::timespan($time_limit, game::TIME_FULL).'. Det var mindre enn '.game::format_cash($trigger['trigger']->get("chips")).' chips. Oppdraget &laquo;$name&raquo; ble mislykket.');
 						}
 					break;
 				}
@@ -1018,7 +1018,7 @@ class oppdrag
 			// hvis oppdraget fortsatt er aktivt, sett det som feilet pga. tid
 			if (isset($this->oppdrag[$o_id]) && $this->oppdrag[$o_id]['uo_active'] != 0)
 			{
-				$this->failed($o_id, 'Du brukte for lang tid på oppdraget &laquo;$name&raquo; og mislykket.');
+				$this->failed($o_id, 'Du brukte for lang tid pÃ¥ oppdraget &laquo;$name&raquo; og mislykket.');
 			}
 			
 			return false;
@@ -1032,7 +1032,7 @@ class oppdrag
 	 *
 	 * @param integer $o_id
 	 */
-	public function success($o_id, $text = 'Oppdraget &laquo;$name&raquo; ble utført vellykket!')
+	public function success($o_id, $text = 'Oppdraget &laquo;$name&raquo; ble utfÃ¸rt vellykket!')
 	{
 		$o_id = (int) $o_id;
 		if (!isset($this->oppdrag[$o_id])) return false;
@@ -1068,7 +1068,7 @@ class oppdrag
 		$oppdrag['uo_active_time'] = 0;
 		$oppdrag['uo_params'] = null;
 		
-		// fjern oppdraget fra lokalt (skal ikke være på listen)
+		// fjern oppdraget fra lokalt (skal ikke vÃ¦re pÃ¥ listen)
 		unset($this->active);
 		$this->active = false;
 		
@@ -1142,7 +1142,7 @@ class oppdrag
 					$last = " og ".array_pop($prizes);
 				}
 				$prizes_msg = " Du mottok ".implode(", ", $prizes).$last.".";
-				ess::$b->page->add_message("Du mottok ".implode(", ", $prizes).$last." for å ha fullført oppdraget &laquo;{$oppdrag['o_title']}&raquo;.");
+				ess::$b->page->add_message("Du mottok ".implode(", ", $prizes).$last." for Ã¥ ha fullfÃ¸rt oppdraget &laquo;{$oppdrag['o_title']}&raquo;.");
 			}
 		}
 		
@@ -1216,7 +1216,7 @@ class oppdrag
 		// melding i spillelogg
 		player::add_log_static("oppdrag", $text, 0, $this->up->id);
 		
-		// forsøk å sett brukeren i fengsel
+		// forsÃ¸k Ã¥ sett brukeren i fengsel
 		$this->up->fengsel_rank(0, false, true, oppdrag::TIME_FENGSEL);
 		
 		// fjern fra params
@@ -1236,7 +1236,7 @@ class oppdrag
 	}
 	
 	/**
-	 * Brukeren kom i fengsel -- aktive oppdrag blir mislykket hvis det er satt på oppdraget
+	 * Brukeren kom i fengsel -- aktive oppdrag blir mislykket hvis det er satt pÃ¥ oppdraget
 	 */
 	public function fengsel()
 	{
@@ -1253,11 +1253,11 @@ class oppdrag
 	}
 	
 	/**
-	 * Åpne oppdrag (gjør det mulig å gjennomføre)
+	 * Ã…pne oppdrag (gjÃ¸r det mulig Ã¥ gjennomfÃ¸re)
 	 * 
 	 * @param int $o_id
 	 */
-	public function unlock($o_id, $text = 'Du har gjennomført første delen av oppdraget &laquo;$name&raquo;.')
+	public function unlock($o_id, $text = 'Du har gjennomfÃ¸rt fÃ¸rste delen av oppdraget &laquo;$name&raquo;.')
 	{
 		$o_id = (int) $o_id;
 		ess::$b->db->query("UPDATE users_oppdrag SET uo_locked = 0, uo_params = NULL WHERE uo_up_id = {$this->up->id} AND uo_o_id = $o_id AND uo_locked != 0");
@@ -1328,7 +1328,7 @@ class oppdrag
 	{
 		$result = ess::$b->db->query("SELECT uo_repeats, uo_success, uo_availiable, uo_locked, uo_last_time, uo_last_state, uo_active, uo_active_time, uo_params, o_id, o_name, o_title, o_description, o_description_unlock, o_rank_min, o_rank_max, o_retry_wait, o_repeat_wait, o_unlock_params, o_params FROM users_oppdrag, oppdrag WHERE uo_up_id = {$this->up->id} AND uo_availiable = 1 AND uo_o_id = o_id ORDER BY uo_time DESC");
 		
-		// gå gjennom oppdragene
+		// gÃ¥ gjennom oppdragene
 		unset($this->active);
 		$this->active = false;
 		$this->params = array();
@@ -1357,7 +1357,7 @@ class oppdrag
 	 */
 	public function check_new()
 	{
-		// sørg for at alle oppdragene er lastet inn
+		// sÃ¸rg for at alle oppdragene er lastet inn
 		if (!$this->oppdrag_loaded) $this->user_load_all();
 		
 		// sjekk om brukeren kan motta nye oppdrag (og ikke har noe oppdrag aktivt og dette er den aktive brukeren)
@@ -1374,7 +1374,7 @@ class oppdrag
 			
 			while ($row = mysql_fetch_assoc($result))
 			{
-				// hatt det før?
+				// hatt det fÃ¸r?
 				if ($row['uo_availiable'] !== NULL)
 				{
 					ess::$b->db->query("UPDATE users_oppdrag SET uo_time = ".time().", uo_availiable = 1, uo_locked = 1, uo_params = NULL WHERE uo_up_id = ".$this->up->id." AND uo_o_id = {$row['o_id']} AND uo_availiable = 0");
@@ -1392,7 +1392,7 @@ class oppdrag
 				$row['uo_locked'] = 1;
 				$row['uo_params'] = NULL;
 				
-				// legg til oppdraget først (og behold keys)
+				// legg til oppdraget fÃ¸rst (og behold keys)
 				$this->oppdrag = array($row['o_id'] => $row) + $this->oppdrag;
 				
 				// sett opp params
@@ -1402,7 +1402,7 @@ class oppdrag
 			}
 		}
 		
-		// noen nye oppdrag å lagre?
+		// noen nye oppdrag Ã¥ lagre?
 		if ($this->new) $this->link_triggers();
 	}
 	
@@ -1461,7 +1461,7 @@ class oppdrag
 					break;
 					
 					case "bullets":
-						$prizes[] = fwords("%d kule", "%d kuler", (int) $item[1]) . ' (må ha våpen og ledig kapasitet)';
+						$prizes[] = fwords("%d kule", "%d kuler", (int) $item[1]) . ' (mÃ¥ ha vÃ¥pen og ledig kapasitet)';
 					break;
 				}
 			}
@@ -1481,32 +1481,32 @@ class oppdrag
 		switch ($params->get("name"))
 		{
 			case "rank_points":
-				// oppnå poeng på gitt tid
+				// oppnÃ¥ poeng pÃ¥ gitt tid
 				$target = $this->up->data['up_points']+$params->get("points");
-				return $prefix.'<p>Oppnå totalt '.game::format_num($target).' poeng i løpet av '.game::timespan($time_limit, game::TIME_FULL).'. <span class="dark">Merk at <i>lotto</i> og <i>angrep</i> ikke teller med. Hvis du mottar poeng fra disse funksjonene vil poenggrensen øke med så mange poeng du mottar.</span></p>'.$suffix;
+				return $prefix.'<p>OppnÃ¥ totalt '.game::format_num($target).' poeng i lÃ¸pet av '.game::timespan($time_limit, game::TIME_FULL).'. <span class="dark">Merk at <i>lotto</i> og <i>angrep</i> ikke teller med. Hvis du mottar poeng fra disse funksjonene vil poenggrensen Ã¸ke med sÃ¥ mange poeng du mottar.</span></p>'.$suffix;
 			break;
 			
 			case "kriminalitet_different":
-				// hvor mange forskjellige må vi oppnå?
+				// hvor mange forskjellige mÃ¥ vi oppnÃ¥?
 				$different = $params->get("count", 5);
 				
-				return $prefix.'<p>Utfør '.$different.' forskjellige kriminaliteter etter hverandre som blir vellykket'.($active ? ' i løpet av '.game::timespan($time_limit, game::TIME_FULL) : '').'.</p>'.$suffix;
+				return $prefix.'<p>UtfÃ¸r '.$different.' forskjellige kriminaliteter etter hverandre som blir vellykket'.($active ? ' i lÃ¸pet av '.game::timespan($time_limit, game::TIME_FULL) : '').'.</p>'.$suffix;
 			break;
 			
 			case "poker_unique_people":
-				// hvor mange man må vinne mot
+				// hvor mange man mÃ¥ vinne mot
 				$user_count = $params->get("user_count", 10);
 				
-				return $prefix.'<p>Vinn '.$user_count.' ganger på rad i poker mot '.$user_count.' forskjellige personer'.($time_limit ? ' innen '.game::timespan($time_limit, game::TIME_FULL) : '').'. Hvis du spiller flere ganger mot samme person, er det første gang som teller. (Taper du første gang, må du vinne '.$user_count.' nye ganger.)</p>'.$suffix;
+				return $prefix.'<p>Vinn '.$user_count.' ganger pÃ¥ rad i poker mot '.$user_count.' forskjellige personer'.($time_limit ? ' innen '.game::timespan($time_limit, game::TIME_FULL) : '').'. Hvis du spiller flere ganger mot samme person, er det fÃ¸rste gang som teller. (Taper du fÃ¸rste gang, mÃ¥ du vinne '.$user_count.' nye ganger.)</p>'.$suffix;
 			break;
 			
 			case "wanted_level":
-				return $prefix.'<p>Oppnå wanted nivå på '.game::format_num($params->get("wanted_level", 500)/10, 1).' %'.($time_limit ? ' innen '.game::timespan($time_limit, game::TIME_FULL) : '').'.</p>'.$suffix;
+				return $prefix.'<p>OppnÃ¥ wanted nivÃ¥ pÃ¥ '.game::format_num($params->get("wanted_level", 500)/10, 1).' %'.($time_limit ? ' innen '.game::timespan($time_limit, game::TIME_FULL) : '').'.</p>'.$suffix;
 			
 			case "fengsel_breakout":
-				return $prefix.'<p>Bryt ut '.$params->get("user_count", 3).' spillere fra fengsel på rad uten å komme i fengsel'.($time_limit ? ' innen '.game::timespan($time_limit, game::TIME_FULL) : '').'.</p>'.$suffix;
+				return $prefix.'<p>Bryt ut '.$params->get("user_count", 3).' spillere fra fengsel pÃ¥ rad uten Ã¥ komme i fengsel'.($time_limit ? ' innen '.game::timespan($time_limit, game::TIME_FULL) : '').'.</p>'.$suffix;
 		}
 		
-		return !empty($prefix) ? $prefix.$suffix : '<p>Fant ingen relevant beskrivelse for dette oppdraget på dette stadiet. Ingen triggere som må utføres?</p>'.$suffix;
+		return !empty($prefix) ? $prefix.$suffix : '<p>Fant ingen relevant beskrivelse for dette oppdraget pÃ¥ dette stadiet. Ingen triggere som mÃ¥ utfÃ¸res?</p>'.$suffix;
 	}
 }

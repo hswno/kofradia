@@ -49,7 +49,7 @@ $_game = array(
 		"block_pm" => array(-15,8),
 		"ressurs_nostat" => array(12),
 		"developer" => array(13),
-		"nostat" => array(14) // hvis denne fjernes må det endres i /ajax/get_player_info.php
+		"nostat" => array(14) // hvis denne fjernes mÃ¥ det endres i /ajax/get_player_info.php
 	),
 	
 	"access_colors" => array(
@@ -93,16 +93,16 @@ $_game = array(
 	
 	"cash" => array(
 		"Uteligger" => 0,
-		"Løpegutt" => 1000,
+		"LÃ¸pegutt" => 1000,
 		"Raner" => 10000,
 		"Svart arbeider" => 100000,
 		"Langer" => 500000,
-		"Millionær" => 1000000,
-		"Mangemillionær" => 10000000,
-		"Farlig millionær" => 50000000,
-		"Beryktet millionær" => 100000000,
-		"Milliardær" => 1000000000,
-		"Mangemilliardær" => 10000000000
+		"MillionÃ¦r" => 1000000,
+		"MangemillionÃ¦r" => 10000000,
+		"Farlig millionÃ¦r" => 50000000,
+		"Beryktet millionÃ¦r" => 100000000,
+		"MilliardÃ¦r" => 1000000000,
+		"MangemilliardÃ¦r" => 10000000000
 	),
 	
 	// pengeranker
@@ -142,13 +142,13 @@ $_lang = array(
 		"short" => array("u", "u")
 	),
 	"weekdays" => array(
-		"søndag",
+		"sÃ¸ndag",
 		"mandag",
 		"tirsdag",
 		"onsdag",
 		"torsdag",
 		"fredag",
-		"lørdag"
+		"lÃ¸rdag"
 	),
 	"months" => array(
 		1 => "januar",
@@ -197,7 +197,7 @@ $__page = array(
 	"title_direction" => "left",
 	"title_split" => " &raquo; ",
 	"keywords_default" => array("kofradia", "broderskap", "mafia spill", "streetzmafia", "drammen", "spill", "henrik steen"),
-	"description_default" => "Kofradia er et tekstbasert nettspill hvor du konkurrerer om å være blant de beste og i det beste broderskapet. Du kan involvere deg i broderskap, firmaer, angripe og forsøke å eliminere andre spillere og forsøke å erobre den mektigste posisjonen i spillet. Velkommen til Kofradia!",
+	"description_default" => "Kofradia er et tekstbasert nettspill hvor du konkurrerer om Ã¥ vÃ¦re blant de beste og i det beste broderskapet. Du kan involvere deg i broderskap, firmaer, angripe og forsÃ¸ke Ã¥ eliminere andre spillere og forsÃ¸ke Ã¥ erobre den mektigste posisjonen i spillet. Velkommen til Kofradia!",
 	"theme" => "sm"
 );
 

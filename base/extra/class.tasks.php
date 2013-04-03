@@ -8,7 +8,7 @@ class tasks
 	/** Hent oppgaver */
 	private static function load($skip_cache = false)
 	{
-		// forsøk å hent fra cache
+		// forsÃ¸k Ã¥ hent fra cache
 		if (!$skip_cache && !self::$cache)
 		{
 			self::$cache = cache::fetch("tasks");
@@ -35,7 +35,7 @@ class tasks
 	/** Hent ut info om en oppgave */
 	public static function get($name)
 	{
-		// sørg for data
+		// sÃ¸rg for data
 		if (!self::$cache) self::load();
 		
 		// fant ikke
@@ -48,12 +48,12 @@ class tasks
 		return self::$cache[$name];
 	}
 	
-	/** Øk telleren for en oppgave */
+	/** Ã˜k telleren for en oppgave */
 	public static function increment($name)
 	{
 		global $_base;
 		
-		// forsøk å øk telleren
+		// forsÃ¸k Ã¥ Ã¸k telleren
 		$_base->db->query("UPDATE tasks SET t_ant = t_ant + 1 WHERE t_name = ".$_base->db->quote($name));
 		
 		if ($_base->db->affected_rows() == 0)
@@ -78,7 +78,7 @@ class tasks
 		global $_base;
 		$count = max(1, (int) $count);
 		
-		// forsøk å senke telleren
+		// forsÃ¸k Ã¥ senke telleren
 		$_base->db->query("UPDATE tasks SET t_ant = t_ant - 1 WHERE t_name = ".$_base->db->quote($name));
 		
 		if ($_base->db->affected_rows() == 0)
@@ -103,7 +103,7 @@ class tasks
 		global $_base;
 		$value = (int) $value;
 		
-		// forsøk å sett telleren til bestemt verdi
+		// forsÃ¸k Ã¥ sett telleren til bestemt verdi
 		$_base->db->query("UPDATE tasks SET t_ant = $value WHERE t_name = ".$_base->db->quote($name));
 		$affected = $_base->db->affected_rows();
 		

@@ -2,10 +2,10 @@
 
 class page_angrip extends pages_player
 {
-	/** Energi vi må ha for å kunne utføre drapsforsøk */
+	/** Energi vi mÃ¥ ha for Ã¥ kunne utfÃ¸re drapsforsÃ¸k */
 	const ENERGY_MUST_HAVE = 5000;
 	
-	/** Energi vi bruker når vi ikke finner en spiller */
+	/** Energi vi bruker nÃ¥r vi ikke finner en spiller */
 	const ENERGY_NOT_FOUND = 1500;
 	
 	/**
@@ -21,13 +21,13 @@ class page_angrip extends pages_player
 	protected $form;
 	
 	/**
-	 * Anti-bot for våpentrening
+	 * Anti-bot for vÃ¥pentrening
 	 * @var antibot
 	 */
 	protected $training_antibot;
 	
 	/**
-	 * Skjema for våpentrening
+	 * Skjema for vÃ¥pentrening
 	 * @var form
 	 */
 	protected $training_form;
@@ -39,12 +39,12 @@ class page_angrip extends pages_player
 	protected $up_offer;
 	
 	/**
-	 * Skal vi vise våpentrening?
+	 * Skal vi vise vÃ¥pentrening?
 	 */
 	protected $show_training = true;
 	
 	/**
-	 * De ulike treningsvalgene for våpentrening
+	 * De ulike treningsvalgene for vÃ¥pentrening
 	 */
 	protected static $trainings = array(
 		1 => array(
@@ -65,8 +65,8 @@ class page_angrip extends pages_player
 	);
 	
 	/**
-	 * Maksimalt man kan øke våpentreninga<br />
-	 * Denne faktoren multipliseres med prosentverdien i hvert treningsalternativ, og multipliseres så med treningsprosenten man IKKE har opptjent
+	 * Maksimalt man kan Ã¸ke vÃ¥pentreninga<br />
+	 * Denne faktoren multipliseres med prosentverdien i hvert treningsalternativ, og multipliseres sÃ¥ med treningsprosenten man IKKE har opptjent
 	 */
 	const TRAINING_MAX = 0.05;
 	
@@ -83,7 +83,7 @@ class page_angrip extends pages_player
 		
 		if (!isset($_POST['wt'])) $this->page_attack_show();
 		
-		// vise våpentrening?
+		// vise vÃ¥pentrening?
 		if ($this->show_training && login::$user->player->weapon)
 		{
 			$this->page_training_show();
@@ -93,14 +93,14 @@ class page_angrip extends pages_player
 	}
 	
 	/**
-	 * Vis skjema og behandle angrep på annen spiller
+	 * Vis skjema og behandle angrep pÃ¥ annen spiller
 	 */
 	protected function page_attack_show()
 	{
-		// kan vi ikke angripe nå?
+		// kan vi ikke angripe nÃ¥?
 		$lock = array(
-			array(1356325200, 1356411600, "Angrepsfunksjonen er stengt på julaften frem til kl 06:00 1. juledag. Endringer i tidspunkt kan komme."), // julaften 2012 (kl 06 den 24 - kl 06 den 25)
-			array(1356973200, 1357059600, "Angrepsfunksjonen er stengt på nyttårsaften frem til kl 18:00 1. januar.") // nyttår 2012-2013 (kl 18 den 31 - kl 18 den 1)
+			array(1356325200, 1356411600, "Angrepsfunksjonen er stengt pÃ¥ julaften frem til kl 06:00 1. juledag. Endringer i tidspunkt kan komme."), // julaften 2012 (kl 06 den 24 - kl 06 den 25)
+			array(1356973200, 1357059600, "Angrepsfunksjonen er stengt pÃ¥ nyttÃ¥rsaften frem til kl 18:00 1. januar.") // nyttÃ¥r 2012-2013 (kl 18 den 31 - kl 18 den 1)
 		);
 		$locked = false;
 		foreach ($lock as $period)
@@ -123,14 +123,14 @@ class page_angrip extends pages_player
 			return;
 		}
 		
-		// har vi ikke noe våpen?
+		// har vi ikke noe vÃ¥pen?
 		if (!login::$user->player->weapon)
 		{
 			echo '
 <div class="bg1_c xxsmall">
 	<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Du må kjøpe et våpen før du kan gjennomføre et angrep mot en annen spiller. Våpen kjøpes hos våpen og beskyttelse-firma.</p>
+		<p>Du mÃ¥ kjÃ¸pe et vÃ¥pen fÃ¸r du kan gjennomfÃ¸re et angrep mot en annen spiller. VÃ¥pen kjÃ¸pes hos vÃ¥pen og beskyttelse-firma.</p>
 	</div>
 </div>';
 			
@@ -144,21 +144,21 @@ class page_angrip extends pages_player
 <div class="bg1_c xxsmall">
 	<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Du har ikke nok energi for å utføre et drapsforsøk for øyeblikket.</p>
+		<p>Du har ikke nok energi for Ã¥ utfÃ¸re et drapsforsÃ¸k for Ã¸yeblikket.</p>
 	</div>
 </div>';
 			
 			return;
 		}
 		
-		// kan vi ikke utføre angrep nå?
+		// kan vi ikke utfÃ¸re angrep nÃ¥?
 		if (DISABLE_ANGREP && !access::has("mod"))
 		{
 			echo '
 <div class="bg1_c xxsmall">
 	<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Funksjonen er for øyeblikket deaktivert.</p>
+		<p>Funksjonen er for Ã¸yeblikket deaktivert.</p>
 	</div>
 </div>';
 			
@@ -184,7 +184,7 @@ class page_angrip extends pages_player
 		<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">'.($_SERVER['REQUEST_METHOD'] == "POST" ? '
 			<boxes />' : '').'
-			<p>Her kan du angripe en spiller. Du må først spesifisere hvilken spiller du skal angripe. Deretter spesifiserer du antall kuler, før du faktisk forsøker å angripe spilleren.</p>
+			<p>Her kan du angripe en spiller. Du mÃ¥ fÃ¸rst spesifisere hvilken spiller du skal angripe. Deretter spesifiserer du antall kuler, fÃ¸r du faktisk forsÃ¸ker Ã¥ angripe spilleren.</p>
 			<dl class="dd_right">
 				<dt>Spiller som skal angripes</dt>
 				<dd><input type="text" name="up" id="angrip_up" class="styled w80" value="'.htmlspecialchars(postval("up")).'" /></dd>
@@ -201,7 +201,7 @@ class page_angrip extends pages_player
 	 */
 	protected function player_check()
 	{
-		// søke etter spiller?
+		// sÃ¸ke etter spiller?
 		if (isset($_POST['up']))
 		{
 			$this->up_offer = player::get($_POST['up'], NULL, true);
@@ -227,7 +227,7 @@ class page_angrip extends pages_player
 			return false;
 		}
 		
-		// død?
+		// dÃ¸d?
 		if (!$this->up_offer->active)
 		{
 			ess::$b->page->add_message('Spilleren <user id="'.$this->up_offer->id.'" /> er ikke levende og kan ikke angripes.', "error");
@@ -248,18 +248,18 @@ class page_angrip extends pages_player
 			return false;
 		}
 		
-		// kan ikke angripe spillere registrert for under 1 uke siden og som ikke har nådd ridder
+		// kan ikke angripe spillere registrert for under 1 uke siden og som ikke har nÃ¥dd ridder
 		$expire = time()-604800;
 		if ($this->up_offer->data['up_created_time'] > $expire && $this->up_offer->rank['number'] < 8)
 		{
-			ess::$b->page->add_message('<user id="'.$this->up_offer->id.'" /> har vært registrert i under 7 dager med lav rank og kan ikke angripes', "error");
+			ess::$b->page->add_message('<user id="'.$this->up_offer->id.'" /> har vÃ¦rt registrert i under 7 dager med lav rank og kan ikke angripes', "error");
 			return false;
 		}
 		
 		// sett opp skjema
 		$this->form = new form("angrip");
 		
-		// utføre et angrep?
+		// utfÃ¸re et angrep?
 		if (isset($_POST['attack']))
 		{
 			$this->handle_attack();
@@ -272,14 +272,14 @@ class page_angrip extends pages_player
 	<div class="bg1_c xsmall">
 		<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du er i ferd med å angripe '.$this->up_offer->profile_link().' som har ranken '.$this->up_offer->rank['name'].' og er plassert som nummer '.$this->up_offer->data['upr_rank_pos'].' på ranklista.</p>
-			<p>Du befinner deg på '.login::$user->player->bydel['name'].' og har en <b>'.htmlspecialchars(login::$user->player->weapon->data['name']).'</b> med <b>'.game::format_num(login::$user->player->data['up_weapon_bullets']).'</b> '.fword('kule', 'kuler', login::$user->player->data['up_weapon_bullets']).' og en våpentrening på <b>'.game::format_num(login::$user->player->data['up_weapon_training']*100, 1).' %</b>.</p>';
+			<p>Du er i ferd med Ã¥ angripe '.$this->up_offer->profile_link().' som har ranken '.$this->up_offer->rank['name'].' og er plassert som nummer '.$this->up_offer->data['upr_rank_pos'].' pÃ¥ ranklista.</p>
+			<p>Du befinner deg pÃ¥ '.login::$user->player->bydel['name'].' og har en <b>'.htmlspecialchars(login::$user->player->weapon->data['name']).'</b> med <b>'.game::format_num(login::$user->player->data['up_weapon_bullets']).'</b> '.fword('kule', 'kuler', login::$user->player->data['up_weapon_bullets']).' og en vÃ¥pentrening pÃ¥ <b>'.game::format_num(login::$user->player->data['up_weapon_training']*100, 1).' %</b>.</p>';
 		
 		// har vi ingen kuler?
 		if (login::$user->player->data['up_weapon_bullets'] == 0)
 		{
 			echo '
-			<p><b>Du må kjøpe kuler før du kan utføre et angrep.</b> Kuler får du kjøpt hos våpen og beskyttelse-firmaet.</p>';
+			<p><b>Du mÃ¥ kjÃ¸pe kuler fÃ¸r du kan utfÃ¸re et angrep.</b> Kuler fÃ¥r du kjÃ¸pt hos vÃ¥pen og beskyttelse-firmaet.</p>';
 		}
 		
 		else
@@ -291,7 +291,7 @@ class page_angrip extends pages_player
 				<dt>Antall kuler som skal benyttes</dt>
 				<dd><input type="text" id="angrep_kuler" name="kuler" class="styled w40" value="'.intval(postval("kuler", "")).'" /></dd>
 			</dl>
-			<p class="c">'.show_sbutton("Utfør angrep", 'name="attack"').'</p>';
+			<p class="c">'.show_sbutton("UtfÃ¸r angrep", 'name="attack"').'</p>';
 		}
 		
 		echo '
@@ -302,10 +302,10 @@ class page_angrip extends pages_player
 <div class="bg1_c xsmall">
 	<h1 class="bg1">Informasjon<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Hvis spilleren du angriper ikke befinner seg i <b>'.login::$user->player->bydel['name'].'</b>, er i <b>bomberom</b> eller <b>fengsel</b> eller hvis du rett og slett ikke klarer å oppdage spilleren, vil du miste en del energi og bli plassert i fengsel i en kort varighet.</p>
-		<p>Hvis du klarer å oppdage spilleren, vil du skade spilleren. Hvis angrepet er så kraftig at spilleren dør vil du:</p>
+		<p>Hvis spilleren du angriper ikke befinner seg i <b>'.login::$user->player->bydel['name'].'</b>, er i <b>bomberom</b> eller <b>fengsel</b> eller hvis du rett og slett ikke klarer Ã¥ oppdage spilleren, vil du miste en del energi og bli plassert i fengsel i en kort varighet.</p>
+		<p>Hvis du klarer Ã¥ oppdage spilleren, vil du skade spilleren. Hvis angrepet er sÃ¥ kraftig at spilleren dÃ¸r vil du:</p>
 		<ul>
-			<li>Overta pengene spilleren hadde på hånda</li>
+			<li>Overta pengene spilleren hadde pÃ¥ hÃ¥nda</li>
 			<li>Motta en del rank, avhengig av ranken til offeret</li>
 		</ul>
 		<p>Hvis spilleren overlever, vil du:</p>
@@ -314,7 +314,7 @@ class page_angrip extends pages_player
 			<li>Miste en god del energi</li>
 			<li>Motta litt rank som spilleren du angriper mister</li>
 		</ul>
-		<p>Når du utfører et angrep mot en annen spiller, risikerer du å bli oppdaget av vitner. Hvis du oppdager vitnene i det du utfører angrepet, vil du også få vite hvem du oppdaget som vitnet angrepet.</p>
+		<p>NÃ¥r du utfÃ¸rer et angrep mot en annen spiller, risikerer du Ã¥ bli oppdaget av vitner. Hvis du oppdager vitnene i det du utfÃ¸rer angrepet, vil du ogsÃ¥ fÃ¥ vite hvem du oppdaget som vitnet angrepet.</p>
 	</div>
 </div>';
 		
@@ -334,31 +334,31 @@ class page_angrip extends pages_player
 		
 		$bullets = max(0, (int) postval("kuler"));
 		
-		// har vi ikke så mange kuler?
+		// har vi ikke sÃ¥ mange kuler?
 		if ($bullets > login::$user->player->data['up_weapon_bullets'])
 		{
-			ess::$b->page->add_message("Du har ikke så mange kuler.", "error");
+			ess::$b->page->add_message("Du har ikke sÃ¥ mange kuler.", "error");
 			return;
 		}
 		
 		// har ikke skrevet inn noe?
 		if ($bullets == 0)
 		{
-			ess::$b->page->add_message("Du må fylle inn antall kuler du ønsker å benytte.", "error");
+			ess::$b->page->add_message("Du mÃ¥ fylle inn antall kuler du Ã¸nsker Ã¥ benytte.", "error");
 			return;
 		}
 		
 		// er offeret i fengsel?
 		if ($this->up_offer->fengsel_check())
 		{
-			ess::$b->page->add_message('<user id="'.$this->up_offer->id.'" /> er i fengsel og kan ikke angripes nå.', "error");
+			ess::$b->page->add_message('<user id="'.$this->up_offer->id.'" /> er i fengsel og kan ikke angripes nÃ¥.', "error");
 			return;
 		}
 		
 		// oppdater tidspunkt for siste angrep
 		ess::$b->db->query("UPDATE users_players SET up_df_time = ".time()." WHERE up_id = ".login::$user->player->id);
 		
-		// er i annen bydel, bomberom eller vi klarte ikke å finne spilleren?
+		// er i annen bydel, bomberom eller vi klarte ikke Ã¥ finne spilleren?
 		$not_found_b = $this->up_offer->data['up_b_id'] != login::$user->player->data['up_b_id'];
 		$not_found_brom = $this->up_offer->bomberom_check();
 		$prob = rand(1, 100);
@@ -370,7 +370,7 @@ class page_angrip extends pages_player
 			if ($not_found_b)
 			{
 				$reason = 'Ikke i samme bydel ('.login::$user->player->bydel['name'].' mot '.$this->up_offer->bydel['name'].').';
-				if ($not_found_brom) $reason .= ' Offeret er også i bomberom.';
+				if ($not_found_brom) $reason .= ' Offeret er ogsÃ¥ i bomberom.';
 			}
 			elseif ($not_found_brom)
 			{
@@ -378,17 +378,17 @@ class page_angrip extends pages_player
 			}
 			else
 			{
-				$reason = 'Traff ikke på sannsynligheten ('.$prob.' > '.ceil($find_prob).').';
+				$reason = 'Traff ikke pÃ¥ sannsynligheten ('.$prob.' > '.ceil($find_prob).').';
 			}
 			putlog("DF", "ANGREP FEILET: ".login::$user->player->data['up_name']." skulle angripe%c3 ".$this->up_offer->data['up_name']."%c med $bullets ".fword("kule", "kuler", $bullets).". $reason");
 			
-			// øk telleren over antall ganger vi ikke har funnet spiller
+			// Ã¸k telleren over antall ganger vi ikke har funnet spiller
 			ess::$b->db->query("UPDATE users_players SET up_attack_failed_num = up_attack_failed_num + 1 WHERE up_id = ".login::$user->player->id);
 			
-			// øk telleren over antall ganger vi ikke har funnet spiller (for familien spilleren er medlem i)
+			// Ã¸k telleren over antall ganger vi ikke har funnet spiller (for familien spilleren er medlem i)
 			login::$user->player->attack_ff_update("failed");
 			
-			// øk teller for ff for offeret
+			// Ã¸k teller for ff for offeret
 			$this->up_offer->attacked_ff_update("failed");
 			
 			// sett i fengsel i 2-4 minutter
@@ -397,7 +397,7 @@ class page_angrip extends pages_player
 			// mist energi
 			login::$user->player->energy_use(self::ENERGY_NOT_FOUND);
 			
-			// øk anti-bot
+			// Ã¸k anti-bot
 			$this->antibot->increase_counter();
 			
 			// trigger
@@ -442,9 +442,9 @@ class page_angrip extends pages_player
 <div class="bg1_c xsmall">
 	<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Du forsøkte å angripe '.$this->up_offer->profile_link().' med ranken '.$this->up_offer->rank['name'].' og plassering nummer '.$this->up_offer->data['upr_rank_pos'].' på ranklista med '.$bullets.' '.fword("kule", "kuler", $bullets).'.</p>
-		<p>Spilleren ble ikke funnet, og angrepet kunne ikke bli gjennomført.</p>
-		<p>Du kom i fengsel og slipper ut om '.game::counter(login::$user->player->data['up_fengsel_time']-time()).'. Wanted nivået er nå på '.game::format_num(login::$user->player->data['up_wanted_level']/10, 1).' %.</p>
+		<p>Du forsÃ¸kte Ã¥ angripe '.$this->up_offer->profile_link().' med ranken '.$this->up_offer->rank['name'].' og plassering nummer '.$this->up_offer->data['upr_rank_pos'].' pÃ¥ ranklista med '.$bullets.' '.fword("kule", "kuler", $bullets).'.</p>
+		<p>Spilleren ble ikke funnet, og angrepet kunne ikke bli gjennomfÃ¸rt.</p>
+		<p>Du kom i fengsel og slipper ut om '.game::counter(login::$user->player->data['up_fengsel_time']-time()).'. Wanted nivÃ¥et er nÃ¥ pÃ¥ '.game::format_num(login::$user->player->data['up_wanted_level']/10, 1).' %.</p>
 		<p class="c"><a href="angrip">Tilbake</a></p>
 	</div>
 </div>';
@@ -465,7 +465,7 @@ class page_angrip extends pages_player
 		// sett opp hva vi fikk
 		$got = array();
 		$got[] = game::format_num($result['rankpoeng']).' poeng'.($result['drept'] ? '' : ' fra spilleren');
-		if (isset($result['penger']) && $result['penger'] > 0) $got[] = game::format_cash($result['penger']).' som offeret hadde på hånda';
+		if (isset($result['penger']) && $result['penger'] > 0) $got[] = game::format_cash($result['penger']).' som offeret hadde pÃ¥ hÃ¥nda';
 		if (isset($result['penger_bank']) && $result['penger_bank'] > 0) $got[] = game::format_cash($result['penger_bank']).' som deler av det offeret hadde i banken';
 		if (isset($result['hitlist']) && $result['hitlist'] > 0) $got[] = game::format_cash($result['hitlist']).' fra hitlista';
 		$got = sentences_list($got);
@@ -475,15 +475,15 @@ class page_angrip extends pages_player
 		{
 			$place = bydeler::get_random_place(login::$user->player->bydel['id']);
 			echo '
-		<p>Du fant '.$this->up_offer->profile_link().' som hadde ranken '.$this->up_offer->rank['name'].' og var plassert som nummer '.$this->up_offer->data['upr_rank_pos'].' på ranklista'.($place ? ' ved '.$place : '').' og angrep spilleren med '.$bullets.' '.fword("kule", "kuler", $bullets).'.</p>
-		<p>Spilleren døde av angrepet ditt. Du fikk '.$got.'.'.($result['penger'] == 0 ? ' Offeret hadde ingen penger på hånda.' : '').'</p>';
+		<p>Du fant '.$this->up_offer->profile_link().' som hadde ranken '.$this->up_offer->rank['name'].' og var plassert som nummer '.$this->up_offer->data['upr_rank_pos'].' pÃ¥ ranklista'.($place ? ' ved '.$place : '').' og angrep spilleren med '.$bullets.' '.fword("kule", "kuler", $bullets).'.</p>
+		<p>Spilleren dÃ¸de av angrepet ditt. Du fikk '.$got.'.'.($result['penger'] == 0 ? ' Offeret hadde ingen penger pÃ¥ hÃ¥nda.' : '').'</p>';
 		}
 		
 		else
 		{
 			$place = bydeler::get_random_place(login::$user->player->bydel['id']);
 			echo '
-		<p>Du fant '.$this->up_offer->profile_link().' med ranken '.$this->up_offer->rank['name'].' og plassering nummer '.$this->up_offer->data['upr_rank_pos'].' på ranklista'.($place ? ' ved '.$place : '').' og angrep spilleren med '.$bullets.' '.fword("kule", "kuler", $bullets).'.</p>
+		<p>Du fant '.$this->up_offer->profile_link().' med ranken '.$this->up_offer->rank['name'].' og plassering nummer '.$this->up_offer->data['upr_rank_pos'].' pÃ¥ ranklista'.($place ? ' ved '.$place : '').' og angrep spilleren med '.$bullets.' '.fword("kule", "kuler", $bullets).'.</p>
 		<p>Spilleren ble skadet av angrepet men overlevde. Du mottok '.$got.'.</p>';
 		}
 		
@@ -491,7 +491,7 @@ class page_angrip extends pages_player
 		if (count($result['vitner']) == 0)
 		{
 			echo '
-		<p>Ingen spillere vitnet '.($result['drept'] ? 'drapet' : 'drapsforsøket').'.</p>';
+		<p>Ingen spillere vitnet '.($result['drept'] ? 'drapet' : 'drapsforsÃ¸ket').'.</p>';
 		}
 		
 		else
@@ -507,7 +507,7 @@ class page_angrip extends pages_player
 			if ($count_other > 0) $list[] = fwords("%d ukjent spiller", "%d ukjente spillere", $count_other);
 			
 			echo '
-		<p>Du ble oppdaget av '.sentences_list($list).' da '.($result['drept'] ? 'drapet' : 'drapsforsøket').' ble gjennomført.</p>';
+		<p>Du ble oppdaget av '.sentences_list($list).' da '.($result['drept'] ? 'drapet' : 'drapsforsÃ¸ket').' ble gjennomfÃ¸rt.</p>';
 		}
 		
 		// fengselendring?
@@ -520,14 +520,14 @@ class page_angrip extends pages_player
 				ess::$b->page->message_get("fengsel");
 				
 				echo '
-		<p>Du kom i fengsel og slipper ut om '.game::counter(login::$user->player->data['up_fengsel_time']-time()).'. Wanted nivået er nå på '.game::format_num(login::$user->player->data['up_wanted_level']/10, 1).' %.</p>';
+		<p>Du kom i fengsel og slipper ut om '.game::counter(login::$user->player->data['up_fengsel_time']-time()).'. Wanted nivÃ¥et er nÃ¥ pÃ¥ '.game::format_num(login::$user->player->data['up_wanted_level']/10, 1).' %.</p>';
 			}
 			
-			// wanted nivået økte
+			// wanted nivÃ¥et Ã¸kte
 			else
 			{
 				echo '
-		<p>Wanted nivået økte med '.game::format_num($result['fengsel']/10, 1).' %.</p>';
+		<p>Wanted nivÃ¥et Ã¸kte med '.game::format_num($result['fengsel']/10, 1).' %.</p>';
 			}
 		}
 		
@@ -540,7 +540,7 @@ class page_angrip extends pages_player
 	}
 	
 	/**
-	 * Våpentrening
+	 * VÃ¥pentrening
 	 */
 	protected function page_training_show()
 	{
@@ -554,12 +554,12 @@ class page_angrip extends pages_player
 		// ventetid?
 		$wait = max(0, login::$user->player->data['up_weapon_training_next'] - time());
 		
-		// skal vi trene våpenet?
+		// skal vi trene vÃ¥penet?
 		if (isset($_POST['wt']))
 		{
-			$this->training_form->validate(postval("h"), "Våpentrening");
+			$this->training_form->validate(postval("h"), "VÃ¥pentrening");
 			
-			// kan vi ikke trene nå?
+			// kan vi ikke trene nÃ¥?
 			if ($wait > 0)
 			{
 				redirect::handle();
@@ -569,7 +569,7 @@ class page_angrip extends pages_player
 			$id = (int) postval("training_id");
 			if (!isset(self::$trainings[$id]))
 			{
-				ess::$b->page->add_message("Du må velge et alternativ.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge et alternativ.", "error");
 				redirect::handle();
 			}
 			$opt = self::$trainings[$id];
@@ -580,14 +580,14 @@ class page_angrip extends pages_player
 			// har ikke nok cash?
 			if ($opt['price'] > login::$user->player->data['up_cash'])
 			{
-				ess::$b->page->add_message("Du har ikke nok penger til å utføre våpentreningen.");
+				ess::$b->page->add_message("Du har ikke nok penger til Ã¥ utfÃ¸re vÃ¥pentreningen.");
 				redirect::handle();
 			}
 			
 			$f = self::TRAINING_MAX * $opt['percent'];
 			$next_old = login::$user->player->data['up_weapon_training_next'] ? ' = '.login::$user->player->data['up_weapon_training_next'] : ' IS NULL';
 			
-			// utfør våpentrening
+			// utfÃ¸r vÃ¥pentrening
 			ess::$b->db->query("
 				UPDATE users_players
 				SET up_weapon_training = up_weapon_training + (1 - up_weapon_training) * $f, up_weapon_training_next = ".(time()+$opt['wait']).", up_cash = up_cash - {$opt['price']}
@@ -596,13 +596,13 @@ class page_angrip extends pages_player
 			// ikke oppdatert?
 			if (ess::$b->db->affected_rows() == 0)
 			{
-				ess::$b->page->add_message("Kunne ikke utføre våpentrening.", "error");
+				ess::$b->page->add_message("Kunne ikke utfÃ¸re vÃ¥pentrening.", "error");
 			}
 			
 			else
 			{
 				$this->training_antibot->increase_counter();
-				ess::$b->page->add_message("Du trente opp våpenet ditt og våpentreningen økte med ".game::format_num((1 - login::$user->player->data['up_weapon_training']) * $f * 100, 2)." %.");
+				ess::$b->page->add_message("Du trente opp vÃ¥penet ditt og vÃ¥pentreningen Ã¸kte med ".game::format_num((1 - login::$user->player->data['up_weapon_training']) * $f * 100, 2)." %.");
 			}
 			
 			redirect::handle();
@@ -612,13 +612,13 @@ class page_angrip extends pages_player
 		
 		echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Våpentrening<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">VÃ¥pentrening<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">';
 		
 		if ($wait > 0)
 		{
 			echo '
-		<p class="c">Du må vente '.game::counter($wait, true).' før du kan trene våpenet på nytt.</p>';
+		<p class="c">Du mÃ¥ vente '.game::counter($wait, true).' fÃ¸r du kan trene vÃ¥penet pÃ¥ nytt.</p>';
 		}
 		
 		else
@@ -650,22 +650,22 @@ class page_angrip extends pages_player
 			echo '
 				</tbody>
 			</table>
-			<p class="c">'.show_sbutton("Utfør", 'name="wt"').'</p>
+			<p class="c">'.show_sbutton("UtfÃ¸r", 'name="wt"').'</p>
 		</form>';
 		}
 		
 		echo '
 		<div class="progressbar p'.($training < 28 ? ' levelcrit' : ($training < 35 ? ' levelwarn' : '')).'">
 			<div class="progress" style="width: '.round(min(100, $training)).'%">
-				<p>Våpentrening: '.($training == 100 ? '100' : game::format_num($training, 2)).' %</p>
+				<p>VÃ¥pentrening: '.($training == 100 ? '100' : game::format_num($training, 2)).' %</p>
 			</div>
 		</div>
 		<p>Du har en <b>'.htmlspecialchars(login::$user->player->weapon->data['name']).'</b> med <b>'.game::format_num(login::$user->player->data['up_weapon_bullets']).'</b> '.fword('kule', 'kuler', login::$user->player->data['up_weapon_bullets']).'.</p>
-		<p>Våpentreningen din synker jevnlig i løpet av dagen, og du er nødt til å trene for å holde oppe våpentreningen din. Hvis våpentreningen din faller under 25 %, risikerer du å miste våpenet ditt.</p>
-		<p>Bedre våpentrening fører til:</p>
+		<p>VÃ¥pentreningen din synker jevnlig i lÃ¸pet av dagen, og du er nÃ¸dt til Ã¥ trene for Ã¥ holde oppe vÃ¥pentreningen din. Hvis vÃ¥pentreningen din faller under 25 %, risikerer du Ã¥ miste vÃ¥penet ditt.</p>
+		<p>Bedre vÃ¥pentrening fÃ¸rer til:</p>
 		<ul class="spacer">
 			<li>Du forbedrer treffsikkerheten din</li>
-			<li>Du øker skuddtakten samtidig som treffsikkerheten forblir den samme</li>
+			<li>Du Ã¸ker skuddtakten samtidig som treffsikkerheten forblir den samme</li>
 		</ul>
 	</div>
 </div>';

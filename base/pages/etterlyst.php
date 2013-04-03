@@ -18,7 +18,7 @@ class page_etterlyst extends pages_player
 	}
 	
 	/**
-	 * Behandle forespørsel
+	 * Behandle forespÃ¸rsel
 	 */
 	protected function handle()
 	{
@@ -28,7 +28,7 @@ class page_etterlyst extends pages_player
 			$this->show_add_player();
 		}
 		
-		// kjøpe ut spiller?
+		// kjÃ¸pe ut spiller?
 		elseif (isset($_GET['free']))
 		{
 			$this->show_free_player();
@@ -40,7 +40,7 @@ class page_etterlyst extends pages_player
 			$this->show_details();
 		}
 		
-		// trekke tilbake dusør
+		// trekke tilbake dusÃ¸r
 		elseif (isset($_POST['release']))
 		{
 			$this->show_release();
@@ -59,7 +59,7 @@ class page_etterlyst extends pages_player
 	{
 		global $__server;
 		
-		// hent alle oppføringene sortert med høyeste dusør øverst
+		// hent alle oppfÃ¸ringene sortert med hÃ¸yeste dusÃ¸r Ã¸verst
 		$expire = etterlyst::get_freeze_expire();
 		$pagei = new pagei(pagei::PER_PAGE, 20, pagei::ACTIVE_GET, "side");
 		$result = $pagei->query("
@@ -78,7 +78,7 @@ class page_etterlyst extends pages_player
 		if ($pagei->total == 0)
 		{
 			echo '
-		<p>Ingen spillere er etterlyst for øyeblikket.</p>';
+		<p>Ingen spillere er etterlyst for Ã¸yeblikket.</p>';
 		}
 		
 		else
@@ -115,8 +115,8 @@ class page_etterlyst extends pages_player
 				<tr>
 					<th>Spiller</th>
 					<th>Broderskap/firma</th>
-					<th>Dusør</th>
-					<th>Dusør som<br />kan kjøpes ut</th>
+					<th>DusÃ¸r</th>
+					<th>DusÃ¸r som<br />kan kjÃ¸pes ut</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -126,8 +126,8 @@ class page_etterlyst extends pages_player
 			foreach ($list as $row)
 			{
 				$links = array();
-				if ($row['hl_up_id'] != $this->up->id) $links[] = '<a href="?add&amp;up_id='.$row['hl_up_id'].'">øk dusør</a>';
-				if ($row['sum_can_remove'] > 0) $links[] = '<a href="?free='.$row['hl_up_id'].'">kjøp ut</a>';
+				if ($row['hl_up_id'] != $this->up->id) $links[] = '<a href="?add&amp;up_id='.$row['hl_up_id'].'">Ã¸k dusÃ¸r</a>';
+				if ($row['sum_can_remove'] > 0) $links[] = '<a href="?free='.$row['hl_up_id'].'">kjÃ¸p ut</a>';
 				
 				$ff = isset($ff_list[$row['hl_up_id']]) ? implode("<br />", $ff_list[$row['hl_up_id']]) : '&nbsp;';
 				
@@ -154,12 +154,12 @@ class page_etterlyst extends pages_player
 		}
 		
 		echo '
-		<p>Hvis du skader en spiller som det er satt en dusør på vil du motta deler av dusøren. Hvis denne spilleren dør vil du motta det gjenstående av dusøren. Det er ikke mulig å kjøpe ut dusører som har blitt satt de siste 7 dagene. <a href="'.$__server['relative_path'].'/node/44">Mer informasjon &raquo;</a></p>
-		<p><a href="?add">Sett dusør på en spiller &raquo;</a></p>
+		<p>Hvis du skader en spiller som det er satt en dusÃ¸r pÃ¥ vil du motta deler av dusÃ¸ren. Hvis denne spilleren dÃ¸r vil du motta det gjenstÃ¥ende av dusÃ¸ren. Det er ikke mulig Ã¥ kjÃ¸pe ut dusÃ¸rer som har blitt satt de siste 7 dagene. <a href="'.$__server['relative_path'].'/node/44">Mer informasjon &raquo;</a></p>
+		<p><a href="?add">Sett dusÃ¸r pÃ¥ en spiller &raquo;</a></p>
 	</div>
 </div>';
 		
-		// hent egne dusører
+		// hent egne dusÃ¸rer
 		$pagei = new pagei(pagei::PER_PAGE, 20, pagei::ACTIVE_GET, "side_by");
 		$result = $pagei->query("
 			SELECT hl_id, hl_up_id, hl_time, hl_amount, hl_amount_valid
@@ -171,9 +171,9 @@ class page_etterlyst extends pages_player
 		{
 			echo '
 <div class="bg1_c small" style="width: 450px">
-	<h2 class="bg1">Mine dusører<span class="left2"></span><span class="right2"></span></h2>
+	<h2 class="bg1">Mine dusÃ¸rer<span class="left2"></span><span class="right2"></span></h2>
 	<div class="bg1">
-		<p>Dette er dusørene du har plassert på andre spillere som fremdeles er gyldige. Hvis du velger å trekke en dusør, får du kun igjen <b>50 %</b> av dusøren.</p>
+		<p>Dette er dusÃ¸rene du har plassert pÃ¥ andre spillere som fremdeles er gyldige. Hvis du velger Ã¥ trekke en dusÃ¸r, fÃ¥r du kun igjen <b>50 %</b> av dusÃ¸ren.</p>
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="release" />
@@ -181,8 +181,8 @@ class page_etterlyst extends pages_player
 				<thead>
 					<tr>
 						<th>Spiller og tidspunkt</th>
-						<th>Opprinnelig beløp</th>
-						<th>Gjenstående beløp</th>
+						<th>Opprinnelig belÃ¸p</th>
+						<th>GjenstÃ¥ende belÃ¸p</th>
 					</tr>
 				</thead>
 				<tbody>';
@@ -202,7 +202,7 @@ class page_etterlyst extends pages_player
 				</tbody>
 			</table>
 			<p class="c">'.show_sbutton("Trekk tilbake").'</p>
-			<p>Gjenstående beløp er det beløpet som enda ikke er kjøpt ut av andre spillere.</p>
+			<p>GjenstÃ¥ende belÃ¸p er det belÃ¸pet som enda ikke er kjÃ¸pt ut av andre spillere.</p>
 		</form>
 	</div>
 </div>';
@@ -210,15 +210,15 @@ class page_etterlyst extends pages_player
 	}
 	
 	/**
-	 * Sette dusør på en spiller
+	 * Sette dusÃ¸r pÃ¥ en spiller
 	 */
 	protected function show_add_player()
 	{
-		ess::$b->page->add_title("Sett dusør");
+		ess::$b->page->add_title("Sett dusÃ¸r");
 		
 		echo '
 <div class="bg1_c xxsmall">
-	<h1 class="bg1">Etterlyst - sett dusør<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Etterlyst - sett dusÃ¸r<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1"><boxes />';
 		
 		// har vi valgt en spiller?
@@ -248,10 +248,10 @@ class page_etterlyst extends pages_player
 				if ($by_id !== false) redirect::handle("etterlyst?add");
 			}
 			
-			// død spiller?
+			// dÃ¸d spiller?
 			if ($player && $player['up_access_level'] == 0)
 			{
-				ess::$b->page->add_message('Spilleren <user id="'.$player['up_id'].'" /> er død og kan ikke etterlyses.', "error");
+				ess::$b->page->add_message('Spilleren <user id="'.$player['up_id'].'" /> er dÃ¸d og kan ikke etterlyses.', "error");
 				if ($by_id !== false) redirect::handle("etterlyst?add");
 				$player = false;
 			}
@@ -259,7 +259,7 @@ class page_etterlyst extends pages_player
 			// seg selv?
 			if ($player && $player['up_id'] == $this->up->id)
 			{
-				ess::$b->page->add_message("Du kan ikke sette dusør på deg selv.", "error");
+				ess::$b->page->add_message("Du kan ikke sette dusÃ¸r pÃ¥ deg selv.", "error");
 				if ($by_id !== false) redirect::handle("etterlyst?add");
 				$player = false;
 			}
@@ -267,35 +267,35 @@ class page_etterlyst extends pages_player
 			// nostat?
 			if ($player['up_access_level'] >= ess::$g['access_noplay'] && !access::is_nostat())
 			{
-				ess::$b->page->add_message("Du kan ikke sette dusør på en nostat.", "error");
+				ess::$b->page->add_message("Du kan ikke sette dusÃ¸r pÃ¥ en nostat.", "error");
 				if ($by_id !== false) redirect::handle("etterlyst?add");
 				$player = false;
 			}
 			
-			// er nostat og prøver å sette dusør på en spiller som ikke er nostat?
+			// er nostat og prÃ¸ver Ã¥ sette dusÃ¸r pÃ¥ en spiller som ikke er nostat?
 			if (access::is_nostat() && $player['up_access_level'] < ess::$g['access_noplay'] && !access::has("sadmin"))
 			{
-				ess::$b->page->add_message("Du er nostat og kan ikke sette dusør på en vanlig spiller.", "error");
+				ess::$b->page->add_message("Du er nostat og kan ikke sette dusÃ¸r pÃ¥ en vanlig spiller.", "error");
 				if ($by_id !== false) redirect::handle("etterlyst?add");
 				$player = false;
 			}
 		}
 		
-		// bestemme dusør?
+		// bestemme dusÃ¸r?
 		if ($player)
 		{
-			// hent eventuelle aktive dusører på spilleren
+			// hent eventuelle aktive dusÃ¸rer pÃ¥ spilleren
 			$result = ess::$b->db->query("
 				SELECT SUM(hl_amount_valid) AS sum_hl_amount_valid
 				FROM hitlist
 				WHERE hl_up_id = {$player['up_id']}");
 			$a = mysql_result($result, 0);
 			
-			// må vi vente?
+			// mÃ¥ vi vente?
 			$wait = false;
 			if ($a == 0 && !access::has("admin"))
 			{
-				// sjekk når siste hitlist ble utført
+				// sjekk nÃ¥r siste hitlist ble utfÃ¸rt
 				$last = $this->up->params->get("hitlist_last_new", false);
 				if ($last && $last + etterlyst::WAIT_TIME > time())
 				{
@@ -303,26 +303,26 @@ class page_etterlyst extends pages_player
 				}
 			}
 			
-			// legge til dusøren?
+			// legge til dusÃ¸ren?
 			if (isset($_POST['amount']) && !$wait)
 			{
 				$amount = game::intval($_POST['amount']);
 				
-				// høy nok dusør?
+				// hÃ¸y nok dusÃ¸r?
 				if ($amount < etterlyst::MIN_AMOUNT_SET)
 				{
-					ess::$b->page->add_message("Dusøren må være på minimum ".game::format_cash(etterlyst::MIN_AMOUNT_SET).".", "error");
+					ess::$b->page->add_message("DusÃ¸ren mÃ¥ vÃ¦re pÃ¥ minimum ".game::format_cash(etterlyst::MIN_AMOUNT_SET).".", "error");
 				}
 				
 				else
 				{
 					ess::$b->db->begin();
 					
-					// forsøk å trekk fra pengene
+					// forsÃ¸k Ã¥ trekk fra pengene
 					ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = ".$this->up->id." AND up_cash >= $amount");
 					if (ess::$b->db->affected_rows() == 0)
 					{
-						ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
+						ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda.", "error");
 					}
 					
 					else
@@ -334,10 +334,10 @@ class page_etterlyst extends pages_player
 						// legg til i loggen til spilleren
 						player::add_log_static("etterlyst_add", NULL, $amount, $player['up_id']);
 						
-						putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." la til dusør for UP_ID={$player['up_id']} på ".game::format_cash($amount).'.');
-						putlog("INFO", "ETTERLYST: En spiller la til en dusør for {$player['up_name']} på ".game::format_cash($amount)." ".ess::$s['path']."/etterlyst");
+						putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." la til dusÃ¸r for UP_ID={$player['up_id']} pÃ¥ ".game::format_cash($amount).'.');
+						putlog("INFO", "ETTERLYST: En spiller la til en dusÃ¸r for {$player['up_name']} pÃ¥ ".game::format_cash($amount)." ".ess::$s['path']."/etterlyst");
 						
-						ess::$b->page->add_message('Du la til '.game::format_cash($amount).' som dusør for spilleren <user id="'.$player['up_id'].'" />.');
+						ess::$b->page->add_message('Du la til '.game::format_cash($amount).' som dusÃ¸r for spilleren <user id="'.$player['up_id'].'" />.');
 						$this->up->params->update("hitlist_last_new", time(), true);
 						
 						redirect::handle();
@@ -353,17 +353,17 @@ class page_etterlyst extends pages_player
 		<p>Valgt spiller: <user id="'.$player['up_id'].'" /></p>
 		<form action="" method="post">
 			<input type="hidden" name="up_id" value="'.$player['up_id'].'" />'.(!$a ? '
-			<p>Denne spilleren har ingen dusør tilnyttet seg fra før.</p>' : '
-			<p>Denne spilleren har allerede en dusør på '.game::format_cash($a).'.</p>').($wait ? '
-			<p class="error_box">Du må vente '.game::counter($wait).' før du kan plassere en ny spiller på listen.</p>
+			<p>Denne spilleren har ingen dusÃ¸r tilnyttet seg fra fÃ¸r.</p>' : '
+			<p>Denne spilleren har allerede en dusÃ¸r pÃ¥ '.game::format_cash($a).'.</p>').($wait ? '
+			<p class="error_box">Du mÃ¥ vente '.game::counter($wait).' fÃ¸r du kan plassere en ny spiller pÃ¥ listen.</p>
 			<p class="c"><a href="etterlyst">Avbryt</a></p>' : '
 			<dl class="dd_right">
-				<dt>'.(!$a ? 'Dusør' : 'Øk dusøren med').'</dt>
+				<dt>'.(!$a ? 'DusÃ¸r' : 'Ã˜k dusÃ¸ren med').'</dt>
 				<dd><input type="text" name="amount" id="select_amount" value="'.htmlspecialchars(postval("amount")).'" class="styled w100" /></dd>
 			</dl>
-			<p class="c">'.show_sbutton($a ? "Øk dusøren" : "Legg til dusør").'</p>
+			<p class="c">'.show_sbutton($a ? "Ã˜k dusÃ¸ren" : "Legg til dusÃ¸r").'</p>
 			<p class="c"><a href="etterlyst">Avbryt</a> - <a href="etterlyst?add">Velg en annen spiller</a></p>
-			<p>Hvis du velger å fjerne dusøren etter du har lagt den til, får du kun 50 % igjen. Hvis noen kjøper ut dusøren får du igjen 50 % av den.</p>').'
+			<p>Hvis du velger Ã¥ fjerne dusÃ¸ren etter du har lagt den til, fÃ¥r du kun 50 % igjen. Hvis noen kjÃ¸per ut dusÃ¸ren fÃ¥r du igjen 50 % av den.</p>').'
 		</form>';
 		}
 		
@@ -373,7 +373,7 @@ class page_etterlyst extends pages_player
 			ess::$b->page->add_js_domready('$("select_up_name").focus();');
 			
 			echo '
-		<p>Du må først velge hvilken spiller du ønsker å legge til dusør på.</p>
+		<p>Du mÃ¥ fÃ¸rst velge hvilken spiller du Ã¸nsker Ã¥ legge til dusÃ¸r pÃ¥.</p>
 		<form action="" method="post">
 			<dl class="dd_right">
 				<dt>Spiller</dt>
@@ -390,7 +390,7 @@ class page_etterlyst extends pages_player
 	}
 	
 	/**
-	 * Kjøpe ut en spiller
+	 * KjÃ¸pe ut en spiller
 	 */
 	protected function show_free_player()
 	{
@@ -407,28 +407,28 @@ class page_etterlyst extends pages_player
 		$hl = mysql_fetch_assoc($result);
 		if (!$hl)
 		{
-			ess::$b->page->add_message('Spilleren <user id="'.$hl['hl_up_id'].'" /> har ingen dusør på seg.', "error");
+			ess::$b->page->add_message('Spilleren <user id="'.$hl['hl_up_id'].'" /> har ingen dusÃ¸r pÃ¥ seg.', "error");
 			redirect::handle();
 		}
 		
-		// kan ikke kjøpe ut noe?
+		// kan ikke kjÃ¸pe ut noe?
 		if ($hl['sum_can_remove'] == 0)
 		{
-			ess::$b->page->add_message('Du må vente lenger for å kunne kjøpe ut dusøren til <user id="'.$up_id.'" />.', "error");
+			ess::$b->page->add_message('Du mÃ¥ vente lenger for Ã¥ kunne kjÃ¸pe ut dusÃ¸ren til <user id="'.$up_id.'" />.', "error");
 			redirect::handle();
 		}
 		
 		$least = min(max(etterlyst::MIN_AMOUNT_BUYOUT, etterlyst::MIN_AMOUNT_BUYOUT_RATIO * $hl['sum_can_remove']), $hl['sum_can_remove']);
 		
-		// kjøpe ut?
+		// kjÃ¸pe ut?
 		if (isset($_POST['amount']))
 		{
 			$amount = game::intval($_POST['amount']);
 			
-			// under minstebeløpet?
+			// under minstebelÃ¸pet?
 			if ($amount < $least)
 			{
-				ess::$b->page->add_message("Beløpet kan ikke være mindre enn ".game::format_cash($least).".", "error");
+				ess::$b->page->add_message("BelÃ¸pet kan ikke vÃ¦re mindre enn ".game::format_cash($least).".", "error");
 			}
 			
 			else
@@ -438,32 +438,32 @@ class page_etterlyst extends pages_player
 				$result = ess::$b->db->query("SELECT $amount * $m, $amount > {$hl['sum_can_remove']}, $amount * $m > ".$this->up->data['up_cash']);
 				$price = mysql_result($result, 0);
 				
-				// for høyt beløp?
+				// for hÃ¸yt belÃ¸p?
 				if (mysql_result($result, 0, 1))
 				{
-					ess::$b->page->add_message("Beløpet var for høyt.", "error");
+					ess::$b->page->add_message("BelÃ¸pet var for hÃ¸yt.", "error");
 				}
 				
 				// har ikke nok penger?
 				elseif (mysql_result($result, 0, 2))
 				{
-					ess::$b->page->add_message("Du har ikke nok penger på hånda. Du må ha ".game::format_cash($price)." på hånda for å kunne betale ut ".game::format_cash($amount).".", "error");
+					ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda. Du mÃ¥ ha ".game::format_cash($price)." pÃ¥ hÃ¥nda for Ã¥ kunne betale ut ".game::format_cash($amount).".", "error");
 				}
 				
 				else
 				{
 					ess::$b->db->begin();
 					
-					// forsøk å trekk fra pengene
+					// forsÃ¸k Ã¥ trekk fra pengene
 					ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = ".$this->up->id." AND up_cash >= $price");
 					if (ess::$b->db->affected_rows() == 0)
 					{
-						ess::$b->page->add_message("Du har ikke nok penger på hånda. Du må ha ".game::format_cash($price)." på hånda for å kunne betale ut ".game::format_cash($amount).".", "error");
+						ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda. Du mÃ¥ ha ".game::format_cash($price)." pÃ¥ hÃ¥nda for Ã¥ kunne betale ut ".game::format_cash($amount).".", "error");
 					}
 					
 					else
 					{
-						// forsøk å trekk fra pengene fra hitlist
+						// forsÃ¸k Ã¥ trekk fra pengene fra hitlist
 						ess::$b->db->query("SET @t := $amount");
 						ess::$b->db->query("
 							UPDATE hitlist h, (
@@ -485,22 +485,22 @@ class page_etterlyst extends pages_player
 						if ($a > 0)
 						{
 							ess::$b->db->rollback();
-							ess::$b->page->add_message("Beløpet var for høyt.", "error");
+							ess::$b->page->add_message("BelÃ¸pet var for hÃ¸yt.", "error");
 						}
 						
 						else
 						{
 							ess::$b->db->commit();
 							
-							putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." kjøpte ut dusør for UP_ID=$up_id på ".game::format_cash($amount).'. Betalte '.game::format_cash($price).'.');
+							putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." kjÃ¸pte ut dusÃ¸r for UP_ID=$up_id pÃ¥ ".game::format_cash($amount).'. Betalte '.game::format_cash($price).'.');
 							
 							if ($up_id == $this->up->id)
 							{
-								ess::$b->page->add_message("Du kjøpte ut en dusør på ".game::format_cash($amount).' for deg selv. Du måtte betale '.game::format_cash($price).' for dette.');
+								ess::$b->page->add_message("Du kjÃ¸pte ut en dusÃ¸r pÃ¥ ".game::format_cash($amount).' for deg selv. Du mÃ¥tte betale '.game::format_cash($price).' for dette.');
 							}
 							else
 							{
-								ess::$b->page->add_message("Du kjøpte ut en dusør på ".game::format_cash($amount).' for <user id="'.$up_id.'" />. Du måtte betale '.game::format_cash($price).' for dette.');
+								ess::$b->page->add_message("Du kjÃ¸pte ut en dusÃ¸r pÃ¥ ".game::format_cash($amount).' for <user id="'.$up_id.'" />. Du mÃ¥tte betale '.game::format_cash($price).' for dette.');
 							}
 							
 							redirect::handle();
@@ -514,27 +514,27 @@ class page_etterlyst extends pages_player
 		
 		echo '
 <div class="bg1_c xxsmall">
-	<h1 class="bg1">Etterlyst - kjøp ut spiller<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Etterlyst - kjÃ¸p ut spiller<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1"><boxes />
 		<dl class="dd_right">
 			<dt>Spiller</dt>
 			<dd><user id="'.$up_id.'" /></dd>
-			<dt>Total dusør</dt>
+			<dt>Total dusÃ¸r</dt>
 			<dd>'.game::format_cash($hl['sum_hl_amount_valid']).'</dd>
-			<dt>Dusør som kan kjøpes ut</dt>
+			<dt>DusÃ¸r som kan kjÃ¸pes ut</dt>
 			<dd>'.game::format_cash($hl['sum_can_remove']).'</dd>
 		</dl>
 		<form action="" method="post">
 			<input type="hidden" name="up_id" value="'.$up_id.'" />
 			<dl class="dd_right">
-				<dt>Dusør å kjøpe ut</dt>
+				<dt>DusÃ¸r Ã¥ kjÃ¸pe ut</dt>
 				<dd><input type="text" name="amount" id="select_amount" value="'.htmlspecialchars(postval("amount", game::format_cash($hl['sum_can_remove']))).'" class="styled w100" /></dd>
 			</dl>
-			<p class="c">'.show_sbutton("Kjøp ut").'</p>
+			<p class="c">'.show_sbutton("KjÃ¸p ut").'</p>
 			<p class="c"><a href="etterlyst">Avbryt</a> - <a href="etterlyst?add">Velg en annen spiller</a></p>
 			<p>'.($up_id == $this->up->id
-				? 'Du må betale 3 ganger beløpet du velger å kjøpe ut for når du kjøper ut deg selv.'
-				: 'Du må betale det dobbelte av beløpet du velger å kjøpe ut en annen spiller for.').'</p>
+				? 'Du mÃ¥ betale 3 ganger belÃ¸pet du velger Ã¥ kjÃ¸pe ut for nÃ¥r du kjÃ¸per ut deg selv.'
+				: 'Du mÃ¥ betale det dobbelte av belÃ¸pet du velger Ã¥ kjÃ¸pe ut en annen spiller for.').'</p>
 		</form>
 	</div>
 </div>';
@@ -568,12 +568,12 @@ class page_etterlyst extends pages_player
 	</h1>
 	<p class="h_left"><a href="etterlyst">&laquo; Tilbake</a></p>
 	<div class="bg1">
-		<p>Denne listen viser info om alle som har lagt til dusør på spilleren '.$up->profile_link().'.</p>';
+		<p>Denne listen viser info om alle som har lagt til dusÃ¸r pÃ¥ spilleren '.$up->profile_link().'.</p>';
 		
 		if ($pagei->total == 0)
 		{
 			echo '
-		<p><b>Det er ingen som har satt dusør på denne spilleren.</b></p>';
+		<p><b>Det er ingen som har satt dusÃ¸r pÃ¥ denne spilleren.</b></p>';
 		}
 		
 		else
@@ -584,8 +584,8 @@ class page_etterlyst extends pages_player
 				<tr>
 					<th>Satt av</th>
 					<th>Tid</th>
-					<th>Opprinnelig dusør</th>
-					<th>Gjenstående dusør</th>
+					<th>Opprinnelig dusÃ¸r</th>
+					<th>GjenstÃ¥ende dusÃ¸r</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -619,13 +619,13 @@ class page_etterlyst extends pages_player
 	}
 	
 	/**
-	 * Trekk tilbake dusør
+	 * Trekk tilbake dusÃ¸r
 	 */
 	protected function show_release()
 	{
 		if (!isset($_POST['hl_id']))
 		{
-			ess::$b->page->add_message("Du må velge en dusør du har satt.", "error");
+			ess::$b->page->add_message("Du mÃ¥ velge en dusÃ¸r du har satt.", "error");
 			redirect::handle();
 		}
 		
@@ -637,22 +637,22 @@ class page_etterlyst extends pages_player
 		
 		if (!$hl)
 		{
-			ess::$b->page->add_message("Fant ikke oppføringen.", "error");
+			ess::$b->page->add_message("Fant ikke oppfÃ¸ringen.", "error");
 			redirect::handle();
 		}
 		
 		ess::$b->db->begin();
 		
-		// slett oppføringen
+		// slett oppfÃ¸ringen
 		ess::$b->db->query("DELETE FROM hitlist WHERE hl_id = $hl_id AND hl_amount_valid = {$hl['hl_amount_valid']}");
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Noen kom deg i forkjøpet og kjøpte ut hele eller deler av dusøren.", "error");
+			ess::$b->page->add_message("Noen kom deg i forkjÃ¸pet og kjÃ¸pte ut hele eller deler av dusÃ¸ren.", "error");
 			ess::$b->db->commit();
 			redirect::handle();
 		}
 		
-		// hvor mye penger skal vi få?
+		// hvor mye penger skal vi fÃ¥?
 		$result = ess::$b->db->query("SELECT ROUND({$hl['hl_amount_valid']}/2)");
 		$amount = mysql_result($result, 0);
 		
@@ -660,9 +660,9 @@ class page_etterlyst extends pages_player
 		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + $amount WHERE up_id = ".$this->up->id);
 		ess::$b->db->commit();
 		
-		putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." trakk tilbake dusør for UP_ID={$hl['hl_up_id']} på ".game::format_cash($hl['hl_amount_valid']).'.');
+		putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." trakk tilbake dusÃ¸r for UP_ID={$hl['hl_up_id']} pÃ¥ ".game::format_cash($hl['hl_amount_valid']).'.');
 		
-		ess::$b->page->add_message('Du trakk tilbake dusøren på <user id="'.$hl['hl_up_id'].'" /> som ble satt '.ess::$b->date->get($hl['hl_time'])->format().' og som hadde igjen '.game::format_cash($hl['hl_amount_valid']).'. Du fikk tilbake '.game::format_cash($amount).'.');
+		ess::$b->page->add_message('Du trakk tilbake dusÃ¸ren pÃ¥ <user id="'.$hl['hl_up_id'].'" /> som ble satt '.ess::$b->date->get($hl['hl_time'])->format().' og som hadde igjen '.game::format_cash($hl['hl_amount_valid']).'. Du fikk tilbake '.game::format_cash($amount).'.');
 		redirect::handle();
 	}
 }

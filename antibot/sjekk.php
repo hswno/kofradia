@@ -14,7 +14,7 @@ if (isset($_GET['a']))
 	// mangler?
 	if (!isset($_SESSION[$GLOBALS['__server']['session_prefix'].'data']['antibot'][$aid][$num]))
 	{
-		#putlog("ABUSE", "%bUGYLDIG BILDE:%b %u".login::$user->player->data['up_name']."%u fors¯kte Â vise et anti-bot bilde som ikke fantes: {$_SERVER['REQUEST_URI']}");
+		#putlog("ABUSE", "%bUGYLDIG BILDE:%b %u".login::$user->player->data['up_name']."%u fors√∏kte √• vise et anti-bot bilde som ikke fantes: {$_SERVER['REQUEST_URI']}");
 		die("Mangler.");
 	}
 	

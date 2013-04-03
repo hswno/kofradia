@@ -34,7 +34,7 @@ class antibot
 	}
 	
 	/**
-	 * Øk telleren
+	 * Ã˜k telleren
 	 */
 	public function increase_counter()
 	{
@@ -69,7 +69,7 @@ class antibot
 	}
 	
 	/**
-	 * Sjekk om test er nødvendig
+	 * Sjekk om test er nÃ¸dvendig
 	 */
 	public function is_check_required()
 	{
@@ -92,7 +92,7 @@ class antibot
 	}
 	
 	/**
-	 * Send videre til siden for anti-bot test om nødvendig
+	 * Send videre til siden for anti-bot test om nÃ¸dvendig
 	 */
 	public function check_required($redirect = NULL)
 	{
@@ -108,7 +108,7 @@ class antibot
 	}
 	
 	/**
-	 * Oppdater tid for forsøk
+	 * Oppdater tid for forsÃ¸k
 	 */
 	public function update_time()
 	{
@@ -147,11 +147,11 @@ class antibot
 		// slett gamle bilder
 		ess::$b->db->query("DELETE FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
 		
-		// lås anti-boten
+		// lÃ¥s anti-boten
 		$l = ess::$b->db->begin();
 		ess::$b->db->query("SELECT id FROM users_antibot WHERE id = {$this->data['id']} FOR UPDATE");
 		
-		// har noen bilder nå?
+		// har noen bilder nÃ¥?
 		$result = ess::$b->db->query("SELECT COUNT(*) FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
 		if (mysql_result($result, 0) > 0)
 		{
@@ -184,7 +184,7 @@ class antibot
 			if ($valid) $images['valid']++;
 		}
 		
-		// avslutt lås
+		// avslutt lÃ¥s
 		if ($l) ess::$b->db->commit();
 		
 		return $images;
@@ -200,7 +200,7 @@ class antibot
 	}
 	
 	/**
-	 * Anti-bot test ble utført vellykket
+	 * Anti-bot test ble utfÃ¸rt vellykket
 	 */
 	public function valid()
 	{
@@ -218,12 +218,12 @@ class antibot
 	}
 	
 	/**
-	 * Antall kuler som skal kjøpes
+	 * Antall kuler som skal kjÃ¸pes
 	 */
 	protected $kuler_num;
 	
 	/**
-	 * Når kulene må være kjøpt
+	 * NÃ¥r kulene mÃ¥ vÃ¦re kjÃ¸pt
 	 */
 	public $kuler_time_left;
 	
@@ -234,7 +234,7 @@ class antibot
 	{
 		$time = time();
 		
-		// sjekk om vi fremdeles kan kjøpe kulene
+		// sjekk om vi fremdeles kan kjÃ¸pe kulene
 		$result = ess::$b->db->query("
 			SELECT COUNT(*)
 			FROM bullets
@@ -244,15 +244,15 @@ class antibot
 		$this->kuler_num = mysql_result($result, 0);
 		if ($this->kuler_num == 0)
 		{
-			putlog("LOG", "KJØPE KULER: ".login::$user->player->data['up_name']." var for treg med å utføre anti-bot for å kjøpe kuler");
-			ess::$b->page->add_message("Du var for treg og kulene du ønsket å kjøpe var ikke lenger tilgjengelig.", "error");
+			putlog("LOG", "KJÃ˜PE KULER: ".login::$user->player->data['up_name']." var for treg med Ã¥ utfÃ¸re anti-bot for Ã¥ kjÃ¸pe kuler");
+			ess::$b->page->add_message("Du var for treg og kulene du Ã¸nsket Ã¥ kjÃ¸pe var ikke lenger tilgjengelig.", "error");
 			
 			$this->abort();
 			
 			return false;
 		}
 		
-		// finn ut hvor lang tid vi har på oss
+		// finn ut hvor lang tid vi har pÃ¥ oss
 		$result = ess::$b->db->query("
 			SELECT bullet_freeze_time
 			FROM bullets
@@ -273,7 +273,7 @@ class antibot
 	 */
 	protected function kuler()
 	{
-		// utføre precheck?
+		// utfÃ¸re precheck?
 		if (!$this->kuler_num)
 		{
 			if (!$this->kuler_precheck()) return;
@@ -288,7 +288,7 @@ class antibot
 		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = ".login::$user->player->id." AND up_cash >= $price");
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Du har ikke nok penger på hånda. For å kjøpe $this->kuler_num ".fword("kule", "kuler", $this->kuler_num)." må du ha ".game::format_cash($price)." på hånda. Kulene ble gjort tilgjengelig for alle igjen.", "error");
+			ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda. For Ã¥ kjÃ¸pe $this->kuler_num ".fword("kule", "kuler", $this->kuler_num)." mÃ¥ du ha ".game::format_cash($price)." pÃ¥ hÃ¥nda. Kulene ble gjort tilgjengelig for alle igjen.", "error");
 			
 			ess::$b->db->query("UPDATE bullets SET up_freeze_up_id = NULL, up_freeze_time = 0 WHERE up_freeze_up_id = ".login::$user->player->id);
 			ess::$b->db->commit();
@@ -296,7 +296,7 @@ class antibot
 			return;
 		}
 		
-		// forsøk å skaff alle kulene
+		// forsÃ¸k Ã¥ skaff alle kulene
 		ess::$b->db->query("
 			DELETE FROM bullets
 			WHERE bullet_freeze_up_id = ".login::$user->player->id." AND bullet_freeze_time > $time
@@ -310,8 +310,8 @@ class antibot
 			ess::$b->db->rollback();
 			
 			// informer
-			putlog("DF", "KJØPE KULER: ".login::$user->player->data['up_name']." var for treg med å utføre anti-bot for å kjøpe kuler");
-			ess::$b->page->add_message("Du var for treg og kulene du ønsket å kjøpe var ikke lenger tilgjengelig.", "error");
+			putlog("DF", "KJÃ˜PE KULER: ".login::$user->player->data['up_name']." var for treg med Ã¥ utfÃ¸re anti-bot for Ã¥ kjÃ¸pe kuler");
+			ess::$b->page->add_message("Du var for treg og kulene du Ã¸nsket Ã¥ kjÃ¸pe var ikke lenger tilgjengelig.", "error");
 			
 			return;
 		}
@@ -321,14 +321,14 @@ class antibot
 		ess::$b->db->commit();
 		
 		// logg
-		putlog("DF", "KJØPE KULER: ".login::$user->player->data['up_name']." kjøpte $this->kuler_num kuler for totalt ".game::format_cash($price));
+		putlog("DF", "KJÃ˜PE KULER: ".login::$user->player->data['up_name']." kjÃ¸pte $this->kuler_num kuler for totalt ".game::format_cash($price));
 		
 		// informer
-		ess::$b->page->add_message("Du kjøpte $this->kuler_num ".fword("kule", "kuler", $this->kuler_num)." for ".game::format_cash($price).".");
+		ess::$b->page->add_message("Du kjÃ¸pte $this->kuler_num ".fword("kule", "kuler", $this->kuler_num)." for ".game::format_cash($price).".");
 	}
 	
 	/**
-	 * Oppdater anti-bot status - for å loggføre de som bruker lang tid mellom anti-bot handlingene
+	 * Oppdater anti-bot status - for Ã¥ loggfÃ¸re de som bruker lang tid mellom anti-bot handlingene
 	 */
 	public function update_status($step, $param = NULL)
 	{
@@ -344,14 +344,14 @@ class antibot
 		//   failed
 		//   success
 		
-		// har vi noe status fra før?
+		// har vi noe status fra fÃ¸r?
 		if (isset($_SESSION[$__server['session_prefix'].'antibot_status'][$this->name]))
 		{
 			$p = array_reverse($_SESSION[$__server['session_prefix'].'antibot_status'][$this->name]);
 			
 			if (count($p) > 6)
 			{
-				putlog("ABUSE", "%c10%bANTIBOT-LOG%b: %u".login::$user->player->data['up_name']."%u har utført mange forskjellige handlinger på rad uten å ha fullført anti-boten (%u{$this->name}%u) - handlingslogg:");
+				putlog("ABUSE", "%c10%bANTIBOT-LOG%b: %u".login::$user->player->data['up_name']."%u har utfÃ¸rt mange forskjellige handlinger pÃ¥ rad uten Ã¥ ha fullfÃ¸rt anti-boten (%u{$this->name}%u) - handlingslogg:");
 				putlog("ABUSE", "%c10%bANTIBOT-LOG%b: $step");
 				$time_last = $n;
 				foreach ($p as $row)
@@ -368,16 +368,16 @@ class antibot
 			$last = $p[0];
 			$last_time = $n - $last['time'];
 			
-			// utført anti-bot, men forrige handling var ikke init/repeat?
+			// utfÃ¸rt anti-bot, men forrige handling var ikke init/repeat?
 			if ($step == "success" && $last['step'] != "test_init" && $last['step'] != "test_repeat")
 			{
-				putlog("ABUSE", "%c10%bANTIBOT-LOG%b: %u".login::$user->player->data['up_name']."%u utførte anti-bot vellykket, men forrige handling var ikke å vise anti-bot testen ($last_time sekunder siden forrige handling: {$last['step']}) (%u{$this->name}%u)");
+				putlog("ABUSE", "%c10%bANTIBOT-LOG%b: %u".login::$user->player->data['up_name']."%u utfÃ¸rte anti-bot vellykket, men forrige handling var ikke Ã¥ vise anti-bot testen ($last_time sekunder siden forrige handling: {$last['step']}) (%u{$this->name}%u)");
 			}
 			
-			// brukt lang tid på å utføre anti-boten?
+			// brukt lang tid pÃ¥ Ã¥ utfÃ¸re anti-boten?
 			elseif ($last_time > 60 && $step == "success")
 			{
-				putlog("ABUSE", "%c10%bANTIBOT-LOG%b: %u".login::$user->player->data['up_name']."%u utførte anti-bot vellykket, men brukte lang tid ($last_time sekunder siden forrige handling: {$last['step']}) (%u{$this->name}%u)");
+				putlog("ABUSE", "%c10%bANTIBOT-LOG%b: %u".login::$user->player->data['up_name']."%u utfÃ¸rte anti-bot vellykket, men brukte lang tid ($last_time sekunder siden forrige handling: {$last['step']}) (%u{$this->name}%u)");
 			}
 		}
 		
@@ -397,11 +397,11 @@ class antibot
 		{
 			case "redir":
 				// trenger sjekk
-				putlog("ANTIBOT", "%c10%bVIDERESENDING%b: %u".login::$user->player->data['up_name']."%u blir nå videresendt til anti-bot testen %u{$this->name}%u");
+				putlog("ANTIBOT", "%c10%bVIDERESENDING%b: %u".login::$user->player->data['up_name']."%u blir nÃ¥ videresendt til anti-bot testen %u{$this->name}%u");
 			break;
 			
 			case "new_img_wait":
-				putlog("ANTIBOT", "%c8%bNYE BILDER%b: %u".login::$user->player->data['up_name']."%u ba om nye bilder for %u{$this->name}%u men må vente %u$param%u sekunder");
+				putlog("ANTIBOT", "%c8%bNYE BILDER%b: %u".login::$user->player->data['up_name']."%u ba om nye bilder for %u{$this->name}%u men mÃ¥ vente %u$param%u sekunder");
 			break;
 			
 			case "new_img":
@@ -409,7 +409,7 @@ class antibot
 			break;
 			
 			case "test_repeat":
-				putlog("ANTIBOT", "%c13%bSJEKK%b: %u".login::$user->player->data['up_name']."%u viste anti-boten for %u{$this->name}%u på nytt");
+				putlog("ANTIBOT", "%c13%bSJEKK%b: %u".login::$user->player->data['up_name']."%u viste anti-boten for %u{$this->name}%u pÃ¥ nytt");
 			break;
 			
 			case "test_init":
@@ -421,7 +421,7 @@ class antibot
 			break;
 			
 			case "success":
-				putlog("ANTIBOT", "%bSJEKK VELLYKKET%b: %u".login::$user->player->data['up_name']."%u utførte anti-boten for %u{$this->name}%u");
+				putlog("ANTIBOT", "%bSJEKK VELLYKKET%b: %u".login::$user->player->data['up_name']."%u utfÃ¸rte anti-boten for %u{$this->name}%u");
 			break;
 		}
 	}
@@ -534,7 +534,7 @@ class antibot_generate
 		// ingen bilder?
 		if (count($images) == 0)
 		{
-			// lag et hvitt bilde med tekst på
+			// lag et hvitt bilde med tekst pÃ¥
 			$text = $valid ? 'Gyldig bilde' : 'Ikke gyldig';
 			
 			// opprett bilde
@@ -556,11 +556,11 @@ class antibot_generate
 		$file = $images[array_rand($images)];
 		$type = self::image_type($file);
 		
-		// åpne bildet
+		// Ã¥pne bildet
 		$source = call_user_func("imagecreatefrom".$type, "$dir/$file");
 		if (!$source) die("image create error");
 		
-		// finn størrelse
+		// finn stÃ¸rrelse
 		$source_width = imagesx($source);
 		$source_height = imagesy($source);
 		
@@ -600,7 +600,7 @@ class antibot_generate
 		imagedestroy($rotated);
 		
 		
-		// legger på watermark
+		// legger pÃ¥ watermark
 		if (self::WATERMARK)
 		{
 			$watermark = imagecreatefrompng(self::$watermark_src);

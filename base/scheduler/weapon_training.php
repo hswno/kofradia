@@ -1,21 +1,21 @@
 <?php
 
 /*
- * Setter ned våpentreningen
- * Kjøres 1 gang per time
+ * Setter ned vÃ¥pentreningen
+ * KjÃ¸res 1 gang per time
  * 
- * Hvis en spiller har under 25 % våpentrening mister spilleren våpenet (om det er bedre våpen enn glock)
+ * Hvis en spiller har under 25 % vÃ¥pentrening mister spilleren vÃ¥penet (om det er bedre vÃ¥pen enn glock)
  */
 
-// sett ned våpentreningen
-$expire = time() - 172800; // kun for de som har vært aktive siste 48 timer
+// sett ned vÃ¥pentreningen
+$expire = time() - 172800; // kun for de som har vÃ¦rt aktive siste 48 timer
 ess::$b->db->query("
 	UPDATE users_players
 	SET up_weapon_training = GREATEST(0.1, up_weapon_training * 0.988)
 	WHERE up_weapon_training > 0.1
 		AND up_last_online > $expire");
 
-// hent de spillerene som skal nedgradere eller miste våpenet sitt
+// hent de spillerene som skal nedgradere eller miste vÃ¥penet sitt
 $result = ess::$b->db->query("
 	SELECT up_id, up_name, up_weapon_id, up_weapon_bullets
 	FROM users_players
@@ -29,16 +29,16 @@ while ($row = mysql_fetch_assoc($result))
 	// fjern fra evt. auksjoner
 	auksjon::player_release(null, $row['up_id'], auksjon::TYPE_KULER);
 	
-	// skal vi nedgradere våpenet?
-	// man vil aldri miste våpen, det blir alltid nedgradert til dårligste våpen
-	// beholder resten av koden i tilfelle vi ønsker å gjøre forandringer igjen
+	// skal vi nedgradere vÃ¥penet?
+	// man vil aldri miste vÃ¥pen, det blir alltid nedgradert til dÃ¥rligste vÃ¥pen
+	// beholder resten av koden i tilfelle vi Ã¸nsker Ã¥ gjÃ¸re forandringer igjen
 	if ($row['up_weapon_id'] > 1)
 	{
 		$new_id = $row['up_weapon_id'] - 1;
 		$new_w = &weapon::$weapons[$new_id];
 		$training = weapon::DOWNGRADE_TRAINING;
 		
-		// sett til 50 % på forrige våpen
+		// sett til 50 % pÃ¥ forrige vÃ¥pen
 		ess::$b->db->query("
 			UPDATE users_players
 			SET up_weapon_id = $new_id, up_weapon_bullets = 0, up_weapon_training = $training
@@ -50,7 +50,7 @@ while ($row = mysql_fetch_assoc($result))
 			player::add_log_static("weapon_lost", $row['up_weapon_id'].":".urlencode($w['name']).":".urlencode($row['up_weapon_bullets']).":".urlencode($new_w['name']).":".$training, 1, $row['up_id']);
 			
 			// logg
-			putlog("LOG", "NEDGRADERT VÅPEN: {$row['up_name']} mistet våpenet {$w['name']} med {$row['up_weapon_bullets']} kuler grunnet lav våpentrening. Fikk i stedet våpenet {$new_w['name']}.");
+			putlog("LOG", "NEDGRADERT VÃ…PEN: {$row['up_name']} mistet vÃ¥penet {$w['name']} med {$row['up_weapon_bullets']} kuler grunnet lav vÃ¥pentrening. Fikk i stedet vÃ¥penet {$new_w['name']}.");
 		}
 	}
 	
@@ -60,7 +60,7 @@ while ($row = mysql_fetch_assoc($result))
 		player::add_log_static("weapon_lost", $row['up_weapon_id'].":".urlencode($w['name']).":".urlencode($row['up_weapon_bullets']), 0, $row['up_id']);
 		
 		// logg
-		putlog("LOG", "MISTET VÅPEN: {$row['up_name']} mistet våpenet {$w['name']} med {$row['up_weapon_bullets']} kuler grunnet lav våpentrening.");
+		putlog("LOG", "MISTET VÃ…PEN: {$row['up_name']} mistet vÃ¥penet {$w['name']} med {$row['up_weapon_bullets']} kuler grunnet lav vÃ¥pentrening.");
 	}
 }
 
@@ -68,7 +68,7 @@ unset($w);
 
 if (mysql_num_rows($result) > 0)
 {
-	// fjern våpnene fra de som skal miste det
+	// fjern vÃ¥pnene fra de som skal miste det
 	ess::$b->db->query("
 		UPDATE users_players
 		SET up_weapon_id = NULL, up_weapon_bullets = 0

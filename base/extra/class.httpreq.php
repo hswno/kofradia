@@ -23,7 +23,7 @@ class httpreq
 		return true;
 	}
 	
-	// utføre GET spørring
+	// utfÃ¸re GET spÃ¸rring
 	function get($path, $cookies = array(), $receive_data = true)
 	{
 		// koble til
@@ -44,7 +44,7 @@ class httpreq
 		
 		$headers[] = "Connection: close";
 		
-		// send spørring
+		// send spÃ¸rring
 		@fputs($this->link, implode("\r\n", $headers)."\r\n\r\n");
 		
 		// hente data?
@@ -56,7 +56,7 @@ class httpreq
 		return $this->link;
 	}
 	
-	// utføre POST spørring
+	// utfÃ¸re POST spÃ¸rring
 	function post($path, $params = array(), $cookies = array(), $receive_data = true)
 	{
 		// koble til
@@ -104,7 +104,7 @@ class httpreq
 		$headers[] = "Content-length: " . strlen($post);
 		$headers[] = "Connection: close";
 		
-		// send spørring
+		// send spÃ¸rring
 		fputs($this->link, implode("\r\n", $headers)."\r\n\r\n".$post);
 		
 		// hente data?

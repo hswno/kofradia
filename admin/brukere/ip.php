@@ -23,7 +23,7 @@ $time = isset($_GET['filter']) && $_GET['filter'] > 0 ? intval($_GET['filter']) 
 
 echo '
 <h1>IP</h1>
-<p>IP-adresser med flere enn 1 bruker som har vært logget inn i løpet av siste '.game::timespan($time, game::TIME_FULL).'</p>
+<p>IP-adresser med flere enn 1 bruker som har vÃ¦rt logget inn i lÃ¸pet av siste '.game::timespan($time, game::TIME_FULL).'</p>
 <form action="" method="get">
 	<p>
 		Filter:
@@ -68,11 +68,11 @@ else
 			<th>Brukernavn</th>
 			<th>E-post</th>
 			<th>Registert</th>
-			<th colspan="2">Sist pålogget</th>
+			<th colspan="2">Sist pÃ¥logget</th>
 			<th>Hits</th>
 			<th>Rankpoeng</th>
 			<th>Penger</th>
-			<th>Fødselsdato</th>
+			<th>FÃ¸dselsdato</th>
 		</tr>
 	</thead>
 	<tbody>';

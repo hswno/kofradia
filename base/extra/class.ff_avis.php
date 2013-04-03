@@ -1,6 +1,6 @@
 <?php
 
-// sett opp riktig adresse til forhåndsvisningsbildet av avismalene
+// sett opp riktig adresse til forhÃ¥ndsvisningsbildet av avismalene
 ff_avis::$templates['template1']['preview'] = STATIC_LINK.'/firma/aviser_template1.gif';
 ff_avis::$templates['template2']['preview'] = STATIC_LINK.'/firma/aviser_template2.gif';
 ff_avis::$templates['template3']['preview'] = STATIC_LINK.'/firma/aviser_template3.gif';
@@ -11,7 +11,7 @@ ff_avis::$templates['template4']['preview'] = STATIC_LINK.'/firma/aviser_templat
  */
 class ff_avis
 {
-	/** Pris for å publisere en avisutgivelse */
+	/** Pris for Ã¥ publisere en avisutgivelse */
 	const FFN_PUBLISH_COST = 0;
 	
 	/** Ventetid mellom hver utgivelse kan publiseres */
@@ -24,17 +24,17 @@ class ff_avis
 				"top" => "Toppen",
 				"left" => "Venstre kolonne",
 				"center" => "Midtkolonne",
-				"right" => "Høyre kolonne",
+				"right" => "HÃ¸yre kolonne",
 				"bottom" => "Bunnen"
 			),
 			"name" => "Template 1",
-			"description" => "Inneholder topp, tre kolonner og bunn. De tre kolonnene består av to små på hver sin side og en litt større i midten."
+			"description" => "Inneholder topp, tre kolonner og bunn. De tre kolonnene bestÃ¥r av to smÃ¥ pÃ¥ hver sin side og en litt stÃ¸rre i midten."
 		),
 		"template2" => array(
 			"areas" => array(
 				"top" => "Toppen",
 				"left" => "Venstre kolonne",
-				"right" => "Høyre kolonne",
+				"right" => "HÃ¸yre kolonne",
 				"bottom" => "Bunnen"
 			),
 			"name" => "Template 2",
@@ -44,7 +44,7 @@ class ff_avis
 			"areas" => array(
 				"top" => "Toppen",
 				"left" => "Venstre kolonne",
-				"right" => "Høyre kolonne",
+				"right" => "HÃ¸yre kolonne",
 				"bottom" => "Bunnen"
 			),
 			"name" => "Template 3",
@@ -54,7 +54,7 @@ class ff_avis
 			"areas" => array(
 				"top" => "Toppen",
 				"left" => "Venstre kolonne",
-				"right" => "Høyre kolonne",
+				"right" => "HÃ¸yre kolonne",
 				"bottom" => "Bunnen"
 			),
 			"name" => "Template 4",
@@ -179,7 +179,7 @@ class ff_avis_artikkel
 	public $id;
 	
 	/**
-	 * Avisutgivelsen artikkelen tilhører
+	 * Avisutgivelsen artikkelen tilhÃ¸rer
 	 * @var ff_avis_utgivelse
 	 */
 	public $ffn;
@@ -283,7 +283,7 @@ class ff_avis_template
 	public $ffn;
 	
 	/**
-	 * Avisartiklene som skal være med
+	 * Avisartiklene som skal vÃ¦re med
 	 * @var array
 	 */
 	public $ffna;
@@ -318,7 +318,7 @@ class ff_avis_template
 	 */
 	public function add_ffna(array $ffna, $position = NULL)
 	{
-		// kontroller for nødvendig data
+		// kontroller for nÃ¸dvendig data
 		if (!isset($ffna['ffna_id']))
 		{
 			throw new HSException("Mangler data.");
@@ -345,7 +345,7 @@ class ff_avis_template
 		"Vestibulum dapibus ultricies posuere. Phasellus fringilla neque ultricies lacus eleifend vel consectetur velit mollis. Vestibulum semper viverra mauris vel hendrerit.\n\nDuis sit amet erat ut turpis ornare blandit iaculis vitae erat. Phasellus imperdiet rhoncus vehicula. Sed hendrerit ipsum non justo suscipit laoreet. Duis turpis orci, congue vel gravida eget, placerat."
 	);
 	
-	/** Diverse dummy tekst (for overskrift) (må inneholde like mange elementer som self::$dummy_text */
+	/** Diverse dummy tekst (for overskrift) (mÃ¥ inneholde like mange elementer som self::$dummy_text */
 	public static $dummy_text_short = array(
 		"Sed non quam eros, ut mattis mauris.",
 		"Praesent dignissim nibh.",
@@ -356,7 +356,7 @@ class ff_avis_template
 	);
 	
 	/**
-	 * Legg til dummy tekst på de plasseringene det ikke har artikler
+	 * Legg til dummy tekst pÃ¥ de plasseringene det ikke har artikler
 	 */
 	public function add_dummy_text()
 	{
@@ -432,7 +432,7 @@ class ff_avis_template
 			case "template1":
 				// top, left, center, right, bottom
 				
-				// artiklene på toppen
+				// artiklene pÃ¥ toppen
 				if (count($this->ffna['top']) > 0)
 				{
 					$data .= '
@@ -443,7 +443,7 @@ class ff_avis_template
 				// bestemme om det skal settes clear under left, center, right
 				$clear = false;
 				
-				// artiklene på venstre side
+				// artiklene pÃ¥ venstre side
 				if (count($this->ffna['left']) > 0)
 				{
 					$clear = true;
@@ -452,7 +452,7 @@ class ff_avis_template
 	</div>';
 				}
 				
-				// artiklene i midten og på høyre side
+				// artiklene i midten og pÃ¥ hÃ¸yre side
 				if (count($this->ffna['center']) > 0 || count($this->ffna['right']) > 0)
 				{
 					$clear = true;
@@ -467,7 +467,7 @@ class ff_avis_template
 		</div>';
 					}
 					
-					// artiklene på høyre side
+					// artiklene pÃ¥ hÃ¸yre side
 					if (count($this->ffna['right']) > 0)
 					{
 						$data .= '
@@ -500,7 +500,7 @@ class ff_avis_template
 			case "template4":
 				// top, left, right, bottom
 				
-				// artiklene på toppen
+				// artiklene pÃ¥ toppen
 				if (count($this->ffna['top']) > 0)
 				{
 					$data .= '
@@ -511,7 +511,7 @@ class ff_avis_template
 				// bestemme om det skal settes clear under left, center, right
 				$clear = false;
 				
-				// artiklene på venstre side
+				// artiklene pÃ¥ venstre side
 				if (count($this->ffna['left']) > 0)
 				{
 					$clear = true;
@@ -520,7 +520,7 @@ class ff_avis_template
 	</div>';
 				}
 				
-				// artiklene på høyre side
+				// artiklene pÃ¥ hÃ¸yre side
 				if (count($this->ffna['right']) > 0)
 				{
 					$clear = true;

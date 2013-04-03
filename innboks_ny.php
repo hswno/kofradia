@@ -73,18 +73,18 @@ class page_innboks_ny
 		// ingen mottakere?
 		if (count($this->receivers) == 0)
 		{
-			ess::$b->page->add_message("Du mÂ velge en eller flere mottakere.", "error");
+			ess::$b->page->add_message("Du m√• velge en eller flere mottakere.", "error");
 			return;
 		}
 		
 		// for mange mottakere?
 		if (count($this->receivers) > $this->receivers_limit)
 		{
-			ess::$b->page->add_message("Du har valgt for mange mottakere. Du har en grense pÂ <b>{$this->receivers_limit}</b> spillere.", "error");
+			ess::$b->page->add_message("Du har valgt for mange mottakere. Du har en grense p√• <b>{$this->receivers_limit}</b> spillere.", "error");
 			return;
 		}
 		
-		// blokkert fra Â sende meldinger? (kan kun sende til Crewet og med 1 mottaker)
+		// blokkert fra √• sende meldinger? (kan kun sende til Crewet og med 1 mottaker)
 		$blokkering = blokkeringer::check(blokkeringer::TYPE_MELDINGER);
 		$blokkering_ok = true;
 		if ($blokkering && count($this->receivers) == 1)
@@ -113,21 +113,21 @@ class page_innboks_ny
 		// blokkert og for mange mottakere?
 		if ($blokkering && count($this->receivers) > 1)
 		{
-			ess::$b->page->add_message("Du er blokkert fra Â sende meldinger til andre enn Crewet. Du kan kun ha Èn mottaker. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
+			ess::$b->page->add_message("Du er blokkert fra √• sende meldinger til andre enn Crewet. Du kan kun ha √©n mottaker. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
 			return;
 		}
 		
 		// blokkert og mottaker er ikke i Crewet?
 		if (!$blokkering_ok)
 		{
-			ess::$b->page->add_message("Du er blokkert fra Â sende meldinger til andre enn Crewet. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
+			ess::$b->page->add_message("Du er blokkert fra √• sende meldinger til andre enn Crewet. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
 			return;
 		}
 		
 		// er spilleren deaktivert, og mottakere er ikke crew?
 		if (!login::$user->player->active && (!$receivers_crew || count($this->receivers) > 1))
 		{
-			ess::$b->page->add_message("Din spiller er deaktivert. Du har kun mulighet til Â sende meldinger til Crewet. Kun Èn deltaker kan legges til.");
+			ess::$b->page->add_message("Din spiller er deaktivert. Du har kun mulighet til √• sende meldinger til Crewet. Kun √©n deltaker kan legges til.");
 			return;
 		}
 		
@@ -143,33 +143,33 @@ class page_innboks_ny
 		
 		// lengde
 		$plain = strip_tags(game::bb_to_html($message));
-		$plain = preg_replace("/[^a-zA-ZÊ¯Â∆ÿ≈0-9]/", '', $plain);
+		$plain = preg_replace("/[^a-zA-Z√¶√∏√•√Ü√ò√Ö0-9]/", '', $plain);
 		
 		// er ikke begge feltene fylt ut?
 		if (empty($title) || empty($message))
 		{
-			ess::$b->page->add_message("BÂde tittelfeltet og tekstfeltet mÂ fylles ut.", "error");
+			ess::$b->page->add_message("B√•de tittelfeltet og tekstfeltet m√• fylles ut.", "error");
 			return;
 		}
 		
 		// for kort tittel?
 		if (strlen($title) < 2)
 		{
-			ess::$b->page->add_message("Tittelfeltet mÂ inneholde minst 2 tegn.", "error");
+			ess::$b->page->add_message("Tittelfeltet m√• inneholde minst 2 tegn.", "error");
 			return;
 		}
 		
 		// for lang tittel?
 		if (strlen($title) > 35)
 		{
-			ess::$b->page->add_message("Tittelfeltet kan ikke vÊre lengre enn 35 tegn.", "error");
+			ess::$b->page->add_message("Tittelfeltet kan ikke v√¶re lengre enn 35 tegn.", "error");
 			return;
 		}
 		
 		// for kort melding?
 		if (strlen($plain) < 10)
 		{
-			ess::$b->page->add_message("Meldingen kan ikke inneholde fÊrre enn 10 bokstaver/tall.", "error");
+			ess::$b->page->add_message("Meldingen kan ikke inneholde f√¶rre enn 10 bokstaver/tall.", "error");
 			return;
 		}
 		
@@ -183,15 +183,15 @@ class page_innboks_ny
 	protected function check_wait()
 	{
 		// ventetid - 20 sekunder
-		// TODO: forbedre denne sÂ den sjekker antall meldinger sendt siste 10 min eller liknende
+		// TODO: forbedre denne s√• den sjekker antall meldinger sendt siste 10 min eller liknende
 		if (access::has("crewet")) $wait = 0;
 		else $wait = max(0, login::$user->data['u_inbox_sent_time'] + 20 - time());
 		
 		// ventetid?
 		if ($wait > 0)
 		{
-			ess::$b->page->add_message('Du mÂ vente '.game::counter($wait).' f¯r du kan sende en melding.', "error");
-			putlog("LOG", "%c13%bMELDING FORSÿK%b%c: %u".login::$user->player->data['up_name']."%u fors¯kte Â opprette en ny melding. MÂ vente {$wait} sekunder.");
+			ess::$b->page->add_message('Du m√• vente '.game::counter($wait).' f√∏r du kan sende en melding.', "error");
+			putlog("LOG", "%c13%bMELDING FORS√òK%b%c: %u".login::$user->player->data['up_name']."%u fors√∏kte √• opprette en ny melding. M√• vente {$wait} sekunder.");
 			
 			return false;
 		}
@@ -220,7 +220,7 @@ class page_innboks_ny
 			}
 		}
 		
-		$this->errors[] = "F¯lgende mottakere".($this->players_by_id ? ' med ID' : '').' finnes ikke: '.implode(", ", $missing);
+		$this->errors[] = "F√∏lgende mottakere".($this->players_by_id ? ' med ID' : '').' finnes ikke: '.implode(", ", $missing);
 	}
 	
 	protected $players_by_id;
@@ -244,7 +244,7 @@ class page_innboks_ny
 	 */
 	protected function parse_receivers()
 	{
-		// sett opp s¯k
+		// sett opp s√∏k
 		$where = $this->get_receivers();
 		if (!$where) return null;
 		
@@ -276,12 +276,12 @@ class page_innboks_ny
 				if (!access::has("crewet") || $row['u_access_level'] == 0 || $row['u_active_up_id'] != $row['up_id'])
 				{
 					$this->remove_player($row);
-					$this->errors[] = '<user id="'.$row['up_id'].'" /> er d¯d og kan ikke motta meldinger.';
+					$this->errors[] = '<user id="'.$row['up_id'].'" /> er d√∏d og kan ikke motta meldinger.';
 				}
 				else
 				{
 					$receivers[] = $row;
-					$this->errors[] = '<user id="'.$row['up_id'].'" /> er d¯d, men brukeren er aktivert. Kan motta meldinger hvis spilleren er den eneste mottakeren.';
+					$this->errors[] = '<user id="'.$row['up_id'].'" /> er d√∏d, men brukeren er aktivert. Kan motta meldinger hvis spilleren er den eneste mottakeren.';
 				}
 			}
 			
@@ -301,13 +301,13 @@ class page_innboks_ny
 			
 			else
 			{
-				// forbeholdt mot Â motta meldinger? -> men crew
+				// forbeholdt mot √• motta meldinger? -> men crew
 				if (in_array($row['up_access_level'], ess::$g['access']['block_pm']) && access::has("crewet"))
 				{
 					$this->infos[] = '<user id="'.$row['up_id'].'" /> er egentlig reservert mot meldinger.';
 				}
 				
-				// forbeholdt mot Â motta meldinger? (ikke crew)
+				// forbeholdt mot √• motta meldinger? (ikke crew)
 				elseif (in_array($row['up_access_level'], ess::$g['access']['block_pm']))
 				{
 					$result2 = ess::$b->db->query("
@@ -333,8 +333,8 @@ class page_innboks_ny
 						{
 							$this->remove_player($row);
 							
-							$this->errors[] = '<user id="'.$row['up_id'].'" /> kan ikke legges til som mottaker fordi spilleren er reservert mot dette. For Â kunne sende melding til denne spilleren mÂ du vÊre i kontaklisten til personen, eller ha mottatt en melding fra personen i l¯pet av de siste 24 timene.';
-							putlog("NOTICE", "%bMELDING SPERRET%b: %u".login::$user->player->data['up_name']."%u fors¯kte Â sende melding til %u{$row['up_name']}%u men var ikke i kontaktlisten!");
+							$this->errors[] = '<user id="'.$row['up_id'].'" /> kan ikke legges til som mottaker fordi spilleren er reservert mot dette. For √• kunne sende melding til denne spilleren m√• du v√¶re i kontaklisten til personen, eller ha mottatt en melding fra personen i l√∏pet av de siste 24 timene.';
+							putlog("NOTICE", "%bMELDING SPERRET%b: %u".login::$user->player->data['up_name']."%u fors√∏kte √• sende melding til %u{$row['up_name']}%u men var ikke i kontaktlisten!");
 							
 							// lagre logg
 							$file = GAMELOG_DIR."/message_reject_".date("Ymd_His").".log";
@@ -420,7 +420,7 @@ class page_innboks_ny
 	}
 	
 	/**
-	 * Vis siden for Â sende melding
+	 * Vis siden for √• sende melding
 	 */
 	protected function show()
 	{
@@ -463,13 +463,13 @@ class page_innboks_ny
 			<dt>Tekst</dt>
 			<dd><textarea name="message" rows="20" cols="75" id="melding">'.htmlspecialchars(postval("message")).'</textarea></dd>
 			
-			<dt'.(isset($_POST['preview']) && isset($_POST['message']) ? '' : ' style="display: none"').' id="pdt">ForhÂndsvisning</dt>
+			<dt'.(isset($_POST['preview']) && isset($_POST['message']) ? '' : ' style="display: none"').' id="pdt">Forh√•ndsvisning</dt>
 			<dd'.(isset($_POST['preview']) && isset($_POST['message']) ? '' : ' style="display: none"').' id="pdd">'.(!isset($_POST['message']) || empty($_POST['message']) ? 'Tomt?!' : game::bb_to_html($_POST['message'])).'</dd>
 			<div class="clear"></div>
 		</dl>
 		<h3 class="c">
 			'.show_sbutton("Send melding", 'name="post" accesskey="s"').'
-			'.show_sbutton("ForhÂndsvis", 'name="preview" accesskey="p" onclick="previewDL(event, \'melding\', \'pdt\', \'pdd\')"').'
+			'.show_sbutton("Forh√•ndsvis", 'name="preview" accesskey="p" onclick="previewDL(event, \'melding\', \'pdt\', \'pdd\')"').'
 		</h3>
 	</div>
 </form>

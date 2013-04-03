@@ -2,23 +2,23 @@
 
 class etterlyst
 {
-	/** Hvor lang tid det må gå før en oppføring kan kjøpes ut */
+	/** Hvor lang tid det mÃ¥ gÃ¥ fÃ¸r en oppfÃ¸ring kan kjÃ¸pes ut */
 	const FREEZE_TIME = 604800; // 1 uke
 	
-	/** Hvor lang tid man må vente mellom hver nye hitlist man oppretter */
+	/** Hvor lang tid man mÃ¥ vente mellom hver nye hitlist man oppretter */
 	const WAIT_TIME = 3600;
 	
-	/** Minste beløpet man kan sette en dusør på */
+	/** Minste belÃ¸pet man kan sette en dusÃ¸r pÃ¥ */
 	const MIN_AMOUNT_SET = 500000;
 	
-	/** Minste beløpet man kan kjøpe ut en dusør for */
+	/** Minste belÃ¸pet man kan kjÃ¸pe ut en dusÃ¸r for */
 	const MIN_AMOUNT_BUYOUT = 100000;
 	
-	/** Minste prosentsats man kan kjøpe ut en dusør for (hvis større enn MIN_AMOUNT_BUYOUT) */
+	/** Minste prosentsats man kan kjÃ¸pe ut en dusÃ¸r for (hvis stÃ¸rre enn MIN_AMOUNT_BUYOUT) */
 	const MIN_AMOUNT_BUYOUT_RATIO = 0.1; // 10 %
 	
 	/**
-	 * Finn tidspunkt for når en oppføring har gått ut på tid og kan kjøpes ut
+	 * Finn tidspunkt for nÃ¥r en oppfÃ¸ring har gÃ¥tt ut pÃ¥ tid og kan kjÃ¸pes ut
 	 */
 	public static function get_freeze_expire()
 	{
@@ -26,18 +26,18 @@ class etterlyst
 	}
 	
 	/**
-	 * Fjern en dusør hvis den eksisterer (ved drap)
+	 * Fjern en dusÃ¸r hvis den eksisterer (ved drap)
 	 * @param player $up spilleren det gjelder
-	 * @param player $killer spilleren som forårsaket at spilleren ble drept/døde av skadene sine
-	 * @param bool $instant døde spilleren momentant?
+	 * @param player $killer spilleren som forÃ¥rsaket at spilleren ble drept/dÃ¸de av skadene sine
+	 * @param bool $instant dÃ¸de spilleren momentant?
 	 */
 	public static function player_dies(player $up, player $killer = NULL, $instant = NULL)
 	{
-		// hent og fjern mulig dusør
+		// hent og fjern mulig dusÃ¸r
 		$hitlist = ess::$b->db->query("SELECT hl_id, hl_by_up_id, hl_time, hl_amount_valid FROM hitlist WHERE hl_up_id = $up->id");
 		if (mysql_num_rows($hitlist) == 0) return array("hitlist" => 0);
 		
-		// fjern alle oppføringene
+		// fjern alle oppfÃ¸ringene
 		ess::$b->db->query("DELETE FROM hitlist WHERE hl_up_id = $up->id");
 		
 		// deaktiverte seg?
@@ -52,7 +52,7 @@ class etterlyst
 				$list[$row['hl_by_up_id']] += $row['hl_amount_valid'];
 			}
 			
-			// pengene skal gis tilbake til de spillerene som satte dusøren, dersom de fremdeles er i live
+			// pengene skal gis tilbake til de spillerene som satte dusÃ¸ren, dersom de fremdeles er i live
 			foreach ($list as $up_id => $sum)
 			{
 				// gi pengene tilbake hvis spilleren fremdeles er i live
@@ -101,7 +101,7 @@ class etterlyst
 	}
 	
 	/**
-	 * Senk deler av en dusør (ved skadet angrep)
+	 * Senk deler av en dusÃ¸r (ved skadet angrep)
 	 * @param player $up spilleren det gjelder
 	 * @param player $attacker spilleren som angrep
 	 * @param float $health_f for hvor mye helse spilleren mistet (i forhold til maksverdien til spilleren)
@@ -128,7 +128,7 @@ class etterlyst
 		}
 		$sum = $hl['sum_hl_amount_valid'];
 		
-		// hvor mye vi får
+		// hvor mye vi fÃ¥r
 		$amount = bcmul($sum, $health_f);
 		if ($amount <= 0)
 		{

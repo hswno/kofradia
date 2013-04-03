@@ -40,24 +40,24 @@ class page_credits
 		
 		echo '
 <h1>Takk til</h1>
-<p>Vi ønsker å takke alle personer som har hjulpet Kofradia på en eller flere måter. Uten dem hadde ikke Kofradia vært det det er i dag, og vi setter virkelig pris på hjelpen de har bidratt med. Nedenfor er noen av de vi ønsker å takke spesielt:</p>
+<p>Vi Ã¸nsker Ã¥ takke alle personer som har hjulpet Kofradia pÃ¥ en eller flere mÃ¥ter. Uten dem hadde ikke Kofradia vÃ¦rt det det er i dag, og vi setter virkelig pris pÃ¥ hjelpen de har bidratt med. Nedenfor er noen av de vi Ã¸nsker Ã¥ takke spesielt:</p>
 
 <div class="credits_wrap">
 	<div class="section credits_top">
 		<h2><user id="1" /> - Henrik Steen</h2>
-		<p>Henrik er skaperen og eier av Kofradia. Han er den eneste som utvikler spillet og har overordnet ansvar og kontroll på spillet.</p>
+		<p>Henrik er skaperen og eier av Kofradia. Han er den eneste som utvikler spillet og har overordnet ansvar og kontroll pÃ¥ spillet.</p>
 	</div>
 	
 	<!-- venstre siden -->
 	<div class="credits_left">
 		<div class="section">
 			<h2><user="InZo" /> - Anita</h2>
-			<p><user="InZo" /> var med som Administrator i en lengre periode. Hun er en person man alltid kan spørre om ting, og er tilgjenglig så godt som hele tiden. Hun er en person man absolutt kan stole på, og vi skal ikke se bort ifra at hun kanskje returnerer til Crewet ved en senere anledning!</p>
+			<p><user="InZo" /> var med som Administrator i en lengre periode. Hun er en person man alltid kan spÃ¸rre om ting, og er tilgjenglig sÃ¥ godt som hele tiden. Hun er en person man absolutt kan stole pÃ¥, og vi skal ikke se bort ifra at hun kanskje returnerer til Crewet ved en senere anledning!</p>
 		</div>
 		
 		<div class="section">
 			<h2>Tidligere medlemmer av Crewet</h2>
-			<p>Brukere som tidligere har vært medlem av Crewet, og som vi ønsker å takke spesielt.</p>
+			<p>Brukere som tidligere har vÃ¦rt medlem av Crewet, og som vi Ã¸nsker Ã¥ takke spesielt.</p>
 			<div class="section credits_g_left">
 				<h3>Administratorer</h3>
 				<ul>
@@ -95,7 +95,7 @@ class page_credits
 					<li><user="Shero" /></li>
 					<li><user="Sunniva" /></li>
 				</ul>
-				<h3>Support Operatører</h3>
+				<h3>Support OperatÃ¸rer</h3>
 				<ul>
 					<li><user="LoveToy" /></li>
 					<li><user="Hardraade" /></li>
@@ -107,7 +107,7 @@ class page_credits
 				<ul>
 					<li><user="Floyd" /></li>
 				</ul>
-				<h3>Idémyldrere</h3>
+				<h3>IdÃ©myldrere</h3>
 				<ul>
 					<li><user="BlackkoZ" /></li>
 					<li><user="DeShuan Holton" /></li>
@@ -115,16 +115,16 @@ class page_credits
 				</ul>
 			</div>
 			<div class="clear"></div>
-			<p>Nåværende Crew kan sees <a href="crewet">her</a>.</p>
+			<p>NÃ¥vÃ¦rende Crew kan sees <a href="crewet">her</a>.</p>
 		</div>
 	</div>
 	
-	<!-- høyre siden -->
+	<!-- hÃ¸yre siden -->
 	<div class="credits_right">
 		<div class="section">
 			<h2>Donasjoner</h2>
 			<p class="h_right"><a href="donasjon">Doner &raquo;</a></p>
-			<p>Donasjoner er det som hjelper å holde balanse i økonomien til spillet. Vi har en del utgifter, men ingen inntekter, og derfor setter vi stor pris på de som ønsker å donere penger til oss.</p>
+			<p>Donasjoner er det som hjelper Ã¥ holde balanse i Ã¸konomien til spillet. Vi har en del utgifter, men ingen inntekter, og derfor setter vi stor pris pÃ¥ de som Ã¸nsker Ã¥ donere penger til oss.</p>
 			<div class="section">
 				<h3>Siste donasjoner</h3>';
 		
@@ -159,7 +159,7 @@ class page_credits
 		</div>
 		<div class="section">
 			<h2>Annet</h2>
-			<p>Mange av ikonene våre er hentet fra ikon-pakken til <a href="http://famfamfam.com/lab/icons/silk/">famfamfam.com</a>:</p>
+			<p>Mange av ikonene vÃ¥re er hentet fra ikon-pakken til <a href="http://famfamfam.com/lab/icons/silk/">famfamfam.com</a>:</p>
 			<p class="c"><a href="http://famfamfam.com/lab/icons/silk/"><img src="'.STATIC_LINK.'/icon/famfamfam.png" alt="Ikoner fra famfamfam.com" /></a></p>
 		</div>
 	</div>

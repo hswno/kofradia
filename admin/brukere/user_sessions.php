@@ -6,7 +6,7 @@ global $_base;
 access::need("mod");
 
 echo '
-<h1>Logg inn sesjoner på bruker</h1>
+<h1>Logg inn sesjoner pÃ¥ bruker</h1>
 <form action="" method="get">
 	<p>
 		<input type="text" name="uid" value="" class="styled w120" />

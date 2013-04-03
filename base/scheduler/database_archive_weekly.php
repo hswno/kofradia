@@ -1,6 +1,6 @@
 <?php
 
-// gjennomføres kun på mandager
+// gjennomfÃ¸res kun pÃ¥ mandager
 $day = ess::$b->date->get()->format("N");
 if ($day != 1) return;
 

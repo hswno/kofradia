@@ -3,8 +3,8 @@
  * Skrevet av Henrik Steen
  * www.henrist.net
  *
- * Beskyttet av �ndsverkloven
- * Alle rettigheter tilh�rer Henrik Steen dersom ikke annet er oppgitt
+ * Beskyttet av ï¿½ndsverkloven
+ * Alle rettigheter tilhï¿½rer Henrik Steen dersom ikke annet er oppgitt
  *
  * Copyright (c) 2010 All rights reserved
  */
@@ -70,7 +70,7 @@ p {
 }
 
 
-/** Forskjellige tekst st�rrelser og margins */
+/** Forskjellige tekst stï¿½rrelser og margins */
 h1 { font-size: 15px; margin: 1em /*0.67em*/ 0 }
 h2 { font-size: 13px; margin: 1em /*0.75em*/ 0 }
 h3 { font-size: 12px; margin: 1em /*0.83em*/ 0 }
@@ -180,7 +180,7 @@ table, .table {
 	font-size: 11px;
 }
 
-/* margins (for � unng� firefox problem med margin-collapse pga. table table) */
+/* margins (for ï¿½ unngï¿½ firefox problem med margin-collapse pga. table table) */
 .tablemt {
 	margin-top: 1em;
 }
@@ -249,7 +249,7 @@ table, .table {
 	padding: 3px 5px;
 }
 .table tr.color td {
-	/* egen bakgrunn (for forskjell p� odd/even rader) */
+	/* egen bakgrunn (for forskjell pï¿½ odd/even rader) */
 	background-color: #2D2D2D;
 }
 .table tr.highlight td {
@@ -546,7 +546,7 @@ ul.spacer li, ol.spacer li {
 }
 
 
-/** Runde hj�rner (delvis CSS3 - funker ikke i IE og Opera) */
+/** Runde hjï¿½rner (delvis CSS3 - funker ikke i IE og Opera) */
 .r4, .r4l, .r4t, .r4tl { -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; border-top-left-radius: 4px }
 .r4, .r4r, .r4t, .r4tr { -moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; border-top-right-radius: 4px }
 .r4, .r4l, .r4b, .r4bl { -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; border-bottom-left-radius: 4px }
@@ -568,7 +568,7 @@ ul.spacer li, ol.spacer li {
 .r1, .r1r, .r1b, .r1br { -moz-border-radius-bottomright: 15px; -webkit-border-bottom-right-radius: 15px; border-bottom-right-radius: 15px }
 
 
-/* Plassere tekst til venstre/h�yre i overskrifter */
+/* Plassere tekst til venstre/hï¿½yre i overskrifter */
 .h_left, .h_right {
 	float: right;
 	margin: -36px 0 0 0 !important;
@@ -577,7 +577,7 @@ ul.spacer li, ol.spacer li {
 	text-transform: none;
 	text-decoration: none;*/
 	color: #888888;
-	position: relative; /* gj�re det synlig */
+	position: relative; /* gjï¿½re det synlig */
 }
 .h_left {
 	float: left;
@@ -791,12 +791,12 @@ div.bg1 div.bg1 {
 }
 
 
-/** Pekere p� andre elementer enn <a> */
+/** Pekere pï¿½ andre elementer enn <a> */
 .pointer, .pointer td, td.pointer { cursor: pointer }
 .nopointer, .nopointer td, td.nopointer { cursor: default }
 
 
-/** FIXME - ting som b�r fikses og gj�res p� en annen m�te - risikerer cross-browser kr�sj ved � bruke disse */
+/** FIXME - ting som bï¿½r fikses og gjï¿½res pï¿½ en annen mï¿½te - risikerer cross-browser krï¿½sj ved ï¿½ bruke disse */
 .clear {
 	clear: both;
 }
@@ -810,7 +810,7 @@ div.bg1 div.bg1 {
 }
 
 
-/** M�rk tekst */
+/** Mï¿½rk tekst */
 .dark {
 	color: #888888;
 }
@@ -889,13 +889,13 @@ div.bg1 div.bg1 {
 	opacity: 0.75;
 	filter: alpha(opacity=75);
 }
-/* fjern gjennomsiktighet p� linker ved hover */
+/* fjern gjennomsiktighet pï¿½ linker ved hover */
 a.op25:hover, a:hover .op25,
 a.op50:hover, a:hover .op50,
 a.op75:hover, a:hover .op75 { opacity: 1; filter: alpha(opacity=100) }
 
 
-/** Plassere ting i midten p� siden (block elementer) */
+/** Plassere ting i midten pï¿½ siden (block elementer) */
 .center {
 	margin-left: auto;
 	margin-right: auto;
@@ -910,7 +910,7 @@ a.op75:hover, a:hover .op75 { opacity: 1; filter: alpha(opacity=100) }
 .nowrap { white-space: nowrap }
 
 
-/** Kolonneseende (st�tter 2, 3 og 4 kolonner ) */
+/** Kolonneseende (stï¿½tter 2, 3 og 4 kolonner ) */
 
 /* 2 kolonner */
 .col2_w { overflow: hidden; margin: -5px 0 0; padding: 0 0 }

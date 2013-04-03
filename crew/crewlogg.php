@@ -47,7 +47,7 @@ class page_crewloggs
 		
 		if (!$lc)
 		{
-			ess::$b->page->add_message("Fant ikke oppføringen med ID #$lc_id.");
+			ess::$b->page->add_message("Fant ikke oppfÃ¸ringen med ID #$lc_id.");
 			redirect::handle();
 		}
 		
@@ -71,11 +71,11 @@ class page_crewloggs
 			$this->handle_specific_edit($lc, $lc_action, $data);
 		}
 		
-		ess::$b->page->add_title("Oppføring: $lc_id (".htmlspecialchars($lc_action[4]).")");
+		ess::$b->page->add_title("OppfÃ¸ring: $lc_id (".htmlspecialchars($lc_action[4]).")");
 		
 		echo '
 <div class="bg1_c small">
-	<h1 class="bg1">Viser loggoppføring<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Viser loggoppfÃ¸ring<span class="left2"></span><span class="right2"></span></h1>
 	<p class="h_left"><a href="crewlogg">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<dl class="dd_right">
@@ -85,9 +85,9 @@ class page_crewloggs
 			<dd>'.htmlspecialchars(crewlog::$actions_groups[$lc_action[1]]).'</dd>
 			<dt>Handling</dt>
 			<dd>'.htmlspecialchars($lc_action[4]).'</dd>
-			<dt>Utført av</dt>
+			<dt>UtfÃ¸rt av</dt>
 			<dd><user id="'.$lc['lc_up_id'].'" /></dd>'.($lc['lc_a_up_id'] ? '
-			<dt>Påvirket spiller</dt>
+			<dt>PÃ¥virket spiller</dt>
 			<dd><user id="'.$lc['lc_a_up_id'].'" /></dd>' : '').'
 			<dt>Tidspunkt</dt>
 			<dd>'.ess::$b->date->get($lc['lc_time'])->format(date::FORMAT_SEC).'</dd>
@@ -105,13 +105,13 @@ class page_crewloggs
 	}
 	
 	/**
-	 * Redigere en oppføring
+	 * Redigere en oppfÃ¸ring
 	 */
 	protected function handle_specific_edit($lc, $lc_action, $data)
 	{
-		ess::$b->page->add_title("Redigering av oppføring: {$lc['lc_id']} (".htmlspecialchars($lc_action[4]).")");
+		ess::$b->page->add_title("Redigering av oppfÃ¸ring: {$lc['lc_id']} (".htmlspecialchars($lc_action[4]).")");
 		
-		// behandle ulike type oppføringer
+		// behandle ulike type oppfÃ¸ringer
 		switch (crewlog::$actions_id[$lc['lc_lca_id']])
 		{
 			// advarsel
@@ -159,7 +159,7 @@ class page_crewloggs
 						
 						if (empty($log) || empty($note))
 						{
-							ess::$b->page->add_message("Både begrunnelse og intern informasjon må fylles ut.", "error");
+							ess::$b->page->add_message("BÃ¥de begrunnelse og intern informasjon mÃ¥ fylles ut.", "error");
 						}
 						
 						elseif (!isset($types[$type]))
@@ -238,9 +238,9 @@ class page_crewloggs
 			<dd>'.$lc['lc_id'].'</dd>
 			<dt>Handling</dt>
 			<dd>'.htmlspecialchars(crewlog::$actions_groups[$lc_action[1]]).': '.htmlspecialchars($lc_action[4]).'</dd>
-			<dt>Utført av</dt>
+			<dt>UtfÃ¸rt av</dt>
 			<dd><user id="'.$lc['lc_up_id'].'" /></dd>'.($lc['lc_a_up_id'] ? '
-			<dt>Påvirket spiller</dt>
+			<dt>PÃ¥virket spiller</dt>
 			<dd><user id="'.$lc['lc_a_up_id'].'" /></dd>' : '').'
 			<dt>Tidspunkt</dt>
 			<dd>'.ess::$b->date->get($lc['lc_time'])->format(date::FORMAT_SEC).'</dd>
@@ -249,7 +249,7 @@ class page_crewloggs
 			<dt>Kategori</dt>
 			<dd>'.$data['type'].'</dd>
 			<dt>Prioritet</dt>
-			<dd>'.($data['priority'] == 1 ? 'Lav' : ($data['priority'] == 3 ? 'Høy' : 'Moderator')).'</dd>
+			<dd>'.($data['priority'] == 1 ? 'Lav' : ($data['priority'] == 3 ? 'HÃ¸y' : 'Moderator')).'</dd>
 			<dt>Varslet?</dt>
 			<dd>'.(empty($data['notified']) ? 'Brukeren ble ikke varslet' : 'Brukeren ble varslet med logg').'</dd>'.($invalidated ? '
 			<dt>Ugyldig</dt>
@@ -299,7 +299,7 @@ class page_crewloggs
 			echo '
 						<option value="1"'.($priority == 1 ? ' selected="selected"' : '').'>Lav</option>
 						<option value="2"'.($priority == 2 ? ' selected="selected"' : '').'>Moderat</option>
-						<option value="3"'.($priority == 3 ? ' selected="selected"' : '').'>Høy</option>
+						<option value="3"'.($priority == 3 ? ' selected="selected"' : '').'>HÃ¸y</option>
 					</select>
 				</dd>
 			</dl>
@@ -310,7 +310,7 @@ class page_crewloggs
 			<p class="c">'.show_sbutton("Oppdater advarsel", 'name="edit"').'</p>
 		</form>
 		<form action="" method="post">
-			<p class="c">'.show_sbutton("Trekk tilbake advarsel", 'name="revoke" onclick="return confirm(\'Er du sikker på at du ønsker å trekke tilbake denne advarselen?\')"').'</p>
+			<p class="c">'.show_sbutton("Trekk tilbake advarsel", 'name="revoke" onclick="return confirm(\'Er du sikker pÃ¥ at du Ã¸nsker Ã¥ trekke tilbake denne advarselen?\')"').'</p>
 		</form>';
 				}
 				
@@ -321,7 +321,7 @@ class page_crewloggs
 			
 			// ukjent
 			default:
-				ess::$b->page->add_message("Kan ikke redigere denne oppføringen.", "error");
+				ess::$b->page->add_message("Kan ikke redigere denne oppfÃ¸ringen.", "error");
 				redirect::handle("crewlogg?lc_id={$lc['lc_id']}");
 		}
 		
@@ -382,19 +382,19 @@ class page_crewloggs
 			if ($this->filter_by_up)
 			{
 				echo '
-			<li>'.(isset($_POST['by_invert']) ? 'Ikke u' : 'U').'tført av: '.$list_users($this->filter_by_up).'</li>';
+			<li>'.(isset($_POST['by_invert']) ? 'Ikke u' : 'U').'tfÃ¸rt av: '.$list_users($this->filter_by_up).'</li>';
 			}
 			
 			if ($this->filter_a_up)
 			{
 				echo '
-			<li>'.(isset($_POST['a_invert']) ? 'Ikke s' : 'S').'piller berørt: '.$list_users($this->filter_a_up).'</li>';
+			<li>'.(isset($_POST['a_invert']) ? 'Ikke s' : 'S').'piller berÃ¸rt: '.$list_users($this->filter_a_up).'</li>';
 			}
 			
 			if ($this->filter_time_before && !$this->filter_time_after)
 			{
 				echo '
-			<li>Før/lik '.ess::$b->date->get($this->filter_time_before)->format().'</li>';
+			<li>FÃ¸r/lik '.ess::$b->date->get($this->filter_time_before)->format().'</li>';
 			}
 			
 			elseif (!$this->filter_time_before && $this->filter_time_after)
@@ -444,7 +444,7 @@ class page_crewloggs
 	}
 	
 	/**
-	 * Sjekk hvilke filter som skal være aktivert, om noen
+	 * Sjekk hvilke filter som skal vÃ¦re aktivert, om noen
 	 */
 	protected function check_filters()
 	{
@@ -576,11 +576,11 @@ class page_crewloggs
 		</tbody>
 	</table>
 	<dl class="center w300 dd_right">
-		<dt>Utført av</dt>
+		<dt>UtfÃ¸rt av</dt>
 		<dd><input type="checkbox" name="by_invert"'.(isset($_POST['by_invert']) ? ' checked="checked"' : '').' id="by_invert"><label for="by_invert"> inverter</label> <input type="text" class="styled w120" name="by" value="'.($this->filter_by_up ? implode(", ", $this->filter_by_up) : '').'" /></dd>
-		<dt>Spiller berørt</dt>
+		<dt>Spiller berÃ¸rt</dt>
 		<dd><input type="checkbox" name="a_invert"'.(isset($_POST['a_invert']) ? ' checked="checked"' : '').' id="a_invert"><label for="a_invert"> inverter</label> <input type="text" class="styled w120" name="a" value="'.($this->filter_a_up ? implode(", ", $this->filter_a_up) : '').'" /></dd>
-		<dt>Før/lik tidspunkt</dt>
+		<dt>FÃ¸r/lik tidspunkt</dt>
 		<dd><input type="text" class="styled w120" name="before" value="'.(!$this->filter_time_before ? '' : ess::$b->date->get($this->filter_time_before)->format("d.m.Y H:i:s")).'" /></dd>
 		<dt>Etter/lik tidspunkt</dt>
 		<dd><input type="text" class="styled w120" name="after" value="'.(!$this->filter_time_after ? '' : ess::$b->date->get($this->filter_time_after)->format("d.m.Y H:i:s")).'" /></dd>
@@ -649,7 +649,7 @@ class page_crewloggs
 		if ($this->filters_active)
 		{
 			echo '
-		<p class="c">Fant '.fwords("%d oppføring", "%d oppføringer", $pagei->total).' som passet til filteret.</p>';
+		<p class="c">Fant '.fwords("%d oppfÃ¸ring", "%d oppfÃ¸ringer", $pagei->total).' som passet til filteret.</p>';
 		}
 		
 		echo '

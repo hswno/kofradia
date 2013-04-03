@@ -67,7 +67,7 @@ if (count($not_found) > 0)
 	
 	echo '
 <p align="center">
-	Følgende bilder ('.count($not_found).' stk.) finnes ikke på serveren men er fortsatt lagt til i databasen:
+	FÃ¸lgende bilder ('.count($not_found).' stk.) finnes ikke pÃ¥ serveren men er fortsatt lagt til i databasen:
 </p>
 <form action="" method="post">
 	<table class="table center tablemb">
@@ -108,7 +108,7 @@ else
 {
 	echo '
 <p align="center">
-	Alle bildene som er i databasen finnes på disken!
+	Alle bildene som er i databasen finnes pÃ¥ disken!
 </p>';
 }
 

@@ -10,7 +10,7 @@ class access
 	 * @param string $access_name
 	 * @param boolean $allow_admin
 	 * @param integer $access_level
-	 * @param mixed $skip_extended_access_check "login" for å logge sende til logg inn siden
+	 * @param mixed $skip_extended_access_check "login" for Ã¥ logge sende til logg inn siden
 	 */
 	public static function has($access_name, $allow_admin = NULL, $access_level = NULL, $skip_extended_access_check = NULL)
 	{
@@ -58,7 +58,7 @@ class access
 	}
 	
 	/**
-	 * Krev at brukeren må ha en bestemt tilgang for å vise siden
+	 * Krev at brukeren mÃ¥ ha en bestemt tilgang for Ã¥ vise siden
 	 * @param string $access_name
 	 * @param boolean $allow_admin
 	 * @param integer $access_level
@@ -100,7 +100,7 @@ class access
 	}
 	
 	/**
-	 * Krev at brukeren er nostat for å vise siden
+	 * Krev at brukeren er nostat for Ã¥ vise siden
 	 * @param optional integer $access_level
 	 */
 	public static function need_nostat($access_level = NULL)
@@ -193,7 +193,7 @@ class access
 	}
 	
 	/**
-	 * Finn ut navnet/tittelen for et tilgangsnivå
+	 * Finn ut navnet/tittelen for et tilgangsnivÃ¥
 	 *
 	 * @param string $access_type (f.eks. forum_mod)
 	 * @return string f.eks. Forum moderator
@@ -229,7 +229,7 @@ class access
 	}
 	
 	/**
-	 * Finn spesielt oppsett for spillernavnet i html, %user må byttes ut med spillernavn
+	 * Finn spesielt oppsett for spillernavnet i html, %user mÃ¥ byttes ut med spillernavn
 	 * @param string $access_type
 	 * @return string
 	 */
@@ -246,7 +246,7 @@ class access
 	}
 	
 	/**
-	 * Ikke tillatt gjester på denne siden
+	 * Ikke tillatt gjester pÃ¥ denne siden
 	 */
 	public static function no_guest()
 	{
@@ -264,7 +264,7 @@ class access
 	}
 	
 	/**
-	 * Ikke tillatt innloggede brukere på denne siden
+	 * Ikke tillatt innloggede brukere pÃ¥ denne siden
 	 */
 	public static function no_user()
 	{

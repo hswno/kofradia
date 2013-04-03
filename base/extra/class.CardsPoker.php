@@ -87,7 +87,7 @@ class CardsPoker extends Cards
 		// sjekk at vi har 5 kort
 		if (count($this->active) != 5)
 		{
-			throw new HSException("Trenger 5 kort for å beregne resultat.");
+			throw new HSException("Trenger 5 kort for Ã¥ beregne resultat.");
 		}
 		
 		// sett opp kortnummerene og kortgruppene
@@ -100,7 +100,7 @@ class CardsPoker extends Cards
 			$cards_group[] = $card->group['id'];
 		}
 		
-		// sorter kortnummerene (så det høyeste kortet blir sist) og kortgruppene
+		// sorter kortnummerene (sÃ¥ det hÃ¸yeste kortet blir sist) og kortgruppene
 		array_multisort($cards_num, SORT_ASC, $cards_order);
 		sort($cards_group);
 		
@@ -129,12 +129,12 @@ class CardsPoker extends Cards
 	 */
 	private function solve_internal($cards_num, $cards_group)
 	{
-		// finn ut om vi har flush og/eller straight (for å slippe å sjekke dette ved hver anledning etterpå)
+		// finn ut om vi har flush og/eller straight (for Ã¥ slippe Ã¥ sjekke dette ved hver anledning etterpÃ¥)
 		$flush = $cards_group[0] == $cards_group[4]; // alle kortgruppene er de samme
-		$straight = $cards_num[0] == $cards_num[1]-1 && $cards_num[0] == $cards_num[2]-2 && $cards_num[0] == $cards_num[3]-3 && ($cards_num[0] == $cards_num[4]-4 || ($cards_num[0] == 1 && $cards_num[4] == 13)); // 5 kort etter hverandre i antal øyne
+		$straight = $cards_num[0] == $cards_num[1]-1 && $cards_num[0] == $cards_num[2]-2 && $cards_num[0] == $cards_num[3]-3 && ($cards_num[0] == $cards_num[4]-4 || ($cards_num[0] == 1 && $cards_num[4] == 13)); // 5 kort etter hverandre i antal Ã¸yne
 		
 		// fikk vi: royal straight flush?
-		if ($flush && $straight && $cards_num[0] == 9) // 10 er lavest og ess er høyest
+		if ($flush && $straight && $cards_num[0] == 9) // 10 er lavest og ess er hÃ¸yest
 		{
 			return array(self::ROYALE_STRAIGHT_FLUSH, array(), array(0,1,2,3,4));
 		}
@@ -253,7 +253,7 @@ class CardsPoker extends Cards
 		{
 			// highcard
 			case self::HIGHCARD:
-				return 'Høyeste kort: <b>'.ucfirst($highcards[0]->sign()).'</b>';
+				return 'HÃ¸yeste kort: <b>'.ucfirst($highcards[0]->sign()).'</b>';
 			break;
 			
 			// ett par
@@ -273,12 +273,12 @@ class CardsPoker extends Cards
 			
 			// straight
 			case self::STRAIGHT:
-				return 'Straight med <b>'.$highcards[0]->sign().'</b> øverst';
+				return 'Straight med <b>'.$highcards[0]->sign().'</b> Ã¸verst';
 			break;
 			
 			// flush
 			case self::FLUSH:
-				return 'Flush med <b>'.$highcards[0]->sign().'</b> øverst';
+				return 'Flush med <b>'.$highcards[0]->sign().'</b> Ã¸verst';
 			break;
 			
 			// hus
@@ -293,7 +293,7 @@ class CardsPoker extends Cards
 			
 			// straight flush
 			case self::STRAIGHT_FLUSH:
-				return 'Straight flush med <b>'.$highcards[0]->sign().'</b> øverst';
+				return 'Straight flush med <b>'.$highcards[0]->sign().'</b> Ã¸verst';
 			break;
 			
 			// royal straight flush

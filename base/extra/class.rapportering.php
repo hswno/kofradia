@@ -8,7 +8,7 @@ class rapportering
 	/** PM id */
 	const TYPE_PM = 1;
 	
-	/** Forumtråd id */
+	/** ForumtrÃ¥d id */
 	const TYPE_FORUM_TOPIC = 2;
 	
 	/** Forumsvar id */
@@ -22,7 +22,7 @@ class rapportering
 	
 	public static $types = array(
 		1 => "Privat melding",
-		2 => "Forumtråd",
+		2 => "ForumtrÃ¥d",
 		3 => "Forumsvar",
 		4 => "Signatur",
 		5 => "Profil"
@@ -57,18 +57,18 @@ class rapportering
 	}
 	
 	/**
-	 * Rapportere en forumtråd
+	 * Rapportere en forumtrÃ¥d
 	 * @param int $ft_id
 	 * @param string $message
 	 * @return int r_id || bool false if not found || string deleted if deleted || array dupe
 	 */
 	public static function report_forum_topic($ft_id, $message)
 	{
-		// hent brukerid til personen som opprettet forumtråden
+		// hent brukerid til personen som opprettet forumtrÃ¥den
 		$ft_id = (int) $ft_id;
 		$result = ess::$b->db->query("SELECT ft_up_id, ft_deleted FROM forum_topics WHERE ft_id = $ft_id");
 		
-		// fant ikke tråden?
+		// fant ikke trÃ¥den?
 		if (mysql_num_rows($result) == 0)
 		{
 			return false;
@@ -77,7 +77,7 @@ class rapportering
 		// slettet?
 		if (mysql_result($result, 0, 1) != 0)
 		{
-			// slettede tråder skal ikke kunne rapporteres
+			// slettede trÃ¥der skal ikke kunne rapporteres
 			return "deleted";
 		}
 		$up_id = mysql_result($result, 0);
@@ -99,7 +99,7 @@ class rapportering
 	 */
 	public static function report_forum_reply($fr_id, $message)
 	{
-		// hent brukerid til personen som opprettet forumtråden
+		// hent brukerid til personen som opprettet forumtrÃ¥den
 		$fr_id = (int) $fr_id;
 		$result = ess::$b->db->query("SELECT fr_up_id, fr_deleted, fr_ft_id FROM forum_replies WHERE fr_id = $fr_id");
 		
@@ -116,7 +116,7 @@ class rapportering
 			return "deleted";
 		}
 		
-		// sjekk om tråden er slettet
+		// sjekk om trÃ¥den er slettet
 		$result2 = ess::$b->db->query("SELECT ft_deleted FROM forum_topics WHERE ft_id = ".mysql_result($result, 0, 2));
 		if (mysql_num_rows($result2) == 0)
 		{
@@ -223,7 +223,7 @@ class rapportering
 	{
 		global $__server;
 		
-		// sørg for at brukeren er logget inn
+		// sÃ¸rg for at brukeren er logget inn
 		if (!login::$logged_in)
 		{
 			throw new HSException("Brukeren er ikke logget inn.");
@@ -240,10 +240,10 @@ class rapportering
 		ess::$b->db->query("INSERT INTO rapportering SET r_source_up_id = $source_up_id, r_up_id = $up_id, r_type = $type, r_type_id = $type_id, r_time = ".time().", r_note = $message");
 		$id = ess::$b->db->insert_id();
 		
-		// melding på IRC
+		// melding pÃ¥ IRC
 		putlog("CREWCHAN", "%bNY RAPPORTERING:%b {$__server['path']}/crew/rapportering");
 		
-		// øk rapporteringstelleren
+		// Ã¸k rapporteringstelleren
 		tasks::increment("rapporteringer");
 		
 		// returner iden
@@ -257,7 +257,7 @@ class rapportering
 	);
 	
 	/**
-	 * Hent data for å generere lenker
+	 * Hent data for Ã¥ generere lenker
 	 * @param array $rows data fra databasen
 	 */
 	public static function generate_prerequisite($rows)
@@ -315,7 +315,7 @@ class rapportering
 	
 	/**
 	 * Generer lenke til det som er rapportert
-	 * Husk at generate_prerequisite må være kalt på forhånd
+	 * Husk at generate_prerequisite mÃ¥ vÃ¦re kalt pÃ¥ forhÃ¥nd
 	 */
 	public static function generate_link($row)
 	{

@@ -6,7 +6,7 @@ global $_base;
 // krev admin tilgang
 access::need("admin");
 
-$_base->page->add_title("Registrer donasjonsoppføring");
+$_base->page->add_title("Registrer donasjonsoppfÃ¸ring");
 
 // har vi brukerid?
 if (isset($_POST['up_id']))
@@ -38,7 +38,7 @@ if (isset($_POST['up_id']))
 			$time->setTime($date[4], $date[5], $date[6]);
 		}
 		
-		// kontroller beløp
+		// kontroller belÃ¸p
 		$amount = round(str_replace(",", ".", $_POST['amount']), 2);
 		
 		// ugyldig dato
@@ -47,10 +47,10 @@ if (isset($_POST['up_id']))
 			$_base->page->add_message("Ugyldig dato.", "error");
 		}
 		
-		// ugyldig beløp
+		// ugyldig belÃ¸p
 		elseif ($amount <= 0)
 		{
-			$_base->page->add_message("Ugyldig beløp.", "error");
+			$_base->page->add_message("Ugyldig belÃ¸p.", "error");
 		}
 		
 		// godkjent?
@@ -59,10 +59,10 @@ if (isset($_POST['up_id']))
 			// legg til
 			$_base->db->query("INSERT INTO donations SET d_up_id = ".($up_id ? $up_id : 'NULL').", d_amount = $amount, d_time = ".$time->format("U"));
 			
-			// tøm cache
+			// tÃ¸m cache
 			cache::delete("donation_list");
 			
-			$_base->page->add_message("Donasjonsoppføringen ble lagt til.");
+			$_base->page->add_message("DonasjonsoppfÃ¸ringen ble lagt til.");
 			redirect::handle();
 		}
 		
@@ -78,10 +78,10 @@ if (isset($_POST['up_id']))
 				<dd>'.($player ? game::profile_link($player['up_id'], $player['up_name'], $player['up_access_level']) : 'Anonym').'</dd>
 				<dt>Tidspunkt</dt>
 				<dd>'.$time->format(date::FORMAT_SEC).'</dd>
-				<dt>Beløp</dt>
+				<dt>BelÃ¸p</dt>
 				<dd>'.game::format_nok($amount).'</dd>
 			</dl>
-			<p class="c">'.show_sbutton("Legg til oppføringen", 'name="approve"').' '.show_sbutton("Tilbake", 'name="edit"').'</p>
+			<p class="c">'.show_sbutton("Legg til oppfÃ¸ringen", 'name="approve"').' '.show_sbutton("Tilbake", 'name="edit"').'</p>
 		</form>'.box_end();
 			
 			$_base->page->load();
@@ -97,7 +97,7 @@ if (isset($_POST['up_id']))
 				<dd>'.($player ? game::profile_link($player['up_id'], $player['up_name'], $player['up_access_level']) : 'Anonym').'</dd>
 				<dt>Tidspunkt</dt>
 				<dd><input type="text" name="time" value="'.htmlspecialchars(postval("time", $_base->date->get()->format("d.m.Y H:i:s"))).'" class="styled w120" /></dd>
-				<dt>Beløp</dt>
+				<dt>BelÃ¸p</dt>
 				<dd>kr. <input type="text" name="amount" value="'.htmlspecialchars(postval("amount")).'" class="styled w50" /></dd></dd>
 			</dl>
 			<p class="c">'.show_sbutton("Fortsett").' <a href="registrer_donasjon" class="button">Avbryt</a></p>
@@ -106,14 +106,14 @@ if (isset($_POST['up_id']))
 	$_base->page->load();
 }
 
-// søke etter bruker ved e-post?
+// sÃ¸ke etter bruker ved e-post?
 if (isset($_POST['email']) && isset($_POST['value']))
 {
-	// finn brukere på denne e-posten
+	// finn brukere pÃ¥ denne e-posten
 	$result = $_base->db->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users, users_players WHERE u_email = ".$_base->db->quote($_POST['value'])." AND up_u_id = u_id ORDER BY up_last_online DESC");
 	
-	echo box_start("Registrer donasjon - Søk etter bruker (e-post)", "small").'
-		<p>Søk (e-post): '.htmlspecialchars($_POST['value']).'</p>';
+	echo box_start("Registrer donasjon - SÃ¸k etter bruker (e-post)", "small").'
+		<p>SÃ¸k (e-post): '.htmlspecialchars($_POST['value']).'</p>';
 	
 	if (mysql_num_rows($result) == 0)
 	{
@@ -128,7 +128,7 @@ if (isset($_POST['email']) && isset($_POST['value']))
 			<thead>
 				<tr>
 					<th>Bruker</th>
-					<th>Sist pålogget</th>
+					<th>Sist pÃ¥logget</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -153,14 +153,14 @@ if (isset($_POST['email']) && isset($_POST['value']))
 	echo box_end();
 }
 
-// søke etter bruker ved id?
+// sÃ¸ke etter bruker ved id?
 if (isset($_POST['id']) && isset($_POST['value']))
 {
 	// finn brukeren med denne iden
 	$result = $_base->db->query("SELECT up_id, up_name, u_email, up_access_level, up_last_online FROM users, users_players WHERE up_id = ".intval($_POST['value'])." AND u_id = up_u_id");
 	
-	echo box_start("Registrer donasjon - Søk etter bruker (id)", "small").'
-		<p>Søk (id): '.htmlspecialchars($_POST['value']).'</p>';
+	echo box_start("Registrer donasjon - SÃ¸k etter bruker (id)", "small").'
+		<p>SÃ¸k (id): '.htmlspecialchars($_POST['value']).'</p>';
 	
 	if (mysql_num_rows($result) == 0)
 	{
@@ -176,7 +176,7 @@ if (isset($_POST['id']) && isset($_POST['value']))
 				<tr>
 					<th>Bruker</th>
 					<th>E-post</th>
-					<th>Sist pålogget</th>
+					<th>Sist pÃ¥logget</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -207,8 +207,8 @@ if (isset($_POST['user']) && isset($_POST['value']))
 	// finn brukeren med dette spillernavnet
 	$result = $_base->db->query("SELECT up_id, up_name, u_email, up_access_level, up_last_online FROM users, users_players WHERE up_name = ".$_base->db->quote($_POST['value'])." AND up_u_id = u_id");
 	
-	echo box_start("Registrer donasjon - Søk etter spiller", "small").'
-		<p>Søk (spiller): '.htmlspecialchars($_POST['value']).'</p>';
+	echo box_start("Registrer donasjon - SÃ¸k etter spiller", "small").'
+		<p>SÃ¸k (spiller): '.htmlspecialchars($_POST['value']).'</p>';
 	
 	if (mysql_num_rows($result) == 0)
 	{
@@ -224,7 +224,7 @@ if (isset($_POST['user']) && isset($_POST['value']))
 				<tr>
 					<th>Bruker</th>
 					<th>E-post</th>
-					<th>Sist pålogget</th>
+					<th>Sist pÃ¥logget</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -260,7 +260,7 @@ function like_search($value)
 
 function show_search_form()
 {
-	echo box_start("Registrer donasjon - Søk etter bruker", "small").'
+	echo box_start("Registrer donasjon - SÃ¸k etter bruker", "small").'
 		<form action="" method="post">
 			<dl class="dd_right">
 				<dt><input type="text" class="styled w150" name="value" value="'.htmlspecialchars(postval("value")).'" /></dt>

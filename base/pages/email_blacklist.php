@@ -19,19 +19,19 @@ class page_email_blacklist
 	 */
 	protected function handle()
 	{
-		// redigere oppføring?
+		// redigere oppfÃ¸ring?
 		if (isset($_POST['edit']))
 		{
 			$this->edit();
 		}
 		
-		// slette oppføring?
+		// slette oppfÃ¸ring?
 		elseif (isset($_POST['delete']))
 		{
 			$this->delete();
 		}
 		
-		// opprette ny oppføring?
+		// opprette ny oppfÃ¸ring?
 		elseif (isset($_GET['new']))
 		{
 			$this->add();
@@ -45,25 +45,25 @@ class page_email_blacklist
 	}
 	
 	/**
-	 * Redigere oppføring
+	 * Redigere oppfÃ¸ring
 	 */
 	protected function edit()
 	{
 		// ingen valg?
 		if (!isset($_POST['eb_id']))
 		{
-			ess::$b->page->add_message("Du må velge en oppføringen.", "error");
+			ess::$b->page->add_message("Du mÃ¥ velge en oppfÃ¸ringen.", "error");
 			redirect::handle();
 		}
 		
-		// forsøk og finn oppføringen
+		// forsÃ¸k og finn oppfÃ¸ringen
 		$eb_id = (int) $_POST['eb_id'];
 		$result = ess::$b->db->query("SELECT eb_id, eb_type, eb_value, eb_time, eb_up_id, eb_note FROM email_blacklist WHERE eb_id = $eb_id");
 		$eb = mysql_fetch_assoc($result);
 		
 		if (!$eb)
 		{
-			ess::$b->page->add_message("Fant ikke oppføringen du ønsket å redigere.", "error");
+			ess::$b->page->add_message("Fant ikke oppfÃ¸ringen du Ã¸nsket Ã¥ redigere.", "error");
 			redirect::handle();
 		}
 		
@@ -95,7 +95,7 @@ class page_email_blacklist
 			// ingen endringer?
 			elseif ($type == $eb['eb_type'] && $value == $eb['eb_value'] && $note == $eb['eb_note'])
 			{
-				ess::$b->page->add_message("Ingen endringer har blitt utført.", "error");
+				ess::$b->page->add_message("Ingen endringer har blitt utfÃ¸rt.", "error");
 			}
 			
 			else
@@ -106,12 +106,12 @@ class page_email_blacklist
 				
 				if ($row)
 				{
-					ess::$b->page->add_message('En identisk oppføring ble lagt til av <user id="'.$row['eb_up_id'].'" /> '.ess::$b->date->get($row['eb_time'])->format().'.', "error");
+					ess::$b->page->add_message('En identisk oppfÃ¸ring ble lagt til av <user id="'.$row['eb_up_id'].'" /> '.ess::$b->date->get($row['eb_time'])->format().'.', "error");
 				}
 				
 				else
 				{
-					// oppdater oppføringen
+					// oppdater oppfÃ¸ringen
 					ess::$b->db->query("INSERT INTO email_blacklist SET eb_type = ".ess::$b->db->quote($type).", eb_value = ".ess::$b->db->quote($value).", eb_time = ".time().", eb_up_id = ".login::$user->player->id.", eb_note = ".ess::$b->db->quote($note));
 					
 					// logg
@@ -120,9 +120,9 @@ class page_email_blacklist
 						: ($value != $eb['eb_value']
 							? " til $value"
 							: " (notat endret)");
-					putlog("CREWCHAN", "E-POST BLOKKERING: ".login::$user->player->data['up_name']." endret oppføringen {$eb['eb_value']} ({$eb['eb_type']})$msg");
+					putlog("CREWCHAN", "E-POST BLOKKERING: ".login::$user->player->data['up_name']." endret oppfÃ¸ringen {$eb['eb_value']} ({$eb['eb_type']})$msg");
 					
-					ess::$b->page->add_message("Oppføringen ".htmlspecialchars($eb['eb_value'])." (".htmlspecialchars($eb['eb_type']).") ble oppdatert.");
+					ess::$b->page->add_message("OppfÃ¸ringen ".htmlspecialchars($eb['eb_value'])." (".htmlspecialchars($eb['eb_type']).") ble oppdatert.");
 					redirect::handle();
 				}
 			}
@@ -159,42 +159,42 @@ class page_email_blacklist
 	}
 	
 	/**
-	 * Slette oppføring
+	 * Slette oppfÃ¸ring
 	 */
 	protected function delete()
 	{
 		// ingen valg?
 		if (!isset($_POST['eb_id']))
 		{
-			ess::$b->page->add_message("Du må velge en oppføringen.", "error");
+			ess::$b->page->add_message("Du mÃ¥ velge en oppfÃ¸ringen.", "error");
 			redirect::handle();
 		}
 		
-		// forsøk og finn oppføringen
+		// forsÃ¸k og finn oppfÃ¸ringen
 		$eb_id = (int) $_POST['eb_id'];
 		$result = ess::$b->db->query("SELECT eb_id, eb_type, eb_value, eb_time, eb_up_id, eb_note FROM email_blacklist WHERE eb_id = $eb_id");
 		$eb = mysql_fetch_assoc($result);
 		
 		if (!$eb)
 		{
-			ess::$b->page->add_message("Fant ikke oppføringen du ønsket å slette.", "error");
+			ess::$b->page->add_message("Fant ikke oppfÃ¸ringen du Ã¸nsket Ã¥ slette.", "error");
 			redirect::handle();
 		}
 		
 		// bekreftet sletting?
 		if (isset($_POST['confirm']))
 		{
-			// slett oppføringen
+			// slett oppfÃ¸ringen
 			ess::$b->db->query("DELETE FROM email_blacklist WHERE eb_id = $eb_id");
 			
 			// logg
-			putlog("CREWCHAN", "E-POST BLOKKERING: ".login::$user->player->data['up_name']." slettet oppføringen {$eb['eb_value']} ({$eb['eb_type']})");
+			putlog("CREWCHAN", "E-POST BLOKKERING: ".login::$user->player->data['up_name']." slettet oppfÃ¸ringen {$eb['eb_value']} ({$eb['eb_type']})");
 			
-			ess::$b->page->add_message("Oppføringen ".htmlspecialchars($eb['eb_value'])." (".htmlspecialchars($eb['eb_type']).") ble slettet.");
+			ess::$b->page->add_message("OppfÃ¸ringen ".htmlspecialchars($eb['eb_value'])." (".htmlspecialchars($eb['eb_type']).") ble slettet.");
 			redirect::handle();
 		}
 		
-		ess::$b->page->add_title("Slette oppføring");
+		ess::$b->page->add_title("Slette oppfÃ¸ring");
 		
 		$type = $eb['eb_type'] == "address" ? "Spesifikk e-post" : "Domenenavn";
 		
@@ -206,7 +206,7 @@ class page_email_blacklist
 		<form action="" method="post">
 			<input type="hidden" name="eb_id" value="'.$eb_id.'" />
 			<input type="hidden" name="delete" />
-			<p>Ønsker du virkelig å slette denne oppføringen:</p>
+			<p>Ã˜nsker du virkelig Ã¥ slette denne oppfÃ¸ringen:</p>
 			<dl class="dd_right">
 				<dt>Type</dt>
 				<dd>'.$type.'</dd>
@@ -227,7 +227,7 @@ class page_email_blacklist
 	}
 	
 	/**
-	 * Opprette ny oppføring
+	 * Opprette ny oppfÃ¸ring
 	 */
 	protected function add()
 	{
@@ -264,18 +264,18 @@ class page_email_blacklist
 				
 				if ($row)
 				{
-					ess::$b->page->add_message('En identisk oppføring ble lagt til av <user id="'.$row['eb_up_id'].'" /> '.ess::$b->date->get($row['eb_time'])->format().'.', "error");
+					ess::$b->page->add_message('En identisk oppfÃ¸ring ble lagt til av <user id="'.$row['eb_up_id'].'" /> '.ess::$b->date->get($row['eb_time'])->format().'.', "error");
 				}
 				
 				else
 				{
-					// opprett oppføringen
+					// opprett oppfÃ¸ringen
 					ess::$b->db->query("INSERT INTO email_blacklist SET eb_type = ".ess::$b->db->quote($type).", eb_value = ".ess::$b->db->quote($value).", eb_time = ".time().", eb_up_id = ".login::$user->player->id.", eb_note = ".ess::$b->db->quote($note));
 					
 					// logg
-					putlog("CREWCHAN", "E-POST BLOKKERING: ".login::$user->player->data['up_name']." la til oppføringen $value ($type)");
+					putlog("CREWCHAN", "E-POST BLOKKERING: ".login::$user->player->data['up_name']." la til oppfÃ¸ringen $value ($type)");
 					
-					ess::$b->page->add_message("Oppføringen ble lagt til.");
+					ess::$b->page->add_message("OppfÃ¸ringen ble lagt til.");
 					redirect::handle();
 				}
 			}

@@ -2,7 +2,7 @@
 
 class mailer
 {
-	/** Hvor lang tid det skal gå før vi prøver å sende en tidligere e-post på nytt */
+	/** Hvor lang tid det skal gÃ¥ fÃ¸r vi prÃ¸ver Ã¥ sende en tidligere e-post pÃ¥ nytt */
 	public static $timeout = 600;
 	
 	/** Send ut e-poster */
@@ -16,7 +16,7 @@ class mailer
 		// generer id
 		$id = uniqid("", true);
 		
-		// sett tags på e-poster vi ønsker å hente
+		// sett tags pÃ¥ e-poster vi Ã¸nsker Ã¥ hente
 		$_base->db->query("UPDATE mailer SET m_active_end = ".(time()+self::$timeout).", m_active_id = ".$_base->db->quote($id)." WHERE (m_active_end IS NULL OR m_active_end < ".time().") LIMIT $limit");
 		
 		// ingen endret?
@@ -37,7 +37,7 @@ class mailer
 	{
 		global $_base;
 		
-		// hent alle e-postene vi tagget og forsøk å send de
+		// hent alle e-postene vi tagget og forsÃ¸k Ã¥ send de
 		$result = $_base->db->query("SELECT m_id, m_receiver, m_subject, m_headers, m_body, m_params FROM mailer WHERE m_active_id = ".$_base->db->quote($tag));
 		
 		$sent = 0;
@@ -57,7 +57,7 @@ class mailer
 	}
 	
 	/**
-	 * Legg til e-post i køen
+	 * Legg til e-post i kÃ¸en
 	 * @param object email $email
 	 * @param array receivers
 	 * @param string subject

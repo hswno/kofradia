@@ -15,7 +15,7 @@ class theme_helper
 		<p id="first">';
 		
 		$pages = array();
-		$pages[] = '<a href="&rpath;/node" class="help">Hjelp / innføring</a>';
+		$pages[] = '<a href="&rpath;/node" class="help">Hjelp / innfÃ¸ring</a>';
 		
 		if (!login::$logged_in)
 		{
@@ -108,7 +108,7 @@ html, body {
 		<aside id="facebook">'.($this->theme == "logginn" ? '
 			<iframe src="http://www.facebook.com/plugins/like.php?app_id=245125612176286&amp;href=http%3A%2F%2Fwww.facebook.com%2Fkofradia&amp;send=false&amp;layout=button_count&amp;width=60&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px; margin: 10px 0 13px" allowTransparency="true"></iframe>' : '
 			<p id="num">'.facebook::get_likes_num().'</p>').'
-			<p id="sub"><a href="http://www.facebook.com/kofradia">Støtt oss på facebook</a></p>
+			<p id="sub"><a href="http://www.facebook.com/kofradia">StÃ¸tt oss pÃ¥ facebook</a></p>
 		</aside>
 	</header>';
 		
@@ -129,7 +129,7 @@ html, body {
 	
 	<!--
 	Script: '.round(microtime(true)-SCRIPT_START-ess::$b->db->time, 4).' sek
-	Database: '.round(ess::$b->db->time, 4).' sek ('.ess::$b->db->queries.' spørring'.(ess::$b->db->queries == 1 ? '' : 'er').')
+	Database: '.round(ess::$b->db->time, 4).' sek ('.ess::$b->db->queries.' spÃ¸rring'.(ess::$b->db->queries == 1 ? '' : 'er').')
 	-->'.ess::$b->page->body_end.'
 </body>
 </html>';
@@ -169,7 +169,7 @@ html, body {
 					if (access::has("crewet")) $extended .= '
 			<p>
 				<a href="'.ess::$s['relative_path'].'/forum/forum?id=5">Crewforum</a> (<a href="'.ess::$s['relative_path'].'/forum/forum?id=6">arkiv</a>)<br />
-				<a href="'.ess::$s['relative_path'].'/forum/forum?id=7">Idémyldringsforum</a><br />
+				<a href="'.ess::$s['relative_path'].'/forum/forum?id=7">IdÃ©myldringsforum</a><br />
 				<a href="'.ess::$s['relative_path'].'/crew/trac_rss">Trac hendelser</a>
 			</p>';
 					
@@ -201,12 +201,12 @@ html, body {
 					@include_once ROOT."/base/data/trac_rss.php";
 					if (isset($_trac_rss))
 					{
-						// har ikke brukeren vært innom status siden enda?
+						// har ikke brukeren vÃ¦rt innom status siden enda?
 						$last = login::$user->params->get("trac_last_changeset");
 						if (!$last)
 						{
 							$extended .= '
-			<div class="link_box"><a href="'.ess::$s['relative_path'].'/crew/trac_rss?show=changeset">Du vil nå motta nye hendelser om <b>endringer i Subversion</b> fra Trac her. Trykk her for å se de siste hendelser.</a></div>';
+			<div class="link_box"><a href="'.ess::$s['relative_path'].'/crew/trac_rss?show=changeset">Du vil nÃ¥ motta nye hendelser om <b>endringer i Subversion</b> fra Trac her. Trykk her for Ã¥ se de siste hendelser.</a></div>';
 						}
 						
 						// nye hendelser?
@@ -224,12 +224,12 @@ html, body {
 			<div class="link_box"><a href="'.ess::$s['relative_path'].'/crew/trac_rss?show=changeset">Det er <b>'.$new.'</b> usett'.($new == 1 ? '' : 'e').' hendelse'.($new == 1 ? '' : 'r').' i Trac (endringer i <b>Git</b>).</a></div>';
 						}
 						
-						// har ikke brukeren vært innom status siden enda?
+						// har ikke brukeren vÃ¦rt innom status siden enda?
 						$last = login::$user->params->get("trac_last_other");
 						if (!$last)
 						{
 							$extended .= '
-			<div class="link_box"><a href="'.ess::$s['relative_path'].'/crew/trac_rss?show=other">Du vil nå motta nye hendelser om <b>endringer i wikien og tickets</b> fra Trac her. Trykk her for å se siste hendelser.</a></div>';
+			<div class="link_box"><a href="'.ess::$s['relative_path'].'/crew/trac_rss?show=other">Du vil nÃ¥ motta nye hendelser om <b>endringer i wikien og tickets</b> fra Trac her. Trykk her for Ã¥ se siste hendelser.</a></div>';
 						}
 						
 						// nye hendelser?
@@ -289,7 +289,7 @@ html, body {
 	}
 	
 	/**
-	 * Hent nyeste tråder og svar i forumet
+	 * Hent nyeste trÃ¥der og svar i forumet
 	 */
 	public function get_forum_new($limit = null)
 	{
@@ -355,11 +355,11 @@ html, body {
 		foreach ($this->get_forum_new() as $item)
 		{
 			$data .= '
-				<p><span class="time">'.ess::$b->date->get($item['time'])->format("H:i").':</span> <user id="'.$item['user'].'" /> '.($item['reply'] ? 'svarte i tråden' : 'opprettet').' <a href="'.ess::$s['rpath'].'/forum/topic?id='.$item['topic_id'].($item['reply'] ? '&amp;replyid='.$item['reply_id'] : '').'">'.htmlspecialchars($item['title']).'</a> i '.$item['section'].'</p>';
+				<p><span class="time">'.ess::$b->date->get($item['time'])->format("H:i").':</span> <user id="'.$item['user'].'" /> '.($item['reply'] ? 'svarte i trÃ¥den' : 'opprettet').' <a href="'.ess::$s['rpath'].'/forum/topic?id='.$item['topic_id'].($item['reply'] ? '&amp;replyid='.$item['reply_id'] : '').'">'.htmlspecialchars($item['title']).'</a> i '.$item['section'].'</p>';
 		}
 		
 		$data .= '
-				<p class="last"><a href="forum">Gå til forumene &raquo;</a></p>';
+				<p class="last"><a href="forum">GÃ¥ til forumene &raquo;</a></p>';
 		
 		return $this->get_box("&raquo; Siste fra forumene", $data, null, "login_actions_box");
 	}

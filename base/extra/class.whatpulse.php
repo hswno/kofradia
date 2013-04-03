@@ -1,6 +1,6 @@
 <?php
 
-// whatpulse stæsj
+// whatpulse stÃ¦sj
 global $_whatpulse;
 $_whatpulse = array(
 	"fields_text" => array(
@@ -102,7 +102,7 @@ class whatpulse
 			return false;
 		}
 		
-		// forsøk å les XML data
+		// forsÃ¸k Ã¥ les XML data
 		try
 		{
 			return @new SimpleXMLElement($xml_data);
@@ -116,7 +116,7 @@ class whatpulse
 		return false;
 	}
 	
-	/** Hent ut data for brukeren og sørg for at den er oppdatert */
+	/** Hent ut data for brukeren og sÃ¸rg for at den er oppdatert */
 	public function update($data = NULL, $force_update = NULL)
 	{
 		global $_base;
@@ -127,7 +127,7 @@ class whatpulse
 			$data = $this->data['sw_xml'];
 		}
 		
-		// forsøk å lese data
+		// forsÃ¸k Ã¥ lese data
 		$xml = $this->read_xml($data);
 		$update = $force_update !== false;
 		
@@ -136,7 +136,7 @@ class whatpulse
 		{
 			$last_real_update = $_base->date->parse($xml->GeneratedTime)->format("U");
 			
-			// gått mindre enn en time?
+			// gÃ¥tt mindre enn en time?
 			if ($last_real_update > time()-3600)
 			{
 				// ikke oppdater data

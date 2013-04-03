@@ -6,7 +6,7 @@ global $_base;
 // kontroller link
 if (getval("sid") != login::$info['ses_id'])
 {
-	$_base->page->add_message("Ugyldig inntasting. Prøv på nytt.", "error");
+	$_base->page->add_message("Ugyldig inntasting. PrÃ¸v pÃ¥ nytt.", "error");
 	$_base->page->load();
 }
 

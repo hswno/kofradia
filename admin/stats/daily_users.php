@@ -4,7 +4,7 @@ require "../../base.php";
 error_reporting(E_ALL ^ E_NOTICE);
 global $_base;
 
-$_base->page->add_title("Brukere pålogget per dag");
+$_base->page->add_title("Brukere pÃ¥logget per dag");
 
 $sort_dir = $_GET['sort_dir'] == "asc" ? "ASC" : "DESC";
 $sort = $_GET['sort'] == "users" ? "users" : ($_GET['sort'] == "hits" ? "hits" : "date");
@@ -21,7 +21,7 @@ $result = $_base->db->query("
 	ORDER BY $sort $sort_dir");
 
 echo '
-<h1>Antall brukere pålogget for hver dag</h1>
+<h1>Antall brukere pÃ¥logget for hver dag</h1>
 <p align="center">
 	<a href="./">&laquo; Tilbake</a>
 </p>
@@ -33,7 +33,7 @@ echo '
 			<option value="hits"'.($sort == "hits" ? ' selected="selected"' : '').'>Hits</option>
 		</select>
 		<select name="sort_dir">
-			<option value="desc"'.($sort_dir == "DESC" ? ' selected="selected"' : '').'>DESC: Størst/nyeste øverst</option>
+			<option value="desc"'.($sort_dir == "DESC" ? ' selected="selected"' : '').'>DESC: StÃ¸rst/nyeste Ã¸verst</option>
 			<option value="asc"'.($sort_dir == "ASC" ? ' selected="selected"' : '').'>ASC: Minst/eldste nederst</option>
 		</select>
 		<input type="submit" value="VIS" />
@@ -43,7 +43,7 @@ echo '
 	<thead>
 		<tr>
 			<th>&nbsp;</th>
-			<th>Når</th>
+			<th>NÃ¥r</th>
 			<th>Dato</th>
 			<th>Antall brukere</th>
 			<th>Antall hits</th>
@@ -59,7 +59,7 @@ while ($row = mysql_fetch_assoc($result))
 	echo '
 		<tr>
 			<td align="right">#'.$i.'</td>
-			<td align="right">'.($time == 1 ? '<b>I går</b>' : ($time > 0 ? '<b>'.$time.'</b> dager' : '<b>I dag</b>')).'</td>
+			<td align="right">'.($time == 1 ? '<b>I gÃ¥r</b>' : ($time > 0 ? '<b>'.$time.'</b> dager' : '<b>I dag</b>')).'</td>
 			<td>'.$row['date'].'</td>
 			<td align="right">'.game::format_number($row['users']).'</td>
 			<td align="right">'.game::format_number($row['hits']).'</td>

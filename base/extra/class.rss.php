@@ -2,7 +2,7 @@
 
 // finn ut om vi skal enkelt- eller dobbeltkode tegnene i <title>
 // (Se http://www.xn--8ws00zhy3a.com/blog/2006/06/encoding-rss-titles)
-// kjør enkeltkoding kun for firefox
+// kjÃ¸r enkeltkoding kun for firefox
 define("RSS_SINGLE_ENCODE_TITLE", strpos(strtolower($_SERVER['HTTP_USER_AGENT']), "firefox") !== false);
 
 class rss
@@ -36,7 +36,7 @@ class rss
 	}
 	
 	/**
-	 * Sett språk
+	 * Sett sprÃ¥k
 	 *
 	 * @param string $lang
 	 */
@@ -169,7 +169,7 @@ class rss
 		}
 		$data = array(array("rss", array(array("channel", $data)), array("version" => "2.0")));
 		
-		$result = '<?xml version="1.0" encoding="ISO-8859-1"?>'.$seperator.$this->generate_xml($data, $seperator, $indent, '');
+		$result = '<?xml version="1.0" encoding="utf-8"?>'.$seperator.$this->generate_xml($data, $seperator, $indent, '');
 		return $result;
 	}
 	

@@ -59,14 +59,14 @@ class page_logginn
 			
 			if (!$err)
 			{
-				// prøv å logg inn
+				// prÃ¸v Ã¥ logg inn
 				switch (login::do_login($id, $pass, $type, true, $secure_only, $devlogin))
 				{
 					case LOGIN_ERROR_USER_OR_PASS:
 					ess::$b->page->add_message("Feil ID".(!$devlogin ? ' eller passord' : '').".", "error");
 					
 					// logg
-					putlog("ABUSE", "%c4%bUGYLDIG BRUKERNAVN/PASSORD:%b%c {$_SERVER['REMOTE_ADDR']} forsøkte å logge inn med ID %u$id%u!");
+					putlog("ABUSE", "%c4%bUGYLDIG BRUKERNAVN/PASSORD:%b%c {$_SERVER['REMOTE_ADDR']} forsÃ¸kte Ã¥ logge inn med ID %u$id%u!");
 					
 					break;
 					
@@ -78,7 +78,7 @@ class page_logginn
 						$info = mysql_fetch_assoc($result);
 						$_SESSION[$GLOBALS['__server']['session_prefix'].'login_error'] = array("deactivated", $info);
 						
-						putlog("ABUSE", "%c8%bLOGG INN - DEAKTIVERT%b%c: %u{$_SERVER['REMOTE_ADDR']}%u forsøkte å logge inn på %u{$info['u_email']}%u som er en deaktivert bruker!");
+						putlog("ABUSE", "%c8%bLOGG INN - DEAKTIVERT%b%c: %u{$_SERVER['REMOTE_ADDR']}%u forsÃ¸kte Ã¥ logge inn pÃ¥ %u{$info['u_email']}%u som er en deaktivert bruker!");
 						
 						// send til feilside
 						redirect::handle("", redirect::ROOT);
@@ -101,10 +101,10 @@ class page_logginn
 			}
 		}
 		
-		// spør brukeren etter en spesifikk side?
+		// spÃ¸r brukeren etter en spesifikk side?
 		if (isset($_GET['orign']) && $_GET['orign'] != "/")
 		{
-			ess::$b->page->add_message("Du må logge inn for å se denne siden.", "error");
+			ess::$b->page->add_message("Du mÃ¥ logge inn for Ã¥ se denne siden.", "error");
 		}
 		
 		ess::$b->page->load();
@@ -152,7 +152,7 @@ class page_logginn
 				}
 	
 				echo '
-<p>Dersom du mener denne deaktiveringen er feil kan du ta <a href="henvendelser">kontakt</a>. Kun seriøse henvendelser blir behandlet.</p>';
+<p>Dersom du mener denne deaktiveringen er feil kan du ta <a href="henvendelser">kontakt</a>. Kun seriÃ¸se henvendelser blir behandlet.</p>';
 				
 				break;
 				

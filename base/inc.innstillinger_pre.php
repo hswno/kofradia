@@ -3,7 +3,7 @@
 // grunnpath
 define("ROOT", dirname(dirname(__FILE__)));
 
-// IP-adresse for å hoppe over lockdown status på hovedserveren
+// IP-adresse for Ã¥ hoppe over lockdown status pÃ¥ hovedserveren
 // regex
 define("ADMIN_IP", "/(10.8.0.6|127.0.0.1)/");
 
@@ -14,33 +14,33 @@ define("HTTPS", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? "s" : "
 $local_settings = dirname(__FILE__) . "/inc.innstillinger_local.php";
 if (!file_exists($local_settings))
 {
-	// forsøk å opprett fil utifra malen
+	// forsÃ¸k Ã¥ opprett fil utifra malen
 	$template = '<?php
 
 
 // hvilken versjon dette dokumentet er
-// endre denne kun på forespørsel
-// brukes til å hindre siden i å kjøre dersom nye innstillinger legges til
-// slik at de blir lagt til her før siden blir mulig å bruke igjen
-// (først etter at nye innstillinger lagt til, skal versjonen settes til det som samsvarer med de nye innstillingene)
+// endre denne kun pÃ¥ forespÃ¸rsel
+// brukes til Ã¥ hindre siden i Ã¥ kjÃ¸re dersom nye innstillinger legges til
+// slik at de blir lagt til her fÃ¸r siden blir mulig Ã¥ bruke igjen
+// (fÃ¸rst etter at nye innstillinger lagt til, skal versjonen settes til det som samsvarer med de nye innstillingene)
 $local_settings_version = 1.5;
 
 
 
-// linjene som er kommentert med # er eksempler på andre oppsett
+// linjene som er kommentert med # er eksempler pÃ¥ andre oppsett
 
 
 
 define("DEBUGGING", true);
 
 // hovedserveren?
-// settes kun til true på sm serveren
-// dette gjør at den utelukker enkelte statistikk spesifikt for serveren, aktiverer teststatus av funksjoner osv.
+// settes kun til true pÃ¥ sm serveren
+// dette gjÃ¸r at den utelukker enkelte statistikk spesifikt for serveren, aktiverer teststatus av funksjoner osv.
 define("MAIN_SERVER", false);
 
-// testversjon på hovedserveren?
-// kun avjørende hvis MAIN_SERVER er true
-// deaktiverer opplasting av bilder på testserveren, benytter egen test-cache versjon og litt annet
+// testversjon pÃ¥ hovedserveren?
+// kun avjÃ¸rende hvis MAIN_SERVER er true
+// deaktiverer opplasting av bilder pÃ¥ testserveren, benytter egen test-cache versjon og litt annet
 define("TEST_SERVER", false);
 
 // HTTP adresse til static filer
@@ -58,9 +58,9 @@ $__server = array(
 	"cookie_prefix" => "sm_",
 	"cookie_path" => "/",
 	"cookie_domain" => "", // eks: ".kofradia.no"
-	"https_support" => false, // har vi støtte for SSL (https)?
+	"https_support" => false, // har vi stÃ¸tte for SSL (https)?
 	"http_path" => "http://".$_SERVER[\'HTTP_HOST\'], // full HTTP adresse, for videresending fra HTTPS
-	"https_path" => false, // full HTTPS adresse, false hvis ikke støtte for HTTPS, eks: "https://www.kofradia.no"
+	"https_path" => false, // full HTTPS adresse, false hvis ikke stÃ¸tte for HTTPS, eks: "https://www.kofradia.no"
 	"timezone" => "Europe/Oslo"
 );
 $__server[\'path\'] = $__server[\'absolute_path\'].$__server[\'relative_path\'];
@@ -69,7 +69,7 @@ $__server[\'path\'] = $__server[\'absolute_path\'].$__server[\'relative_path\'];
 
 
 // mappestruktur
-// merk at adresse på windows må ha to \\.
+// merk at adresse pÃ¥ windows mÃ¥ ha to \\.
 
 // HTTP-adresse til lib-mappen (hvor f.eks. MooTools plasseres)
 define("LIB_HTTP", $__server[\'path\'] . "/lib");
@@ -86,12 +86,12 @@ define("GAMELOG_DIR", dirname(__FILE__) . "/gamelogs");
 
 // knyttet opp mot profilbilder
 define("PROFILE_IMAGES_HTTP", IMGS_HTTP . "/profilbilder"); // HTTP-adressen hvor bildene finnes
-define("PROFILE_IMAGES_FOLDER", ROOT . "/imgs/profilbilder"); // mappe hvor bildene skal lagres på disk
+define("PROFILE_IMAGES_FOLDER", ROOT . "/imgs/profilbilder"); // mappe hvor bildene skal lagres pÃ¥ disk
 #define("PROFILE_IMAGES_FOLDER", "c:\\\\users\\\\henrik\\\\web\\\\static");
 define("PROFILE_IMAGES_DEFAULT", "https://kofradia.no/static/other/profilbilde_default.png"); // standard profilbilde
 
 // knyttet opp mot bydeler, kartfiler
-define("BYDELER_MAP_FOLDER", ROOT . "/imgs/bydeler"); // adresse til hvor bydelskartene vil bli generert, må være mulig å nå med IMGS_HTTP/bydeler.
+define("BYDELER_MAP_FOLDER", ROOT . "/imgs/bydeler"); // adresse til hvor bydelskartene vil bli generert, mÃ¥ vÃ¦re mulig Ã¥ nÃ¥ med IMGS_HTTP/bydeler.
 
 // data for crewfiles
 define("CREWFILES_DATA_FOLDER", "/home/kofradia/www/kofradia.no/crewfiles/data");
@@ -125,7 +125,7 @@ $set = array();
 // bruker-ID til SYSTEM-brukeren
 $set["system_user_id"] = 16;
 
-// Debug modus - aktiverer enkelte funksjoner for å forenkle debugging/testing
+// Debug modus - aktiverer enkelte funksjoner for Ã¥ forenkle debugging/testing
 $set["kofradia_debug"] = FALSE;
 
 // facebook app-id og secret
@@ -134,12 +134,12 @@ $set["facebook_app_secret"] = null;
 
 
 // kommenter eller fjern neste linje ETTER at innstillingene ovenfor er korrigert
-die("Innstillingene må redigeres før serveren kan benyttes. Se base/inc.innstillinger_local.php.");';
+die("Innstillingene mÃ¥ redigeres fÃ¸r serveren kan benyttes. Se base/inc.innstillinger_local.php.");';
 	
-	// forsøk å lagre malen for innstillinger
+	// forsÃ¸k Ã¥ lagre malen for innstillinger
 	if (!file_put_contents($local_settings, $template))
 	{
-		die("Kunne ikke opprette fil for lokale innstillinger. Forsøke å opprette base/inc.innstillinger_local.php.");
+		die("Kunne ikke opprette fil for lokale innstillinger. ForsÃ¸ke Ã¥ opprette base/inc.innstillinger_local.php.");
 	}
 }
 
@@ -156,7 +156,7 @@ if ($local_settings_version < 1.5)
 	echo '<!DOCTYPE html>
 <html lang="no">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="Henrik Steen; http://www.henrist.net" />
 <title>Kofradia</title>
 <style>
@@ -169,8 +169,8 @@ h1 { font-size: 23px; }
 </style>
 </head>
 <body>
-<h1>Oppdateringer på server er nødvendig</h1>
-<p>De lokale innstillingene er ikke oppdatert mot nyeste endringer og må oppdateres før siden kan benyttes.</p>
+<h1>Oppdateringer pÃ¥ server er nÃ¸dvendig</h1>
+<p>De lokale innstillingene er ikke oppdatert mot nyeste endringer og mÃ¥ oppdateres fÃ¸r siden kan benyttes.</p>
 <p>Se diff i Git for info.</p>
 <p class="hsws"><a href="http://hsw.no/">hsw.no</a></p>
 </body>

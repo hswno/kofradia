@@ -3,8 +3,8 @@
  * Skrevet av Henrik Steen
  * www.henrist.net
  *
- * Beskyttet av åndsverkloven
- * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ * Beskyttet av Ã¥ndsverkloven
+ * Alle rettigheter tilhÃ¸rer Henrik Steen dersom ikke annet er oppgitt
  *
  * Copyright (c) 2010 All rights reserved
  */
@@ -24,13 +24,13 @@ var poker = {
 		poker.c_clicked = "#183138";
 		poker.c_clicked_hover = "#183138";
 		
-		// legg til events på kort boksene
+		// legg til events pÃ¥ kort boksene
 		for (var i = 0; i < 5; i++) {
 			poker.addCheckboxEvent(i, "mouseover", "mouseover");
 			poker.addCheckboxEvent(i, "mouseout", "mouseout");
 			poker.addCheckboxEvent(i, "click", "select");
 			
-			// sjul checkbox (dette er for at folk uten javascript også skal kunne bruke pokerfunksjonen)
+			// sjul checkbox (dette er for at folk uten javascript ogsÃ¥ skal kunne bruke pokerfunksjonen)
 			poker.checkbox(i).style.display = "none";
 		}
 	},

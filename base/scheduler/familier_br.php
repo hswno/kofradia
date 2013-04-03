@@ -2,7 +2,7 @@
 
 global $_base;
 
-// hent de familiene som skal dø ut
+// hent de familiene som skal dÃ¸ ut
 $expire = time();
 $result = $_base->db->query("SELECT fff_id, ff_id FROM ff_free LEFT JOIN ff ON ff_fff_id = fff_id AND ff_inactive = 0 AND ff_is_crew = 0 AND ff_br_id IS NULL WHERE fff_active = 2 AND fff_time_expire_br <= $expire");
 
@@ -29,7 +29,7 @@ while ($row = mysql_fetch_assoc($result))
 	}
 }
 
-// sett scheduler til neste familie som skal dø ut hvis ikke valgt bygning
+// sett scheduler til neste familie som skal dÃ¸ ut hvis ikke valgt bygning
 $scheduler_skip_next = true;
 $_base->db->query("
 	UPDATE scheduler, (

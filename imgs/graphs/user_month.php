@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if (!$_SESSION['userinfo']) die("Du er ikke logget inn eller har vært inaktiv over lengre tid!");
+if (!$_SESSION['userinfo']) die("Du er ikke logget inn eller har vÃ¦rt inaktiv over lengre tid!");
 require "../../../public_html/base/essentials.php";
 global $_base;
 
@@ -12,7 +12,7 @@ if (!isset($_GET['BrukerID']))
 else
 {
 	$BrukerID = intval($_GET['BrukerID']);
-	if ($BrukerID != $_SESSION['userinfo']['info']['id'] && !in_array("mod", $_SESSION['userinfo']['accesses'])) die("Du må være moderator eller høyere for å vise andre brukere!");
+	if ($BrukerID != $_SESSION['userinfo']['info']['id'] && !in_array("mod", $_SESSION['userinfo']['accesses'])) die("Du mÃ¥ vÃ¦re moderator eller hÃ¸yere for Ã¥ vise andre brukere!");
 }
 
 $result = $_base->db->query("SELECT id, user, ip, hits, last_online FROM users WHERE id = $BrukerID");
@@ -29,7 +29,7 @@ if (isset($_GET['Dato']))
 	$dato = $_GET['Dato'];
 	if (!preg_match("/^(200[6-9])-(0[1-9]|1[0-2])$/", $dato, $matches))
 	{
-		die("Ugyldig måned: ".htmlspecialchars($dato)."!");
+		die("Ugyldig mÃ¥ned: ".htmlspecialchars($dato)."!");
 	}
 	
 	$time_from = mktime(0, 0, 0, $matches[2], 1, $matches[1]);

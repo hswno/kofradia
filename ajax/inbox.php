@@ -5,14 +5,14 @@ require "../base/ajax.php";
 // krev bruker
 ajax::require_user();
 
-// behandle forespørsel
+// behandle forespÃ¸rsel
 ajax_inbox::load();
 
 class ajax_inbox
 {
 	public static function load()
 	{
-		// skal vi behandle en meldingstråd?
+		// skal vi behandle en meldingstrÃ¥d?
 		if (isset($_GET['it']))
 		{
 			return self::load_thread($_GET['it']);
@@ -22,27 +22,27 @@ class ajax_inbox
 		ajax::text("UKJENT", ajax::TYPE_INVALID);
 	}
 	
-	/** Behandle meldingstråd */
+	/** Behandle meldingstrÃ¥d */
 	public static function load_thread($it_id)
 	{
 		$it_id = (int) $it_id;
 		
-		// mangler ønsket handling?
+		// mangler Ã¸nsket handling?
 		if (!isset($_GET['a'])) ajax::text("UKJENT-HANDLING", ajax::TYPE_INVALID);
 		$a = $_GET['a'];
 		
-		// forsøk å hent tråden
+		// forsÃ¸k Ã¥ hent trÃ¥den
 		essentials::load_module("inbox_thread");
 		if (!($thread = inbox_thread_ajax::get($it_id)))
 		{
-			// fant ikke tråden
+			// fant ikke trÃ¥den
 			ajax::text("404", ajax::TYPE_404);
 		}
 		
 		// sjekk for tilgang
 		$thread->check_rel();
 		
-		// ønsket handling
+		// Ã¸nsket handling
 		switch ($a)
 		{
 			// hente nye svar
@@ -50,7 +50,7 @@ class ajax_inbox
 				self::thread_check_new_replies($thread);
 			break;
 			
-			// markere/fjerne markering av meldingstråd
+			// markere/fjerne markering av meldingstrÃ¥d
 			case "mark":
 				self::thread_mark($thread);
 			break;
@@ -61,7 +61,7 @@ class ajax_inbox
 	}
 	
 	/**
-	 * Sjekk for nye svar i forumtråd
+	 * Sjekk for nye svar i forumtrÃ¥d
 	 * @param inbox_thread_ajax $thread
 	 */
 	public static function thread_check_new_replies(inbox_thread_ajax $thread)
@@ -84,10 +84,10 @@ class ajax_inbox
 		$messages = array();
 		if (mysql_num_rows($result) > 0)
 		{
-			// forsøk å sette ned meldingstelleren
+			// forsÃ¸k Ã¥ sette ned meldingstelleren
 			$thread->counter_new_reset();
 			
-			// gå gjennom meldingene
+			// gÃ¥ gjennom meldingene
 			$i = 0;
 			$messages = array();
 			while ($row = mysql_fetch_assoc($result))
@@ -123,7 +123,7 @@ class ajax_inbox
 	}
 	
 	/**
-	 * Markere/fjerne markering av meldingstråd
+	 * Markere/fjerne markering av meldingstrÃ¥d
 	 * @param inbox_thread_ajax $thread
 	 */
 	public static function thread_mark(inbox_thread_ajax $thread)
@@ -131,7 +131,7 @@ class ajax_inbox
 		// kontroller SID
 		ajax::validate_sid();
 		
-		// kan vi ikke markere denne tråden?
+		// kan vi ikke markere denne trÃ¥den?
 		if (!$thread->data_rel)
 		{
 			ajax::text("NO-RELATION", ajax::TYPE_INVALID);
@@ -144,7 +144,7 @@ class ajax_inbox
 		}
 		$mark = $_POST['mark'] != 0;
 		
-		// forsøk å markere tråden
+		// forsÃ¸k Ã¥ markere trÃ¥den
 		$thread->mark($mark);
 	}
 }

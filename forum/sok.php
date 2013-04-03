@@ -15,13 +15,13 @@ if (isset($_GET['f']) || isset($_GET['fa']))
 // hent forumene og sett opp forumene vi har tilgang til
 $sections = forum::get_forum_list();
 
-$_base->page->add_title("Forum", "Søk");
+$_base->page->add_title("Forum", "SÃ¸k");
 
 $forum_mod = access::has("forum_mod");
 $allow_deleted = $forum_mod;
 
 
-// hvor man skal kunne søke
+// hvor man skal kunne sÃ¸ke
 $search_where = array(
 	1 => array("Alle innlegg", true, true),
 	array("Kun hovedinnlegg", true, false),
@@ -31,7 +31,7 @@ $id = requestval("w");
 $search_where_id = isset($search_where[$id]) ? $id : 1;
 
 
-// hvilke forum søker vi i?
+// hvilke forum sÃ¸ker vi i?
 $search_forums = $sections;
 $search_forums_active = array();
 
@@ -49,14 +49,14 @@ foreach ($_REQUEST as $key => $dummy)
 
 if (count($search_forums_active) == 0)
 {
-	// søk i alle forumene (vi må ha et forum å søke i!)
+	// sÃ¸k i alle forumene (vi mÃ¥ ha et forum Ã¥ sÃ¸ke i!)
 	$search_forums_active = array_keys($search_forums);
 }
 
 $search_forums_query = " AND ft_fse_id IN (".implode(",", $search_forums_active).")";
 
 
-// hvem som skal ha kunnet skrevet det man søker på
+// hvem som skal ha kunnet skrevet det man sÃ¸ker pÃ¥
 $search_from = array(
 	1 => array("Alle", "", ""),
 	array("Meg selv", " AND ft_up_id = ".login::$user->player->id, " AND fr.fr_up_id = ".login::$user->player->id),
@@ -78,7 +78,7 @@ if ($search_from_id == 4)
 	if (count($names) == 0)
 	{
 		$search_from_id = 1;
-		//$_base->page->add_message("Ingen brukere ble funnet.. Søker blant alle.", "error");
+		//$_base->page->add_message("Ingen brukere ble funnet.. SÃ¸ker blant alle.", "error");
 	}
 	
 	else
@@ -102,7 +102,7 @@ if ($search_from_id == 4)
 				$missing[] = $names[$id];
 			}
 			
-			$_base->page->add_message("Følgende spillere finnes ikke: ".implode(", ", array_map("htmlspecialchars", $missing)), "error");
+			$_base->page->add_message("FÃ¸lgende spillere finnes ikke: ".implode(", ", array_map("htmlspecialchars", $missing)), "error");
 		}
 		
 		if (count($players) == 0)
@@ -122,9 +122,9 @@ $search_from_reply_query = $search_from[$search_from_id][2];
 
 // slettet
 $search_deleted = array(
-	1 => array("<b>Skjul alle</b> slettede forumtråder og forumsvar", " AND ft_deleted = 0", " AND ft_deleted = 0 AND fr.fr_deleted = 0"),
-	array("<b>Skjul</b> slettede <b>forumsvar</b>, <b>vis</b> slettede <b>forumtråder</b>", "", " AND fr.fr_deleted = 0"),
-	array("<b>Vis slettede</b> forumtråder og forumsvar", "", "")
+	1 => array("<b>Skjul alle</b> slettede forumtrÃ¥der og forumsvar", " AND ft_deleted = 0", " AND ft_deleted = 0 AND fr.fr_deleted = 0"),
+	array("<b>Skjul</b> slettede <b>forumsvar</b>, <b>vis</b> slettede <b>forumtrÃ¥der</b>", "", " AND fr.fr_deleted = 0"),
+	array("<b>Vis slettede</b> forumtrÃ¥der og forumsvar", "", "")
 );
 $id = requestval("d");
 $search_deleted_id = isset($search_deleted[$id]) && $allow_deleted ? $id : 1;
@@ -145,10 +145,10 @@ $sort->append("asc", "Siste innlegg", "IFNULL(ft_last_reply, ft_time)");
 $sort->append("desc", "Siste innlegg", "IFNULL(ft_last_reply, ft_time) DESC");
 $sort->set_active(requestval("sort"), 3);
 
-// søkeform
+// sÃ¸keform
 echo '
 <div class="bg1_c small">
-	<h1 class="bg1">Søk i forum<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">SÃ¸k i forum<span class="left"></span><span class="right"></span></h1>
 	<form action="" method="get">
 		<div class="bg1">
 			<dl class="dl_20 dl_2x">
@@ -158,7 +158,7 @@ echo '
 				<dt>Innhold</dt>
 				<dd><input type="text" name="qt" value="'.htmlspecialchars(requestval("qt")).'" class="styled w300" /></dd>
 				
-				<dt>Søk i forum</dt>
+				<dt>SÃ¸k i forum</dt>
 				<dd>
 					<div style="float: left">';
 
@@ -223,32 +223,32 @@ if ($allow_deleted)
 
 echo '
 			</dl>
-			<p class="c">'.show_sbutton("Utfør søk").'</p>
+			<p class="c">'.show_sbutton("UtfÃ¸r sÃ¸k").'</p>
 		</div>
 	</form>
 </div>';
 
 
-// søke?
+// sÃ¸ke?
 if (isset($_GET['qs']))
 {
 	$title_search = requestval("qs");
 	$text_search = requestval("qt");
 	
-	// finn ut delene av spørringen
+	// finn ut delene av spÃ¸rringen
 	$title_parts = search_query($title_search);
 	$text_parts = search_query($text_search);
 	
 	/*if (count($title_parts[0]) == 0 && count($text_parts[0]) == 0 && $search_from_id != 4)
 	{
 		echo '
-<h2>Søkeresultater</h2>
-<p>Skal du ikke søke etter noe?!</p>';
+<h2>SÃ¸keresultater</h2>
+<p>Skal du ikke sÃ¸ke etter noe?!</p>';
 	}
 	
 	else*/
 	{
-		// sett opp søkespørringen
+		// sett opp sÃ¸kespÃ¸rringen
 		$search_title = false;
 		$search_text_topic = false;
 		$search_text_reply = false;
@@ -367,7 +367,7 @@ if (isset($_GET['qs']))
 		
 		if (count($info) == 0)
 		{
-			$info = "Fritt søk";
+			$info = "Fritt sÃ¸k";
 		}
 		else
 		{
@@ -376,9 +376,9 @@ if (isset($_GET['qs']))
 		
 		echo '
 <div class="bg1_c large scroll_here">
-	<h1 class="bg1">Søkeresultater<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">SÃ¸keresultater<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p>Søk: '.$info.'</p>';
+		<p>SÃ¸k: '.$info.'</p>';
 		
 		// fant vi noe?
 		if ($pagei->total == 0)
@@ -396,7 +396,7 @@ if (isset($_GET['qs']))
 				<tr>
 					<th>Forum</th>
 					<th>Tittel<br /><nobr>'.$sort->show_link(0, 1).'</nobr></th>
-					<th>Trådstarter<br /><nobr>'.$sort->show_link(2, 3).'</nobr></th>
+					<th>TrÃ¥dstarter<br /><nobr>'.$sort->show_link(2, 3).'</nobr></th>
 					<th>Svar<br /><nobr>'.$sort->show_link(4, 5).'</nobr></th>
 					<th><abbr title="Visninger">Vis</abbr><br /><nobr>'.$sort->show_link(6, 7).'</nobr></th>
 					<th>Siste innlegg<br />'.$sort->show_link(8, 9).'</th>
@@ -405,7 +405,7 @@ if (isset($_GET['qs']))
 			</thead>
 			<tbody class="c">';
 			
-			// legg til nødvendig css
+			// legg til nÃ¸dvendig css
 			$_base->page->add_css('
 .f_viktig a { font-weight: bold; color: #FFFFFF }
 .f_viktig .info { color: #CCFF00; font-weight: bold }
@@ -424,7 +424,7 @@ if (isset($_GET['qs']))
 				echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
 					<td><a href="forum?id='.$row['ft_fse_id'].'">'.htmlspecialchars($sections[$row['ft_fse_id']]['name']).'</a></td>
-					<td class="l'.($row['ft_type'] == 3 ? ' f_viktig' : ($row['ft_type'] == 2 ? ' f_sticky' : '')).'"><a href="topic?id='.$row['ft_id'].'">'.htmlspecialchars($row['ft_title']).'</a>'.($row['ft_type'] == 3 ? ' <span class="info">(Viktig)</span>' : ($row['ft_type'] == 2 ? ' <span class="info">(Sticky)</span>' : '')).($row['ft_locked'] == 1 ? ' <span class="f_lock">(låst)</span>' : '').($row['ft_deleted'] != 0 ? ' <span class="f_deld">(Slettet)</span>' : '').'</td>
+					<td class="l'.($row['ft_type'] == 3 ? ' f_viktig' : ($row['ft_type'] == 2 ? ' f_sticky' : '')).'"><a href="topic?id='.$row['ft_id'].'">'.htmlspecialchars($row['ft_title']).'</a>'.($row['ft_type'] == 3 ? ' <span class="info">(Viktig)</span>' : ($row['ft_type'] == 2 ? ' <span class="info">(Sticky)</span>' : '')).($row['ft_locked'] == 1 ? ' <span class="f_lock">(lÃ¥st)</span>' : '').($row['ft_deleted'] != 0 ? ' <span class="f_deld">(Slettet)</span>' : '').'</td>
 					<td class="f_u">'.game::profile_link($row['ft_up_id'], $row['up_name'], $row['up_access_level']).'<br /><span class="f_time">'.$_base->date->get($row['ft_time'])->format().'</span></td>
 					<td>'.game::format_number($row['ft_replies']).'</td>
 					<td>'.game::format_number($row['ft_views']).'</td>

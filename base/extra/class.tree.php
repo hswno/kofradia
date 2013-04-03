@@ -83,7 +83,7 @@ class tree
 				$prefix_this = ($i < $count ? $this->prefix['normal'] : $this->prefix['last']);
 				$prefix_sub = $prefix . ($i < $count ? $this->prefix['jump'] : $this->prefix['none']);
 				
-				// oppdag løkke
+				// oppdag lÃ¸kke
 				if (isset($this->data[$row])) throw new HSException("loop on id $row");
 				
 				$add = array("number" => $number, "prefix" => $prefix, "prefix_node" => $prefix_this);

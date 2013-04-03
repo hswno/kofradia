@@ -8,7 +8,7 @@ abstract class irc_info
 	/** Send melding til endepunktet */
 	abstract public function send_output($text);
 	
-	/** GÂ gjennom tekst som skal behandles (kommandoen) */
+	/** G√• gjennom tekst som skal behandles (kommandoen) */
 	public function parse_request($text)
 	{
 		// script for info til IRC (mIRC kaller denne filen)
@@ -86,7 +86,7 @@ abstract class irc_info
 		$this->send_output("Server tid: ".ess::$b->date->get(time())->format(date::FORMAT_SEC));
 	}
 	
-	/** Antall pÂlogget */
+	/** Antall p√•logget */
 	public function c_online()
 	{
 		$time = isset($this->cmd_x[1]) ? intval($this->cmd_x[1]) : 0;
@@ -100,10 +100,10 @@ abstract class irc_info
 		$ant = game::format_number(mysql_result($result, 0));
 		
 		$time = game::timespan($time, game::TIME_NOBOLD);
-		$this->send_output("%bAntall pÂlogget siste $time%b: %u$ant%u");
+		$this->send_output("%bAntall p√•logget siste $time%b: %u$ant%u");
 	}
 	
-	/** Antall pÂlogget (kort tid) */
+	/** Antall p√•logget (kort tid) */
 	public function stats_short()
 	{
 		$result = ess::$b->db->query("SELECT COUNT(IF(up_last_online > ".(time()-60).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-10).", 1, NULL)) FROM users_players");
@@ -164,11 +164,11 @@ abstract class irc_info
 		$this->send_output("%bHits statistikk:%b");
 		$this->send_output("%bTotalt:%b %c5%u$total%u");
 		$this->send_output("%bI dag:%b %c7%u$today%u");
-		$this->send_output("I gÂr: $day_1");
-		$this->send_output("I forigÂrs: $day_2");
+		$this->send_output("I g√•r: $day_1");
+		$this->send_output("I forig√•rs: $day_2");
 	}
 	
-	/** Belastning pÂ serveren */
+	/** Belastning p√• serveren */
 	public function c_load()
 	{
 		$oppetid = shell_exec('uptime');
@@ -214,7 +214,7 @@ abstract class irc_info
 		}
 	}
 	
-	/** NÂr en spiller sist var pÂlogget */
+	/** N√•r en spiller sist var p√•logget */
 	public function c_last_online()
 	{
 		$player = $this->cmd_x[1];
@@ -259,7 +259,7 @@ abstract class irc_info
 		$this->send_output(ess::$b->date->get(intval($this->cmd_x[1]))->format(date::FORMAT_SEC));
 	}
 	
-	/** Antall registrerte spillere pÂ en dag */
+	/** Antall registrerte spillere p√• en dag */
 	public function c_regstats_last()
 	{
 		$date = ess::$b->date->get(time());
@@ -349,7 +349,7 @@ abstract class irc_info
 				// antall prosent -- hele spillet
 				$percent = round($row['up_points'] / $points_max * 100, 3);
 				
-				// hvilken rank -- nÂvÊrende
+				// hvilken rank -- n√•v√¶rende
 				$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
 				
 				// hvilken rank -- den neste
@@ -359,7 +359,7 @@ abstract class irc_info
 					$points_needed = $rank_neste['points'] - $rank['points'];
 					$percent_next = round(100 - round(($row['up_points'] - $rank['points']) / $points_needed * 100, 3), 3);
 					
-					$this->send_output("%b{$row['up_name']}%b har {$row['up_points']} rankpoeng, er %b{$rank['name']}%b og mangler %b$percent_next%b % fra Â bli {$rank_neste['name']}, og har fullf¯rt spillet med %b$percent %%b!");
+					$this->send_output("%b{$row['up_name']}%b har {$row['up_points']} rankpoeng, er %b{$rank['name']}%b og mangler %b$percent_next%b % fra √• bli {$rank_neste['name']}, og har fullf√∏rt spillet med %b$percent %%b!");
 					
 					
 					$tid_start = $row['up_created_time'];
@@ -372,12 +372,12 @@ abstract class irc_info
 					$tid_pre = round($tid_idag - $tid);
 					$tid_post = round($tid_idag + $tid);
 					
-					$this->send_output("Det vil ta %b{$row['up_name']}%b %u".game::timespan($tid_pre, game::TIME_ABS | game::TIME_NOBOLD | game::TIME_FULL)."%u Â nÂ den h¯yeste ranken! (%u".ess::$b->date->get($tid_post)->format()."%u)");
+					$this->send_output("Det vil ta %b{$row['up_name']}%b %u".game::timespan($tid_pre, game::TIME_ABS | game::TIME_NOBOLD | game::TIME_FULL)."%u √• n√• den h√∏yeste ranken! (%u".ess::$b->date->get($tid_post)->format()."%u)");
 				}
 				
 				else
 				{
-					$this->send_output("%b{$row['up_name']}%b har {$row['up_points']} rankpoeng og er %b{$rank['name']}%b, som er den h¯yeste ranken! I forhold til hele spillet har han fullf¯rt det %b$percent %%b!");
+					$this->send_output("%b{$row['up_name']}%b har {$row['up_points']} rankpoeng og er %b{$rank['name']}%b, som er den h√∏yeste ranken! I forhold til hele spillet har han fullf√∏rt det %b$percent %%b!");
 				}
 			}
 			
@@ -403,11 +403,11 @@ abstract class irc_info
 		{
 			if ($row = $this->hent_bruker_info($player, "up_name, up_points, up_access_level, upr_rank_pos"))
 			{
-				// hvilken rank -- nÂvÊrende
+				// hvilken rank -- n√•v√¶rende
 				$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
 				$rank['name'] = strip_tags($rank['name']);
 				
-				$this->send_output("%b{$row['up_name']}%b er %b{$rank['name']}%b og ligger pÂ %b{$row['upr_rank_pos']}%b. plass!".($row['up_access_level'] >= $_game['access_noplay'] ? ' (NoStatUser)' : ''));
+				$this->send_output("%b{$row['up_name']}%b er %b{$rank['name']}%b og ligger p√• %b{$row['upr_rank_pos']}%b. plass!".($row['up_access_level'] >= $_game['access_noplay'] ? ' (NoStatUser)' : ''));
 			}
 			
 			else
@@ -445,7 +445,7 @@ abstract class irc_info
 				$this->send_output("Rank: %b$rank");
 				$this->send_output("Bydel: %b$bydel");
 				$this->send_output("Penger: %b$cash%b - I banken: %b$bank");
-				$this->send_output("Sist pÂlogget: %b$last_online_delay");
+				$this->send_output("Sist p√•logget: %b$last_online_delay");
 				$this->send_output("Antall sidevisninger: %b$hits");
 			}
 			
@@ -472,7 +472,7 @@ abstract class irc_info
 		}
 	}
 	
-	/** S¯k etter en spiller */
+	/** S√∏k etter en spiller */
 	public function c_finnspiller()
 	{
 		global $__server;
@@ -480,7 +480,7 @@ abstract class irc_info
 		$find = $this->cmd_x[1];
 		if (empty($find))
 		{
-			$this->send_output("%bSyntax:%b !info finnspiller <s¯ketter>");
+			$this->send_output("%bSyntax:%b !info finnspiller <s√∏ketter>");
 			$this->send_output("Bruk * dersom du ikke vet hva som er mellom..");
 		}
 		
@@ -595,7 +595,7 @@ abstract class irc_info
 		global $_game;
 		$online_min = 15;
 		
-		// hent n¯kkeltall
+		// hent n√∏kkeltall
 		$result = ess::$b->db->query("
 		SELECT COUNT(up_id) FROM users_players WHERE up_access_level < {$_game['access_noplay']}
 		UNION ALL
@@ -615,9 +615,9 @@ abstract class irc_info
 		$online = game::format_number(mysql_result($result, 4));
 		$this->send_output("%bStatistikk:%b");
 		$this->send_output("Antall spillere: %u$players%u (%u$living%u lever)");
-		$this->send_output("Totalt penger pÂ hÂnda: %u$cash%u");
+		$this->send_output("Totalt penger p√• h√•nda: %u$cash%u");
 		$this->send_output("Totalt penger i bankene: %u$bank%u");
-		$this->send_output("Antall pÂlogget siste 15 minuttene: %u$online%u");
+		$this->send_output("Antall p√•logget siste 15 minuttene: %u$online%u");
 	}
 	
 	/** Hent antall spillere */
@@ -631,7 +631,7 @@ abstract class irc_info
 		$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players");
 		$ant = mysql_result($result, 0);
 		
-		$this->send_output("%bAntall spillere:%b %u".game::format_number($row['living'])."%u av ".game::format_number($row['tot'])." lever (altsÂ %u".game::format_number($row['tot']-$row['living'])."%u d¯de) (totalt %u".game::format_number($ant)."%u med nostats)");
+		$this->send_output("%bAntall spillere:%b %u".game::format_number($row['living'])."%u av ".game::format_number($row['tot'])." lever (alts√• %u".game::format_number($row['tot']-$row['living'])."%u d√∏de) (totalt %u".game::format_number($ant)."%u med nostats)");
 	}
 	
 	/** Hent pengestatistikk */
@@ -719,7 +719,7 @@ abstract class irc_info
 		$this->send_output("Databasen ".DBNAME." inneholder $i tabeller og %u".game::format_number($rows)."%u rader..");
 	}
 	
-	/** Hent nummer registrert pÂ en spiller */
+	/** Hent nummer registrert p√• en spiller */
 	public function c_phone()
 	{
 		$player = $this->cmd_x[1];
@@ -787,7 +787,7 @@ abstract class irc_info
 		$fh = @fopen("/home/smafia/sm_base/lockdown.sm", "r");
 		if (!$fh)
 		{
-			$this->send_output("Kunne ikke Âpne lockdown fil. Antar at siden ikke er lÂst.");
+			$this->send_output("Kunne ikke √•pne lockdown fil. Antar at siden ikke er l√•st.");
 		}
 		
 		else
@@ -800,7 +800,7 @@ abstract class irc_info
 			
 			if (preg_match("/^false/", $contents) || $contents == "")
 			{
-				$this->send_output("SMafia.no er Âpent.");
+				$this->send_output("SMafia.no er √•pent.");
 			}
 			else
 			{
@@ -832,7 +832,7 @@ abstract class irc_info
 		$this->send_output("%bBiler totalt%b: %u".game::format_number(mysql_result($result, 0))."%u");
 	}
 	
-	/** Oppdater innstillinger som er cachet pÂ nytt fra databasen */
+	/** Oppdater innstillinger som er cachet p√• nytt fra databasen */
 	public function c_reload()
 	{
 		$this->send_output("%bReload fra databasen%b");
@@ -886,7 +886,7 @@ abstract class irc_info
 			{
 				if (empty($row['u_birth']))
 				{
-					$this->send_output("Det er ikke noen f¯dselsdato for %u{$row['up_name']}%u (#{$row['up_id']})");
+					$this->send_output("Det er ikke noen f√∏dselsdato for %u{$row['up_name']}%u (#{$row['up_id']})");
 				}
 				
 				else
@@ -906,10 +906,10 @@ abstract class irc_info
 						$date->setDate($info[1]+13, $info[2], $info[3]);
 						$then = $date->format("U");
 						
-						$left = " Det gjenstÂr %u".game::timespan($then - $time, game::TIME_FULL | game::TIME_NOBOLD)."%u f¯r %u{$row['up_name']}%u fyller 13 Âr!";
+						$left = " Det gjenst√•r %u".game::timespan($then - $time, game::TIME_FULL | game::TIME_NOBOLD)."%u f√∏r %u{$row['up_name']}%u fyller 13 √•r!";
 					}
-					$extra = $age > 20 ? " og begynner Â komme langt opp i Âra" : "";
-					$this->send_output("%u{$row['up_name']}%u ble f¯dt %u".intval($info[3]).". ".$_lang['months'][intval($info[2])]." {$info[1]}%u og er nÂ %u$age%u Âr$extra!$left");
+					$extra = $age > 20 ? " og begynner √• komme langt opp i √•ra" : "";
+					$this->send_output("%u{$row['up_name']}%u ble f√∏dt %u".intval($info[3]).". ".$_lang['months'][intval($info[2])]." {$info[1]}%u og er n√• %u$age%u √•r$extra!$left");
 				}
 			}
 			
@@ -920,7 +920,7 @@ abstract class irc_info
 		}
 	}
 	
-	/** Hent hvor lenge siden en spiller ble f¯dt */
+	/** Hent hvor lenge siden en spiller ble f√∏dt */
 	public function c_alder_eksistert()
 	{
 		$player = $this->cmd_x[1];
@@ -936,7 +936,7 @@ abstract class irc_info
 			{
 				if (empty($row['birth']))
 				{
-					$this->send_output("Det er ikke noen f¯dselsdato for %u{$row['up_name']}%u (#{$row['up_id']})");
+					$this->send_output("Det er ikke noen f√∏dselsdato for %u{$row['up_name']}%u (#{$row['up_id']})");
 				}
 				
 				else
@@ -949,7 +949,7 @@ abstract class irc_info
 					$date->setDate($info[1], $info[2], $info[3]);
 					$birth = $date->format("U");
 					
-					$this->send_output("%u{$row['up_name']}%u har vÊrt ute i verdenen i %u".game::timespan($time - $birth, game::TIME_FULL | game::TIME_NOBOLD)."%u!");
+					$this->send_output("%u{$row['up_name']}%u har v√¶rt ute i verdenen i %u".game::timespan($time - $birth, game::TIME_FULL | game::TIME_NOBOLD)."%u!");
 				}
 			}
 			
@@ -960,7 +960,7 @@ abstract class irc_info
 		}
 	}
 	
-	/** Sjekk om en bestemt IP tilh¯rer en spiller */
+	/** Sjekk om en bestemt IP tilh√∏rer en spiller */
 	public function c_verify()
 	{
 		$info = explode(",", $this->cmd_x[1], 3);
@@ -982,11 +982,11 @@ abstract class irc_info
 			{
 				if ($row['up_online_ip'] == $info[1])
 				{
-					$this->send_output("%c3%u{$info[1]}%u tilh¯rer %u{$row['up_name']}%u!");
+					$this->send_output("%c3%u{$info[1]}%u tilh√∏rer %u{$row['up_name']}%u!");
 				}
 				else
 				{
-					$this->send_output("%c4%u{$info[1]}%u tilh¯rer IKKE %u{$row['up_name']}%u!");
+					$this->send_output("%c4%u{$info[1]}%u tilh√∏rer IKKE %u{$row['up_name']}%u!");
 				}
 			}
 			
@@ -997,10 +997,10 @@ abstract class irc_info
 		}
 	}
 	
-	/** Hent informasjon om antall sp¯rringer per tidsenhet */
+	/** Hent informasjon om antall sp√∏rringer per tidsenhet */
 	public function c_qps()
 	{
-		// finn antall sp¯rringer
+		// finn antall sp√∏rringer
 		$result = ess::$b->db->query("SHOW GLOBAL STATUS");
 		$vars = array();
 		while ($row = mysql_fetch_row($result))
@@ -1013,14 +1013,14 @@ abstract class irc_info
 		{
 			if (!isset(game::$settings['qps_int']) || !isset(game::$settings['qps_time']))
 			{
-				$this->send_output("Trenger init, kj¯r med reset param.");
+				$this->send_output("Trenger init, kj√∏r med reset param.");
 				return;
 			}
 			
 			$time = round(microtime(true) - game::$settings['qps_time']['value'], 1);
 			$count = $q - game::$settings['qps_int']['value'];
 			
-			$this->send_output("Periode: %u".game::timespan($time, game::TIME_FULL | game::TIME_NOBOLD)."%u -- Antall sp¯rringer: %u".game::format_number($count)."%u -- %u".game::format_number($count/$time, 1)."%u sp¯rringer i sekundet");
+			$this->send_output("Periode: %u".game::timespan($time, game::TIME_FULL | game::TIME_NOBOLD)."%u -- Antall sp√∏rringer: %u".game::format_number($count)."%u -- %u".game::format_number($count/$time, 1)."%u sp√∏rringer i sekundet");
 		}
 		
 		if (isset($this->cmd_x[1]) && ($this->cmd_x[1] == "reset" || $this->cmd_x[1] == "resetd"))
@@ -1028,7 +1028,7 @@ abstract class irc_info
 			ess::$b->db->query("REPLACE INTO settings SET name = 'qps_int', value = '$q'");
 			ess::$b->db->query("REPLACE INTO settings SET name = 'qps_time', value = '".microtime(true)."'");
 			require ROOT . "/base/scripts/update_db_settings.php";
-			if ($this->cmd_x[1] != "resetd") $this->send_output("QPS er nÂ nullstilt");
+			if ($this->cmd_x[1] != "resetd") $this->send_output("QPS er n√• nullstilt");
 		}
 	}
 	
@@ -1038,7 +1038,7 @@ abstract class irc_info
 		$result = ess::$b->db->query("SELECT COUNT(up_id), FROM_UNIXTIME(MIN(up_deactivated_time)), FROM_UNIXTIME(MAX(up_deactivated_time)) FROM users_players WHERE up_deactivated_time >= UNIX_TIMESTAMP(".ess::$b->db->quote($this->cmd_x[1]).")");
 		$ant = mysql_result($result, 0);
 		if ($ant == 0) $this->send_output("Ingen ble funnet!");
-		else $this->send_output("Antall deaktivert i tidsrommet: ".mysql_result($result, 0)." (f¯rste: ".mysql_result($result, 0, 1)."; siste: ".mysql_result($result, 0, 2).")");
+		else $this->send_output("Antall deaktivert i tidsrommet: ".mysql_result($result, 0)." (f√∏rste: ".mysql_result($result, 0, 1)."; siste: ".mysql_result($result, 0, 2).")");
 	}
 	
 	/** Hent status */
@@ -1061,7 +1061,7 @@ abstract class irc_info
 			$p4 = strpos($c, "-", $p1)+2;
 			$p5 = strpos($c, "%", $p4)+1;
 			
-			// finn antall requests i dette ¯yeblikket
+			// finn antall requests i dette √∏yeblikket
 			$req = explode(" ", substr($c, $p3+6, 10));
 			$req = $req[0];
 			
@@ -1096,12 +1096,12 @@ abstract class irc_info
 		}
 		
 		
-		// hent antall brukere pÂlogget
+		// hent antall brukere p√•logget
 		$result = ess::$b->db->query("SELECT COUNT(IF(up_last_online > ".(time()-1800).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-900).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-600).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-300).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-60).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-30).", 1, NULL)) FROM users_players");
 		
 		$row = mysql_fetch_row($result);
 		
-		$ret = "Status: Antall pÂlogget siste sekunder: 1800={$row[0]}, 900={$row[1]}, 600={$row[2]}, 300={$row[3]}, 60={$row[4]}, 30={$row[5]}. CPU: $load. Visninger/sekund: {$status[0]}. NÂ: {$req}. Minnebruk: {$mem_percent}";
+		$ret = "Status: Antall p√•logget siste sekunder: 1800={$row[0]}, 900={$row[1]}, 600={$row[2]}, 300={$row[3]}, 60={$row[4]}, 30={$row[5]}. CPU: $load. Visninger/sekund: {$status[0]}. N√•: {$req}. Minnebruk: {$mem_percent}";
 		
 		$this->send_output($ret);
 	}
@@ -1126,14 +1126,14 @@ abstract class irc_info
 		}
 	}
 	
-	/** Hent nÂr crewmedlemmene sist var logget inn */
+	/** Hent n√•r crewmedlemmene sist var logget inn */
 	public function c_crewstatus()
 	{
 		global $_game;
 		
 		$result = ess::$b->db->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users_players WHERE up_access_level != 0 AND up_access_level != 1 ORDER BY up_last_online DESC");
 		
-		$this->send_output("Sist pÂlogget for Crewet:");
+		$this->send_output("Sist p√•logget for Crewet:");
 		while ($row = mysql_fetch_assoc($result))
 		{
 			if ($row['up_name'] == "SYSTEM" || $row['up_name'] == "beta") continue;

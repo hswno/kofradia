@@ -20,8 +20,8 @@ else
 	echo '
 <h1>IP ban</h1>
 <ul>
-	<li><a href="ip_ban?active">Vis aktive IP-ban oppføringer</a></li>
-	<li><a href="ip_ban?inactive">Vis gamle IP-ban oppføringer</a></li>
+	<li><a href="ip_ban?active">Vis aktive IP-ban oppfÃ¸ringer</a></li>
+	<li><a href="ip_ban?inactive">Vis gamle IP-ban oppfÃ¸ringer</a></li>
 </ul>';
 }
 

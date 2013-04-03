@@ -9,7 +9,7 @@ class page_drap extends pages_player
 	{
 		parent::__construct($up);
 		
-		// vise liste over drapsforsøk for en bestemt spiller
+		// vise liste over drapsforsÃ¸k for en bestemt spiller
 		if (isset($_GET['up_id']) && access::has("mod", NULL, NULL, "login"))
 		{
 			$up_id = (int) $_GET['up_id'];
@@ -23,7 +23,7 @@ class page_drap extends pages_player
 			$this->show_tries($player);
 		}
 		
-		// vise liste over drapsforsøk rettet mot en bestemt spiller
+		// vise liste over drapsforsÃ¸k rettet mot en bestemt spiller
 		elseif (isset($_GET['offer_up_id']) && access::has("mod", NULL, NULL, "login"))
 		{
 			$up_id = (int) $_GET['offer_up_id'];
@@ -37,13 +37,13 @@ class page_drap extends pages_player
 			$this->show_tries($player, true);
 		}
 		
-		// vise liste over alle drapsforsøk
+		// vise liste over alle drapsforsÃ¸k
 		elseif (isset($_GET['allef']) && access::has("mod", NULL, NULL, "login"))
 		{
 			$this->show_tries();
 		}
 		
-		// vise liste over drapsforsøk spilleren selv har utført
+		// vise liste over drapsforsÃ¸k spilleren selv har utfÃ¸rt
 		elseif (isset($_GET['forsok']))
 		{
 			$this->show_tries($this->up);
@@ -55,7 +55,7 @@ class page_drap extends pages_player
 			$this->show_all();
 		}
 		
-		// vis siste gjennomførte drap
+		// vis siste gjennomfÃ¸rte drap
 		else
 		{
 			$this->show_main();
@@ -77,8 +77,8 @@ class page_drap extends pages_player
 		Drapliste
 		<span class="left2"></span><span class="right2"></span>
 	</h1>'.(access::has("mod") ? '
-	<p class="h_left"><a href="drap?allef">Alle drapsforsøk</a></p>' : '').'
-	<p class="h_right"><a href="drap?forsok">Mine drapsforsøk</a></p>
+	<p class="h_left"><a href="drap?allef">Alle drapsforsÃ¸k</a></p>' : '').'
+	<p class="h_right"><a href="drap?forsok">Mine drapsforsÃ¸k</a></p>
 	<div class="bg1">
 		<p>Dette er en oversikt over de siste spillerne som har blitt drept. Listen viser alle drap 7 dager tilbake i tid.</p>';
 		
@@ -93,7 +93,7 @@ class page_drap extends pages_player
 		if ($pagei->total == 0)
 		{
 			echo '
-		<p><b>Ingen drap har blitt gjennomført de siste 7 dagene.</b></p>';
+		<p><b>Ingen drap har blitt gjennomfÃ¸rt de siste 7 dagene.</b></p>';
 		}
 		
 		else
@@ -158,7 +158,7 @@ class page_drap extends pages_player
 					<td>'.$familier.'</td>
 					<td>'.$firmaer.'</td>
 					<td>'.ess::$b->date->get($row['up_deactivated_time'])->format().'</td>
-					<td>'.($row['up_deactivated_dead'] == 1 ? 'Døde momentant' : 'Døde av skader påført tidligere').'</td>
+					<td>'.($row['up_deactivated_dead'] == 1 ? 'DÃ¸de momentant' : 'DÃ¸de av skader pÃ¥fÃ¸rt tidligere').'</td>
 				</tr>';
 			}
 			
@@ -211,7 +211,7 @@ class page_drap extends pages_player
 		if ($pagei->total == 0)
 		{
 			echo '
-		<p><b>Ingen drap har blitt gjennomført.</b></p>';
+		<p><b>Ingen drap har blitt gjennomfÃ¸rt.</b></p>';
 		}
 		
 		else
@@ -236,7 +236,7 @@ class page_drap extends pages_player
 					<td>'.($row['up_deactivated_up_id'] ? '<user id="'.$row['up_deactivated_up_id'].'" />' : '<i>Ingen</i>').'</td>
 					<td><user id="'.$row['up_id'].'" /></td>
 					<td>'.ess::$b->date->get($row['up_deactivated_time'])->format().'</td>
-					<td>'.($row['up_deactivated_dead'] == 1 ? 'Døde momentant' : 'Døde av skader påført tidligere').'</td>
+					<td>'.($row['up_deactivated_dead'] == 1 ? 'DÃ¸de momentant' : 'DÃ¸de av skader pÃ¥fÃ¸rt tidligere').'</td>
 				</tr>';
 			}
 			
@@ -257,7 +257,7 @@ class page_drap extends pages_player
 	}
 	
 	/**
-	 * Vis alle drapsforsøk for en spesifikk spiller
+	 * Vis alle drapsforsÃ¸k for en spesifikk spiller
 	 * @param player $up
 	 * @param bool $offer skal vi vise angrep mot spilleren?
 	 */
@@ -266,19 +266,19 @@ class page_drap extends pages_player
 		$alle = !$up;
 		$egen = $up && $up->id == $this->up->id;
 		
-		if ($alle) ess::$b->page->add_title("Alle drapsforsøk");
-		elseif (!$egen) ess::$b->page->add_title("Drapsforsøk ".($offer ? 'mot' : 'for')." '{$up->data['up_name']}'");
-		else ess::$b->page->add_title("Mine drapsforsøk");
+		if ($alle) ess::$b->page->add_title("Alle drapsforsÃ¸k");
+		elseif (!$egen) ess::$b->page->add_title("DrapsforsÃ¸k ".($offer ? 'mot' : 'for')." '{$up->data['up_name']}'");
+		else ess::$b->page->add_title("Mine drapsforsÃ¸k");
 		
 		echo '
 <div class="bg1_c '.($alle ? 'large' : 'medium').'">
 	<h1 class="bg1">
-		'.($alle ? 'Alle drapsforsøk' : 'Drapsforsøk').'
+		'.($alle ? 'Alle drapsforsÃ¸k' : 'DrapsforsÃ¸k').'
 		<span class="left2"></span><span class="right2"></span>
 	</h1>
 	<p class="h_left"><a href="drap">&laquo; Tilbake</a></p>
 	<div class="bg1">
-		<p class="c">Dette er en oversikt som viser '.($alle ? 'alle drapsforsøk som er utført' : 'drapsforsøk '.($egen ? 'du har utført' : ($offer ? 'rettet mot spilleren '.$up->profile_link() : 'spilleren '.$up->profile_link().' har utført'))).'.</p>';
+		<p class="c">Dette er en oversikt som viser '.($alle ? 'alle drapsforsÃ¸k som er utfÃ¸rt' : 'drapsforsÃ¸k '.($egen ? 'du har utfÃ¸rt' : ($offer ? 'rettet mot spilleren '.$up->profile_link() : 'spilleren '.$up->profile_link().' har utfÃ¸rt'))).'.</p>';
 		
 		$pagei = new pagei(pagei::PER_PAGE, 20, pagei::ACTIVE_GET, "side");
 		$result = $pagei->query("
@@ -292,7 +292,7 @@ class page_drap extends pages_player
 			if ($alle)
 			{
 				echo '
-		<p class="c"><b>Det er ingen som har prøvd å drepe noen enda.</b></p>';
+		<p class="c"><b>Det er ingen som har prÃ¸vd Ã¥ drepe noen enda.</b></p>';
 			}
 			
 			elseif ($offer)
@@ -304,7 +304,7 @@ class page_drap extends pages_player
 			else
 			{
 				echo '
-		<p class="c"><b>'.($egen ? 'Du' : $up->profile_link()).' har ikke prøvd å drepe noen enda.</b></p>';
+		<p class="c"><b>'.($egen ? 'Du' : $up->profile_link()).' har ikke prÃ¸vd Ã¥ drepe noen enda.</b></p>';
 			}
 		}
 		
@@ -315,7 +315,7 @@ class page_drap extends pages_player
 			if ($ff_only_familier)
 			{
 				echo '
-		<p class="c"><a href="'.game::address("drap", $_GET, array("familier")).'">Vis også firmaer</a></p>';
+		<p class="c"><a href="'.game::address("drap", $_GET, array("familier")).'">Vis ogsÃ¥ firmaer</a></p>';
 			}
 			else
 			{
@@ -408,8 +408,8 @@ class page_drap extends pages_player
 					<td><user id="'.$row['df_attack_up_id'].'" />'.$ff_attack.'</td>' : '').(!$offer ? '
 					<td><user id="'.$row['df_defend_up_id'].'" />'.$ff.'</td>' : '').'
 					<td>'.ess::$b->date->get($row['df_time'])->format().'<br />'.$bydel.'</td>
-					<td>'.($row['df_outcome'] == 1 ? '<b style="color: #FF0000">Døde</b>' : 'Ble skadet').'<br />
-						<span class="dark">'.($row['df_type'] == 1 ? 'Utpressing' : 'Drapsforsøk').'</span></td>
+					<td>'.($row['df_outcome'] == 1 ? '<b style="color: #FF0000">DÃ¸de</b>' : 'Ble skadet').'<br />
+						<span class="dark">'.($row['df_type'] == 1 ? 'Utpressing' : 'DrapsforsÃ¸k').'</span></td>
 					<td class="r">'.game::format_num($row['df_rankpoints']).'</td>
 					<td class="r">'.game::format_cash($row['df_cash']).($row['df_hitlist'] > 0 ? '<br />'.game::format_cash($row['df_hitlist']) : '').'</td>
 					<td>'.$vitner.'</td>

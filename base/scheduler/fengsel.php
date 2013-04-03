@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Dette scriptet setter ned wanted nivået til en spiller
+ * Dette scriptet setter ned wanted nivÃ¥et til en spiller
  */
 
 $i = 0;
@@ -10,7 +10,7 @@ while (true)
 	// for mange feil?
 	if (++$i > 2)
 	{
-		sysreport::log("For mange feilforsøk. Kunne ikke fullføre schedule fengsel.", "Scheduler: Fengsel feilet");
+		sysreport::log("For mange feilforsÃ¸k. Kunne ikke fullfÃ¸re schedule fengsel.", "Scheduler: Fengsel feilet");
 		break;
 	}
 	

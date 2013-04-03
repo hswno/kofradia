@@ -56,7 +56,7 @@ class p_crew_deaktiverte
 	<thead>
 		<tr>
 			<th>Hvem</th>
-			<th>Når</th>
+			<th>NÃ¥r</th>
 			<th>Deaktivert selv?</th>
 			<th>Begrunnelse</th>
 		</tr>

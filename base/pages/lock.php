@@ -19,7 +19,7 @@ class page_lock
 		
 		ess::$b->page->add_title("Begrenset tilgang");
 		
-		// løse problemet?
+		// lÃ¸se problemet?
 		if (isset($_GET['f']))
 		{
 			$this->solve();
@@ -93,9 +93,9 @@ class page_lock
 				case "birth":
 					echo '
 <div class="lock_box r3">
-	<h2>Fødselsdato</h2>
-	<p>Du har ikke registrert din fødselsdato. Vi krever at alle som skal benytte seg av Kofradia oppgir sin fødselsdato for vår garanti for at dere oppfyller vårt krav om alder.</p>
-	<p><a href="'.htmlspecialchars(game::address("lock", $this->get, array(), array("f" => "birth"))).'">Fyll inn fødselsdato &raquo;</a></p>
+	<h2>FÃ¸dselsdato</h2>
+	<p>Du har ikke registrert din fÃ¸dselsdato. Vi krever at alle som skal benytte seg av Kofradia oppgir sin fÃ¸dselsdato for vÃ¥r garanti for at dere oppfyller vÃ¥rt krav om alder.</p>
+	<p><a href="'.htmlspecialchars(game::address("lock", $this->get, array(), array("f" => "birth"))).'">Fyll inn fÃ¸dselsdato &raquo;</a></p>
 </div>';
 				break;
 				
@@ -122,8 +122,8 @@ class page_lock
 					
 					echo '
 <div class="lock_box r3">
-	<h2>Spiller '.($killed == 2 ? 'blødd ihjel' : ($killed ? 'drept' : 'deaktivert')).'</h2>
-	<p>'.($deact_self ? 'Du deaktivert din spiller' : 'Din spiller '.($killed == 2 ? 'blødde ihjel på grunn av lite energi og helse' : ($killed ? 'ble drept' : 'ble deaktivert'))).'. Du må opprette en ny spiller for å kunne fortsette å spille.</p>
+	<h2>Spiller '.($killed == 2 ? 'blÃ¸dd ihjel' : ($killed ? 'drept' : 'deaktivert')).'</h2>
+	<p>'.($deact_self ? 'Du deaktivert din spiller' : 'Din spiller '.($killed == 2 ? 'blÃ¸dde ihjel pÃ¥ grunn av lite energi og helse' : ($killed ? 'ble drept' : 'ble deaktivert'))).'. Du mÃ¥ opprette en ny spiller for Ã¥ kunne fortsette Ã¥ spille.</p>
 	<p><a href="">Mer informasjon</a> | <a href="'.htmlspecialchars(game::address("lock", $this->get, array(), array("f" => "player"))).'">Opprett ny spiller &raquo;</a></p>
 </div>';
 				break;
@@ -132,7 +132,7 @@ class page_lock
 					echo '
 <div class="lock_box r3">
 	<h2>Mangler passord</h2>
-	<p>Din bruker har for øyeblikket ikke noe passord, noe som er et resultat av at du har bedt om å nullstille passordet ditt.</p>
+	<p>Din bruker har for Ã¸yeblikket ikke noe passord, noe som er et resultat av at du har bedt om Ã¥ nullstille passordet ditt.</p>
 	<p><a href="'.htmlspecialchars(game::address("lock", $this->get, array(), array("f" => "pass"))).'">Opprett nytt passord &raquo;</a></p>
 </div>';
 				break;
@@ -144,17 +144,17 @@ class page_lock
 	}
 	
 	/**
-	 * Behandle fødselsdato
+	 * Behandle fÃ¸dselsdato
 	 */
 	protected function solve_birth()
 	{
 		global $_lang;
 		
 		echo '
-<h1>Fødselsdato</h1>
+<h1>FÃ¸dselsdato</h1>
 <p class="h_right"><a href="'.htmlspecialchars($this->url).'">Tilbake</a></p>
-<p>Din bruker har ingen fødselsdato tilknyttet seg. Vi vil at alle brukerene skal ha dette.</p>
-<p>Feil fødselsdato vil i de fleste tilfeller føre til deaktivering av kontoen.</p>';
+<p>Din bruker har ingen fÃ¸dselsdato tilknyttet seg. Vi vil at alle brukerene skal ha dette.</p>
+<p>Feil fÃ¸dselsdato vil i de fleste tilfeller fÃ¸re til deaktivering av kontoen.</p>';
 		
 		// submit?
 		if (isset($_POST['b_dag']))
@@ -171,7 +171,7 @@ class page_lock
 			$age = $n_year - $b_aar - (($n_month < $b_maaned || ($b_maaned == $n_month && $n_day < $b_dag)) ? 1 : 0);
 			$birth = $b_aar."-".str_pad($b_maaned, 2, "0", STR_PAD_LEFT)."-".str_pad($b_dag, 2, "0", STR_PAD_LEFT);
 			
-			// sjekk om fødselsdatoen er gyldig
+			// sjekk om fÃ¸dselsdatoen er gyldig
 			$birth_date = ess::$b->date->get();
 			$birth_date->setDate($b_aar, $b_maaned, $b_dag);
 			$birth_valid = $birth_date->format("Y-m-d") == $birth;
@@ -180,21 +180,21 @@ class page_lock
 			$error = array();
 			if ($b_dag < 1 || $b_dag > 31)
 			{
-				$error[] = "Du må velge en gyldig dag.";
+				$error[] = "Du mÃ¥ velge en gyldig dag.";
 			}
 			if ($b_maaned < 1 || $b_maaned > 12)
 			{
-				$error[] = "Du må velge en gyldig måned.";
+				$error[] = "Du mÃ¥ velge en gyldig mÃ¥ned.";
 			}
 			if ($b_aar < 1900 || $b_aar > $date->format("Y"))
 			{
-				$error[] = "Du må velge et gyldig år.";
+				$error[] = "Du mÃ¥ velge et gyldig Ã¥r.";
 			}
 			
-			// ugyldig fødselsdato?
+			// ugyldig fÃ¸dselsdato?
 			if (count($error) == 0 && !$birth_valid)
 			{
-				$error[] = "Datoen du fylte inn for fødselsdatoen din eksisterer ikke.";
+				$error[] = "Datoen du fylte inn for fÃ¸dselsdatoen din eksisterer ikke.";
 			}
 			
 			// noen feil?
@@ -212,10 +212,10 @@ class page_lock
 			
 			elseif ($age < 13)
 			{
-				putlog("CREWCHAN", "%c9%bUNDER ALDERSGRENSEN?:%b%c %u".login::$user->player->data['up_name']."%u prøvde å legge inn fødselsdatoen %u{$birth}%u (%u{$age}%u år)!");
+				putlog("CREWCHAN", "%c9%bUNDER ALDERSGRENSEN?:%b%c %u".login::$user->player->data['up_name']."%u prÃ¸vde Ã¥ legge inn fÃ¸dselsdatoen %u{$birth}%u (%u{$age}%u Ã¥r)!");
 				
 				echo '
-<p class="error_box">Du må ha fylt 13 år for å kunne spille Kofradia.</p>';
+<p class="error_box">Du mÃ¥ ha fylt 13 Ã¥r for Ã¥ kunne spille Kofradia.</p>';
 			}
 			
 			elseif (!isset($_POST['fix']))
@@ -228,8 +228,8 @@ class page_lock
 					
 					if (ess::$b->db->affected_rows() > 0)
 					{
-						ess::$b->page->add_message("Fødselsdatoen $b_dag. {$_lang['months'][$b_maaned]} $b_aar er nå registrert til din bruker.");
-						putlog("CREWCHAN", "%c7%bFødselsdato registrert:%b%c %u".login::$user->player->data['up_name']."%u la inn fødselsdatoen %u{$birth}%u (%u{$age}%u år).");
+						ess::$b->page->add_message("FÃ¸dselsdatoen $b_dag. {$_lang['months'][$b_maaned]} $b_aar er nÃ¥ registrert til din bruker.");
+						putlog("CREWCHAN", "%c7%bFÃ¸dselsdato registrert:%b%c %u".login::$user->player->data['up_name']."%u la inn fÃ¸dselsdatoen %u{$birth}%u (%u{$age}%u Ã¥r).");
 					}
 					
 					redirect::handle();
@@ -239,8 +239,8 @@ class page_lock
 				{
 					echo '
 <div class="section">
-	<h2>Godkjenn fødselsdato</h2>
-	<p>Du har opplyst om at din fødselsdato er <u>'.$b_dag.'. '.$_lang['months'][$b_maaned].' '.$b_aar.'</u> ('.$birth.'). Det vil si at du er '.$age.' år.</p>
+	<h2>Godkjenn fÃ¸dselsdato</h2>
+	<p>Du har opplyst om at din fÃ¸dselsdato er <u>'.$b_dag.'. '.$_lang['months'][$b_maaned].' '.$b_aar.'</u> ('.$birth.'). Det vil si at du er '.$age.' Ã¥r.</p>
 	<p>Stemmer dette?</p>
 	<form action="" method="post">
 		<input type="hidden" name="b_dag" value="'.$b_dag.'" />
@@ -255,7 +255,7 @@ class page_lock
 			}
 		}
 		
-		ess::$b->page->add_title("Registrere fødselsdato");
+		ess::$b->page->add_title("Registrere fÃ¸dselsdato");
 		
 		echo '
 <form action="" method="post">
@@ -275,10 +275,10 @@ class page_lock
 		echo '
 			</select>
 		</dd>
-		<dt>Måned</dt>
+		<dt>MÃ¥ned</dt>
 		<dd>
 			<select name="b_maaned">
-				<option value="">Måned</option>';
+				<option value="">MÃ¥ned</option>';
 		
 		$active = postval("b_maaned");
 		for ($i = 1; $i <= 12; $i++)
@@ -290,10 +290,10 @@ class page_lock
 		echo '
 			</select>
 		</dd>
-		<dt>År</dt>
+		<dt>Ã…r</dt>
 		<dd>
 			<select name="b_aar">
-				<option value="">År</option>';
+				<option value="">Ã…r</option>';
 		
 		$active = postval("b_aar");
 		for ($i = ess::$b->date->get()->format("Y"); $i >= 1900; $i--)
@@ -306,7 +306,7 @@ class page_lock
 			</select>
 		</dd>
 	</dl>
-	<p>'.show_sbutton("Legg til fødselsdato").'</p>
+	<p>'.show_sbutton("Legg til fÃ¸dselsdato").'</p>
 </form>';
 	}
 	
@@ -318,7 +318,7 @@ class page_lock
 		ess::$b->page->add_title("Ny spiller");
 		redirect::store($_SERVER['REQUEST_URI']);
 		
-		// sjekk om vi allerede har en spiller fra før som ikke er den aktive
+		// sjekk om vi allerede har en spiller fra fÃ¸r som ikke er den aktive
 		$result = ess::$b->db->query("SELECT up_id, up_name, up_created_time, up_last_online, up_access_level FROM users_players WHERE up_u_id = ".login::$user->id." AND up_access_level != 0");
 		if (mysql_num_rows($result) > 0)
 		{
@@ -354,7 +354,7 @@ class page_lock
 	<div class="bg1">
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
-			<p>Du har allerede en annen spiller som er i live. Du må enten deaktivere spilleren eller velge å bruke den som din aktive spiller.</p>
+			<p>Du har allerede en annen spiller som er i live. Du mÃ¥ enten deaktivere spilleren eller velge Ã¥ bruke den som din aktive spiller.</p>
 			<table class="table center">
 				<thead>
 					<tr>
@@ -416,7 +416,7 @@ class page_lock
 			// har ikke valgt noe navn?
 			elseif (empty($name))
 			{
-				ess::$b->page->add_message("Du må skrive inn et navn du ønsker at din nye spiller skal ha.", "error");
+				ess::$b->page->add_message("Du mÃ¥ skrive inn et navn du Ã¸nsker at din nye spiller skal ha.", "error");
 			}
 			
 			// allerede i bruk?
@@ -425,10 +425,10 @@ class page_lock
 				ess::$b->page->add_message("Spillernavnet er allerede tatt! Velg et annet.", "error");
 			}
 			
-			// noen forsøker å registrere seg med dette?
+			// noen forsÃ¸ker Ã¥ registrere seg med dette?
 			elseif (mysql_num_rows($result3) > 0)
 			{
-				ess::$b->page->add_message("Noen holder allerede på å registrere seg med dette spillernavnet. Velg et annet.", "error");
+				ess::$b->page->add_message("Noen holder allerede pÃ¥ Ã¥ registrere seg med dette spillernavnet. Velg et annet.", "error");
 			}
 			
 			else
@@ -476,7 +476,7 @@ class page_lock
 			<input type="hidden" name="bydel" value="'.$bydel['id'].'" />' : '').'
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="name" value="'.htmlspecialchars($name).'" />
-			<p>Du er i ferd med å opprette følgende spiller:</p>
+			<p>Du er i ferd med Ã¥ opprette fÃ¸lgende spiller:</p>
 			<dl class="dd_right">
 				<dt>Spillernavn</dt>
 				<dd><b>'.htmlspecialchars($name).'</b></dd>
@@ -554,14 +554,14 @@ class page_lock
 	<div class="bg1">
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
-			<p>Du er nå i ferd med å opprette en ny spiller. Du kan også se informasjon for din tidligere spiller <a href="min_side?up_id='.login::$user->player->id.'">'.htmlspecialchars(login::$user->player->data['up_name']).'</a>.</p>
-			<p>Du kan ikke bytte spillernavnet du velger å opprette her uten og opprette en ny spiller.</p>
+			<p>Du er nÃ¥ i ferd med Ã¥ opprette en ny spiller. Du kan ogsÃ¥ se informasjon for din tidligere spiller <a href="min_side?up_id='.login::$user->player->id.'">'.htmlspecialchars(login::$user->player->data['up_name']).'</a>.</p>
+			<p>Du kan ikke bytte spillernavnet du velger Ã¥ opprette her uten og opprette en ny spiller.</p>
 			<dl class="dd_right" style="overflow: hidden">
 				<dt>Nytt spillernavn</dt>
 				<dd><input type="text" id="name_enter" name="name" class="styled w120" value="'.htmlspecialchars(postval("name")).'" /></dd>
 				<dt>Status:
 					<span class="name_v hide" id="name_validate_loading"><img src="'.STATIC_LINK.'/other/loading-black.gif" /></span>
-					<span class="name_v hide" id="name_validate">Skriv inn ønsket navn</span>
+					<span class="name_v hide" id="name_validate">Skriv inn Ã¸nsket navn</span>
 					<span class="name_v hide" id="name_validate_ok">Ledig</span>
 					<span class="name_v hide" id="name_validate_taken">Opptatt</span>
 				</dt>
@@ -609,7 +609,7 @@ class page_lock
 			// kontroller at alle feltene er fylt ut
 			if ($pass_new == "" || $pass_repeat == "")
 			{
-				ess::$b->page->add_message("Alle feltene må fylles ut.", "error");
+				ess::$b->page->add_message("Alle feltene mÃ¥ fylles ut.", "error");
 			}
 			
 			// kontroller nytt passord og repeat
@@ -621,13 +621,13 @@ class page_lock
 			// kontroller krav (minst 6 tegn)
 			elseif (strlen($pass_new) < 6)
 			{
-				ess::$b->page->add_message("Det nye passordet må inneholde minimum 6 tegn.", "error");
+				ess::$b->page->add_message("Det nye passordet mÃ¥ inneholde minimum 6 tegn.", "error");
 			}
 			
 			// for enkelt passord?
 			elseif (password::validate($pass_new, password::LEVEL_LOGIN) != 0)
 			{
-				ess::$b->page->add_message("Du må velge et vanskeligere passord.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge et vanskeligere passord.", "error");
 			}
 			
 			// samme passord som i banken?
@@ -642,19 +642,19 @@ class page_lock
 				ess::$b->db->query("UPDATE users SET u_pass = ".ess::$b->db->quote(password::hash($pass_new, null, 'user')).", u_pass_change = NULL WHERE u_id = ".login::$user->id);
 				
 				// melding
-				ess::$b->page->add_message("Du har nå lagret et nytt passord for brukeren din.");
-				putlog("NOTICE", "%bPASSORD%b: %u".login::$user->player->data['up_name']."%u lagret nytt passord på sin bruker (var nullstilt). ".ess::$s['path']."/min_side?u_id=".login::$user->id);
+				ess::$b->page->add_message("Du har nÃ¥ lagret et nytt passord for brukeren din.");
+				putlog("NOTICE", "%bPASSORD%b: %u".login::$user->player->data['up_name']."%u lagret nytt passord pÃ¥ sin bruker (var nullstilt). ".ess::$s['path']."/min_side?u_id=".login::$user->id);
 				
-				// send ut e-post for å informere
+				// send ut e-post for Ã¥ informere
 				$email = new email();
 				$email->text = 'Hei,
 
-Det er nå blitt opprettet et nytt passord fra '.$_SERVER['REMOTE_ADDR'].' ('.$_SERVER['HTTP_USER_AGENT'].').
+Det er nÃ¥ blitt opprettet et nytt passord fra '.$_SERVER['REMOTE_ADDR'].' ('.$_SERVER['HTTP_USER_AGENT'].').
 
 Bruker ID: '.login::$user->data['u_id'].'
 E-post: '.login::$user->data['u_email'].'
 
-Vi sender selvfølgelig ikke ditt nye passord på e-post. Det skal du kunne selv!
+Vi sender selvfÃ¸lgelig ikke ditt nye passord pÃ¥ e-post. Det skal du kunne selv!
 
 --
 www.kofradia.no';
@@ -674,7 +674,7 @@ www.kofradia.no';
 	<h1 class="bg1">Lagre nytt passord<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="'.htmlspecialchars($this->url).'">Tilbake</a></p>
 	<div class="bg1">
-		<p>Ditt passord har blitt nullstilt. Du vil ikke kunne logge inn uten å måtte benytte <i>glemt passord</i> funksjonen før du har opprettet et nytt passord.</p>
+		<p>Ditt passord har blitt nullstilt. Du vil ikke kunne logge inn uten Ã¥ mÃ¥tte benytte <i>glemt passord</i> funksjonen fÃ¸r du har opprettet et nytt passord.</p>
 		<form action="" method="post" autocomplete="off">
 			<dl class="dd_right dl_2x center" style="width: 80%">
 				<dt>Nytt passord</dt>

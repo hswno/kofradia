@@ -20,7 +20,7 @@ class page_forum
 		$this->forum->require_access();
 		$this->forum->add_title();
 		
-		// slette forumtråder?
+		// slette forumtrÃ¥der?
 		if (isset($_POST['slett_emner']) && $this->forum->fmod)
 		{
 			$this->delete_topics();
@@ -43,19 +43,19 @@ class page_forum
 			$this->forum->ff->uinfo->forum_seen();
 		}
 		
-		// vise slettede forumtråder?
+		// vise slettede forumtrÃ¥der?
 		$show_deleted = false;
 		if (isset($_GET['sd']) && $this->forum->fmod)
 		{
 			// ff
 			if ($this->forum->ff && !access::has("mod"))
 			{
-				ess::$b->page->add_message("Du viser også forumtråder som ble slettet for mindre enn ".game::timespan(forum_topic::FF_HIDE_TIME, game::TIME_FULL)." siden.");
+				ess::$b->page->add_message("Du viser ogsÃ¥ forumtrÃ¥der som ble slettet for mindre enn ".game::timespan(forum_topic::FF_HIDE_TIME, game::TIME_FULL)." siden.");
 			}
 			
 			else
 			{
-				ess::$b->page->add_message("Du viser også slettede forumtråder.");
+				ess::$b->page->add_message("Du viser ogsÃ¥ slettede forumtrÃ¥der.");
 			}
 			
 			$show_deleted = true;
@@ -68,12 +68,12 @@ class page_forum
 <div class="bg1_c forumw">
 	<h1 class="bg1">'.htmlspecialchars($this->forum->get_name()).'<span class="left"></span><span class="right"></span></h1>
 	<p class="h_right">
-		<a href="topic_new?f='.$this->forum->id.'">Opprett ny forumtråd</a>'.($this->forum->fmod && !$vis_bokser && !$show_deleted ? '
+		<a href="topic_new?f='.$this->forum->id.'">Opprett ny forumtrÃ¥d</a>'.($this->forum->fmod && !$vis_bokser && !$show_deleted ? '
 		<a href="'.htmlspecialchars(game::address(PHP_SELF, $_GET, array(), array("vis_bokser" => true))).'">Vis merk innlegg knapp</a>' : ($vis_bokser ? '
 		<a href="'.htmlspecialchars(game::address(PHP_SELF, $_GET, array("vis_bokser"))).'">Skjul valg</a>' : '')).'
 	</p>
 	<p class="h_left">
-		<a href="sok?s'.$this->forum->id.'">Søk</a>
+		<a href="sok?s'.$this->forum->id.'">SÃ¸k</a>
 		<a href="'.ess::$s['relative_path'].'/node/6">Forumregler</a>'.($this->forum->fmod && !$vis_bokser ? ($show_deleted ? '
 		<a href="'.htmlspecialchars(game::address(PHP_SELF, $_GET, array("sd"))).'">Skjul slettede</a>' : '
 		<a href="'.htmlspecialchars(game::address(PHP_SELF, $_GET, array(), array("sd" => true))).'">Vis slettede</a>') : '').'
@@ -94,8 +94,8 @@ class page_forum
 		mysql_free_result($result);
 		
 		
-		// alle important og sticky topics skal vises på første siden
-		// mens bare 15 normale topics skal vises på hver side
+		// alle important og sticky topics skal vises pÃ¥ fÃ¸rste siden
+		// mens bare 15 normale topics skal vises pÃ¥ hver side
 		$pagei = new pagei(pagei::PER_PAGE, 15, pagei::TOTAL, $count['normal'], pagei::ACTIVE_GET, "p");
 		
 		if (isset($_GET['p']) && (string)$pagei->active != $_GET['p'])
@@ -110,7 +110,7 @@ class page_forum
 		// markere alle emner og svar som lest?
 		if (isset($_GET['fs_force']) && login::$logged_in && forum::$fs_check)
 		{
-			// legg til og oppdater innleggene på denne siden
+			// legg til og oppdater innleggene pÃ¥ denne siden
 			ess::$b->db->query("
 				INSERT INTO forum_seen (fs_ft_id, fs_u_id, fs_time)
 				
@@ -140,7 +140,7 @@ class page_forum
 	<thead>
 		<tr>
 			<th>Tittel'.($this->forum->fmod && $vis_bokser ? ' (<a href="#" class="box_handle_toggle" rel="emne[]">Merk alle</a>)' : '').'</th>
-			<th>Trådstarter</th>
+			<th>TrÃ¥dstarter</th>
 			<th>Svar</th>
 			<th><abbr title="Visninger">Vis</abbr></th>
 			<th>Siste innlegg</th>
@@ -153,7 +153,7 @@ class page_forum
 			// skal vi hente important og sticky topics?
 			if ($pagei->active == 1 && ($count['important'] > 0 || $count['sticky'] > 0))
 			{
-				// hent important og sticky forumtråder
+				// hent important og sticky forumtrÃ¥der
 				$result = $this->get_topics(false, $show_deleted);
 				
 				// vis hver topic
@@ -179,16 +179,16 @@ class page_forum
 					
 					echo '
 		<tr class="'.(++$i % 2 == 0 ? 'color2_1' : 'color2_0').($row['ft_deleted'] != 0 ? ' ft_deleted' : '').'" id="emne_'.$row['ft_id'].'">
-			<td class="f"><a href="topic?id='.$row['ft_id'].$fs_link_suffix.'">'.htmlspecialchars($row['ft_title']).'</a> '.($row['ft_type'] == 3 ? '<span style="color: #CCFF00; font-weight: bold">(Viktig)</span>' : '<span style="color: #CCFF00">(Sticky)</span>').($row['ft_locked'] == 1 ? ' <span class="forum_lock">(låst)</span>' : '').($row['ft_deleted'] != 0 ? ' (slettet)' : '').$fs_info.'</td>
+			<td class="f"><a href="topic?id='.$row['ft_id'].$fs_link_suffix.'">'.htmlspecialchars($row['ft_title']).'</a> '.($row['ft_type'] == 3 ? '<span style="color: #CCFF00; font-weight: bold">(Viktig)</span>' : '<span style="color: #CCFF00">(Sticky)</span>').($row['ft_locked'] == 1 ? ' <span class="forum_lock">(lÃ¥st)</span>' : '').($row['ft_deleted'] != 0 ? ' (slettet)' : '').$fs_info.'</td>
 			<td class="t_uinfo">'.game::profile_link($row['ft_up_id'], $row['up_name'], $row['up_access_level']).'<br /><span class="f_time">'.ess::$b->date->get($row['ft_time'])->format().'</span></td>
 			<td>'.game::format_number($row['ft_replies']).'</td>
 			<td>'.game::format_number($row['ft_views']).'</td>
-			<td class="t_uinfo">'.($row['fr_time'] ? game::profile_link($row['fr_up_id'], $row['r_up_name'], $row['r_up_access_level']).'<br /><span class="f_time2"><a href="topic?id='.$row['ft_id'].'&amp;replyid='.$row['fr_id'].'" title="Gå til dette svaret">'.game::timespan($row['fr_time'], game::TIME_ABS).' &raquo;</a></span>' : '<span style="color: #AAA">Ingen</span>').'</td>
+			<td class="t_uinfo">'.($row['fr_time'] ? game::profile_link($row['fr_up_id'], $row['r_up_name'], $row['r_up_access_level']).'<br /><span class="f_time2"><a href="topic?id='.$row['ft_id'].'&amp;replyid='.$row['fr_id'].'" title="GÃ¥ til dette svaret">'.game::timespan($row['fr_time'], game::TIME_ABS).' &raquo;</a></span>' : '<span style="color: #AAA">Ingen</span>').'</td>
 		</tr>';
 				}
 			}
 			
-			// hent vanlige forumtråder
+			// hent vanlige forumtrÃ¥der
 			$result = $this->get_topics(true, $show_deleted, $pagei->start, $pagei->per_page);
 			
 			// vis hver topic
@@ -216,11 +216,11 @@ class page_forum
 				$i++;
 				echo '
 		<tr'.(is_int($i/2) ? ' class="color'.($row['ft_deleted'] != 0 ? ' ft_deleted' : '').($this->forum->fmod && $vis_bokser ? ' box_handle' : '').'"' : ($this->forum->fmod && $vis_bokser ? ' class="box_handle"' : ($row['ft_deleted'] != 0 ? ' class="ft_deleted"' : ''))).'>
-			<td class="f">'.($this->forum->fmod && $vis_bokser ? '<input type="checkbox" name="emne[]" value="'.$row['ft_id'].'" />' : '').'<a href="topic?id='.$row['ft_id'].$fs_link_suffix.'">'.(empty($row['ft_title']) ? '<i>Mangler tittel</i>' : ucfirst(htmlspecialchars($row['ft_title']))).'</a>'.($row['ft_locked'] == 1 ? ' <span class="forum_lock">(låst)</span>' : '').($row['ft_deleted'] != 0 ? ' (slettet)' : '').$fs_info.'</td>
+			<td class="f">'.($this->forum->fmod && $vis_bokser ? '<input type="checkbox" name="emne[]" value="'.$row['ft_id'].'" />' : '').'<a href="topic?id='.$row['ft_id'].$fs_link_suffix.'">'.(empty($row['ft_title']) ? '<i>Mangler tittel</i>' : ucfirst(htmlspecialchars($row['ft_title']))).'</a>'.($row['ft_locked'] == 1 ? ' <span class="forum_lock">(lÃ¥st)</span>' : '').($row['ft_deleted'] != 0 ? ' (slettet)' : '').$fs_info.'</td>
 			<td class="t_uinfo">'.game::profile_link($row['ft_up_id'], $row['up_name'], $row['up_access_level']).'<br /><span class="f_time">'.ess::$b->date->get($row['ft_time'])->format().'</span></td>
 			<td>'.game::format_number($row['ft_replies']).'</td>
 			<td>'.game::format_number($row['ft_views']).'</td>
-			<td class="t_uinfo">'.($row['fr_time'] ? game::profile_link($row['fr_up_id'], $row['r_up_name'], $row['r_up_access_level']).'<br /><span class="f_time2"><a href="topic?id='.$row['ft_id'].'&amp;replyid='.$row['fr_id'].'" title="Gå til dette svaret">'.game::timespan($row['fr_time'], game::TIME_ABS).' &raquo;</a></span>' : '<span style="color: #AAA">Ingen</span>').'</td>
+			<td class="t_uinfo">'.($row['fr_time'] ? game::profile_link($row['fr_up_id'], $row['r_up_name'], $row['r_up_access_level']).'<br /><span class="f_time2"><a href="topic?id='.$row['ft_id'].'&amp;replyid='.$row['fr_id'].'" title="GÃ¥ til dette svaret">'.game::timespan($row['fr_time'], game::TIME_ABS).' &raquo;</a></span>' : '<span style="color: #AAA">Ingen</span>').'</td>
 		</tr>';
 			}
 			
@@ -248,7 +248,7 @@ class page_forum
 			if ($this->forum->fmod && $vis_bokser)
 			{
 				echo '
-<p class="c red" style="margin-top:0">'.show_sbutton("Slett merkede emner", 'name="slett_emner" onclick="return confirm(\'Er du sikker på at du vil slette valgte emner?\')"').'</p>
+<p class="c red" style="margin-top:0">'.show_sbutton("Slett merkede emner", 'name="slett_emner" onclick="return confirm(\'Er du sikker pÃ¥ at du vil slette valgte emner?\')"').'</p>
 </form>';
 			}
 		}
@@ -258,7 +258,7 @@ class page_forum
 		else
 		{
 			echo '
-<p align="center">Dette forumet er tomt. Bli den første til å opprette en forumtråd ved å <a href="topic_new?f='.$this->forum->id.'">trykke her</a>.</p>';
+<p align="center">Dette forumet er tomt. Bli den fÃ¸rste til Ã¥ opprette en forumtrÃ¥d ved Ã¥ <a href="topic_new?f='.$this->forum->id.'">trykke her</a>.</p>';
 		}
 		
 		echo '
@@ -267,17 +267,17 @@ class page_forum
 	}
 	
 	/**
-	 * Slette forumtråder
+	 * Slette forumtrÃ¥der
 	 */
 	protected function delete_topics()
 	{
 		if (!isset($_POST['emne']))
 		{
-			ess::$b->page->add_message("Du merket ingen forumtråder!");
+			ess::$b->page->add_message("Du merket ingen forumtrÃ¥der!");
 		}
 		elseif (!is_array($_POST['emne']))
 		{
-			ess::$b->page->add_message("Ugyldig forumtråder (ingen array)!", "error");
+			ess::$b->page->add_message("Ugyldig forumtrÃ¥der (ingen array)!", "error");
 		}
 		else
 		{
@@ -291,20 +291,20 @@ class page_forum
 				$idlist[] = intval($id);
 			}
 			
-			// ingen forumtråder?
+			// ingen forumtrÃ¥der?
 			if (count($idlist) == 0)
 			{
-				ess::$b->page->add_message("Du må merke noen forumtråder.", "error");
+				ess::$b->page->add_message("Du mÃ¥ merke noen forumtrÃ¥der.", "error");
 				redirect::handle(game::address("forum", $_GET));
 			}
 			
-			// hent forumtrådene
+			// hent forumtrÃ¥dene
 			$result = ess::$b->db->query("SELECT ft_id, ft_title, ft_up_id FROM forum_topics WHERE ft_deleted = 0 AND ft_fse_id = {$this->forum->id} AND ft_id IN (".implode(",", $idlist).") FOR UPDATE");
 			
-			// ingen forumtråder?
+			// ingen forumtrÃ¥der?
 			if (mysql_num_rows($result) == 0)
 			{
-				ess::$b->page->add_message("Fant ingen av de merkede forumtrådene.", "error");
+				ess::$b->page->add_message("Fant ingen av de merkede forumtrÃ¥dene.", "error");
 				redirect::handle(game::address("forum", $_GET));
 			}
 			
@@ -320,7 +320,7 @@ class page_forum
 				$deleted[] = "{$row['ft_id']}:{$row['ft_up_id']}:".urlencode($row['ft_title']);
 			}
 			
-			// slett forumtrådene
+			// slett forumtrÃ¥dene
 			ess::$b->db->query("UPDATE forum_topics SET ft_deleted = $time WHERE ft_id IN (".implode(",", $del_list).")");
 			
 			// opprett forumlogg
@@ -335,17 +335,17 @@ class page_forum
 			}
 			
 			$ant = count($del_list);
-			putlog("LOG", "FORUMTRÅDER SLETTET: '".login::$user->player->data['up_name']."' slettet {$ant} forumtråder; ID: ".implode(", ",  $del_list));
+			putlog("LOG", "FORUMTRÃ…DER SLETTET: '".login::$user->player->data['up_name']."' slettet {$ant} forumtrÃ¥der; ID: ".implode(", ",  $del_list));
 			
-			ess::$b->page->add_message("<b>".game::format_number($ant)."</b> forumtråd".($ant == 1 ? '' : 'er')." ble slettet!");
+			ess::$b->page->add_message("<b>".game::format_number($ant)."</b> forumtrÃ¥d".($ant == 1 ? '' : 'er')." ble slettet!");
 		}
 		
 		redirect::handle(game::address("forum", $_GET));
 	}
 	
 	/**
-	 * Hent forumtrådene
-	 * @param boolean $normal hent normale tråder
+	 * Hent forumtrÃ¥dene
+	 * @param boolean $normal hent normale trÃ¥der
 	 * @param integer $limit_from
 	 * @param integer $limit_num
 	 */

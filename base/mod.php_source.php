@@ -5,13 +5,13 @@ if (isset($_GET['show_source']))
 	global $php_source_key;
 	if (isset($php_source_key))
 	{
-		if ($php_source_key != $_GET['show_source']) die("Ugyldig nøkkel!");
+		if ($php_source_key != $_GET['show_source']) die("Ugyldig nÃ¸kkel!");
 	}
 	
 	$fh = fopen($_SERVER['SCRIPT_FILENAME'], "r");
 	if (!$fh)
 	{
-		die("Kunne ikke åpne {$_SERVER['SCRIPT_FILENAME']}!");
+		die("Kunne ikke Ã¥pne {$_SERVER['SCRIPT_FILENAME']}!");
 	}
 	
 	$data = fread($fh, filesize($_SERVER['SCRIPT_FILENAME']));
@@ -19,7 +19,7 @@ if (isset($_GET['show_source']))
 	die('<!DOCTYPE html>
 <html lang="no">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="Henrik Steen; http://www.henrist.net" />
 <title>Kildekode</title>
 <style>

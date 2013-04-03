@@ -3,7 +3,7 @@
 require "base.php";
 global $_base;
 
-$_base->page->add_title("Antall pålogget rekorder");
+$_base->page->add_title("Antall pÃ¥logget rekorder");
 
 // hent stats
 $result = $_base->db->query("SELECT name, extra, value, time FROM sitestats");
@@ -34,7 +34,7 @@ $_base->page->add_css('
 }');
 
 echo '
-<h1>Antall pålogget rekorder</h1>
+<h1>Antall pÃ¥logget rekorder</h1>
 
 <table class="table stats_rekord center tablemb">
 	<thead>

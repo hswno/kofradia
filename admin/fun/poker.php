@@ -46,18 +46,18 @@ echo '
 	15. april 2007: Da kan moderatorene ha det morsomt med den gamle pokerversjonen!
 </p>
 <!--<p>
-	<b style="color: #FF0000">Oppdatering 4. mars:</b> Nå er det gjort litt endringer på gevinstene og man vinner kun på 1 par dersom man har 9, 10, J, Q, K eller A. Maksimumsgrensen er også fjernet.
+	<b style="color: #FF0000">Oppdatering 4. mars:</b> NÃ¥ er det gjort litt endringer pÃ¥ gevinstene og man vinner kun pÃ¥ 1 par dersom man har 9, 10, J, Q, K eller A. Maksimumsgrensen er ogsÃ¥ fjernet.
 </p>-->';
 
 // 5-korts draw
 
 // innstillinger
 $farger = array(
-	/*array("Kløver", "&clubs;"),
+	/*array("KlÃ¸ver", "&clubs;"),
 	array("Spar", "&spades;"),
 	array("Hjerter", "&hearts;"),
 	array("Ruter", "&diams;")*/
-	array("Kløver",		'<img src="'.STATIC_LINK.'/other/poker_clubs.gif" alt="Kløver" />'),
+	array("KlÃ¸ver",		'<img src="'.STATIC_LINK.'/other/poker_clubs.gif" alt="KlÃ¸ver" />'),
 	array("Spar",		'<img src="'.STATIC_LINK.'/other/poker_spades.gif" alt="Spar" />'),
 	array("Hjerter",	'<img src="'.STATIC_LINK.'/other/poker_hearts.gif" alt="Hjerter" />'),
 	array("Ruter",		'<img src="'.STATIC_LINK.'/other/poker_diams.gif" alt="Ruter" />')
@@ -66,7 +66,7 @@ $tegn = array(
 	1 => 2,3,4,5,6,7,8,9,10,"J","Q","K","A"
 );
 $gevinster = array(
-	array(9, "royal straight flush", 100),	// de fem høyste kortene i samme farge
+	array(9, "royal straight flush", 100),	// de fem hÃ¸yste kortene i samme farge
 	array(8, "straight flush", 12),			// fem kort etter hverandre i samme farge
 	array(7, "fire like", 4),				// fire like kort
 	array(6, "hus", 3),						// tre like og ett par
@@ -81,7 +81,7 @@ $gevinster = array(
 $kortstokk = array(1 => 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52);
 
 
-// oppføring fra databasen?
+// oppfÃ¸ring fra databasen?
 $result = ess::$b->db->query("SELECT id, upoker_up_id, cards, time, cash, finished FROM users_poker WHERE upoker_up_id = ".login::$user->player->id);
 $poker = false;
 if (mysql_num_rows($result) > 0)
@@ -89,27 +89,27 @@ if (mysql_num_rows($result) > 0)
 	$poker = mysql_fetch_assoc($result);
 }
 
-// de første kortene
+// de fÃ¸rste kortene
 if (isset($_POST['amount']))
 {
 	if ($poker)
 	{
-		ess::$b->page->add_message("Du er allerede i gang med et spill. Fullfør det før du begynner på et nytt.", "error");
+		ess::$b->page->add_message("Du er allerede i gang med et spill. FullfÃ¸r det fÃ¸r du begynner pÃ¥ et nytt.", "error");
 		redirect::handle();
 	}
 	
-	// pengebeløpet
+	// pengebelÃ¸pet
 	$amount = game::intval($_POST['amount']);
 	if ($amount > login::$user->player->data['up_cash'])
 	{
-		ess::$b->page->add_message("Du har ikke så mye penger på hånda!", "error");
+		ess::$b->page->add_message("Du har ikke sÃ¥ mye penger pÃ¥ hÃ¥nda!", "error");
 		redirect::handle();
 	}
 	
-	// for lite beløp?
+	// for lite belÃ¸p?
 	elseif ($amount < 200)
 	{
-		ess::$b->page->add_message("Du må satse minimum 200 kr!", "error");
+		ess::$b->page->add_message("Du mÃ¥ satse minimum 200 kr!", "error");
 		redirect::handle();
 	}
 	
@@ -124,7 +124,7 @@ if (isset($_POST['amount']))
 	// fjern pengene fra brukeren
 	ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = ".login::$user->player->id);
 	
-	ess::$b->page->add_message("Du har startet et spill med innsats pålydende ".game::format_cash($amount)."!");
+	ess::$b->page->add_message("Du har startet et spill med innsats pÃ¥lydende ".game::format_cash($amount)."!");
 	redirect::handle();
 }
 
@@ -228,17 +228,17 @@ else
 	}
 	
 	
-	// fortsette på gammel poker
+	// fortsette pÃ¥ gammel poker
 	else
 	{	
-		// fullføre?
+		// fullfÃ¸re?
 		if (isset($_POST['fullfor']))
 		{
 			// beholde noen bilder?
 			$hente = array(0,1,2,3,4);
 			if (isset($_POST['kort']) && is_array($_POST['kort']))
 			{
-				// gå gjennom hver og fjern fra den vi skal beholde
+				// gÃ¥ gjennom hver og fjern fra den vi skal beholde
 				for ($i = 0; $i < 5; $i++)
 				{
 					if (isset($_POST['kort'][$i])) unset($hente[$i]);
@@ -363,14 +363,14 @@ else
 				// fikk vi egentlig ett par?
 				#if ($kortnummer[0] == $kortnummer[1] || $kortnummer[1] == $kortnummer[2] || $kortnummer[2] == $kortnummer[3] || $kortnummer[3] == $kortnummer[4])
 				#{
-				#	ess::$b->page->add_message("Du fikk ett par, men kombinasjonen var ikke lik eller større enn <b>9</b> og du tapte innsatsen på <b>".game::format_cash($poker['cash'])."</b>! Som trøst fikk du tilbake ".($gevinster[9][2]*100)." %, altså ".game::format_cash($poker['cash']*$gevinster[9][2])."!");
+				#	ess::$b->page->add_message("Du fikk ett par, men kombinasjonen var ikke lik eller stÃ¸rre enn <b>9</b> og du tapte innsatsen pÃ¥ <b>".game::format_cash($poker['cash'])."</b>! Som trÃ¸st fikk du tilbake ".($gevinster[9][2]*100)." %, altsÃ¥ ".game::format_cash($poker['cash']*$gevinster[9][2])."!");
 				#}
 				#else
 				#{
-					ess::$b->page->add_message("Du fikk ingen kombinasjoner og tapte innsatsen på <b>".game::format_cash($poker['cash'])."</b>!<br />Som trøst fikk du tilbake <b>".($gevinster[9][2]*100)." %</b>, altså <b>".game::format_cash($poker['cash']*$gevinster[9][2])."</b>!");
+					ess::$b->page->add_message("Du fikk ingen kombinasjoner og tapte innsatsen pÃ¥ <b>".game::format_cash($poker['cash'])."</b>!<br />Som trÃ¸st fikk du tilbake <b>".($gevinster[9][2]*100)." %</b>, altsÃ¥ <b>".game::format_cash($poker['cash']*$gevinster[9][2])."</b>!");
 				#}
 				
-				// gi trøstepengene til brukeren
+				// gi trÃ¸stepengene til brukeren
 				ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + ".($cash*$gevinster[9][2])." WHERE up_id = ".login::$user->player->id);
 			}
 			
@@ -543,7 +543,7 @@ function gevinster()
 		</tr>
 		<tr class="spacer"><td colspan="3">&nbsp;</td></tr>
 		<tr'.(is_int(++$i/2) ? ' class="color"' : '').'>
-			<td colspan="3"><b>Tips</b>: Hold musa over stats feltet for å se pengestats!</td>
+			<td colspan="3"><b>Tips</b>: Hold musa over stats feltet for Ã¥ se pengestats!</td>
 		</tr>
 	</tbody>
 </table>';

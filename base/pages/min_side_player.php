@@ -90,7 +90,7 @@ class page_min_side_player
 		if (!page_min_side::$pstats)
 		{
 			echo '
-	<p class="c">Du har ikke tilgang til å se denne siden.</p>';
+	<p class="c">Du har ikke tilgang til Ã¥ se denne siden.</p>';
 			return;
 		}
 		
@@ -110,7 +110,7 @@ class page_min_side_player
 		$rank_prosent_top = page_min_side::$active_player->data['up_points'] / game::$ranks['items_number'][count(game::$ranks['items_number'])]['points'] * 100;
 		
 		
-		// hvor mange rankprosent må vi til for å ta igjen neste person?
+		// hvor mange rankprosent mÃ¥ vi til for Ã¥ ta igjen neste person?
 		$result = ess::$b->db->query("SELECT up_points FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_points > ".page_min_side::$active_player->data['up_points']." ORDER BY up_points LIMIT 1");
 		$rank_user_next = false;
 		$rank_user_prevnext = false;
@@ -122,7 +122,7 @@ class page_min_side_player
 			{
 				// totalt for spillet
 				$percent = game::format_rank($points, "all");
-				$rank_user_next = '<p>Du må oppnå '.game::format_num($points).' poeng ('.$percent.' rank for spillet totalt) for å ta igjen neste rangert spiller.</p>';
+				$rank_user_next = '<p>Du mÃ¥ oppnÃ¥ '.game::format_num($points).' poeng ('.$percent.' rank for spillet totalt) for Ã¥ ta igjen neste rangert spiller.</p>';
 				
 				// antall prosent vi trenger
 				$rank_user_next .= '<p>Du trenger '.game::format_num($points-page_min_side::$active_player->data['up_points']).' poeng ('.game::format_rank($points-page_min_side::$active_player->data['up_points'], $to).' rank).</p>';
@@ -135,7 +135,7 @@ class page_min_side_player
 				// samme rank?
 				$same = page_min_side::$active_player->rank['id'] == $to['id'];
 				
-				$rank_user_next = '<p>Du må oppnå '.game::format_num($points).' poeng ('.$percent.' % '.($same ? 'på nåværende rank' : 'på ranken '.$to['name']).') for å nå neste rangert spiller.</p>';
+				$rank_user_next = '<p>Du mÃ¥ oppnÃ¥ '.game::format_num($points).' poeng ('.$percent.' % '.($same ? 'pÃ¥ nÃ¥vÃ¦rende rank' : 'pÃ¥ ranken '.$to['name']).') for Ã¥ nÃ¥ neste rangert spiller.</p>';
 				
 				if ($same)
 				{
@@ -159,7 +159,7 @@ class page_min_side_player
 			"lotto" => page_min_side::$active_player->status_lotto()
 		);
 		
-		// finn ut når vi kan gjøre forskjellige ting
+		// finn ut nÃ¥r vi kan gjÃ¸re forskjellige ting
 		$wait = array(
 			"kriminalitet" => $status['krim']['wait_time'],
 			"utpressing" => $status['utpressing']['wait_time'],
@@ -175,7 +175,7 @@ class page_min_side_player
 		$wait['forum_topic'] = max(0, page_min_side::$active_user->data['u_forum_topic_time'] + game::$settings['delay_forum_new']['value'] - time());
 		if (page_min_side::$active_player->data['up_weapon_id']) $wait['training'] = max(0, page_min_side::$active_player->data['up_weapon_training_next'] - time());
 		
-		// for lav rank til å opprette forumtråder?
+		// for lav rank til Ã¥ opprette forumtrÃ¥der?
 		if (page_min_side::$active_player->rank['number'] < 4) $wait['forum_topic'] = -1;
 		
 		// fengsel og bomberom
@@ -195,7 +195,7 @@ class page_min_side_player
 			array("Fengsel", $wait['lock'], "fengsel")
 		);
 		
-		if (page_min_side::$active_player->data['up_weapon_id']) $status[] = array("Våpentrening", max($wait['training'], $wait['lock']), "angrip");
+		if (page_min_side::$active_player->data['up_weapon_id']) $status[] = array("VÃ¥pentrening", max($wait['training'], $wait['lock']), "angrip");
 		
 		// javascript funksjoner for status
 		ess::$b->page->add_js_domready('
@@ -258,12 +258,12 @@ a.status_venter:hover { }
 					</div>
 					<div class="ms_space ms_up_st progressbar'.($training !== false ? ($training < 28 ? ' levelcrit' : ($training < 35 ? ' levelwarn' : '')) : '').'">
 						<div class="progress" style="width: '.round(min(100, $training)).'%">
-							<p><a href="'.ess::$s['relative_path'].'/angrip">Våpentrening</a>: '.($training === false ? 'Ingen våpen' : ($training == 100 ? '100' : game::format_num($training, 2)).' %').'</p>
+							<p><a href="'.ess::$s['relative_path'].'/angrip">VÃ¥pentrening</a>: '.($training === false ? 'Ingen vÃ¥pen' : ($training == 100 ? '100' : game::format_num($training, 2)).' %').'</p>
 						</div>
 					</div>
 					<div class="progressbar ms_space">
 						<div class="progress" style="width: '.round(min(100, page_min_side::$active_player->data['up_wanted_level']/10)).'%">
-							<p>Wanted nivå: '.game::format_number(page_min_side::$active_player->data['up_wanted_level']/10, 1).' %</p>
+							<p>Wanted nivÃ¥: '.game::format_number(page_min_side::$active_player->data['up_wanted_level']/10, 1).' %</p>
 						</div>
 					</div>
 				</div>' : '').($rank_prosent < 100 ? '
@@ -276,9 +276,9 @@ a.status_venter:hover { }
 					</div>
 				</div>' : '').'
 				<div class="bg1_c">
-					<h1 class="bg1">Prosent til høyeste rank<span class="left2"></span><span class="right2"></span></h1>
+					<h1 class="bg1">Prosent til hÃ¸yeste rank<span class="left2"></span><span class="right2"></span></h1>
 					<div class="progressbar">'.(page_min_side::$active_player->rank['number'] < 5 && !access::has("mod") ? '
-						<p>Krever ranken <b>'.game::$ranks['items_number'][5]['name'].'</b> eller høyere!</p>' : '
+						<p>Krever ranken <b>'.game::$ranks['items_number'][5]['name'].'</b> eller hÃ¸yere!</p>' : '
 						<div class="progress" style="width: '.min(round($rank_prosent_top), 100).'%">
 							<p>'.game::format_number($rank_prosent_top, 4).' % ('.game::format_num(page_min_side::$active_player->data['up_points']).' poeng)</p>
 						</div>').'
@@ -372,7 +372,7 @@ a.status_venter:hover { }
 					<h1 class="bg1">Drept<span class="left2"></span><span class="right2"></span></h1>'.(access::has("mod") ? '
 					<p class="h_right"><a href="'.htmlspecialchars(page_min_side::addr("activate")).'">aktiver</a></p>' : '').'
 					<div class="bg1">
-						<p>Denne spilleren '.($instant ? 'ble drept' : 'døde av skader').(access::has("mod") ? ($instant ? ' av <user id="'.page_min_side::$active_player->data['up_deactivated_up_id'].'" />' : ' påført av <user id="'.page_min_side::$active_player->data['up_deactivated_up_id'].'" />') : '').' '.ess::$b->date->get(page_min_side::$active_player->data['up_deactivated_time'])->format(date::FORMAT_SEC).'.</p>
+						<p>Denne spilleren '.($instant ? 'ble drept' : 'dÃ¸de av skader').(access::has("mod") ? ($instant ? ' av <user id="'.page_min_side::$active_player->data['up_deactivated_up_id'].'" />' : ' pÃ¥fÃ¸rt av <user id="'.page_min_side::$active_player->data['up_deactivated_up_id'].'" />') : '').' '.ess::$b->date->get(page_min_side::$active_player->data['up_deactivated_time'])->format(date::FORMAT_SEC).'.</p>
 					</div>
 				</div>';
 		}
@@ -402,7 +402,7 @@ a.status_venter:hover { }
 						<p>Denne spilleren deaktiverte seg selv '.ess::$b->date->get(page_min_side::$active_player->data['up_deactivated_time'])->format(date::FORMAT_SEC).'.</p>' : '
 						<p>Denne spilleren ble deaktivert '.ess::$b->date->get(page_min_side::$active_player->data['up_deactivated_time'])->format(date::FORMAT_SEC).(!page_min_side::$active_own ? ' av '.(empty(page_min_side::$active_player->data['up_deactivated_up_id']) ? 'en ukjent bruker' : '<user id="'.page_min_side::$active_player->data['up_deactivated_up_id'].'" />') : '').'.</p>').'
 						<div class="p"><b>Begrunnelse:</b> '.(empty(page_min_side::$active_player->data['up_deactivated_reason']) ? 'Ingen begrunnelse oppgitt.' : game::bb_to_html(page_min_side::$active_player->data['up_deactivated_reason'])).'</div>'.(!page_min_side::$active_own && !$deact_self ? '
-						<div class="p"><b>Intern informasjon:</b> '.(access::has("mod") ? (empty(page_min_side::$active_player->data['up_deactivated_note']) ? 'Ingen intern informasjon oppgitt.' : game::bb_to_html(page_min_side::$active_player->data['up_deactivated_note'])) : 'Du har ikke tilgang til å se intern informasjon.').'</div>' : '').'
+						<div class="p"><b>Intern informasjon:</b> '.(access::has("mod") ? (empty(page_min_side::$active_player->data['up_deactivated_note']) ? 'Ingen intern informasjon oppgitt.' : game::bb_to_html(page_min_side::$active_player->data['up_deactivated_note'])) : 'Du har ikke tilgang til Ã¥ se intern informasjon.').'</div>' : '').'
 					</div>
 				</div>';
 		}
@@ -411,7 +411,7 @@ a.status_venter:hover { }
 				<div class="bg1_c">
 					<h1 class="bg1">Avstand til neste rangert spiller<span class="left2"></span><span class="right2"></span></h1>
 					<div class="bg1">
-						'.($rank_user_next ? $rank_user_next : '<p>Du er høyest rangert!</p>').($rank_user_prevnext ? '
+						'.($rank_user_next ? $rank_user_next : '<p>Du er hÃ¸yest rangert!</p>').($rank_user_prevnext ? '
 						<div class="progressbar ms_space_bt">
 							<div class="progress" style="width: '.round($rank_user_prevnext).'%">
 								<p>Avstand forrige/neste spiller: '.game::format_number($rank_user_prevnext, 4).' %</p>
@@ -425,7 +425,7 @@ a.status_venter:hover { }
 			OFC::embed("ranklevel_last_days", "graphs/ranklevel_last_days?up_id=".page_min_side::$active_player->id, "100%", 150);
 			echo '
 				<div class="bg1_c">
-					<h1 class="bg1">Ditt ranknivå siste dagene<span class="left2"></span><span class="right2"></span></h1>
+					<h1 class="bg1">Ditt ranknivÃ¥ siste dagene<span class="left2"></span><span class="right2"></span></h1>
 					<div class="bg1" style="padding: 0 0 5px; background-color: #1A1A1A">
 						<p style="font-size: 10px; margin: 5px">Denne grafen sammenlikner deg med de 10 beste rankerne de siste dagene.</p>
 						<span id="ranklevel_last_days"></span>
@@ -448,7 +448,7 @@ a.status_venter:hover { }
 		if (!page_min_side::$pstats)
 		{
 			echo '
-	<p class="c">Du har ikke tilgang til å se denne siden.</p>';
+	<p class="c">Du har ikke tilgang til Ã¥ se denne siden.</p>';
 			return;
 		}
 		
@@ -510,27 +510,27 @@ a.status_venter:hover { }
 					</div>
 				</div>
 				<div class="bg1_c">
-					<h1 class="bg1">Våpen<span class="left2"></span><span class="right2"></span></h1>
+					<h1 class="bg1">VÃ¥pen<span class="left2"></span><span class="right2"></span></h1>
 					<div class="bg1">';
 		
-		// TODO: lenker til å kjøpe våpen og beskyttelse (hvis man har høy nok rank) etc
+		// TODO: lenker til Ã¥ kjÃ¸pe vÃ¥pen og beskyttelse (hvis man har hÃ¸y nok rank) etc
 		if (!page_min_side::$active_player->weapon)
 		{
 			
 			echo '
-						<p>Du har ikke noe våpen. Du kjøper våpen hos et våpen og beskyttelse-firma via bydeler.</p>';
+						<p>Du har ikke noe vÃ¥pen. Du kjÃ¸per vÃ¥pen hos et vÃ¥pen og beskyttelse-firma via bydeler.</p>';
 		}
 		else
 		{
 			echo '
 						<dl class="dd_right">
-							<dt>Våpen</dt>
+							<dt>VÃ¥pen</dt>
 							<dd>'.htmlspecialchars(page_min_side::$active_player->weapon->data['name']).'</dd>
 							<dt>Kulekapasitet</dt>
 							<dd>'.page_min_side::$active_player->weapon->data['bullets'].'</dd>
-							<dt>Antall kuler i våpenet</dt>
+							<dt>Antall kuler i vÃ¥penet</dt>
 							<dd>'.page_min_side::$active_player->data['up_weapon_bullets'].'</dd>
-							<dt>Våpentrening</dt>
+							<dt>VÃ¥pentrening</dt>
 							<dd>'.game::format_number(page_min_side::$active_player->data['up_weapon_training']*100, 2).' %</dd>
 						</dl>';
 		}
@@ -545,7 +545,7 @@ a.status_venter:hover { }
 		if (!page_min_side::$active_player->protection->data)
 		{
 			echo '
-						<p>Du har ingen beskyttelse. Du kjøper beskyttelse hos et våpen og beskyttelse-firma via bydeler.</p>';
+						<p>Du har ingen beskyttelse. Du kjÃ¸per beskyttelse hos et vÃ¥pen og beskyttelse-firma via bydeler.</p>';
 		}
 		else
 		{
@@ -563,7 +563,7 @@ a.status_venter:hover { }
 		if ($bomberom_wait > 0)
 		{
 			echo '
-						<p>Befinner seg i <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.page_min_side::$active_player->data['up_brom_ff_id'].'">bomberom</a> til '.ess::$b->date->get(page_min_side::$active_player->data['up_brom_expire'])->format().' ('.game::counter($bomberom_wait).' gjenstår).</p>';
+						<p>Befinner seg i <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.page_min_side::$active_player->data['up_brom_ff_id'].'">bomberom</a> til '.ess::$b->date->get(page_min_side::$active_player->data['up_brom_expire'])->format().' ('.game::counter($bomberom_wait).' gjenstÃ¥r).</p>';
 		}
 		
 		echo '
@@ -598,30 +598,30 @@ a.status_venter:hover { }
 							<dd>'.game::format_number(page_min_side::$active_player->data['up_fengsel_num_out_success']).' / '.game::format_number(page_min_side::$active_player->data['up_fengsel_num_out_tries']).'</dd>
 							<dt>Antall ganger vunnet i lotto</dt>
 							<dd><a href="lotto_vinn'.(page_min_side::$active_user->id != login::$user->id ? '?up_id='.page_min_side::$active_player->id : '').'">'.game::format_number($lotto_vinn).'</a></dd>
-							<dt>Totalt gitt fra seg i fengseldusører</dt>
+							<dt>Totalt gitt fra seg i fengseldusÃ¸rer</dt>
 							<dd>'.game::format_cash(page_min_side::$active_player->data['up_fengsel_dusor_total_out']).'</dd>
-							<dt>Totalt skaffet av fengseldusører</dt>
+							<dt>Totalt skaffet av fengseldusÃ¸rer</dt>
 							<dd>'.game::format_cash(page_min_side::$active_player->data['up_fengsel_dusor_total_in']).'</dd>
 							<dt>Totalt vunnet i lotto</dt>
 							<dd>'.game::format_cash($lotto_vinn_sum).'</dd>
-							<dt>Siste rentebeløp</dt>
+							<dt>Siste rentebelÃ¸p</dt>
 							<dd>'.game::format_cash(page_min_side::$active_player->data['up_interest_last']).'</dd>
-							<dt>Totalt brukt på auksjoner</dt>
+							<dt>Totalt brukt pÃ¥ auksjoner</dt>
 							<dd>'.game::format_cash(page_min_side::$active_player->data['up_auksjoner_total_out']).'</dd>
-							<dt>Totalt tjent på auksjoner</dt>
+							<dt>Totalt tjent pÃ¥ auksjoner</dt>
 							<dd>'.game::format_cash(page_min_side::$active_player->data['up_auksjoner_total_in']).'</dd>
 						</dl>
 						<p class="minside_stats_h">Meldinger og forum</p>
 						<dl class="dd_right minside_stats_d">
 							<dt>Nye meldinger</dt>
 							<dd>'.game::format_number(page_min_side::$active_player->data['up_inbox_num_threads']).'</dd>
-							<dt>Svar på meldinger</dt>
+							<dt>Svar pÃ¥ meldinger</dt>
 							<dd>'.game::format_number(page_min_side::$active_player->data['up_inbox_num_messages']).'</dd>
-							<dt>Forumtråder</dt>
+							<dt>ForumtrÃ¥der</dt>
 							<dd>'.game::format_number(page_min_side::$active_player->data['up_forum_num_topics']).'</dd>
 							<dt>Forumsvar</dt>
 							<dd>'.game::format_number(page_min_side::$active_player->data['up_forum_num_replies']).'</dd>
-							<dt>Forumtråder i firma/broderskap</dt>
+							<dt>ForumtrÃ¥der i firma/broderskap</dt>
 							<dd>'.game::format_number(page_min_side::$active_player->data['up_forum_ff_num_topics']).'</dd>
 							<dt>Forumsvar i firma/broderskap</dt>
 							<dd>'.game::format_number(page_min_side::$active_player->data['up_forum_ff_num_replies']).'</dd>
@@ -634,9 +634,9 @@ a.status_venter:hover { }
 							<dd>'.game::format_num(page_min_side::$active_player->data['up_attack_damaged_num']).'</dd>
 							<dt>Angrep hvor spilleren ble drept</dt>
 							<dd>'.game::format_num(page_min_side::$active_player->data['up_attack_killed_num']).'</dd>
-							<dt>Angrep hvor spilleren døde av skadene påført</dt>
+							<dt>Angrep hvor spilleren dÃ¸de av skadene pÃ¥fÃ¸rt</dt>
 							<dd>'.game::format_num(page_min_side::$active_player->data['up_attack_bleed_num']).'</dd>'.(page_min_side::$active_player->data['up_df_time'] ? '
-							<dt>Siste angrep ble utført</dt>
+							<dt>Siste angrep ble utfÃ¸rt</dt>
 							<dd>'.ess::$b->date->get(page_min_side::$active_player->data['up_df_time'])->format().'</dd>' : '').'
 						</dl>
 					</div>
@@ -658,12 +658,12 @@ a.status_venter:hover { }
 		if (!page_min_side::$pstats)
 		{
 			echo '
-	<p class="c">Du har ikke tilgang til å se denne siden.</p>';
+	<p class="c">Du har ikke tilgang til Ã¥ se denne siden.</p>';
 			return;
 		}
 		
 		echo '
-	<p class="c">Du har oppnådd totalt '.game::format_num(page_min_side::$active_player->data['up_achievements_points']).' prestasjonspoeng.</p>
+	<p class="c">Du har oppnÃ¥dd totalt '.game::format_num(page_min_side::$active_player->data['up_achievements_points']).' prestasjonspoeng.</p>
 	
 	<div class="achievements">';
 		
@@ -684,7 +684,7 @@ a.status_venter:hover { }
 		{
 			echo '
 		<div class="achievements_group">
-			<p class="ac_group">'.($type == "rep" ? 'Repeterende prestasjoner:' : 'Enkeltoppnående prestasjoner:').'</p>';
+			<p class="ac_group">'.($type == "rep" ? 'Repeterende prestasjoner:' : 'EnkeltoppnÃ¥ende prestasjoner:').'</p>';
 			
 			foreach ($all as $a)
 			{
@@ -692,25 +692,25 @@ a.status_venter:hover { }
 				$prize = sentences_list($a->get_prizes()/*, "<br />", "<br />"*/);
 				if (empty($prize)) $prize = '&nbsp;';
 				
-				// sjekk om utført
+				// sjekk om utfÃ¸rt
 				if (isset($rep_all[$a->id]))
 				{
 					if ($a->data['ac_recurring'])
 					{
-						$done = 'Oppnådd '.fwords("%d gang", "%d ganger", $rep_all[$a->id]['count_upa_id']);
+						$done = 'OppnÃ¥dd '.fwords("%d gang", "%d ganger", $rep_all[$a->id]['count_upa_id']);
 						$done .= '<br />Sist '.ess::$b->date->get($rep_all[$a->id]['max_upa_time'])->format();
 					}
 					else
 					{
-						$done = 'Oppnådd '.ess::$b->date->get($rep_all[$a->id]['max_upa_time'])->format();
+						$done = 'OppnÃ¥dd '.ess::$b->date->get($rep_all[$a->id]['max_upa_time'])->format();
 					}
 				}
 				else
 				{
-					$done = "Du har ikke oppnådd denne prestasjonen";
+					$done = "Du har ikke oppnÃ¥dd denne prestasjonen";
 				}
 				
-				$img = isset($rep_all[$a->id]) && !$a->data['ac_recurring'] ? '<img src="'.STATIC_LINK.'/icon/ruby.png" alt="" title="Oppnådd" /> ' : '';
+				$img = isset($rep_all[$a->id]) && !$a->data['ac_recurring'] ? '<img src="'.STATIC_LINK.'/icon/ruby.png" alt="" title="OppnÃ¥dd" /> ' : '';
 				
 				// fremdrift
 				$progress = '';
@@ -752,7 +752,7 @@ a.status_venter:hover { }
 		if (!page_min_side::$pstats)
 		{
 			echo '
-	<p class="c">Du har ikke tilgang til å se denne siden.</p>';
+	<p class="c">Du har ikke tilgang til Ã¥ se denne siden.</p>';
 			return;
 		}
 		
@@ -804,7 +804,7 @@ a.status_venter:hover { }
 		$i_bruk = $tilgjengelig;
 		$total = array_sum($count);
 		
-		// nye hendelser (viser også nye hendelser i firma/familie)?
+		// nye hendelser (viser ogsÃ¥ nye hendelser i firma/familie)?
 		if ((page_min_side::$active_player->data['up_log_ff_new'] > 0 || page_min_side::$active_player->data['up_log_new'] > 0) && page_min_side::$active_own)
 		{
 			echo '
@@ -1016,7 +1016,7 @@ a.status_venter:hover { }
 			$i_bruk[] = "NULL";
 			$where = ' AND type IN ('.implode(",", $i_bruk).')';
 			
-			// sideinformasjon - hent loggene på denne siden
+			// sideinformasjon - hent loggene pÃ¥ denne siden
 			$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, max(50, page_min_side::$active_player->data['up_log_new']));
 			$result = $pagei->query("SELECT time, type, note, num FROM users_log WHERE ul_up_id IN (0, ".page_min_side::$active_player->id.")$where ORDER BY time DESC, id DESC");
 			
@@ -1099,7 +1099,7 @@ a.status_venter:hover { }
 		echo '
 	<p class="c minside_set_links">
 		<a href="'.htmlspecialchars(page_min_side::addr(NULL, "")).'"'.($subpage2 == "" ? ' class="active"' : '').'>Signatur</a> |
-		<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=ft")).'"'.($subpage2 == "ft" ? ' class="active"' : '').'>Mine forumtråder</a> |
+		<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=ft")).'"'.($subpage2 == "ft" ? ' class="active"' : '').'>Mine forumtrÃ¥der</a> |
 		<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=fr")).'"'.($subpage2 == "fr" ? ' class="active"' : '').'>Mine forumsvar</a>
 	</p>';
 		
@@ -1114,14 +1114,14 @@ a.status_venter:hover { }
 	<div class="bg1_c">
 		<h1 class="bg1">Signatur<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du har kun rettigheter til å se innholdet av signaturen til denne spilleren.</p>'.(page_min_side::$active_player->data['up_forum_signature'] == "" ? '
+			<p>Du har kun rettigheter til Ã¥ se innholdet av signaturen til denne spilleren.</p>'.(page_min_side::$active_player->data['up_forum_signature'] == "" ? '
 			<p>Det er ingen signatur knyttet opp til denne spilleren.</p>' : '
 			<p><textarea style="width: 98%" rows="4">'.htmlspecialchars(page_min_side::$active_player->data['up_forum_signature']).'</textarea></p>').'
 		</div>
 	</div>';
 			}
 			
-			// har vi kun rettigheter til å fjerne signaturen?
+			// har vi kun rettigheter til Ã¥ fjerne signaturen?
 			elseif (!page_min_side::$active_player->active && !access::has("forum_mod"))
 			{
 				// fjerne signaturen?
@@ -1129,7 +1129,7 @@ a.status_venter:hover { }
 				{
 					if (page_min_side::$active_player->data['up_forum_signature'] == "")
 					{
-						ess::$b->page->add_message("Det var ingen signatur å fjerne.");
+						ess::$b->page->add_message("Det var ingen signatur Ã¥ fjerne.");
 					}
 					else
 					{
@@ -1146,12 +1146,12 @@ a.status_venter:hover { }
 	<div class="bg1_c">
 		<h1 class="bg1">Fjern signatur for forumet<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Siden denne spilleren er deaktivert kan du ikke redigere signaturen. Du kan derimot fjerne signaturen om det er ønskelig.</p>'.(page_min_side::$active_player->data['up_forum_signature'] == "" ? '
+			<p>Siden denne spilleren er deaktivert kan du ikke redigere signaturen. Du kan derimot fjerne signaturen om det er Ã¸nskelig.</p>'.(page_min_side::$active_player->data['up_forum_signature'] == "" ? '
 			<p>Det er ingen signatur knyttet opp til denne spilleren.</p>' : '
-			<p>Den nåværende signaturen vises i tilfelle det er ønskelig å hente ut informasjon fra den:</p>
+			<p>Den nÃ¥vÃ¦rende signaturen vises i tilfelle det er Ã¸nskelig Ã¥ hente ut informasjon fra den:</p>
 			<p><textarea style="width: 98%" rows="4">'.htmlspecialchars(page_min_side::$active_player->data['up_forum_signature']).'</textarea></p>
 			<form action="" method="post">
-				<p class="c"><span class="red">'.show_sbutton("Fjern signaturen", 'name="remove" onclick="return confirm(\'Er du sikker på at du ønsker å fjerne signaturen fra denne spilleren? Denne handlingen kan ikke angres.\')"').'</span></p>
+				<p class="c"><span class="red">'.show_sbutton("Fjern signaturen", 'name="remove" onclick="return confirm(\'Er du sikker pÃ¥ at du Ã¸nsker Ã¥ fjerne signaturen fra denne spilleren? Denne handlingen kan ikke angres.\')"').'</span></p>
 			</form>').'
 		</div>
 	</div>';
@@ -1159,7 +1159,7 @@ a.status_venter:hover { }
 			
 			else
 			{
-				// blokkert fra å endre signaturen?
+				// blokkert fra Ã¥ endre signaturen?
 				$blokkering = blokkeringer::check(blokkeringer::TYPE_SIGNATUR);
 				
 				// lagre endringer?
@@ -1168,7 +1168,7 @@ a.status_venter:hover { }
 					$signature = trim(postval("signature"));
 					if ($signature == page_min_side::$active_player->data['up_forum_signature'])
 					{
-						ess::$b->page->add_message("Ingen endringer ble utført.", "error");
+						ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 					}
 					
 					else
@@ -1223,7 +1223,7 @@ function minside_preview_forum()
 {
 	var data = $("minside_signatur").value;
 	var preview_box = $("preview_forum").empty();
-	var p = new Element("div").set("class", "p").set("html", "Henter forhåndsvisning...").inject(preview_box.set("class", "minside_preview"));
+	var p = new Element("div").set("class", "p").set("html", "Henter forhÃ¥ndsvisning...").inject(preview_box.set("class", "minside_preview"));
 	
 	// xhr objekt
 	var xhr = new Request({
@@ -1252,9 +1252,9 @@ function minside_preview_forum()
 	<div class="bg1_c">
 		<h1 class="bg1">Rediger signatur for forumet<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">'.($blokkering && !access::has("mod") ? '
-			<p class="error_box">Du er blokkert fra å redigere signaturen din. Blokkeringen varer til '.ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).'.<br /><b>Begrunnelse:</b> '.game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>' : '').'
+			<p class="error_box">Du er blokkert fra Ã¥ redigere signaturen din. Blokkeringen varer til '.ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).'.<br /><b>Begrunnelse:</b> '.game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>' : '').'
 			<boxes />
-			<p><b>Begrensninger:</b> Maks 4-5 linjer med tekst. Dersom du har et eller flere bilder i signaturen er maks høyde totalt 100 pixels og total størrelse 50 KB. Ved bilde kan man kun ha én linje tekst over eller under bildet.</p>
+			<p><b>Begrensninger:</b> Maks 4-5 linjer med tekst. Dersom du har et eller flere bilder i signaturen er maks hÃ¸yde totalt 100 pixels og total stÃ¸rrelse 50 KB. Ved bilde kan man kun ha Ã©n linje tekst over eller under bildet.</p>
 			<p>Vanlige <a href="'.ess::$s['relative_path'].'/node/11" target="_blank">BB-koder</a> og <a href="'.ess::$s['relative_path'].'/node/15" target="_blank">uttryks-ikon</a> kan benyttes.</p>
 			<form action="" method="post">
 				<p><textarea name="signature" id="minside_signatur" style="width: 98%" rows="4">'.htmlspecialchars(postval("signature", page_min_side::$active_player->data['up_forum_signature'])).'</textarea></p>
@@ -1263,7 +1263,7 @@ function minside_preview_forum()
 					<dt>Begrunnelse for endring (crewlogg)</dt>
 					<dd><textarea name="log" rows="3" cols="40">'.htmlspecialchars(postval("log")).'</textarea></dd>
 				</dl>' : '').'
-				<p class="c">'.show_sbutton("Lagre endringer", 'name="save_forum"').' '.show_button("Forhåndsvis", 'onclick="minside_preview_forum()"').'</p>'.(!page_min_side::$active_own ? '
+				<p class="c">'.show_sbutton("Lagre endringer", 'name="save_forum"').' '.show_button("ForhÃ¥ndsvis", 'onclick="minside_preview_forum()"').'</p>'.(!page_min_side::$active_own ? '
 				'.self::advarsel_input("signature") : '').'
 			</form>
 		</div>
@@ -1273,18 +1273,18 @@ function minside_preview_forum()
 		
 		elseif ($subpage2 == "ft")
 		{
-			ess::$b->page->add_title("Forumtråder");
+			ess::$b->page->add_title("ForumtrÃ¥der");
 			
 			echo '
 	<div class="bg1_c">
-		<h1 class="bg1">Mine forumtråder i forumet<span class="left2"></span><span class="right2"></span></h1>
+		<h1 class="bg1">Mine forumtrÃ¥der i forumet<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">';
 			
 			// vise slettede?
 			$deleted = isset($_GET['sd']);
 			$deleted_sql = $deleted ? '' : ' AND ft_deleted = 0';
 			
-			// hent trådene
+			// hent trÃ¥dene
 			$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 50);
 			$result = $pagei->query("
 				SELECT IF(fse_ff_id IS NULL, fse_name, ff_name) fse_name, ft_id, ft_type, ft_title, ft_fse_id, ft_time, ft_views, ft_up_id, ft_locked, ft_replies, ft_last_reply, r.fr_time AS r_time, fs_time, COUNT(rs.fr_id) AS fs_new, ft_deleted
@@ -1298,19 +1298,19 @@ function minside_preview_forum()
 				GROUP BY ft_id ORDER BY ft_time DESC");
 			
 			echo '
-			<p>Oversikt over tråder som er opprettet'.($deleted ? ' (viser også <span style="color: #FF0000">slettede</span> tråder)' : '').':</p>';
+			<p>Oversikt over trÃ¥der som er opprettet'.($deleted ? ' (viser ogsÃ¥ <span style="color: #FF0000">slettede</span> trÃ¥der)' : '').':</p>';
 			
-			// ingen tråder
+			// ingen trÃ¥der
 			if (mysql_num_rows($result) == 0)
 			{
 				echo '
-			<p>Fant ingen forumtråder.</p>';
+			<p>Fant ingen forumtrÃ¥der.</p>';
 			}
 			
 			else
 			{
 				echo '
-			<p>Totalt <b>'.$pagei->total.'</b> tråd'.($pagei->total == 1 ? '' : 'er').':</p>
+			<p>Totalt <b>'.$pagei->total.'</b> trÃ¥d'.($pagei->total == 1 ? '' : 'er').':</p>
 			<table class="table forum" style="width: 100%">
 				<thead>
 					<tr>
@@ -1322,7 +1322,7 @@ function minside_preview_forum()
 				</thead>
 				<tbody>';
 				
-				// vis trådene
+				// vis trÃ¥dene
 				$i = 0;
 				while ($row = mysql_fetch_assoc($result))
 				{
@@ -1342,7 +1342,7 @@ function minside_preview_forum()
 					$date = ess::$b->date->get($row['ft_time']);
 					echo '
 				<tr class="'.(++$i % 2 == 0 ? 'color' : '').'">
-					<td class="f">'.(access::has("forum_mod") || $row['ft_deleted'] == 0 ? '<a href="forum/topic?id='.$row['ft_id'].$fs_link_suffix.'">'.htmlspecialchars($row['ft_title']).'</a>' : htmlspecialchars($row['ft_title'])).($row['ft_type'] > 1 ? ($row['ft_type'] == 3 ? ' <span style="color: #CCFF00; font-weight: bold">(Viktig)</span>' : ' <span style="color: #CCFF00">(Sticky)</span>') : '').($row['ft_locked'] == 1 ? ' <span class="forum_lock">(låst)</span>' : '').($row['ft_deleted'] != 0 ? ' <span style="color: #FF0000">(Slettet)</span>' : '').$fs_info.'<br /><a href="forum/forum?id='.$row['ft_fse_id'].'" style="color: #555">'.htmlspecialchars($row['fse_name']).'</a></td>
+					<td class="f">'.(access::has("forum_mod") || $row['ft_deleted'] == 0 ? '<a href="forum/topic?id='.$row['ft_id'].$fs_link_suffix.'">'.htmlspecialchars($row['ft_title']).'</a>' : htmlspecialchars($row['ft_title'])).($row['ft_type'] > 1 ? ($row['ft_type'] == 3 ? ' <span style="color: #CCFF00; font-weight: bold">(Viktig)</span>' : ' <span style="color: #CCFF00">(Sticky)</span>') : '').($row['ft_locked'] == 1 ? ' <span class="forum_lock">(lÃ¥st)</span>' : '').($row['ft_deleted'] != 0 ? ' <span style="color: #FF0000">(Slettet)</span>' : '').$fs_info.'<br /><a href="forum/forum?id='.$row['ft_fse_id'].'" style="color: #555">'.htmlspecialchars($row['fse_name']).'</a></td>
 					<td>'.game::format_number($row['ft_replies']).'</td>
 					<td>'.game::format_number($row['ft_views']).'</td>
 					<td class="f_time nowrap">'.$date->format(date::FORMAT_NOTIME).'<br />'.$date->format("H:i:s").'</td>
@@ -1406,7 +1406,7 @@ function minside_preview_forum()
 				GROUP BY r.fr_id ORDER BY r.fr_time DESC");
 			
 			echo '
-			<p>Oversikt over svar som er opprettet i de ulike trådene'.($deleted ? ' (viser også <span style="color: #FF0000">slettede</span> svar)' : '').':</p>';
+			<p>Oversikt over svar som er opprettet i de ulike trÃ¥dene'.($deleted ? ' (viser ogsÃ¥ <span style="color: #FF0000">slettede</span> svar)' : '').':</p>';
 			
 			// ingen svar
 			if (mysql_num_rows($result) == 0)
@@ -1422,8 +1422,8 @@ function minside_preview_forum()
 			<table class="table forum" style="width: 100%">
 				<thead>
 					<tr>
-						<th>Trådtittel</th>
-						<th>Trådskaper</th>
+						<th>TrÃ¥dtittel</th>
+						<th>TrÃ¥dskaper</th>
 						<th>Svar</th>
 						<th>Visninger</th>
 						<th>Dato</th>
@@ -1452,9 +1452,9 @@ function minside_preview_forum()
 						<td class="f">'.
 							(($row['ft_deleted'] == 0 && $row['fr_deleted'] == 0) || access::has("forum_mod") ? '<a href="forum/topic?id='.$row['ft_id'].'&amp;replyid='.$row['fr_id'].'">'.htmlspecialchars($row['ft_title']).'</a>' : htmlspecialchars($row['ft_title'])).
 							($row['ft_type'] > 1 ? ($row['ft_type'] == 3 ? ' <span style="color: #CCFF00; font-weight: bold">(Viktig)</span>' : ' <span style="color: #CCFF00">(Sticky)</span>') : '').
-							($row['ft_locked'] == 1 ? ' <span class="forum_lock">(låst)</span>' : '').
+							($row['ft_locked'] == 1 ? ' <span class="forum_lock">(lÃ¥st)</span>' : '').
 							($row['fr_deleted'] != 0 ? ' <span style="color: #FF0000">(Slettet)</span>' : '').
-							($row['ft_deleted'] != 0 ? ' <span style="color: #555">(Tråd slettet)</span>' : '').
+							($row['ft_deleted'] != 0 ? ' <span style="color: #555">(TrÃ¥d slettet)</span>' : '').
 							$fs_info.'<br /><a href="forum/forum?id='.$row['ft_fse_id'].'" style="color: #555">'.htmlspecialchars($row['fse_name']).'</a></td>
 						<td><user id="'.$row['ft_up_id'].'" /></td>
 						<td>'.game::format_number($row['ft_replies']).'</td>
@@ -1522,14 +1522,14 @@ function minside_preview_forum()
 	<div class="bg1_c">
 		<h1 class="bg1">Profiltekst<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du har kun rettigheter til å se innholdet av profilteksten til denne spilleren.</p>'.(page_min_side::$active_player->data['up_profile_text'] == "" ? '
+			<p>Du har kun rettigheter til Ã¥ se innholdet av profilteksten til denne spilleren.</p>'.(page_min_side::$active_player->data['up_profile_text'] == "" ? '
 			<p>Det er ingen profiltekst knyttet opp til denne spilleren.</p>' : '
 			<p><textarea style="width: 98%" rows="30">'.htmlspecialchars(page_min_side::$active_player->data['up_profile_text']).'</textarea></p>').'
 		</div>
 	</div>';
 			}
 			
-			// har vi kun rettigheter til å fjerne profilteksten?
+			// har vi kun rettigheter til Ã¥ fjerne profilteksten?
 			elseif (!page_min_side::$active_player->active && !access::has("mod"))
 			{
 				// fjerne profilteksten?
@@ -1537,7 +1537,7 @@ function minside_preview_forum()
 				{
 					if (page_min_side::$active_player->data['up_profile_text'] == "")
 					{
-						ess::$b->page->add_message("Det var ingen tekst å fjerne.");
+						ess::$b->page->add_message("Det var ingen tekst Ã¥ fjerne.");
 					}
 					else
 					{
@@ -1554,13 +1554,13 @@ function minside_preview_forum()
 	<div class="bg1_c">
 		<h1 class="bg1">Fjern teksten i profilen<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Siden denne spilleren er deaktivert kan du ikke redigere profilen. Du kan derimot fjerne teksten i profilen om det er ønskelig.</p>
-			<p><a href="p/'.htmlspecialchars(page_min_side::$active_player->data['up_name']).'/'.page_min_side::$active_player->id.'">Gå til profil &raquo;</a></p>'.(page_min_side::$active_player->data['up_profile_text'] == "" ? '
+			<p>Siden denne spilleren er deaktivert kan du ikke redigere profilen. Du kan derimot fjerne teksten i profilen om det er Ã¸nskelig.</p>
+			<p><a href="p/'.htmlspecialchars(page_min_side::$active_player->data['up_name']).'/'.page_min_side::$active_player->id.'">GÃ¥ til profil &raquo;</a></p>'.(page_min_side::$active_player->data['up_profile_text'] == "" ? '
 			<p>Profilen inneholder ikke noe tekst.</p>' : '
-			<p>Det nåværende innholdet vises i tilfelle det er ønskelig å hente ut informasjon fra det:</p>
+			<p>Det nÃ¥vÃ¦rende innholdet vises i tilfelle det er Ã¸nskelig Ã¥ hente ut informasjon fra det:</p>
 			<p><textarea style="width: 98%" rows="30">'.htmlspecialchars(page_min_side::$active_player->data['up_profile_text']).'</textarea></p>
 			<form action="" method="post">
-				<p class="c"><span class="red">'.show_sbutton("Fjern teksten i profilen", 'name="remove" onclick="return confirm(\'Er du sikker på at du ønsker å fjerne teksten i profilen for denne spilleren? Denne handlingen kan ikke angres.\')"').'</span></p>
+				<p class="c"><span class="red">'.show_sbutton("Fjern teksten i profilen", 'name="remove" onclick="return confirm(\'Er du sikker pÃ¥ at du Ã¸nsker Ã¥ fjerne teksten i profilen for denne spilleren? Denne handlingen kan ikke angres.\')"').'</span></p>
 			</form>').'
 		</div>
 	</div>';
@@ -1568,7 +1568,7 @@ function minside_preview_forum()
 			
 			else
 			{
-				// blokkert fra å endre profilteksten?
+				// blokkert fra Ã¥ endre profilteksten?
 				$blokkering = blokkeringer::check(blokkeringer::TYPE_PROFIL);
 				
 				// lagre endringer?
@@ -1579,7 +1579,7 @@ function minside_preview_forum()
 					// ingen endringer?
 					if ($text == page_min_side::$active_player->data['up_profile_text'])
 					{
-						ess::$b->page->add_message("Ingen endringer ble utført.", "error");
+						ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 					}
 					
 					else
@@ -1643,7 +1643,7 @@ function rp_preview_profile_text()
 	<div class="bg1_c">
 		<h1 class="bg1">Rediger profiltekst<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">'.($blokkering && !access::has("mod") ? '
-			<p class="error_box">Du er blokkert fra å redigere profilteksten din. Blokkeringen varer til '.ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).'.<br /><b>Begrunnelse:</b> '.game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>' : '').'
+			<p class="error_box">Du er blokkert fra Ã¥ redigere profilteksten din. Blokkeringen varer til '.ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).'.<br /><b>Begrunnelse:</b> '.game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>' : '').'
 			<boxes />
 			<p>Vanlige <a href="'.ess::$s['relative_path'].'/node/11" target="_blank">BB-koder</a> og <a href="'.ess::$s['relative_path'].'/node/15" target="_blank">uttryks-ikon</a> kan benyttes. I tillegg kan det benyttes egne <a href="'.ess::$s['relative_path'].'/node/12" target="_blank">BB-koder for profil</a>.</p>
 			<form action="" method="post">
@@ -1652,7 +1652,7 @@ function rp_preview_profile_text()
 					<dt>Begrunnelse for endring (crewlogg)</dt>
 					<dd><textarea name="log" class="w300" rows="6" cols="40">'.htmlspecialchars(postval("log")).'</textarea></dd>
 				</dl>' : '').'
-				<p class="c">'.show_sbutton("Lagre endringer", 'name="save_profile_content" onclick="return confirm(\'Er du sikker på at du vil lagre profilen din?\\n\\nTips: Forhåndsvis profilen din før du gjør endringer for å se om alt blir som det skal.\')"').' '.show_button("Forhåndsvis", 'onclick="rp_preview_profile_text()"').'</p>'.(!page_min_side::$active_own ? '
+				<p class="c">'.show_sbutton("Lagre endringer", 'name="save_profile_content" onclick="return confirm(\'Er du sikker pÃ¥ at du vil lagre profilen din?\\n\\nTips: ForhÃ¥ndsvis profilen din fÃ¸r du gjÃ¸r endringer for Ã¥ se om alt blir som det skal.\')"').' '.show_button("ForhÃ¥ndsvis", 'onclick="rp_preview_profile_text()"').'</p>'.(!page_min_side::$active_own ? '
 				'.self::advarsel_input("profiletext") : '').'
 			</form>
 		</div>
@@ -1665,7 +1665,7 @@ function rp_preview_profile_text()
 		{
 			ess::$b->page->add_title("Profilbilde");
 			
-			// blokkert fra å endre profilbilder?
+			// blokkert fra Ã¥ endre profilbilder?
 			$blokkering = blokkeringer::check(blokkeringer::TYPE_PROFILE_IMAGE);
 			
 			// har vi valgt et profilbilde?
@@ -1712,7 +1712,7 @@ function rp_preview_profile_text()
 					// er brukeren deaktivert?
 					if (!page_min_side::$active_player->active && !access::has("mod"))
 					{
-						ess::$b->page->add_message("Du kan ikke sette nytt profilbilde på en spiller som er død.");
+						ess::$b->page->add_message("Du kan ikke sette nytt profilbilde pÃ¥ en spiller som er dÃ¸d.");
 					}
 					
 					else
@@ -1748,12 +1748,12 @@ function rp_preview_profile_text()
 				// er brukeren deaktivert?
 				if (!page_min_side::$active_player->active && !access::has("mod"))
 				{
-					ess::$b->page->add_message("Du kan ikke sette nytt profilbilde på en spiller som er død.");
+					ess::$b->page->add_message("Du kan ikke sette nytt profilbilde pÃ¥ en spiller som er dÃ¸d.");
 				}
 				
 				if (TEST_SERVER)
 				{
-					ess::$b->page->add_message("Du kan ikke laste opp profilbilder på testsiden. Last opp bildet på den vanlige siden.", "error");
+					ess::$b->page->add_message("Du kan ikke laste opp profilbilder pÃ¥ testsiden. Last opp bildet pÃ¥ den vanlige siden.", "error");
 					redirect::handle();
 				}
 				
@@ -1761,7 +1761,7 @@ function rp_preview_profile_text()
 				$result = ess::$b->db->query("SELECT COUNT(*) FROM profile_images WHERE pi_up_id = ".page_min_side::$active_player->id);
 				if (mysql_result($result, 0) >= $profile_images_max)
 				{
-					ess::$b->page->add_message("Du kan ikke ha flere enn ".$profile_images_max." bilder lastet opp samtidig. Slett et bilde og prøv igjen.", "error");
+					ess::$b->page->add_message("Du kan ikke ha flere enn ".$profile_images_max." bilder lastet opp samtidig. Slett et bilde og prÃ¸v igjen.", "error");
 					redirect::handle();
 				}
 				
@@ -1771,7 +1771,7 @@ function rp_preview_profile_text()
 				// skjekk om det er et gyldig bilde
 				if (!is_uploaded_file($src))
 				{
-					ess::$b->page->add_message("Noe gikk galt. Prøv på nytt.", "error");
+					ess::$b->page->add_message("Noe gikk galt. PrÃ¸v pÃ¥ nytt.", "error");
 					redirect::handle();
 				}
 				
@@ -1779,14 +1779,14 @@ function rp_preview_profile_text()
 				$image = @imagecreatefromstring(@file_get_contents($src));
 				if (!$image)
 				{
-					ess::$b->page->add_message("Kunne ikke lese bildet. Prøv et annet bilde.", "error");
+					ess::$b->page->add_message("Kunne ikke lese bildet. PrÃ¸v et annet bilde.", "error");
 					redirect::handle();
 				}
 				
 				$w = imagesx($image);
 				$h = imagesy($image);
 				
-				// dimensjoner til 120 i bredden og maks 180 i høyden
+				// dimensjoner til 120 i bredden og maks 180 i hÃ¸yden
 				$width = 120;
 				$max_h = 180;
 				$height = floor($width / $w * $h);
@@ -1799,7 +1799,7 @@ function rp_preview_profile_text()
 				// kopier det andre bildet over hit
 				imagecopyresampled($new, $image, 0, 0, 0, 0, $width, $height, $w, $h);
 				
-				// opprett ny rad i databasen for å finne id
+				// opprett ny rad i databasen for Ã¥ finne id
 				ess::$b->db->query("INSERT INTO profile_images SET pi_up_id = ".page_min_side::$active_player->id.", local = 1, time = ".time());
 				$id = ess::$b->db->insert_id();
 				
@@ -1839,7 +1839,7 @@ function rp_preview_profile_text()
 			if ($blokkering && !access::has("mod"))
 			{
 				echo '
-	<p class="error_box">Du er blokkert fra å endre profilbildet ditt. Blokkeringen varer til '.ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).'.<br /><b>Begrunnelse:</b> '.game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>';
+	<p class="error_box">Du er blokkert fra Ã¥ endre profilbildet ditt. Blokkeringen varer til '.ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).'.<br /><b>Begrunnelse:</b> '.game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>';
 			}
 			
 			echo '
@@ -1853,24 +1853,24 @@ function rp_preview_profile_text()
 			if (!page_min_side::$active_own && !access::has("mod"))
 			{
 				echo '
-						<p>Du har ikke tilgang til å laste opp bilder for denne spilleren.</p>';
+						<p>Du har ikke tilgang til Ã¥ laste opp bilder for denne spilleren.</p>';
 			}
 			elseif (!page_min_side::$active_player->active && !access::has("mod"))
 			{
 				echo '
-						<p>Denne spilleren er deaktivert. Du har ikke mulighet til å laste opp nytt bilde.</p>
-						<p>Du kan eventuelt prøve og be en <a href="crew">moderator</a> laste opp et bilde for deg.</p>';
+						<p>Denne spilleren er deaktivert. Du har ikke mulighet til Ã¥ laste opp nytt bilde.</p>
+						<p>Du kan eventuelt prÃ¸ve og be en <a href="crew">moderator</a> laste opp et bilde for deg.</p>';
 			}
 			else
 			{
 				echo '
 						<p>Her laster du opp nytt profilbilde.</p>
-						<p>Bildet skal helst være 120 piksler bredt og 120 piksler høyt. Bildet blir skalert til 120 piksler i bredden. Maks høyde er 180 piksler.</p>';
+						<p>Bildet skal helst vÃ¦re 120 piksler bredt og 120 piksler hÃ¸yt. Bildet blir skalert til 120 piksler i bredden. Maks hÃ¸yde er 180 piksler.</p>';
 				
 				if (count($profile_images) > $profile_images_max)
 				{
 					echo '
-						<p>Du kan kun ha '.$profile_images_max.' bilder lastet opp på en gang. Slett et bilde for å kunne laste opp et nytt.</p>';
+						<p>Du kan kun ha '.$profile_images_max.' bilder lastet opp pÃ¥ en gang. Slett et bilde for Ã¥ kunne laste opp et nytt.</p>';
 				}
 				
 				else
@@ -2005,7 +2005,7 @@ function rp_preview_profile_text()
 					if ($send_email) $data["email_sent"] = 1;
 					crewlog::log("player_deactivate", page_min_side::$active_player->id, $log, $data);
 					
-					// fullfør transaksjon
+					// fullfÃ¸r transaksjon
 					if (!$transaction_before) ess::$b->db->commit();
 					
 					// send e-post
@@ -2019,7 +2019,7 @@ Din spiller '.page_min_side::$active_player->data['up_name'].' har blitt deaktiv
 Begrunnelse for deaktivering:
 '.strip_tags(game::bb_to_html($log)).'
 
-Du kan opprette ny spiller ved å logge inn på din bruker.
+Du kan opprette ny spiller ved Ã¥ logge inn pÃ¥ din bruker.
 
 --
 www.kofradia.no';
@@ -2031,7 +2031,7 @@ www.kofradia.no';
 				
 				else
 				{
-					// fullfør transaksjon
+					// fullfÃ¸r transaksjon
 					if (!$transaction_before) ess::$b->db->commit();
 				}
 				
@@ -2044,8 +2044,8 @@ www.kofradia.no';
 		<h1 class="bg1">Deaktiver spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<boxes />
-			<p>Ved å deaktivere spilleren kan brukeren fremdeles logge inn og opprette en ny spiller på samme bruker. Ønsker du egentlig å <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "user")).'">deaktivere brukeren</a>?</p>
-			<p>Hvis e-post blir sendt blir brukeren også informert om muligheten for å logge inn på brukeren sin og opprette ny spiller.</p>
+			<p>Ved Ã¥ deaktivere spilleren kan brukeren fremdeles logge inn og opprette en ny spiller pÃ¥ samme bruker. Ã˜nsker du egentlig Ã¥ <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "user")).'">deaktivere brukeren</a>?</p>
+			<p>Hvis e-post blir sendt blir brukeren ogsÃ¥ informert om muligheten for Ã¥ logge inn pÃ¥ brukeren sin og opprette ny spiller.</p>
 			<form action="" method="post">
 				<dl class="dd_right">
 					<dt>Begrunnelse for deaktivering<br />(for spiller)</dt>
@@ -2128,8 +2128,8 @@ www.kofradia.no';
 		<div class="bg1">
 			<boxes />
 			<form action="" method="post">'.(page_min_side::$active_user->active ? '
-				<p>Brukeren vil ikke bli informert om disse endringene, annet enn at brukeren får oppgitt den nye begrunnelsen på min side.</p>' : '
-				<p>Brukeren er deaktivert, og vil derfor ikke ha mulighet til å motta denne nye begrunnelsen. Ønsker du heller å <a href="'.htmlspecialchars(page_min_side::addr("cdeact", "", "user")).'">endre deaktiveringen til brukeren</a>? Du kan da også velge å oppdatere både deaktiveringen til brukeren og spilleren.</p>').'
+				<p>Brukeren vil ikke bli informert om disse endringene, annet enn at brukeren fÃ¥r oppgitt den nye begrunnelsen pÃ¥ min side.</p>' : '
+				<p>Brukeren er deaktivert, og vil derfor ikke ha mulighet til Ã¥ motta denne nye begrunnelsen. Ã˜nsker du heller Ã¥ <a href="'.htmlspecialchars(page_min_side::addr("cdeact", "", "user")).'">endre deaktiveringen til brukeren</a>? Du kan da ogsÃ¥ velge Ã¥ oppdatere bÃ¥de deaktiveringen til brukeren og spilleren.</p>').'
 				<dl class="dd_right">
 					<dt>Begrunnelse for deaktivering<br />(for spiller)</dt>
 					<dd><textarea name="log" id="log" cols="30" rows="5">'.htmlspecialchars(postval("log", page_min_side::$active_player->data['up_deactivated_reason'])).'</textarea></dd>
@@ -2158,7 +2158,7 @@ www.kofradia.no';
 			redirect::handle(page_min_side::addr(""));
 		}
 		
-		// blokkert fra å deaktivere spilleren?
+		// blokkert fra Ã¥ deaktivere spilleren?
 		$blokkering = blokkeringer::check(blokkeringer::TYPE_DEAKTIVER);
 		if ($blokkering)
 		{
@@ -2166,7 +2166,7 @@ www.kofradia.no';
 	<div class="bg1_c" style="width: 300px">
 		<h1 class="bg1">Deaktiver spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du er blokkert fra å deaktivere spilleren din.</p>
+			<p>Du er blokkert fra Ã¥ deaktivere spilleren din.</p>
 			<p>Blokkeringen varer til '.ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).'.</p>
 			<p><b>Begrunnelse:</b> '.game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>
 		</div>
@@ -2191,12 +2191,12 @@ www.kofradia.no';
 			$deactivate_expire = page_min_side::$active_player->params->get("deactivate_expire");
 			$deactivate_expire_time = 3600;
 			
-			// må be om e-post?
+			// mÃ¥ be om e-post?
 			if (!$deactivate_expire || $deactivate_expire < time())
 			{
 				if (isset($_POST['deactivate']))
 				{
-					// opprett nøkkel
+					// opprett nÃ¸kkel
 					$key = uniqid();
 					$expire = time()+$deactivate_expire_time;
 					
@@ -2208,22 +2208,22 @@ www.kofradia.no';
 					$email = new email();
 					$email->text = 'Hei,
 
-Du har bedt om å deaktivere din spiller '.page_min_side::$active_player->data['up_name'].' på Kofradia.
-For din egen skyld sender vi deg denne e-posten for å være sikker på at ingen uvedkommende forsøker å deaktivere spilleren din.
+Du har bedt om Ã¥ deaktivere din spiller '.page_min_side::$active_player->data['up_name'].' pÃ¥ Kofradia.
+For din egen skyld sender vi deg denne e-posten for Ã¥ vÃ¦re sikker pÃ¥ at ingen uvedkommende forsÃ¸ker Ã¥ deaktivere spilleren din.
 
 Brukerinformasjon:
 Bruker ID: '.page_min_side::$active_user->id.'
 E-post: '.page_min_side::$active_user->data['u_email'].'
 Spiller: '.page_min_side::$active_player->data['up_name'].' (#'.page_min_side::$active_player->id.')
 
-For å godta eller avslå deaktivering:
+For Ã¥ godta eller avslÃ¥ deaktivering:
 '.$__server['path'].'/min_side?up_id='.page_min_side::$active_player->id.'&a=deact&key='.urlencode($key).'
 
 --
 www.kofradia.no';
 					$email->send(page_min_side::$active_user->data['u_email'], "Deaktiver spiller");
 					
-					putlog("CREWCHAN", "%bDeaktiveringsmulighet%b: ".page_min_side::$active_player->data['up_name']." (".page_min_side::$active_user->data['u_email'].") ba om e-post for å deaktivere spilleren -- {$__server['path']}/min_side?up_id=".page_min_side::$active_player->id);
+					putlog("CREWCHAN", "%bDeaktiveringsmulighet%b: ".page_min_side::$active_player->data['up_name']." (".page_min_side::$active_user->data['u_email'].") ba om e-post for Ã¥ deaktivere spilleren -- {$__server['path']}/min_side?up_id=".page_min_side::$active_player->id);
 					ess::$b->page->add_message("E-post med detaljer ble sendt til <b>".htmlspecialchars(page_min_side::$active_user->data['u_email'])."</b>.");
 					
 					redirect::handle();
@@ -2233,16 +2233,16 @@ www.kofradia.no';
 				{
 					if (isset($_GET['key']))
 					{
-						ess::$b->page->add_message("Du brukte for lang tid fra e-posten ble sendt. Alternativt er du logget inn på feil bruker.", "error");
+						ess::$b->page->add_message("Du brukte for lang tid fra e-posten ble sendt. Alternativt er du logget inn pÃ¥ feil bruker.", "error");
 					}
 					else
 					{
-						ess::$b->page->add_message("Du brukte for lang tid fra e-posten ble sendt om å deaktivere spilleren din. Alternativt er du logget inn på feil bruker.", "error");
+						ess::$b->page->add_message("Du brukte for lang tid fra e-posten ble sendt om Ã¥ deaktivere spilleren din. Alternativt er du logget inn pÃ¥ feil bruker.", "error");
 					}
 					
 					if ($deactivate_expire && $deactivate_expire < time())
 					{
-						// fjern oppføringene
+						// fjern oppfÃ¸ringene
 						page_min_side::$active_player->params->remove("deactivate_expire");
 						page_min_side::$active_player->params->remove("deactivate_key");
 						page_min_side::$active_player->params->remove("deactivate_time", true);
@@ -2259,7 +2259,7 @@ www.kofradia.no';
 				// ikke normal spiller
 				if (page_min_side::$active_player->data['up_access_level'] != 1 && false)
 				{
-					// fjern oppføringene
+					// fjern oppfÃ¸ringene
 					page_min_side::$active_player->params->remove("deactivate_expire");
 					page_min_side::$active_player->params->remove("deactivate_key");
 					page_min_side::$active_player->params->remove("deactivate_time", true);
@@ -2270,9 +2270,9 @@ www.kofradia.no';
 				// avbryte?
 				if (isset($_GET['abort']))
 				{
-					ess::$b->page->add_message("Du har trukket tilbake ditt ønske om deaktivering.", "error");
+					ess::$b->page->add_message("Du har trukket tilbake ditt Ã¸nske om deaktivering.", "error");
 					
-					// fjern oppføringene
+					// fjern oppfÃ¸ringene
 					page_min_side::$active_player->params->remove("deactivate_expire");
 					page_min_side::$active_player->params->remove("deactivate_key");
 					page_min_side::$active_player->params->remove("deactivate_time", true);
@@ -2287,7 +2287,7 @@ www.kofradia.no';
 					$key = getval("key");
 					if ($key != page_min_side::$active_player->params->get("deactivate_key"))
 					{
-						ess::$b->page->add_message("Lenken er feil. Sørg for at du kopierer hele lenken.", "error");
+						ess::$b->page->add_message("Lenken er feil. SÃ¸rg for at du kopierer hele lenken.", "error");
 						redirect::handle();
 					}
 					
@@ -2305,7 +2305,7 @@ www.kofradia.no';
 						
 						elseif ($pass == "")
 						{
-							ess::$b->page->add_message("Du må fylle inn passordet ditt.", "error");
+							ess::$b->page->add_message("Du mÃ¥ fylle inn passordet ditt.", "error");
 						}
 						
 						elseif (!password::verify_hash($pass, page_min_side::$active_user->data['u_pass'], 'user'))
@@ -2319,7 +2319,7 @@ www.kofradia.no';
 							$player_deact = page_min_side::$active_player->active;
 							if (page_min_side::$active_player->deactivate($note, NULL, page_min_side::$active_player))
 							{
-								ess::$b->page->add_message("Spilleren er nå deaktivert.");
+								ess::$b->page->add_message("Spilleren er nÃ¥ deaktivert.");
 								
 								// send e-post
 								$email = new email();
@@ -2330,7 +2330,7 @@ Du har deaktivert din spiller '.page_min_side::$active_player->data['up_name'].'
 Din begrunnelse for deaktivering:
 '.game::bb_to_html($note).'
 
-Du kan fremdeles logge inn på din bruker og opprette en ny spiller.
+Du kan fremdeles logge inn pÃ¥ din bruker og opprette en ny spiller.
 
 --
 www.kofradia.no';
@@ -2343,7 +2343,7 @@ www.kofradia.no';
 				}
 			}
 			
-			// venter på kode
+			// venter pÃ¥ kode
 			if ($deactivate_expire !== false)
 			{
 				// har kode?
@@ -2354,8 +2354,8 @@ www.kofradia.no';
 		<h1 class="bg1">Deaktiver spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<div class="warning">
-				<p>Du er i ferd med å deaktivere spilleren din. Når spilleren din blir deaktivert vil du fremdeles være logget inn med din bruker og kan opprette en ny spiller.</p>
-				<p>Hvis du ønsker å fjerne din bruker fra spillet må du <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "user")).'">deaktivere brukeren din</a>.</p>
+				<p>Du er i ferd med Ã¥ deaktivere spilleren din. NÃ¥r spilleren din blir deaktivert vil du fremdeles vÃ¦re logget inn med din bruker og kan opprette en ny spiller.</p>
+				<p>Hvis du Ã¸nsker Ã¥ fjerne din bruker fra spillet mÃ¥ du <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "user")).'">deaktivere brukeren din</a>.</p>
 			</div>
 			<form action="" method="post">
 				<dl class="dd_right dl_2x">
@@ -2365,7 +2365,7 @@ www.kofradia.no';
 					<dd><textarea name="note" cols="30" rows="5">'.htmlspecialchars(postval("note")).'</textarea></dd>
 				</dl>
 				<p class="c">'.show_sbutton("Deaktiver spiller").'</p>
-				<p class="c"><a href="'.htmlspecialchars(page_min_side::addr(NULL, "abort")).'">Avbryt - ønsker ikke å deaktivere spilleren</a></p>
+				<p class="c"><a href="'.htmlspecialchars(page_min_side::addr(NULL, "abort")).'">Avbryt - Ã¸nsker ikke Ã¥ deaktivere spilleren</a></p>
 			</form>
 		</div>
 	</div>';
@@ -2377,8 +2377,8 @@ www.kofradia.no';
 	<div class="bg1_c" style="width: 300px">
 		<h1 class="bg1">Deaktiver spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du skal ha mottatt en e-post med link til å deaktivere din spiller.</p>
-			<p><a href="'.htmlspecialchars(page_min_side::addr(NULL, "abort")).'">Avbryt - ønsker ikke å deaktivere spilleren</a></p>
+			<p>Du skal ha mottatt en e-post med link til Ã¥ deaktivere din spiller.</p>
+			<p><a href="'.htmlspecialchars(page_min_side::addr(NULL, "abort")).'">Avbryt - Ã¸nsker ikke Ã¥ deaktivere spilleren</a></p>
 		</div>
 	</div>';
 				}
@@ -2390,10 +2390,10 @@ www.kofradia.no';
 	<div class="bg1_c" style="width: 300px">
 		<h1 class="bg1">Deaktiver spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Ved å deaktivere spilleren din vil du fremdeles være logget inn med din bruker og kan opprette en ny spiller.</p>
-			<p>Du mister muligheten til å benytte denne spilleren, og vil ikke kunne aktivere den igjen.</p>
-			<p>Hvis du ønsker å fjerne din bruker fra spillet må du <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "user")).'">deaktivere brukeren din</a>.</p>
-			<p>Av sikkerhetsmessige grunner vil du motta en e-post med nærmere instrukser for å deaktivere spilleren.</p>
+			<p>Ved Ã¥ deaktivere spilleren din vil du fremdeles vÃ¦re logget inn med din bruker og kan opprette en ny spiller.</p>
+			<p>Du mister muligheten til Ã¥ benytte denne spilleren, og vil ikke kunne aktivere den igjen.</p>
+			<p>Hvis du Ã¸nsker Ã¥ fjerne din bruker fra spillet mÃ¥ du <a href="'.htmlspecialchars(page_min_side::addr("deact", "", "user")).'">deaktivere brukeren din</a>.</p>
+			<p>Av sikkerhetsmessige grunner vil du motta en e-post med nÃ¦rmere instrukser for Ã¥ deaktivere spilleren.</p>
 			<form action="" method="post">
 				<p class="c">'.show_sbutton("Be om e-post", 'name="deactivate"').'</p>
 			</form>
@@ -2463,7 +2463,7 @@ www.kofradia.no';
 
 Din'.($user_activate ? ' bruker og' : '').' spiller '.page_min_side::$active_player->data['up_name'].' har blitt aktivert igjen av Crewet.
 
-Du får tilgang til din spiller ved å logge inn på Kofradia:
+Du fÃ¥r tilgang til din spiller ved Ã¥ logge inn pÃ¥ Kofradia:
 '.$__server['path'].'/'.(!empty($note) ? '
 
 Begrunnelse for aktivering:
@@ -2494,7 +2494,7 @@ www.kofradia.no';
 	<div class="bg1_c" style="width: 400px">
 		<h1 class="bg1">Aktiver spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Du er i ferd med å aktivere denne spilleren.'.(page_min_side::$active_user->active ? '' : ' Dette vil også aktivere brukeren til spilleren. Du kan også velge å kun <a href="'.htmlspecialchars(page_min_side::addr("activate", "", "user")).'">aktivere brukeren</a> slik at brukeren kan opprette ny spiller på egenhånd.').'</p>
+			<p>Du er i ferd med Ã¥ aktivere denne spilleren.'.(page_min_side::$active_user->active ? '' : ' Dette vil ogsÃ¥ aktivere brukeren til spilleren. Du kan ogsÃ¥ velge Ã¥ kun <a href="'.htmlspecialchars(page_min_side::addr("activate", "", "user")).'">aktivere brukeren</a> slik at brukeren kan opprette ny spiller pÃ¥ egenhÃ¥nd.').'</p>
 			<form action="" method="post">
 				<dl class="dd_right">
 					<dt>Begrunnelse for aktivering<br />(internt for crewet)</dt>
@@ -2502,7 +2502,7 @@ www.kofradia.no';
 				</dl>
 				<p>
 					<input type="checkbox" id="email" name="email"'.($_SERVER['REQUEST_METHOD'] != "POST" || isset($_POST['email']) ? ' checked="checked"' : '').' />
-					<label for="email"> Send e-post til '.htmlspecialchars(page_min_side::$active_user->data['u_email']).' for å informere om at brukeren er aktivert igjen</label>
+					<label for="email"> Send e-post til '.htmlspecialchars(page_min_side::$active_user->data['u_email']).' for Ã¥ informere om at brukeren er aktivert igjen</label>
 				</p>
 				<dl class="dd_right">
 					<dt id="email-info"'.($_SERVER['REQUEST_METHOD'] == "POST" && !isset($_POST['email']) ? ' class="email-info-dis"' : '').'>Tilleggsinformasjon til spilleren<br />(ikke BB-kode)<br /><br />(Blir oppgitt som begrunnelse<br />for aktivering hvis fylt ut)</dt>
@@ -2522,7 +2522,7 @@ www.kofradia.no';
 		if (!isset(login::$extended_access['authed']))
 		{
 			echo '
-	<p class="c">Du må logge inn for utvidede tilganger.</p>';
+	<p class="c">Du mÃ¥ logge inn for utvidede tilganger.</p>';
 		}
 		
 		else
@@ -2553,13 +2553,13 @@ www.kofradia.no';
 					<div class="bg1">'.(access::has("mod") ? '
 						<ul>'.(access::has("admin") && KOFRADIA_DEBUG ? '
 							<li><a href="innboks?u_id='.page_min_side::$active_user->id.'">Vis innboksen</a></li>
-							<li><a href="innboks_sok?u_id='.page_min_side::$active_user->id.'">Søk i innboksen</a></li>' : '').'
+							<li><a href="innboks_sok?u_id='.page_min_side::$active_user->id.'">SÃ¸k i innboksen</a></li>' : '').'
 							<li><a href="poker?up_id='.page_min_side::$active_player->id.'&amp;stats">Vis pokerhistorien</a></li>
-							<li><a href="admin/brukere/bankoverforinger?u1='.page_min_side::$active_player->id.'">Vis bankoverføringer</a></li>
-							<li><a href="drap?up_id='.page_min_side::$active_player->id.'">Vis angrep utført av spilleren</a></li>
-							<li><a href="drap?offer_up_id='.page_min_side::$active_player->id.'">Vis angrep utført mot spilleren</a></li>
+							<li><a href="admin/brukere/bankoverforinger?u1='.page_min_side::$active_player->id.'">Vis bankoverfÃ¸ringer</a></li>
+							<li><a href="drap?up_id='.page_min_side::$active_player->id.'">Vis angrep utfÃ¸rt av spilleren</a></li>
+							<li><a href="drap?offer_up_id='.page_min_side::$active_player->id.'">Vis angrep utfÃ¸rt mot spilleren</a></li>
 						</ul>' : '').'
-						<p>Trykk på <a href="'.htmlspecialchars(page_min_side::addr(NULL, "", "user")).'">min bruker</a> for å vise informasjon om brukeren.</p>
+						<p>Trykk pÃ¥ <a href="'.htmlspecialchars(page_min_side::addr(NULL, "", "user")).'">min bruker</a> for Ã¥ vise informasjon om brukeren.</p>
 					</div>
 				</div>
 			</div>
@@ -2570,7 +2570,7 @@ www.kofradia.no';
 					<h1 class="bg1">Crewnotat for brukeren<span class="left2"></span><span class="right2"></span></h1>
 					<p class="h_right"><a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=enote", "user")).'">rediger</a></p>
 					<div class="bg1">
-						<p>Her kan hvem som helst i crewet legge til eller endre et notat for denne brukeren for å memorere ting som har med <u>brukeren</u> å gjøre.</p>'.(empty(page_min_side::$active_user->data['u_note_crew']) ? '
+						<p>Her kan hvem som helst i crewet legge til eller endre et notat for denne brukeren for Ã¥ memorere ting som har med <u>brukeren</u> Ã¥ gjÃ¸re.</p>'.(empty(page_min_side::$active_user->data['u_note_crew']) ? '
 						<p>Ingen notat er registrert.</p>' : '
 						<div class="p">'.game::bb_to_html(page_min_side::$active_user->data['u_note_crew']).'</div>').'
 					</div>
@@ -2579,7 +2579,7 @@ www.kofradia.no';
 					<h1 class="bg1">Crewnotat for spilleren<span class="left2"></span><span class="right2"></span></h1>
 					<p class="h_right"><a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=enote")).'">rediger</a></p>
 					<div class="bg1">
-						<p>Her kan hvem som helst i crewet legge til eller endre et notat for denne spilleren for å memorere ting som har med <u>spilleren</u> å gjøre.</p>'.(empty(page_min_side::$active_player->data['up_note_crew']) ? '
+						<p>Her kan hvem som helst i crewet legge til eller endre et notat for denne spilleren for Ã¥ memorere ting som har med <u>spilleren</u> Ã¥ gjÃ¸re.</p>'.(empty(page_min_side::$active_player->data['up_note_crew']) ? '
 						<p>Ingen notat er registrert.</p>' : '
 						<div class="p">'.game::bb_to_html(page_min_side::$active_player->data['up_note_crew']).'</div>').'
 					</div>
@@ -2587,7 +2587,7 @@ www.kofradia.no';
 			</div>
 		</div>
 	</div>
-	<p class="c">Loggoppføringer for denne spilleren - <a href="'.htmlspecialchars(page_min_side::addr(NULL, "", "user")).'">se komplett logg for brukeren</a></p>';
+	<p class="c">LoggoppfÃ¸ringer for denne spilleren - <a href="'.htmlspecialchars(page_min_side::addr(NULL, "", "user")).'">se komplett logg for brukeren</a></p>';
 				
 				// hent loggene for denne spilleren
 				$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 50);
@@ -2597,7 +2597,7 @@ www.kofradia.no';
 				if (mysql_num_rows($result) == 0)
 				{
 					echo '
-	<p class="c">Ingen oppføringer eksisterer.</p>';
+	<p class="c">Ingen oppfÃ¸ringer eksisterer.</p>';
 				}
 				
 				else
@@ -2645,7 +2645,7 @@ www.kofradia.no';
 					$notat = postval("notat");
 					if ($notat == page_min_side::$active_player->data['up_note_crew'])
 					{
-						ess::$b->page->add_message("Ingen endringer ble utført.", "error");
+						ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 					}
 					
 					else
@@ -2670,7 +2670,7 @@ www.kofradia.no';
 		<h1 class="bg1">Endre crewnotat for spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<form action="" method="post">
-				<p>Dette endrer notatet som er tilknyttet denne spilleren. Du kan også tilknytte <a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=enote", "user")).'">informasjon til brukeren</a>, eller til en annen av brukerens spillere hvis det heller er ønskelig.</p>
+				<p>Dette endrer notatet som er tilknyttet denne spilleren. Du kan ogsÃ¥ tilknytte <a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=enote", "user")).'">informasjon til brukeren</a>, eller til en annen av brukerens spillere hvis det heller er Ã¸nskelig.</p>
 				<p>Notat:</p>
 				<p><textarea name="notat" rows="10" cols="30" style="width: 98%">'.htmlspecialchars(page_min_side::$active_player->data['up_note_crew']).'</textarea></p>
 				<p class="c">'.show_sbutton("Lagre").'</p>
@@ -2702,7 +2702,7 @@ www.kofradia.no';
 						// samme?
 						if ($points == page_min_side::$active_player->data['up_points'])
 						{
-							ess::$b->page->add_message("Ingen endringer ble utført.", "error");
+							ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 						}
 						
 						// negativt?
@@ -2711,10 +2711,10 @@ www.kofradia.no';
 							ess::$b->page->add_message("Kan ikke sette til negativt tall.", "error");
 						}
 						
-						// for høyt?
+						// for hÃ¸yt?
 						elseif ($points > 9999999)
 						{
-							ess::$b->page->add_message("Kan ikke settes til så høyt tall.", "error");
+							ess::$b->page->add_message("Kan ikke settes til sÃ¥ hÃ¸yt tall.", "error");
 						}
 						
 						else
@@ -2731,19 +2731,19 @@ www.kofradia.no';
 						// ingen endring?
 						if ($points == 0)
 						{
-							ess::$b->page->add_message("Ingen endringer ble utført.", "error");
+							ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 						}
 						
 						// resulterer i negativ rank?
 						elseif (page_min_side::$active_player->data['up_points'] + $points < 0)
 						{
-							ess::$b->page->add_message("Kan ikke utføre handlingen. Vil føre til <b>for lav</b> verdi.", "error");
+							ess::$b->page->add_message("Kan ikke utfÃ¸re handlingen. Vil fÃ¸re til <b>for lav</b> verdi.", "error");
 						}
 						
-						// resulterer i for høy rank?
+						// resulterer i for hÃ¸y rank?
 						elseif (page_min_side::$active_player->data['up_points'] + $points > 9999999)
 						{
-							ess::$b->page->add_message("Kan ikke utføre handlingen. Vil føre til <b>for høy</b> verdi.", "error");
+							ess::$b->page->add_message("Kan ikke utfÃ¸re handlingen. Vil fÃ¸re til <b>for hÃ¸y</b> verdi.", "error");
 						}
 						
 						else
@@ -2755,7 +2755,7 @@ www.kofradia.no';
 					// skal ikke dette annonseres?
 					$silent = isset($_POST['silent']);
 					
-					// øke ranken?
+					// Ã¸ke ranken?
 					if ($rel > 0)
 					{
 						page_min_side::$active_player->increase_rank($rel, false, $silent, 0);
@@ -2763,7 +2763,7 @@ www.kofradia.no';
 						// legg til crewlogg
 						crewlog::log("player_rank_inc", page_min_side::$active_player->id, $log, array("points" => $rel));
 						
-						ess::$b->page->add_message("Endringene ble lagret. Du økte ranken med ".game::format_number($rel)." poeng.".($silent ? ' Informasjonen ble ikke annonsert.' : ''));
+						ess::$b->page->add_message("Endringene ble lagret. Du Ã¸kte ranken med ".game::format_number($rel)." poeng.".($silent ? ' Informasjonen ble ikke annonsert.' : ''));
 						redirect::handle();
 					}
 					
@@ -2794,7 +2794,7 @@ www.kofradia.no';
 					<dd><input type="text" name="points_abs" value="'.game::format_number(postval("points_abs", page_min_side::$active_player->data['up_points'])).'" class="styled w60" maxlength="10" /> '.show_sbutton("Lagre", 'name="abs"').'</dd>
 					<dt>Juster ranken (relativ verdi)</dt>
 					<dd><input type="text" name="points_rel" value="'.game::format_number(postval("points_rel", 0)).'" class="styled w60" maxlength="10" /> '.show_sbutton("Lagre", 'name="rel"').'</dd>
-					<dd><input type="checkbox" name="silent"'.(isset($_POST['silent']) ? ' checked="checked"' : '').' id="silent" /><label for="silent"> Ikke annonser denne endringen (f.eks. på IRC)</label></dd>
+					<dd><input type="checkbox" name="silent"'.(isset($_POST['silent']) ? ' checked="checked"' : '').' id="silent" /><label for="silent"> Ikke annonser denne endringen (f.eks. pÃ¥ IRC)</label></dd>
 					<dt>Begrunnelse for endring (crewlogg)</dt>
 					<dd><textarea name="log" id="log" cols="30" rows="5">'.htmlspecialchars(postval("log")).'</textarea></dd>
 				</dl>
@@ -2812,10 +2812,10 @@ www.kofradia.no';
 					$name = trim(postval("name"));
 					$log = trim(postval("log"));
 					
-					// ingen endringer utført?
+					// ingen endringer utfÃ¸rt?
 					if (strcmp(page_min_side::$active_player->data['up_name'], $name) === 0)
 					{
-						ess::$b->page->add_message("Spillernavnet er det samme som før.", "error");
+						ess::$b->page->add_message("Spillernavnet er det samme som fÃ¸r.", "error");
 					}
 					
 					// mangler begrunnelse?
@@ -2826,7 +2826,7 @@ www.kofradia.no';
 					
 					else
 					{
-						// kontroller spillernavnet (kun hvis endringer utover små/store bokstaver er gjort)
+						// kontroller spillernavnet (kun hvis endringer utover smÃ¥/store bokstaver er gjort)
 						$check = strcasecmp(page_min_side::$active_player->data['up_name'], $name) !== 0;
 						if ($check) $result = ess::$b->db->query("SELECT ".ess::$b->db->quote($name, false)." REGEXP regex AS m, error FROM regex_checks WHERE type = 'reg_user_strength' HAVING m = 1");
 						if ($check && mysql_num_rows($result) > 0)
@@ -2844,7 +2844,7 @@ www.kofradia.no';
 						
 						else
 						{
-							// sjekk at spillernavnet ikke finnes fra før
+							// sjekk at spillernavnet ikke finnes fra fÃ¸r
 							$result = ess::$b->db->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE up_name = ".ess::$b->db->quote($name)." AND up_id != ".page_min_side::$active_player->id." AND (up_u_id != ".page_min_side::$active_user->id." OR up_access_level != 0)");
 							if (mysql_num_rows($result) > 0)
 							{
@@ -2854,7 +2854,7 @@ www.kofradia.no';
 							
 							else
 							{
-								// utfør endringer - endre spillernavnet
+								// utfÃ¸r endringer - endre spillernavnet
 								ess::$b->db->query("UPDATE users_players SET up_name = ".ess::$b->db->quote($name)." WHERE up_id = ".page_min_side::$active_player->id);
 								
 								// legg til crewlogg
@@ -2875,11 +2875,11 @@ www.kofradia.no';
 	<div class="bg1_c" style="width: 350px">
 		<h1 class="bg1">Endre spillernavn<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
-			<p>Ikke utfør andre endringer enn store/små bokstaver i spillernavnet dersom det ikke er veldig nødvendig. Dette på grunn av BB-koder som [user=..] ikke lenger vil fungere.</p>
-			<p>Det er mulig å gi en spiller samme navn som en annen spiller, så lenge spillerene tilhører samme bruker.</p>
+			<p>Ikke utfÃ¸r andre endringer enn store/smÃ¥ bokstaver i spillernavnet dersom det ikke er veldig nÃ¸dvendig. Dette pÃ¥ grunn av BB-koder som [user=..] ikke lenger vil fungere.</p>
+			<p>Det er mulig Ã¥ gi en spiller samme navn som en annen spiller, sÃ¥ lenge spillerene tilhÃ¸rer samme bruker.</p>
 			<form action="" method="post">
 				<dl class="dd_right dl_2x">
-					<dt>Nåværende spillernavn</dt>
+					<dt>NÃ¥vÃ¦rende spillernavn</dt>
 					<dd>'.htmlspecialchars(page_min_side::$active_player->data['up_name']).'</dd>
 					<dt>Nytt spillernavn</dt>
 					<dd><input type="text" value="'.htmlspecialchars(postval("name", page_min_side::$active_player->data['up_name'])).'" name="name" class="styled w120" /></dd>
@@ -2972,7 +2972,7 @@ www.kofradia.no';
 		$html .= '
 							<option value="1"'.($priority == 1 ? ' selected="selected"' : '').'>Lav</option>
 							<option value="2"'.($priority == 2 ? ' selected="selected"' : '').'>Moderat</option>
-							<option value="3"'.($priority == 3 ? ' selected="selected"' : '').'>Høy</option>
+							<option value="3"'.($priority == 3 ? ' selected="selected"' : '').'>HÃ¸y</option>
 						</select>
 					</dd>
 				</dl>
@@ -3022,7 +3022,7 @@ www.kofradia.no';
 			
 			foreach ($data as $row)
 			{
-				$priority = $row['data']['priority'] == 1 ? "lav" : ($row['data']['priority'] == 2 ? "moderat" : "høy");
+				$priority = $row['data']['priority'] == 1 ? "lav" : ($row['data']['priority'] == 2 ? "moderat" : "hÃ¸y");
 				
 				$html .= '
 			<div class="advarsel">
@@ -3035,7 +3035,7 @@ www.kofradia.no';
 			</div>';
 			}
 			
-			// TODO: AJAX på sidevalg
+			// TODO: AJAX pÃ¥ sidevalg
 			
 			$html .= '
 			<p class="c">'.$pagei->pagenumbers().'</p>';
@@ -3043,7 +3043,7 @@ www.kofradia.no';
 			if ($pagei->pages > 1)
 			{
 				$html .= '
-			<p class="c dark">(Sidene åpner i samme vindu, så pass på hvis du har fylt inn feltene ovenfor.)</p>';
+			<p class="c dark">(Sidene Ã¥pner i samme vindu, sÃ¥ pass pÃ¥ hvis du har fylt inn feltene ovenfor.)</p>';
 			}
 		}
 		
@@ -3087,7 +3087,7 @@ www.kofradia.no';
 		
 		if (empty($log))
 		{
-			ess::$b->page->add_message("Begrunnelse for advarsel må fylles ut.", "error");
+			ess::$b->page->add_message("Begrunnelse for advarsel mÃ¥ fylles ut.", "error");
 			return false;
 		}
 		

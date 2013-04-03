@@ -1,6 +1,6 @@
 <?php
 
-putlog("INFO", "Nå er det 1 minutt til renter!!! Har dere pengene i banken?!");
+putlog("INFO", "NÃ¥ er det 1 minutt til renter!!! Har dere pengene i banken?!");
 sleep(30);
 putlog("INFO", "%u%u30 sekunder!");
 sleep(20);

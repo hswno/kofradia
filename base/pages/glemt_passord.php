@@ -8,7 +8,7 @@ class page_glemt_passord
 	const AUTOLOGIN_TIME = 900; // 15 minutter
 	
 	/**
-	 * Ventetid før man kan benytte glemt passord på nytt
+	 * Ventetid fÃ¸r man kan benytte glemt passord pÃ¥ nytt
 	 */
 	const WAIT = 600; // 10 minutter
 	
@@ -23,7 +23,7 @@ class page_glemt_passord
 		ess::$b->page->theme_file = "guest_simple";
 		sess_start();
 		
-		// behandle forespørsel?
+		// behandle forespÃ¸rsel?
 		if (isset($_POST['epost']))
 		{
 			$this->handle();
@@ -40,10 +40,10 @@ class page_glemt_passord
 	 */
 	protected function handle()
 	{
-		// mangler eller ugyldig nøkkel?
+		// mangler eller ugyldig nÃ¸kkel?
 		if (!isset($_POST['key']) || !isset($_SESSION['glemtpassord_key']) || $_POST['key'] != $_SESSION['glemtpassord_key'])
 		{
-			ess::$b->page->add_message("Ugyldig forespørsel. Prøv på nytt.", "error");
+			ess::$b->page->add_message("Ugyldig forespÃ¸rsel. PrÃ¸v pÃ¥ nytt.", "error");
 			return;
 		}
 		
@@ -51,11 +51,11 @@ class page_glemt_passord
 		$epost = trim(postval("epost"));
 		if (empty($epost))
 		{
-			ess::$b->page->add_message("Du må fylle inn e-postadressen din.", "error");
+			ess::$b->page->add_message("Du mÃ¥ fylle inn e-postadressen din.", "error");
 			return;
 		}
 		
-		// sjekk om det er noen oppføringer med denne e-posten i databasen (og hent de som lever)
+		// sjekk om det er noen oppfÃ¸ringer med denne e-posten i databasen (og hent de som lever)
 		$result = ess::$b->db->query("SELECT u_id, up_name, up_access_level, u_pass_change, u_email FROM users LEFT JOIN users_players ON u_active_up_id = up_id WHERE u_email = ".ess::$b->db->quote($epost)." AND u_access_level != 0");
 		
 		// ingen?
@@ -68,13 +68,13 @@ class page_glemt_passord
 		// flere e-postadresser?
 		if (mysql_num_rows($result) > 1)
 		{
-			ess::$b->page->add_message('Det finnes flere brukere som er registrert på '.htmlspecialchars($epost).'. Vennligst ta <a href="henvendelser">kontakt</a>!', "error");
+			ess::$b->page->add_message('Det finnes flere brukere som er registrert pÃ¥ '.htmlspecialchars($epost).'. Vennligst ta <a href="henvendelser">kontakt</a>!', "error");
 			redirect::handle();
 		}
 		
 		$row = mysql_fetch_assoc($result);
 		
-		// er det noen oppføring for når passordet sist ble oppdatert?
+		// er det noen oppfÃ¸ring for nÃ¥r passordet sist ble oppdatert?
 		if (!empty($row['u_pass_change']))
 		{
 			$info = explode(";", $row['u_pass_change']);
@@ -85,12 +85,12 @@ class page_glemt_passord
 			// bedt om pass (A - asked)
 			if ($info[0] == "A")
 			{
-				// når?
+				// nÃ¥r?
 				$when = intval($info[1]);
 				$wait = max(0, $when + self::WAIT - time());
 				if ($wait > 0)
 				{
-					ess::$b->page->add_message("Du benyttet deg av glemt passord ".ess::$b->date->get($when)->format().", og må vente ".game::timespan($wait, game::TIME_FULL)." før du kan benytte deg av glemt passord på nytt. Se e-posten du skal ha mottatt!", "error");
+					ess::$b->page->add_message("Du benyttet deg av glemt passord ".ess::$b->date->get($when)->format().", og mÃ¥ vente ".game::timespan($wait, game::TIME_FULL)." fÃ¸r du kan benytte deg av glemt passord pÃ¥ nytt. Se e-posten du skal ha mottatt!", "error");
 					return;
 				}
 			}
@@ -106,12 +106,12 @@ class page_glemt_passord
 		$email = new email();
 		$email->text = 'Hei,
 
-Du har bedt om å nullstille ditt passord på '.ess::$s['path'].' fra IP-en '.$_SERVER['REMOTE_ADDR'].' ('.$_SERVER['HTTP_USER_AGENT'].').
+Du har bedt om Ã¥ nullstille ditt passord pÃ¥ '.ess::$s['path'].' fra IP-en '.$_SERVER['REMOTE_ADDR'].' ('.$_SERVER['HTTP_USER_AGENT'].').
 
-Ved å benytte lenken nedenfor vil passordet på brukeren din bli nullstilt, du blir automatisk logget inn og kan fylle inn ditt nye passord:
+Ved Ã¥ benytte lenken nedenfor vil passordet pÃ¥ brukeren din bli nullstilt, du blir automatisk logget inn og kan fylle inn ditt nye passord:
 '.ess::$s['spath'].'/autologin/'.$hash.'
 
-Hvis du ikke ønsker å nullstille ditt passord kan du se bort fra denne e-posten.
+Hvis du ikke Ã¸nsker Ã¥ nullstille ditt passord kan du se bort fra denne e-posten.
 
 --
 www.kofradia.no';
@@ -120,10 +120,10 @@ www.kofradia.no';
 		$email->send($epost, "Nullstille ditt passord");
 		
 		// logg dette
-		putlog("NOTICE", "%c7%bNULLSTILLE PASSORD:%b%c %u{$_SERVER['REMOTE_ADDR']}%u ba om e-post for å nullstille passordet %u{$epost}%u (%u{$row['up_name']}%u)");
+		putlog("NOTICE", "%c7%bNULLSTILLE PASSORD:%b%c %u{$_SERVER['REMOTE_ADDR']}%u ba om e-post for Ã¥ nullstille passordet %u{$epost}%u (%u{$row['up_name']}%u)");
 		
 		// gi infomelding
-		ess::$b->page->add_message("Vi har sendt deg en e-post til <b>".htmlspecialchars($row['u_email'])."</b>.<br />Benytt denne for å nullstille passordet ditt.");
+		ess::$b->page->add_message("Vi har sendt deg en e-post til <b>".htmlspecialchars($row['u_email'])."</b>.<br />Benytt denne for Ã¥ nullstille passordet ditt.");
 		redirect::handle("", redirect::ROOT);
 	}
 	
@@ -143,15 +143,15 @@ www.kofradia.no';
 }
 ');
 		
-		// generer unik nøkkel
+		// generer unik nÃ¸kkel
 		$key = substr(md5(uniqid("")), 0, 8);
 		$_SESSION['glemtpassord_key'] = $key;
 		
 		ess::$b->page->add_js_domready('$("gp_epost").focus();');
 		
 		echo '
-<p>Hvis du har glemt passordet ditt har du her mulighet til å nullstille det. Du trenger din e-postadresse og mulighet for å lese e-posten din.</p>
-<p>Når du benytter deg av denne funksjonen, vil du bli tilsendt en lenke på e-posten din. Denne lenken vil automatisk logge deg inn og nullstille passordet ditt. Du må deretter opprette et nytt passord for å kunne benytte hele siden.</p>
+<p>Hvis du har glemt passordet ditt har du her mulighet til Ã¥ nullstille det. Du trenger din e-postadresse og mulighet for Ã¥ lese e-posten din.</p>
+<p>NÃ¥r du benytter deg av denne funksjonen, vil du bli tilsendt en lenke pÃ¥ e-posten din. Denne lenken vil automatisk logge deg inn og nullstille passordet ditt. Du mÃ¥ deretter opprette et nytt passord for Ã¥ kunne benytte hele siden.</p>
 <div class="gp_wrap">
 	<form action="" method="post">
 		<input type="hidden" name="key" value="'.$key.'" />

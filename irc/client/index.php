@@ -15,7 +15,7 @@ putlog("NOTICE", "%b%c11IRC-CHAT:%c%b %u".login::$user->player->data['up_name'].
 echo '
 <h1>IRC Chat</h1>
 <p>
-	Hvis du ikke ønsker å laste ned og installere mIRC på din egen PC kan du bruke dette som et alternativ for å prate på chatten!
+	Hvis du ikke Ã¸nsker Ã¥ laste ned og installere mIRC pÃ¥ din egen PC kan du bruke dette som et alternativ for Ã¥ prate pÃ¥ chatten!
 </p>
 <iframe src="http://webchat.quakenet.org/?nick='.urlencode($ircnick."[KF]").'&channels=kofradia&uio=OT10cnVlJjExPTE5NQ64" width="100%" height="400"></iframe>';
 

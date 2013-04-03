@@ -18,7 +18,7 @@ class page_ff_banken
 	protected $nostat;
 	
 	/**
-	 * Priority man må ha for å kunne sette inn/ta ut penger
+	 * Priority man mÃ¥ ha for Ã¥ kunne sette inn/ta ut penger
 	 */
 	protected $priority_write;
 	
@@ -37,7 +37,7 @@ class page_ff_banken
 <div class="bg1_c xsmall">
 	<h1 class="bg1">'.ucfirst($this->ff->type['type']).'bank stengt<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p>'.ucfirst($this->ff->type['type']).'banken er stengt for å unngå distribusjon av penger. Pengenivået vil bli justert til å være ihht. verdiene ved midnatt.</p>
+		<p>'.ucfirst($this->ff->type['type']).'banken er stengt for Ã¥ unngÃ¥ distribusjon av penger. PengenivÃ¥et vil bli justert til Ã¥ vÃ¦re ihht. verdiene ved midnatt.</p>
 	</div>
 </div>';
 			
@@ -52,7 +52,7 @@ class page_ff_banken
 		// kontroller at vi har bankkonto
 		if (!login::$user->player->user->data['u_bank_auth'])
 		{
-			ess::$b->page->add_message("Banken for {$this->ff->type['refobj']} benytter seg av passordet i din vanlige bank. For å få tilgang til den må du først opprette et passord. Etter du har opprettet et passord kan du gå tilbake til banken til {$this->ff->type['refobj']}.");
+			ess::$b->page->add_message("Banken for {$this->ff->type['refobj']} benytter seg av passordet i din vanlige bank. For Ã¥ fÃ¥ tilgang til den mÃ¥ du fÃ¸rst opprette et passord. Etter du har opprettet et passord kan du gÃ¥ tilbake til banken til {$this->ff->type['refobj']}.");
 			redirect::handle("banken", redirect::ROOT);
 		}
 		
@@ -94,12 +94,12 @@ class page_ff_banken
 	 */
 	protected function auth_verify()
 	{
-		// alltid logget inn i banken når man er logget inn som crew
+		// alltid logget inn i banken nÃ¥r man er logget inn som crew
 		if (isset(login::$extended_access['authed'])) return;
 		
 		// sjekk om vi er logget inn i banken
 		$last = login::data_get("banken_last_view", 0);
-		$idle = 1800; // hvor lenge vi kan være inaktiv
+		$idle = 1800; // hvor lenge vi kan vÃ¦re inaktiv
 		$exceed = max(0, time() - $last - $idle);
 		
 		// allerede logget inn?
@@ -115,14 +115,14 @@ class page_ff_banken
 			if (!password::verify_hash($_POST['passord'], login::$user->player->user->data['u_bank_auth'], "bank_auth"))
 			{
 				ess::$b->page->add_message("Passordet var ikke riktig. Husk at dette er bank passordet og ikke passordet til brukerkontoen.", "error");
-				putlog("ABUSE", "%c4%bUGYLDIG PASSORD I BANKEN (FF):%b%c %u".login::$user->player->data['up_name']."%u ({$_SERVER['REMOTE_ADDR']}) brukte feil passord for å logge inn i banken");
+				putlog("ABUSE", "%c4%bUGYLDIG PASSORD I BANKEN (FF):%b%c %u".login::$user->player->data['up_name']."%u ({$_SERVER['REMOTE_ADDR']}) brukte feil passord for Ã¥ logge inn i banken");
 			}
 			
 			else
 			{
 				// logget inn
 				login::data_set("banken_last_view", time());
-				ess::$b->page->add_message("Du er nå logget inn i banken. Du blir logget ut etter ".game::timespan($idle, game::TIME_FULL)." uten å besøke banken.");
+				ess::$b->page->add_message("Du er nÃ¥ logget inn i banken. Du blir logget ut etter ".game::timespan($idle, game::TIME_FULL)." uten Ã¥ besÃ¸ke banken.");
 			}
 			
 			redirect::handle();
@@ -142,7 +142,7 @@ class page_ff_banken
 			login::data_set("banken_last_view", 0);
 			
 			echo '
-		<p>Det gikk for lang tid siden du viste banken og du må logge inn på nytt. Du var '.game::timespan($exceed, game::TIME_FULL).' over tiden.</p>';
+		<p>Det gikk for lang tid siden du viste banken og du mÃ¥ logge inn pÃ¥ nytt. Du var '.game::timespan($exceed, game::TIME_FULL).' over tiden.</p>';
 		}
 		
 		// javascript for fokus til passord feltet
@@ -151,7 +151,7 @@ document.getElementById("b_pass").focus();
 </script>');
 		
 		echo '
-		<p>Du må logge inn for å få tilgang til banken for '.$this->ff->type['refobj'].'.</p>
+		<p>Du mÃ¥ logge inn for Ã¥ fÃ¥ tilgang til banken for '.$this->ff->type['refobj'].'.</p>
 		<form action="" method="post">
 			<dl class="dd_right dl_2x">
 				<dt>Bankpassord</dt>
@@ -173,7 +173,7 @@ document.getElementById("b_pass").focus();
 	{
 		if (!$this->ff->bank_write_pri2_change(isset($_POST['pri2_wt'])))
 		{
-			ess::$b->page->add_message("Ingen endringer utført.");
+			ess::$b->page->add_message("Ingen endringer utfÃ¸rt.");
 		}
 		
 		redirect::handle();
@@ -199,15 +199,15 @@ document.getElementById("b_pass").focus();
 				redirect::handle();
 			}
 			
-			// vis skjema for å bekrefte
+			// vis skjema for Ã¥ bekrefte
 			echo '
 <div class="bg1_c xxsmall">
 	<h1 class="bg1">Nullstille Statistikk<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p>Du er i ferd med å nullstille statistikken over pengeflyten i '.$this->ff->type['refobj'].'.</p>
-		<p>Når du nullstiller statistikken vil du beholde en totaloversikt fra '.$this->ff->type['refobj'].' ble opprettet og frem til nå.</p>
-		<p>Etter at statistikken blir nullstilt vil det være to oversikter, som hver viser statistikk før og etter nullstillingen.</p>
-		<p>Det kan kanskje være ønskelig å ta en kopi av statistikken nå for å kunne sammenlikne senere.</p>
+		<p>Du er i ferd med Ã¥ nullstille statistikken over pengeflyten i '.$this->ff->type['refobj'].'.</p>
+		<p>NÃ¥r du nullstiller statistikken vil du beholde en totaloversikt fra '.$this->ff->type['refobj'].' ble opprettet og frem til nÃ¥.</p>
+		<p>Etter at statistikken blir nullstilt vil det vÃ¦re to oversikter, som hver viser statistikk fÃ¸r og etter nullstillingen.</p>
+		<p>Det kan kanskje vÃ¦re Ã¸nskelig Ã¥ ta en kopi av statistikken nÃ¥ for Ã¥ kunne sammenlikne senere.</p>
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<p class="c">'.show_sbutton("Ja, nullstill statistikk", 'name="confirm"').'</p>
@@ -253,7 +253,7 @@ document.getElementById("b_pass").focus();
 		if ($reset)
 		{
 			echo '
-		<p>Statistikken ble nullstilt '.ess::$b->date->get($reset)->format().'. Etter dette tidspunktet er følgende gjeldende:</p>';
+		<p>Statistikken ble nullstilt '.ess::$b->date->get($reset)->format().'. Etter dette tidspunktet er fÃ¸lgende gjeldende:</p>';
 		}
 		
 		$this->stats_show($stats['after']);
@@ -261,7 +261,7 @@ document.getElementById("b_pass").focus();
 		if ($reset)
 		{
 			echo '
-		<p>Før statistikken ble nullstilt:</p>';
+		<p>FÃ¸r statistikken ble nullstilt:</p>';
 			
 			$this->stats_show($stats['before']);
 		}
@@ -284,7 +284,7 @@ document.getElementById("b_pass").focus();
 		
 		$ff_reset = !$reset && $this->ff->data['ff_time_reset'] && !$this->ff->mod ? " AND ffbl_time > {$this->ff->data['ff_time_reset']}" : "";
 		
-		// hent statistikk fra bankoverføringene
+		// hent statistikk fra bankoverfÃ¸ringene
 		$result = ess::$b->db->query("
 			SELECT ffbl_type, SUM(ffbl_amount) sum_ffbl_amount
 			FROM ff_bank_log
@@ -357,7 +357,7 @@ document.getElementById("b_pass").focus();
 		
 		if ($amount < 0)
 		{
-			ess::$b->page->add_message("Kanskje en fordel med positivt beløp? :)", "error");
+			ess::$b->page->add_message("Kanskje en fordel med positivt belÃ¸p? :)", "error");
 		}
 		
 		elseif ($amount == 0)
@@ -367,12 +367,12 @@ document.getElementById("b_pass").focus();
 		
 		elseif ($amount < 15000)
 		{
-			ess::$b->page->add_message("Minstebeløp på 15 000 kr!", "error");
+			ess::$b->page->add_message("MinstebelÃ¸p pÃ¥ 15 000 kr!", "error");
 		}
 		
 		else
 		{
-			// forsøk å sett inn
+			// forsÃ¸k Ã¥ sett inn
 			ess::$b->db->query("
 				UPDATE ff, users_players
 				SET ff_bank = ff_bank + $amount, up_cash = up_cash - $amount
@@ -381,7 +381,7 @@ document.getElementById("b_pass").focus();
 			// hadde ikke nok penger?
 			if (ess::$b->db->affected_rows() == 0)
 			{
-				ess::$b->page->add_message("Du har ikke nok penger på hånda til å sette inn ".game::format_cash($amount).".", "error");
+				ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda til Ã¥ sette inn ".game::format_cash($amount).".", "error");
 			}
 			
 			else
@@ -409,7 +409,7 @@ document.getElementById("b_pass").focus();
 		
 		if ($amount < 0)
 		{
-			ess::$b->page->add_message("Kanskje en fordel med positivt beløp? :)", "error");
+			ess::$b->page->add_message("Kanskje en fordel med positivt belÃ¸p? :)", "error");
 		}
 		
 		elseif ($amount == 0)
@@ -419,12 +419,12 @@ document.getElementById("b_pass").focus();
 		
 		elseif ($amount < 15000)
 		{
-			ess::$b->page->add_message("Minstebeløp på 15 000 kr!", "error");
+			ess::$b->page->add_message("MinstebelÃ¸p pÃ¥ 15 000 kr!", "error");
 		}
 		
 		else
 		{
-			// forsøk å ta ut
+			// forsÃ¸k Ã¥ ta ut
 			ess::$b->db->query("
 				UPDATE ff, users_players
 				SET ff_bank = ff_bank - $amount, up_cash = up_cash + $amount
@@ -433,7 +433,7 @@ document.getElementById("b_pass").focus();
 			// hadde ikke nok penger?
 			if (ess::$b->db->affected_rows() == 0)
 			{
-				ess::$b->page->add_message("Det er ikke nok penger til å ta ut ".game::format_cash($amount).".", "error");
+				ess::$b->page->add_message("Det er ikke nok penger til Ã¥ ta ut ".game::format_cash($amount).".", "error");
 			}
 			else
 			{
@@ -475,14 +475,14 @@ document.getElementById("b_pass").focus();
 			if ($this->priority_write == 1)
 			{
 				echo '
-		<p>'.ucfirst($this->ff->type['priority'][2]).' har ikke tilgang til å sette inn/ta ut penger fra denne banken.</p>
+		<p>'.ucfirst($this->ff->type['priority'][2]).' har ikke tilgang til Ã¥ sette inn/ta ut penger fra denne banken.</p>
 		<p class="c">'.show_sbutton("Gi tilgang til {$this->ff->type['priority'][2]}", 'name="pri2_wt"').'</p>';
 			}
 			
 			else
 			{
 				echo '
-		<p>'.ucfirst($this->ff->type['priority'][2]).' <b>har</b> tilgang til å sette inn/ta ut penger fra denne banken.</p>
+		<p>'.ucfirst($this->ff->type['priority'][2]).' <b>har</b> tilgang til Ã¥ sette inn/ta ut penger fra denne banken.</p>
 		<p class="c">'.show_sbutton("Fjern tilgang til {$this->ff->type['priority'][2]}", 'name="pri2_wf"').'</p>';
 			}
 			
@@ -506,7 +506,7 @@ document.getElementById("b_pass").focus();
 		<form action="" method="post">
 			<h2>Sett inn penger</h2>
 			<dl class="dd_right dl_2x">
-				<dt>Beløp</dt>
+				<dt>BelÃ¸p</dt>
 				<dd><input type="text" name="bank_inn" class="styled w90" value="0" style="margin-right: 3px" />'.show_button("Alt", 'onclick="this.previousSibling.value=\''.game::format_cash(login::$user->player->data['up_cash']).'\'"').'
 				
 				<dt>Notat</dt>
@@ -523,7 +523,7 @@ document.getElementById("b_pass").focus();
 		<form action="" method="post">
 			<h2>Ta ut penger</h2>
 			<dl class="dd_right dl_2x">
-				<dt>Beløp</dt>
+				<dt>BelÃ¸p</dt>
 				<dd><input type="text" name="bank_ut" class="styled w90" value="0" style="margin-right: 3px" />'.show_button("Alt", 'onclick="this.previousSibling.value=\''.game::format_cash($this->ff->data['ff_bank']).'\'"').'
 				
 				<dt>Notat</dt>
@@ -551,7 +551,7 @@ document.getElementById("b_pass").focus();
 		{
 			echo '
 <p class="c">
-	Ingen overføringer er enda registrert.
+	Ingen overfÃ¸ringer er enda registrert.
 </p>';
 		}
 		
@@ -564,7 +564,7 @@ document.getElementById("b_pass").focus();
 		<tr>
 			<th>Type</th>
 			<th>Person</th>
-			<th>Beløp</th>
+			<th>BelÃ¸p</th>
 			<th>Tidspunkt</th>
 			<th>Notat</th>
 			<th>Balanse</th>

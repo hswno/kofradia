@@ -3,13 +3,13 @@
  * Skrevet av Henrik Steen
  * www.henrist.net
  *
- * Beskyttet av åndsverkloven
- * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ * Beskyttet av Ã¥ndsverkloven
+ * Alle rettigheter tilhÃ¸rer Henrik Steen dersom ikke annet er oppgitt
  *
  * Copyright (c) 2010 All rights reserved
  */
 
-/** Ressurs på bydelskart */
+/** Ressurs pÃ¥ bydelskart */
 var BydelResource = new Class({
 	Implements: Options,
 	options: {
@@ -58,7 +58,7 @@ var BydelResource = new Class({
 	click: $lambda
 });
 
-/** FF på kart */
+/** FF pÃ¥ kart */
 var BydelResourceFF = new Class({
 	Extends: BydelResource,
 	initialize: function(data, container, x, y)
@@ -77,7 +77,7 @@ var BydelResourceFF = new Class({
 	}
 });
 
-/** Ledig plass på kart */
+/** Ledig plass pÃ¥ kart */
 var BydelResourceSelect = new Class({
 	Extends: BydelResource,
 	initialize: function(data, container, x, y, click_function)

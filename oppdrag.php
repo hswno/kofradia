@@ -9,7 +9,7 @@ global $_base;
 	$_base->db->query("UPDATE users_oppdrag SET uo_last_time = 0, uo_locked = 0 WHERE uo_o_id AND uo_up_id = ".login::$user->player->id);
 	$_base->db->query("UPDATE users_players SET up_fengsel_time = UNIX_TIMESTAMP() WHERE up_id = ".login::$user->player->id);
 	
-	$_base->page->add_message("Hvis du var i fengsel, er du nå ute. Du kan begynne på alle oppdrag du har på listen nedenfor. (Ventetid osv nullstilt.)");
+	$_base->page->add_message("Hvis du var i fengsel, er du nÃ¥ ute. Du kan begynne pÃ¥ alle oppdrag du har pÃ¥ listen nedenfor. (Ventetid osv nullstilt.)");
 	redirect::handle();
 }*/
 
@@ -29,7 +29,7 @@ login::$user->player->bomberom_require_no();
 
 #login::$user->player->oppdrag->user_load_all();
 
-// er vi på et aktivt oppdrag?
+// er vi pÃ¥ et aktivt oppdrag?
 if (login::$user->player->oppdrag->active)
 {
 	$oppdrag = login::$user->player->oppdrag->active;
@@ -61,8 +61,8 @@ if (login::$user->player->oppdrag->active)
 		// godkjent?
 		if (isset($_POST['confirm']))
 		{
-			login::$user->player->oppdrag->failed($oppdrag['o_id'], 'Du avbrøt oppdraget &laquo;$name&raquo;. Oppdraget ble derfor mislykket.');
-			$_base->page->add_message("Du avbrøt oppdraget. Oppdraget ble derfor mislykket.");
+			login::$user->player->oppdrag->failed($oppdrag['o_id'], 'Du avbrÃ¸t oppdraget &laquo;$name&raquo;. Oppdraget ble derfor mislykket.');
+			$_base->page->add_message("Du avbrÃ¸t oppdraget. Oppdraget ble derfor mislykket.");
 			redirect::handle();
 		}
 		
@@ -70,7 +70,7 @@ if (login::$user->player->oppdrag->active)
 <div class="bg1_c medium">
 	<h1 class="bg1">Avbryte &laquo;'.htmlspecialchars($oppdrag['o_title']).'&raquo;<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p>Hvis du avbryter oppdraget vil oppdraget bli mislykket. Du må da vente 1 time før du kan forsøke dette på dette oppdraget igjen. I tillegg vil du komme i fengsel i 15 minutter.</p>
+		<p>Hvis du avbryter oppdraget vil oppdraget bli mislykket. Du mÃ¥ da vente 1 time fÃ¸r du kan forsÃ¸ke dette pÃ¥ dette oppdraget igjen. I tillegg vil du komme i fengsel i 15 minutter.</p>
 		<form action="" method="post">
 			<input type="hidden" name="o_id" value="'.$oppdrag['o_id'].'" />
 			<input type="hidden" name="confirm" value="1" />
@@ -87,7 +87,7 @@ if (login::$user->player->oppdrag->active)
 	<h1 class="bg1">'.htmlspecialchars($oppdrag['o_title']).'<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<dl class="dl_15">
-			<dt>Påbegynt</dt>
+			<dt>PÃ¥begynt</dt>
 			<dd>'.$_base->date->get($oppdrag['uo_active_time'])->format(date::FORMAT_SEC).'</dd>
 			<dt>Tidsgrense</dt>
 			<dd>'.$_base->date->get($expire)->format(date::FORMAT_SEC).' ('.game::timespan($expire, game::TIME_ABS).')</dd>
@@ -98,7 +98,7 @@ if (login::$user->player->oppdrag->active)
 	{
 		case "single_poker":
 			echo '
-		<p class="c" style="font-size: 16px"><a href="oppdrag">Gå til pokeren</a></p>';
+		<p class="c" style="font-size: 16px"><a href="oppdrag">GÃ¥ til pokeren</a></p>';
 		break;
 	}
 	
@@ -117,7 +117,7 @@ if (login::$user->player->oppdrag->active)
 // hent oppdragene
 login::$user->player->oppdrag->user_load_all();
 
-// starte på et nytt oppdrag
+// starte pÃ¥ et nytt oppdrag
 if (isset($_GET['o_id']))
 {
 	$o_id = (int) getval("o_id");
@@ -130,7 +130,7 @@ if (isset($_GET['o_id']))
 	}
 	$oppdrag = login::$user->player->oppdrag->oppdrag[$o_id];
 	
-	// ikke gått lang nok tid?
+	// ikke gÃ¥tt lang nok tid?
 	if ($oppdrag['uo_last_state'] == 0 && $oppdrag['uo_last_time']+$oppdrag['o_retry_wait'] > time())
 	{
 		redirect::handle();
@@ -145,7 +145,7 @@ if (isset($_GET['o_id']))
 			redirect::handle();
 		}
 		
-		// sett nødvendige verdier
+		// sett nÃ¸dvendige verdier
 		if (isset(login::$user->player->oppdrag->triggers_id[$o_id]))
 		{
 			$trigger = login::$user->player->oppdrag->triggers_id[$o_id];
@@ -172,12 +172,12 @@ if (isset($_GET['o_id']))
 	<h1 class="bg1">'.htmlspecialchars($oppdrag['o_title']).'<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<div class="information">
-			<p><b>Merk:</b> Du må trykke &laquo;Start oppdrag&raquo; knappen nederst på denne siden før oppdraget blir gjeldende.</p>
+			<p><b>Merk:</b> Du mÃ¥ trykke &laquo;Start oppdrag&raquo; knappen nederst pÃ¥ denne siden fÃ¸r oppdraget blir gjeldende.</p>
 		</div>
 		<p><b>Beskrivelse:</b></p>
 		<div class="p">'.login::$user->player->oppdrag->get_description($oppdrag['o_id']).'</div>
 		<p><b>Merk:</b></p>
-		<p>Hvis du mislykker oppdraget, må du vente 1 time før du kan utføre oppdraget på nytt. I tillegg kommer du i fengsel i 15 minutter. Hvis du avbryter oppdraget vil det tilsvare at oppdraget blir mislykket.</p>
+		<p>Hvis du mislykker oppdraget, mÃ¥ du vente 1 time fÃ¸r du kan utfÃ¸re oppdraget pÃ¥ nytt. I tillegg kommer du i fengsel i 15 minutter. Hvis du avbryter oppdraget vil det tilsvare at oppdraget blir mislykket.</p>
 		<form action="" method="post">
 			<input type="hidden" name="o_id" value="'.$oppdrag['o_id'].'" />
 			<p class="c">'.show_sbutton("Start oppdrag", 'name="start"').' - <a href="oppdrag" class="button">Avbryt</a></p>
@@ -214,7 +214,7 @@ $_base->page->add_css('
 }
 ');
 
-// for å generere nødvendige params til nye oppdrag
+// for Ã¥ generere nÃ¸dvendige params til nye oppdrag
 if (false)
 {
 	$p = new params("20=4:name11:rank_points13=6:points3:01519=10:time_limit4:180048=5:prize38:13=4:cash5:1000019=11:rank_points3:500");
@@ -252,7 +252,7 @@ if (count(login::$user->player->oppdrag->oppdrag) == 0)
 	echo '
 		<div class="information c"><p>Du har ingen oppdrag tilgjengelige.</p></div>
 		<h3><b>Hvordan motta nye oppdrag?</b></h3>
-		<p>Etter hvert som du stiger i høyere rang får du tilgang til nye og flere oppdrag. Har du nettopp utført et oppdrag, må du nok vente en stund før oppdraget blir tilgjengelig igjen.</p>
+		<p>Etter hvert som du stiger i hÃ¸yere rang fÃ¥r du tilgang til nye og flere oppdrag. Har du nettopp utfÃ¸rt et oppdrag, mÃ¥ du nok vente en stund fÃ¸r oppdraget blir tilgjengelig igjen.</p>
 		<p>Sjekk derfor innom oppdrag av og til og se om du er klar for en utfordring!</p>';
 }
 
@@ -276,7 +276,7 @@ else
 			<p><b>Nytt oppdrag!</b></p>';
 		}
 		
-		// ikke mulig å utføre enda?
+		// ikke mulig Ã¥ utfÃ¸re enda?
 		if ($row['uo_locked'] != 0)
 		{
 			echo '
@@ -291,13 +291,13 @@ else
 			echo '
 			<div class="p">'.login::$user->player->oppdrag->get_description($row['o_id']).'</div>';
 			
-			// akkurat forsøkt -- mislykte -- må vente
+			// akkurat forsÃ¸kt -- mislykte -- mÃ¥ vente
 			if ($row['uo_last_state'] == 0 && $row['uo_last_time']+$row['o_retry_wait'] > time())
 			{
 				$wait = $row['uo_last_time']+$row['o_retry_wait'] - time();
 				
 				echo '
-			<p>Du mislyktes oppdraget forrige gang du prøvde og må vente '.game::counter($wait, true).' før du kan prøve igjen.</p>';
+			<p>Du mislyktes oppdraget forrige gang du prÃ¸vde og mÃ¥ vente '.game::counter($wait, true).' fÃ¸r du kan prÃ¸ve igjen.</p>';
 			}
 			
 			else

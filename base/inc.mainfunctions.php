@@ -3,8 +3,8 @@
 /** Autoloader */
 function __autoload($name)
 {
-	// trenger ikke å gjennomføre noen sjekk på inndata
-	// skal være hardkodet uansett (ingen user_func eller noe)
+	// trenger ikke Ã¥ gjennomfÃ¸re noen sjekk pÃ¥ inndata
+	// skal vÃ¦re hardkodet uansett (ingen user_func eller noe)
 	// bruker essentials::load_module
 	essentials::load_module($name);
 }
@@ -21,8 +21,8 @@ function dump($value)
 }
 
 /**
- * for å starte _SESSION og evt. bruke egen verdi
- * kjøres kun om session ikke allerede er startet
+ * for Ã¥ starte _SESSION og evt. bruke egen verdi
+ * kjÃ¸res kun om session ikke allerede er startet
  */
 function sess_start($value = false)
 {
@@ -230,7 +230,7 @@ function show_sbutton($text, $attr = '', $class = '')
 }
 
 /**
- * Funksjon for å kontrollere SID
+ * Funksjon for Ã¥ kontrollere SID
  * @param bool $redirect redirect hvis ugyldig
  */
 function validate_sid($redirect = true)
@@ -238,24 +238,24 @@ function validate_sid($redirect = true)
 	global $_base;
 	if (!login::$logged_in || ((!isset($_POST['sid']) || $_POST['sid'] != login::$info['ses_id']) && (!isset($_GET['sid']) || $_GET['sid'] != login::$info['ses_id'])))
 	{
-		$_base->page->add_message("Ugyldig forespørsel.", "error");
+		$_base->page->add_message("Ugyldig forespÃ¸rsel.", "error");
 		if ($redirect) redirect::handle();
 		return false;
 	}
 	return true;
 }
 
-// søkefunksjoner
+// sÃ¸kefunksjoner
 function search_query($input, $regexp = true)
 {
-	// hent ut hele søke ord (de som er med anførelsestegn rundt)
+	// hent ut hele sÃ¸ke ord (de som er med anfÃ¸relsestegn rundt)
 	$matches = false;
 	preg_match_all('/(?:^|\s)"([^"]+)"(?:$|\s)/', $input, $matches, PREG_PATTERN_ORDER);
 	
-	// sett sammen søkeordene (sett sammen anførselstegn ordene og de vanlige ordene)
+	// sett sammen sÃ¸keordene (sett sammen anfÃ¸rselstegn ordene og de vanlige ordene)
 	$search = array_merge($matches[1], explode(" ", preg_replace('/(?:^|\s)"([^"]+)"(?:$|\s)/', " ", $input)));
 	
-	// gå gjennom søkeordene og fjern unødvendige ting
+	// gÃ¥ gjennom sÃ¸keordene og fjern unÃ¸dvendige ting
 	foreach ($search as $key => $value)
 	{
 		$search[$key] = trim($value);
@@ -280,8 +280,8 @@ function search_query($input, $regexp = true)
 }
 
 /**
- * Rette på HTML før output
- * Støtter en array med tekst
+ * Rette pÃ¥ HTML fÃ¸r output
+ * StÃ¸tter en array med tekst
  * @param array $content
  * @return array
  */
@@ -290,18 +290,18 @@ function parse_html_array($content)
 	// generer unik string som kan brukes som seperator
 	$seperator = ":seperator:".uniqid().":";
 	
-	// hent ut nøklene
+	// hent ut nÃ¸klene
 	$keys = array_keys($content);
 	
 	// fiks html
 	$content = explode($seperator, parse_html(implode($seperator, $content)));
 	
-	// legg til nøklene igjen og returner
+	// legg til nÃ¸klene igjen og returner
 	return array_combine($keys, $content);
 }
 
 /**
- * Rette på HTML før output.
+ * Rette pÃ¥ HTML fÃ¸r output.
  * 
  * @param string $content
  * @return string
@@ -426,7 +426,7 @@ function parse_html($content)
 
 /**
  * Lager sidetall linker. Best egnet til Javascript linker.
- * Kan også brukes til <input> linker ved å sende "input" som $page_1 og navnet på <input> som $page_x.
+ * Kan ogsÃ¥ brukes til <input> linker ved Ã¥ sende "input" som $page_1 og navnet pÃ¥ <input> som $page_x.
  *
  * @param string $page_1 (IKKE html safe)
  * @param string $page_x (IKKE html safe) (bruk &lt;page&gt; eller _pageid_)
@@ -451,10 +451,10 @@ function force_https($mode = true)
 {
 	if (defined("FORCE_SSL_ALL") && FORCE_SSL_ALL === true) return;
 	
-	// skal være https - er ikke
+	// skal vÃ¦re https - er ikke
 	if ($mode && !HTTPS)
 	{
-		// endre til https hvis serveren støtter det
+		// endre til https hvis serveren stÃ¸tter det
 		global $__server;
 		if ($__server['https_support'])
 		{
@@ -462,7 +462,7 @@ function force_https($mode = true)
 		}
 	}
 	
-	// skal ikke være https - er https
+	// skal ikke vÃ¦re https - er https
 	elseif (!$mode && HTTPS)
 	{
 		// endre til http
@@ -471,7 +471,7 @@ function force_https($mode = true)
 }
 
 /**
- * Formatter data så det kan brukes i JavaScript variabler osv
+ * Formatter data sÃ¥ det kan brukes i JavaScript variabler osv
  * Ikke UTF-8 (slik som json_encode)
  * 
  * @param string $value
@@ -588,7 +588,7 @@ function fwords($single, $multiple, $num)
 }
 
 /**
- * Sett opp en setning basert på en liste (med komma og "og")
+ * Sett opp en setning basert pÃ¥ en liste (med komma og "og")
  */
 function sentences_list($sentences, $combine = ", ", $combine_last = " og ")
 {

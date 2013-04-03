@@ -26,23 +26,23 @@ class page_hall_of_fame
 			switch ($name)
 			{
 				case "rank": echo '
-			<p class="hof_desc">Første spiller til å oppnå rangering:</p>'; break;
+			<p class="hof_desc">FÃ¸rste spiller til Ã¥ oppnÃ¥ rangering:</p>'; break;
 				case "rank_kill": echo '
-			<p class="hof_desc">Første spiller til å drepe en rangert spiller:</p>'; break;
+			<p class="hof_desc">FÃ¸rste spiller til Ã¥ drepe en rangert spiller:</p>'; break;
 				case "ff_owner": echo '
-			<p class="hof_desc">Første spiller til å eie:</p>'; break;
+			<p class="hof_desc">FÃ¸rste spiller til Ã¥ eie:</p>'; break;
 				case "cash_num": echo '
-			<p class="hof_desc">Første spiller til å oppnå pengerangering:</p>'; break;
+			<p class="hof_desc">FÃ¸rste spiller til Ã¥ oppnÃ¥ pengerangering:</p>'; break;
 				case "familie": echo '
-			<p class="hof_desc">Første broderskap i spillet:</p>'; break;
+			<p class="hof_desc">FÃ¸rste broderskap i spillet:</p>'; break;
 				case "familie_rank": echo '
-			<p class="hof_desc">Høyest rangert broderskap i spillet:</p>'; break;
+			<p class="hof_desc">HÃ¸yest rangert broderskap i spillet:</p>'; break;
 			}
 			
 			foreach ($group as $id => $info)
 			{
 				$time = $info ? ' <span class="hof_time">'.ess::$b->date->get($info[0])->format(date::FORMAT_NOTIME).'</span>' : '';
-				$subject = $info ? hall_of_fame::get_subject_html($name, $info[1]) : 'Ikke oppnådd';
+				$subject = $info ? hall_of_fame::get_subject_html($name, $info[1]) : 'Ikke oppnÃ¥dd';
 				$text = $this->get_text($name, $id, $info[1]);
 				
 				echo '

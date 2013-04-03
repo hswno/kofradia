@@ -59,7 +59,7 @@ $status = "";
 // drept?
 if ($player['up_access_level'] == 0 && $player['up_deactivated_dead'] != 0)
 {
-	$status = '<span class="c_deactivated">[Død]</span>';
+	$status = '<span class="c_deactivated">[DÃ¸d]</span>';
 }
 
 else
@@ -97,7 +97,7 @@ if ($player['up_access_level'] != 0 && $player['up_u_id'] != login::$user->id)
 // som html?
 if (isset($_POST['html']))
 {
-	header("Content-Type: text/html; charset=iso-8859-1");
+	header("Content-Type: text/html; charset=utf-8");
 	echo '<div class="profile_box_wrap">
 	<div class="profile_box_left">
 		<div class="profile_box_status">
@@ -105,7 +105,7 @@ if (isset($_POST['html']))
 		</div>
 		<div class="profile_box_info">
 			<p><span class="profile_box_type">Rank:</span> <span class="profile_box_value">'.htmlspecialchars($rank['name'].($rank['orig'] ? ' ('.$rank['orig'].')' : '')).'</span></p>'.($player['up_access_level'] != 0 ? '
-			<p><span class="profile_box_type">Wanted nivå:</span> <span class="profile_box_value">'.game::format_number($player['up_wanted_level']/10, 1).' %</span></p>' : '').'
+			<p><span class="profile_box_type">Wanted nivÃ¥:</span> <span class="profile_box_value">'.game::format_number($player['up_wanted_level']/10, 1).' %</span></p>' : '').'
 			<p><span class="profile_box_type">Sist aktiv:</span> <span class="profile_box_value">'.game::timespan($player['up_last_online'], game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).'</span></p>
 		</div>'.($mod ? '
 		<div class="profile_box_info">
@@ -207,7 +207,7 @@ if (isset($_POST['html']))
 
 header("Content-Type: text/xml");
 
-echo '<?xml version="1.0" encoding="ISO-8859-1"?>
+echo '<?xml version="1.0" encoding="utf-8"?>
 <playerinfo>
 	<up_id>'.$player['up_id'].'</up_id>
 	<url>'.htmlspecialchars($__server['relative_path']."/p/".rawurlencode($player['up_name'])."/".$player['up_id']).'</url>
@@ -222,7 +222,7 @@ echo '<?xml version="1.0" encoding="ISO-8859-1"?>
 	<profile_image>'.htmlspecialchars($profile_image).'</profile_image>
 	<rank_name>'.htmlspecialchars($rank['name'].($rank['orig'] ? ' ('.$rank['orig'].')' : '')).'</rank_name>';
 
-// moderator stæsj
+// moderator stÃ¦sj
 if ($mod)
 {
 	echo '

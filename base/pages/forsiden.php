@@ -110,7 +110,7 @@ class page_forsiden extends pages_player
 				"time" => strtotime($row['created_time'])
 			);
 			
-			// TODO: det kommer mange "ukjent tekst" i feeden. returnert json fra facebook bør sjekkes igjen. midlertidig fiks å skjule disse
+			// TODO: det kommer mange "ukjent tekst" i feeden. returnert json fra facebook bÃ¸r sjekkes igjen. midlertidig fiks Ã¥ skjule disse
 			if ($link['text'] !== "ukjent tekst") $links[] = $link;
 		}
 		
@@ -280,7 +280,7 @@ class page_forsiden extends pages_player
 	 */
 	protected function show_livefeed()
 	{
-		// hent siste oppføringene
+		// hent siste oppfÃ¸ringene
 		$result = livefeed::get_latest();
 		if (count($result) == 0) return;
 		
@@ -454,7 +454,7 @@ class page_forsiden extends pages_player
 		}
 		
 		$data .= '
-	<p class="dark">En rankperiode er fra sist klokka var 21:00 og 24 timer før. De beste rankerene <a href="'.ess::$s['rpath'].'/node/59">mottar bonus</a> for sin innsats.</p>';
+	<p class="dark">En rankperiode er fra sist klokka var 21:00 og 24 timer fÃ¸r. De beste rankerene <a href="'.ess::$s['rpath'].'/node/59">mottar bonus</a> for sin innsats.</p>';
 		
 		$this->put_box($data);
 	}
@@ -464,7 +464,7 @@ class page_forsiden extends pages_player
 	 */
 	protected function show_auksjoner()
 	{
-		// hent aktive auksjonene og høyeste bud
+		// hent aktive auksjonene og hÃ¸yeste bud
 		$time = time();
 		$result = ess::$b->db->query("
 			SELECT
@@ -533,11 +533,11 @@ class page_forsiden extends pages_player
 	}
 	
 	/**
-	 * Sjekk om spilleren er død
+	 * Sjekk om spilleren er dÃ¸d
 	 */
 	protected function player_dead()
 	{
-		// ikke død?
+		// ikke dÃ¸d?
 		if (login::$user->player->active) return;
 		
 		$killed = login::$user->player->data['up_deactivated_dead'];
@@ -574,11 +574,11 @@ class page_forsiden extends pages_player
 		
 		echo '
 <div class="player_dead r2">
-	<h1>'.($killed == 2 ? 'Du blødde ihjel' : ($killed ? 'Du ble drept' : 'Du er deaktivert')).'</h1>
-	<p>'.($deact_self ? 'Du deaktivert din spiller' : 'Din spiller '.($killed == 2 ? 'blødde ihjel på grunn av lite energi og helse' : ($killed ? 'ble drept' : 'ble deaktivert'))).' '.ess::$b->date->get(login::$user->player->data['up_deactivated_time'])->format().'.'.($killed == 1 ? ' Du vil ikke kunne se hvem som drepte deg uten å få en spiller som vitnet angrepet til å fortelle deg det.' : '').'</p>'.(!$killed && !$deact_self ? '
+	<h1>'.($killed == 2 ? 'Du blÃ¸dde ihjel' : ($killed ? 'Du ble drept' : 'Du er deaktivert')).'</h1>
+	<p>'.($deact_self ? 'Du deaktivert din spiller' : 'Din spiller '.($killed == 2 ? 'blÃ¸dde ihjel pÃ¥ grunn av lite energi og helse' : ($killed ? 'ble drept' : 'ble deaktivert'))).' '.ess::$b->date->get(login::$user->player->data['up_deactivated_time'])->format().'.'.($killed == 1 ? ' Du vil ikke kunne se hvem som drepte deg uten Ã¥ fÃ¥ en spiller som vitnet angrepet til Ã¥ fortelle deg det.' : '').'</p>'.(!$killed && !$deact_self ? '
 	<p>Begrunnelse for deaktivering: '.(empty(login::$user->player->data['up_deactivated_reason']) ? 'Ingen begrunnelse oppgitt.' : game::bb_to_html(login::$user->player->data['up_deactivated_reason'])).'</p>' : '').'
-	<p>Ved å gå inn på "min side" og "min bruker" kan du se informasjon om dine tidligere spillere. Du kan trykke på spillernavnet som står oppført for å komme til "min spiller" som gjelder for den spilleren.</p>
-	<p>Du må opprette en <a href="lock?f=player">ny spiller</a> for å kunne fortsette i spillet med en ny spiller.</p>
+	<p>Ved Ã¥ gÃ¥ inn pÃ¥ "min side" og "min bruker" kan du se informasjon om dine tidligere spillere. Du kan trykke pÃ¥ spillernavnet som stÃ¥r oppfÃ¸rt for Ã¥ komme til "min spiller" som gjelder for den spilleren.</p>
+	<p>Du mÃ¥ opprette en <a href="lock?f=player">ny spiller</a> for Ã¥ kunne fortsette i spillet med en ny spiller.</p>
 </div>';
 	}
 	
@@ -601,7 +601,7 @@ class page_forsiden extends pages_player
 		else
 		{
 			// til timeout
-			echo '<p class="login_type">Du er logget inn til det har gått 15 minutter uten aktivitet. Det vil si hvis du ikke gjør noe før: '.ess::$b->date->get(login::$info['ses_expire_time'])->format().'.</p>';
+			echo '<p class="login_type">Du er logget inn til det har gÃ¥tt 15 minutter uten aktivitet. Det vil si hvis du ikke gjÃ¸r noe fÃ¸r: '.ess::$b->date->get(login::$info['ses_expire_time'])->format().'.</p>';
 		}
 	}
 }

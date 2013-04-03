@@ -6,12 +6,12 @@
 class utpressing extends pages_player
 {
 	/**
-	 * Energi for å utføre utpressing
+	 * Energi for Ã¥ utfÃ¸re utpressing
 	 */
 	const ENERGY = 100;
 	
 	/**
-	 * Maksimalt pengebeløp man kan utpresse
+	 * Maksimalt pengebelÃ¸p man kan utpresse
 	 */
 	const CASH_MAX = 45000;
 	
@@ -101,7 +101,7 @@ class utpressing extends pages_player
 	}
 	
 	/**
-	 * Utfør utpressing
+	 * UtfÃ¸r utpressing
 	 */
 	public function utpress($opt_key)
 	{
@@ -143,10 +143,10 @@ class utpressing extends pages_player
 		// beregn maksimal pengeverdi offeret kan miste
 		$cash_max = $this->up->rank['number'] / count(game::$ranks['items']) * self::CASH_MAX / 2 + self::CASH_MAX / 2;
 		
-		// beregn hvor mye penger vi får
+		// beregn hvor mye penger vi fÃ¥r
 		$cash = round(rand($cash_max * $opt['cash_min'], $cash_max * $opt['cash_max']));
 		
-		// kriterier for å finne en spiller
+		// kriterier for Ã¥ finne en spiller
 		$where = $this->get_criterias($cash, true);
 		
 		// finn en tilfeldig spiller som passer med kriteriene
@@ -291,10 +291,10 @@ class utpressing extends pages_player
 		// beregn maksimal pengeverdi offeret ville mistet
 		$cash_max = $this->up->rank['number'] / count(game::$ranks['items']) * self::CASH_MAX / 2 + self::CASH_MAX / 2;
 		
-		// beregn hvor mye penger vi får
+		// beregn hvor mye penger vi fÃ¥r
 		$cash = round(rand($cash_max * $opt['cash_min'], $cash_max * $opt['cash_max']));
 		
-		// kriterier for å finne en spiller
+		// kriterier for Ã¥ finne en spiller
 		$where = $this->get_criterias($cash);
 		
 		// finn en tilfeldig spiller som passer med kriteriene
@@ -341,7 +341,7 @@ class utpressing extends pages_player
 	}
 	
 	/**
-	 * Setter opp kriterier for å finne en spiller
+	 * Setter opp kriterier for Ã¥ finne en spiller
 	 * @param int $cash
 	 */
 	private function get_criterias($cash, $success = null)
@@ -350,13 +350,13 @@ class utpressing extends pages_player
 		$up_ids = $this->get_ff_up_ids();
 		$up_ids[] = $this->up->id;
 		
-		// når siste må ha vært pålogget
+		// nÃ¥r siste mÃ¥ ha vÃ¦rt pÃ¥logget
 		$expire = time() - 604800 * ($cash ? 2 : 3);
 		
 		// rankbegrensning
 		$ranks = $this->get_rank_limits();
 		
-		// sett opp kriterier for å finne spiller
+		// sett opp kriterier for Ã¥ finne spiller
 		$where = "up_access_level != 0";
 		$where .= " AND up_last_online >= $expire";
 		$where .= " AND up_b_id = {$this->up->data['up_b_id']}";

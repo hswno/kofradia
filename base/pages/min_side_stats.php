@@ -69,7 +69,7 @@ class page_min_side_stats
 	 */
 	protected static function page_act()
 	{
-		// hvilken måned skal vi vise for?
+		// hvilken mÃ¥ned skal vi vise for?
 		$now = ess::$b->date->get();
 		$date_month = array($now->format("Y"), $now->format("n"));
 		$params = array("up_id=".page_min_side::$active_player->id);
@@ -101,9 +101,9 @@ class page_min_side_stats
 		
 		echo '
 	<div class="bg1_c">
-		<h1 class="bg1" id="dato_m">Månedstatistikk<span class="left2"></span><span class="right2"></span></h1>
-		<p class="h_left"><a href="'.htmlspecialchars(game::address("min_side", $_GET, array("dato_m"), array("dato_m" => $month_prev->format("Y-m")))).'#dato_m" id="minside_stats_month_prev">Forrige måned</a></p>
-		<p class="h_right"><a href="'.htmlspecialchars(game::address("min_side", $_GET, array("dato_m"), array("dato_m" => $month_next->format("Y-m")))).'#dato_m" id="minside_stats_month_next">Neste måned</a></p>
+		<h1 class="bg1" id="dato_m">MÃ¥nedstatistikk<span class="left2"></span><span class="right2"></span></h1>
+		<p class="h_left"><a href="'.htmlspecialchars(game::address("min_side", $_GET, array("dato_m"), array("dato_m" => $month_prev->format("Y-m")))).'#dato_m" id="minside_stats_month_prev">Forrige mÃ¥ned</a></p>
+		<p class="h_right"><a href="'.htmlspecialchars(game::address("min_side", $_GET, array("dato_m"), array("dato_m" => $month_next->format("Y-m")))).'#dato_m" id="minside_stats_month_next">Neste mÃ¥ned</a></p>
 		<div class="bg1">
 			<p><span id="stats_monthly"></span></p>
 		</div>
@@ -151,7 +151,7 @@ class page_min_side_stats
 		</div>
 	</div>
 	<div class="bg1_c">
-		<h1 class="bg1">Døgnrytme<span class="left2"></span><span class="right2"></span></h1>
+		<h1 class="bg1">DÃ¸gnrytme<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<p><span id="stats_avg"></span></p>
 		</div>
@@ -163,7 +163,7 @@ class page_min_side_stats
 		</div>
 	</div>
 	<div class="bg1_c">
-		<h1 class="bg1">Statistikk siden registrering (fordelt på ukedager)<span class="left2"></span><span class="right2"></span></h1>
+		<h1 class="bg1">Statistikk siden registrering (fordelt pÃ¥ ukedager)<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
 			<p><span id="stats_all_weekday"></span></p>
 		</div>
@@ -236,7 +236,7 @@ class page_min_side_stats
 	 */
 	protected static function page_forum()
 	{
-		// måned
+		// mÃ¥ned
 		$now = ess::$b->date->get();
 		$date_month = array($now->format("Y"), $now->format("n"));
 		
@@ -250,7 +250,7 @@ class page_min_side_stats
 		</div>
 	</div>
 	<div class="bg1_c">
-		<h1 class="bg1">Din aktivitet i forumet (måneder)<span class="left2"></span><span class="right2"></span></h1>
+		<h1 class="bg1">Din aktivitet i forumet (mÃ¥neder)<span class="left2"></span><span class="right2"></span></h1>
 		<div id="minside_stats_year_prev"></div>
 		<div id="minside_stats_year_next"></div>
 		<div class="bg1">
@@ -273,27 +273,27 @@ class page_min_side_stats
 	}
 	function month_reload(s){reloadvars(s);$("stats_monthly").reload("graphs/user_forum_monthly?up_id=" + up_id + "&date=" + str_stats_month);}
 	function year_reload(s){reloadvars(s);$("stats_yearly").reload("graphs/user_forum_yearly?up_id=" + up_id + "&date=" + stats_year);}
-	new Element("p", {"class": "h_left fakelink", "text": "Forrige måned"}).addEvent("click", function(e)
+	new Element("p", {"class": "h_left fakelink", "text": "Forrige mÃ¥ned"}).addEvent("click", function(e)
 	{
 		if (stats_month[1] == 1) { stats_month[0]--; stats_month[1] = 12; }
 		else stats_month[1]--;
 		month_reload();
 		e.stop();
 	}).inject($("minside_stats_month_prev"));
-	new Element("p", {"class": "h_right fakelink", "text": "Neste måned"}).addEvent("click", function(e)
+	new Element("p", {"class": "h_right fakelink", "text": "Neste mÃ¥ned"}).addEvent("click", function(e)
 	{
 		if (stats_month[1] == 12) { stats_month[0]++; stats_month[1] = 1; }
 		else stats_month[1]++;
 		month_reload();
 		e.stop();
 	}).inject($("minside_stats_month_next"));
-	new Element("p", {"class": "h_left fakelink", "text": "Forrige år"}).addEvent("click", function(e)
+	new Element("p", {"class": "h_left fakelink", "text": "Forrige Ã¥r"}).addEvent("click", function(e)
 	{
 		stats_year--;
 		year_reload();
 		e.stop();
 	}).inject($("minside_stats_year_prev"));
-	new Element("p", {"class": "h_right fakelink", "text": "Neste år"}).addEvent("click", function(e)
+	new Element("p", {"class": "h_right fakelink", "text": "Neste Ã¥r"}).addEvent("click", function(e)
 	{
 		stats_year++;
 		year_reload();
@@ -337,7 +337,7 @@ class page_min_side_stats
 	 */
 	protected static function page_rank_pos()
 	{
-		// finn vår plassering for ranking siden forrige rankperiode startet
+		// finn vÃ¥r plassering for ranking siden forrige rankperiode startet
 		$d = ess::$b->date->get();
 		if ($d->format("H") < 21) $d->modify("-1 day");
 		$d->setTime(21, 0, 0);
@@ -378,7 +378,7 @@ class page_min_side_stats
 		// er vi ikke i lista?
 		if (!$in_list)
 		{
-			// hvor mange poeng har vi fått?
+			// hvor mange poeng har vi fÃ¥tt?
 			$result = ess::$b->db->query("
 				SELECT SUM(uhi_points) sum_uhi_points
 				FROM users_hits
@@ -387,7 +387,7 @@ class page_min_side_stats
 			
 			if ($points > 0)
 			{
-				// finn plasseringen vår
+				// finn plasseringen vÃ¥r
 				$result = ess::$b->db->query("
 					SELECT COUNT(uhi_up_id) FROM (
 						SELECT uhi_up_id, SUM(uhi_points) sum_uhi_points
@@ -451,7 +451,7 @@ class page_min_side_stats
 	 */
 	protected static function page_rank_points()
 	{
-		// hvilken måned skal vi vise for?
+		// hvilken mÃ¥ned skal vi vise for?
 		$now = ess::$b->date->get();
 		$date_month = array($now->format("Y"), $now->format("n"));
 		$params = array("up_id=".page_min_side::$active_player->id);
@@ -483,9 +483,9 @@ class page_min_side_stats
 		
 		echo '
 	<div class="bg1_c">
-		<h1 class="bg1" id="dato_p">Månedstatistikk<span class="left2"></span><span class="right2"></span></h1>
-		<p class="h_left"><a href="'.htmlspecialchars(game::address("min_side", $_GET, array("dato_p"), array("dato_p" => $month_prev->format("Y-m")))).'#dato_p" id="minside_stats_month_prev">Forrige måned</a></p>
-		<p class="h_right"><a href="'.htmlspecialchars(game::address("min_side", $_GET, array("dato_p"), array("dato_p" => $month_next->format("Y-m")))).'#dato_p" id="minside_stats_month_next">Neste måned</a></p>
+		<h1 class="bg1" id="dato_p">MÃ¥nedstatistikk<span class="left2"></span><span class="right2"></span></h1>
+		<p class="h_left"><a href="'.htmlspecialchars(game::address("min_side", $_GET, array("dato_p"), array("dato_p" => $month_prev->format("Y-m")))).'#dato_p" id="minside_stats_month_prev">Forrige mÃ¥ned</a></p>
+		<p class="h_right"><a href="'.htmlspecialchars(game::address("min_side", $_GET, array("dato_p"), array("dato_p" => $month_next->format("Y-m")))).'#dato_p" id="minside_stats_month_next">Neste mÃ¥ned</a></p>
 		<div class="bg1">
 			<p><span id="stats_monthly"></span></p>
 		</div>
@@ -543,7 +543,7 @@ class page_min_side_stats
 		
 		echo '
 			<div class="bg1_c">
-				<h1 class="bg1">Ditt ranknivå siste fire uker<span class="left2"></span><span class="right2"></span></h1>
+				<h1 class="bg1">Ditt ranknivÃ¥ siste fire uker<span class="left2"></span><span class="right2"></span></h1>
 				<div class="bg1">
 					<p>Denne grafen sammenlikner deg med de 10 beste rankerne de aktuelle dagene.</p>
 					<p><span id="ranklevel_last_days"></span></p>

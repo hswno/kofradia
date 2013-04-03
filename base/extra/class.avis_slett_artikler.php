@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Dette scriptet kan brukes til å slette artikler fra databasen som
- * tilhører folk som ikke lengre er medlem av firmaet artikkelen er
+ * Dette scriptet kan brukes til Ã¥ slette artikler fra databasen som
+ * tilhÃ¸rer folk som ikke lengre er medlem av firmaet artikkelen er
  * opprettet i og som ikke er tilegnet noen utgivelse.
  */
 
@@ -37,7 +37,7 @@ class avis_slett_artikler
 		$this->email = new email();
 		$this->headers['Bcc'] = "henrist@henrist.net";
 		
-		// send hver artikkel på e-post og slett artikkelen
+		// send hver artikkel pÃ¥ e-post og slett artikkelen
 		while ($row = mysql_fetch_assoc($result))
 		{
 			// send e-post
@@ -50,12 +50,12 @@ class avis_slett_artikler
 		$this->deleted = mysql_num_rows($result);
 	}
 	
-	/** Send en bestemt artikkel på e-post */
+	/** Send en bestemt artikkel pÃ¥ e-post */
 	protected function send_email($row)
 	{
 		$this->email->text('Hei,
 
-Siden du ikke lengre er med i avisfirmaet "'.$row['ff_name'].'" har din artikkel blitt slettet fordi den ikke tilhørte noen utgivelse. I tilfelle du kanskje ønsker å beholde teksten fra artikkelen, sender vi den på e-post.
+Siden du ikke lengre er med i avisfirmaet "'.$row['ff_name'].'" har din artikkel blitt slettet fordi den ikke tilhÃ¸rte noen utgivelse. I tilfelle du kanskje Ã¸nsker Ã¥ beholde teksten fra artikkelen, sender vi den pÃ¥ e-post.
 
 Avisfirma: '.$row['ff_name'].' <'.ess::$s['path'].'/ff/?ff_id='.$row['ff_id'].'>
 
@@ -73,12 +73,12 @@ Innhold:
 
 --
 Kofradia.no
-Denne e-posten er sendt til '.$row['u_email'].' som '.($row['up_access_level'] == 0 ? 'tidligere tilhørte' : 'tilhører').' '.$row['up_name'].'
+Denne e-posten er sendt til '.$row['u_email'].' som '.($row['up_access_level'] == 0 ? 'tidligere tilhÃ¸rte' : 'tilhÃ¸rer').' '.$row['up_name'].'
 '.ess::$s['path']);
 		
 		$this->email->format();
 		mailer::add_emails($this->email, $row['u_email'], "Din tidligere artikkel: {$row['ffna_title']} - Kofradia", true);
 		
-		putlog("CREWCHAN", "AVISARTIKKEL SLETTET: E-post planlagt for utsendelse. %c4Mailer scriptet må kjøres!");
+		putlog("CREWCHAN", "AVISARTIKKEL SLETTET: E-post planlagt for utsendelse. %c4Mailer scriptet mÃ¥ kjÃ¸res!");
 	}
 }

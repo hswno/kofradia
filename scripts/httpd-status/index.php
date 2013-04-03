@@ -10,12 +10,12 @@ $_base->page->add_title("Apache status");
 echo '
 <h1>Apache status</h1>
 <p>
-	Velg sorteringsrekkefølge:
+	Velg sorteringsrekkefÃ¸lge:
 </p>';
 
 $orders = array(
 	"last" => array("Siste visning &raquo;", "Sorterer etter siste visning"),
-	"count" => array("Antall rader oppført &raquo;", "Sorterer etter antall rader oppført"),
+	"count" => array("Antall rader oppfÃ¸rt &raquo;", "Sorterer etter antall rader oppfÃ¸rt"),
 );
 
 foreach ($orders as $order => $info)
@@ -112,12 +112,12 @@ else
 		
 		if ($order == "count")
 		{
-			// sorter med flest rader øverst
+			// sorter med flest rader Ã¸verst
 			array_multisort($hosts_count, SORT_DESC, $hosts_last, SORT_ASC, $hosts);
 		}
 		else
 		{
-			// sorter med siste visning øverst
+			// sorter med siste visning Ã¸verst
 			array_multisort($hosts_last, SORT_ASC, $hosts_count, SORT_DESC, $hosts);
 		}
 		

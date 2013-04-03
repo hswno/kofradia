@@ -3,7 +3,7 @@
 class database_archive
 {
 	/**
-	 * Uke scheduler - kjøres 1 gang i uka (mandager)
+	 * Uke scheduler - kjÃ¸res 1 gang i uka (mandager)
 	 */
 	public static function run_weekly()
 	{
@@ -20,7 +20,7 @@ class database_archive
 	}
 	
 	/**
-	 * 24-timers scheduler - kjøres 1 gang i døgnet
+	 * 24-timers scheduler - kjÃ¸res 1 gang i dÃ¸gnet
 	 */
 	public static function run_24h()
 	{
@@ -32,7 +32,7 @@ class database_archive
 	}
 	
 	/**
-	 * 6-timers scheduler - kjøres 4 ganger i døgnet
+	 * 6-timers scheduler - kjÃ¸res 4 ganger i dÃ¸gnet
 	 */
 	public static function run_6h()
 	{
@@ -45,7 +45,7 @@ class database_archive
 	
 	/**
 	 * Opprett en ny tabell for backup
-	 * @return string navn på ny tabell
+	 * @return string navn pÃ¥ ny tabell
 	 */
 	public static function create_backup_table($table_name)
 	{
@@ -95,7 +95,7 @@ class database_archive
 	
 	/**
 	 * Behandle users_antibot_validate tabellen
-	 * Slett oppføringer eldre enn 6 timer
+	 * Slett oppfÃ¸ringer eldre enn 6 timer
 	 */
 	public static function handle_table_users_antibot_validate()
 	{
@@ -105,7 +105,7 @@ class database_archive
 	
 	/**
 	 * Behandle users_views tabellen
-	 * Oppføringer som er eldre enn 1 uke vil ikke bli vist i en profil og kan derfor slettes
+	 * OppfÃ¸ringer som er eldre enn 1 uke vil ikke bli vist i en profil og kan derfor slettes
 	 */
 	public static function handle_table_users_views()
 	{
@@ -115,7 +115,7 @@ class database_archive
 	
 	/**
 	 * Behandle forms tabellen
-	 * Alett oppføringer som ble opprettet for mer enn 6 timer siden
+	 * Alett oppfÃ¸ringer som ble opprettet for mer enn 6 timer siden
 	 */
 	public static function handle_table_forms()
 	{
@@ -125,22 +125,22 @@ class database_archive
 	
 	/**
 	 * Behandle log_referers tabellen
-	 * Ta backup av oppføringene eldre enn 24 timer og slett fra databasen
+	 * Ta backup av oppfÃ¸ringene eldre enn 24 timer og slett fra databasen
 	 */
 	public static function handle_table_log_referers()
 	{
 		$expire = time() - 86400;
 		
-		// er det noen oppføringer?
+		// er det noen oppfÃ¸ringer?
 		$result = ess::$b->db->query("SELECT COUNT(*) FROM log_referers WHERE lr_time < $expire");
 		$num = mysql_result($result, 0);
 		
-		if ($num == 0) return; // ingen oppføringer å behandle
+		if ($num == 0) return; // ingen oppfÃ¸ringer Ã¥ behandle
 		
 		// opprett tabell for backup
 		$table = self::create_backup_table("log_referers");
 		
-		// overfør data
+		// overfÃ¸r data
 		ess::$b->db->query("INSERT INTO $table SELECT * FROM log_referers WHERE lr_time < $expire");
 		
 		// slett data
@@ -207,7 +207,7 @@ class database_archive
 			FROM users_log
 			WHERE type IN ({$ids['days30crew']})");
 		
-		// slett oppføringene som be flyttet over
+		// slett oppfÃ¸ringene som be flyttet over
 		ess::$b->db->query("
 			DELETE users_log t2
 			FROM $table t1, users_log t2
@@ -223,7 +223,7 @@ class database_archive
 				JOIN users ON u_id = up_u_id
 			WHERE u_access_level = 0");
 		
-		// slett oppføringene som be flyttet over
+		// slett oppfÃ¸ringene som be flyttet over
 		ess::$b->db->query("
 			DELETE users_log t2
 			FROM $table t1, users_log t2
@@ -240,7 +240,7 @@ class database_archive
 				OR
 				(time < $expire60 AND type IN ({$ids['days60']}))");
 		
-		// slett oppføringene som be flyttet over
+		// slett oppfÃ¸ringene som be flyttet over
 		ess::$b->db->query("
 			DELETE users_log t2
 			FROM $table t1, users_log t2
@@ -257,7 +257,7 @@ class database_archive
 	
 	/**
 	 * Behandle sessions tabellen
-	 * Sletter sessions som ikke har vært aktive på 60 dager
+	 * Sletter sessions som ikke har vÃ¦rt aktive pÃ¥ 60 dager
 	 */
 	public static function handle_table_sessions()
 	{
@@ -286,7 +286,7 @@ class database_archive
 	
 	/**
 	 * Behandle poker tabellen
-	 * Sletter pokeroppføringer som er eldre enn 90 dager
+	 * Sletter pokeroppfÃ¸ringer som er eldre enn 90 dager
 	 */
 	public static function handle_table_poker()
 	{
@@ -315,7 +315,7 @@ class database_archive
 	
 	/**
 	 * Behandle lotto_vinnere tabellen
-	 * Sletter oppføringer eldre enn 60 dager
+	 * Sletter oppfÃ¸ringer eldre enn 60 dager
 	 */
 	public static function handle_table_lotto_vinnere()
 	{
@@ -344,7 +344,7 @@ class database_archive
 	
 	/**
 	 * Behandle ff_bank_transactions tabellen
-	 * Sletter overføringer som er eldre enn 24 timer
+	 * Sletter overfÃ¸ringer som er eldre enn 24 timer
 	 */
 	public static function handle_table_ff_bank_transactions()
 	{
@@ -376,7 +376,7 @@ class database_archive
 	 */
 	public static function handle_tables_inbox()
 	{
-		// sett opp en oversikt over alle trådene som alle medlemmer har slettet og som ikke har vært aktivt på 30 dager
+		// sett opp en oversikt over alle trÃ¥dene som alle medlemmer har slettet og som ikke har vÃ¦rt aktivt pÃ¥ 30 dager
 		ess::$b->db->query("CREATE TEMPORARY TABLE inbox_threads_temp (itt_it_id int(11) unsigned, primary key (itt_it_id))");
 		
 		$expire = time() - 86400 * 30;
@@ -393,7 +393,7 @@ class database_archive
 				HAVING no_delete = 0
 			) ref");
 		
-		// ingenting å slette?
+		// ingenting Ã¥ slette?
 		$result = ess::$b->db->query("SELECT COUNT(*) FROM inbox_threads_temp");
 		$num_threads = mysql_result($result, 0);
 		if ($num_threads == 0)
@@ -423,7 +423,7 @@ class database_archive
 		}
 		
 		
-		// flytt over trådene
+		// flytt over trÃ¥dene
 		$table = self::create_backup_table("inbox_threads");
 		ess::$b->db->query("
 			INSERT INTO $table
@@ -503,19 +503,19 @@ class database_archive
 		self::backup_table_export($table, true);
 		
 		
-		putlog("NOTICE", "DATABASE ARKIVERING: $num_threads meldingstråder, $num_messages meldinger og $num_rel meldingsrelasjoner ble arkivert fra innbokssystemet");
+		putlog("NOTICE", "DATABASE ARKIVERING: $num_threads meldingstrÃ¥der, $num_messages meldinger og $num_rel meldingsrelasjoner ble arkivert fra innbokssystemet");
 	}
 	
 	/**
 	 * Behandle forumet
-	 * Arkiverer tråder som ble slettet for mer enn 30 dager siden
+	 * Arkiverer trÃ¥der som ble slettet for mer enn 30 dager siden
 	 * Ikke slett fra crewforum
 	 */
 	public static function handle_tables_forum()
 	{
 		$crewforum = "5,6,7";
 		
-		// finn trådene som må slettes
+		// finn trÃ¥dene som mÃ¥ slettes
 		$table_ft = self::create_backup_table("forum_topics");
 		$expire = time() - 86400 * 30;
 		ess::$b->db->query("
@@ -528,17 +528,17 @@ class database_archive
 				((ft_deleted != 0 AND ft_deleted < $expire) OR (ff_id IS NOT NULL AND ff_inactive != 0 AND ff_inactive_time < $expire))
 				AND ft_fse_id NOT IN ($crewforum)");
 		
-		// tell opp antall tråder
+		// tell opp antall trÃ¥der
 		$result = ess::$b->db->query("SELECT COUNT(*) FROM $table_ft");
 		$num_ft = mysql_result($result, 0);
 		
-		// slett oppføringene som be flyttet over
+		// slett oppfÃ¸ringene som be flyttet over
 		ess::$b->db->query("
 			DELETE forum_topics t2
 			FROM $table_ft t1, forum_topics t2
 			WHERE t1.ft_id = t2.ft_id");
 		
-		// behandle svarene i trådene
+		// behandle svarene i trÃ¥dene
 		$table = self::create_backup_table("forum_replies");
 		ess::$b->db->query("
 			INSERT INTO $table
@@ -550,7 +550,7 @@ class database_archive
 		$result = ess::$b->db->query("SELECT COUNT(*) FROM $table");
 		$num_fr = mysql_result($result, 0);
 		
-		// slett oppføringene som ble flyttet over
+		// slett oppfÃ¸ringene som ble flyttet over
 		ess::$b->db->query("
 			DELETE forum_replies
 			FROM forum_replies, $table_ft
@@ -572,7 +572,7 @@ class database_archive
 		$result = ess::$b->db->query("SELECT COUNT(*) FROM $table");
 		$num_fs = mysql_result($result, 0);
 		
-		// slett oppføringene som ble flyttet over
+		// slett oppfÃ¸ringene som ble flyttet over
 		ess::$b->db->query("
 			DELETE forum_seen
 			FROM forum_seen, $table_ft
@@ -582,14 +582,14 @@ class database_archive
 		self::backup_table_export($table, true);
 		
 		
-		// eksporter forumtrådene
+		// eksporter forumtrÃ¥dene
 		self::backup_table_export($table_ft, true);
 		
-		putlog("NOTICE", "DATABASE ARKIVERING: $num_ft forumtråder, $num_fr forumsvar og $num_fs forum-sett-relasjoner ble arkivert fra forumet");
+		putlog("NOTICE", "DATABASE ARKIVERING: $num_ft forumtrÃ¥der, $num_fr forumsvar og $num_fs forum-sett-relasjoner ble arkivert fra forumet");
 	}
 	
 	/**
-	 * Arkiver alle medlemmer i et FF (utenom de som er markert som døde)
+	 * Arkiver alle medlemmer i et FF (utenom de som er markert som dÃ¸de)
 	 */
 	public static function handle_ff_members($ff_id)
 	{
@@ -610,13 +610,13 @@ class database_archive
 			SET ffm_donate = 0, ffm_params = NULL, ffm_forum_topics = 0, ffm_forum_replies = 0, ffm_earnings = 0, ffm_earnings_ff = 0, ffm_pay_points = NULL, ffm_log_new = 0
 			WHERE ffm_ff_id = $ff_id AND ffm_status = ".ff_member::STATUS_DEACTIVATED);
 		
-		// slett oppføringene som ble flyttet over med unntak av deaktiverte spillere
+		// slett oppfÃ¸ringene som ble flyttet over med unntak av deaktiverte spillere
 		ess::$b->db->query("DELETE FROM ff_members WHERE ffm_ff_id = $ff_id AND ffm_status != ".ff_member::STATUS_DEACTIVATED);
 		
 		// eksporter data
 		self::backup_table_export($table, true, true);
 		
-		putlog("NOTICE", "DATABASE ARKIVERING: $num oppføringer ble arkivert fra medlemsdatabasen til FF med ID #$ff_id");
+		putlog("NOTICE", "DATABASE ARKIVERING: $num oppfÃ¸ringer ble arkivert fra medlemsdatabasen til FF med ID #$ff_id");
 	}
 	
 	/**
@@ -633,7 +633,7 @@ class database_archive
 		// eksporter data
 		self::backup_table_export($table, true, true);
 		
-		putlog("NOTICE", "DATABASE ARKIVERING: FF-oppføringen med ID #$ff_id ble tatt backup av");
+		putlog("NOTICE", "DATABASE ARKIVERING: FF-oppfÃ¸ringen med ID #$ff_id ble tatt backup av");
 	}
 	
 	/**

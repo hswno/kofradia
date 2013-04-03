@@ -36,7 +36,7 @@ echo '
 			<th>Siste IP<br />(for brukeren)</th>
 			<th>Hits</th>
 			<th>Registrert</th>
-			<th>Sist pålogget</th>
+			<th>Sist pÃ¥logget</th>
 		</tr>
 	</thead>
 	<tbody>';

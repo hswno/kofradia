@@ -1,13 +1,13 @@
 <?php
 
-// prefiks i database: ds_ (Div. Søknader)
+// prefiks i database: ds_ (Div. SÃ¸knader)
 
 class soknader
 {
 	/** Type: Navnbytte for FF */
 	const TYPE_FF_NAME = 1;
 	
-	/** Type søknader */
+	/** Type sÃ¸knader */
 	public static $types = array(
 		1 => array(
 			"name" => "ff_name",
@@ -49,7 +49,7 @@ class soknader
 	}
 	
 	/**
-	 * Legg til søknad
+	 * Legg til sÃ¸knad
 	 */
 	public static function add($type, $params, $reason, $rel_id = NULL)
 	{
@@ -71,13 +71,13 @@ class soknader
 		tasks::set("soknader", mysql_result($_base->db->query("SELECT COUNT(ds_id) FROM div_soknader WHERE ds_reply_decision = 0"), 0));
 		
 		// logg
-		putlog("NOTICE", "%bNY SØKNAD:%b {$__server['https_path']}{$__server['relative_path']}/crew/soknader");
+		putlog("NOTICE", "%bNY SÃ˜KNAD:%b {$__server['https_path']}{$__server['relative_path']}/crew/soknader");
 		
 		return $_base->db->insert_id();
 	}
 	
 	/**
-	 * Hent info om en søknad
+	 * Hent info om en sÃ¸knad
 	 */
 	public static function get($ds_id)
 	{
@@ -90,7 +90,7 @@ class soknader
 	}
 	
 	/**
-	 * Hent informasjon om en søknad
+	 * Hent informasjon om en sÃ¸knad
 	 * @param string $type_name
 	 * @param array $soknad
 	 * @param mixed $params
@@ -112,7 +112,7 @@ class soknader
 					return "Fant ikke FF.";
 				}
 				
-				// navnet før og etter
+				// navnet fÃ¸r og etter
 				$name = $ff['ff_name'];
 				if ($soknad['ds_reply_decision'] == 1 && $params['name_old'] != $ff['ff_name'])
 				{
@@ -121,8 +121,8 @@ class soknader
 				
 				// sett opp beskrivelse
 				return array(
-					"bb" => 'Bytte navn på FF '.$name.' til [b]'.$params['name'].'[/b] ([iurl=/ff/?ff_id='.$ff['ff_id'].']vis FF[/iurl]).',
-					"html" => 'Bytte navn på FF '.htmlspecialchars($name).' til <b>'.htmlspecialchars($params['name']).'</b> (<a href="'.$__server['relative_path'].'/ff/?ff_id='.$ff['ff_id'].'">vis FF</a>).',
+					"bb" => 'Bytte navn pÃ¥ FF '.$name.' til [b]'.$params['name'].'[/b] ([iurl=/ff/?ff_id='.$ff['ff_id'].']vis FF[/iurl]).',
+					"html" => 'Bytte navn pÃ¥ FF '.htmlspecialchars($name).' til <b>'.htmlspecialchars($params['name']).'</b> (<a href="'.$__server['relative_path'].'/ff/?ff_id='.$ff['ff_id'].'">vis FF</a>).',
 					"ff_name" => $ff['ff_name']
 				);
 		}
@@ -131,8 +131,8 @@ class soknader
 	}
 	
 	/**
-	 * Godta/avslå søknad
-	 * @param boolean $outcome - om søknaden blir innvilget eller ikke
+	 * Godta/avslÃ¥ sÃ¸knad
+	 * @param boolean $outcome - om sÃ¸knaden blir innvilget eller ikke
 	 * @param integer $ds_id
 	 * @param string $reason
 	 */
@@ -141,16 +141,16 @@ class soknader
 		global $_base, $__server;
 		$ds_id = (int) $ds_id;
 		
-		// hent søknaden
+		// hent sÃ¸knaden
 		$soknad = self::get($ds_id);
 		
-		// fant ikke søknaden?
+		// fant ikke sÃ¸knaden?
 		if (!$soknad)
 		{
 			return false;
 		}
 		
-		// er søknaden allerede behandlet?
+		// er sÃ¸knaden allerede behandlet?
 		if ($soknad['ds_reply_decision'] != 0)
 		{
 			return false;
@@ -159,7 +159,7 @@ class soknader
 		// typen
 		$type = self::get_type($soknad['ds_type']);
 		
-		// har vi tilgang til søknaden?
+		// har vi tilgang til sÃ¸knaden?
 		if (!access::has($type['access']))
 		{
 			return false;
@@ -171,32 +171,32 @@ class soknader
 		// sett opp params
 		$params = unserialize($soknad['ds_params']);
 		
-		// sett opp søknadsinfo
+		// sett opp sÃ¸knadsinfo
 		$info = self::get_info($type['name'], $soknad, $params);
 		
-		// info er ikke gyldig - søknaden er ikke gyldig
+		// info er ikke gyldig - sÃ¸knaden er ikke gyldig
 		if (!is_array($info))
 		{
-			// slett søknaden
+			// slett sÃ¸knaden
 			self::delete($ds_id);
 			
 			return $info;
 		}
 		
-		// avslå søknad
+		// avslÃ¥ sÃ¸knad
 		if (!$outcome)
 		{
-			$msg = 'bb:'.$type['title'].': Din søknad ble avslått. ('.$info['bb'].') Begrunnelse: '.($have_reason ? $reason : 'Ingen begrunnelse gitt.');
+			$msg = 'bb:'.$type['title'].': Din sÃ¸knad ble avslÃ¥tt. ('.$info['bb'].') Begrunnelse: '.($have_reason ? $reason : 'Ingen begrunnelse gitt.');
 			
 			// spesielle handlinger
 			switch ($type['name'])
 			{
 				case "ff_name":
-					// sett tilbakepengene på bankkontoen
+					// sett tilbakepengene pÃ¥ bankkontoen
 					if (isset($params['cost']) && $params['cost'] > 0)
 					{
-						$msg .= ' Beløpet på '.game::format_cash($params['cost']).' som ble innbetalt ved søknad er satt inn på kontoen igjen.';
-						ff::bank_static(ff::BANK_TILBAKEBETALING, $params['cost'], $soknad['ds_rel_id'], 'Navnsøknad avslått: '.$params['name']);
+						$msg .= ' BelÃ¸pet pÃ¥ '.game::format_cash($params['cost']).' som ble innbetalt ved sÃ¸knad er satt inn pÃ¥ kontoen igjen.';
+						ff::bank_static(ff::BANK_TILBAKEBETALING, $params['cost'], $soknad['ds_rel_id'], 'NavnsÃ¸knad avslÃ¥tt: '.$params['name']);
 					}
 				break;
 			}
@@ -205,7 +205,7 @@ class soknader
 		// innvilge
 		else
 		{
-			$msg = 'bb:'.$type['title'].': Din søknad har blitt innvilget. ('.$info['bb'].') Begrunnelse: '.($have_reason ? $reason : 'Ingen begrunnelse gitt.');
+			$msg = 'bb:'.$type['title'].': Din sÃ¸knad har blitt innvilget. ('.$info['bb'].') Begrunnelse: '.($have_reason ? $reason : 'Ingen begrunnelse gitt.');
 			
 			// spesielle handlinger
 			switch ($type['name'])
@@ -216,7 +216,7 @@ class soknader
 					{
 						$ff->change_name($params['name'], $soknad['ds_up_id']);
 						
-						// lagre gammelt navn på FF i søknaden
+						// lagre gammelt navn pÃ¥ FF i sÃ¸knaden
 						$params['name_old'] = $info['ff_name'];
 					}
 				break;
@@ -226,7 +226,7 @@ class soknader
 		// legg til logg hos spilleren
 		player::add_log_static("soknader", $msg, 0, $soknad['ds_up_id']);
 		
-		// oppdater søknaden
+		// oppdater sÃ¸knaden
 		$_base->db->query("UPDATE div_soknader SET ds_params = ".$_base->db->quote(serialize($params)).", ds_reply_decision = ".($outcome ? 1 : -1).", ds_reply_reason = ".$_base->db->quote($reason).", ds_reply_up_id = ".self::up_id().", ds_reply_time = ".time()." WHERE ds_id = $ds_id");
 		
 		// oppdater cache
@@ -236,7 +236,7 @@ class soknader
 	}
 	
 	/**
-	 * Slett søknad
+	 * Slett sÃ¸knad
 	 * @param integer $ds_id
 	 * @param boolean $force slette selv om den er behandlet
 	 */
@@ -247,7 +247,7 @@ class soknader
 		
 		$where = $force ? '' : ' AND ds_reply_decision = 0';
 		
-		// slett søknaden
+		// slett sÃ¸knaden
 		$_base->db->query("DELETE FROM div_soknader WHERE ds_id = $ds_id$where");
 		
 		if ($_base->db->affected_rows() == 0) return false;

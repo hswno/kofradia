@@ -93,9 +93,9 @@ class theme_sm_default
 		
 		echo '
 			
-			<p id="toplink"><a href="'.ess::$s['path'].'/" title="Gå til forsiden"></a></p>
-			<p id="fb_link"><a href="http://www.facebook.com/kofradia" target="_blank"><span>Du finner oss på Facebook</span></a></p>';
-			//<p id="donate_link"><a href="'.ess::$s['relative_path'].'/donasjon" title="Doner &raquo;"><span>Donér &raquo;</span></a></p>';
+			<p id="toplink"><a href="'.ess::$s['path'].'/" title="GÃ¥ til forsiden"></a></p>
+			<p id="fb_link"><a href="http://www.facebook.com/kofradia" target="_blank"><span>Du finner oss pÃ¥ Facebook</span></a></p>';
+			//<p id="donate_link"><a href="'.ess::$s['relative_path'].'/donasjon" title="Doner &raquo;"><span>DonÃ©r &raquo;</span></a></p>';
 		
 		$blog_links = self::get_blog_links();
 		if ($blog_links)
@@ -106,7 +106,7 @@ class theme_sm_default
 		
 		echo '
 			<ul id="default_topmenu">
-				<li><a href="'.ess::$s['relative_path'].'/loggut?sid='.login::$info['ses_id'].'" onclick="return confirm(\'Er du sikker på at du vil logge ut?\n\nTips! Trykk Esc knappen tre ganger for å logge ut uten å måtte trykke på denne knappen!\')"><b>Logg ut</b></a></li>
+				<li><a href="'.ess::$s['relative_path'].'/loggut?sid='.login::$info['ses_id'].'" onclick="return confirm(\'Er du sikker pÃ¥ at du vil logge ut?\n\nTips! Trykk Esc knappen tre ganger for Ã¥ logge ut uten Ã¥ mÃ¥tte trykke pÃ¥ denne knappen!\')"><b>Logg ut</b></a></li>
 				<li><a href="'.ess::$s['relative_path'].'/innboks">Meldinger</a></li>';
 		
 		if (!self::$locked)
@@ -168,7 +168,7 @@ class theme_sm_default
 			echo '
 		<div id="default_info_dead">
 			<a href="'.ess::$s['relative_path'].'/lock?f=player">'.(login::$user->player->data['up_deactivated_dead'] == 2 ? '
-				<span>Din spiller blødde ihjel pga. lite energi.</span>' : (login::$user->player->data['up_deactivated_dead'] ? '
+				<span>Din spiller blÃ¸dde ihjel pga. lite energi.</span>' : (login::$user->player->data['up_deactivated_dead'] ? '
 				<span>Din spiller har blitt drept.</span>' : '
 				<span>Din spiller er deaktivert.</span>')).'
 				<span class="link">Ny spiller &raquo;</span>
@@ -205,11 +205,11 @@ class theme_sm_default
 		</div>
 	</div>
 	<div id="default_bottom_1">
-		<p><a href="/">Kofradia</a> &copy; - Beskyttet av <a href="http://www.lovdata.no/all/nl-19610512-002.html" target="_blank">åndsverkloven</a> - Utviklet av <a href="http://www.henrist.net/" target="_blank">Henrik Steen</a></p>
-		<p><a href="'.ess::$s['relative_path'].'/betingelser">Betingelser for bruk</a> - Besøk <a href="irc://irc.quakenet.org/kofradia" target="_blank">#Kofradia</a> på QuakeNet<!-- <a href="'.ess::$s['relative_path'].'/forum/topic?id=85">(Hjelp)</a>--> - <a href="'.ess::$s['relative_path'].'/credits">Takk til</a></p>
+		<p><a href="/">Kofradia</a> &copy; - Beskyttet av <a href="http://www.lovdata.no/all/nl-19610512-002.html" target="_blank">Ã¥ndsverkloven</a> - Utviklet av <a href="http://www.henrist.net/" target="_blank">Henrik Steen</a></p>
+		<p><a href="'.ess::$s['relative_path'].'/betingelser">Betingelser for bruk</a> - BesÃ¸k <a href="irc://irc.quakenet.org/kofradia" target="_blank">#Kofradia</a> pÃ¥ QuakeNet<!-- <a href="'.ess::$s['relative_path'].'/forum/topic?id=85">(Hjelp)</a>--> - <a href="'.ess::$s['relative_path'].'/credits">Takk til</a></p>
 	</div>
 	<div id="default_bottom_2">
-		<p>Script: '.round(microtime(true)-SCRIPT_START-ess::$b->db->time, 4).' sek - Database: '.round(ess::$b->db->time, 4).' sek ('.ess::$b->db->queries.' spørring'.(ess::$b->db->queries == 1 ? '' : 'er').')<span id="js_time"></span></p>';
+		<p>Script: '.round(microtime(true)-SCRIPT_START-ess::$b->db->time, 4).' sek - Database: '.round(ess::$b->db->time, 4).' sek ('.ess::$b->db->queries.' spÃ¸rring'.(ess::$b->db->queries == 1 ? '' : 'er').')<span id="js_time"></span></p>';
 		
 		$revision = self::get_revision_info();
 		if ($revision) {
@@ -252,7 +252,7 @@ class theme_sm_default
 		// hent avstemningene
 		$polls = cache::fetch("polls_list");
 		
-		// må opprette cache?
+		// mÃ¥ opprette cache?
 		if ($polls === false)
 		{
 			$polls = array();
@@ -280,14 +280,14 @@ class theme_sm_default
 				{
 					$params = new params($row['p_params']);
 					
-					// har vi forum mal og nødvendig info?
+					// har vi forum mal og nÃ¸dvendig info?
 					$text = $params->get("forum_text");
 					$up_id = $params->get("forum_up_id");
 					if ($text && $up_id && $params->get("forum_active"))
 					{
 						$title = "Avstemning: ".$row['p_title'];
 						
-						// forsøk å lag emnet først
+						// forsÃ¸k Ã¥ lag emnet fÃ¸rst
 						ess::$b->db->begin();
 						$update = ess::$b->db->query("SELECT p_ft_id FROM polls WHERE p_id = {$row['p_id']} FOR UPDATE");
 						
@@ -304,7 +304,7 @@ class theme_sm_default
 							// oppdater avstemningen
 							ess::$b->db->query("UPDATE polls SET p_ft_id = $id WHERE p_id = {$row['p_id']}");
 							
-							// melding på IRC
+							// melding pÃ¥ IRC
 							putlog("INFO", "%bFORUM EMNE%b: $title (%b".ess::$s['path']."/forum/topic?id=$id%b)\r\n");
 						}
 						
@@ -330,12 +330,12 @@ class theme_sm_default
 		// hent alternativer
 		$polls_options = cache::fetch("polls_options_list");
 		
-		// må opprette cache for alternativene?
+		// mÃ¥ opprette cache for alternativene?
 		if (!$polls_options)
 		{
 			$polls_options = array();
 			
-			// har vi noen avstemninger å hente for?
+			// har vi noen avstemninger Ã¥ hente for?
 			if (count($polls) > 0)
 			{
 				// hent alternativene
@@ -358,10 +358,10 @@ class theme_sm_default
 			cache::store("polls_options_list", $polls_options);
 		}
 		
-		// finn ut vårt valg
+		// finn ut vÃ¥rt valg
 		$votes = array();
 		
-		// har vi noen avstemninger å hente for?
+		// har vi noen avstemninger Ã¥ hente for?
 		if (count($polls) > 0)
 		{
 			$result = ess::$b->db->query("
@@ -382,7 +382,7 @@ class theme_sm_default
 	}
 	
 	/**
-	 * Finn tidspunkt for når polls skal endres neste gang
+	 * Finn tidspunkt for nÃ¥r polls skal endres neste gang
 	 */
 	protected static function get_poll_cachetime()
 	{
@@ -402,7 +402,7 @@ class theme_sm_default
 		if (!$n || $time+$default_time <= $n)
 			return $default_time;
 		
-		// beregn hvor lang tid den skal stå
+		// beregn hvor lang tid den skal stÃ¥
 		return $n - $time;
 	}
 	
@@ -430,7 +430,7 @@ class theme_sm_default
 		$polls = self::get_polls();
 		if (!$polls || !$polls['polls']) return;
 		
-		// innhold på høyre siden
+		// innhold pÃ¥ hÃ¸yre siden
 		$content = '';
 		kf_menu::$data['is_avstemning'] = true;
 		
@@ -573,13 +573,13 @@ class theme_sm_default
 				'Det er <b>'.$row['t_ant'].'</b> '.fword("ubehandlet rapportering", "ubehandlede rapporteringer", $row['t_ant']).'.');
 		}
 		
-		// hent antall nye søknader fra cache
+		// hent antall nye sÃ¸knader fra cache
 		$row = tasks::get("soknader");
 		if ($row['t_ant'] > 0)
 		{
 			$boxes[] = array(
 				ess::$s['relative_path'].'/crew/soknader',
-				'Det er <b>'.$row['t_ant'].'</b> '.fword("ubehandlet søknad", "ubehandlede søknader", $row['t_ant']).'.');
+				'Det er <b>'.$row['t_ant'].'</b> '.fword("ubehandlet sÃ¸knad", "ubehandlede sÃ¸knader", $row['t_ant']).'.');
 		}
 		
 		// antall ubesvarte henvendelser
@@ -608,13 +608,13 @@ class theme_sm_default
 		}
 		else
 		{
-			// har ikke brukeren vært innom status siden enda?
+			// har ikke brukeren vÃ¦rt innom status siden enda?
 			$last = login::$user->params->get("trac_last_changeset");
 			if (!$last)
 			{
 				$boxes[] = array(
 					ess::$s['relative_path'].'/crew/trac_rss?show=changeset',
-					'Du vil nå motta nye hendelser om <b>endringer i Subversion</b> fra Trac her. Trykk her for å se de siste hendelser.');
+					'Du vil nÃ¥ motta nye hendelser om <b>endringer i Subversion</b> fra Trac her. Trykk her for Ã¥ se de siste hendelser.');
 			}
 			
 			// nye hendelser?
@@ -633,13 +633,13 @@ class theme_sm_default
 					'Det er <b>'.$new.'</b> usett'.($new == 1 ? '' : 'e').' hendelse'.($new == 1 ? '' : 'r').' i Trac (endringer i <b>Git</b>).');
 			}
 			
-			// har ikke brukeren vært innom status siden enda?
+			// har ikke brukeren vÃ¦rt innom status siden enda?
 			$last = login::$user->params->get("trac_last_other");
 			if (!$last)
 			{
 				$boxes[] = array(
 					ess::$s['relative_path'].'/crew/trac_rss?show=other',
-					'Du vil nå motta nye hendelser om <b>endringer i wikien og tickets</b> fra Trac her. Trykk her for å se siste hendelser.');
+					'Du vil nÃ¥ motta nye hendelser om <b>endringer i wikien og tickets</b> fra Trac her. Trykk her for Ã¥ se siste hendelser.');
 			}
 			
 			// nye hendelser?
@@ -693,7 +693,7 @@ class theme_sm_default
 		
 		if (access::has("crewet")) $data .= '
 				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=5"'.($fc[5] ? ' class="crew_updates"' : '').'>Crewforum</a> - <a href="'.ess::$s['relative_path'].'/forum/forum?id=6"'.($fc[6] ? ' class="crew_updates"' : '').'>arkiv</a></li>
-				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=7"'.($fc[7] ? ' class="crew_updates"' : '').'>Idémyldringsforum</a></li>';
+				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=7"'.($fc[7] ? ' class="crew_updates"' : '').'>IdÃ©myldringsforum</a></li>';
 
         if (access::has("admin")) $data .= '
                 <li><a href="'.ess::$s['relative_path'].'/forum/forum?id=4">Evalueringsforum</a></li>';
@@ -897,15 +897,15 @@ class theme_sm_default
 				$rank_prosent
 			);
 			
-			// wanted nivå
+			// wanted nivÃ¥
 			$bars[] = array(
-				'Wanted nivå',
+				'Wanted nivÃ¥',
 				($wl == 0 ? '0' : game::format_num($wl, 1)).' %',
 				ess::$s['relative_path'].'/min_side',
 				$wl > 80 ? 'levelwarn' : '',
 				'upst_wanted',
 				$wl,
-				'Wanted nivå'
+				'Wanted nivÃ¥'
 			);
 		}
 		
@@ -973,7 +973,7 @@ class theme_sm_default
 				</a>
 				<a href="'.ess::$s['relative_path'].'/min_side" class="def_up_st progressbar def_up_st5'.($wl > 80 ? ' levelwarn' : '').'" id="upst_wanted">
 					<span class="progress" style="width: '.round(min(100, $wl)).'%">
-						<span title="Wanted nivå">Wanted: '.($wl == 0 ? '0' : game::format_num($wl, 1)).' %</span>
+						<span title="Wanted nivÃ¥">Wanted: '.($wl == 0 ? '0' : game::format_num($wl, 1)).' %</span>
 					</span>
 				</a>';
 			}
@@ -982,7 +982,7 @@ class theme_sm_default
 	
 	protected static function get_oppdrag_status()
 	{
-		// ikke på et aktivt oppdrag?
+		// ikke pÃ¥ et aktivt oppdrag?
 		if (!login::$user->player->oppdrag->active) return '';
 		
 		$ret = '

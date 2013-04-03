@@ -2,14 +2,14 @@
 
 /**
  * Rutiner
- * Dette scriptet kjøres manuelt og utfører rutiner kontinuerlig uten behov for cron
+ * Dette scriptet kjÃ¸res manuelt og utfÃ¸rer rutiner kontinuerlig uten behov for cron
  */
 
 if (!defined("SCRIPT_START"))
 {
 	require dirname(dirname(__FILE__))."/essentials.php";
 	
-	// hindre scriptet i å kjøre to ganger
+	// hindre scriptet i Ã¥ kjÃ¸re to ganger
 	if (defined("SCHEDULER")) die();
 }
 
@@ -19,15 +19,15 @@ define("SCHEDULER", true);
 define("SCHEDULER_REPEATING", true);
 sess_start();
 
-echo "Utfører rutine regelmessig.\n";
+echo "UtfÃ¸rer rutine regelmessig.\n";
 
-// kjør rutiner (autoload klassen)
+// kjÃ¸r rutiner (autoload klassen)
 ess::$b->scheduler = new scheduler();
 
-// utfør rutiner regelmessig
+// utfÃ¸r rutiner regelmessig
 while (true)
 {
-	// finn ut når neste rutine skal utføres
+	// finn ut nÃ¥r neste rutine skal utfÃ¸res
 	$result = ess::$b->db->query("
 		SELECT GREATEST(s_next, s_expire) next
 		FROM scheduler

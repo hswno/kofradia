@@ -3,8 +3,8 @@
  * Skrevet av Henrik Steen
  * www.henrist.net
  *
- * Beskyttet av åndsverkloven
- * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ * Beskyttet av Ã¥ndsverkloven
+ * Alle rettigheter tilhÃ¸rer Henrik Steen dersom ikke annet er oppgitt
  *
  * Copyright (c) 2010 All rights reserved
  */
@@ -95,7 +95,7 @@ p/*, .p*/ {
 }
 
 
-/** Forskjellige tekst størrelser og margins */
+/** Forskjellige tekst stÃ¸rrelser og margins */
 h1 { font-size: 15px; margin: 1em /*0.67em*/ 0 }
 h2 { font-size: 13px; margin: 1em /*0.75em*/ 0 }
 h3 { font-size: 12px; margin: 1em /*0.83em*/ 0 }
@@ -205,7 +205,7 @@ table, .table {
 	font-size: 11px;
 }
 
-/* margins (for å unngå firefox problem med margin-collapse pga. table table) */
+/* margins (for Ã¥ unngÃ¥ firefox problem med margin-collapse pga. table table) */
 .tablemt {
 	margin-top: 1em;
 }
@@ -216,7 +216,7 @@ table, .table {
 	margin: 1em 0;
 }
 
-/* firefox tweaks (firefox utfører ikke margin-collapse pga. display verdien til tabeller) */
+/* firefox tweaks (firefox utfÃ¸rer ikke margin-collapse pga. display verdien til tabeller) */
 /*div > table,
 p + .table,
 .table + p,
@@ -281,7 +281,7 @@ p + .table,
 	padding: 3px 5px;
 }
 .table tr.color td {
-	/* egen bakgrunn (for forskjell på odd/even rader) */
+	/* egen bakgrunn (for forskjell pÃ¥ odd/even rader) */
 	background-color: #1E1E1E;
 }
 .table tr.highlight td {
@@ -326,7 +326,7 @@ p + .table,
 }
 
 
-/** Farger for de ulike tilgangsnivåene */
+/** Farger for de ulike tilgangsnivÃ¥ene */
 /*.c_idemyldrer:hover span,
 .c_forum_mod:hover span,
 .c_mod:hover span,
@@ -549,7 +549,7 @@ dl.dl_50 dd { width: 50% }
 dl.dl_60 dd { width: 40% }
 dl.dl_70 dd { width: 30% }
 
-/* FIXME: størrelsene må justeres på dd og ikke dt */
+/* FIXME: stÃ¸rrelsene mÃ¥ justeres pÃ¥ dd og ikke dt */
 dl.dl_50px dt { width: 50px }
 dl.dl_100px dt { width: 100px }
 dl.dl_150px dt { width: 150px }
@@ -560,7 +560,7 @@ dl.dl_2x dt { margin-top: 2px }
 .dd_right dd { text-align: right }
 
 
-/* automatisk bredde på textarea og innhold i <dd> */
+/* automatisk bredde pÃ¥ textarea og innhold i <dd> */
 .dd_auto_60 { overflow: hidden; padding-left: 60px; }
 .dd_auto_60 > dt {                margin-left: -60px; }
 
@@ -612,7 +612,7 @@ ul.spacer li, ol.spacer li {
 }
 
 
-/** Runde hjørner (delvis CSS3 - funker ikke i IE og Opera) */
+/** Runde hjÃ¸rner (delvis CSS3 - funker ikke i IE og Opera) */
 .r4, .r4l, .r4t, .r4tl { -moz-border-radius-topleft: 4px; -webkit-border-top-left-radius: 4px; border-top-left-radius: 4px }
 .r4, .r4r, .r4t, .r4tr { -moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; border-top-right-radius: 4px }
 .r4, .r4l, .r4b, .r4bl { -moz-border-radius-bottomleft: 4px; -webkit-border-bottom-left-radius: 4px; border-bottom-left-radius: 4px }
@@ -634,7 +634,7 @@ ul.spacer li, ol.spacer li {
 .r1, .r1r, .r1b, .r1br { -moz-border-radius-bottomright: 15px; -webkit-border-bottom-right-radius: 15px; border-bottom-right-radius: 15px }
 
 
-/* Plassere tekst til venstre/høyre i overskrifter */
+/* Plassere tekst til venstre/hÃ¸yre i overskrifter */
 .h_left, .h_right {
 	float: right;
 	margin: -36px 0 0 0 !important;
@@ -643,7 +643,7 @@ ul.spacer li, ol.spacer li {
 	text-transform: none;
 	text-decoration: none;*/
 	color: #888888;
-	position: relative; /* gjøre det synlig */
+	position: relative; /* gjÃ¸re det synlig */
 }
 .h_left {
 	float: left;
@@ -968,12 +968,12 @@ div.bg1 div.bg1 {
 }
 
 
-/** Pekere på andre elementer enn <a> */
+/** Pekere pÃ¥ andre elementer enn <a> */
 .pointer, .pointer td, td.pointer { cursor: pointer }
 .nopointer, .nopointer td, td.nopointer { cursor: default }
 
 
-/** FIXME - ting som bør fikses og gjøres på en annen måte - risikerer cross-browser kræsj ved å bruke disse */
+/** FIXME - ting som bÃ¸r fikses og gjÃ¸res pÃ¥ en annen mÃ¥te - risikerer cross-browser krÃ¦sj ved Ã¥ bruke disse */
 .clear {
 	clear: both;
 }
@@ -993,7 +993,7 @@ div.bg1 div.bg1 {
 a:hover .ny2 { display: none }
 
 
-/** Mørk tekst */
+/** MÃ¸rk tekst */
 .dark {
 	color: #888888;
 }
@@ -1073,13 +1073,13 @@ a:hover .ny2 { display: none }
 	opacity: 0.75;
 	filter: alpha(opacity=75);
 }
-/* fjern gjennomsiktighet på linker ved hover */
+/* fjern gjennomsiktighet pÃ¥ linker ved hover */
 a.op25:hover, a:hover .op25,
 a.op50:hover, a:hover .op50,
 a.op75:hover, a:hover .op75 { opacity: 1; filter: alpha(opacity=100) }
 
 
-/** Plassere ting i midten på siden (block elementer) */
+/** Plassere ting i midten pÃ¥ siden (block elementer) */
 .center {
 	margin-left: auto;
 	margin-right: auto;
@@ -1095,7 +1095,7 @@ a.op75:hover, a:hover .op75 { opacity: 1; filter: alpha(opacity=100) }
 .wrap { white-space: normal }
 
 
-/** Kolonneseende (støtter 2, 3 og 4 kolonner ) */
+/** Kolonneseende (stÃ¸tter 2, 3 og 4 kolonner ) */
 
 /* 2 kolonner */
 .col2_w { overflow: hidden; margin: -5px 0 0; padding: 0 0 }
@@ -1210,7 +1210,7 @@ label .spillekort:hover {
 .box_handle_checked_hover {
 	background-color: #526326 !important;
 }
-/* mørk versjon (for bruk til blant annet firma) */
+/* mÃ¸rk versjon (for bruk til blant annet firma) */
 .box_handle_dark.box_handle_normal, .box_handle_dark .box_handle_normal {
 	background-color: #000000 !important;
 }
@@ -1575,7 +1575,7 @@ div.quote div.quote span.quote_time {
 	#default_profilbilde .profile_image {
 		border: 2px solid #000;
 		width: 120px;
-		max-height: 160px; /* fiks for gamle høye bilder */
+		max-height: 160px; /* fiks for gamle hÃ¸ye bilder */
 	}
 	#default_profilbilde_wrap .profile_image_edit {
 		display: none;
@@ -2047,7 +2047,7 @@ div.quote div.quote span.quote_time {
 		margin-top: 0;
 	}
 	
-	/* menyen øverst */
+	/* menyen Ã¸verst */
 	/*#default_topmenu {
 		float: right;
 		width: 650px;
@@ -2857,7 +2857,7 @@ div.bydeler {
 	color: #999999;
 }
 
-/* firma - verktøy */
+/* firma - verktÃ¸y */
 .firma_a2 {
 	border-top: 2px dashed #222222;
 	margin: 2em auto 2em auto;

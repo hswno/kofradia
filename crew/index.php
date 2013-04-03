@@ -6,7 +6,7 @@ global $_base, $__server;
 if (isset($_GET['facebook_cache_clear']))
 {
 	cache::delete("facebook_posts");
-	ess::$b->page->add_message("Cache for Facebook-feed på forsiden ble slettet.");
+	ess::$b->page->add_message("Cache for Facebook-feed pÃ¥ forsiden ble slettet.");
 	
 	redirect::handle();
 }
@@ -20,15 +20,15 @@ echo '
 			<li><a href="crewlogg">Vis crewlogg</a></li>
 			<li><a href="banned">Vis aktive blokkeringer</a></li>
 			<li><a href="deaktiverte">Vis liste over deaktiverte brukere/spillere</a></li>
-			<li><a href="advarsel">Vis liste over brukere med høy advarselpoeng</a></li>
-			<li><a href="soknader?all">Vis tidligere søknader</a></li>
+			<li><a href="advarsel">Vis liste over brukere med hÃ¸y advarselpoeng</a></li>
+			<li><a href="soknader?all">Vis tidligere sÃ¸knader</a></li>
 		</ul>
-		<p>Verktøy:</p>
+		<p>VerktÃ¸y:</p>
 		<ul>
             <li><a href="../extended_access">Endre eget passord til utvidet tilganger</a></li>
 			<li><a href="htpass">Endre eget HT-Pass</a></li>
 			<li><a href="wordpress_entries">Oppdater RSS for bloggen</a></li>
-			<li><a href="./?facebook_cache_clear">Slett cache for Facebook-feed på forsiden</a></li>
+			<li><a href="./?facebook_cache_clear">Slett cache for Facebook-feed pÃ¥ forsiden</a></li>
 		</ul>'.(access::has("forum_mod") ? '
 		<p>Annet:</p>
 		<ul>

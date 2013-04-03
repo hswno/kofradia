@@ -3,8 +3,8 @@
  * Skrevet av Henrik Steen
  * www.henrist.net
  *
- * Beskyttet av åndsverkloven
- * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ * Beskyttet av Ã¥ndsverkloven
+ * Alle rettigheter tilhÃ¸rer Henrik Steen dersom ikke annet er oppgitt
  *
  * Copyright (c) 2010 All rights reserved
  */
@@ -13,7 +13,7 @@ var main_server = document.domain.test('^kofradia\.no$');
 var static_link = static_link || "/static";
 
 /**
- * Legger til mulighet for å kjøre en bestemt event kun et bestemt antall ganger
+ * Legger til mulighet for Ã¥ kjÃ¸re en bestemt event kun et bestemt antall ganger
  */
 Native.implement([Event, Element, Window, Document], {
 	addEventTimes: function(type, fn, times)
@@ -266,7 +266,7 @@ window.addEvent("domready", function()
 		User.s_id = sm_id[0];
 	}
 	
-	// sjekk for inaktivitet - for å deaktivere en rekke automatiske funksjoner, evige redirects etc
+	// sjekk for inaktivitet - for Ã¥ deaktivere en rekke automatiske funksjoner, evige redirects etc
 	document.Idle = true;
 	new IdleChecker(document);
 	
@@ -286,7 +286,7 @@ window.addEvent("domready", function()
 		offset = serverTime - $time() + (new Date).getTimezoneOffset()*60*1000;
 	}
 	
-	// ta høyde for tid siden script start?
+	// ta hÃ¸yde for tid siden script start?
 	if ($defined(js_start)) offset += $time()-js_start;
 	
 	// lagre offset som global
@@ -301,15 +301,15 @@ window.addEvent("domready", function()
 		var offset_t = (offset/1000).toFixed(1);
 		if (offset_t == 0)
 		{
-			server_klokka.set("title", "Din klokke går helt identisk som Kofradia sin");
+			server_klokka.set("title", "Din klokke gÃ¥r helt identisk som Kofradia sin");
 		}
 		else if (offset_t > 0)
 		{
-			server_klokka.set("title", "Din klokke går ca. "+offset_t+" sekunder tregere enn Kofradia sin");
+			server_klokka.set("title", "Din klokke gÃ¥r ca. "+offset_t+" sekunder tregere enn Kofradia sin");
 		}
 		else
 		{
-			server_klokka.set("title", "Din klokke går ca. "+Math.abs(offset_t)+" sekunder kjappere enn Kofradia sin");
+			server_klokka.set("title", "Din klokke gÃ¥r ca. "+Math.abs(offset_t)+" sekunder kjappere enn Kofradia sin");
 		}
 		
 		(function()
@@ -325,11 +325,11 @@ window.addEvent("domready", function()
 	// logget inn?
 	if (User.u_id)
 	{
-		// hurtigtast for å logge ut
+		// hurtigtast for Ã¥ logge ut
 		new KeySequence(["esc","esc","esc"], function()
 		{
 			this.last = [];
-			if (confirm("Sikker på at du vil logge ut?"))
+			if (confirm("Sikker pÃ¥ at du vil logge ut?"))
 			{
 				navigateTo(relative_path + "/loggut?sid="+User.s_id)
 			}
@@ -489,7 +489,7 @@ window.addEvent("domready", function()
 					elm.getElement("input").focus();
 				});
 				
-				// følg med nedover på siden
+				// fÃ¸lg med nedover pÃ¥ siden
 				var top = $("default_header_subline").getPosition().y;
 				var f = false;
 				window.addEvent("scroll", function()
@@ -538,14 +538,14 @@ window.addEvent("domready", function()
 
 
 /*
- * Forskjellige funksjoner som utføres av de sidene som trenger det
+ * Forskjellige funksjoner som utfÃ¸res av de sidene som trenger det
  */
 var sm_scripts = {
 	/**
 	 * Hent HistoryManager objekt
 	 * @requires HashListener
 	 * Syntaks i document.hash: #var1=data1;var2=data2
-	 * I utgangspunktet kun ment for enkel data hvor ; og = ikke er inkludert i nøkkel/verdi
+	 * I utgangspunktet kun ment for enkel data hvor ; og = ikke er inkludert i nÃ¸kkel/verdi
 	 */
 	"load_hm": function()
 	{
@@ -648,7 +648,7 @@ var sm_scripts = {
 	 */
 	"report_links": function()
 	{
-		// sørg for at klassen er opprettet
+		// sÃ¸rg for at klassen er opprettet
 		this.init_report_links();
 		
 		window.addEvent("sm_domready", function()
@@ -665,7 +665,7 @@ var sm_scripts = {
 		// finn rapporteringslenkene
 		scope.getElements(".report_link").each(function(elm)
 		{
-			// allerede gått gjennom?
+			// allerede gÃ¥tt gjennom?
 			if (elm.retrieve("ReportBox")) return;
 			
 			elm.store("ReportBox", new ReportBox(elm));
@@ -711,7 +711,7 @@ var sm_scripts = {
 				switch (this.data[0])
 				{
 					case "pm": title += " privat melding"; break;
-					case "ft": title += " forumtråd"; break;
+					case "ft": title += " forumtrÃ¥d"; break;
 					case "fr": title += " forumsvar"; break;
 					case "signature": title += " signatur"; break;
 					case "profile": title += " profil"; break;
@@ -724,12 +724,12 @@ var sm_scripts = {
 				
 				if (this.data[0] == "pm")
 				{
-					obj.set("html", '<p><b>Merk:</b> Ved å rapportere denne meldingen gir du moderatorene tilgang til denne meldingstråden.</p>');
+					obj.set("html", '<p><b>Merk:</b> Ved Ã¥ rapportere denne meldingen gir du moderatorene tilgang til denne meldingstrÃ¥den.</p>');
 				}
 				
 				if (this.data[2] == "1")
 				{
-					new Element("p").set("html", "Ingen andre brukere enn Crewet vil se at du utfører denne rapporteringen.").inject(obj);
+					new Element("p").set("html", "Ingen andre brukere enn Crewet vil se at du utfÃ¸rer denne rapporteringen.").inject(obj);
 				}
 				
 				// skjemaet
@@ -750,7 +750,7 @@ var sm_scripts = {
 									self.hide(true);
 								})).inject(obj);
 								self.populate(obj);
-								self.element.set("text", "Rapportert nå");
+								self.element.set("text", "Rapportert nÃ¥");
 								setTimeout(function(){self.hide(true);}, 5000);
 							},
 							"failure": function(xhr)
@@ -807,7 +807,7 @@ var sm_scripts = {
 			}
 		});
 		
-		// hindre denne funksjonen å bli utført flere ganger
+		// hindre denne funksjonen Ã¥ bli utfÃ¸rt flere ganger
 		this.init_report_links = $empty;
 	},
 	
@@ -887,21 +887,21 @@ var sm_scripts = {
 				}
 			});
 			
-			// legg til kortfunksjoner på kortene
+			// legg til kortfunksjoner pÃ¥ kortene
 			$$(".spillekort").each(function(elm)
 			{
 				new Pokerkort(elm);
 			});
 		});
 		
-		// hindre denne funksjonen å bli utført flere ganger
+		// hindre denne funksjonen Ã¥ bli utfÃ¸rt flere ganger
 		this.poker_parse = $empty;
 	}
 }
 
 
 /**
- * For debugging: Finne ut hvor lang tid det tar å kjøre deler av javascriptet
+ * For debugging: Finne ut hvor lang tid det tar Ã¥ kjÃ¸re deler av javascriptet
  */
 function time_debug()
 {
@@ -1006,10 +1006,10 @@ var BBImg = new Class({
 	
 	resize: function(is_first)
 	{
-		// finn ut om bildet må forminskes
+		// finn ut om bildet mÃ¥ forminskes
 		var wp = this.parent.getComputedSize()['width'] - this.ep;
 		
-		// samme størrelse på container som sist?
+		// samme stÃ¸rrelse pÃ¥ container som sist?
 		if (!is_first && wp == this.lwp) return;
 		
 		// skaleres
@@ -1020,13 +1020,13 @@ var BBImg = new Class({
 			
 			if (wp < 10) wp = 10;
 			
-			// må forminskes
+			// mÃ¥ forminskes
 			this.img.set("width", wp);
 			this.img.set("height", this.h*wp/this.w);
 			
 			if (!this.scaled)
 			{
-				// opprett lenke for å putte rundt
+				// opprett lenke for Ã¥ putte rundt
 				var l = new Element("a", {
 					"href": this.src,
 					"target": "_blank"
@@ -1039,7 +1039,7 @@ var BBImg = new Class({
 			}
 			
 			// oppdater tekst
-			this.textspan.set("text", "Bildet er forminsket ("+Math.round(wp/this.w*100)+" %) - trykk for å se full størrelse ("+this.w+"x"+this.h+"px)");
+			this.textspan.set("text", "Bildet er forminsket ("+Math.round(wp/this.w*100)+" %) - trykk for Ã¥ se full stÃ¸rrelse ("+this.w+"x"+this.h+"px)");
 			
 			if (!this.scaled) this.img.inject(l.inject(this.element, "top"));
 			this.scaled = true;
@@ -1069,7 +1069,7 @@ function detect_bb_img(dom)
 	var elms = $(dom).getElements("span.bb_image, img.scale");
 	elms.each(function(elm)
 	{
-		// allerede gått gjennom?
+		// allerede gÃ¥tt gjennom?
 		if ($(elm).retrieve("BBImg"))
 		{
 			return;
@@ -1085,7 +1085,7 @@ function detect_bb_img(dom)
 
 
 /*
- * Språkinnstillinger
+ * SprÃ¥kinnstillinger
  */
 var LangBase = new Class({
 	initialize: function(data)
@@ -1129,13 +1129,13 @@ var Lang = new LangBase({
 	}
 });
 Lang.weekdays = new LangBase({
-	"0": { full: ["søndag", "søndager"], short: ["søn", "søn"] },
+	"0": { full: ["sÃ¸ndag", "sÃ¸ndager"], short: ["sÃ¸n", "sÃ¸n"] },
 	"1": { full: ["mandag", "mandager"], short: ["man", "man"] },
 	"2": { full: ["tirsdag", "tirsdager"], short: ["tir", "tir"] },
 	"3": { full: ["onsdag", "onsdager"], short: ["ons", "ons"] },
 	"4": { full: ["torsdag", "torsdager"], short: ["tor", "tor"] },
 	"5": { full: ["fredag", "fredager"], short: ["fre", "fre"] },
-	"6": { full: ["lørdag", "lørdager"], short: ["lør", "lør"] }
+	"6": { full: ["lÃ¸rdag", "lÃ¸rdager"], short: ["lÃ¸r", "lÃ¸r"] }
 });
 Lang.months = new LangBase({
 	"0": { full: ["januar", "januar"], short: ["jan", "jan"] },
@@ -1182,7 +1182,7 @@ Status.User = new Class({
 		this.request = new Request({url: relative_path + "/ajax/my_info", data: {sid: User.s_id}, autoCancel: true});
 		this.request.errors = 0;
 		this.request.addEvents({
-			// når data blir mottatt
+			// nÃ¥r data blir mottatt
 			"success": function(text, xml)
 			{
 				this.request.errors = 0;
@@ -1256,7 +1256,7 @@ Status.User = new Class({
 				self.stop();
 				if (self.load)
 				{
-					window.fireEvent("status_user_info", "<div class='c'><h2>Statusoppdatering</h2><p>Oppdatering av status har blitt deaktivert på grunn av inaktivitet.</p><p>Beveg musen for å aktivere.</p></div>");
+					window.fireEvent("status_user_info", "<div class='c'><h2>Statusoppdatering</h2><p>Oppdatering av status har blitt deaktivert pÃ¥ grunn av inaktivitet.</p><p>Beveg musen for Ã¥ aktivere.</p></div>");
 					self.setAsInactive();
 				}
 			}
@@ -1301,14 +1301,14 @@ Status.User = new Class({
 		var time_cookie = parseInt(this.cookie.get("time"));
 		if (time_cookie > this.load_last && time_cookie + this.options.load_interval >= time)
 		{
-			// avbryt xhr hvis kjører
+			// avbryt xhr hvis kjÃ¸rer
 			this.request.cancel();
 			
 			this.loadFromCookie();
 			return;
 		}
 		
-		// gått for lang tid siden vi hentet/forsøkte å hente data?
+		// gÃ¥tt for lang tid siden vi hentet/forsÃ¸kte Ã¥ hente data?
 		if (this.load && time >= this.load_last + this.options.load_interval)
 		{
 			this.request.send();
@@ -1316,7 +1316,7 @@ Status.User = new Class({
 		}
 	},
 	
-	// start å hente data
+	// start Ã¥ hente data
 	start: function()
 	{
 		if (this.timer) return;
@@ -1325,7 +1325,7 @@ Status.User = new Class({
 		this.timer = this.updateStatus.periodical(this.options.check_interval, this);
 	},
 	
-	// stopp å hente data
+	// stopp Ã¥ hente data
 	stop: function()
 	{
 		$clear(this.timer);
@@ -1348,16 +1348,16 @@ Status.User = new Class({
 
 /*
  * Sjekke etter inaktivitet hos brukeren
- * Kan brukes på alle DOM elementer. Bruker events for å gi beskjed videre ved inaktivet/aktivitet.
+ * Kan brukes pÃ¥ alle DOM elementer. Bruker events for Ã¥ gi beskjed videre ved inaktivet/aktivitet.
  */
 var IdleChecker = new Class({
 	options: {
-		// hvor lang tid det skal gå før vi sjekker etter musebevegelse (aktivitet)
+		// hvor lang tid det skal gÃ¥ fÃ¸r vi sjekker etter musebevegelse (aktivitet)
 		time_check: 5000,
 		
 		/* FIXME */
 		
-		// hvor lang tid det skal gå før vi setter status til inaktiv (idle) etter at den har begynt å sjekke etter aktivitet
+		// hvor lang tid det skal gÃ¥ fÃ¸r vi setter status til inaktiv (idle) etter at den har begynt Ã¥ sjekke etter aktivitet
 		time_idle: 54000 // time_check + this
 	},
 	
@@ -1375,7 +1375,7 @@ var IdleChecker = new Class({
 		var self = this;
 		this.bind = function(){self.activity();};
 		
-		// hvis den allerede er satt til Idle, legg til timer for å gi melding om Idle etter check+idle tid
+		// hvis den allerede er satt til Idle, legg til timer for Ã¥ gi melding om Idle etter check+idle tid
 		this.timer = setTimeout(function()
 		{
 			self.idle();
@@ -1474,7 +1474,7 @@ var Countdown = new Class({
 		this.time--;
 		this.element.set("html", timespan(this.time, this.timesize, false, true));
 		
-		// nådd 0?
+		// nÃ¥dd 0?
 		if (this.time == 0)
 		{
 			this.complete();
@@ -1494,7 +1494,7 @@ function detect_counters(dom)
 {
 	dom.getElements(".counter").each(function(elm)
 	{
-		// allerede gått gjennom?
+		// allerede gÃ¥tt gjennom?
 		if ($(elm).retrieve("Countdown"))
 		{
 			return;
@@ -1507,7 +1507,7 @@ function detect_counters(dom)
 
 /**
  * Nedteller for progressbar
- * Fullfører progressbaren til 100%
+ * FullfÃ¸rer progressbaren til 100%
  */
 var CountdownProgressbar = new Class({
 	initialize: function(elm, now, total)
@@ -1546,7 +1546,7 @@ var CountdownProgressbar = new Class({
 
 
 /**
- * Nedteller for progressbar -- for tidspunkt (f.eks. 2 minutter og 52 sekunder gjenstår)
+ * Nedteller for progressbar -- for tidspunkt (f.eks. 2 minutter og 52 sekunder gjenstÃ¥r)
  */
 var CountdownProgressbarTime = new Class({
 	Extends: CountdownProgressbar,
@@ -1554,7 +1554,7 @@ var CountdownProgressbarTime = new Class({
 	{
 		this.parent(elm, now, total);
 		this.prefix = prefix ? prefix : '';
-		this.suffix = suffix ? suffix : ' gjenstår';
+		this.suffix = suffix ? suffix : ' gjenstÃ¥r';
 		this.p = this.elm.getElement("p");
 		this.l = this.total - this.now;
 	},
@@ -1578,7 +1578,7 @@ var CountdownProgressbarTime = new Class({
 
 
 /**
- * Utfør funksjoner bassert på kombinasjoner av tastetrykk
+ * UtfÃ¸r funksjoner bassert pÃ¥ kombinasjoner av tastetrykk
  * @param string/array sequence
  * @param function fn 
  * @todo capitals
@@ -1644,7 +1644,7 @@ var KeySequence = new Class({
 
 
 /*
- * Legg til funksjon for å debugge tastetrykk
+ * Legg til funksjon for Ã¥ debugge tastetrykk
  */
 new KeySequence("esc,D,E,B,U,G", function(event)
 {
@@ -1661,7 +1661,7 @@ new KeySequence("esc,D,E,B,U,G", function(event)
 		this.debugfn = function(event)
 		{
 			if (event.key == "esc") return;
-			alert("Du trykket en tast:\nTast: "+event.key+"\nKode: "+event.code+"\n\nTrykk ESC for å deaktivere.");
+			alert("Du trykket en tast:\nTast: "+event.key+"\nKode: "+event.code+"\n\nTrykk ESC for Ã¥ deaktivere.");
 		}
 	}
 	
@@ -1673,7 +1673,7 @@ new KeySequence("esc,D,E,B,U,G", function(event)
 
 /**
  * Videresende til ny side
- * Hvis status er Idle, venter den på aktivitet
+ * Hvis status er Idle, venter den pÃ¥ aktivitet
  * @param string src
  */
 function navigateTo(src)
@@ -1685,7 +1685,7 @@ function navigateTo(src)
 		document.location = src;
 	};
 	
-	// hvis idle, vent til aktiv før vi videresender
+	// hvis idle, vent til aktiv fÃ¸r vi videresender
 	if (document.Idle) document.addEventTimes("active", fn);
 	else fn.delay(0);
 	
@@ -1701,10 +1701,10 @@ var FBox = new Class({
 		// opacity for boksen
 		opacity: 0.95,
 		
-		// tid før boksen lukker seg automatisk
+		// tid fÃ¸r boksen lukker seg automatisk
 		delay: 300,
 		
-		// hvor lang tid den bruker på å fade ut
+		// hvor lang tid den bruker pÃ¥ Ã¥ fade ut
 		duration: 250,
 		
 		// om overlay skal brukes (settes av this.overlay)
@@ -1719,7 +1719,7 @@ var FBox = new Class({
 	timer: false,
 	
 	/**
-	 * Gjør at boksen lukker seg automatisk når man beveger musa utenfor
+	 * GjÃ¸r at boksen lukker seg automatisk nÃ¥r man beveger musa utenfor
 	 */
 	autoclose: function(check)
 	{
@@ -1740,7 +1740,7 @@ var FBox = new Class({
 				}
 			});
 			
-			// hindre events i å bli lagt til flere ganger
+			// hindre events i Ã¥ bli lagt til flere ganger
 			self.autoclose = $empty;
 		};
 		
@@ -1753,7 +1753,7 @@ var FBox = new Class({
 	
 	/**
 	 * Legg til overlay rundt
-	 * @param bool click_to_close - lukke boksen ved å trykke på overlay (utenfor boksen)
+	 * @param bool click_to_close - lukke boksen ved Ã¥ trykke pÃ¥ overlay (utenfor boksen)
 	 */
 	overlay: function(click_to_close, opacity)
 	{
@@ -1766,13 +1766,13 @@ var FBox = new Class({
 	 * Koble denne boksen til et element
 	 * @param object elm
 	 * @param bool show_hide - boksen blir automatisk synlig/skjult ved mus over/ut
-	 * @param bool click - boksen blir kun synlig ved å klikke på elementet
+	 * @param bool click - boksen blir kun synlig ved Ã¥ klikke pÃ¥ elementet
 	 */
 	connect: function(elm, show_hide, click)
 	{
 		var self = this;
 		
-		// event for å klikke på boksen
+		// event for Ã¥ klikke pÃ¥ boksen
 		if (click)
 		{
 			elm.addEvent("click", function(event)
@@ -1786,7 +1786,7 @@ var FBox = new Class({
 			});
 		}
 		
-		// event for å vise/skjule boksen ved musa over/ut
+		// event for Ã¥ vise/skjule boksen ved musa over/ut
 		if (show_hide)
 		{
 			elm.addEvent("mouseenter", function()
@@ -1883,7 +1883,7 @@ var FBox = new Class({
 		this.boxo = new Element("div", {"class": "js_box_b"}).grab(this.box);
 		this.boxw = new Element("div", {"class": "js_box js_box_b", "styles": {"opacity": 0}, "tween": {"duration": this.options.duration}}).grab(new Element("div", {"class": "js_box_b"}).grab(this.boxo)).inject(document.body);
 		
-		// sjekk for event for å lukke boksen
+		// sjekk for event for Ã¥ lukke boksen
 		this.autoclose(true);
 	},
 	
@@ -1896,7 +1896,7 @@ var FBox = new Class({
 	rel_y: "window", // window, <element>, x
 	offset_x: 0, // [width, center, neg, <integer>]
 	offset_y: 0, // [height, center, neg, <integer>]
-	outer: window, // ramme som boksen må være inni
+	outer: window, // ramme som boksen mÃ¥ vÃ¦re inni
 	outer_space: [5, 5, 5, 5], // avstand fra kantene
 	move: function()
 	{
@@ -1908,7 +1908,7 @@ var FBox = new Class({
 		}
 		
 		// funksjonen som tar seg av flyttingen
-		// (for å kunne legge til som events)
+		// (for Ã¥ kunne legge til som events)
 		var self = this;
 		this.move_int = function()
 		{
@@ -1977,7 +1977,7 @@ var FBox = new Class({
 			
 			size_box = self.boxw.getSize();
 			
-			// sørg for at boksen ikke går utenfor høyre side
+			// sÃ¸rg for at boksen ikke gÃ¥r utenfor hÃ¸yre side
 			var right = outer_pos.x + outer_size.x + self.outer.getScroll().x - self.outer_space[1];
 			if (x + size_box.x > right)
 			{
@@ -2001,7 +2001,7 @@ var FBox = new Class({
 			this.eventScroll = window.addEvent("scroll", this.move_int);
 		}
 		
-		// utfør flytting
+		// utfÃ¸r flytting
 		this.move_int();
 	},
 	
@@ -2014,7 +2014,7 @@ var FBox = new Class({
 		if ($type(data) == "string") this.box.set("html", data);
 		else this.box.empty().grab(data);
 		
-		// flytt boksen på nytt i tilfelle innholdet har strukket boksen
+		// flytt boksen pÃ¥ nytt i tilfelle innholdet har strukket boksen
 		if (this.move_int) this.move_int();// else this.move();
 	}
 });
@@ -2123,7 +2123,7 @@ var Playerinfo = new Class({
 	{
 		this.parent(data);
 		
-		// for ajax scriptet for å fikse høyden på bildet
+		// for ajax scriptet for Ã¥ fikse hÃ¸yden pÃ¥ bildet
 		if (script)
 		{
 			window.profile_box = this.box;
@@ -2133,12 +2133,12 @@ var Playerinfo = new Class({
 });
 function detect_playerinfo(dom)
 {
-	// må være logget inn
+	// mÃ¥ vÃ¦re logget inn
 	if (!User.u_id) return;
 	
 	$(dom).getElements("a.profile_link,span.profile_link").each(function(elm)
 	{
-		// allerede gått gjennom?
+		// allerede gÃ¥tt gjennom?
 		if ($(elm).retrieve("Playerinfo"))
 		{
 			return;
@@ -2150,7 +2150,7 @@ function detect_playerinfo(dom)
 
 
 /*
- * Vis hvor mange uker, dager, timer, minutter sekundene går over
+ * Vis hvor mange uker, dager, timer, minutter sekundene gÃ¥r over
  */ 
 function timespan(secs, longtype, nobold, noall)
 {
@@ -2194,7 +2194,7 @@ function timespan(secs, longtype, nobold, noall)
 	// antall sekunder
 	if (ret.length == 0 || secs != 0) ret.push((nobold ? secs : "<b>"+secs+"</b>") + split+Lang.get("seconds", size, secs));
 	
-	// "og" før siste?
+	// "og" fÃ¸r siste?
 	var l = '';
 	if (size == "full" && ret.length >= 2)
 	{
@@ -2234,7 +2234,7 @@ function str_pad(input, padlength, padchar, padtype)
 
 
 // hent xml verdier og attributter
-// så slipper vi så mye kode andre steder :]
+// sÃ¥ slipper vi sÃ¥ mye kode andre steder :]
 function xmlGetValue(xmldom, tagname, i, parentname, parenti)
 {
 	if (!i) i = 0; if (!parenti) parenti = 0;
@@ -2288,7 +2288,7 @@ function abortEvent(event)
 }
 
 
-// preloader - hente bilder før de vises
+// preloader - hente bilder fÃ¸r de vises
 function preload(src)
 {
 	var img = new Image;
@@ -2314,10 +2314,10 @@ var ajax = {
 	{
 		if (!wrap) wrap = document;
 		
-		// utfør oppgaver som skal kjøres etter innholdet er lastet inn
+		// utfÃ¸r oppgaver som skal kjÃ¸res etter innholdet er lastet inn
 		check_html(wrap);
 		
-		// kjør javascript
+		// kjÃ¸r javascript
 		$exec(this.js);
 		this.js = "";
 	},
@@ -2336,7 +2336,7 @@ var ajax = {
 		{
 			var t = '';
 			if (data.length > 10) t = " ("+data.substring(10)+")";
-			return "Fant ikke det du søkte"+t+".";
+			return "Fant ikke det du sÃ¸kte"+t+".";
 		}
 		
 		// ikke tilgang?
@@ -2362,7 +2362,7 @@ var ajax = {
 }
 
 
-// for å hindre at former blir utført flere ganger
+// for Ã¥ hindre at former blir utfÃ¸rt flere ganger
 function noSubmit(form)
 {
 	form.onsubmit = function() { return false; };
@@ -2370,7 +2370,7 @@ function noSubmit(form)
 
 
 /**
- * Forhåndsvise BB-kode (bruker MooTools funksjoner)
+ * ForhÃ¥ndsvise BB-kode (bruker MooTools funksjoner)
  */
 function preview(content, element_update)
 {
@@ -2392,7 +2392,7 @@ function preview(content, element_update)
 		{
 			if (text == "")
 			{
-				elm.set("html", "<p><b>Feil:</b> Ingen tekst å vise.</p>");
+				elm.set("html", "<p><b>Feil:</b> Ingen tekst Ã¥ vise.</p>");
 			}
 			else
 			{
@@ -2404,7 +2404,7 @@ function preview(content, element_update)
 		});
 		xhr.addEvent("failure", function()
 		{
-			elm.set("html", "<p><b>Feil:</b> Kunne ikke hente data. Prøv på nytt.</p>");
+			elm.set("html", "<p><b>Feil:</b> Kunne ikke hente data. PrÃ¸v pÃ¥ nytt.</p>");
 		});
 		elm.store("xhr", xhr);
 	}
@@ -2416,7 +2416,7 @@ function preview(content, element_update)
 	xhr.send();
 }
 
-// for å forhåndsvise BB kode til et element
+// for Ã¥ forhÃ¥ndsvise BB kode til et element
 function preview_bb(event, data, hidden_ids, dst_id, preview_text)
 {
 	if (event) abortEvent(event);
@@ -2457,7 +2457,7 @@ function preview_bb(event, data, hidden_ids, dst_id, preview_text)
 }
 
 
-// forhåndsvise ting
+// forhÃ¥ndsvise ting
 function previewDL(event, elmid, dtid, ddid)
 {
 	preview_bb(event, $(elmid).value, [dtid, ddid], ddid);
@@ -2552,7 +2552,7 @@ var boxHandleItem = new Class({
 		
 		this.checked = !this.checked;
 		
-		// har vi noen andre elementer som må krysses ut?
+		// har vi noen andre elementer som mÃ¥ krysses ut?
 		var self = this;
 		if (this.checked && !this.multiple && boxHandleElms[this.name].length > 1)
 		{
@@ -2610,7 +2610,7 @@ var boxHandleObj = {
 			// finn boksen
 			var box = wrap.getElement("input");
 			
-			// allerede gått gjennom denne?
+			// allerede gÃ¥tt gjennom denne?
 			if (box.retrieve("boxHandle")) return;
 			box.store("boxHandle", true);
 			
@@ -2621,7 +2621,7 @@ var boxHandleObj = {
 		// finn alle toogle linker
 		$(element).getElements(".box_handle_toggle").each(function(elm)
 		{
-			// allerede gått gjennom denne?
+			// allerede gÃ¥tt gjennom denne?
 			if (elm.retrieve("boxHandleOK")) return;
 			elm.store("boxHandleOK", true);
 			
@@ -2750,7 +2750,7 @@ function ajax_html(p, section, data, event, load_html, replace)
 	// event
 	if (event) new Event(event).preventDefault();
 	
-	// kjør ajax
+	// kjÃ¸r ajax
 	req.send();
 }
 
@@ -2782,7 +2782,7 @@ function get_form_data(form, event)
 }
 
 /**
- * Gjør om slik at skjemaene på siden kjøres via ajax
+ * GjÃ¸r om slik at skjemaene pÃ¥ siden kjÃ¸res via ajax
  */
 sm_scripts.ajax_forms = function()
 {
@@ -2834,7 +2834,7 @@ sm_scripts.ajax_forms = function()
 			// event
 			if (event) new Event(event).preventDefault();
 			
-			// kjør ajax
+			// kjÃ¸r ajax
 			req.send();
 		}
 	});
@@ -2849,7 +2849,7 @@ sm_scripts.ajax_forms = function()
 };
 sm_scripts.ajax_forms_init = function()
 {
-	// finn alle skjemaene på siden
+	// finn alle skjemaene pÃ¥ siden
 	$("default_main").getElements("form").each(function(element)
 	{
 		new AjaxForm(element);

@@ -20,14 +20,14 @@ function autologin_putlog($message = NULL)
 	}
 	else
 	{
-		putlog("NOTICE", "AUTOLOGIN: Ugyldig forespørsel fra {$_SERVER['REMOTE_ADDR']}$message");
+		putlog("NOTICE", "AUTOLOGIN: Ugyldig forespÃ¸rsel fra {$_SERVER['REMOTE_ADDR']}$message");
 	}
 }
 
 // mangler vi informasjon?
 if (!isset($_GET['h']))
 {
-	ess::$b->page->add_message("Ugyldig forespørsel.");
+	ess::$b->page->add_message("Ugyldig forespÃ¸rsel.");
 	autologin_putlog("Manglet hash");
 	redirect::handle();
 }
@@ -56,7 +56,7 @@ if ($al['al_redirect'])
 	redirect::store($al['al_redirect'], redirect::ROOT);
 }
 
-// allerede benyttet eller gått ut på tid?
+// allerede benyttet eller gÃ¥tt ut pÃ¥ tid?
 $expired = $al['al_time_expire'] < time();
 if ($al['al_time_used'] || $expired)
 {
@@ -70,21 +70,21 @@ if ($al['al_time_used'] || $expired)
 	if (login::$logged_in && login::$user->id == $al['al_u_id'])
 	{
 		// send til korrekt side uten beskjed
-		autologin_putlog(($expired ? "Gått ut på tid" . ($al['al_time_used'] ? " og allerede benyttet" : "") : "Allerede benyttet")."; Allerede logget inn");
+		autologin_putlog(($expired ? "GÃ¥tt ut pÃ¥ tid" . ($al['al_time_used'] ? " og allerede benyttet" : "") : "Allerede benyttet")."; Allerede logget inn");
 		redirect::handle();
 	}
 	
 	// logget inn men som en annen bruker?
 	if (login::$logged_in)
 	{
-		autologin_putlog(($expired ? "Gått ut på tid" . ($al['al_time_used'] ? " og allerede benyttet" : "") : "Allerede benyttet")."; Logget inn som annen bruker");
-		ess::$b->page->add_message("Lenken du forsøkte å åpne ".($expired ? "har gått ut på tid" : "har allerede blitt benyttet").". Du er ikke logget inn med samme bruker som lenken var rettet til.", "error");
+		autologin_putlog(($expired ? "GÃ¥tt ut pÃ¥ tid" . ($al['al_time_used'] ? " og allerede benyttet" : "") : "Allerede benyttet")."; Logget inn som annen bruker");
+		ess::$b->page->add_message("Lenken du forsÃ¸kte Ã¥ Ã¥pne ".($expired ? "har gÃ¥tt ut pÃ¥ tid" : "har allerede blitt benyttet").". Du er ikke logget inn med samme bruker som lenken var rettet til.", "error");
 		redirect::handle();
 	}
 	
 	// ikke logget inn
-	autologin_putlog(($expired ? "Gått ut på tid" . ($al['al_time_used'] ? " og allerede benyttet" : "") : "Allerede benyttet"));
-	ess::$b->page->add_message("Lenken du forsøkte å åpne ".($expired ? "har gått ut på tid" : "har allerede blitt benyttet").".".($al['al_redirect'] ? " Du må logge inn manuelt for å bli sendt til korrekt side." : ""), "error");
+	autologin_putlog(($expired ? "GÃ¥tt ut pÃ¥ tid" . ($al['al_time_used'] ? " og allerede benyttet" : "") : "Allerede benyttet"));
+	ess::$b->page->add_message("Lenken du forsÃ¸kte Ã¥ Ã¥pne ".($expired ? "har gÃ¥tt ut pÃ¥ tid" : "har allerede blitt benyttet").".".($al['al_redirect'] ? " Du mÃ¥ logge inn manuelt for Ã¥ bli sendt til korrekt side." : ""), "error");
 	redirect::handle();
 }
 
@@ -101,7 +101,7 @@ if (login::$logged_in)
 			ess::$b->db->query("UPDATE autologin SET al_time_used = ".time()." WHERE al_id = {$al['al_id']}");
 			
 			autologin_putlog("Logget inn som annen bruker; Bruker deaktivert");
-			ess::$b->page->add_message("Lenken du forsøkte å åpne var ment for en annen bruker som er deaktivert.", "error");
+			ess::$b->page->add_message("Lenken du forsÃ¸kte Ã¥ Ã¥pne var ment for en annen bruker som er deaktivert.", "error");
 			redirect::handle();
 		}
 		
@@ -115,7 +115,7 @@ if (login::$logged_in)
 			ess::$b->db->query("UPDATE autologin SET al_time_used = ".time().", al_sid = ".login::$info['ses_id']." WHERE al_id = {$al['al_id']}");
 			
 			autologin_putlog("Logget ut og logget inn med korrekt bruker");
-			ess::$b->page->add_message("Du har blitt automatisk logget ut av den forrige brukeren og logget inn med brukeren lenken du åpnet var ment for.<br />Du blir automatisk logget ut etter 15 minutter uten aktivitet.");
+			ess::$b->page->add_message("Du har blitt automatisk logget ut av den forrige brukeren og logget inn med brukeren lenken du Ã¥pnet var ment for.<br />Du blir automatisk logget ut etter 15 minutter uten aktivitet.");
 			redirect::handle();
 		}
 		
@@ -147,12 +147,12 @@ if (login::do_login_handle($al['al_u_id']))
 		ess::$b->db->query("UPDATE users SET u_pass = NULL, u_pass_change = NULL WHERE u_id = ".login::$user->id);
 		$reseted = login::$user->data['u_pass'] != null;
 		
-		// logg ut øktene
+		// logg ut Ã¸ktene
 		ess::$b->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_u_id = ".login::$user->id." AND ses_active = 1 AND ses_id != ".login::$info['ses_id']);
 		$logged_out = ess::$b->db->affected_rows();
 		
-		$msg = $reseted ? 'Ditt passord har nå blitt nullstilt, og du kan nå opprette et nytt passord.' : 'Ditt passord var allerede nullstilt.';
-		if ($logged_out > 0) $msg .= ' '.fwords("%d økt", "%d økter", $logged_out).' ble logget ut automatisk.';
+		$msg = $reseted ? 'Ditt passord har nÃ¥ blitt nullstilt, og du kan nÃ¥ opprette et nytt passord.' : 'Ditt passord var allerede nullstilt.';
+		if ($logged_out > 0) $msg .= ' '.fwords("%d Ã¸kt", "%d Ã¸kter", $logged_out).' ble logget ut automatisk.';
 		
 		autologin_putlog("Logget inn; passord nullstilt");
 		ess::$b->page->add_message("Du har blitt automatisk logget inn.<br />Du blir automatisk logget ut etter 15 minutter uten aktivitet.<br /><br />$msg");

@@ -35,7 +35,7 @@ class page_auksjoner extends pages_player
 	}
 	
 	/**
-	 * Behandle forespørsel
+	 * Behandle forespÃ¸rsel
 	 */
 	protected function handle()
 	{
@@ -87,7 +87,7 @@ class page_auksjoner extends pages_player
 		if ($type->id == 1)
 		{
 			echo '
-		<p class="j">Når du vinner en firma-auksjon, vil du automatisk bli satt som eier av firmaet. Dersom du allerede eier et firma fra før, vil du måtte kvitte deg med et av firmaene senest like etter at auksjonen er avsluttet. Dersom du allerede er medlem av 3 firmaer, slik at dette blir ditt fjerde, må du forlate ett av firmaene senest like etter at auksjonen er avsluttet.</p>';
+		<p class="j">NÃ¥r du vinner en firma-auksjon, vil du automatisk bli satt som eier av firmaet. Dersom du allerede eier et firma fra fÃ¸r, vil du mÃ¥tte kvitte deg med et av firmaene senest like etter at auksjonen er avsluttet. Dersom du allerede er medlem av 3 firmaer, slik at dette blir ditt fjerde, mÃ¥ du forlate ett av firmaene senest like etter at auksjonen er avsluttet.</p>';
 		}
 		
 		// kuler?
@@ -96,13 +96,13 @@ class page_auksjoner extends pages_player
 			if (!$this->up->weapon)
 			{
 				echo '
-		<p class="c">Du har ikke noe våpen, og kan ikke benytte deg av denne typen auksjoner.</p>';
+		<p class="c">Du har ikke noe vÃ¥pen, og kan ikke benytte deg av denne typen auksjoner.</p>';
 			}
 			
 			elseif ($this->up->data['up_weapon_bullets'] < auksjon::BULLETS_MIN)
 			{
 				echo '
-		<p class="c">Hvis du ønsker å selge kuler på auksjon må du ha minimum '.auksjon::BULLETS_MIN.' kuler.</p>';
+		<p class="c">Hvis du Ã¸nsker Ã¥ selge kuler pÃ¥ auksjon mÃ¥ du ha minimum '.auksjon::BULLETS_MIN.' kuler.</p>';
 			}
 			
 			else
@@ -112,7 +112,7 @@ class page_auksjoner extends pages_player
 			}
 		}
 		
-		// hent alle auksjonene og høyeste bud
+		// hent alle auksjonene og hÃ¸yeste bud
 		$expire = time() - 86400; // auksjoner er synlige i 24 timer etter de er avsluttet
 		$result = ess::$b->db->query("
 			SELECT
@@ -153,7 +153,7 @@ class page_auksjoner extends pages_player
 		if (count($tidligere) == 0 && count($senere) == 0 && count($tilgjengelige) == 0)
 		{
 			echo '
-		<p class="c">Det finnes for øyeblikket ingen auksjoner innenfor denne kategorien.</p>';
+		<p class="c">Det finnes for Ã¸yeblikket ingen auksjoner innenfor denne kategorien.</p>';
 		}
 		
 		// vis tilgjengelige bud
@@ -228,7 +228,7 @@ class page_auksjoner extends pages_player
 		}
 		
 		
-		// vis ferdige/utførte auksjoner
+		// vis ferdige/utfÃ¸rte auksjoner
 		if (count($tidligere) > 0)
 		{
 			echo '
@@ -276,11 +276,11 @@ class page_auksjoner extends pages_player
 	}
 	
 	/**
-	 * Selge kuler på auksjon
+	 * Selge kuler pÃ¥ auksjon
 	 */
 	protected function new_bullets()
 	{
-		// har ikke noe våpen eller nok kuler?
+		// har ikke noe vÃ¥pen eller nok kuler?
 		if (!$this->up->weapon || $this->up->data['up_weapon_bullets'] < auksjon::BULLETS_MIN)
 		{
 			redirect::handle();
@@ -293,34 +293,34 @@ class page_auksjoner extends pages_player
 			$bullets = (int) postval("bullets");
 			$time = (int) postval("time");
 			
-			// for få kuler?
+			// for fÃ¥ kuler?
 			if ($bullets < auksjon::BULLETS_MIN)
 			{
-				ess::$b->page->add_message("Du må legge ut minimum ".auksjon::BULLETS_MIN." kuler på auksjon.", "error");
+				ess::$b->page->add_message("Du mÃ¥ legge ut minimum ".auksjon::BULLETS_MIN." kuler pÃ¥ auksjon.", "error");
 			}
 			
 			// for mange kuler?
 			elseif ($bullets > auksjon::BULLETS_MAX)
 			{
-				ess::$b->page->add_message("Du kan ikke legge ut flere enn ".auksjon::BULLETS_MAX." kuler på auksjon.", "error");
+				ess::$b->page->add_message("Du kan ikke legge ut flere enn ".auksjon::BULLETS_MAX." kuler pÃ¥ auksjon.", "error");
 			}
 			
 			// flere enn vi har?
 			elseif ($bullets > $this->up->data['up_weapon_bullets'])
 			{
-				ess::$b->page->add_message("Du har ikke så mange kuler.", "error");
+				ess::$b->page->add_message("Du har ikke sÃ¥ mange kuler.", "error");
 			}
 			
 			// for lav startpris?
 			elseif ($price <= 0)
 			{
-				ess::$b->page->add_message("Startprisen må være over 0.", "error");
+				ess::$b->page->add_message("Startprisen mÃ¥ vÃ¦re over 0.", "error");
 			}
 			
 			// for kort varighet?
 			elseif ($time < auksjon::BULLETS_TIME_MIN)
 			{
-				ess::$b->page->add_message("Auksjonen må ha en varighet på minimum ".game::timespan(auksjon::BULLETS_TIME_MIN*60, game::TIME_FULL).".", "error");
+				ess::$b->page->add_message("Auksjonen mÃ¥ ha en varighet pÃ¥ minimum ".game::timespan(auksjon::BULLETS_TIME_MIN*60, game::TIME_FULL).".", "error");
 			}
 			
 			// for lang varighet?
@@ -340,7 +340,7 @@ class page_auksjoner extends pages_player
 				// hadde ikke nok kuler?
 				if (ess::$b->db->affected_rows() == 0)
 				{
-					ess::$b->page->add_message("Du har ikke så mange kuler.", "error");
+					ess::$b->page->add_message("Du har ikke sÃ¥ mange kuler.", "error");
 				}
 				
 				else
@@ -354,7 +354,7 @@ class page_auksjoner extends pages_player
 					ess::$b->db->query("INSERT INTO auksjoner SET a_type = ".auksjon::TYPE_KULER.", a_title = '$bullets kuler', a_up_id = {$this->up->id}, a_start = $timen, a_end = $expire, a_bid_start = $price, a_bid_jump = 50000, a_active = 1, a_params = $params");
 					
 					$a_id = ess::$b->db->insert_id();
-					putlog("INFO", "%bKULEAUKSJON:%b %u{$this->up->data['up_name']}%u opprettet en auksjon for ".$bullets." kuler med budstart på ".game::format_cash($price)." ".ess::$s['spath']."/auksjoner?a_id=$a_id");
+					putlog("INFO", "%bKULEAUKSJON:%b %u{$this->up->data['up_name']}%u opprettet en auksjon for ".$bullets." kuler med budstart pÃ¥ ".game::format_cash($price)." ".ess::$s['spath']."/auksjoner?a_id=$a_id");
 					
 					$auksjon = auksjon::get($a_id);
 					if ($auksjon)
@@ -367,7 +367,7 @@ class page_auksjoner extends pages_player
 					auksjon::update_cache();
 					
 					// live-feed
-					#livefeed::add_row('<user id="'.$this->up->id.'" /> opprettet en auksjon for <a href="'.ess::$s['relative_path'].'/auksjoner?a_id='.$a_id.'">'.$bullets.' kuler</a> med startbud på '.game::format_cash($price).'.');
+					#livefeed::add_row('<user id="'.$this->up->id.'" /> opprettet en auksjon for <a href="'.ess::$s['relative_path'].'/auksjoner?a_id='.$a_id.'">'.$bullets.' kuler</a> med startbud pÃ¥ '.game::format_cash($price).'.');
 					
 					ess::$b->page->add_message("Auksjonen ble opprettet.");
 					redirect::handle("auksjoner?a_id=$a_id");
@@ -378,19 +378,19 @@ class page_auksjoner extends pages_player
 		
 		echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Selg kuler på auksjon<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">Selg kuler pÃ¥ auksjon<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<p class="c"><a href="auksjoner?t=2">Tilbake</a></p>
-		<p>Her har du muligheten til å selge kuler på auksjon. På den måten kan du være heldig å tjene på tiden du har brukt for å få tak i kulene.</p>
-		<p>Når du oppretter en auksjon, har du ikke mulighet til å trekke den tilbake. Hvis ingen byr på auksjonen din vil du få kulene returnert.</p>
-		<p>Du har for øyeblikket <b>'.$this->up->data['up_weapon_bullets'].'</b> kuler som du kan selge.</p>
+		<p>Her har du muligheten til Ã¥ selge kuler pÃ¥ auksjon. PÃ¥ den mÃ¥ten kan du vÃ¦re heldig Ã¥ tjene pÃ¥ tiden du har brukt for Ã¥ fÃ¥ tak i kulene.</p>
+		<p>NÃ¥r du oppretter en auksjon, har du ikke mulighet til Ã¥ trekke den tilbake. Hvis ingen byr pÃ¥ auksjonen din vil du fÃ¥ kulene returnert.</p>
+		<p>Du har for Ã¸yeblikket <b>'.$this->up->data['up_weapon_bullets'].'</b> kuler som du kan selge.</p>
 		<form action="" method="post">
 			<dl class="dd_right">
 				<dt>Antall kuler som skal selges</dt>
 				<dd><input type="text" class="styled w40" name="bullets" value="'.max(auksjon::BULLETS_MIN, intval(postval("bullets"))).'" /></dd>
 				<dt>Varighet for auksjon (minutter)</dt>
 				<dd><input type="text" class="styled w40" name="time" value="'.intval(postval("time", auksjon::BULLETS_TIME_MAX)).'" /></dd>
-				<dt>Startpris på auksjon</dt>
+				<dt>Startpris pÃ¥ auksjon</dt>
 				<dd><input type="text" class="styled w80" name="price" value="'.game::format_cash(postval("price", 10000)).'" /></dd>
 			</dl>
 			<p class="c">'.show_sbutton("Opprett auksjon", 'name="create"').'</p>
@@ -480,7 +480,7 @@ class page_auksjoner_auksjon extends pages_player
 	 */
 	protected function handle()
 	{
-		// legg til eller øke bud
+		// legg til eller Ã¸ke bud
 		if (isset($_POST['raise_bid']) || isset($_POST['place_bid']))
 		{
 			$this->bid();
@@ -497,14 +497,14 @@ class page_auksjoner_auksjon extends pages_player
 	}
 	
 	/**
-	 * Øke eller legge til bud
+	 * Ã˜ke eller legge til bud
 	 */
 	protected function bid()
 	{
 		// nostat?
 		if (access::is_nostat() && $this->up->id != 1)
 		{
-			ess::$b->page->add_message("Du er nostatuser og har ikke tilgang til å by på auksjoner.", "error");
+			ess::$b->page->add_message("Du er nostatuser og har ikke tilgang til Ã¥ by pÃ¥ auksjoner.", "error");
 			redirect::handle();
 		}
 		
@@ -520,7 +520,7 @@ class page_auksjoner_auksjon extends pages_player
 		// firma og for lite helse?
 		if ($this->auksjon->data['a_type'] == auksjon::TYPE_FIRMA && $this->up->get_health_percent() < player::FF_HEALTH_LOW * 100)
 		{
-			ess::$b->page->add_message("Du har for lav helse til å kunne by på et firma.", "error");
+			ess::$b->page->add_message("Du har for lav helse til Ã¥ kunne by pÃ¥ et firma.", "error");
 			redirect::handle();
 		}
 		
@@ -539,7 +539,7 @@ class page_auksjoner_auksjon extends pages_player
 		// under min?
 		if (bccomp($amount, $min_bud) == -1)
 		{
-			ess::$b->page->add_message("Du må by minimum ".game::format_cash($min_bud).".", "error");
+			ess::$b->page->add_message("Du mÃ¥ by minimum ".game::format_cash($min_bud).".", "error");
 			redirect::handle();
 		}
 		
@@ -549,7 +549,7 @@ class page_auksjoner_auksjon extends pages_player
 		
 		$update = false;
 		
-		// økte bud?
+		// Ã¸kte bud?
 		if ($bud && isset($_POST['raise_bid']))
 		{
 			// er dette det siste budet?
@@ -576,21 +576,21 @@ class page_auksjoner_auksjon extends pages_player
 			{
 				// firma
 				case auksjon::TYPE_FIRMA:
-					// har vi bud på en annen auksjon?
+					// har vi bud pÃ¥ en annen auksjon?
 					$result = ess::$b->db->query("
 						SELECT ab_id
 						FROM auksjoner, auksjoner_bud
 						WHERE ab_a_id = a_id AND a_completed = 0 AND a_active != 0 AND a_type = ".auksjon::TYPE_FIRMA." AND ab_up_id = {$this->up->id} AND ab_active != 0");
 					if (mysql_num_rows($result) > 0)
 					{
-						ess::$b->page->add_message("Du har allerede bydd på en annen auksjon. Du kan ikke by på flere auksjoner samtidig.", "error");
+						ess::$b->page->add_message("Du har allerede bydd pÃ¥ en annen auksjon. Du kan ikke by pÃ¥ flere auksjoner samtidig.", "error");
 						redirect::handle();
 					}
 				break;
 				
 				// kuler
 				case auksjon::TYPE_KULER:
-					// har vi ikke noe våpen?
+					// har vi ikke noe vÃ¥pen?
 					if (!$this->up->weapon)
 					{
 						redirect::handle();
@@ -625,7 +625,7 @@ class page_auksjoner_auksjon extends pages_player
 		// ikke nok penger
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
+			ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda.", "error");
 			ess::$b->db->rollback();
 			redirect::handle();
 		}
@@ -637,7 +637,7 @@ class page_auksjoner_auksjon extends pages_player
 			{
 				// kuler
 				case auksjon::TYPE_KULER:
-					// oppdater antall kuler vi kjøper via auksjoner
+					// oppdater antall kuler vi kjÃ¸per via auksjoner
 					$kuler = (int) $this->auksjon->params->get("bullets");
 					if ($kuler)
 					{
@@ -647,7 +647,7 @@ class page_auksjoner_auksjon extends pages_player
 			}
 		}
 		
-		// oppdatere oppføringen?
+		// oppdatere oppfÃ¸ringen?
 		if ($update)
 		{
 			ess::$b->db->query("UPDATE auksjoner_bud SET ab_bid = $amount, ab_time = ".time()." WHERE ab_id = {$bud['ab_id']} AND ab_time = {$bud['ab_time']}");
@@ -661,7 +661,7 @@ class page_auksjoner_auksjon extends pages_player
 			}
 		}
 		
-		// ny oppføring
+		// ny oppfÃ¸ring
 		else
 		{
 			// tidligere bud som skal fjernes?
@@ -672,13 +672,13 @@ class page_auksjoner_auksjon extends pages_player
 				// kunne ikke fjerne tidligere bud?
 				if (ess::$b->db->affected_rows() == 0)
 				{
-					ess::$b->page->add_message("Kunne ikke øke budet.", "error");
+					ess::$b->page->add_message("Kunne ikke Ã¸ke budet.", "error");
 					ess::$b->db->rollback();
 					redirect::handle();
 				}
 			}
 			
-			// legg til oppføringen
+			// legg til oppfÃ¸ringen
 			ess::$b->db->query("INSERT INTO auksjoner_bud SET ab_a_id = {$this->auksjon->id}, ab_up_id = {$this->up->id}, ab_bid = $amount, ab_time = ".time());
 			
 			// oppdater auksjonen
@@ -691,24 +691,24 @@ class page_auksjoner_auksjon extends pages_player
 		$place = $this->auksjon->data['a_type'] == auksjon::TYPE_FIRMA ? "INFO" : "LOG";
 		if ($bud)
 		{
-			$msg = "Du har økt ditt bud.";
+			$msg = "Du har Ã¸kt ditt bud.";
 			
 			if ($update)
 			{
-				putlog($place, "%bAUKSJONER:%b %u{$this->up->data['up_name']}%u økte sitt bud til %b".game::format_cash($amount)."%b på %b{$this->auksjon->data['a_title']}%b og leder fortsatt auksjonen ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
+				putlog($place, "%bAUKSJONER:%b %u{$this->up->data['up_name']}%u Ã¸kte sitt bud til %b".game::format_cash($amount)."%b pÃ¥ %b{$this->auksjon->data['a_title']}%b og leder fortsatt auksjonen ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
 			}
 			else
 			{
-				putlog($place, "%bAUKSJONER:%b %u{$this->up->data['up_name']}%u økte sitt bud til %b".game::format_cash($amount)."%b på %b{$this->auksjon->data['a_title']}%b og leder nå auksjonen ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
+				putlog($place, "%bAUKSJONER:%b %u{$this->up->data['up_name']}%u Ã¸kte sitt bud til %b".game::format_cash($amount)."%b pÃ¥ %b{$this->auksjon->data['a_title']}%b og leder nÃ¥ auksjonen ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
 			}
 		}
 		else
 		{
 			$msg = "Du la inn bud for denne auksjonen.";
-			putlog($place, "%bAUKSJONER:%b %u{$this->up->data['up_name']}%u bydde %b".game::format_cash($amount)."%b på %b{$this->auksjon->data['a_title']}%b ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
+			putlog($place, "%bAUKSJONER:%b %u{$this->up->data['up_name']}%u bydde %b".game::format_cash($amount)."%b pÃ¥ %b{$this->auksjon->data['a_title']}%b ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
 		}
 		
-		// sørg for at det er minimum 2 min igjen av auksjonen
+		// sÃ¸rg for at det er minimum 2 min igjen av auksjonen
 		$end_min = time()+120;
 		if ($this->auksjon->data['a_end'] < $end_min)
 		{
@@ -736,18 +736,18 @@ class page_auksjoner_auksjon extends pages_player
 		// har ikke noe bud?
 		if (!$bud)
 		{
-			ess::$b->page->add_message("Du har ikke noe bud på denne auksjonen.", "error");
+			ess::$b->page->add_message("Du har ikke noe bud pÃ¥ denne auksjonen.", "error");
 			redirect::handle();
 		}
 		
 		// for gammelt?
 		if ($bud['ab_time'] < time()-auksjon::MAX_TIME_REMOVE)
 		{
-			ess::$b->page->add_message("Budet ditt har stått i mer enn ".game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL)." og er bindende. Du må vente til noen nyere bud har stått lengre enn ".game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL).".", "error");
+			ess::$b->page->add_message("Budet ditt har stÃ¥tt i mer enn ".game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL)." og er bindende. Du mÃ¥ vente til noen nyere bud har stÃ¥tt lengre enn ".game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL).".", "error");
 			redirect::handle();
 		}
 		
-		// fjern budet vi har på auksjonen
+		// fjern budet vi har pÃ¥ auksjonen
 		if (!auksjon::set_bud_inactive($bud, $this->auksjon, $this->up, true))
 		{
 			ess::$b->page->add_message("Budet ditt hadde endret seg.", "error");
@@ -760,7 +760,7 @@ class page_auksjoner_auksjon extends pages_player
 			// firma
 			case auksjon::TYPE_FIRMA:
 				// informer om handlingen
-				putlog("INFO", "%bAUKSJONER:%b %u{$this->up->data['up_name']}%u fjernet sitt bud på %b".game::format_cash($bud['ab_bid'])."%b fra %b{$this->auksjon->data['a_title']}%b ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
+				putlog("INFO", "%bAUKSJONER:%b %u{$this->up->data['up_name']}%u fjernet sitt bud pÃ¥ %b".game::format_cash($bud['ab_bid'])."%b fra %b{$this->auksjon->data['a_title']}%b ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
 			break;
 		}
 		
@@ -769,7 +769,7 @@ class page_auksjoner_auksjon extends pages_player
 		$msg = '';
 		if (mysql_num_rows($result) == 0)
 		{
-			// sørg for at det er minimum 2 min igjen av auksjonen
+			// sÃ¸rg for at det er minimum 2 min igjen av auksjonen
 			$end_min = time()+120;
 			if ($this->auksjon->data['a_end'] < $end_min)
 			{
@@ -780,7 +780,7 @@ class page_auksjoner_auksjon extends pages_player
 			}
 		}
 		
-		ess::$b->page->add_message("Du trakk tilbake budet ditt på ".game::format_cash($bud['ab_bid'])." innen det gikk ".game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL).".$msg");
+		ess::$b->page->add_message("Du trakk tilbake budet ditt pÃ¥ ".game::format_cash($bud['ab_bid'])." innen det gikk ".game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL).".$msg");
 		redirect::handle();
 	}
 	
@@ -873,7 +873,7 @@ class page_auksjoner_auksjon extends pages_player
 		echo '
 						<dt>Budstart</dt>
 						<dd>'.game::format_cash($this->auksjon->data['a_bid_start']).'</dd>
-						<dt>Minste budøkning</dt>
+						<dt>Minste budÃ¸kning</dt>
 						<dd>'.game::format_cash($this->auksjon->data['a_bid_jump']).'</dd>';
 		
 		// status
@@ -906,10 +906,10 @@ class page_auksjoner_auksjon extends pages_player
 		}
 		else
 		{
-			// pågår
+			// pÃ¥gÃ¥r
 			echo '
 						<dt>Status</dt>
-						<dd>Pågår nå</dd>';
+						<dd>PÃ¥gÃ¥r nÃ¥</dd>';
 		}
 		
 		echo '
@@ -933,73 +933,73 @@ class page_auksjoner_auksjon extends pages_player
 				<h1 class="bg1">Bud<span class="left"></span><span class="right"></span></h1>
 				<div class="bg1">';
 		
-		// auksjon pågår -- legg til nye bud
+		// auksjon pÃ¥gÃ¥r -- legg til nye bud
 		if ($this->auksjon->status == auksjon::STATUS_ACTIVE)
 		{
 			$own = $this->auksjon->data['a_up_id'] == $this->up->id;
 			
 			if (!$own)
 			{
-				// første budet?
+				// fÃ¸rste budet?
 				if (!$bud_lead)
 				{
 					echo '
-					<p>Dette er det første budet på denne auksjonen. Du må derfor by minimum '.game::format_cash($this->auksjon->data['a_bid_start']).'.</p>';
+					<p>Dette er det fÃ¸rste budet pÃ¥ denne auksjonen. Du mÃ¥ derfor by minimum '.game::format_cash($this->auksjon->data['a_bid_start']).'.</p>';
 				}
 				else
 				{
 					echo '
-					<p>Du må by minimum '.game::format_cash($this->auksjon->data['a_bid_jump']).' høyere enn '.($bud_lead['ab_up_id'] == $this->up->id ? 'ditt forrige bud' : 'det forrige budet til <user id="'.$bud_lead['ab_up_id'].'" />').' på '.game::format_cash($bud_lead['ab_bid']).'.</p>';
+					<p>Du mÃ¥ by minimum '.game::format_cash($this->auksjon->data['a_bid_jump']).' hÃ¸yere enn '.($bud_lead['ab_up_id'] == $this->up->id ? 'ditt forrige bud' : 'det forrige budet til <user id="'.$bud_lead['ab_up_id'].'" />').' pÃ¥ '.game::format_cash($bud_lead['ab_bid']).'.</p>';
 				}
 				
 				echo '
-					<p>Du kan trekke tilbake budet ditt innen det har gått '.game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL).'. Etter '.game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL | game::TIME_NOBOLD).' er budet ditt bindende og det kan ikke trekkes tilbake.</p>
-					<p>Dersom noen byr over deg, vil budet ditt bli inaktivt og du får pengene igjen etter at budet har stått i '.game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL | game::TIME_NOBOLD).'.</p>';
+					<p>Du kan trekke tilbake budet ditt innen det har gÃ¥tt '.game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL).'. Etter '.game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL | game::TIME_NOBOLD).' er budet ditt bindende og det kan ikke trekkes tilbake.</p>
+					<p>Dersom noen byr over deg, vil budet ditt bli inaktivt og du fÃ¥r pengene igjen etter at budet har stÃ¥tt i '.game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL | game::TIME_NOBOLD).'.</p>';
 			}
 			
 			// har vi bydd?
 			if ($bud_own)
 			{
-				// gått ut på tid?
+				// gÃ¥tt ut pÃ¥ tid?
 				if ($bud_own_locked)
 				{
 					echo '
-					<p>Du har bydd på denne auksjonen og ditt bud er bindende.</p>';
+					<p>Du har bydd pÃ¥ denne auksjonen og ditt bud er bindende.</p>';
 				}
 				
 				else
 				{
 					// kan trekke budet
 					echo '
-					<p>Du har bydd på denne auksjonen og kan fortsatt trekke tilbake ditt bud.</p>';
+					<p>Du har bydd pÃ¥ denne auksjonen og kan fortsatt trekke tilbake ditt bud.</p>';
 				}
 				
-				// vis budøkning
+				// vis budÃ¸kning
 				echo '
 					<form action="" method="post">
 						<dl class="dd_right">
-							<dt>Øk bud til</dt>
+							<dt>Ã˜k bud til</dt>
 							<dd><input class="styled w100 r" type="text" name="amount" value="'.game::format_cash($minstepris).'" /></dd>
 						</dl>
-						<p class="c">'.show_sbutton("Øk bud", 'name="raise_bid"').(!$bud_own_locked ? ' '.show_sbutton("Slett bud", 'name="del_bid"') : '').'</p>
+						<p class="c">'.show_sbutton("Ã˜k bud", 'name="raise_bid"').(!$bud_own_locked ? ' '.show_sbutton("Slett bud", 'name="del_bid"') : '').'</p>
 					</form>';
 			}
 			
 			// har ikke bydd
 			elseif (!$own)
 			{
-				// har ikke noe våpen?
+				// har ikke noe vÃ¥pen?
 				if ($this->auksjon->data['a_type'] == auksjon::TYPE_KULER && !$this->up->weapon)
 				{
 					echo '
-					<p>Du har ikke noe våpen og kan ikke delta i denne auksjonen.</p>';
+					<p>Du har ikke noe vÃ¥pen og kan ikke delta i denne auksjonen.</p>';
 				}
 				
 				// firma og for lite helse?
 				elseif ($this->auksjon->data['a_type'] == auksjon::TYPE_FIRMA && $this->up->get_health_percent() < player::FF_HEALTH_LOW * 100)
 				{
 					echo '
-					<p>Du har for lav helse til å kunne by på et firma.</p>';
+					<p>Du har for lav helse til Ã¥ kunne by pÃ¥ et firma.</p>';
 				}
 				
 				else
@@ -1033,7 +1033,7 @@ class page_auksjoner_auksjon extends pages_player
 			echo '
 					<dl class="dd_right">';
 			
-			// gå gjennom alle budene
+			// gÃ¥ gjennom alle budene
 			foreach ($bud as $row)
 			{
 				echo '

@@ -17,7 +17,7 @@ if (isset($_GET['up_id']) && access::has("mod"))
 	$player = player::get(intval(getval('up_id')));
 	if (!$player OR $player->id == login::$user->player->id) redirect::handle();
 	
-	ess::$b->page->add_message('Du viser nå WhatPulse-informasjonen til <user id="'.$player->id.'" />');
+	ess::$b->page->add_message('Du viser nÃ¥ WhatPulse-informasjonen til <user id="'.$player->id.'" />');
 	redirect::store("?up_id={$player->id}");
 }
 
@@ -32,7 +32,7 @@ if (mysql_num_rows($result) == 0)
 	<div class="section">
 		<h3>Informasjon</h3>
 		<p>
-			Du er ikke registrert med WhatPulse informasjon. For å koble WhatPulse informasjonen til din profil fyll ut formen nedenfor. Se på <a href="http://whatpulse.org/" target="_blank">whatpulse.org</a> for informasjon om WhatPulse.
+			Du er ikke registrert med WhatPulse informasjon. For Ã¥ koble WhatPulse informasjonen til din profil fyll ut formen nedenfor. Se pÃ¥ <a href="http://whatpulse.org/" target="_blank">whatpulse.org</a> for informasjon om WhatPulse.
 		</p>
 	</div>
 	<div class="section">
@@ -63,7 +63,7 @@ if (mysql_num_rows($result) == 0)
 		
 		else
 		{
-			// forsøk å lese data (XML)
+			// forsÃ¸k Ã¥ lese data (XML)
 			if (!$wp->update($data, false))
 			{
 				$_base->page->add_message("Ukjent feil oppsto.<br /><br />".htmlspecialchars($data));
@@ -88,7 +88,7 @@ if (mysql_num_rows($result) == 0)
 					$_base->db->query("INSERT INTO stats_whatpulse SET sw_userid = $id, sw_up_id = ".$player->id.", sw_time_add = ".time().", sw_params = ".$_base->db->quote($params_text));
 					putlog("NOTICE", "%c12%bWHATPULSE-OPPRETTELSE:%b%c (".$player->data['up_name'].") la til WhatPulse til sin profil (WPID: %u{$id}%u).");
 					
-					$_base->page->add_message("Du har nå koblet din WhatPulse konto til din konto her på Kofradia.<br />Du kan nå velge hvilke felt du ønsker å vise på profilen din.");
+					$_base->page->add_message("Du har nÃ¥ koblet din WhatPulse konto til din konto her pÃ¥ Kofradia.<br />Du kan nÃ¥ velge hvilke felt du Ã¸nsker Ã¥ vise pÃ¥ profilen din.");
 					redirect::handle();
 				}
 				
@@ -98,7 +98,7 @@ if (mysql_num_rows($result) == 0)
 			<h3>Legg til WhatPulse informasjon (trinn 2)</h3>
 			<p class="h_right"><a href="./">Avbryt</a></p>
 			<p>
-				Her er litt informasjon fra WhatPulse profilen du anga. Hvis dette er din WhatPulse profil som du ønsker å legge til trykk på legg til knappen nederst, eller trykk avbryt over.
+				Her er litt informasjon fra WhatPulse profilen du anga. Hvis dette er din WhatPulse profil som du Ã¸nsker Ã¥ legge til trykk pÃ¥ legg til knappen nederst, eller trykk avbryt over.
 			</p>
 			<dl class="dl_30">';
 				
@@ -148,7 +148,7 @@ else
 	if (isset($_POST['wpFjern']))
 	{
 		$_base->db->query("DELETE FROM stats_whatpulse WHERE sw_up_id = ".$player->id);
-		$_base->page->add_message("WhatPulse informasjonen er nå fjernet fra din konto.");
+		$_base->page->add_message("WhatPulse informasjonen er nÃ¥ fjernet fra din konto.");
 		putlog("NOTICE", "%c12%bWHATPULSE-FJERNING:%b%c (%u".$player->data['up_name']."%u) fjernet WhatPulse fra sin profil (WPID: %u{$wpInfo['sw_userid']}%u).");
 		redirect::handle();
 	}
@@ -164,11 +164,11 @@ else
 <h1>WhatPulse</h1>
 <div style="width: 300px" class="center">
 	<div class="section">
-		<h3>Feil oppstått med WhatPulse</h3>
+		<h3>Feil oppstÃ¥tt med WhatPulse</h3>
 		<p>Noe gikk feil ved henting og lesing av data fra WhatPulse serveren.</p>
-		<p>Du kan forsøke å laste inn data med en annen brukerkonto ved å fjerne tilknytningen til WhatPulse og deretter legge den til på nytt.</p>
+		<p>Du kan forsÃ¸ke Ã¥ laste inn data med en annen brukerkonto ved Ã¥ fjerne tilknytningen til WhatPulse og deretter legge den til pÃ¥ nytt.</p>
 		<form action="" method="post">
-			<p><input type="submit" name="wpFjern" value="Fjern fra Kofradia kontoen" class="button" onclick="return confirm(\'Er du sikker på at du ønsker å fjerne WhatPulse informasjonen fra Kofradia kontoen din?\')" /></p>
+			<p><input type="submit" name="wpFjern" value="Fjern fra Kofradia kontoen" class="button" onclick="return confirm(\'Er du sikker pÃ¥ at du Ã¸nsker Ã¥ fjerne WhatPulse informasjonen fra Kofradia kontoen din?\')" /></p>
 		</form>
 	</div>
 </div>';
@@ -340,7 +340,7 @@ function wpNySeperator(form)
 				<dd><a href="http://whatpulse.org/stats/profile.php?uid='.$wp->user_id.'" target="_blank">Vis WP profil</a></dd>
 				
 				<dt>Fjern</dt>
-				<dd><input type="submit" name="wpFjern" value="Fjern fra Kofradia kontoen" class="button" onclick="return confirm(\'Er du sikker på at du ønsker å fjerne WhatPulse informasjonen fra Kofradia kontoen din?\')" /></dd>
+				<dd><input type="submit" name="wpFjern" value="Fjern fra Kofradia kontoen" class="button" onclick="return confirm(\'Er du sikker pÃ¥ at du Ã¸nsker Ã¥ fjerne WhatPulse informasjonen fra Kofradia kontoen din?\')" /></dd>
 			</dl>
 		</div>
 	</form>
@@ -405,7 +405,7 @@ function wpNySeperator(form)
 <div class="wp" style="width: 250px; float: left; padding-left: 30px">
 	<div class="section">';
 		
-		// har vi noe å vise?
+		// har vi noe Ã¥ vise?
 		if (count($fields) > 0)
 		{
 			#$_base->page->add_css('.wp dd { text-align: center } .wp dl { margin: 0 -10px } .wp dt, .wp dd { padding-left: 8px; padding-right: 8px }');

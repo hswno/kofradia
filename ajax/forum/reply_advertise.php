@@ -12,10 +12,10 @@
 require "../../base/ajax.php";
 ajax::validate_sid();
 
-// kontroller lås
+// kontroller lÃ¥s
 ajax::validate_lock(true);
 
-// hent forumtråd
+// hent forumtrÃ¥d
 essentials::load_module("forum");
 $topic = new forum_topic_ajax(postval("topic_id"));
 
@@ -28,7 +28,7 @@ if (!$reply)
 	ajax::text("ERROR:404-REPLY", ajax::TYPE_INVALID);
 }
 
-// ikke et gyldig forum hvor vi kan annonsere forumsvar på nytt?
+// ikke et gyldig forum hvor vi kan annonsere forumsvar pÃ¥ nytt?
 if ($topic->forum->id < 5 || $topic->forum->id > 7)
 {
 	ajax::text("ERROR:INVALID-ANNOUNCE-FORUM", ajax::TYPE_INVALID);
@@ -37,4 +37,4 @@ if ($topic->forum->id < 5 || $topic->forum->id > 7)
 // annonser svaret
 $reply->announce();
 
-ajax::text("Forumsvaret ble annonsert på nytt. Du ser også denne oppføringen i hendelser.");
+ajax::text("Forumsvaret ble annonsert pÃ¥ nytt. Du ser ogsÃ¥ denne oppfÃ¸ringen i hendelser.");

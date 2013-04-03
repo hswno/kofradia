@@ -6,14 +6,14 @@
 class player
 {
 	/**
-	 * Helse under denne verdien fører til at man mister medlemskap i familier/firma
+	 * Helse under denne verdien fÃ¸rer til at man mister medlemskap i familier/firma
 	 */
 	const FF_HEALTH_LOW = 0.4;
 	
 	/**
-	 * Hvor lav helse vi må ha for at vi automatisk blir flyttet til en annen bydel
+	 * Hvor lav helse vi mÃ¥ ha for at vi automatisk blir flyttet til en annen bydel
 	 */
-	const HEALTH_MOVE_AUTO = 0.4; // samme som når man mister FF
+	const HEALTH_MOVE_AUTO = 0.4; // samme som nÃ¥r man mister FF
 	
 	/** Samling av spillerobjekter */
 	protected static $players = array();
@@ -52,7 +52,7 @@ class player
 	public $oppdrag;
 	
 	/**
-	 * Våpen
+	 * VÃ¥pen
 	 * @var weapon
 	 */
 	public $weapon;
@@ -72,7 +72,7 @@ class player
 	/**
 	 * Hent spillerobjekt
 	 * @param integer $up_id
-	 * @param user $user_object brukerobjektet som denne spilleren skal være standard spiller for
+	 * @param user $user_object brukerobjektet som denne spilleren skal vÃ¦re standard spiller for
 	 * @param boolean $find_user sett til true hvis $up_id er spillernavnet
 	 * @return player
 	 */
@@ -111,7 +111,7 @@ class player
 	/**
 	 * Last inn spillerinformasjon
 	 * @param integer $up_id
-	 * @param user $user_object brukerobjektet som denne spilleren skal være standard spiller for
+	 * @param user $user_object brukerobjektet som denne spilleren skal vÃ¦re standard spiller for
 	 * @param boolean $find_user sett til true hvis $up_id er spillernavnet
 	 */
 	public function __construct($up_id, user $user_object = NULL, $find_user = NULL)
@@ -140,7 +140,7 @@ class player
 		$this->id = $this->data['up_id'];
 		$this->active = $this->data['up_access_level'] != 0;
 		
-		// fjern variablene som skal lastes når de blir benyttet
+		// fjern variablene som skal lastes nÃ¥r de blir benyttet
 		$this->__wakeup(true);
 		
 		// referanse fra og til brukerobjekt?
@@ -150,7 +150,7 @@ class player
 			if ($is_login) $user_object->player = $this;
 		}
 		
-		// må ranklista oppdateres?
+		// mÃ¥ ranklista oppdateres?
 		if ($this->data['upr_rank_pos'] === null)
 		{
 			ranklist::flush();
@@ -173,7 +173,7 @@ class player
 	}
 	
 	/**
-	 * Lås brukeren og hent fersk data
+	 * LÃ¥s brukeren og hent fersk data
 	 */
 	public function lock()
 	{
@@ -215,11 +215,11 @@ class player
 	}
 	
 	/**
-	 * Fiks objektet hvis det har vært serialized
+	 * Fiks objektet hvis det har vÃ¦rt serialized
 	 */
 	public function __wakeup($clean = NULL)
 	{
-		// slett objektene på nytt hvis de ikke er initialisert med __get
+		// slett objektene pÃ¥ nytt hvis de ikke er initialisert med __get
 		if (!isset($this->params) || $clean) unset($this->params);
 		if (!isset($this->oppdrag) || $clean) unset($this->oppdrag);
 		if (!isset($this->rank) || $clean) unset($this->rank);
@@ -231,7 +231,7 @@ class player
 	}
 	
 	/**
-	 * Last inn objekter først når de skal benyttes
+	 * Last inn objekter fÃ¸rst nÃ¥r de skal benyttes
 	 */
 	public function __get($name)
 	{
@@ -271,7 +271,7 @@ class player
 				return $this->bydel;
 			break;
 			
-			// våpen
+			// vÃ¥pen
 			case "weapon":
 				$this->weapon = $this->data['up_weapon_id'] != 0 ? weapon::get($this->data['up_weapon_id'], $this) : false;
 				return $this->weapon;
@@ -307,7 +307,7 @@ class player
 		{
 			foreach ($to_up_id as $row)
 			{
-				// tillatt å send med arrays som har array med up_id felt
+				// tillatt Ã¥ send med arrays som har array med up_id felt
 				if (isset($row['up_id'])) $row = (int) $row['up_id'];
 				else $row = (int) $row;
 				
@@ -365,14 +365,14 @@ class player
 			  AND up_id = ".$this->id);
 		
 		// oppdater brukere
-		if (count($id_list) == 0) $id_list[] = $to_up_id; // fiks for at det alltid vil være en spiller som får ny melding
+		if (count($id_list) == 0) $id_list[] = $to_up_id; // fiks for at det alltid vil vÃ¦re en spiller som fÃ¥r ny melding
 		ess::$b->db->query("
 			UPDATE users, users_players
 			SET u_inbox_new = u_inbox_new + 1
 			WHERE up_id IN (".implode(",", $id_list).") AND up_u_id = u_id");
 		
 		// logg
-		putlog("LOG", "%c13%bMELDING%b%c: %u".$this->data['up_name']."%u opprettet ny meldingstråd med it_id {$it_id} (%u{$title}%u). Lengde: ".strlen($text)." bytes! ".ess::$s['path']."/innboks_les?id={$it_id}");
+		putlog("LOG", "%c13%bMELDING%b%c: %u".$this->data['up_name']."%u opprettet ny meldingstrÃ¥d med it_id {$it_id} (%u{$title}%u). Lengde: ".strlen($text)." bytes! ".ess::$s['path']."/innboks_les?id={$it_id}");
 		
 		return $it_id;
 	}
@@ -381,9 +381,9 @@ class player
 	 * Endre rankpoengene for spilleren
 	 * @param integer $points_change
 	 * @param boolean $use_login skal vi oppdatere sesjonsinfo hvis dette er den innloggede spilleren?
-	 * @param boolean $silent ikke annonser svaret på f.eks. IRC
+	 * @param boolean $silent ikke annonser svaret pÃ¥ f.eks. IRC
 	 * @param integer $points_change_rel
-	 * @param string $oppdrag_name navn for oppdragtrigger å identifisere funksjonen som gav poeng
+	 * @param string $oppdrag_name navn for oppdragtrigger Ã¥ identifisere funksjonen som gav poeng
 	 */
 	public function increase_rank($points_change, $use_login = true, $silent = null, $points_change_rel = null, $oppdrag_name = null)
 	{
@@ -395,9 +395,9 @@ class player
 	 * @param integer $points_change
 	 * @param player $up (evt. integer)
 	 * @param boolean $use_login skal vi oppdatere sesjonsinfo hvis dette er den innloggede spilleren?
-	 * @param boolean $silent ikke annonser svaret på f.eks. IRC
+	 * @param boolean $silent ikke annonser svaret pÃ¥ f.eks. IRC
 	 * @param integer $points_change_rel
-	 * @param string $oppdrag_name navn for oppdragtrigger å identifisere funksjonen som gav poeng
+	 * @param string $oppdrag_name navn for oppdragtrigger Ã¥ identifisere funksjonen som gav poeng
 	 * @return integer rank pos change/boolean false 404
 	 */
 	public static function increase_rank_static($points_change, $up, $use_login = false, $silent = null, $points_change_rel = null, $oppdrag_name = null)
@@ -414,7 +414,7 @@ class player
 		}
 		else $up_id = $up->id;
 		
-		// tilhører spilleren brukeren som er logget inn?
+		// tilhÃ¸rer spilleren brukeren som er logget inn?
 		$is_login = $use_login && login::$logged_in && $up_id == login::$user->player->id;
 		
 		// hent helt fersk spillerinfo
@@ -436,7 +436,7 @@ class player
 		$pos_change = 0;
 		$extra = "";
 		
-		// må ranklista oppdateres?
+		// mÃ¥ ranklista oppdateres?
 		if ($rank_pos === null)
 		{
 			ranklist::flush();
@@ -448,15 +448,15 @@ class player
 			// har fortsatt ikke plassering?
 			if (!$row)
 			{
-				throw new HSException("Klarer ikke å finne korrekt rankplassering.");
+				throw new HSException("Klarer ikke Ã¥ finne korrekt rankplassering.");
 			}
 		}
 		
-		// ranken vi har nå
+		// ranken vi har nÃ¥
 		$rank = game::rank_info($points);
 		$rank_num_now = $rank['number'];
 		
-		// ranken vi kommer til å være på etter endring
+		// ranken vi kommer til Ã¥ vÃ¦re pÃ¥ etter endring
 		$rank_after = game::rank_info($points_after);
 		$rank_num_after = $rank_after['number'];
 		
@@ -486,7 +486,7 @@ class player
 			// oppdater ranklisten
 			ess::$b->db->query("UPDATE users_players_rank SET upr_up_points = upr_up_points + $points_change WHERE upr_up_id = $up_id");
 			
-			// oppdater rankplasseringen til de vi går forbi
+			// oppdater rankplasseringen til de vi gÃ¥r forbi
 			#if (!$invisible) ess::$b->db->query("UPDATE users_players SET up_rank_pos = up_rank_pos + 1 WHERE up_points >= $points AND up_points < $points_after");
 			ranklist::update();
 		}
@@ -516,7 +516,7 @@ class player
 			// oppdater ranklisten
 			ess::$b->db->query("UPDATE users_players_rank SET upr_up_points = upr_up_points + $points_change WHERE upr_up_id = $up_id");
 			
-			// oppdater rankplasseringen til de vi går forbi
+			// oppdater rankplasseringen til de vi gÃ¥r forbi
 			#if (!$invisible) ess::$b->db->query("UPDATE users_players SET up_rank_pos = GREATEST(1, up_rank_pos - 1) WHERE up_points < $points AND up_points >= $points_after");
 			ranklist::update();
 		}
@@ -531,7 +531,7 @@ class player
 		// logg
 		putlog("SPAMLOG", "%c6%bRANKPOENG:%b%c %u{$name}%u skaffet %b%u{$points_change}%u%b rankpoeng ({$_SERVER['REQUEST_URI']}) ({$_SERVER['REQUEST_METHOD']})");
 		
-		// økning?
+		// Ã¸kning?
 		if ($rank_num_after > $rank_num_now)
 		{
 			for ($i = $rank_num_now+1; $i <= $rank_num_after && $i <= count(game::$ranks['items']); $i++)
@@ -617,7 +617,7 @@ class player
 				"pos" => $pos_change));
 		}
 		
-		// har vi endret plass når vi er i top 100 lista?
+		// har vi endret plass nÃ¥r vi er i top 100 lista?
 		if (($rank_pos <= 10 || $pos <= 10) && $pos_change != 0 && !$silent)
 		{
 			if ($pos_change < 0)
@@ -673,7 +673,7 @@ class player
 		$num = game::intval($num);
 		$up_id = (int) $up_id;
 		
-		// legg til melding og øk telleren til brukeren
+		// legg til melding og Ã¸k telleren til brukeren
 		ess::$b->db->query("INSERT INTO users_log (time, ul_up_id, type, note, num) VALUES (".time().", $up_id, $type, $message, $num)");
 		$id = ess::$b->db->insert_id();
 		
@@ -754,18 +754,18 @@ class player
 			"time_wait" => 0
 		);
 		
-		// finn ut om vi er i en aktiv periode (kan kjøpe lodd)
+		// finn ut om vi er i en aktiv periode (kan kjÃ¸pe lodd)
 		$date = ess::$b->date->get();
 		$lotto_active = ($date->format("i")/2 % 15) != 7;
 		
-		// finn når neste trekning er
+		// finn nÃ¥r neste trekning er
 		$offset_now = $date->format("i")*60+$date->format("s");
 		$lotto_next = ($offset_now >= 2700 ? 4500-$offset_now : ($offset_now >= 900 ? 2700-$offset_now : 900-$offset_now));
 		
-		// ventetiden før vi sjekker om vi har lodd
+		// ventetiden fÃ¸r vi sjekker om vi har lodd
 		$info['wait_time'] = $lotto_active ? 0 : ($lotto_next <= 60 ? $lotto_next + 60 : $lotto_next-1740);
 		
-		// har vi noen lodd nå?
+		// har vi noen lodd nÃ¥?
 		$result = ess::$b->db->query("SELECT MAX(time) FROM lotto WHERE l_up_id = $this->id");
 		$next = mysql_result($result, 0);
 		mysql_free_result($result);
@@ -804,7 +804,7 @@ class player
 		// fjern tilknytninger til FF
 		ff::set_leave($this->id);
 		
-		putlog("CREWCHAN", "%bAktivering%b: Spilleren {$this->data['up_name']} er nå aktivert igjen ".$this->generate_minside_url());
+		putlog("CREWCHAN", "%bAktivering%b: Spilleren {$this->data['up_name']} er nÃ¥ aktivert igjen ".$this->generate_minside_url());
 		return true;
 	}
 	
@@ -870,7 +870,7 @@ class player
 		}
 		putlog("CREWCHAN", "%bDeaktivering%b: Spilleren {$this->data['up_name']} $info ".$this->generate_minside_url());
 		
-		// gi tilbake eventuelle oppføringer i hitlisten
+		// gi tilbake eventuelle oppfÃ¸ringer i hitlisten
 		etterlyst::player_dies($this);
 		
 		return true;
@@ -878,8 +878,8 @@ class player
 	
 	/**
 	 * Spiller blir drept
-	 * @param bool $instant døde spilleren momentant?
-	 * @param player $by_up hvem som forårsaket dødsfallet
+	 * @param bool $instant dÃ¸de spilleren momentant?
+	 * @param player $by_up hvem som forÃ¥rsaket dÃ¸dsfallet
 	 */
 	public function dies($instant, player $by_up = NULL)
 	{
@@ -911,7 +911,7 @@ class player
 			WHERE up_id = $this->id AND up_access_level != 0");
 		if (ess::$b->db->affected_rows() == 0) return false;
 		
-		// har vi noen som skal få penger vi har i banken?
+		// har vi noen som skal fÃ¥ penger vi har i banken?
 		if ($this->data['up_bank'] > 0)
 		{
 			// hent liste over FF-id vi er med i
@@ -921,7 +921,7 @@ class player
 			{
 				$ff_ids = implode(",", $ff_list);
 				
-				// familier som skal få penger
+				// familier som skal fÃ¥ penger
 				$result = ess::$b->db->query("
 					SELECT ff_id
 					FROM ff
@@ -932,7 +932,7 @@ class player
 			// har vi noen familier eller ble drept instant
 			if ($num_ff > 0 || $instant)
 			{
-				// hent ut beløpet i banken og sett bankkontoen til 10 %
+				// hent ut belÃ¸pet i banken og sett bankkontoen til 10 %
 				ess::$b->db->query("
 					UPDATE users_players, (SELECT up_id ref_up_id, @bank := up_bank FROM users_players WHERE up_id = $this->id) ref
 					SET up_bank = up_bank * 0.1
@@ -958,7 +958,7 @@ class player
 				// noe til familie?
 				if ($f_ff > 0)
 				{
-					// hvor mye hver familie skal få
+					// hvor mye hver familie skal fÃ¥
 					$ff_bank_each = bcdiv(bcmul($bank, $f_ff), $num_ff);
 					
 					// del ut pengene til familiene
@@ -978,9 +978,9 @@ class player
 			}
 		}
 		
-		$info = ($instant ? 'ble drept av '.$by_up->data['up_name'] : ($by_up ? 'døde av skadene påført av '.$by_up->data['up_name'] : 'døde pga. lav helse og energi'));
+		$info = ($instant ? 'ble drept av '.$by_up->data['up_name'] : ($by_up ? 'dÃ¸de av skadene pÃ¥fÃ¸rt av '.$by_up->data['up_name'] : 'dÃ¸de pga. lav helse og energi'));
 		
-		putlog("INFO", "%bDrept%b: Spilleren {$this->data['up_name']} ".($instant ? 'ble drept ' : 'døde av skader ').$this->generate_profile_url());
+		putlog("INFO", "%bDrept%b: Spilleren {$this->data['up_name']} ".($instant ? 'ble drept ' : 'dÃ¸de av skader ').$this->generate_profile_url());
 		putlog("DF", "%bDrept%b: Spilleren {$this->data['up_name']} $info ".$this->generate_minside_url());
 		
 		// hent familier
@@ -993,24 +993,24 @@ class player
 		}
 		
 		// live-feed
-		livefeed::add_row('<user id="'.$this->id.'" />'.(count($familier) > 0 ? ' (medlem av '.implode(", ", $familier).')' : '').' '.($instant ? 'ble drept' : ($by_up ? 'døde av et tidligere angrep' : 'døde pga. lav helse og energi')).'.');
+		livefeed::add_row('<user id="'.$this->id.'" />'.(count($familier) > 0 ? ' (medlem av '.implode(", ", $familier).')' : '').' '.($instant ? 'ble drept' : ($by_up ? 'dÃ¸de av et tidligere angrep' : 'dÃ¸de pga. lav helse og energi')).'.');
 		
 		$ret = array_merge($ret, $this->release_relations($prev_level, $by_up, $instant));
 		
 		// behandle hitlist
 		$ret = array_merge($ret, etterlyst::player_dies($this, $by_up, $instant));
 		
-		// informer spilleren på e-post
+		// informer spilleren pÃ¥ e-post
 		$email = new email();
 		$email->text = 'Hei,
 
-Din spiller '.$this->data['up_name'].' '.($instant ? 'har blitt drept av en annen spiller' : 'døde på grunn av lav energi og lav helse').'.
+Din spiller '.$this->data['up_name'].' '.($instant ? 'har blitt drept av en annen spiller' : 'dÃ¸de pÃ¥ grunn av lav energi og lav helse').'.
 
-Du kan se informasjon om din spiller og opprette en ny spiller ved å logge inn på din bruker.
+Du kan se informasjon om din spiller og opprette en ny spiller ved Ã¥ logge inn pÃ¥ din bruker.
 
 --
 www.kofradia.no';
-		$email->send($this->user->data['u_email'], "Din spiller {$this->data['up_name']} ".($instant ? 'har blitt drept' : 'er død'));
+		$email->send($this->user->data['u_email'], "Din spiller {$this->data['up_name']} ".($instant ? 'har blitt drept' : 'er dÃ¸d'));
 		
 		// legg til hendelse hos spilleren
 		$this->add_log("dead", $instant ? 1 : 0);
@@ -1019,9 +1019,9 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Frigjør relasjonene en spiller har i spillet
-	 * Oppdaterer også ranklisten
-	 * @param int $previous_level spillernivået før død/deaktivering
+	 * FrigjÃ¸r relasjonene en spiller har i spillet
+	 * Oppdaterer ogsÃ¥ ranklisten
+	 * @param int $previous_level spillernivÃ¥et fÃ¸r dÃ¸d/deaktivering
 	 */
 	protected function release_relations($previous_level, player $up_attack = null, $instant = null)
 	{
@@ -1036,15 +1036,15 @@ www.kofradia.no';
 		
 		$ret = $this->release_relations_low_health(true, $up_attack, $instant);
 		
-		// overfør ansvar for bomberom
+		// overfÃ¸r ansvar for bomberom
 		$result = ess::$b->db->query("
 			SELECT up_id
 			FROM users_players
 			WHERE up_brom_up_id = $this->id");
 		if (mysql_num_rows($result) > 0)
 		{
-			// TODO: skal spilleren som overtar ansvaret få noen beskjed?
-			// TODO: hvis ingen overtar ansvaret: skal spilleren som mister ansvarsspiller få beskjed om dette?
+			// TODO: skal spilleren som overtar ansvaret fÃ¥ noen beskjed?
+			// TODO: hvis ingen overtar ansvaret: skal spilleren som mister ansvarsspiller fÃ¥ beskjed om dette?
 			
 			// skal vi gi ansvaret videre?
 			$resp = $this->data['up_brom_up_id']
@@ -1077,7 +1077,7 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Frigjør relasjon grunnet lav helse
+	 * FrigjÃ¸r relasjon grunnet lav helse
 	 */
 	public function release_relations_low_health($release_all = null, player $up_attack = null, $instant = null)
 	{
@@ -1109,7 +1109,7 @@ www.kofradia.no';
 			$lost = true;
 		}
 		
-		// oppdater tidspunkt for når man mistet FF
+		// oppdater tidspunkt for nÃ¥r man mistet FF
 		if ($lost)
 		{
 			ess::$b->db->query("UPDATE users_players SET up_health_ff_time = 0 WHERE up_id = $this->id");
@@ -1181,7 +1181,7 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Sjekk om vi har nok energi for å utføre en handling
+	 * Sjekk om vi har nok energi for Ã¥ utfÃ¸re en handling
 	 */
 	public function energy_check($value)
 	{
@@ -1189,7 +1189,7 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Krev at vi har minimum så mye energi
+	 * Krev at vi har minimum sÃ¥ mye energi
 	 */
 	public function energy_require($value)
 	{
@@ -1261,22 +1261,22 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Juster wanted nivå og sett i fengsel ved sannsynlighet
-	 * @param int $rank_points antall rankpoeng man skaffet (grunnlag for hvor mye wanted nivået går opp)
+	 * Juster wanted nivÃ¥ og sett i fengsel ved sannsynlighet
+	 * @param int $rank_points antall rankpoeng man skaffet (grunnlag for hvor mye wanted nivÃ¥et gÃ¥r opp)
 	 * @param bool $success var handlingen vellykket slik at man ikke skal kunne komme i fengsel?
 	 * @param bool $force tving spilleren i fengsel
-	 * @param int $force_time tidspunkt når spiller skal slippes løs når man tvinger spilleren i fengsel
+	 * @param int $force_time tidspunkt nÃ¥r spiller skal slippes lÃ¸s nÃ¥r man tvinger spilleren i fengsel
 	 */
 	public function fengsel_rank($rank_points, $success = false, $force = false, $force_time = NULL)
 	{
-		// finn ut hvor mye vi skal øke
+		// finn ut hvor mye vi skal Ã¸ke
 		$increase = 100;
 		if ($rank_points >= 0 && $rank_points <= 50)
 		{
 			$increase = $rank_points * 2 + 5;
 		}
 		
-		// øk wanted level
+		// Ã¸k wanted level
 		ess::$b->db->query("UPDATE users_players SET up_wanted_level = LEAST(1000, up_wanted_level * 1.10 + $increase) WHERE up_id = $this->id");
 		
 		// hent wanted level og test fengsel
@@ -1317,7 +1317,7 @@ www.kofradia.no';
 			// gi melding hvis aktiv bruker (den som viser siden)
 			if ($fengsel_time_wait == 0 && login::is_active_user($this) && isset(ess::$b->page))
 			{
-				ess::$b->page->add_message('Du ble tatt og kom i fengsel. Du slipper ut om '.game::counter($fengsel_time_wait_new, true).'. Wanted nivået er nå på '.game::format_num($this->data['up_wanted_level']/10, 1).' %.', null, null, "fengsel");
+				ess::$b->page->add_message('Du ble tatt og kom i fengsel. Du slipper ut om '.game::counter($fengsel_time_wait_new, true).'. Wanted nivÃ¥et er nÃ¥ pÃ¥ '.game::format_num($this->data['up_wanted_level']/10, 1).' %.', null, null, "fengsel");
 			}
 			
 			$fengsel = true;
@@ -1334,11 +1334,11 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Sjekk status på fengseldusør
+	 * Sjekk status pÃ¥ fengseldusÃ¸r
 	 */
 	public function fengsel_dusor_check()
 	{
-		// er vi ute av fengsel men har dusør?
+		// er vi ute av fengsel men har dusÃ¸r?
 		if ($this->data['up_fengsel_time'] < time() && $this->data['up_fengsel_dusor'])
 		{
 			// gi tilbake pengene
@@ -1379,7 +1379,7 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Sjekk hvor lenge vi skal være i bomberom
+	 * Sjekk hvor lenge vi skal vÃ¦re i bomberom
 	 */
 	public function bomberom_wait()
 	{
@@ -1408,7 +1408,7 @@ www.kofradia.no';
 		<p style="float: right; margin: 10px 0 10px 10px"><img src="'.STATIC_LINK.'/other/bomberom.jpg" alt="I bomberom" style="border: 2px solid #333333" /></p>
 		<p style="margin-top: 30px; text-align: center; font-size: 150%">I bomberom</p>
 		<p style="margin-top: 20px">Du befinner deg i bomberom frem til '.ess::$b->date->get($this->data['up_brom_expire'])->format(date::FORMAT_SEC).'.</p>
-		<p style="margin-top: 20px">'.game::counter($wait, true).' gjenstår</p>
+		<p style="margin-top: 20px">'.game::counter($wait, true).' gjenstÃ¥r</p>
 		<p style="margin-top: 20px"><a href="'.$__server['relative_path'].'/ff/?ff_id='.$this->data['up_brom_ff_id'].'">Vis mer informasjon &raquo;</a></p>
 	</div>
 </div>';
@@ -1421,10 +1421,10 @@ www.kofradia.no';
 	const ATTACK_TYPE_UTPRESSING = 1;
 	
 	/**
-	 * Sett ned helsen til spilleren etter skade utført av en annen spiller
+	 * Sett ned helsen til spilleren etter skade utfÃ¸rt av en annen spiller
 	 * @param int $miste_helse hvor mye helse som skal settes ned
-	 * @param player $up spilleren som forårsaker dette
-	 * @param int $attack_type hva slags angrep det var (0=drapsforsøk, 1=utpressing)
+	 * @param player $up spilleren som forÃ¥rsaker dette
+	 * @param int $attack_type hva slags angrep det var (0=drapsforsÃ¸k, 1=utpressing)
 	 * @param float $skadeprosent skadeprosenten ved et angrep
 	 * @param int $bullets antall kuler benyttet i angrep
 	 */
@@ -1432,11 +1432,11 @@ www.kofradia.no';
 	{
 		$transaction_before = ess::$b->db->transaction;
 		
-		// lås spillerene
+		// lÃ¥s spillerene
 		$up->lock();
 		$this->lock();
 		
-		// allerede død?
+		// allerede dÃ¸d?
 		if (!$this->active)
 		{
 			if (!$transaction_before) ess::$b->db->commit();
@@ -1446,7 +1446,7 @@ www.kofradia.no';
 		$miste_helse = (int) $miste_helse;
 		$attack_type = (int) $attack_type;
 		
-		// dør spilleren?
+		// dÃ¸r spilleren?
 		if ($this->data['up_health'] <= $miste_helse)
 		{
 			// gi rankpoeng
@@ -1468,7 +1468,7 @@ www.kofradia.no';
 				return false;
 			}
 			
-			// gi angriper pengene offeret hadde på hånden
+			// gi angriper pengene offeret hadde pÃ¥ hÃ¥nden
 			$cash = 0;
 			if ($this->data['up_cash'] > 0)
 			{
@@ -1480,16 +1480,16 @@ www.kofradia.no';
 				$up->data['up_cash'] += $cash;
 			}
 			
-			// øk telleren over antall drap
+			// Ã¸k telleren over antall drap
 			ess::$b->db->query("UPDATE users_players SET up_attack_killed_num = up_attack_killed_num + 1 WHERE up_id = {$up->id}");
 			
-			// øk telleren over antall drap i familien spilleren er medlem i
+			// Ã¸k telleren over antall drap i familien spilleren er medlem i
 			$up->attack_ff_update("killed");
 			
 			$ret = array_merge($ret, array(
 				"drept" => true,
 				"rankpoeng" => $rankpoeng, // antall rankpoeng man fikk
-				"penger" => $cash // penger offeret hadde på hånda
+				"penger" => $cash // penger offeret hadde pÃ¥ hÃ¥nda
 			));
 		}
 		
@@ -1528,7 +1528,7 @@ www.kofradia.no';
 			$ret['rankpoeng'] = 0;
 			$ret['rankpoeng_lost'] = 0;
 			
-			// sett ny beskyttelse på offeret
+			// sett ny beskyttelse pÃ¥ offeret
 			$prot_mistet = "";
 			$ret['protection_replaced'] = false;
 			if ($this->protection->data)
@@ -1543,7 +1543,7 @@ www.kofradia.no';
 				else $prot_mistet = round($prot_mistet, 5);
 			}
 			
-			// rettet drapsforsøk?
+			// rettet drapsforsÃ¸k?
 			$rankpoeng = 0;
 			if ($attack_type == self::ATTACK_TYPE_KILL)
 			{
@@ -1576,10 +1576,10 @@ www.kofradia.no';
 				// behandle etterlyst
 				$ret['hitlist'] = etterlyst::player_hurt($this, $up, $miste_helse / $this->data['up_health_max']);
 				
-				// øk telleren over antall mislykkede drapsforsøk for angriper
+				// Ã¸k telleren over antall mislykkede drapsforsÃ¸k for angriper
 				ess::$b->db->query("UPDATE users_players SET up_attack_damaged_num = up_attack_damaged_num + 1$extra WHERE up_id = {$up->id}");
 				
-				// øk telleren over antall mislykkede drapsforsøk i familien spilleren er medlem i
+				// Ã¸k telleren over antall mislykkede drapsforsÃ¸k i familien spilleren er medlem i
 				$up->attack_ff_update("damaged");
 				
 				// oppdater ff-stats
@@ -1595,15 +1595,15 @@ www.kofradia.no';
 					$this->increase_rank(-$rankpoeng_lost, false, true, -$rankpoeng, "attack");
 				}
 				
-				// informer spilleren på e-post
+				// informer spilleren pÃ¥ e-post
 				$email = new email();
 				$email->text = 'Hei,
 
 Din spiller '.$this->data['up_name'].' har blitt angrepet av en annen spiller og du har blitt skadet.
 
-Spilleren har nå '.game::format_num($this->get_health_percent(), 2).' % helse'.($this->protection->data ? ', ' : ' og ').game::format_num($this->get_energy_percent(), 2).' % energi'.($this->protection->data ? ' og '.game::format_num($this->get_protection_percent(), 2).' % beskyttelse' : '').'.
+Spilleren har nÃ¥ '.game::format_num($this->get_health_percent(), 2).' % helse'.($this->protection->data ? ', ' : ' og ').game::format_num($this->get_energy_percent(), 2).' % energi'.($this->protection->data ? ' og '.game::format_num($this->get_protection_percent(), 2).' % beskyttelse' : '').'.
 
-Pass på så du ikke risikerer at spilleren blør ihjel!
+Pass pÃ¥ sÃ¥ du ikke risikerer at spilleren blÃ¸r ihjel!
 
 --
 www.kofradia.no';
@@ -1648,7 +1648,7 @@ www.kofradia.no';
 				$ret['protection_new_p'] = $note_data[6];
 			}
 			
-			// så lite helse at spilleren mister medlemskap i familie/firma
+			// sÃ¥ lite helse at spilleren mister medlemskap i familie/firma
 			if ($this->data['up_health'] / $this->data['up_health_max'] < self::FF_HEALTH_LOW)
 			{
 				$ret = array_merge($ret, $this->release_relations_low_health(null, $up, true));
@@ -1656,7 +1656,7 @@ www.kofradia.no';
 		}
 		
 		// behandle vitner
-		// hvis det er en utpressing er det kun vitner hvis spilleren dør
+		// hvis det er en utpressing er det kun vitner hvis spilleren dÃ¸r
 		$vitner_id = array();
 		$vitner = array();
 		$vitner_log = array();
@@ -1677,7 +1677,7 @@ www.kofradia.no';
 			}
 			
 			// hent ut tilfeldige vitner
-			$timelimit = time() - 86400; // vitnet må ha vært pålogget siste 24 timene
+			$timelimit = time() - 86400; // vitnet mÃ¥ ha vÃ¦rt pÃ¥logget siste 24 timene
 			
 			// hent ut tilfeldige vitner
 			$result = ess::$b->db->query("
@@ -1705,7 +1705,7 @@ www.kofradia.no';
 			}
 		}
 		
-		// hent medlemmer av familie til offeret og sjekk om de skal være vitner
+		// hent medlemmer av familie til offeret og sjekk om de skal vÃ¦re vitner
 		if ($ret['drept'] || ($attack_type != self::ATTACK_TYPE_UTPRESSING))
 		{
 			// sett opp liste
@@ -1719,7 +1719,7 @@ www.kofradia.no';
 			
 			if (count($ids) > 0)
 			{
-				$limit = 21600; // pålogget innen 6 timer
+				$limit = 21600; // pÃ¥logget innen 6 timer
 				$expire = time() - $limit;
 				$result = ess::$b->db->query("
 					SELECT DISTINCT up_id, up_last_online
@@ -1733,7 +1733,7 @@ www.kofradia.no';
 					if (in_array($row['up_id'], $vitner_id)) continue;
 					
 					// beregn sannsynlighet
-					$prob = min($limit, $row['up_last_online'] - $expire) / $limit * 0.8; // 80 % maks sannsynlighet hvis pålogget akkurat nå
+					$prob = min($limit, $row['up_last_online'] - $expire) / $limit * 0.8; // 80 % maks sannsynlighet hvis pÃ¥logget akkurat nÃ¥
 					
 					// sjekk sannsynlighet
 					if (round($prob*1000) < rand(1, 1000)) continue;
@@ -1774,7 +1774,7 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Kalkuler antall rankpoeng man får ved å skade en spiller
+	 * Kalkuler antall rankpoeng man fÃ¥r ved Ã¥ skade en spiller
 	 * @param player $up offeret
 	 * @param bool $killed ble spilleren drept
 	 * @param bool $skadeprosent
@@ -1800,7 +1800,7 @@ www.kofradia.no';
 			$rank_num = $up->rank['number'];
 		}
 		
-		// finn verdien hvis den finnes, hvis ikke bruk den høyeste verdien
+		// finn verdien hvis den finnes, hvis ikke bruk den hÃ¸yeste verdien
 		if (isset($table[$rank_num])) $value = $table[$rank_num];
 		else $value = end($table[$rank_num]);
 		
@@ -1818,7 +1818,7 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Kalkuler sannsynlighet for å finne spilleren
+	 * Kalkuler sannsynlighet for Ã¥ finne spilleren
 	 */
 	public function calc_find_player_prob()
 	{
@@ -1832,14 +1832,14 @@ www.kofradia.no';
 			$prob *= 0.6 + 0.4 * $tid_siden_reise / 2700;
 		}
 		
-		// juster sannsynligheten i forhold til wanted nivå
+		// juster sannsynligheten i forhold til wanted nivÃ¥
 		$prob += 0.3 * $this->data['up_wanted_level'] / 1000;
 		
 		return $prob;
 	}
 	
 	/**
-	 * Er spilleren nostat? (Moderator og høyere)
+	 * Er spilleren nostat? (Moderator og hÃ¸yere)
 	 */
 	public function is_nostat()
 	{
@@ -1908,15 +1908,15 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Beregn hvor mange rankpoeng vi skal få
+	 * Beregn hvor mange rankpoeng vi skal fÃ¥
 	 */
 	public function calc_rankpoints_get($rankpoints)
 	{
-		// sett i forhold til når spilleren var pålogget
+		// sett i forhold til nÃ¥r spilleren var pÃ¥logget
 		$t = max(0, time() - $this->data['up_last_online']);
 		$rankpoints *= pow(0.6, $t / 604800); // eksponentiell synking
 		
-		// får bare 90 % av dette
+		// fÃ¥r bare 90 % av dette
 		return max(50, round($rankpoints * 0.9));
 	}
 	
@@ -1965,7 +1965,7 @@ www.kofradia.no';
 			}
 			else
 			{
-				putlog("DF", "ANGREP %c4DREPT%c: {$up->data['up_name']} ({$up->rank['name']}) angrep%c3 {$this->data['up_name']}%c ({$this->rank['name']}) med ".$up->weapon->data['name']." (".game::format_number($up->data['up_weapon_training']*100, 2)." % våpentrening) med ".fwords("%d kule", "%d kuler", $ret['bullets']).". ".$this->generate_minside_url());
+				putlog("DF", "ANGREP %c4DREPT%c: {$up->data['up_name']} ({$up->rank['name']}) angrep%c3 {$this->data['up_name']}%c ({$this->rank['name']}) med ".$up->weapon->data['name']." (".game::format_number($up->data['up_weapon_training']*100, 2)." % vÃ¥pentrening) med ".fwords("%d kule", "%d kuler", $ret['bullets']).". ".$this->generate_minside_url());
 				putlog("DF", " - Angrepstyrke: ".game::format_number($ret['attack_skade'][0]*100, 2).", beskyttelsestyrke: ".game::format_number($ret['attack_skade'][1]*100, 2).", skadeprosent: ".game::format_number($ret['skadeprosent']*100, 2)." % av ".weapon::MAX_ATTACK_HEALTH." helsepoeng");
 			}
 			
@@ -1995,7 +1995,7 @@ www.kofradia.no';
 				}
 			}
 			
-			putlog("DF", " - Penger fra hånda: ".game::format_cash($ret['penger']));
+			putlog("DF", " - Penger fra hÃ¥nda: ".game::format_cash($ret['penger']));
 			if (isset($ret['penger_bank'])) putlog("DF", " - Penger fra banken: ".game::format_cash($ret['penger_bank']));
 			putlog("DF", " - Penger fra hitlist: ".game::format_cash($ret['hitlist']));
 			
@@ -2009,10 +2009,10 @@ www.kofradia.no';
 		elseif ($attack_type == self::ATTACK_TYPE_KILL)
 		{
 			// logg
-			putlog("DF", "ANGREP %c8SKADET%c: {$up->data['up_name']} ({$up->rank['name']}) angrep%c3 {$this->data['up_name']}%c ({$this->rank['name']}) med ".$up->weapon->data['name']." (".game::format_number($up->data['up_weapon_training']*100, 2)." % våpentrening) med ".fwords("%d kule", "%d kuler", $ret['bullets']).". ".$this->generate_minside_url());
+			putlog("DF", "ANGREP %c8SKADET%c: {$up->data['up_name']} ({$up->rank['name']}) angrep%c3 {$this->data['up_name']}%c ({$this->rank['name']}) med ".$up->weapon->data['name']." (".game::format_number($up->data['up_weapon_training']*100, 2)." % vÃ¥pentrening) med ".fwords("%d kule", "%d kuler", $ret['bullets']).". ".$this->generate_minside_url());
 			putlog("DF", " - Angrepstyrke: ".game::format_number($ret['attack_skade'][0]*100, 2).", beskyttelsestyrke: ".game::format_number($ret['attack_skade'][1]*100, 2).", skadeprosent: ".game::format_number($ret['skadeprosent']*100, 2)." % av ".weapon::MAX_ATTACK_HEALTH." helsepoeng");
-			putlog("DF", " - Helse: Mistet ".game::format_number($ret['health_lost_p'] * 100, 3)." % ({$ret['health_lost']}) og har nå%c4 ".game::format_number($ret['health_new_p'] * 100, 3)." %");
-			putlog("DF", " - Energi: Mistet ".game::format_number($ret['energy_lost_p'] * 100, 3)." % ({$ret['energy_lost']}) og har nå%c12 ".game::format_number($ret['energy_new_p'] * 100, 3)." %");
+			putlog("DF", " - Helse: Mistet ".game::format_number($ret['health_lost_p'] * 100, 3)." % ({$ret['health_lost']}) og har nÃ¥%c4 ".game::format_number($ret['health_new_p'] * 100, 3)." %");
+			putlog("DF", " - Energi: Mistet ".game::format_number($ret['energy_lost_p'] * 100, 3)." % ({$ret['energy_lost']}) og har nÃ¥%c12 ".game::format_number($ret['energy_new_p'] * 100, 3)." %");
 			
 			if ($ret['protection_replaced'])
 			{
@@ -2024,7 +2024,7 @@ www.kofradia.no';
 			}
 			else
 			{
-				putlog("DF", " - Beskyttelse: Mistet ".game::format_number($ret['protection_lost_p'] * 100, 3)." % og har nå ".game::format_number($ret['protection_new_p'] * 100, 3)." %");
+				putlog("DF", " - Beskyttelse: Mistet ".game::format_number($ret['protection_lost_p'] * 100, 3)." % og har nÃ¥ ".game::format_number($ret['protection_new_p'] * 100, 3)." %");
 			}
 			
 			putlog("DF", " - Rankpoeng: {$up->data['up_name']} fikk ".game::format_num($ret['rankpoeng'])." rankpoeng (offeret mistet ".game::format_num($ret['rankpoeng_lost']).") ".$up->generate_minside_url());
@@ -2041,7 +2041,7 @@ www.kofradia.no';
 				}
 			}
 			
-			putlog("DF", " - Penger fra hånda: ".game::format_cash($ret['penger']));
+			putlog("DF", " - Penger fra hÃ¥nda: ".game::format_cash($ret['penger']));
 			putlog("DF", " - Penger fra hitlist: ".game::format_cash($ret['hitlist']));
 		}
 	}
@@ -2135,7 +2135,7 @@ www.kofradia.no';
 	 * @param int $amount
 	 * @param bool $cash true=up_cash false=up_bank
 	 * @param bool $update oppdatere users_players tabellen?
-	 * @param int/bool $least må ha minst dette pengebeløpet, evt. true hvis kontrollere at pengenivået ikke går under 0? (kan uansett ikke gå under 0)
+	 * @param int/bool $least mÃ¥ ha minst dette pengebelÃ¸pet, evt. true hvis kontrollere at pengenivÃ¥et ikke gÃ¥r under 0? (kan uansett ikke gÃ¥ under 0)
 	 */
 	public function update_money($amount, $cash = true, $update = true, $least = null)
 	{
@@ -2172,7 +2172,7 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Har spiller lov til å sette spiller i bomberom?
+	 * Har spiller lov til Ã¥ sette spiller i bomberom?
 	 * @param	int		$up_id
 	 * @return	bool
 	 */
@@ -2197,14 +2197,14 @@ www.kofradia.no';
 	}
 	
 	/**
-	 * Spiller dør av lite helse/deaktiverer seg selv
+	 * Spiller dÃ¸r av lite helse/deaktiverer seg selv
 	 */
 	public function bleed_handle()
 	{
 		$expire = time()-3600*4;
 		$by_up = null;
 		
-		// er dødsfallet innenfor tidspunktet hvor noen kan få kreditt for det?
+		// er dÃ¸dsfallet innenfor tidspunktet hvor noen kan fÃ¥ kreditt for det?
 		if ($this->data['up_attacked_time'] >= $expire)
 		{
 			// har vi en spiller som vi skal gi kreditt?
@@ -2216,12 +2216,12 @@ www.kofradia.no';
 					// gi kreditt
 					ess::$b->db->query("UPDATE users_players SET up_attack_bleed_num = up_attack_bleed_num + 1 WHERE up_id = $by_up->id");
 					
-					// gi beskjed til spilleren om at denne spillerne blødde ihjel
+					// gi beskjed til spilleren om at denne spillerne blÃ¸dde ihjel
 					$by_up->add_log("player_bleed", NULL, $this->id);
 				}
 			}
 			
-			// har vi noen FF som skal få kreditt?
+			// har vi noen FF som skal fÃ¥ kreditt?
 			if ($this->data['up_attacked_ff_id_list'])
 			{
 				ff::attack_update(false, "bleed", array_map("intval", explode(",", $this->data['up_attacked_ff_id_list'])));

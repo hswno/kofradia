@@ -1,15 +1,15 @@
 <?php
 
-// iso-8859-1
-header("Content-Type: text/html; charset=ISO-8859-1");
+// utf-8
+header("Content-Type: text/html; charset=utf-8");
 
 // sett opp head
-$head = '<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+$head = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="Henrik Steen; http://www.henrist.net" />
 <meta name="keywords" content="'.ess::$b->page->generate_keywords().'" />
 <meta name="description" content="'.ess::$b->page->description.'" />
 <link rel="shortcut icon" href="'.ess::$s['relative_path'].'/favicon.ico" />
-<link rel="alternate" href="'.ess::$s['relative_path'].'/rss/forum_topics" type="application/rss+xml" title="Siste tråder i forumene" />
+<link rel="alternate" href="'.ess::$s['relative_path'].'/rss/forum_topics" type="application/rss+xml" title="Siste trÃ¥der i forumene" />
 <link rel="alternate" href="'.ess::$s['relative_path'].'/rss/forum_replies" type="application/rss+xml" title="Siste svar i forumene" />
 <link rel="alternate" href="http://kofradia.wordpress.com/feed/" type="application/rss+xml" title="Nyheter fra bloggen" />
 <link href="'.ess::$s['path'].'/themes/sm/default.css?'.@filemtime(dirname(__FILE__)."/default.css").'" rel="stylesheet" type="text/css" />';
@@ -47,7 +47,7 @@ if (!ess::$b->page->js_disable)
 	if (defined("LOCK") && LOCK) ess::$b->page->add_js('var theme_lock=true;');
 }
 
-// legg til øverst i head
+// legg til Ã¸verst i head
 ess::$b->page->head = $head . ess::$b->page->head;
 
 // sett opp nettleser "layout engine" til CSS
@@ -72,7 +72,7 @@ foreach ($list as $key => $item)
 
 if (!isset($_SERVER['HTTP_USER_AGENT']) || strpos($_SERVER['HTTP_USER_AGENT'], "MSIE 6") === false)
 {
-	#header("Content-Type: application/xhtml+xml; charset=iso-8859-1");
-	#header("Content-Type: text/html; charset=iso-8859-1");
-	/*echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";*/
+	#header("Content-Type: application/xhtml+xml; charset=utf-8");
+	#header("Content-Type: text/html; charset=utf-8");
+	/*echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";*/
 }

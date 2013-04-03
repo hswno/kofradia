@@ -2,17 +2,17 @@
 
 /*
  * Dette scriptet gir bonus til spillere som har vervet andre spillere.
- * Oppgaven kjøres kl. 07:00 hver dag.
+ * Oppgaven kjÃ¸res kl. 07:00 hver dag.
  * 
- * Selve vervingen er brukerbasert, slik at hvis en vervet spiller dør,
+ * Selve vervingen er brukerbasert, slik at hvis en vervet spiller dÃ¸r,
  * vil den nye spilleren telle (men spilleren som vervet vil ikke vite hvem
- * dette er). Hvis den som verver dør/deaktiverer vil den nye spilleren gjelde.
+ * dette er). Hvis den som verver dÃ¸r/deaktiverer vil den nye spilleren gjelde.
  */
 
 $points_limit = 300000;
 $points_bonus_factor = 0.10; // 10 % i bonus
 
-// Øk bonusen til 20% i desember
+// Ã˜k bonusen til 20% i desember
 if (time() > 1354320000 && time() < 1356998399)
 {
 	$points_bonus_factor = 0.20;
@@ -79,7 +79,7 @@ foreach ($players as $up_id => $bonus)
 		// gi rankpoengene
 		$up->increase_rank($bonus, false);
 		
-		// oppdater antall poeng vi har fått via verving
+		// oppdater antall poeng vi har fÃ¥tt via verving
 		ess::$b->db->query("UPDATE users_players SET up_points_recruited = up_points_recruited + $bonus WHERE up_id = $up_id");
 	}
 }

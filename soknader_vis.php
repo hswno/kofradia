@@ -6,25 +6,25 @@ define("FORCE_HTTPS", true);
 require "base.php";
 global $_base;
 
-$_base->page->add_title("Søknader");
+$_base->page->add_title("SÃ¸knader");
 
-// hent aktuell søknad
+// hent aktuell sÃ¸knad
 $id = $_base->db->quote(getval("so_id"));
 $result = $_base->db->query("SELECT so_id, so_title, so_info, so_expire, so_status FROM soknader_oversikt WHERE so_id = $id");
 
 $soknad = mysql_fetch_assoc($result);
 $closed = $soknad['so_expire'] <= time();
 
-// finnes ikke, eller ikke tilgang til ikke publisert søknad
+// finnes ikke, eller ikke tilgang til ikke publisert sÃ¸knad
 if (!$soknad || ($soknad['so_status'] == 0 && !access::has("crewet")))
 {
-	$_base->page->add_message("Fant ikke søknaden.", "error");
+	$_base->page->add_message("Fant ikke sÃ¸knaden.", "error");
 	redirect::handle("soknader");
 }
 $_base->page->add_title($soknad['so_title']);
 redirect::store("soknader_vis?so_id={$soknad['so_id']}");
 
-// hent felt til søknaden
+// hent felt til sÃ¸knaden
 $result = $_base->db->query("SELECT sf_id, sf_title, sf_extra, sf_default_value, sf_params FROM soknader_felt WHERE sf_so_id = {$soknad['so_id']} ORDER BY sf_sort");
 $felt = array();
 while ($row = mysql_fetch_assoc($result))
@@ -34,7 +34,7 @@ while ($row = mysql_fetch_assoc($result))
 }
 
 
-// hent informasjon om brukeren og denne søknaden
+// hent informasjon om brukeren og denne sÃ¸knaden
 $applicant = null;
 if (login::$logged_in)
 {
@@ -56,7 +56,7 @@ if ($applicant)
 
 
 
-// vis informasjon om søknaden
+// vis informasjon om sÃ¸knaden
 echo '
 <div class="bg1_c small">
 	<h1 class="bg1">'.htmlspecialchars($soknad['so_title']).'<span class="left"></span><span class="right"></span></h1>
@@ -71,40 +71,40 @@ if (!empty($soknad['so_info']))
 }
 
 echo '
-		<p><u>Søknadsfrist</u><br />'.$_base->date->get($soknad['so_expire'])->format(date::FORMAT_SEC).'</p>
+		<p><u>SÃ¸knadsfrist</u><br />'.$_base->date->get($soknad['so_expire'])->format(date::FORMAT_SEC).'</p>
 		
-		<h2 class="bg1" style="margin-top: 25px">Søknad<span class="left2"></span><span class="right2"></span></h2>
+		<h2 class="bg1" style="margin-top: 25px">SÃ¸knad<span class="left2"></span><span class="right2"></span></h2>
 		<div class="bg1">';
 
 // ikke logget inn?
 if (!login::$logged_in)
 {
 	echo '
-			<p class="c">Du må <a href="&rpath;/?orign='.urlencode($_SERVER['REQUEST_URI']).'">logge inn</a> for å levere søknad.</p>';
+			<p class="c">Du mÃ¥ <a href="&rpath;/?orign='.urlencode($_SERVER['REQUEST_URI']).'">logge inn</a> for Ã¥ levere sÃ¸knad.</p>';
 }
 
-// ingen søknad levert?
+// ingen sÃ¸knad levert?
 elseif ($closed && (!$applicant || $applicant['sa_status'] == 0))
 {
 	echo '
-			<p class="c">Ingen søknad ble levert før tidsfristen.</p>';
+			<p class="c">Ingen sÃ¸knad ble levert fÃ¸r tidsfristen.</p>';
 }
 
 elseif ($applicant)
 {
-	// trekk tilbake søknad
+	// trekk tilbake sÃ¸knad
 	if (isset($_POST['trekk_tilbake']) && !$closed && $applicant['sa_status'] == 1)
 	{
 		$_base->db->query("UPDATE soknader_applicants SET sa_status = 0 WHERE sa_id = {$applicant['sa_id']}");
-		$_base->page->add_message("Du har trukket tilbake søknaden.");
+		$_base->page->add_message("Du har trukket tilbake sÃ¸knaden.");
 		redirect::handle();
 	}
 	
-	// vise levert søknad?
+	// vise levert sÃ¸knad?
 	if ($applicant['sa_status'] == 1)
 	{
 		echo '
-			<p class="c">Du leverte din søknad '.$_base->date->get($applicant['sa_updated'])->format().'.</p>';
+			<p class="c">Du leverte din sÃ¸knad '.$_base->date->get($applicant['sa_updated'])->format().'.</p>';
 		
 		foreach ($felt as $key => $info)
 		{
@@ -143,19 +143,19 @@ elseif ($applicant)
 		{
 			echo '
 			<form action="" method="post">
-				<p class="c">'.show_sbutton("Trekk tilbake søknaden", 'name="trekk_tilbake"').'</p>
-				<p class="c"><i>Dersom du trekker tilbake søknaden vil du kunne redigere og sende inn søknaden igjen innen fristen.</i></p>
+				<p class="c">'.show_sbutton("Trekk tilbake sÃ¸knaden", 'name="trekk_tilbake"').'</p>
+				<p class="c"><i>Dersom du trekker tilbake sÃ¸knaden vil du kunne redigere og sende inn sÃ¸knaden igjen innen fristen.</i></p>
 			</form>';
 		}
 		
 		else
 		{
 			echo '
-			<p class="c">Fristen har gått ut. Du kan ikke trekke tilbake din søknad.</p>';
+			<p class="c">Fristen har gÃ¥tt ut. Du kan ikke trekke tilbake din sÃ¸knad.</p>';
 		}
 	}
 	
-	// rediger søknad
+	// rediger sÃ¸knad
 	else
 	{
 		$preview = false;
@@ -172,7 +172,7 @@ elseif ($applicant)
 				
 				if ($value === NULL || $value == "")
 				{
-					// må fylles ut?
+					// mÃ¥ fylles ut?
 					if (!$info['params']->get("optional"))
 					{
 						$errors[$key] = ' <span style="color: #FF6666">[mangler innhold]</span>';
@@ -191,7 +191,7 @@ elseif ($applicant)
 							break;
 						
 						case "number":
-							// kontroller tall og størrelse
+							// kontroller tall og stÃ¸rrelse
 							$value = game::intval($value);
 							$max_value = $info['params']->get("number_max", 999999999);
 							if ($value > $max_value) $value = $max_value;
@@ -226,7 +226,7 @@ elseif ($applicant)
 				redirect::handle();
 			}
 			
-			// forhåndsvise
+			// forhÃ¥ndsvise
 			elseif (isset($_POST['preview']))
 			{
 				$_base->page->add_message("Endringene ble lagret.");
@@ -240,55 +240,55 @@ elseif ($applicant)
 				// feil?
 				if (count($errors) > 0)
 				{
-					$_base->page->add_message("Kan ikke sende inn søknad fordi noen felt ikke er korrekt utfylt. Se feltene. Endringene ble lagret.", "error");
+					$_base->page->add_message("Kan ikke sende inn sÃ¸knad fordi noen felt ikke er korrekt utfylt. Se feltene. Endringene ble lagret.", "error");
 					$_base->db->commit();
 				}
 				
 				else
 				{
-					// send inn søknaden
+					// send inn sÃ¸knaden
 					$_base->db->query("UPDATE soknader_applicants SET sa_status = 1 WHERE sa_id = {$applicant['sa_id']}");
 					$_base->db->commit();
 					
-					$_base->page->add_message("Søknaden er nå sendt inn. Hvis du vil gjøre endringer kan du trekke tilbake søknaden innen fristen har gått ut.");
+					$_base->page->add_message("SÃ¸knaden er nÃ¥ sendt inn. Hvis du vil gjÃ¸re endringer kan du trekke tilbake sÃ¸knaden innen fristen har gÃ¥tt ut.");
 					redirect::handle();
 				} 
 			}
 		}
 		
-		// slett søknad
+		// slett sÃ¸knad
 		if (isset($_POST['slett']) && isset($_POST['confirm']))
 		{
 			$_base->db->query("DELETE FROM soknader_applicants_felt WHERE saf_sa_id = {$applicant['sa_id']}");
 			$_base->db->query("DELETE FROM soknader_applicants WHERE sa_id = {$applicant['sa_id']}");
 			
-			$_base->page->add_message("Søknaden ble slettet.");
+			$_base->page->add_message("SÃ¸knaden ble slettet.");
 			redirect::handle();
 		}
 		
 		// slette?
 		if (isset($_POST['slett'])) $preview = true;
 		
-		// forhåndsvise?
+		// forhÃ¥ndsvise?
 		if ($preview || isset($_GET['preview']))
 		{
 			echo '
 			<div class="warning c" id="scroll_here">
-				<p><b>Denne søknaden er <u>ikke</u> sendt inn enda.</b></p>
-				<p>Husk å send inn søknaden før fristen.</p>
+				<p><b>Denne sÃ¸knaden er <u>ikke</u> sendt inn enda.</b></p>
+				<p>Husk Ã¥ send inn sÃ¸knaden fÃ¸r fristen.</p>
 			</div>';
 			
 			echo '
 			<boxes />';
 			
-			// slette søknad?
+			// slette sÃ¸knad?
 			if (isset($_POST['slett']))
 			{
 				echo '
 			<div class="warning c">
 				<form action="" method="post">
 					<input type="hidden" name="slett" />
-					<p>Er du sikker på at du vil slette denne søknaden?</p>
+					<p>Er du sikker pÃ¥ at du vil slette denne sÃ¸knaden?</p>
 					<p>'.show_sbutton("Slett", 'name="confirm"').' <a href="soknader_vis?so_id='.$soknad['so_id'].'">Avbryt</a></p>
 				</form>
 			</div>';
@@ -296,7 +296,7 @@ elseif ($applicant)
 			
 			// vis feltene
 			echo '
-			<p><b>Forhåndsvisning:</b></p>';
+			<p><b>ForhÃ¥ndsvisning:</b></p>';
 			
 			foreach ($felt as $key => $info)
 			{
@@ -339,8 +339,8 @@ elseif ($applicant)
 			echo '
 		<form action="" method="post">
 			<div class="warning c">
-				<p><b>Denne søknaden er <u>ikke</u> sendt inn enda.</b></p>
-				<p>Husk å send inn søknaden før fristen.</p>
+				<p><b>Denne sÃ¸knaden er <u>ikke</u> sendt inn enda.</b></p>
+				<p>Husk Ã¥ send inn sÃ¸knaden fÃ¸r fristen.</p>
 			</div>';
 			
 			$_base->page->add_css('.sf_p { margin-bottom: 5px } .sf { margin-top: 0 }');
@@ -401,11 +401,11 @@ elseif ($applicant)
 			echo '
 			<p>
 				'.show_sbutton("Lagre", 'name="lagre"').'
-				'.show_sbutton("Lagre og forhåndsvis", 'name="preview"').'
+				'.show_sbutton("Lagre og forhÃ¥ndsvis", 'name="preview"').'
 				'.show_sbutton("Lagre og send inn", 'name="send_inn"').'
 				'.show_sbutton("Slett", 'name="slett"').'
 			</p>
-			<p><i>Du kan trekke tilbake søknaden etter du har sendt den inn for å gjøre endringer innen fristen. Etter fristen vil du ikke kunne sende inn eller trekke tilbake søknaden.</i></p>
+			<p><i>Du kan trekke tilbake sÃ¸knaden etter du har sendt den inn for Ã¥ gjÃ¸re endringer innen fristen. Etter fristen vil du ikke kunne sende inn eller trekke tilbake sÃ¸knaden.</i></p>
 		</form>';
 		}
 	}
@@ -413,18 +413,18 @@ elseif ($applicant)
 
 elseif (isset($_POST['opprett']) && login::$logged_in)
 {
-	// opprett søknad
+	// opprett sÃ¸knad
 	$_base->db->query("INSERT INTO soknader_applicants SET sa_so_id = {$soknad['so_id']}, sa_up_id = ".login::$user->player->id.", sa_added = ".time().", sa_status = 0");
-	$_base->page->add_message("Du har nå opprettet en søknad og kan redigere denne.");
+	$_base->page->add_message("Du har nÃ¥ opprettet en sÃ¸knad og kan redigere denne.");
 	redirect::handle();
 }
 
 else
 {
 	echo '
-			<p class="c">Du har ikke opprettet noen søknad.</p>
+			<p class="c">Du har ikke opprettet noen sÃ¸knad.</p>
 			<form action="" method="post">
-				<p class="c">'.show_sbutton("Opprett søknad", 'name="opprett"').'</p>
+				<p class="c">'.show_sbutton("Opprett sÃ¸knad", 'name="opprett"').'</p>
 			</form>';
 }
 

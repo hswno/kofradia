@@ -7,14 +7,14 @@ global $_game, $_base;
 
 $now = time();
 
-// antall minutter man skal vise pålogget
+// antall minutter man skal vise pÃ¥logget
 $online_min = 15;
 
 $u = login::$logged_in ? "%u".login::$user->player->data['up_name']."%u" : "Anonym";
 
 // vis nostatusers
 $show_nsu = isset($_GET['show_nsu']);
-if ($show_nsu) $_base->page->add_message("Du viser nå også folk som ikke vanligvis vises på statistikk (NoStatUser)!");
+if ($show_nsu) $_base->page->add_message("Du viser nÃ¥ ogsÃ¥ folk som ikke vanligvis vises pÃ¥ statistikk (NoStatUser)!");
 
 $next = isset($_SESSION[$GLOBALS['__server']['session_prefix'].'statistikk_check']) ? $_SESSION[$GLOBALS['__server']['session_prefix'].'statistikk_check'] : 0;
 if (!empty($next) && $next > time() && !access::has("mod"))
@@ -22,7 +22,7 @@ if (!empty($next) && $next > time() && !access::has("mod"))
 	$wait = $next-time();
 	if ($wait <= 5)
 	{
-		$_base->page->add_message('Du sjekket statistikk for under 5 sekunder siden og må derfor vente i '.game::counter($wait, true).'!', "error");
+		$_base->page->add_message('Du sjekket statistikk for under 5 sekunder siden og mÃ¥ derfor vente i '.game::counter($wait, true).'!', "error");
 		
 		putlog("LOG", "%bVIS STATISTIKK%b: $u (%bDelayed%b)");
 		$_base->page->load();
@@ -139,13 +139,13 @@ if (MAIN_SERVER && $mem)
 }
 
 echo '
-<p><b>Nøkkeltallene og rankinfo viser kun vanlige spillere. Alle spillere som har høyere status enn moderator er utelukket.</b></p>
-<p>Det er nå '.game::timespan(time()-1167675960, game::TIME_FULL).' siden spillet ble åpnet for registrering.</p>';
+<p><b>NÃ¸kkeltallene og rankinfo viser kun vanlige spillere. Alle spillere som har hÃ¸yere status enn moderator er utelukket.</b></p>
+<p>Det er nÃ¥ '.game::timespan(time()-1167675960, game::TIME_FULL).' siden spillet ble Ã¥pnet for registrering.</p>';
 
 if (MAIN_SERVER)
 {
 	echo '
-<p>Serveren har vært oppe i '.game::timespan($uptime, game::TIME_FULL).'.</p>';
+<p>Serveren har vÃ¦rt oppe i '.game::timespan($uptime, game::TIME_FULL).'.</p>';
 }
 
 $date = $_base->date->get();
@@ -156,7 +156,7 @@ $igaar = $date->format("U");
 $date->modify("-1 day");
 $igaar2 = $date->format("U");
 
-// hent nøkkeltall
+// hent nÃ¸kkeltall
 $result = $_base->db->query("
 SELECT 'players',     COUNT(up_id) FROM users_players WHERE up_access_level < {$_game['access_noplay']} AND up_access_level != 0
 UNION ALL
@@ -236,7 +236,7 @@ echo '
 						<td>Plass</td>
 						<td>Spiller</td>
 						<td>Rank</td>
-						<td>Sist pålogget</td>'.(access::has("mod") ? '
+						<td>Sist pÃ¥logget</td>'.(access::has("mod") ? '
 						<td>Rankpoeng</td>
 						<td>Hits</td>' : '').'
 					</tr>
@@ -315,11 +315,11 @@ echo '
 	<tr valign="top">
 		<td width="50%">
 			
-			<!-- nøkkeltall -->
+			<!-- nÃ¸kkeltall -->
 			<table width="100%" class="table tablemb">
 				<thead>
 					<tr>
-						<th colspan="2">Nøkkeltall</th>
+						<th colspan="2">NÃ¸kkeltall</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -352,34 +352,34 @@ echo '
 					
 					<tr class="spacer"><td colspan="2">&nbsp;</td></tr>
 					<tr>
-						<td><a href="online_list?t=24t">Spillere pålogget siste 24 timene</a></td>
+						<td><a href="online_list?t=24t">Spillere pÃ¥logget siste 24 timene</a></td>
 						<td align="right">'.game::format_number($stats['online_24t']).'</td>
 					</tr>
 					<tr class="color">
-						<td><a href="online_list?t=today">Spillere pålogget etter midnatt</a></td>
+						<td><a href="online_list?t=today">Spillere pÃ¥logget etter midnatt</a></td>
 						<td align="right">'.game::format_number($stats['online_today']).'</td>
 					</tr>
 					<tr>
-						<td><a href="online_list?t=1800">Spillere pålogget siste 30 min</a></td>
+						<td><a href="online_list?t=1800">Spillere pÃ¥logget siste 30 min</a></td>
 						<td align="right">'.game::format_number($stats['online_30']).'</td>
 					</tr>
 					<tr class="color">
-						<td><a href="online_list?t='.($online_min*60).'">Spillere pålogget siste '.$online_min.' min</a></td>
+						<td><a href="online_list?t='.($online_min*60).'">Spillere pÃ¥logget siste '.$online_min.' min</a></td>
 						<td align="right">'.game::format_number($stats['online']).'</td>
 					</tr>
 					<tr>
-						<td><a href="online_list?t=300">Spillere pålogget siste 5 min</a></td>
+						<td><a href="online_list?t=300">Spillere pÃ¥logget siste 5 min</a></td>
 						<td align="right">'.game::format_number($stats['online_5']).'</td>
 					</tr>
 					<tr class="color">
-						<td><a href="online_list?t=60">Spillere pålogget siste minuttet</a></td>
+						<td><a href="online_list?t=60">Spillere pÃ¥logget siste minuttet</a></td>
 						<td align="right">'.game::format_number($stats['online_1']).'</td>
 					</tr>
 					
 					
 					<tr class="spacer"><td colspan="2">&nbsp;</td></tr>
 					<tr>
-						<td>Penger i omløp</td>
+						<td>Penger i omlÃ¸p</td>
 						<td align="right">'.game::format_cash($stats['cash']).'</td>
 					</tr>
 					<tr class="color">
@@ -398,11 +398,11 @@ echo '
 						<td align="right">'.game::format_number($stats['reg_today']).'</td>
 					</tr>
 					<tr>
-						<td>Antall registrerte i går</td>
+						<td>Antall registrerte i gÃ¥r</td>
 						<td align="right">'.game::format_number($stats['reg_yesterday']).'</td>
 					</tr>
 					<tr class="color">
-						<td>Antall registrerte i forigårs</td>
+						<td>Antall registrerte i forigÃ¥rs</td>
 						<td align="right">'.game::format_number($stats['reg_yesterday2']).'</td>
 					</tr>
 					<tr>
@@ -436,11 +436,11 @@ echo '
 						<td align="right">'.game::format_number($stats['hits']).'</td>
 					</tr>
 					<tr>
-						<td>Antall sidevisninger i forigårs</td>
+						<td>Antall sidevisninger i forigÃ¥rs</td>
 						<td align="right">'.game::format_number($stats['hits_yesterday2']).'</td>
 					</tr>
 					<tr class="color">
-						<td>Antall sidevisninger i går</td>
+						<td>Antall sidevisninger i gÃ¥r</td>
 						<td align="right">'.game::format_number($stats['hits_yesterday']).'</td>
 					</tr>
 					<tr>
@@ -459,11 +459,11 @@ echo '
 						<td class="r">'.game::timespan($vars['Uptime_since_flush_status'], game::TIME_SHORT).'</td>
 					</tr>
 					<tr class="color">
-						<td>Databasespørringer per sekund</td>
+						<td>DatabasespÃ¸rringer per sekund</td>
 						<td align="right">'.game::format_number($vars['Questions']/$vars['Uptime_since_flush_status'], 4).'</td>
 					</tr>
 					<tr>
-						<td>Antall databasespørringer</td>
+						<td>Antall databasespÃ¸rringer</td>
 						<td align="right">'.game::format_number($vars['Questions']).'</td>
 					</tr>
 				</tbody>
@@ -660,7 +660,7 @@ echo '
 				</thead>
 				<tbody>';
 
-// henter rankene i en spørring (union join)
+// henter rankene i en spÃ¸rring (union join)
 $ranks = array_reverse(game::$ranks['items']);
 $req = array();
 
@@ -870,7 +870,7 @@ echo '
 		<td>';
 
 
-// hent de 20 som har ranket mest i løpet av denne timen
+// hent de 20 som har ranket mest i lÃ¸pet av denne timen
 $result = $_base->db->query("
 	SELECT uhi_up_id, uhi_hits, uhi_points, up_points, up_access_level, upr_rank_pos
 	FROM users_hits
@@ -900,7 +900,7 @@ if (mysql_num_rows($result) == 0)
 {
 	echo '
 					<tr>
-						<td colspan="'.(access::has("mod") ? 5 : 3).'">Ingen spillere har ranket noe så langt denne timen.</td>
+						<td colspan="'.(access::has("mod") ? 5 : 3).'">Ingen spillere har ranket noe sÃ¥ langt denne timen.</td>
 					</tr>';
 }
 
@@ -926,7 +926,7 @@ echo '
 				</tbody>
 			</table>';
 
-// hent 10 høyest wanted spillere
+// hent 10 hÃ¸yest wanted spillere
 $result = $_base->db->query("SELECT up_id, up_name, up_access_level, up_fengsel_time, up_wanted_level FROM users_players WHERE up_wanted_level > 0 ORDER BY up_wanted_level DESC LIMIT 10");
 echo '
 			<!-- mest wanted -->
@@ -937,7 +937,7 @@ echo '
 					</tr>
 					<tr>
 						<td>Spiller</td>
-						<td>Wanted nivå</td>
+						<td>Wanted nivÃ¥</td>
 					</tr>
 				</thead>
 				<tbody>';

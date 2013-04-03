@@ -170,7 +170,7 @@ class julekalender
 			1 => null,
 			2 => null);
 
-		// plukk ut en førsteplass
+		// plukk ut en fÃ¸rsteplass
 		$result = ess::$b->db->query("
 			SELECT jb_up_id
 			FROM julekalender_bidrag JOIN users_players ON jb_up_id = up_id
@@ -218,13 +218,13 @@ class julekalender
 
 		$note = $place == 1
 			? 'Du ble den heldige vinneren av luken for '.$day.'. desember i julekalenderen. Gratulerer!'
-			: 'Du ble den heldige vinneren av deltakerpremien for å ha deltatt på luken for '.$day.'. desember i julekalenderen. Gratulerer!';
+			: 'Du ble den heldige vinneren av deltakerpremien for Ã¥ ha deltatt pÃ¥ luken for '.$day.'. desember i julekalenderen. Gratulerer!';
 		$up->add_log("informasjon", $note);
 	}
 
 	private function announce($day, $res) {
 		if (!$res[1] && !$res[2]) {
-			$html = "Ingen vant eller deltok på luken for ".$day.". desember i julekalenderen.";
+			$html = "Ingen vant eller deltok pÃ¥ luken for ".$day.". desember i julekalenderen.";
 			$text = $html;
 		}
 

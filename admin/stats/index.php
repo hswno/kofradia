@@ -12,7 +12,7 @@ echo '
 </p>
 
 <p>
-	<a href="daily_users">Antall brukere pålogget for hver dag og antall hits &raquo;</a>
+	<a href="daily_users">Antall brukere pÃ¥logget for hver dag og antall hits &raquo;</a>
 </p>';
 
 $_base->page->load();

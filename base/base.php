@@ -17,7 +17,7 @@ class base
 		require "essentials.php";
 		ess::$b->base = $this;
 		
-		// kjør scheduler
+		// kjÃ¸r scheduler
 		if (!MAIN_SERVER) $this->scheduler();
 		
 		ess::$b->dt("load_es-gu_pre");
@@ -29,7 +29,7 @@ class base
 		// sjekk ssl
 		$this->check_ssl();
 		
-		// brukerstæsj
+		// brukerstÃ¦sj
 		if (login::$logged_in)
 		{
 			$this->load_user_stuff();
@@ -55,10 +55,10 @@ class base
 		ess::$b->dt("base_loaded");
 	}
 	
-	/** Kjøre scheduler */
+	/** KjÃ¸re scheduler */
 	protected function scheduler()
 	{
-		// kjør scheduler
+		// kjÃ¸r scheduler
 		require_once ROOT . "/base/scripts/scheduler.php";
 	}
 	
@@ -90,15 +90,15 @@ class base
 		}
 	}
 	
-	/** Oppdater anonym besøksstatistikk */
+	/** Oppdater anonym besÃ¸ksstatistikk */
 	protected function update_anon_stats()
 	{
 		$date = ess::$b->date->get()->format("Y-m-d");
 		
-		// forsøk og oppdater
+		// forsÃ¸k og oppdater
 		ess::$b->db->query("UPDATE stats_daily SET sd_hits_guests = sd_hits_guests + 1 WHERE sd_date = '$date'");
 		
-		// ingen oppdater? forsøk å sett inn
+		// ingen oppdater? forsÃ¸k Ã¥ sett inn
 		if (ess::$b->db->affected_rows() == 0)
 		{
 			ess::$b->db->query("INSERT IGNORE INTO stats_daily SET sd_date = '$date', sd_hits_guests = 1");
@@ -146,7 +146,7 @@ class base
 		{
 			// sjekk at den inneholder en webside..
 			$matches = false;
-			if (preg_match('§(https?://([^/\n\r\t]+))(/[^\n\r\t]*)?$§', $referer, $matches))
+			if (preg_match('~(https?://([^/\n\r\t]+))(/[^\n\r\t]*)?$~', $referer, $matches))
 			{
 				$addr = strtolower($matches[1]);
 				if ($addr == $__server['http_path']) return;

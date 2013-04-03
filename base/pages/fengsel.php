@@ -9,19 +9,19 @@ class page_fengsel
 	protected $up;
 	
 	/**
-	 * Energi for å bryte ut folk
+	 * Energi for Ã¥ bryte ut folk
 	 */
 	const ENERGY = 100;
 	
 	/**
-	 * Penger for å bryte ut (omvendt proposjonal med sannsynligheten)
+	 * Penger for Ã¥ bryte ut (omvendt proposjonal med sannsynligheten)
 	 */
 	const CASH_MAX = 20000;
 	
 	/**
-	 * Hvor mye vi får av dusøren
+	 * Hvor mye vi fÃ¥r av dusÃ¸ren
 	 */
-	const DUSOR_PROFIT = 0.9; // 90 % (10 % går ut)
+	const DUSOR_PROFIT = 0.9; // 90 % (10 % gÃ¥r ut)
 	
 	/**
 	 * Construct
@@ -51,19 +51,19 @@ class page_fengsel
 			$this->in();
 		}
 		
-		// skal vi gå ut av fengsel?
+		// skal vi gÃ¥ ut av fengsel?
 		if (isset($_POST['remove']) && (!MAIN_SERVER || (access::is_nostat() && access::has("mod"))))
 		{
 			$this->out();
 		}
 		
-		// sette dusør?
+		// sette dusÃ¸r?
 		if (isset($_POST['dusor']) && validate_sid())
 		{
 			$this->dusor();
 		}
 		
-		// skal vi forsøke å bryte ut av fengsel?
+		// skal vi forsÃ¸ke Ã¥ bryte ut av fengsel?
 		if (isset($_POST['up_id']))
 		{
 			$this->bryt_ut();
@@ -74,7 +74,7 @@ class page_fengsel
 	}
 	
 	/**
-	 * Gå i fengsel
+	 * GÃ¥ i fengsel
 	 */
 	protected function in()
 	{
@@ -90,7 +90,7 @@ class page_fengsel
 		// ugyldig tid
 		if ($time <= 0)
 		{
-			ess::$b->page->add_message("Du må skrive et positivt tall.", "error");
+			ess::$b->page->add_message("Du mÃ¥ skrive et positivt tall.", "error");
 		}
 		elseif ($time > 900)
 		{
@@ -100,13 +100,13 @@ class page_fengsel
 		{
 			// sett i fengsel
 			ess::$b->db->query("UPDATE users_players SET up_fengsel_time = ".(time()+$time)." WHERE up_id = ".$this->up->id);
-			ess::$b->page->add_message("Du er nå i fengsel.");
+			ess::$b->page->add_message("Du er nÃ¥ i fengsel.");
 			redirect::handle();
 		}
 	}
 	
 	/**
-	 * Gå ut av fengsel
+	 * GÃ¥ ut av fengsel
 	 */
 	protected function out()
 	{
@@ -118,12 +118,12 @@ class page_fengsel
 		}
 		
 		ess::$b->db->query("UPDATE users_players SET up_fengsel_time = ".time()." WHERE up_id = ".$this->up->id);
-		ess::$b->page->add_message("Du er nå ute av fengsel.");
+		ess::$b->page->add_message("Du er nÃ¥ ute av fengsel.");
 		redirect::handle();
 	}
 	
 	/**
-	 * Sette dusør for å bli brytet ut
+	 * Sette dusÃ¸r for Ã¥ bli brytet ut
 	 */
 	protected function dusor()
 	{
@@ -140,45 +140,45 @@ class page_fengsel
 		// nostat?
 		if ($this->up->is_nostat())
 		{
-			ess::$b->page->add_message("Du er nostat og kan ikke sette dusør på deg selv.", "error");
+			ess::$b->page->add_message("Du er nostat og kan ikke sette dusÃ¸r pÃ¥ deg selv.", "error");
 			redirect::handle();
 		}
 		
 		if ($dusor < 0)
 		{
-			ess::$b->page->add_message("Ugyldig dusør.", "error");
+			ess::$b->page->add_message("Ugyldig dusÃ¸r.", "error");
 			redirect::handle();
 		}
 		
 		// ikke endret?
 		if ($dusor == $this->up->data['up_fengsel_dusor'])
 		{
-			ess::$b->page->add_message("Dusøren ble ikke endret.", "error");
+			ess::$b->page->add_message("DusÃ¸ren ble ikke endret.", "error");
 			redirect::handle();
 		}
 		
 		// ikke riktig tid?
 		if ($this->up->data['up_fengsel_time'] != $expire)
 		{
-			ess::$b->page->add_message('Tidspunktet for hvor lenge du skal være i fengsel har forandret seg. Prøv igjen.', "error");
+			ess::$b->page->add_message('Tidspunktet for hvor lenge du skal vÃ¦re i fengsel har forandret seg. PrÃ¸v igjen.', "error");
 			redirect::handle();
 		}
 		
-		// for liten dusør?
+		// for liten dusÃ¸r?
 		if ($dusor < 10000 && $dusor != 0)
 		{
-			ess::$b->page->add_message("Minste dusør du kan legge ut er på 10 000 kr.", "error");
+			ess::$b->page->add_message("Minste dusÃ¸r du kan legge ut er pÃ¥ 10 000 kr.", "error");
 			redirect::handle();
 		}
 		
-		// har vi ikke så mye penger?
+		// har vi ikke sÃ¥ mye penger?
 		if ($dusor > $this->up->data['up_cash']+$this->up->data['up_fengsel_dusor'])
 		{
-			ess::$b->page->add_message("Du har ikke så mye penger på hånda.", "error");
+			ess::$b->page->add_message("Du har ikke sÃ¥ mye penger pÃ¥ hÃ¥nda.", "error");
 			redirect::handle();
 		}
 		
-		// forsøk å sett dusøren
+		// forsÃ¸k Ã¥ sett dusÃ¸ren
 		ess::$b->db->query("
 			UPDATE users_players
 			SET up_cash = up_cash - $dusor + up_fengsel_dusor, up_fengsel_dusor = $dusor
@@ -187,23 +187,23 @@ class page_fengsel
 		// ble ikke endret?
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Dusøren kunne ikke bli endret. Prøv på nytt.", "error");
+			ess::$b->page->add_message("DusÃ¸ren kunne ikke bli endret. PrÃ¸v pÃ¥ nytt.", "error");
 		}
 		
 		// ble satt til 0?
 		elseif ($dusor == 0)
 		{
-			ess::$b->page->add_message("Du fjernet dusøren og fikk tilbake ".game::format_cash($this->up->data['up_fengsel_dusor']).".");
+			ess::$b->page->add_message("Du fjernet dusÃ¸ren og fikk tilbake ".game::format_cash($this->up->data['up_fengsel_dusor']).".");
 		}
 		
 		elseif ($this->up->data['up_fengsel_dusor'] == 0)
 		{
-			ess::$b->page->add_message("Du satt en dusør for å bryte deg ut på ".game::format_cash($dusor).".");
+			ess::$b->page->add_message("Du satt en dusÃ¸r for Ã¥ bryte deg ut pÃ¥ ".game::format_cash($dusor).".");
 		}
 		
 		else
 		{
-			ess::$b->page->add_message("Du endret dusøren fra ".game::format_cash($this->up->data['up_fengsel_dusor'])." til ".game::format_cash($dusor).".");
+			ess::$b->page->add_message("Du endret dusÃ¸ren fra ".game::format_cash($this->up->data['up_fengsel_dusor'])." til ".game::format_cash($dusor).".");
 		}
 		
 		redirect::handle();
@@ -224,7 +224,7 @@ class page_fengsel
 		// har vi ikke nok energi?
 		if (!$this->up->energy_check(self::ENERGY))
 		{
-			ess::$b->page->add_message("Du har ikke nok energi for å bryte ut andre spillere nå.");
+			ess::$b->page->add_message("Du har ikke nok energi for Ã¥ bryte ut andre spillere nÃ¥.");
 			redirect::handle();
 		}
 		
@@ -254,14 +254,14 @@ class page_fengsel
 		// ikke riktig tid?
 		if ($up->data['up_fengsel_time'] != $expire)
 		{
-			ess::$b->page->add_message('<user id="'.$up->id.'" /> har kommet i fengsel på nytt. Prøv igjen.', "error");
+			ess::$b->page->add_message('<user id="'.$up->id.'" /> har kommet i fengsel pÃ¥ nytt. PrÃ¸v igjen.', "error");
 			redirect::handle();
 		}
 		
-		// feil dusør?
+		// feil dusÃ¸r?
 		if ($up->data['up_fengsel_dusor'] != $dusor)
 		{
-			ess::$b->page->add_message('Dusøren til <user id="'.$up->id.'" /> har endret seg. Prøv på nytt.', "error");
+			ess::$b->page->add_message('DusÃ¸ren til <user id="'.$up->id.'" /> har endret seg. PrÃ¸v pÃ¥ nytt.', "error");
 			redirect::handle();
 		}
 		
@@ -269,7 +269,7 @@ class page_fengsel
 		$prob = self::calc_prob($wait, $up->data['up_wanted_level']/10);
 		$points = self::calc_points($prob);
 		
-		// sett opp dusør
+		// sett opp dusÃ¸r
 		$dusor_org = $up->data['up_fengsel_dusor'];
 		$dusor = bcmul($up->data['up_fengsel_dusor'], self::DUSOR_PROFIT);
 		
@@ -277,7 +277,7 @@ class page_fengsel
 		$success = rand(0, 999) < $prob * 10;
 		if ($success)
 		{
-			// penger man får for utbrytelsen
+			// penger man fÃ¥r for utbrytelsen
 			$cash = round(max(0, 100 - $prob) / 100 * self::CASH_MAX);
 			
 			// sett som utbrytet
@@ -307,19 +307,19 @@ class page_fengsel
 			
 			$fengsel = $this->up->fengsel_rank($points, true);
 			
-			// penger, dusør og poeng vi mottar
+			// penger, dusÃ¸r og poeng vi mottar
 			$mottok = array();
 			if ($cash > 0) $mottok[] = game::format_cash($cash);
-			if ($dusor > 0) $mottok[] = "dusøren på ".game::format_cash($dusor);
+			if ($dusor > 0) $mottok[] = "dusÃ¸ren pÃ¥ ".game::format_cash($dusor);
 			$mottok[] = game::format_num($points).' poeng';
 			
 			// melding
-			$msg = 'Du brøt ut <user id="'.$up->id.'" /> fra fengselet og mottok '.sentences_list($mottok).'.';
-			if ($fengsel > 0) $msg .= ' Wanted nivået økte med '.game::format_number($fengsel/10, 1).' %.';
+			$msg = 'Du brÃ¸t ut <user id="'.$up->id.'" /> fra fengselet og mottok '.sentences_list($mottok).'.';
+			if ($fengsel > 0) $msg .= ' Wanted nivÃ¥et Ã¸kte med '.game::format_number($fengsel/10, 1).' %.';
 			ess::$b->page->add_message($msg);
 			
 			// logg
-			putlog("LOG", "FENGSELUTBRYTNING: {$this->up->data['up_name']} brøt ut {$up->data['up_name']} fra fengsel (wait=$wait, cash=$cash, dusør=$dusor_org, prob=$prob, rank=$points)");
+			putlog("LOG", "FENGSELUTBRYTNING: {$this->up->data['up_name']} brÃ¸t ut {$up->data['up_name']} fra fengsel (wait=$wait, cash=$cash, dusÃ¸r=$dusor_org, prob=$prob, rank=$points)");
 			
 			// rank
 			$this->up->increase_rank($points);
@@ -330,12 +330,12 @@ class page_fengsel
 			// mislykket
 			$fengsel = $this->up->fengsel_rank($points, false, true);
 			
-			// oppdater antall utbrytninger (kun forsøk)
+			// oppdater antall utbrytninger (kun forsÃ¸k)
 			ess::$b->db->query("UPDATE users_players SET up_fengsel_num_out_tries = up_fengsel_num_out_tries + 1 WHERE up_id = ".$this->up->id);
 			
 			if ($fengsel > 0)
 			{
-				ess::$b->page->add_message('Mislykket! Wanted nivået økte med '.game::format_number($fengsel/10, 1).' %.');
+				ess::$b->page->add_message('Mislykket! Wanted nivÃ¥et Ã¸kte med '.game::format_number($fengsel/10, 1).' %.');
 			}
 		}
 		
@@ -371,7 +371,7 @@ class page_fengsel
 	 */
 	protected function show()
 	{
-		// er vi i fengsel nå?
+		// er vi i fengsel nÃ¥?
 		if ($wait = $this->up->fengsel_wait())
 		{
 			ess::$b->page->add_js_domready('$("fengsel_dusor").focus();');
@@ -381,16 +381,16 @@ class page_fengsel
 	<h1 class="bg1">Du er i fengsel<span class="left"></span><span class="right"></span></h1>
 	<p class="h_right"><a href="node/16">Hjelp</a></p>
 	<div class="bg1">
-		<p>Du befinner deg for øyeblikket i fengsel og slipper ut om '.game::counter($wait, true).'.</p>'.(!$this->up->is_nostat() ? '
+		<p>Du befinner deg for Ã¸yeblikket i fengsel og slipper ut om '.game::counter($wait, true).'.</p>'.(!$this->up->is_nostat() ? '
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="expire" value="'.$this->up->data['up_fengsel_time'].'" />
 			<dl class="dd_right">
-				<dt>Dusør for å bryte deg ut</dt>
+				<dt>DusÃ¸r for Ã¥ bryte deg ut</dt>
 				<dd><input type="text" class="styled w80" name="amount" id="fengsel_dusor" value="'.game::format_cash($this->up->data['up_fengsel_dusor']).'" /></dd>
 			</dl>
-			<p class="c">'.show_sbutton($this->up->data['up_fengsel_dusor'] > 0 ? "Endre dusør" : "Sett dusør", 'name="dusor"').'</p>
-			<p class="c">Spilleren som bryter ut mottar kun '.(self::DUSOR_PROFIT*100).' % av dusøren.</p>
+			<p class="c">'.show_sbutton($this->up->data['up_fengsel_dusor'] > 0 ? "Endre dusÃ¸r" : "Sett dusÃ¸r", 'name="dusor"').'</p>
+			<p class="c">Spilleren som bryter ut mottar kun '.(self::DUSOR_PROFIT*100).' % av dusÃ¸ren.</p>
 		</form>' : '').'
 	</div>
 </div>';
@@ -400,8 +400,8 @@ class page_fengsel
 		$sort = new sorts("sort");
 		$sort->append("asc", "Spiller", "up_name");
 		$sort->append("desc", "Spiller", "up_name DESC");
-		$sort->append("asc", "Wanted nivå", "up_wanted_level, up_fengsel_time DESC");
-		$sort->append("desc", "Wanted nivå", "up_wanted_level DESC, up_fengsel_time DESC");
+		$sort->append("asc", "Wanted nivÃ¥", "up_wanted_level, up_fengsel_time DESC");
+		$sort->append("desc", "Wanted nivÃ¥", "up_wanted_level DESC, up_fengsel_time DESC");
 		$sort->append("asc", "Tid igjen", "up_fengsel_time");
 		$sort->append("desc", "Tid igjen", "up_fengsel_time DESC");
 		$sort->set_active(requestval("sort"), 5);
@@ -423,12 +423,12 @@ class page_fengsel
 	<p class="h_right"><a href="node/16">Hjelp</a></p>
 	<div class="bg1">
 		<form action="" method="post">
-			<p class="c dark">Ditt wanted nivå er på '.game::format_number($this->up->data['up_wanted_level']/10, 1).' %.</p>';
+			<p class="c dark">Ditt wanted nivÃ¥ er pÃ¥ '.game::format_number($this->up->data['up_wanted_level']/10, 1).' %.</p>';
 		
 		if ($num == 0)
 		{
 			echo '
-			<p class="c dark">Ingen er i fengselet for øyeblikket.</p>
+			<p class="c dark">Ingen er i fengselet for Ã¸yeblikket.</p>
 			<p class="c"><a href="'.htmlspecialchars(game::address("fengsel", $_GET)).'" class="button">Oppdater</a></p>';
 		}
 		
@@ -439,10 +439,10 @@ class page_fengsel
 				<thead>
 					<tr>
 						<th>Spiller '.$sort->show_link(0, 1).'</th>
-						<th>Wanted<br />nivå '.$sort->show_link(2, 3).'</th>
+						<th>Wanted<br />nivÃ¥ '.$sort->show_link(2, 3).'</th>
 						<th>Utbrytning<br />sannsynlighet</th>
 						<th>Ca. poeng</th>
-						<th>Dusør</th>
+						<th>DusÃ¸r</th>
 						<th>Tid igjen '.$sort->show_link(4, 5).'</th>
 					</tr>
 				</thead>
@@ -512,12 +512,12 @@ class page_fengsel
 	<h1 class="bg1">'.(MAIN_SERVER ? 'No-stat' : 'Testing').'<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<form action="" method="post">'.($this->up->fengsel_check() ? '
-			<p class="c">'.show_sbutton("Gå ut av fengsel", 'name="remove"').'</p>' : '
+			<p class="c">'.show_sbutton("GÃ¥ ut av fengsel", 'name="remove"').'</p>' : '
 			<dl class="dd_right dl_2x">
 				<dt>Tid</dt>
 				<dd><input type="text" name="time" value="'.htmlspecialchars(postval("time", 20)).'" class="styled w40" /> sekunder</dd>
 			</dl>
-			<p class="c">'.show_sbutton("Gå inn i fensgel").'</p>').'
+			<p class="c">'.show_sbutton("GÃ¥ inn i fensgel").'</p>').'
 		</form>
 	</div>
 </div>';
@@ -525,7 +525,7 @@ class page_fengsel
 	}
 	
 	/**
-	 * Regn ut sannsynlighet for å bryte ut
+	 * Regn ut sannsynlighet for Ã¥ bryte ut
 	 */
 	protected static function calc_prob($wait, $wanted_level)
 	{
@@ -548,7 +548,7 @@ class page_fengsel
 	}
 	
 	/**
-	 * Regn ut hvor mye poeng vi får av å bryte ut
+	 * Regn ut hvor mye poeng vi fÃ¥r av Ã¥ bryte ut
 	 * @param $prob
 	 */
 	protected static function calc_points($prob)

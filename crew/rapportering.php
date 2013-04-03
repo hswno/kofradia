@@ -35,7 +35,7 @@ if (isset($_REQUEST['r_id']))
 			ess::$b->page->add_message("Rapporteringen er allerede behandlet.", "error");
 		}
 		
-		// prøv å oppdater
+		// prÃ¸v Ã¥ oppdater
 		else
 		{
 			ess::$b->db->query("UPDATE rapportering SET r_state = 1, r_crew_time = ".time().", r_crew_up_id = ".login::$user->player->id." WHERE r_id = $r_id AND r_state = 0");
@@ -43,13 +43,13 @@ if (isset($_REQUEST['r_id']))
 			// ikke oppdatert?
 			if (ess::$b->db->affected_rows() == 0)
 			{
-				ess::$b->page->add_message("En annen bruker var før deg.", "error");
+				ess::$b->page->add_message("En annen bruker var fÃ¸r deg.", "error");
 			}
 			
 			else
 			{
 				// alt ok
-				ess::$b->page->add_message("Du er nå satt som ansvarlig for å behandle rapporteringen.");
+				ess::$b->page->add_message("Du er nÃ¥ satt som ansvarlig for Ã¥ behandle rapporteringen.");
 				
 				redirect::handle("rapportering?r_id=$r_id&finish");
 			}
@@ -67,7 +67,7 @@ if (isset($_REQUEST['r_id']))
 			ess::$b->page->add_message("Rapporteringen er ikke under behandling.", "error");
 		}
 		
-		// forsøk å trekk tilbake
+		// forsÃ¸k Ã¥ trekk tilbake
 		else
 		{
 			ess::$b->db->query("UPDATE rapportering SET r_state = 0 WHERE r_id = $r_id AND r_state = 1 AND r_crew_up_id = ".login::$user->player->id);
@@ -103,13 +103,13 @@ if (isset($_REQUEST['r_id']))
 			$note = trim($_POST['note']);
 			#if (empty($note))
 			#{
-			#	ess::$b->page->add_message("Notatet kan ikke være tomt.", "error");
+			#	ess::$b->page->add_message("Notatet kan ikke vÃ¦re tomt.", "error");
 			#}
 			
-			// tilhører en annen, ikke godkjent overstyring
+			// tilhÃ¸rer en annen, ikke godkjent overstyring
 			if (!isset($_POST['override']) && $r['r_crew_up_id'] != login::$user->player->id)
 			{
-				ess::$b->page->add_message("Denne rapporteringen tilhører ikke deg, og du har ikke merket av for å overstyre.", "error");
+				ess::$b->page->add_message("Denne rapporteringen tilhÃ¸rer ikke deg, og du har ikke merket av for Ã¥ overstyre.", "error");
 			}
 			
 			else
@@ -128,7 +128,7 @@ if (isset($_REQUEST['r_id']))
 					// senk telleren
 					tasks::mark("rapporteringer");
 					
-					ess::$b->page->add_message("Rapporteringen er nå ferdig behandlet.");
+					ess::$b->page->add_message("Rapporteringen er nÃ¥ ferdig behandlet.");
 					redirect::handle();
 				}
 			}
@@ -143,7 +143,7 @@ if (isset($_REQUEST['r_id']))
 	<h1 class="bg1">Rapportering<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="rapportering">&laquo; Tilbake</a></p>
 	<div class="bg1">
-		<p>Før du kan sette rapporteringen som behandlet, må du fylle inn en kort notis/logg.</p>
+		<p>FÃ¸r du kan sette rapporteringen som behandlet, mÃ¥ du fylle inn en kort notis/logg.</p>
 		<h2 class="bg1">Info<span class="left2"></span><span class="right2"></span></h2>
 		<div class="bg1">
 			<p><user id="'.$r['r_source_up_id'].'" /> rapporterte <user id="'.$r['r_up_id'].'" /> ('.ess::$b->date->get($r['r_time'])->format().').</p>
@@ -245,7 +245,7 @@ if (mysql_num_rows($result) == 0)
 	else
 	{
 		echo '
-		<p>Det finnes ingen <b>aktive</b> rapporteringer for øyeblikket.</p>';
+		<p>Det finnes ingen <b>aktive</b> rapporteringer for Ã¸yeblikket.</p>';
 	}
 }
 

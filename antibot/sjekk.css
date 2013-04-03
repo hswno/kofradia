@@ -27,5 +27,5 @@
 	position: relative;
 }
 
-/* Sørg for at checkboksene er over bildene når Javascript ikke er aktivert */
+/* SÃ¸rg for at checkboksene er over bildene nÃ¥r Javascript ikke er aktivert */
 #antibot input { position: absolute; z-index: 100; top: 5px; left: 5px; padding: 3px }

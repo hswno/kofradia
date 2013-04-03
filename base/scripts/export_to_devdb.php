@@ -31,13 +31,13 @@ function export_map(array $cols)
 	return array(implode(", ", $m0), implode(", ", $m1));
 }
 
-// navn på databasene vi skal opprette
+// navn pÃ¥ databasene vi skal opprette
 $nc = array("smafia_database_export");
 
-// navn på databasene vi skal hente data fra
+// navn pÃ¥ databasene vi skal hente data fra
 $no = array("smafia_database");
 
-// navn på filene som eksporteres
+// navn pÃ¥ filene som eksporteres
 $export_names = array("main");
 
 ess::$b->db->query("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
@@ -45,7 +45,7 @@ ess::$b->db->query("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KE
 // opprett midlertidig database
 echo "* Oppretter midlertidig database ".sentences_list($nc)."\n";
 foreach ($nc as $name) {
-	ess::$b->db->query("CREATE DATABASE $name DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci");
+	ess::$b->db->query("CREATE DATABASE $name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci");
 }
 
 // kopier over tabellstruktur fra tabellene
@@ -372,4 +372,4 @@ foreach ($nc as $name)
 	ess::$b->db->query("DROP DATABASE $name");
 }
 
-echo "\nFullført.\n";
+echo "\nFullfÃ¸rt.\n";

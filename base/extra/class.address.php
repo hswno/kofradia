@@ -55,21 +55,21 @@ class address
 					continue;
 				}
 				
-				// hurtigversjon for å legge til enheter
+				// hurtigversjon for Ã¥ legge til enheter
 				if (is_array($arg))
 				{
 					self::add_elms($arg);
 					continue;
 				}
 				
-				// hurtigversjon for å ikke bruke html
+				// hurtigversjon for Ã¥ ikke bruke html
 				if ($arg === false)
 				{
 					self::$html = false;
 					continue;
 				}
 				
-				// hurtigversjon for å legge til suffix
+				// hurtigversjon for Ã¥ legge til suffix
 				if (is_string($arg))
 				{
 					self::$suffix = $arg;
@@ -260,7 +260,7 @@ class address
 	}
 	
 	/**
-	 * Bygg nøkkel/verdi par for elementene
+	 * Bygg nÃ¸kkel/verdi par for elementene
 	 * 
 	 * @param array elements
 	 */

@@ -48,14 +48,14 @@ class trac
 		foreach ($xml->channel->item as $item)
 		{
 			$time = $_base->date->parse($item->pubDate)->format("U");
-			$author = isset($item->author) ? utf8_decode((string)$item->author) : '';
+			$author = isset($item->author) ? (string)$item->author : '';
 			$result[] = array(
-				"title" => utf8_decode((string)$item->title),
+				"title" => (string)$item->title,
 				"author" => $author,
 				"time" => $time,
-				"link" => utf8_decode((string)$item->link),
-				"description" => utf8_decode((string)$item->description),
-				"category" => utf8_decode((string)$item->category)
+				"link" => (string)$item->link,
+				"description" => (string)$item->description,
+				"category" => (string)$item->category
 			);
 		}
 		
@@ -73,10 +73,10 @@ class trac
 		$last_prev = isset(game::$settings['trac_last_'.$name]) ? intval(game::$settings['trac_last_'.$name]['value']) : false;
 		$last = 0;
 		
-		// reverser data så nyeste kommer til slutt
+		// reverser data sÃ¥ nyeste kommer til slutt
 		$data = array_reverse($data);
 		
-		// gå gjennom og se om noe er nyere
+		// gÃ¥ gjennom og se om noe er nyere
 		foreach ($data as $row)
 		{
 			$last = max($row['time'], $last);

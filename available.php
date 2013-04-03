@@ -50,7 +50,7 @@ class available
 		// kontroller tittel
 		if (strlen($title) < 3)
 		{
-			return 'Tittelen må inneholde minimum 3 tegn.';
+			return 'Tittelen mÃ¥ inneholde minimum 3 tegn.';
 		}
 		
 		// legg til
@@ -111,7 +111,7 @@ class available_group
 		// kontroller tittel
 		if (strlen($title) < 3)
 		{
-			return 'Tittelen må inneholde minimum 3 tegn.';
+			return 'Tittelen mÃ¥ inneholde minimum 3 tegn.';
 		}
 		
 		// oppdater
@@ -149,13 +149,13 @@ class available_group
 		// hent alle valgene
 		if (!$this->ai) $this->get_ai_list();
 		
-		// tøm evt. liste
+		// tÃ¸m evt. liste
 		$_base->db->query("DELETE FROM available_votes WHERE av_ag_id = $this->ag_id AND av_up_id = ".login::$user->player->id);
 		
 		// legg til i brukeroversikten
 		$_base->db->query("REPLACE INTO available_users SET au_ag_id = $this->ag_id, au_up_id = ".login::$user->player->id.", au_note = ".$_base->db->quote($note).", au_time = ".time());
 		
-		// gå gjennom hvert valg og legg til hvis det finnes
+		// gÃ¥ gjennom hvert valg og legg til hvis det finnes
 		$count = 0;
 		foreach ($ai_list as $ai)
 		{
@@ -225,7 +225,7 @@ if (isset($_GET['ag_id']))
 		$note = trim(postval("note"));
 		$ai_list = array();
 		
-		// gå gjennom alle alternativene og sjekk om det er valgt eller om et notat er lagt med
+		// gÃ¥ gjennom alle alternativene og sjekk om det er valgt eller om et notat er lagt med
 		foreach ($ag->ai as $ai)
 		{
 			$set = isset($_POST['ai'][$ai['ai_id']]);
@@ -251,7 +251,7 @@ if (isset($_GET['ag_id']))
 		// ikke tilgang?
 		if ($ag->info['ag_up_id'] != login::$user->player->id && !access::has("admin"))
 		{
-			$_base->page->add_message("Du har ikke tilgang til å redigere denne avstemningen.", "error");
+			$_base->page->add_message("Du har ikke tilgang til Ã¥ redigere denne avstemningen.", "error");
 			redirect::handle();
 		}
 		
@@ -293,7 +293,7 @@ if (isset($_GET['ag_id']))
 		// ikke tilgang?
 		if ($ag->info['ag_up_id'] != login::$user->player->id && !access::has("admin"))
 		{
-			$_base->page->add_message("Du har ikke tilgang til å redigere denne avstemningen.", "error");
+			$_base->page->add_message("Du har ikke tilgang til Ã¥ redigere denne avstemningen.", "error");
 			redirect::handle();
 		}
 	}
@@ -451,7 +451,7 @@ elseif (isset($_GET['new']))
 {
 	if (!access::has("sadmin"))
 	{
-		$_base->page->add_message("Denne muligheten er ikke klar enda. Må legges til manuelt i databasen.", "error");
+		$_base->page->add_message("Denne muligheten er ikke klar enda. MÃ¥ legges til manuelt i databasen.", "error");
 		redirect::handle();
 	}
 	
@@ -461,7 +461,7 @@ elseif (isset($_GET['new']))
 		$title = postval("title");
 		$description = postval("description");
 		
-		// prøv å legg til
+		// prÃ¸v Ã¥ legg til
 		$ret = available::add_ag($title, $description);
 		if (is_string($ret))
 		{

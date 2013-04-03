@@ -65,11 +65,11 @@ class pagenumbers_input
 				// finn sidetallet vi skal hoppe til (minus 1)
 				$n = $i > $high ? $this->pages - 1 : $low - 1;
 				
-				// hopp kun over hvis det er mer enn én side
+				// hopp kun over hvis det er mer enn Ã©n side
 				if ($n - $i >= 1)
 				{
 					$i = $n;
-					$ret[] = show_sbutton("..", 'name="'.$this->name_safe.'" onclick="var v=prompt(\'Ønsket sidetall? (1-'.$this->pages.')\', 0); if (v && v >= 1 && v <= '.$this->pages.') this.value = v; else return false"');
+					$ret[] = show_sbutton("..", 'name="'.$this->name_safe.'" onclick="var v=prompt(\'Ã˜nsket sidetall? (1-'.$this->pages.')\', 0); if (v && v >= 1 && v <= '.$this->pages.') this.value = v; else return false"');
 					continue;
 				}
 			}

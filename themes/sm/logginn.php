@@ -57,7 +57,7 @@ ess::$b->page->add_js_domready('
 					"top": this.getPosition().y - 5
 				},
 				"class": "popup_info_box r3",
-				"html": "<h1>Min ID</h1><p>Enkelt å logge inn! Velg en av disse alternativene:</p><ul><li>Navnet på en av dine spillere</li><li>ID-en til din bruker</li><li>E-postadressen din</li></ul></div>",
+				"html": "<h1>Min ID</h1><p>Enkelt Ã¥ logge inn! Velg en av disse alternativene:</p><ul><li>Navnet pÃ¥ en av dine spillere</li><li>ID-en til din bruker</li><li>E-postadressen din</li></ul></div>",
 			}).set("tween", {"duration": "short"}).fade("hide").inject(document.body).fade(0.95));
 		},
 		"mouseleave": function()
@@ -107,7 +107,7 @@ $logginn .= '
 				<label for="expire_type_0">Etter 15 minutter inaktivitet</label><br />
 				
 				<input type="radio" name="expire_type" value="1" id="expire_type_1"'.($expire == 1 ? ' checked="checked"' : '').' />
-				<label for="expire_type_1">Når nettleseren lukkes</label><br />
+				<label for="expire_type_1">NÃ¥r nettleseren lukkes</label><br />
 				
 				<input type="radio" name="expire_type" value="2" id="expire_type_2"'.($expire == 2 ? ' checked="checked"' : '').' />
 				<label for="expire_type_2">Aldri</label><br />' . (ess::$s['https_support'] ? '

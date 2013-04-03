@@ -3,8 +3,8 @@
  * Skrevet av Henrik Steen
  * www.henrist.net
  *
- * Beskyttet av åndsverkloven
- * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ * Beskyttet av Ã¥ndsverkloven
+ * Alle rettigheter tilhÃ¸rer Henrik Steen dersom ikke annet er oppgitt
  *
  * Copyright (c) 2010 All rights reserved
  */
@@ -36,7 +36,7 @@ var InboxMessage = new Class({
 			});
 		});
 		
-		// forhåndsvise svar
+		// forhÃ¥ndsvise svar
 		$("reply_link_preview").addEvent("click", function(event)
 		{
 			event.stop();
@@ -60,7 +60,7 @@ var InboxMessage = new Class({
 		var self = this;
 		
 		// legg til info om nye meldinger
-		this.info = new Element("div", {"class": "innboks_info", "text": "Nye meldinger i denne meldingstråden vil automatisk bli lagt til ovenfor denne boksen."}).inject(this.container, "top");
+		this.info = new Element("div", {"class": "innboks_info", "text": "Nye meldinger i denne meldingstrÃ¥den vil automatisk bli lagt til ovenfor denne boksen."}).inject(this.container, "top");
 		this.info_span = new Element("span", {"style": "float: right; color: #666"}).inject(this.info, "top");
 		
 		// sett events for aktiv/inaktiv
@@ -189,7 +189,7 @@ var InboxMessage = new Class({
 
 
 /**
- * Opprette ny meldingstråd
+ * Opprette ny meldingstrÃ¥d
  */
 var innboks_ny = {
 	receivers: [],
@@ -204,8 +204,8 @@ var innboks_ny = {
 		this.rec_new = $("rec_new");	// ny mottaker
 		this.rec_s = $("rec_s");		// statusfelt (x/max)
 		this.rec_form = $("rec_form");	// skjemaet
-		this.rec_input = this.rec_new.getElement("input");	// søkefeltet
-		this.rec_results = this.rec_new.getElement("ul");		// søkeresultater
+		this.rec_input = this.rec_new.getElement("input");	// sÃ¸kefeltet
+		this.rec_results = this.rec_new.getElement("ul");		// sÃ¸keresultater
 		this.rec_newm = $("rec_newm");
 
 		// skjul spillernavnene
@@ -230,7 +230,7 @@ var innboks_ny = {
 		this.update_status();
 		this.setm("Fyll inn feltet og trykk enter!");
 
-		// søkefeltet
+		// sÃ¸kefeltet
 		var m = this;
 		this.rec_input.addEvent("keypress", function(event)
 		{
@@ -282,7 +282,7 @@ var innboks_ny = {
 	},
 
 
-	// legg til spiller i søkeresultatene
+	// legg til spiller i sÃ¸keresultatene
 	new_clean: function() { while (this.rec_results.childNodes.length > 0) { this.rec_results.removeChild(this.rec_results.childNodes[0]); } this.rec_results.style.display = "none"; },
 	new_add: function(up_id, up_name, view)
 	{
@@ -329,7 +329,7 @@ var innboks_ny = {
 	// sjekk tast i input feltet (sjekk for enter etc)
 	checkKey: function(t, event)
 	{
-		// søke?
+		// sÃ¸ke?
 		if (event.key == "enter")
 		{
 			t.search(this.rec_input.value);
@@ -337,12 +337,12 @@ var innboks_ny = {
 		}
 	},
 
-	// søk etter spiller
+	// sÃ¸k etter spiller
 	setm: function(msg) { if (!msg || msg == "") { this.rec_newm.style.display = "none"; } else { this.rec_newm.innerHTML = msg; this.rec_newm.style.display = "block"; } },
 	search: function(q)
 	{
 		this.new_clean();
-		this.setm("Søker etter spillere..");
+		this.setm("SÃ¸ker etter spillere..");
 		var self = this;
 		
 		// xhr ojekt
@@ -407,7 +407,7 @@ var innboks_ny = {
 		return list.join(",");
 	},
 
-	// fullfør formen (send melding)
+	// fullfÃ¸r formen (send melding)
 	submit: function()
 	{
 		// hent mottakerliste
@@ -416,7 +416,7 @@ var innboks_ny = {
 		// ingen mottakere?
 		if (m == "")
 		{
-			alert("Du må legge til en mottaker!");
+			alert("Du mÃ¥ legge til en mottaker!");
 			return false;
 		}
 

@@ -24,7 +24,7 @@ class page_antibot
 	 */
 	protected $form;
 	
-	/** Har vi ventetid før vi kan utføre? */
+	/** Har vi ventetid fÃ¸r vi kan utfÃ¸re? */
 	protected $wait;
 	
 	/**
@@ -44,14 +44,14 @@ class page_antibot
 		$this->antibot = antibot::get($name);
 		if (!$this->antibot->data)
 		{
-			ess::$b->page->add_message("Anti-bot oppføringen er ikke opprettet.", "error");
+			ess::$b->page->add_message("Anti-bot oppfÃ¸ringen er ikke opprettet.", "error");
 			$this->redirect();
 		}
 		
 		// kuler?
 		if ($name == "kuler")
 		{
-			// gjennomfør pre-check
+			// gjennomfÃ¸r pre-check
 			if (!$this->antibot->kuler_precheck())
 			{
 				$this->redirect();
@@ -78,7 +78,7 @@ class page_antibot
 		
 		$this->form = new form("anti-bot");
 		
-		// utføre sjekk?
+		// utfÃ¸re sjekk?
 		if (isset($_POST['valider']) && isset($this->images) && !$this->wait)
 		{
 			$this->check();
@@ -99,7 +99,7 @@ class page_antibot
 	 */
 	protected function check_wait()
 	{
-		// kan vi utføre med en gang?
+		// kan vi utfÃ¸re med en gang?
 		$this->wait = max(0, $this->antibot->data['last_try'] + $this->retry_delay - time());
 		if ($this->wait > $this->retry_delay) $this->wait = 0;
 	}
@@ -139,7 +139,7 @@ class page_antibot
 	}
 	
 	/**
-	 * Utfør sjekk
+	 * UtfÃ¸r sjekk
 	 */
 	protected function check()
 	{
@@ -148,20 +148,20 @@ class page_antibot
 		// ingen merket?
 		if (!isset($_POST['bilde']))
 		{
-			ess::$b->page->add_message("Du må markere noen bilder.", "error");
+			ess::$b->page->add_message("Du mÃ¥ markere noen bilder.", "error");
 		}
 		
 		// ugyldig?
 		elseif (!is_array($_POST['bilde']))
 		{
 			putlog("ABUSE", "%bUGYLDIG INNTASTING I ANTI-BOT:%b _POST bilde var ikke array: {$_POST['bilde']}");
-			ess::$b->page->add_message("Du må markere noen bilder.", "error");
+			ess::$b->page->add_message("Du mÃ¥ markere noen bilder.", "error");
 		}
 		
 		// antall bilder markert
 		elseif (count($_POST['bilde']) != $this->images_valid)
 		{
-			ess::$b->page->add_message("Du må markere ".fwords("%d bilde", "%d bilder", $this->images_valid).". Du markerte ".fwords("%d bilde", "%d bilder", count($_POST['bilde'])).".");
+			ess::$b->page->add_message("Du mÃ¥ markere ".fwords("%d bilde", "%d bilder", $this->images_valid).". Du markerte ".fwords("%d bilde", "%d bilder", count($_POST['bilde'])).".");
 		}
 		
 		else
@@ -205,11 +205,11 @@ class page_antibot
 	{
 		$this->form->validate(postval("hash"));
 		
-		// kan vi be om nye bilder nå?
+		// kan vi be om nye bilder nÃ¥?
 		$delay = $this->images_time + $this->update_delay - time();
 		if ($delay > 0 && $delay <= $this->update_delay)
 		{
-			ess::$b->page->add_message("Du må vente ".game::counter($delay, true)." før du kan oppdatere bildene.", "error");
+			ess::$b->page->add_message("Du mÃ¥ vente ".game::counter($delay, true)." fÃ¸r du kan oppdatere bildene.", "error");
 			$this->antibot->update_status("new_img_wait", $delay);
 			redirect::handle();
 		}
@@ -240,10 +240,10 @@ class page_antibot
 	<h1 class="bg1">Anti-bot<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<boxes />
-		<p>Dette er et virkemiddel mot bruk av programmer som spiller for deg uten at du aktivt utfører noen handlinger. Dette er juks og ikke tillatt.</p>'.($this->antibot->kuler_time_left ? '
-		<p>Anti-bot må fullføres <b>før</b> kulene blir kjøpt. Du har nå reservert kulene, men for å fullføre kjøpet må anti-boten gjennomføres <b style="color: #DD0000">innen '.game::counter($this->antibot->kuler_time_left, true).'</b> sekunder.</p>' : '').'
-		<p>Merk de bildene som inneholder en <u>bil</u> og trykk på &laquo;Fullfør&raquo; knappen nederst.</p>'.($this->wait ? '
-		<p class="error_box">Du må vente '.game::counter($this->wait).' før du kan utføre anti-bot sjekk på nytt.</p>' : '').'
+		<p>Dette er et virkemiddel mot bruk av programmer som spiller for deg uten at du aktivt utfÃ¸rer noen handlinger. Dette er juks og ikke tillatt.</p>'.($this->antibot->kuler_time_left ? '
+		<p>Anti-bot mÃ¥ fullfÃ¸res <b>fÃ¸r</b> kulene blir kjÃ¸pt. Du har nÃ¥ reservert kulene, men for Ã¥ fullfÃ¸re kjÃ¸pet mÃ¥ anti-boten gjennomfÃ¸res <b style="color: #DD0000">innen '.game::counter($this->antibot->kuler_time_left, true).'</b> sekunder.</p>' : '').'
+		<p>Merk de bildene som inneholder en <u>bil</u> og trykk pÃ¥ &laquo;FullfÃ¸r&raquo; knappen nederst.</p>'.($this->wait ? '
+		<p class="error_box">Du mÃ¥ vente '.game::counter($this->wait).' fÃ¸r du kan utfÃ¸re anti-bot sjekk pÃ¥ nytt.</p>' : '').'
 		<form action="" method="post" id="antibot_form">
 			<input type="hidden" name="hash" value="'.$hash.'" />
 			<div id="antibot">
@@ -277,7 +277,7 @@ class page_antibot
 				</div>
 			</div>
 			<p class="c">
-				'.show_sbutton("Fullfør", 'name="valider"').'
+				'.show_sbutton("FullfÃ¸r", 'name="valider"').'
 				'.show_sbutton("Nye bilder", 'name="new"').'
 			</p>
 		</form>

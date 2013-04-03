@@ -5,7 +5,7 @@ define("ALLOW_GUEST", true);
 require "base.php";
 global $_base;
 
-$_base->page->add_title("Spillere pålogget");
+$_base->page->add_title("Spillere pÃ¥logget");
 
 // spesielle verdier
 $other = array(
@@ -22,7 +22,7 @@ if (isset($_GET['t']) && array_key_exists($_GET['t'], $other))
 {
 	$elm = $other[$_GET['t']];
 	
-	// relativ fra nå eller absolutt fra 00:00
+	// relativ fra nÃ¥ eller absolutt fra 00:00
 	if ($elm[0])
 	{
 		// absolutt verdi
@@ -40,7 +40,7 @@ else
 {
 	$time = isset($_GET['t']) ? intval($_GET['t']) : 0;
 	
-	// utenfor grensen på 10 sekunder og 1 time?
+	// utenfor grensen pÃ¥ 10 sekunder og 1 time?
 	if ($time < 10 || $time > 3600)
 	{
 		// sett tiden til 15 min
@@ -50,7 +50,7 @@ else
 
 echo '
 <div class="bg1_c medium bg1_padding">
-	<h1 class="bg1">Spillere pålogget<span class="left"></span><span class="right"></span></h1>
+	<h1 class="bg1">Spillere pÃ¥logget<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<form action="" method="get">
 			<div style="float: right; margin-top: 0.8em; margin-left: 10px">
@@ -66,8 +66,8 @@ echo '
 					<option value="1800">Siste 30 minuttene</option>
 					<option value="3600">Siste timen</option>
 					<option value="today">I dag</option>
-					<option value="d1">Siden i går</option>
-					<option value="d2">Siden i forigårs</option>
+					<option value="d1">Siden i gÃ¥r</option>
+					<option value="d2">Siden i forigÃ¥rs</option>
 					<option value="d3">Siden 3 dager</option>
 					<option value="24t">Siste 24 timer</option>
 					<option value="1u">Siste uken</option>
@@ -76,7 +76,7 @@ echo '
 					<input type="submit" value="Go" />
 				</noscript>
 			</div>
-			<p>Denne listen viser hvem som har vært aktive i løpet av siste '.game::timespan($time, game::TIME_FULL).'</p>
+			<p>Denne listen viser hvem som har vÃ¦rt aktive i lÃ¸pet av siste '.game::timespan($time, game::TIME_FULL).'</p>
 		</form>';
 
 // hent brukerne
@@ -93,7 +93,7 @@ echo '
 		<table class="table tablemb">
 			<thead>
 				<tr>
-					<th colspan="2">Spillere pålogget - '.game::format_number(mysql_num_rows($result)).' spiller'.(mysql_num_rows($result) == 1 ? '' : 'e').'</th>
+					<th colspan="2">Spillere pÃ¥logget - '.game::format_number(mysql_num_rows($result)).' spiller'.(mysql_num_rows($result) == 1 ? '' : 'e').'</th>
 				</tr>
 			</thead>
 			<tbody>';

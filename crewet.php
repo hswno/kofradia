@@ -12,8 +12,8 @@ echo '
 <div class="bg1_c xsmall" style="width: 280px">
 	<h1 class="bg1">Crewet<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p class="c">Her er en liten liste med Crewet her på Kofradia!</p>
-		<p class="c">Trenger du hjelp til noe relatert til spillet? Les på <a href="&path;/node">hjelpesidene</a> eller <a href="&path;/support/">send inn en supporthenvendelse</a>.</p>';
+		<p class="c">Her er en liten liste med Crewet her pÃ¥ Kofradia!</p>
+		<p class="c">Trenger du hjelp til noe relatert til spillet? Les pÃ¥ <a href="&path;/node">hjelpesidene</a> eller <a href="&path;/support/">send inn en supporthenvendelse</a>.</p>';
 
 visliste("Administratorer", "up_access_level IN ({$_game['access']['admin'][0]}, {$_game['access']['sadmin'][0]})", "Ingen administratorer!");
 visliste("Moderatorer", "up_access_level = {$_game['access']['mod'][0]}", "Ingen moderatorer!");
@@ -50,16 +50,16 @@ function visliste($name, $where)
 		</div>';
 }
 
-// hente liste over spillere som ikke har samme spillernivå som brukernivå?
+// hente liste over spillere som ikke har samme spillernivÃ¥ som brukernivÃ¥?
 if (access::has("crewet"))
 {
-	// skal vi sette spillernivået til et brukernivå?
+	// skal vi sette spillernivÃ¥et til et brukernivÃ¥?
 	if (isset($_POST['u_to_up']) && access::has("admin"))
 	{
 		$up_id = (int) postval("up_id");
 		if (!$up_id)
 		{
-			ess::$b->page->add_message("Du må velge en spiller.", "error");
+			ess::$b->page->add_message("Du mÃ¥ velge en spiller.", "error");
 			redirect::handle();
 		}
 		
@@ -72,37 +72,37 @@ if (access::has("crewet"))
 			redirect::handle();
 		}
 		
-		// nivå er det samme?
+		// nivÃ¥ er det samme?
 		if ($up['u_access_level'] == $up['up_access_level'])
 		{
-			ess::$b->page->add_message("Nivået mellom bruker og spiller er det samme.", "error");
+			ess::$b->page->add_message("NivÃ¥et mellom bruker og spiller er det samme.", "error");
 			redirect::handle();
 		}
 		
 		// er brukeren deaktivert?
 		if ($up['u_access_level'] == 0)
 		{
-			ess::$b->page->add_message('Brukeren til <user id="'.$up['up_id'].'" /> er deaktivert. Endringer må gjøres manuelt.', "error");
+			ess::$b->page->add_message('Brukeren til <user id="'.$up['up_id'].'" /> er deaktivert. Endringer mÃ¥ gjÃ¸res manuelt.', "error");
 			redirect::handle();
 		}
 		
 		// er spilleren deaktivert?
 		if ($up['up_access_level'] == 0)
 		{
-			ess::$b->page->add_message('Spilleren <user id="'.$up['up_id'].'" /> er deaktivert. Endringer må gjøres manuelt.', "error");
+			ess::$b->page->add_message('Spilleren <user id="'.$up['up_id'].'" /> er deaktivert. Endringer mÃ¥ gjÃ¸res manuelt.', "error");
 			redirect::handle();
 		}
 		
-		// overfør nivå
+		// overfÃ¸r nivÃ¥
 		ess::$b->db->query("UPDATE users, users_players SET up_access_level = u_access_level WHERE u_active_up_id = up_id AND up_id = {$up['up_id']} AND u_access_level != 0 AND up_access_level != 0");
-		ess::$b->page->add_message('Tilgangsnivået til brukeren <user id="'.$up['up_id'].'" /> ble overført til spilleren.');
+		ess::$b->page->add_message('TilgangsnivÃ¥et til brukeren <user id="'.$up['up_id'].'" /> ble overfÃ¸rt til spilleren.');
 		
 		// ranklista
 		ess::$b->db->query("UPDATE users, users_players_rank SET upr_up_access_level = u_access_level WHERE upr_up_id = {$up['up_id']} AND upr_up_id = u_active_up_id");
 		ranklist::update();
 		
 		// logg
-		putlog("CREWCHAN", "TILGANGSNIVÅ OVERFØRT: Tilgangsnivået til {$up['up_name']} ble overført fra brukeren (nivå: {$up['u_access_level']}) til spilleren (gammelt nivå: {$up['up_access_level']}).");
+		putlog("CREWCHAN", "TILGANGSNIVÃ… OVERFÃ˜RT: TilgangsnivÃ¥et til {$up['up_name']} ble overfÃ¸rt fra brukeren (nivÃ¥: {$up['u_access_level']}) til spilleren (gammelt nivÃ¥: {$up['up_access_level']}).");
 		redirect::handle();
 	}
 	
@@ -117,7 +117,7 @@ if (access::has("crewet"))
 		
 		echo '
 <div class="bg1_c medium">
-	<h1 class="bg1">Forskjell mellom brukernivå og spillernivå<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Forskjell mellom brukernivÃ¥ og spillernivÃ¥<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<boxes />'.($admin ? '
 		<form action="" method="post">' : '').'
@@ -127,9 +127,9 @@ if (access::has("crewet"))
 					<th>U_ID</th>
 					<th>UP_ID</th>
 					<th>Spiller</th>
-					<th>Brukernivå</th>
-					<th>Spillernivå</th>
-					<th>Sist pålogget</th>
+					<th>BrukernivÃ¥</th>
+					<th>SpillernivÃ¥</th>
+					<th>Sist pÃ¥logget</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -166,7 +166,7 @@ if (access::has("crewet"))
 		echo '
 			</tbody>
 		</table>'.($admin ? '
-		<p class="c">'.show_sbutton("Overfør brukernivå til spillernivå", 'name="u_to_up"').'</p>
+		<p class="c">'.show_sbutton("OverfÃ¸r brukernivÃ¥ til spillernivÃ¥", 'name="u_to_up"').'</p>
 		</form>' : '').'
 	</div>
 </div>';

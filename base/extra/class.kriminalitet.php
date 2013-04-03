@@ -22,7 +22,7 @@ class kriminalitet
 	protected $prob_k_max;
 	protected $prob_ks_max;
 	
-	protected $prob_min = 0.1; // fra 10 % sannsynlighet (kan gå lavere med lav energi)
+	protected $prob_min = 0.1; // fra 10 % sannsynlighet (kan gÃ¥ lavere med lav energi)
 	protected $prob_max = 0.95; // til 95 % sannsynlighet
 	
 	/**
@@ -39,7 +39,7 @@ class kriminalitet
 	 */
 	public function get_last_info()
 	{
-		// finn ut når vi sist utførte kriminalitet og ventetiden
+		// finn ut nÃ¥r vi sist utfÃ¸rte kriminalitet og ventetiden
 		$this->last = false;
 		$this->wait = false;
 		$result = ess::$b->db->query("
@@ -116,7 +116,7 @@ class kriminalitet
 			: $row['ks_strength'] / $this->prob_ks_max;
 		
 		// juster for denne krimen i forhold til de andre
-		// den mest populære krimen settes ned 20 %
+		// den mest populÃ¦re krimen settes ned 20 %
 		$d = $this->prob_k_max == $this->prob_k_min ? 1 : (($row['k_strength'] - $this->prob_k_min) / ($this->prob_k_max - $this->prob_k_min));
 		$d *= 0.2; // settes ned maksimalt 20 %
 		$prob -= $prob * $d;
@@ -131,14 +131,14 @@ class kriminalitet
 	}
 	
 	/**
-	 * Utfør kriminalitet
+	 * UtfÃ¸r kriminalitet
 	 */
 	public function utfor($id)
 	{
 		$this->options_load();
 		if (!isset($this->options[$id]))
 		{
-			throw new HSException("Fant ikke ønsket alternativ.");
+			throw new HSException("Fant ikke Ã¸nsket alternativ.");
 		}
 		
 		$krim = $this->options[$id];
@@ -166,7 +166,7 @@ class kriminalitet
 			$ret['rank'] = $krim['points'];
 		}
 		
-		// wanted nivå
+		// wanted nivÃ¥
 		$ret['wanted_change'] = $this->up->fengsel_rank($krim['points'], $ret['success']);
 		
 		// oppdater kriminalitet-status
@@ -251,7 +251,7 @@ class kriminalitet
 		$this->prob_k_min = mysql_result($result, 0, 0);
 		$this->prob_k_max = max(1, mysql_result($result, 0, 1));
 		
-		// hent stats for å sammenlikne med andre spillere
+		// hent stats for Ã¥ sammenlikne med andre spillere
 		$result = ess::$b->db->query("
 			SELECT MAX(ks_strength)
 			FROM kriminalitet_status");

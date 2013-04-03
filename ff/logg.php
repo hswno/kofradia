@@ -116,7 +116,7 @@ class page_ff_log
 			$where .= ' AND ffl_type IN ('.implode(",", $i_bruk).')';
 		}
 		
-		// sideinformasjon - hent radene på denne siden
+		// sideinformasjon - hent radene pÃ¥ denne siden
 		$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 30);
 		$result = $pagei->query("SELECT SQL_CALC_FOUND_ROWS ffl_id, ffl_time, ffl_type, ffl_data, ffl_extra FROM ff_log WHERE ffl_ff_id = {$this->ff->id}$where ORDER BY ffl_time DESC, ffl_id DESC");
 		

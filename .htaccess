@@ -4,7 +4,7 @@ RewriteEngine On
 # ip-sjekking for videresending
 RewriteRule ^a$ /addip.php [L]
 
-# sørg for korrekt adresse
+# sÃ¸rg for korrekt adresse
 RewriteCond %{HTTP_HOST} !^kofradia.no$ [NC]
 RewriteCond %{HTTP_HOST} !.vpn.hsw.no$ [NC]
 RewriteCond %{HTTP_HOST} !^localhost$ [NC]

@@ -6,12 +6,12 @@
 class achievements
 {
 	/**
-	 * Oppnåelser
+	 * OppnÃ¥elser
 	 */
 	public static $achievements;
 	
 	/**
-	 * Oppnåelser indeksert etter code
+	 * OppnÃ¥elser indeksert etter code
 	 */
 	public static $achievements_code;
 	
@@ -91,7 +91,7 @@ class achievements_item
 		// * cash
 		// * points
 		// * bullets
-		// (se også achivement_player_item::prize())
+		// (se ogsÃ¥ achivement_player_item::prize())
 		
 		$params = new params($this->data['ac_prize']);
 		$text = array();
@@ -165,7 +165,7 @@ class achievements_player
 			break;
 			
 			case "rank_points":
-				// utfør kun på positive forandringer
+				// utfÃ¸r kun pÃ¥ positive forandringer
 				if ($data['points_rel'] < 0) return;
 				
 				$this->handle_code("rank", $data);
@@ -225,7 +225,7 @@ class achievements_player
 	}
 	
 	/**
-	 * Hent cache over ikke-fullførte prestasjoner
+	 * Hent cache over ikke-fullfÃ¸rte prestasjoner
 	 */
 	public function load_cache($reload = null)
 	{
@@ -327,7 +327,7 @@ class achievement_player_item
 	}
 	
 	/**
-	 * Hent aktiv oppføring, hvis noen
+	 * Hent aktiv oppfÃ¸ring, hvis noen
 	 */
 	public function load_active($create = null)
 	{
@@ -371,7 +371,7 @@ class achievement_player_item
 	}
 	
 	/**
-	 * Utfør x antall kriminalitet
+	 * UtfÃ¸r x antall kriminalitet
 	 */
 	public function handle_krim_rep($data)
 	{
@@ -379,7 +379,7 @@ class achievement_player_item
 	}
 	
 	/**
-	 * Oppnå rangering
+	 * OppnÃ¥ rangering
 	 */
 	public function handle_rank($data)
 	{
@@ -390,7 +390,7 @@ class achievement_player_item
 		 *     min_rank
 		 */
 		
-		// oppnådd rankpoeng?
+		// oppnÃ¥dd rankpoeng?
 		if ($rank = $this->a->params->get("rank"))
 		{
 			// har ikke ranken forandret seg?
@@ -399,22 +399,22 @@ class achievement_player_item
 			if ($rank < 0) $rank = count(game::$ranks['items']) + $rank + 1;
 			$rank = max(1, min(count(game::$ranks['items']), $rank));
 			
-			// har vi oppnådd denne ranken?
+			// har vi oppnÃ¥dd denne ranken?
 			if ($this->up->rank['number'] >= $rank)
 			{
-				// allerede utført?
+				// allerede utfÃ¸rt?
 				if ($this->check_complete()) return;
 				
-				// marker som utført
+				// marker som utfÃ¸rt
 				$this->load_active(true);
 				$this->mark_complete();
 			}
 		}
 		
-		// oppnådd plassering?
+		// oppnÃ¥dd plassering?
 		elseif ($pos = $this->a->params->get("pos"))
 		{
-			// har vi ikke oppnådd denne plasseringen?
+			// har vi ikke oppnÃ¥dd denne plasseringen?
 			if ($pos < $this->up->rank['pos']) return;
 			
 			// minstekrav?
@@ -423,21 +423,21 @@ class achievement_player_item
 				if ($min_rank < 0) $min_rank = count(game::$ranks['items']) + $min_rank + 1;
 				$min_rank = max(1, min(count(game::$ranks['items']), $min_rank));
 				
-				// ikke oppnådd?
+				// ikke oppnÃ¥dd?
 				if ($this->up->rank['number'] < $min_rank) return;
 			}
 			
-			// allerede utført?
+			// allerede utfÃ¸rt?
 			if ($this->check_complete()) return;
 			
-			// marker som utført
+			// marker som utfÃ¸rt
 			$this->load_active(true);
 			$this->mark_complete();
 		}
 	}
 	
 	/**
-	 * Oppnå pengeplassering
+	 * OppnÃ¥ pengeplassering
 	 */
 	public function handle_money($data)
 	{
@@ -446,24 +446,24 @@ class achievement_player_item
 		 *   money
 		 */
 		
-		// mangler målverdi?
+		// mangler mÃ¥lverdi?
 		if (!$this->a->params->get("money")) return;
 		
-		// har vi oppnådd målet?
+		// har vi oppnÃ¥dd mÃ¥let?
 		$sum = bcadd($this->up->data['up_cash'], $this->up->data['up_bank']);
 		if (bccomp($sum, $this->a->params->get("money")) >= 0)
 		{
-			// allerede utført?
+			// allerede utfÃ¸rt?
 			if ($this->check_complete()) return;
 			
-			// marker som utført
+			// marker som utfÃ¸rt
 			$this->load_active(true);
 			$this->mark_complete();
 		}
 	}
 	
 	/**
-	 * Oppnå rangering i FF (etter konkurranse for broderskap)
+	 * OppnÃ¥ rangering i FF (etter konkurranse for broderskap)
 	 */
 	public function handle_ff_pos($data)
 	{
@@ -489,20 +489,20 @@ class achievement_player_item
 			if ($type != $data['ff']->data['ff_type']) return;
 		}
 		
-		// oppnådd mål?
+		// oppnÃ¥dd mÃ¥l?
 		if ($pos >= $data['member']->data['ffm_priority'])
 		{
-			// allerede utført?
+			// allerede utfÃ¸rt?
 			if ($this->check_complete()) return;
 			
-			// marker som utført
+			// marker som utfÃ¸rt
 			$this->load_active(true);
 			$this->mark_complete();
 		}
 	}
 	
 	/**
-	 * Være med i broderskapet når konkurransen blir vunnet
+	 * VÃ¦re med i broderskapet nÃ¥r konkurransen blir vunnet
 	 */
 	public function handle_ff_won_member($data)
 	{
@@ -543,7 +543,7 @@ class achievement_player_item
 	}
 	
 	/**
-	 * Utfør oppdrag
+	 * UtfÃ¸r oppdrag
 	 */
 	public function handle_oppdrag_rep($data)
 	{
@@ -565,9 +565,9 @@ class achievement_player_item
 	{
 		/*
 		 * params:
-		 *   pos (kan være på formen X-X, hvor X er posisjon)
-		 *   attacked_rank (kan være på formen -X for å telle fra øverste rank, og X+ for å telle fra og med X)
-		 *     (-X+[X] er også tillatt, -4+3 betyr de tre nest øverste rankene)
+		 *   pos (kan vÃ¦re pÃ¥ formen X-X, hvor X er posisjon)
+		 *   attacked_rank (kan vÃ¦re pÃ¥ formen -X for Ã¥ telle fra Ã¸verste rank, og X+ for Ã¥ telle fra og med X)
+		 *     (-X+[X] er ogsÃ¥ tillatt, -4+3 betyr de tre nest Ã¸verste rankene)
 		 *   etterlyst
 		 */
 		
@@ -622,25 +622,25 @@ class achievement_player_item
 			$ret = isset($data['res']) ? $data['res'] : $data['attack'];
 			
 			// var ikke etterlyst?
-			// man får ikke kreditert prestasjonen hvis en spiller under 40 % som er etterlyst deaktiverer seg
+			// man fÃ¥r ikke kreditert prestasjonen hvis en spiller under 40 % som er etterlyst deaktiverer seg
 			if (empty($ret['hitlist'])) return;
 			
 			// etterlyst for under 24 timer siden?
 			if ($ret['hitlist_oldest_time'] > time()-86400)
 			{
-				putlog("DF", $this->up->data['up_name'].' (#'.$this->up->id.') oppnådde ikke etterlyst-prestasjon mot '.$data['up']->data['up_name'].' (#'.$data['up']->id.') grunnet at etterlysningen var for ny.');
+				putlog("DF", $this->up->data['up_name'].' (#'.$this->up->id.') oppnÃ¥dde ikke etterlyst-prestasjon mot '.$data['up']->data['up_name'].' (#'.$data['up']->id.') grunnet at etterlysningen var for ny.');
 				return;
 			}
 			
-			// offer ikke pålogget siste 7 dager?
+			// offer ikke pÃ¥logget siste 7 dager?
 			if ($data['up']->data['up_last_online'] < time()-86400*7)
 			{
-				putlog("DF", $this->up->data['up_name'].' (#'.$this->up->id.') oppnådde ikke etterlyst-prestasjon mot '.$data['up']->data['up_name'].' (#'.$data['up']->id.') grunnet at offeret ikke har vært pålogget siste 7 dager.');
+				putlog("DF", $this->up->data['up_name'].' (#'.$this->up->id.') oppnÃ¥dde ikke etterlyst-prestasjon mot '.$data['up']->data['up_name'].' (#'.$data['up']->id.') grunnet at offeret ikke har vÃ¦rt pÃ¥logget siste 7 dager.');
 				return;
 			}
 		}
 		
-		// marker som utført
+		// marker som utfÃ¸rt
 		$this->load_active(true);
 		$this->mark_complete();
 	}
@@ -652,11 +652,11 @@ class achievement_player_item
 	{
 		$this->load_active(true);
 		
-		// øk antall
+		// Ã¸k antall
 		$this->params->lock();
 		$this->params->update("c", $this->params->get("c", 0) + 1);
 		
-		// oppnådd?
+		// oppnÃ¥dd?
 		if ($this->params->get("c") >= $this->a->params->get("count", 100))
 		{
 			$this->mark_complete();
@@ -666,7 +666,7 @@ class achievement_player_item
 	}
 	
 	/**
-	 * Sjekk om vi har oppnådd denne prestasjonen
+	 * Sjekk om vi har oppnÃ¥dd denne prestasjonen
 	 */
 	public function check_complete()
 	{
@@ -680,7 +680,7 @@ class achievement_player_item
 	}
 	
 	/**
-	 * Marker som utført
+	 * Marker som utfÃ¸rt
 	 */
 	public function mark_complete()
 	{
@@ -689,7 +689,7 @@ class achievement_player_item
 		$this->data['upa_apoints'] = $this->a->data['ac_apoints'];
 		$this->data['upa_prize'] = $this->a->data['ac_prize'];
 		
-		// marker som utført
+		// marker som utfÃ¸rt
 		ess::$b->db->query("
 			UPDATE up_achievements
 			SET upa_complete = 1, upa_time = {$this->data['upa_time']}, upa_apoints = {$this->data['upa_apoints']}, upa_prize = ".ess::$b->db->quote($this->a->data['ac_prize'])."
@@ -721,7 +721,7 @@ class achievement_player_item
 	}
 	
 	/**
-	 * Hent antall utførte prestasjoner
+	 * Hent antall utfÃ¸rte prestasjoner
 	 */
 	protected function get_rep_count()
 	{

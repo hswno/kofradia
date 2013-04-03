@@ -34,14 +34,14 @@ class wordpress_entries
 		foreach ($xml->channel->item as $item)
 		{
 			$time = $_base->date->parse($item->pubDate)->format("U");
-			#$author = isset($item->author) ? utf8_decode((string)$item->author) : '';
+			#$author = isset($item->author) ? (string)$item->author : '';
 			$result[] = array(
-				"title" => decodeURIComponent(urlencode((string)$item->title)),
+				"title" => (string)$item->title,
 				#"author" => $author,
 				"time" => $time,
-				"link" => utf8_decode((string)$item->link),
-				"description" => decodeURIComponent(urlencode((string)$item->description)),
-				"category" => utf8_decode((string)$item->category)
+				"link" => (string)$item->link,
+				"description" => (string)$item->description,
+				"category" => (string)$item->category
 			);
 		}
 		
@@ -61,10 +61,10 @@ class wordpress_entries
 		// hent siste data
 		$last_data = isset(game::$settings['wordpress_last_data']) ? unserialize(game::$settings['wordpress_last_data']['value']) : NULL;
 		
-		// reverser data så nyeste kommer til slutt
+		// reverser data sÃ¥ nyeste kommer til slutt
 		$data = array_reverse($data);
 		
-		// gå gjennom og se om noe er nyere
+		// gÃ¥ gjennom og se om noe er nyere
 		$time_old = time()-600;
 		foreach ($data as $row)
 		{
@@ -106,7 +106,7 @@ class wordpress_entries
 		// sjekk for ny data
 		self::check_new($data);
 		
-		// last inn settings på nytt
+		// last inn settings pÃ¥ nytt
 		require ROOT."/base/scripts/update_db_settings.php";
 	}
 }

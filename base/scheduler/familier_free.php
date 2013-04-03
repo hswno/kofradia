@@ -4,7 +4,7 @@ global $_base, $__server;
 
 /**
  * Dette scriptet avslutter familiekonkurranser og setter de familiene
- * som ikke oppnådde mistekravet ellers om tapte konkurransen som døde.
+ * som ikke oppnÃ¥dde mistekravet ellers om tapte konkurransen som dÃ¸de.
  */
 
 // hent konkurranser som skal avsluttes
@@ -23,7 +23,7 @@ while ($faf = mysql_fetch_assoc($result_faf))
 		$familie = ff::get_ff($row['ff_id'], ff::LOAD_SCRIPT);
 		if (!$familie) continue;
 		
-		// har ikke oppnådd minstekravet?
+		// har ikke oppnÃ¥dd minstekravet?
 		$rank_points = $familie->competition_rank_points();
 		if ($rank_points < $familie->data['fff_required_points'])
 		{
@@ -40,12 +40,12 @@ while ($faf = mysql_fetch_assoc($result_faf))
 		}
 	}
 	
-	// ingen ff har oppnådd minstekravet?
+	// ingen ff har oppnÃ¥dd minstekravet?
 	if (count($ff) == 0)
 	{
 		putlog("INFO", "Ingen broderskap overlevde eller klarte minstekravet i broderskapkonkurransen. {$__server['path']}/ff/?fff_id={$faf['fff_id']}");
 		
-		// kjør ny konkurranse
+		// kjÃ¸r ny konkurranse
 		ff::create_competition();
 		
 		// sett konkurransen som avsluttet

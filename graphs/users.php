@@ -46,8 +46,8 @@ $bar->colour(OFC_Colours::$colours[0]);
 $ofc->add_element($bar);
 
 $bar = new OFC_Charts_Line();
-$bar->dot_style()->type("solid-dot")->dot_size(3)->halo_size(2)->tip("#x_label#<br>#val# døde brukere");
-$bar->text("Antall døde spillere");
+$bar->dot_style()->type("solid-dot")->dot_size(3)->halo_size(2)->tip("#x_label#<br>#val# dÃ¸de brukere");
+$bar->text("Antall dÃ¸de spillere");
 $bar->values(array_values($stats_die));
 $bar->colour(OFC_Colours::$colours[1]);
 $ofc->add_element($bar);

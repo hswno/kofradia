@@ -56,9 +56,9 @@ class page_utpressing extends utpressing
 		// sett opp hvilke ranker som kan angripes
 		$this->rank_min = max(1, $this->up->rank['number'] - 1);
 		$this->rank_max = min($this->rank_min + 3, count(game::$ranks['items']));
-		if ($this->rank_max - $this->rank_min < 3) $this->rank_min = max(1, $this->rank_max - 3); // sørg for at man har 4 alternativer uavhengig av rank
+		if ($this->rank_max - $this->rank_min < 3) $this->rank_min = max(1, $this->rank_max - 3); // sÃ¸rg for at man har 4 alternativer uavhengig av rank
 		
-		// utføre utpressing?
+		// utfÃ¸re utpressing?
 		if (isset($_POST['hash']))
 		{
 			$this->utpress();
@@ -76,7 +76,7 @@ class page_utpressing extends utpressing
 	{
 		ess::$b->page->add_title("Siste utpressinger");
 		
-		// hent utpressingene man har gjennomført de siste 12 timene
+		// hent utpressingene man har gjennomfÃ¸rt de siste 12 timene
 		$pagei = new pagei(pagei::PER_PAGE, 20, pagei::ACTIVE_GET, "side");
 		$expire = time()-43200;
 		$result = $pagei->query("
@@ -91,12 +91,12 @@ class page_utpressing extends utpressing
 	<p class="h_right"><a href="'.ess::$s['rpath'].'/node/4">Hjelp</a></p>
 	<div class="bg1">
 		<p class="c"><a href="utpressing">&laquo; Tilbake</a></p>
-		<p>Her kan du se utpressingene du har utført de siste 12 timene.</p>';
+		<p>Her kan du se utpressingene du har utfÃ¸rt de siste 12 timene.</p>';
 
 		if (mysql_num_rows($result) == 0)
 		{
 			echo '
-		<p>Du har ikke utført noen utpressinger de siste 12 timene.</p>';
+		<p>Du har ikke utfÃ¸rt noen utpressinger de siste 12 timene.</p>';
 		}
 
 		else
@@ -158,10 +158,10 @@ class page_utpressing extends utpressing
 		if (($wait = $this->calc_wait()) > 0)
 		{
 			echo '
-				<p>Du må vente '.game::counter($wait, true).' før du kan utføre en ny utpressing!</p>';
+				<p>Du mÃ¥ vente '.game::counter($wait, true).' fÃ¸r du kan utfÃ¸re en ny utpressing!</p>';
 		}
 		
-		// vis skjemaet for å utføre en utpressing
+		// vis skjemaet for Ã¥ utfÃ¸re en utpressing
 		else
 		{
 			echo '
@@ -184,7 +184,7 @@ class page_utpressing extends utpressing
 			echo '
 				</tbody>
 			</table>
-			<p class="c">'.show_sbutton("Utfør").'</p>
+			<p class="c">'.show_sbutton("UtfÃ¸r").'</p>
 		</form>';
 		}
 		
@@ -196,14 +196,14 @@ class page_utpressing extends utpressing
 	}
 	
 	/**
-	 * Kontroller inndata og utfør utpressing
+	 * Kontroller inndata og utfÃ¸r utpressing
 	 */
 	public function utpress()
 	{
 		// ventetid?
 		if (($wait = $this->calc_wait()) > 0)
 		{
-			ess::$b->page->add_message("Du må vente ".game::counter($wait, true)." før du kan utføre en ny utpressing.", "error");
+			ess::$b->page->add_message("Du mÃ¥ vente ".game::counter($wait, true)." fÃ¸r du kan utfÃ¸re en ny utpressing.", "error");
 			redirect::handle();
 		}
 		
@@ -213,7 +213,7 @@ class page_utpressing extends utpressing
 		// mangler alternativ?
 		if (!isset($_POST['opt']))
 		{
-			ess::$b->page->add_message("Du må velge et alternativ.", "error");
+			ess::$b->page->add_message("Du mÃ¥ velge et alternativ.", "error");
 			redirect::handle();
 		}
 		
@@ -227,9 +227,9 @@ class page_utpressing extends utpressing
 		// lagre valg for neste gang
 		ess::session_put("utpressing_opt_key", $opt_key);
 		
-		// forsøk utpressing
+		// forsÃ¸k utpressing
 		$result = parent::utpress($opt_key);
-		$post = $result['wanted'] > 0 ? ' Wanted nivået økte med '.game::format_number($result['wanted']/10, 1).' %.' : '';
+		$post = $result['wanted'] > 0 ? ' Wanted nivÃ¥et Ã¸kte med '.game::format_number($result['wanted']/10, 1).' %.' : '';
 		
 		if ($result['success'] === true)
 		{
@@ -239,15 +239,15 @@ class page_utpressing extends utpressing
 			// kom fra spillet?
 			if (!isset($result['player']))
 			{
-				ess::$b->page->add_message("Du fant ".game::format_cash($result['cash'])." liggende på gata.".$post);
+				ess::$b->page->add_message("Du fant ".game::format_cash($result['cash'])." liggende pÃ¥ gata.".$post);
 			}
 			
 			else
 			{
-				// døde spilleren?
+				// dÃ¸de spilleren?
 				if (isset($result['attack']) && $result['attack']['drept'])
 				{
-					$extra .= ' Spilleren hadde så lite helse at spilleren døde av utpressingen din.';
+					$extra .= ' Spilleren hadde sÃ¥ lite helse at spilleren dÃ¸de av utpressingen din.';
 					
 					// list opp vitner
 					if (count($result['attack']['vitner']) == 0)
@@ -272,7 +272,7 @@ class page_utpressing extends utpressing
 				}
 				
 				$text = $result['player_from_bank']
-					? ". Spilleren hadde ingen kontanter på seg, men du tok bankkortet til spilleren og fikk ut ".game::format_cash($result['cash'])." fra kontoen"
+					? ". Spilleren hadde ingen kontanter pÃ¥ seg, men du tok bankkortet til spilleren og fikk ut ".game::format_cash($result['cash'])." fra kontoen"
 					: " og presset spilleren for ".game::format_cash($result['cash']);
 				ess::$b->page->add_message("Du fant ".$result['player']->profile_link()."$text.".$extra.$post);
 			}
@@ -285,14 +285,14 @@ class page_utpressing extends utpressing
 			{
 				// penger i banken?
 				$bank = $result['player']->data['up_bank'] > 10000;
-				$text = $bank ? 'verken kontanter eller bankkort på seg' : 'ingen kontanter på seg. Du fikk tak i bankkortet til spilleren med det var ingen penger å hente der';
+				$text = $bank ? 'verken kontanter eller bankkort pÃ¥ seg' : 'ingen kontanter pÃ¥ seg. Du fikk tak i bankkortet til spilleren med det var ingen penger Ã¥ hente der';
 				
 				ess::$b->page->add_message("Du fant ".$result['player']->profile_link().", men spilleren hadde $text.$post");
 			}
 			
 			else
 			{
-				ess::$b->page->add_message("Du mislykket utpressingsforsøket.$post");
+				ess::$b->page->add_message("Du mislykket utpressingsforsÃ¸ket.$post");
 			}
 		}
 		

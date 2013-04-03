@@ -42,7 +42,7 @@ if (login::$logged_in)
 			if (access::has("crewet")) echo '
 	<p>
 		<a href="'.$__server['relative_path'].'/forum/forum?id=5">Crewforum</a> (<a href="'.$__server['relative_path'].'/forum/forum?id=6">arkiv</a>)<br />
-		<a href="'.$__server['relative_path'].'/forum/forum?id=7">Idémyldringsforum</a><br />
+		<a href="'.$__server['relative_path'].'/forum/forum?id=7">IdÃ©myldringsforum</a><br />
 		<a href="'.$__server['relative_path'].'/crew/trac_rss">Trac hendelser</a>
 	</p>';
 			
@@ -74,12 +74,12 @@ if (login::$logged_in)
 			@include_once ROOT."/base/data/trac_rss.php";
 			if (isset($_trac_rss))
 			{
-				// har ikke brukeren vært innom status siden enda?
+				// har ikke brukeren vÃ¦rt innom status siden enda?
 				$last = login::$user->params->get("trac_last_changeset");
 				if (!$last)
 				{
 					echo '
-	<div class="link_box"><a href="'.$__server['relative_path'].'/crew/trac_rss?show=changeset">Du vil nå motta nye hendelser om <b>endringer i Subversion</b> fra Trac her. Trykk her for å se de siste hendelser.</a></div>';
+	<div class="link_box"><a href="'.$__server['relative_path'].'/crew/trac_rss?show=changeset">Du vil nÃ¥ motta nye hendelser om <b>endringer i Subversion</b> fra Trac her. Trykk her for Ã¥ se de siste hendelser.</a></div>';
 				}
 				
 				// nye hendelser?
@@ -97,12 +97,12 @@ if (login::$logged_in)
 	<div class="link_box"><a href="'.$__server['relative_path'].'/crew/trac_rss?show=changeset">Det er <b>'.$new.'</b> usett'.($new == 1 ? '' : 'e').' hendelse'.($new == 1 ? '' : 'r').' i Trac (endringer i <b>Git</b>).</a></div>';
 				}
 				
-				// har ikke brukeren vært innom status siden enda?
+				// har ikke brukeren vÃ¦rt innom status siden enda?
 				$last = login::$user->params->get("trac_last_other");
 				if (!$last)
 				{
 					echo '
-	<div class="link_box"><a href="'.$__server['relative_path'].'/crew/trac_rss?show=other">Du vil nå motta nye hendelser om <b>endringer i wikien og tickets</b> fra Trac her. Trykk her for å se siste hendelser.</a></div>';
+	<div class="link_box"><a href="'.$__server['relative_path'].'/crew/trac_rss?show=other">Du vil nÃ¥ motta nye hendelser om <b>endringer i wikien og tickets</b> fra Trac her. Trykk her for Ã¥ se siste hendelser.</a></div>';
 				}
 				
 				// nye hendelser?
@@ -155,7 +155,7 @@ echo '
 <div id="doc_content">'.$_base->page->content.'
 </div>
 <div id="doc_footer">
-	<p id="doc_footer_left">Script: '.round(microtime(true)-SCRIPT_START-$_base->db->time, 4).' sek<span id="js_time"></span><br />Database: '.round($_base->db->time, 4).' sek ('.$_base->db->queries.' spørring'.($_base->db->queries == 1 ? '' : 'er').')</p>
+	<p id="doc_footer_left">Script: '.round(microtime(true)-SCRIPT_START-$_base->db->time, 4).' sek<span id="js_time"></span><br />Database: '.round($_base->db->time, 4).' sek ('.$_base->db->queries.' spÃ¸rring'.($_base->db->queries == 1 ? '' : 'er').')</p>
 	<p><a href="http://hsw.no"><span>Henrik Steen Webutvikling</span></a></p>
 </div>
 <!--
@@ -163,10 +163,10 @@ echo '
 '.$_base->date->get()->format("r").'
 
 Kofradia 2010
-Beskyttet av åndsverkloven
+Beskyttet av Ã¥ndsverkloven
 Utviklet og scriptet av Henrik Steen [henrist.net]
 Script tid: '.round(microtime(true)-SCRIPT_START-$_base->db->time, 4).' sek
-Database tid: '.round($_base->db->time, 4).' sek - '.$_base->db->queries.' database spørring'.($_base->db->queries == 1 ? '' : 'er').'
+Database tid: '.round($_base->db->time, 4).' sek - '.$_base->db->queries.' database spÃ¸rring'.($_base->db->queries == 1 ? '' : 'er').'
 
 -->'.$_base->page->body_end.'
 </body>

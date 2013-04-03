@@ -16,11 +16,11 @@ class bydeler
 	 * De ulike stedene man kan oppdage folk
 	 */
 	public static $places = array(
-		// Åssiden
+		// Ã…ssiden
 		1 => array(
 			"travbanen",
-			"vårveien",
-			"Smak gatekjøkken"),
+			"vÃ¥rveien",
+			"Smak gatekjÃ¸kken"),
 		
 		// Bragernes
 		4 => array(
@@ -28,15 +28,15 @@ class bydeler
 			"Snappys",
 			"parken"),
 		
-		// Strøtvet
+		// StrÃ¸tvet
 		5 => array(
 			"Kiwi",
-			"Strøtvet gård",
+			"StrÃ¸tvet gÃ¥rd",
 			"kjappen"),
 		
-		// Strømsø
+		// StrÃ¸msÃ¸
 		6 => array(
-			"Globusgården",
+			"GlobusgÃ¥rden",
 			"jernbanestasjonen",
 			"Shell"),
 		
@@ -47,15 +47,15 @@ class bydeler
 		
 		// Gulskogen
 		10 => array(
-			"Gulskogen gård",
+			"Gulskogen gÃ¥rd",
 			"Gulskogen senter"),
 		
-		// Brakerøya
+		// BrakerÃ¸ya
 		12 => array(
 			"CC",
 			"fjordparken"),
 		
-		// Grønland
+		// GrÃ¸nland
 		13 => array(
 			"politistasjonen",
 			"Union Scene",
@@ -134,21 +134,21 @@ class bydeler
 	}
 	
 	/**
-	 * Tegn på ressurs på kart
+	 * Tegn pÃ¥ ressurs pÃ¥ kart
 	 */
 	#public static function 
 }
 
 
 /**
- * Grafisk kart (fysisk) for et område
+ * Grafisk kart (fysisk) for et omrÃ¥de
  */
 class bydeler_map
 {
 	/** Kartobjekt */
 	protected $img = null;
 	
-	/** Kartkoordinater på originalt kart (x0, y0, x1, y1) */
+	/** Kartkoordinater pÃ¥ originalt kart (x0, y0, x1, y1) */
 	protected $coords = array(0, 0, 0, 0);
 	
 	/** Skalering */
@@ -174,7 +174,7 @@ class bydeler_map
 		// opprett kartobjekt
 		$this->img = @imagecreatefromstring(file_get_contents(bydeler::$map_file));
 		
-		// fikk ikke åpnet kartfil?
+		// fikk ikke Ã¥pnet kartfil?
 		if (!$this->img)
 		{
 			error_log("Kunne ikke generere kart fra fil: ".bydeler::$map_file);
@@ -302,7 +302,7 @@ class bydeler_map
 	}
 	
 	/**
-	 * Tegn en miniversjon av kart for å illustrere hvor en ressurs ligger
+	 * Tegn en miniversjon av kart for Ã¥ illustrere hvor en ressurs ligger
 	 */
 	public function mini_map($br_id, $radius = 150, $scale = 3, $show_all = false)
 	{
@@ -321,7 +321,7 @@ class bydeler_map
 			throw new HSException("Ressursen finnes ikke.");
 		}
 		
-		// finn ut hvor vi skal avgrense på kartet
+		// finn ut hvor vi skal avgrense pÃ¥ kartet
 		$map_size = array(imagesx($this->img), imagesy($this->img));
 		#$map_size = array(1664, 1536);
 		
@@ -336,15 +336,15 @@ class bydeler_map
 		$w = $x2-$x1;
 		$h = $y2-$y1;
 		
-		// tegn på den aktive bydelen
+		// tegn pÃ¥ den aktive bydelen
 		$punkt = imagecreatefromstring(file_get_contents(bydeler::$map_dir."/familiepunkt.png"));
 		imagecopy($this->img, $punkt, $br['br_pos_x']-imagesx($punkt)/2, $br['br_pos_y']-imagesy($punkt)/2, 0, 0, imagesx($punkt), imagesy($punkt));
 		imagedestroy($punkt);
 		
-		// hent ut ressursene i dette området
+		// hent ut ressursene i dette omrÃ¥det
 		$result = $_base->db->query("SELECT br_id, br_b_id, br_type, br_pos_x, br_pos_y FROM bydeler_resources LEFT JOIN ff ON ff_br_id = br_id AND ff_inactive = 0 WHERE br_pos_x BETWEEN $x1 AND $x2 AND br_pos_y BETWEEN $y1 AND $y2 AND br_id != {$br['br_id']} AND ff_id IS NOT NULL");
 		
-		// tegn på ressursene
+		// tegn pÃ¥ ressursene
 		$punkt = imagecreatefromstring(file_get_contents(bydeler::$map_dir."/familiepunkt_transparent.png"));
 		while ($row = mysql_fetch_assoc($result))
 		{

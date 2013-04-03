@@ -12,7 +12,7 @@ class page_ff_members
 	protected $ff;
 	
 	/**
-	 * Navnet på siden (medlemmer eller ansatte)
+	 * Navnet pÃ¥ siden (medlemmer eller ansatte)
 	 */
 	protected $title;
 	
@@ -31,7 +31,7 @@ class page_ff_members
 	}
 	
 	/**
-	 * Behandle forespørsel
+	 * Behandle forespÃ¸rsel
 	 */
 	protected function page_handle()
 	{
@@ -44,7 +44,7 @@ class page_ff_members
 			$this->suggestion_accept();
 		}
 		
-		// avslå forslag om en spiller?
+		// avslÃ¥ forslag om en spiller?
 		if (isset($_POST['suggestion_decline']) && validate_sid())
 		{
 			$this->suggestion_decline();
@@ -68,7 +68,7 @@ class page_ff_members
 			$this->kick();
 		}
 		
-		// endre posisjon på et medlem?
+		// endre posisjon pÃ¥ et medlem?
 		if (isset($_REQUEST['change_priority']))
 		{
 			$this->change_priority();
@@ -83,11 +83,11 @@ class page_ff_members
 	 */
 	protected function show()
 	{
-		// vis oversikt over foreslåtte spillere
+		// vis oversikt over foreslÃ¥tte spillere
 		if (count($this->ff->members['suggested']) > 0)
 		{
 			echo '
-<h1 class="c">Foreslåtte spillere</h1>
+<h1 class="c">ForeslÃ¥tte spillere</h1>
 <form action="" method="post">
 	<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 	<table class="table center">
@@ -95,8 +95,8 @@ class page_ff_members
 			<tr>
 				<th>Spiller</th>
 				<th>Stilling</th>
-				<th>Dato foreslått</th>
-				<th>Sist pålogget</th>
+				<th>Dato foreslÃ¥tt</th>
+				<th>Sist pÃ¥logget</th>
 			</tr>
 		</thead>
 		<tbody>';
@@ -118,7 +118,7 @@ class page_ff_members
 	</table>
 	<p class="c">
 		'.show_sbutton("Godta forslag og inviter spiller", 'name="suggestion_accept"').'
-		'.show_sbutton("Avslå forslag", 'name="suggestion_decline"').'
+		'.show_sbutton("AvslÃ¥ forslag", 'name="suggestion_decline"').'
 	</p>
 </form>
 <div class="fhr"></div>';
@@ -138,7 +138,7 @@ class page_ff_members
 				<th>Spiller</th>
 				<th>Stilling</th>
 				<th>Dato invitert</th>
-				<th>Sist pålogget</th>
+				<th>Sist pÃ¥logget</th>
 			</tr>
 		</thead>
 		<tbody>';
@@ -194,7 +194,7 @@ class page_ff_members
 			<tr>
 				<th>Medlem</th>
 				<th>Dato medlem</th>
-				<th>Sist pålogget</th>
+				<th>Sist pÃ¥logget</th>
 				<th>Donert/<span title="Hvor mye spilleren har bidratt til '.$this->ff->type['refobj'].' i form av oppdrag">Bidrag(?)</span></th>
 				<th>Tjent</th>
 			</tr>
@@ -230,7 +230,7 @@ class page_ff_members
 				}
 				if ($top) echo $table_bottom;
 				
-				// list opp hver pri3 med tilhørende pri4
+				// list opp hver pri3 med tilhÃ¸rende pri4
 				$parents = $this->ff->members['members_parent'];
 				if (isset($this->ff->members['members_priority'][3]))
 				{
@@ -296,7 +296,7 @@ class page_ff_members
 	 * Lag tabellrad for et medlem
 	 * @param ff_member $member
 	 * @param int $i
-	 * @param string $class ekstra class på tr
+	 * @param string $class ekstra class pÃ¥ tr
 	 * @return string <tr>
 	 */
 	protected function show_member_row(ff_member $member, $i, $class = null)
@@ -319,15 +319,15 @@ class page_ff_members
 		// sjekk spilleren
 		if (!isset($_POST['up_id']))
 		{
-			ess::$b->page->add_message("Du må merke en spiller først.", "error");
+			ess::$b->page->add_message("Du mÃ¥ merke en spiller fÃ¸rst.", "error");
 			redirect::handle();
 		}
 		
-		// er foreslått?
+		// er foreslÃ¥tt?
 		$up_id = (int) $_POST['up_id'];
 		if (!isset($this->ff->members['suggested'][$up_id]))
 		{
-			ess::$b->page->add_message("Spilleren er ikke foreslått som medlem til {$this->ff->type['refobj']}.", "error");
+			ess::$b->page->add_message("Spilleren er ikke foreslÃ¥tt som medlem til {$this->ff->type['refobj']}.", "error");
 			redirect::handle();
 		}
 		
@@ -373,35 +373,35 @@ class page_ff_members
 		$member->suggestion_accept();
 		
 		// melding
-		ess::$b->page->add_message('Forslaget ble godtatt. <user id="'.$member->id.'" /> er nå invitert til '.$this->ff->type['refobj'].' som '.$member->get_priority_name().($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').'.');
+		ess::$b->page->add_message('Forslaget ble godtatt. <user id="'.$member->id.'" /> er nÃ¥ invitert til '.$this->ff->type['refobj'].' som '.$member->get_priority_name().($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').'.');
 		redirect::handle();
 	}
 	
 	/**
-	 * Avslå forslag om spiller
+	 * AvslÃ¥ forslag om spiller
 	 */
 	protected function suggestion_decline()
 	{
 		if (!isset($_POST['up_id']))
 		{
-			ess::$b->page->add_message("Du må merke en spiller først.", "error");
+			ess::$b->page->add_message("Du mÃ¥ merke en spiller fÃ¸rst.", "error");
 			redirect::handle();
 		}
 		
-		// er foreslått?
+		// er foreslÃ¥tt?
 		$up_id = (int) $_POST['up_id'];
 		if (!isset($this->ff->members['suggested'][$up_id]))
 		{
-			ess::$b->page->add_message("Spilleren er ikke foreslått som medlem til {$this->ff->type['refobj']}.", "error");
+			ess::$b->page->add_message("Spilleren er ikke foreslÃ¥tt som medlem til {$this->ff->type['refobj']}.", "error");
 			redirect::handle();
 		}
 		
-		// avslå forslag
+		// avslÃ¥ forslag
 		$member = $this->ff->members['suggested'][$up_id];
 		$member->suggestion_decline();
 		
 		// melding
-		ess::$b->page->add_message('Du trakk tilbake forslaget om å invitere <user id="'.$member->id.'" /> til '.$this->ff->type['refobj'].' som '.$member->get_priority_name().($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').'.');
+		ess::$b->page->add_message('Du trakk tilbake forslaget om Ã¥ invitere <user id="'.$member->id.'" /> til '.$this->ff->type['refobj'].' som '.$member->get_priority_name().($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').'.');
 		redirect::handle();
 	}
 	
@@ -423,7 +423,7 @@ class page_ff_members
 		ess::$b->page->add_title("Inviter spiller");
 		$player = false;
 		
-		// begrensning i antall ff man kan være med i
+		// begrensning i antall ff man kan vÃ¦re med i
 		if ($this->ff->type['type'] == "familie")
 		{
 			$type_limit = ff::MAX_FAMILIES;
@@ -466,13 +466,13 @@ class page_ff_members
 				// er i FF?
 				if (isset($this->ff->members['list'][$row['up_id']]))
 				{
-					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> er allerede foreslått, invitert eller medlem av '.$this->ff->type['refobj'].'.', "error");
+					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> er allerede foreslÃ¥tt, invitert eller medlem av '.$this->ff->type['refobj'].'.', "error");
 				}
 				
-				// død/deaktivert?
+				// dÃ¸d/deaktivert?
 				elseif ($row['up_access_level'] == 0)
 				{
-					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> er død og kan ikke inviteres.', "error");
+					ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> er dÃ¸d og kan ikke inviteres.', "error");
 				}
 				
 				// blokkert?
@@ -499,7 +499,7 @@ class page_ff_members
 		// har ikke funnet spiller?
 		if (!$player || $_SERVER['REQUEST_METHOD'] == "GET")
 		{
-			// vis skjema for å finne spiller
+			// vis skjema for Ã¥ finne spiller
 			ess::$b->page->add_title("Velg spiller");
 			
 			echo '
@@ -508,7 +508,7 @@ class page_ff_members
 	<p class="h_right"><a href="medlemmer?ff_id='.$this->ff->id.'">Tilbake</a></p>
 	<boxes />
 	<form action="" method="post">
-		<p>Skriv inn navn på spilleren du vil invitere til '.$this->ff->type['refobj'].'.</p>
+		<p>Skriv inn navn pÃ¥ spilleren du vil invitere til '.$this->ff->type['refobj'].'.</p>
 		<dl class="dd_right">
 			<dt>Spillernavn</dt>
 			<dd><input type="text" name="player" value="'.htmlspecialchars(postval("player", $player ? $player['up_name'] : '')).'" class="styled w100" /></dd>
@@ -526,7 +526,7 @@ class page_ff_members
 		// sett opp rank informasjon for spilleren
 		$rank_info = game::rank_info($player['up_points'], $player['upr_rank_pos'], $player['up_access_level']);
 		
-		// fjern eier og medeier posisjonen om nødvendig
+		// fjern eier og medeier posisjonen om nÃ¸dvendig
 		if (!$this->ff->mod)
 		{
 			unset($limits_data['priorities'][1]);
@@ -540,7 +540,7 @@ class page_ff_members
 			$priority = isset($_POST['priority']) && isset($limits_data['priorities'][$_POST['priority']]) ? $limits_data['priorities'][$_POST['priority']] : false;
 			if (!isset($_POST['priority']))
 			{
-				ess::$b->page->add_message("Du må velge en posisjon.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge en posisjon.", "error");
 			}
 			
 			// gyldig posisjon?
@@ -549,10 +549,10 @@ class page_ff_members
 				ess::$b->page->add_message("Ugyldig posisjon.", "error");
 			}
 			
-			// har ikke høy nok rank?
+			// har ikke hÃ¸y nok rank?
 			elseif ($rank_info['number'] < $priority['min_rank'] && !$this->ff->mod)
 			{
-				ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> har ikke høy nok rank for å bli '.$this->ff->type['priority'][$priority['priority']].".", "error");
+				ess::$b->page->add_message('<user id="'.$row['up_id'].'" /> har ikke hÃ¸y nok rank for Ã¥ bli '.$this->ff->type['priority'][$priority['priority']].".", "error");
 			}
 			
 			// ingen ledige plasser?
@@ -564,7 +564,7 @@ class page_ff_members
 			// ingen pri3 for overordnet?
 			elseif ($this->ff->type['parent'] && $priority['priority'] == 4 && !isset($this->ff->members['members_priority'][3]))
 			{
-				ess::$b->page->add_message("Det finnes ingen {$this->ff->type['priority'][3]} du kan tilegne en {$this->ff->type['priority'][4]}. Du må først sette en spiller som <b>{$this->ff->type['priority'][3]}</b> før du kan invitere en {$this->ff->type['priority'][4]}.", "error");
+				ess::$b->page->add_message("Det finnes ingen {$this->ff->type['priority'][3]} du kan tilegne en {$this->ff->type['priority'][4]}. Du mÃ¥ fÃ¸rst sette en spiller som <b>{$this->ff->type['priority'][3]}</b> fÃ¸r du kan invitere en {$this->ff->type['priority'][4]}.", "error");
 			}
 			
 			else
@@ -636,7 +636,7 @@ class page_ff_members
 		<p>Valgt spiller: '.game::profile_link($player['up_id'], $player['up_name'], $player['up_access_level']).'</p>
 		<input type="hidden" name="player" value="'.htmlspecialchars($player['up_name']).'" />
 		<input type="hidden" name="up_id" value="'.$player['up_id'].'" />
-		<p>Du må nå velge en posisjon du ønsker spilleren skal få i '.$this->ff->type['refobj'].'. Maks antall plasser i '.$this->ff->type['refobj'].': '.$limits_data['max'].'.'.($this->ff->type['type'] == "familie" && $limits_data['max'] < $members_limit_max ? ' <a href="panel?ff_id='.$this->ff->id.'&amp;a=members_limit">Øk begrensning &raquo;</a>' : '').'</p>';
+		<p>Du mÃ¥ nÃ¥ velge en posisjon du Ã¸nsker spilleren skal fÃ¥ i '.$this->ff->type['refobj'].'. Maks antall plasser i '.$this->ff->type['refobj'].': '.$limits_data['max'].'.'.($this->ff->type['type'] == "familie" && $limits_data['max'] < $members_limit_max ? ' <a href="panel?ff_id='.$this->ff->id.'&amp;a=members_limit">Ã˜k begrensning &raquo;</a>' : '').'</p>';
 		
 		$this->pick_position($limits_data, $rank_info['number']);
 		
@@ -658,7 +658,7 @@ class page_ff_members
 	{
 		if (!isset($_POST['up_id']))
 		{
-			ess::$b->page->add_message("Du må merke en spiller først.", "error");
+			ess::$b->page->add_message("Du mÃ¥ merke en spiller fÃ¸rst.", "error");
 			redirect::handle();
 		}
 		
@@ -675,7 +675,7 @@ class page_ff_members
 		$member->invite_pullback();
 		
 		// melding
-		ess::$b->page->add_message('Du trakk tilbake invitasjonen for å invitere <user id="'.$member->id.'" /> til '.$this->ff->type['refobj'].' som '.$member->get_priority_name().($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').'.');
+		ess::$b->page->add_message('Du trakk tilbake invitasjonen for Ã¥ invitere <user id="'.$member->id.'" /> til '.$this->ff->type['refobj'].' som '.$member->get_priority_name().($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').'.');
 		redirect::handle();
 	}
 	
@@ -686,7 +686,7 @@ class page_ff_members
 	{
 		if (!isset($_POST['up_id']) && !isset($_POST['up_ids']))
 		{
-			ess::$b->page->add_message("Du må merke en eller flere spillere.", "error");
+			ess::$b->page->add_message("Du mÃ¥ merke en eller flere spillere.", "error");
 			redirect::handle();
 		}
 		
@@ -720,10 +720,10 @@ class page_ff_members
 				redirect::handle();
 			}
 			
-			// har høyere prioritering?
+			// har hÃ¸yere prioritering?
 			if ($member->data['ffm_priority'] <= $this->ff->uinfo->data['ffm_priority'] && !$this->ff->mod)
 			{
-				ess::$b->page->add_message('Du kan ikke kaste ut <user id="'.$member->id.'" /> som har høyere eller samme posisjon som deg.', "error");
+				ess::$b->page->add_message('Du kan ikke kaste ut <user id="'.$member->id.'" /> som har hÃ¸yere eller samme posisjon som deg.', "error");
 				redirect::handle();
 			}
 			
@@ -734,14 +734,14 @@ class page_ff_members
 		// ingen medlemmer?
 		if (count($members) == 0)
 		{
-			ess::$b->page->add_message("Du må merke en eller flere spillere.", "error");
+			ess::$b->page->add_message("Du mÃ¥ merke en eller flere spillere.", "error");
 			redirect::handle();
 		}
 		
 		// godkjent?
 		if (isset($_POST['confirm']) && validate_sid())
 		{
-			// sorter slik at medlemmene med lavest posisjon kommer først
+			// sorter slik at medlemmene med lavest posisjon kommer fÃ¸rst
 			array_multisort($priority_list, SORT_DESC, $members);
 			
 			// kast ut medlemmene
@@ -758,7 +758,7 @@ class page_ff_members
 				{
 					$list[] = '<li><user id="'.$member->id.'" /> ('.$member->get_priority_name().($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').')</li>';
 				}
-				ess::$b->page->add_message('Du kastet ut følgende spillere fra '.$this->ff->type['refobj'].':<ul>'.implode("", $list).'</ul>');
+				ess::$b->page->add_message('Du kastet ut fÃ¸lgende spillere fra '.$this->ff->type['refobj'].':<ul>'.implode("", $list).'</ul>');
 			}
 			
 			else
@@ -769,7 +769,7 @@ class page_ff_members
 			redirect::handle();
 		}
 		
-		// sorter slik at medlemmene med høyest posisjon kommer først
+		// sorter slik at medlemmene med hÃ¸yest posisjon kommer fÃ¸rst
 		array_multisort($priority_list, $members);
 		
 		// vis skjema
@@ -787,13 +787,13 @@ class page_ff_members
 			$member = reset($members);
 			
 			echo '
-		<p>Du er i ferd med å kaste ut <user id="'.$member->id.'" /> fra '.$this->ff->type['refobj'].'.</p>
+		<p>Du er i ferd med Ã¥ kaste ut <user id="'.$member->id.'" /> fra '.$this->ff->type['refobj'].'.</p>
 		<dl class="dd_right">
 			<dt>Posisjon</dt>
 			<dd>'.ucfirst($member->get_priority_name()).($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').'</dd>
 			<dt>Ble medlem</dt>
 			<dd>'.ess::$b->date->get($member->data['ffm_date_join'])->format().'</dd>
-			<dt>Sist pålogget</dt>
+			<dt>Sist pÃ¥logget</dt>
 			<dd>'.ess::$b->date->get($member->data['up_last_online'])->format().'</dd>
 		</dl>';
 		}
@@ -801,14 +801,14 @@ class page_ff_members
 		else
 		{
 			echo '
-		<p>Du er i ferd med å kaste ut følgende spillere fra '.$this->ff->type['refobj'].':</p>
+		<p>Du er i ferd med Ã¥ kaste ut fÃ¸lgende spillere fra '.$this->ff->type['refobj'].':</p>
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Spiller</th>
 					<th>Posisjon</th>
 					<th>Ble medlem</th>
-					<th>Sist pålogget</th>
+					<th>Sist pÃ¥logget</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -833,7 +833,7 @@ class page_ff_members
 		echo '
 		<p>Begrunnelse: <i>(valgfritt)</i></p>
 		<textarea name="note" rows="3" cols="5" style="width: 90%">'.htmlspecialchars(postval("note")).'</textarea>
-		<p>Begrunnelsen vil bli gitt til spilleren og lagt til i loggen. Merk at '.fwords("spilleren", "spillerene", count($members)).' normalt vil være tilknyttet statistikken for '.$this->ff->type['refobj'].' i 12 timer etter utkastelse.</p>';
+		<p>Begrunnelsen vil bli gitt til spilleren og lagt til i loggen. Merk at '.fwords("spilleren", "spillerene", count($members)).' normalt vil vÃ¦re tilknyttet statistikken for '.$this->ff->type['refobj'].' i 12 timer etter utkastelse.</p>';
 		
 		// kontroller for underordnede spillere
 		if ($this->ff->type['parent'])
@@ -863,19 +863,19 @@ class page_ff_members
 				if (count($members) == 1)
 				{
 					echo '
-		<p>Medlemmet har følgende medlemmer underordnet seg:</p>';
+		<p>Medlemmet har fÃ¸lgende medlemmer underordnet seg:</p>';
 				}
 				
 				else
 				{
 					echo '
-		<p>Følgende medlemmer er underordnet av en av spillerene du har valgt:</p>';
+		<p>FÃ¸lgende medlemmer er underordnet av en av spillerene du har valgt:</p>';
 				}
 				
 				echo '
 		<ul>'.implode("", $subs).'</ul>'.($pri3 ? '
 		<p>Underordnede medlemmer vil bli flyttet til tilfeldige spillere med posisjon '.$this->ff->type['priority'][3].'.</p>' : '
-		<p>Spilleren med posisjonen '.$this->ff->type['priority'][4].' som har vært medlem lengst bli utvalgt til '.$this->ff->type['priority'][3].'.').'</p>';
+		<p>Spilleren med posisjonen '.$this->ff->type['priority'][4].' som har vÃ¦rt medlem lengst bli utvalgt til '.$this->ff->type['priority'][3].'.').'</p>';
 			}
 		}
 		
@@ -895,12 +895,12 @@ class page_ff_members
 	 */
 	protected function change_priority()
 	{
-		ess::$b->page->add_title("Endre posisjon på medlem");
+		ess::$b->page->add_title("Endre posisjon pÃ¥ medlem");
 		
 		// har ikke merket av en spiller?
 		if (!isset($_REQUEST['up_id']) && !isset($_REQUEST['up_ids']))
 		{
-			ess::$b->page->add_message("Du må merke en eller flere spillere.", "error");
+			ess::$b->page->add_message("Du mÃ¥ merke en eller flere spillere.", "error");
 			redirect::handle();
 		}
 		
@@ -910,7 +910,7 @@ class page_ff_members
 			: array_map("intval", (array) $_REQUEST['up_id']);
 		$priority_list = array();
 		$members = array();
-		$rank_points_low = null; // rankpoengene til spilleren med dårligst rank
+		$rank_points_low = null; // rankpoengene til spilleren med dÃ¥rligst rank
 		foreach ($up_ids as $up_id)
 		{
 			// er ikke medlem?
@@ -921,7 +921,7 @@ class page_ff_members
 			}
 			$member = $this->ff->members['members'][$up_id];
 			
-			// kan ikke endre posisjon på seg selv
+			// kan ikke endre posisjon pÃ¥ seg selv
 			if ($member->id == login::$user->player->id && !$this->ff->mod)
 			{
 				ess::$b->page->add_message('Du kan ikke omplassere deg selv.');
@@ -935,10 +935,10 @@ class page_ff_members
 				redirect::handle();
 			}
 			
-			// har høyere prioritering?
+			// har hÃ¸yere prioritering?
 			if ($member->data['ffm_priority'] <= $this->ff->uinfo->data['ffm_priority'] && !$this->ff->mod)
 			{
-				ess::$b->page->add_message('Du kan ikke omplassere <user id="'.$member->id.'" /> som har høyere eller samme posisjon som deg.', "error");
+				ess::$b->page->add_message('Du kan ikke omplassere <user id="'.$member->id.'" /> som har hÃ¸yere eller samme posisjon som deg.', "error");
 				redirect::handle();
 			}
 			
@@ -956,15 +956,15 @@ class page_ff_members
 		$c = count($members);
 		if ($c == 0)
 		{
-			ess::$b->page->add_message("Du må merke en eller flere spillere.", "error");
+			ess::$b->page->add_message("Du mÃ¥ merke en eller flere spillere.", "error");
 			redirect::handle();
 		}
 		
-		// sorter slik at medlemmene med høyest posisjon kommer først
+		// sorter slik at medlemmene med hÃ¸yest posisjon kommer fÃ¸rst
 		array_multisort($priority_list, $members);
 		ksort($priority_list);
 		
-		// sett opp nåværende prioritering hvis det kun er 1 spiller eller alle har samme prioritering
+		// sett opp nÃ¥vÃ¦rende prioritering hvis det kun er 1 spiller eller alle har samme prioritering
 		$priority_old = array_unique($priority_list);
 		if (count($priority_old) == 1)
 		{
@@ -975,11 +975,11 @@ class page_ff_members
 			$priority_old = null;
 		}
 		
-		// rank info for den dårligste ranken
+		// rank info for den dÃ¥rligste ranken
 		$rank_info = game::rank_info($rank_points_low);
 		$rank_number = $rank_info['number'];
 		
-		// hent oversikt over ledige plasser og fjern eier/medeier posisjon om nødvendig
+		// hent oversikt over ledige plasser og fjern eier/medeier posisjon om nÃ¸dvendig
 		$limits_data = $this->ff->check_limits($members);
 		if (!$this->ff->mod)
 		{
@@ -994,7 +994,7 @@ class page_ff_members
 			$priority = isset($_POST['priority']) && isset($limits_data['priorities'][$_POST['priority']]) ? $limits_data['priorities'][$_POST['priority']] : false;
 			if (!isset($_POST['priority']))
 			{
-				ess::$b->page->add_message("Du må velge en posisjon.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge en posisjon.", "error");
 			}
 			
 			// gyldig posisjon?
@@ -1003,10 +1003,10 @@ class page_ff_members
 				ess::$b->page->add_message("Ugyldig posisjon.", "error");
 			}
 			
-			// har ikke høy nok rank?
+			// har ikke hÃ¸y nok rank?
 			elseif ($rank_number < $priority['min_rank'] && !$this->ff->mod && $priority['priority'] != $priority_old)
 			{
-				ess::$b->page->add_message('En eller flere av spillerene valgt har ikke høy nok rank for å bli '.$this->ff->type['priority'][$priority['priority']].".", "error");
+				ess::$b->page->add_message('En eller flere av spillerene valgt har ikke hÃ¸y nok rank for Ã¥ bli '.$this->ff->type['priority'][$priority['priority']].".", "error");
 			}
 			
 			// ingen ledige plasser?
@@ -1018,13 +1018,13 @@ class page_ff_members
 			// ingen pri3 for overordnet?
 			elseif ($this->ff->type['parent'] && $priority['priority'] == 4 && $limits_data['priorities'][3]['members'] == 0)
 			{
-				ess::$b->page->add_message("Det finnes ingen spillere med posisjon {$this->ff->type['priority'][3]} du kan tilegne en {$this->ff->type['priority'][4]}. Du må først sette en spiller som {$this->ff->type['priority'][3]} før du kan sette en {$this->ff->type['priority'][4]}.", "error");
+				ess::$b->page->add_message("Det finnes ingen spillere med posisjon {$this->ff->type['priority'][3]} du kan tilegne en {$this->ff->type['priority'][4]}. Du mÃ¥ fÃ¸rst sette en spiller som {$this->ff->type['priority'][3]} fÃ¸r du kan sette en {$this->ff->type['priority'][4]}.", "error");
 			}
 			
 			// ikke valgt ny posisjon?
 			elseif ($priority['priority'] == $priority_old && (!$this->ff->type['parent'] || $priority['priority'] != 4))
 			{
-				ess::$b->page->add_message("Du må velge en annen posisjon enn den som er satt.");
+				ess::$b->page->add_message("Du mÃ¥ velge en annen posisjon enn den som er satt.");
 			}
 			
 			else
@@ -1064,7 +1064,7 @@ class page_ff_members
 				// godkjent?
 				if (isset($_POST['confirm']) && validate_sid(false))
 				{
-					// sorter slik at medlemmene med lavest posisjon kommer først
+					// sorter slik at medlemmene med lavest posisjon kommer fÃ¸rst
 					array_multisort($priority_list, SORT_DESC, $members);
 					
 					// flytt spillerene
@@ -1091,7 +1091,7 @@ class page_ff_members
 					}
 					elseif (count($changed) > 1)
 					{
-						ess::$b->page->add_message("Du endret posisjonene til følgende spillere til ".$this->ff->type['priority'][$priority['priority']].($parent ? ' underordnet <user id="'.$parent.'" />' : '').':<ul><li>'.implode("</li><li>", $changed).'</li></ul>');
+						ess::$b->page->add_message("Du endret posisjonene til fÃ¸lgende spillere til ".$this->ff->type['priority'][$priority['priority']].($parent ? ' underordnet <user id="'.$parent.'" />' : '').':<ul><li>'.implode("</li><li>", $changed).'</li></ul>');
 					}
 					
 					if (count($error) == 1)
@@ -1100,7 +1100,7 @@ class page_ff_members
 					}
 					elseif (count($error) > 1)
 					{
-						ess::$b->page->add_message("Posisjonene til følgende spillere kunne ikke bli satt til ".$this->ff->type['priority'][$priority['priority']].($parent ? ' underordnet <user id="'.$parent.'" />' : '').':<ul><li>'.implode("</li><li>", $error).'</li></ul>');
+						ess::$b->page->add_message("Posisjonene til fÃ¸lgende spillere kunne ikke bli satt til ".$this->ff->type['priority'][$priority['priority']].($parent ? ' underordnet <user id="'.$parent.'" />' : '').':<ul><li>'.implode("</li><li>", $error).'</li></ul>');
 					}
 					
 					redirect::handle();
@@ -1133,7 +1133,7 @@ class page_ff_members
 		<dl class="dd_right">
 			<dt>Spiller</dt>
 			<dd>'.game::profile_link($member->id, $member->data['up_name'], $member->data['up_access_level']).'</dd>
-			<dt>Nåværende posisjon</dt>
+			<dt>NÃ¥vÃ¦rende posisjon</dt>
 			<dd>'.ucfirst($member->get_priority_name()).($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').'</dd>
 			<dt>Ny posisjon</dt>
 			<dd>'.ucfirst($this->ff->type['priority'][$priority['priority']]).($parent ? ' underordnet <user id="'.$parent.'" />' : '').'</dd>
@@ -1189,19 +1189,19 @@ class page_ff_members
 						if ($c == 1)
 						{
 							echo '
-		<p>Medlemmet har følgende medlemmer underordnet seg:</p>';
+		<p>Medlemmet har fÃ¸lgende medlemmer underordnet seg:</p>';
 						}
 						
 						else
 						{
 							echo '
-		<p>Følgende medlemmer er underordnet av en av spillerene du har valgt:</p>';
+		<p>FÃ¸lgende medlemmer er underordnet av en av spillerene du har valgt:</p>';
 						}
 						
 						echo '
 		<ul>'.implode("", $subs).'</ul>'.($pri3 ? '
 		<p>Underordnede medlemmer vil bli flyttet til tilfeldige spillere med posisjon '.$this->ff->type['priority'][3].'.</p>' : '
-		<p>Spilleren med posisjonen '.$this->ff->type['priority'][4].' som har vært medlem lengst bli utvalgt til '.$this->ff->type['priority'][3].'.').'</p>';
+		<p>Spilleren med posisjonen '.$this->ff->type['priority'][4].' som har vÃ¦rt medlem lengst bli utvalgt til '.$this->ff->type['priority'][3].'.').'</p>';
 					}
 				}
 				
@@ -1251,7 +1251,7 @@ class page_ff_members
 		<input type="hidden" name="change_priority" />
 		<input type="hidden" name="up_ids" value="'.implode(",", $up_ids).'" />
 		<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
-		<p>Du må nå velge ny posisjon du ønsker '.fword("spilleren", "spillerene", $c).' skal få i '.$this->ff->type['refobj'].'.</p>';
+		<p>Du mÃ¥ nÃ¥ velge ny posisjon du Ã¸nsker '.fword("spilleren", "spillerene", $c).' skal fÃ¥ i '.$this->ff->type['refobj'].'.</p>';
 		
 		$this->pick_position($limits_data, $rank_info['number'], $members);
 		
@@ -1270,8 +1270,8 @@ class page_ff_members
 	 * Plukk ut en parent
 	 * @param array $priority
 	 * @param array $members spillerene som skal flyttes
-	 * @param array $player (enten $member eller $player må sendes med, den andre null)
-	 * @param string $back_link (skal være html safe)
+	 * @param array $player (enten $member eller $player mÃ¥ sendes med, den andre null)
+	 * @param string $back_link (skal vÃ¦re html safe)
 	 */
 	protected function pick_parent($priority, $members = null, $player, $back_link, $form_html = null, $invite = false)
 	{
@@ -1336,7 +1336,7 @@ class page_ff_members
 			$member = $members ? $members[0] : null;
 			$up_ids[] = $member ? $member->id : $player['up_id'];
 			$text = '
-		<p>Du må velge en '.$this->ff->type['priority'][3].' som skal være overordnet for '.($member ? game::profile_link($member->id, $member->data['up_name'], $member->data['up_access_level']) : game::profile_link($player['up_id'], $player['up_name'], $player['up_access_level'])).' som vil '.($invite ? 'invitert' : 'få posisjonen').' som '.$this->ff->type['priority'][4].'.'.($member ? ' (Nåværende posisjon: '.ucfirst($member->get_priority_name()).($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').')' : '').'</p>';
+		<p>Du mÃ¥ velge en '.$this->ff->type['priority'][3].' som skal vÃ¦re overordnet for '.($member ? game::profile_link($member->id, $member->data['up_name'], $member->data['up_access_level']) : game::profile_link($player['up_id'], $player['up_name'], $player['up_access_level'])).' som vil '.($invite ? 'invitert' : 'fÃ¥ posisjonen').' som '.$this->ff->type['priority'][4].'.'.($member ? ' (NÃ¥vÃ¦rende posisjon: '.ucfirst($member->get_priority_name()).($member->data['ffm_parent_up_id'] ? ' underordnet <user id="'.$member->data['ffm_parent_up_id'].'" />' : '').')' : '').'</p>';
 		}
 		
 		else
@@ -1349,7 +1349,7 @@ class page_ff_members
 			}
 			
 			$text = '
-		<p>Du må velge en '.$this->ff->type['priority'][3].' som skal være overordnet for følgende spillere:</p>
+		<p>Du mÃ¥ velge en '.$this->ff->type['priority'][3].' som skal vÃ¦re overordnet for fÃ¸lgende spillere:</p>
 		<ul>'.implode("", $list).'</ul>';
 		}
 		
@@ -1365,7 +1365,7 @@ class page_ff_members
 			<thead>
 				<tr>
 					<th>'.ucfirst($this->ff->type['priority'][3]).'</th>
-					<th>Sist pålogget</th>
+					<th>Sist pÃ¥logget</th>
 					<th>'.ucfirst($this->ff->type['priority'][4]).'</th>
 					<th>Inviterte '.$this->ff->type['priority'][4].'</th>
 				</tr>
@@ -1400,7 +1400,7 @@ class page_ff_members
 	}
 	
 	/**
-	 * Skjema for å velge en posisjon
+	 * Skjema for Ã¥ velge en posisjon
 	 * @param array $limits_data
 	 * @param int $rank_number
 	 * @param array $members ff_members liste over medlemmene som flyttes

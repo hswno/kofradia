@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Legg til ny forumtråd
+ * Legg til ny forumtrÃ¥d
  * 
  * Inndata:
  * - sid
@@ -15,7 +15,7 @@
 require "../../base/ajax.php";
 ajax::validate_sid();
 
-// kontroller lås
+// kontroller lÃ¥s
 ajax::validate_lock(true);
 
 global $_base, $_game;
@@ -27,7 +27,7 @@ essentials::load_module("forum");
 $forum = new forum_ajax(postval("forum_id"));
 $forum->require_access();
 
-// forsøk å legg til forumtråden
+// forsÃ¸k Ã¥ legg til forumtrÃ¥den
 $type = isset($_POST['type']) && $forum->fmod ? $_POST['type'] : NULL;
 $locked = isset($_POST['locked']) && $forum->fmod ? $_POST['locked'] : NULL;
 $forum->add_topic(postval("title"), postval("text"), $type, $locked);

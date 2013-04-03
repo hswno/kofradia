@@ -63,7 +63,7 @@ class sorts {
 		return isset($this->elms[$id]);
 	}
 
-	// prøv å sett som aktiv
+	// prÃ¸v Ã¥ sett som aktiv
 	function set_active()
 	{
 		for ($i = 0; $i < func_num_args(); $i++)

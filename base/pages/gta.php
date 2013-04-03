@@ -11,7 +11,7 @@ class page_gta extends pages_player
 	protected $gta;
 	
 	/**
-	 * Hvilken side vi befinner oss på
+	 * Hvilken side vi befinner oss pÃ¥
 	 */
 	protected $parts;
 	
@@ -40,13 +40,13 @@ class page_gta extends pages_player
 	}
 	
 	/**
-	 * Behandle forespørsel
+	 * Behandle forespÃ¸rsel
 	 */
 	protected function handle_page()
 	{
 		ess::$b->page->add_title("GTA");
 		
-		// få temaet til å vise full gta meny
+		// fÃ¥ temaet til Ã¥ vise full gta meny
 		define("SHOW_GTA_MENU", true);
 		
 		// finn ut hva vi skal vise
@@ -95,9 +95,9 @@ class page_gta extends pages_player
 		
 		echo '
 <p align="center" style="color: #888888">
-	Du har ikke høy nok rank for å kunne stjele biler!<br />
+	Du har ikke hÃ¸y nok rank for Ã¥ kunne stjele biler!<br />
 	<br />
-	For å stjele biler trenger du ranken <b>'.game::$ranks['items_number'][$min_rank]['name'].'</b> eller høyere!
+	For Ã¥ stjele biler trenger du ranken <b>'.game::$ranks['items_number'][$min_rank]['name'].'</b> eller hÃ¸yere!
 </p>';
 		
 		ess::$b->page->load();
@@ -110,11 +110,11 @@ class page_gta extends pages_player
 	{
 		ess::$b->page->add_title("Biltyveri");
 		
-		// kontroller ranken vi må ha for å utføre biltyveri
+		// kontroller ranken vi mÃ¥ ha for Ã¥ utfÃ¸re biltyveri
 		$this->check_rank();
 		
 		// kontroller energi
-		$this->gta->up->energy_require(gta::ENERGY_BILTYVERI*1.3); // legg til 30 % på kravet
+		$this->gta->up->energy_require(gta::ENERGY_BILTYVERI*1.3); // legg til 30 % pÃ¥ kravet
 		
 		// anti-bot
 		$this->antibot = antibot::get("biltyveri", 10);
@@ -126,7 +126,7 @@ class page_gta extends pages_player
 		// hent inn alternativene
 		$this->gta->load_options();
 		
-		// ønsker vi å utføre biltyveri?
+		// Ã¸nsker vi Ã¥ utfÃ¸re biltyveri?
 		if (isset($_POST['option_id']))
 		{
 			$this->biltyveri_utfor();
@@ -151,7 +151,7 @@ class page_gta extends pages_player
 		if (!$bydeler[$this->gta->up->data['up_b_id']]['ff_id'])
 		{
 			echo '
-		<p>Du må ha en garasje i denne bydelen før du kan forsøke å utføre biltyveri.</p>';
+		<p>Du mÃ¥ ha en garasje i denne bydelen fÃ¸r du kan forsÃ¸ke Ã¥ utfÃ¸re biltyveri.</p>';
 		}
 		
 		// har ikke plass til flere biler?
@@ -165,14 +165,14 @@ class page_gta extends pages_player
 			}
 			
 			echo '
-		<p>Det er ikke plass til flere kjøretøy i garasjen din. Oppgrader garasje, selg eller flytt biler for å kunne utføre biltyveri.</p>';
+		<p>Det er ikke plass til flere kjÃ¸retÃ¸y i garasjen din. Oppgrader garasje, selg eller flytt biler for Ã¥ kunne utfÃ¸re biltyveri.</p>';
 		}
 		
 		// ingen alternativer?
 		elseif (count($this->gta->options) == 0)
 		{
 			echo '
-		<p>Det er ingen mulighet for å stjele biler i denne bydelen.</p>';
+		<p>Det er ingen mulighet for Ã¥ stjele biler i denne bydelen.</p>';
 		}
 		
 		else
@@ -192,7 +192,7 @@ class page_gta extends pages_player
 					<tr>
 						<th>Navn</th>
 						<th>Sjanse</th>
-						<th>Forsøk</th>
+						<th>ForsÃ¸k</th>
 						<th>Vellykkede</th>
 					</tr>
 				</thead>
@@ -225,8 +225,8 @@ class page_gta extends pages_player
 			}
 			
 			echo ($wait > 0 ? '
-			<p class="c">Du må vente '.game::counter($wait, true).' før du kan utføre biltyveri igjen.</p>' : '
-			<p class="c">'.show_sbutton("Utfør handling").'</p>');
+			<p class="c">Du mÃ¥ vente '.game::counter($wait, true).' fÃ¸r du kan utfÃ¸re biltyveri igjen.</p>' : '
+			<p class="c">'.show_sbutton("UtfÃ¸r handling").'</p>');
 			
 			echo '
 		</form>';
@@ -246,7 +246,7 @@ class page_gta extends pages_player
 	}
 	
 	/**
-	 * Utfør biltyveri
+	 * UtfÃ¸r biltyveri
 	 */
 	protected function biltyveri_utfor()
 	{
@@ -275,13 +275,13 @@ class page_gta extends pages_player
 			redirect::handle();
 		}
 		
-		// utfør
+		// utfÃ¸r
 		$result = $this->gta->biltyveri_utfor(postval("option_id"));
 		
-		$fengsel_msg = $result['wanted_change'] > 0 ? ' Wanted nivået økte med '.game::format_number($result['wanted_change']/10, 1).' %.' : '';
+		$fengsel_msg = $result['wanted_change'] > 0 ? ' Wanted nivÃ¥et Ã¸kte med '.game::format_number($result['wanted_change']/10, 1).' %.' : '';
 		if (!$result['success'])
 		{
-			ess::$b->page->add_message("Du mislykket forsøket.$fengsel_msg", NULL, NULL, "gta_result");
+			ess::$b->page->add_message("Du mislykket forsÃ¸ket.$fengsel_msg", NULL, NULL, "gta_result");
 		}
 		
 		else
@@ -305,7 +305,7 @@ class page_gta extends pages_player
 	{
 		ess::$b->page->add_title("Garasje");
 		
-		// kjøpe garasje?
+		// kjÃ¸pe garasje?
 		if (isset($this->parts[1]) && $this->parts[1] == "kjop")
 		{
 			redirect::store("/gta/garasje/kjop", redirect::ROOT);
@@ -367,7 +367,7 @@ class page_gta extends pages_player
 			WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
 		$garasje = mysql_fetch_assoc($result);
 		
-		// kan vi betale nå?
+		// kan vi betale nÃ¥?
 		$can_pay = $garasje && gta::can_pay($garasje['ugg_time_next_rent']);
 		
 		echo '
@@ -375,7 +375,7 @@ class page_gta extends pages_player
 	<div class="col_w left" style="width: 50%">
 		<div class="col">
 			<div class="bg1_c center" style="width: 85%">
-				<h1 class="bg1">Garasje på '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
+				<h1 class="bg1">Garasje pÃ¥ '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
 				<div class="bg1">'.(!$garasje ? '
 					<p class="c">Du har ingen garasje i denne bydelen.</p>
 					<p class="c"><a href="&rpath;/gta/garasje/kjop">Lei ny garasje</a></p>' : '
@@ -385,10 +385,10 @@ class page_gta extends pages_player
 						<dt>Kapasitet</dt>
 						<dd>'.game::format_num($garasje['ugg_places']).'</dd>
 						<dt>Neste betalingsfrist</dt>
-						<dd>'.ess::$b->date->get($garasje['ugg_time_next_rent'])->format().($can_pay ? '<br /><a href="&rpath;/gta/garasje/betale">Betal leie før fristen</a>' : '').'</dd>
+						<dd>'.ess::$b->date->get($garasje['ugg_time_next_rent'])->format().($can_pay ? '<br /><a href="&rpath;/gta/garasje/betale">Betal leie fÃ¸r fristen</a>' : '').'</dd>
 					</dl>
 					<p class="c"><a href="&rpath;/gta/garasje/detaljer">Vis flere detaljer</a></p>
-					<p>Leie for neste periode må betales innen betalingsfristen'.($can_pay ? '' : ' og blir mulig 3 dager før fristen').'.</p>').'
+					<p>Leie for neste periode mÃ¥ betales innen betalingsfristen'.($can_pay ? '' : ' og blir mulig 3 dager fÃ¸r fristen').'.</p>').'
 				</div>
 			</div>
 		</div>
@@ -505,7 +505,7 @@ class page_gta extends pages_player
 		// ingen biler?
 		if (count($biler) == 0)
 		{
-			ess::$b->page->add_message("Du må merke noen biler du ønsker å flytte.");
+			ess::$b->page->add_message("Du mÃ¥ merke noen biler du Ã¸nsker Ã¥ flytte.");
 			redirect::handle();
 		}
 		
@@ -520,7 +520,7 @@ class page_gta extends pages_player
 			// har vi ikke valgt noen bydel?
 			if (!isset($_POST['bydel']) || !isset($bydeler[$_POST['bydel']]))
 			{
-				ess::$b->page->add_message("Du må velge en bydel du ønsker å flytte bilene til.");
+				ess::$b->page->add_message("Du mÃ¥ velge en bydel du Ã¸nsker Ã¥ flytte bilene til.");
 			}
 			
 			else
@@ -529,7 +529,7 @@ class page_gta extends pages_player
 				$bydel = $bydeler[$_POST['bydel']];
 				if ($bydel['garage_free'] < count($biler))
 				{
-					ess::$b->page->add_message("Det er ikke ledig plass til alle bilene du ønsker å flytte i bydelen <b>".htmlspecialchars(game::$bydeler[$bydel['b_id']]['name'])."</b>.", "error");
+					ess::$b->page->add_message("Det er ikke ledig plass til alle bilene du Ã¸nsker Ã¥ flytte i bydelen <b>".htmlspecialchars(game::$bydeler[$bydel['b_id']]['name'])."</b>.", "error");
 				}
 				
 				else
@@ -652,11 +652,11 @@ class page_gta extends pages_player
 		// ingen biler?
 		if (count($biler_q) == 0)
 		{
-			ess::$b->page->add_message("Du må merke bilene du ønsker å selge.", "error");
+			ess::$b->page->add_message("Du mÃ¥ merke bilene du Ã¸nsker Ã¥ selge.", "error");
 			redirect::handle();
 		}
 		
-		// forsøk å selg bilene
+		// forsÃ¸k Ã¥ selg bilene
 		ess::$b->db->begin();
 		
 		// sett biler som solgt
@@ -665,7 +665,7 @@ class page_gta extends pages_player
 			SET b_id = 0
 			WHERE up_id = {$this->gta->up->id} AND ug_up_id = up_id AND gtaid = gta.id AND b_id = {$this->gta->up->data['up_b_id']} AND users_gta.id IN (".implode(",", $biler_q).")");
 		
-		// beregn hvor mye vi får for bilene
+		// beregn hvor mye vi fÃ¥r for bilene
 		$result = ess::$b->db->query("
 			SELECT SUM(value * (100-damage) / 100)
 			FROM users_gta JOIN gta ON gtaid = gta.id
@@ -720,17 +720,17 @@ class page_gta extends pages_player
 			$data = explode(":", postval("ff_id"));
 			if (!isset($ff_list[$data[0]]) || !isset($data[1]))
 			{
-				ess::$b->page->add_message("Du må velge et firma du ønsker å leie garasje hos.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge et firma du Ã¸nsker Ã¥ leie garasje hos.", "error");
 			}
 			
 			elseif ($ff_list[$data[0]]['price'] != $data[1])
 			{
-				ess::$b->page->add_message("Utleieprisen for firmaet du valgte har forandret seg. Velg ønsket firma på nytt.", "error");
+				ess::$b->page->add_message("Utleieprisen for firmaet du valgte har forandret seg. Velg Ã¸nsket firma pÃ¥ nytt.", "error");
 			}
 			
 			elseif ($places < 1 || $places > $this->gta->get_places_limit())
 			{
-				ess::$b->page->add_message("Ugyldig antall for antall plasser du ønsker å leie.", "error");
+				ess::$b->page->add_message("Ugyldig antall for antall plasser du Ã¸nsker Ã¥ leie.", "error");
 			}
 			
 			else
@@ -742,9 +742,9 @@ class page_gta extends pages_player
 				
 				echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Leie garasje på '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Leie garasje pÃ¥ '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>For at du skal ha en garasje i en bydel må du leie den av et firma. Innen hver 7. dag må du fornye leien for å ikke miste garasjen og bilene i den. Leien betales forskuddsvis.</p>
+		<p>For at du skal ha en garasje i en bydel mÃ¥ du leie den av et firma. Innen hver 7. dag mÃ¥ du fornye leien for Ã¥ ikke miste garasjen og bilene i den. Leien betales forskuddsvis.</p>
 		<form action="" method="post">
 			<input type="hidden" name="confirm" />
 			<input type="hidden" name="ff_id" value="'.$ff['ff_id'].':'.$ff['price'].'" />
@@ -755,7 +755,7 @@ class page_gta extends pages_player
 				<dd><a href="&rpath;/ff/?ff_id='.$ff['ff_id'].'">'.htmlspecialchars($ff['ff_name']).'</a></dd>
 				<dt>Antall plasser</dt>
 				<dd>'.game::format_num($places).'</dd>
-				<dt>Leiepris første 7 dager</dt>
+				<dt>Leiepris fÃ¸rste 7 dager</dt>
 				<dd>'.game::format_cash($price).'</dd>
 			</dl>
 			<p class="c">'.show_sbutton("Lei garasje fra firmaet", 'name="kjop"').' '.show_sbutton("Tilbake").'</p>
@@ -771,15 +771,15 @@ class page_gta extends pages_player
 		
 		echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Leie garasje på '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Leie garasje pÃ¥ '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>For at du skal ha en garasje i en bydel må du leie den av et firma. Innen hver 7. dag må du fornye leien for å ikke miste garasjen og bilene i den. Leien betales forskuddsvis.</p>
+		<p>For at du skal ha en garasje i en bydel mÃ¥ du leie den av et firma. Innen hver 7. dag mÃ¥ du fornye leien for Ã¥ ikke miste garasjen og bilene i den. Leien betales forskuddsvis.</p>
 		<form action="" method="post">
 			<input type="hidden" name="b_id" value="'.$this->gta->up->data['up_b_id'].'" />
 			<dl class="dd_right">
 				<dt>Maksimalt antall plasser</dt>
 				<dd>'.game::format_num($this->gta->get_places_limit()).'</dd>
-				<dt>Antall plasser som ønskes</dt>
+				<dt>Antall plasser som Ã¸nskes</dt>
 				<dd><input type="text" class="styled w40" name="places" id="gta_places" value="'.game::format_num(intval(postval("places", 1))).'" /></dd>
 				<dt>Utleiefirma</dt>
 				<dd>
@@ -808,7 +808,7 @@ class page_gta extends pages_player
 			</table>
 				</dd>
 			</dl>
-			<p class="c">Antall plasser du leier hos firmaet kan endres også etter at du har begynte å leie plass.</p>
+			<p class="c">Antall plasser du leier hos firmaet kan endres ogsÃ¥ etter at du har begynte Ã¥ leie plass.</p>
 			<p class="c">'.show_sbutton("Fortsett", 'name="kjop"').'</p>
 		</form>';
 		
@@ -826,7 +826,7 @@ class page_gta extends pages_player
 		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = {$this->gta->up->id} AND up_cash >= $price");
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Du har ikke råd til å leie så mange plasser hos dette firmaet.", "error");
+			ess::$b->page->add_message("Du har ikke rÃ¥d til Ã¥ leie sÃ¥ mange plasser hos dette firmaet.", "error");
 			return;
 		}
 		
@@ -842,7 +842,7 @@ class page_gta extends pages_player
 		// gi garasje
 		ess::$b->db->query("INSERT IGNORE INTO users_garage SET ugg_up_id = {$this->gta->up->id}, ugg_b_id = {$this->gta->up->data['up_b_id']}, ugg_ff_id = {$ff['ff_id']}, ugg_time = ".time().", ugg_time_next_rent = $next, ugg_cost_total = $price, ugg_places = $places");
 		
-		// kunne ikke gi garasje => allerede kjøpt
+		// kunne ikke gi garasje => allerede kjÃ¸pt
 		if (ess::$b->db->affected_rows() == 0)
 		{
 			// gi tilbake pengene
@@ -854,7 +854,7 @@ class page_gta extends pages_player
 			// gi pengene til firmaet
 			ff::bank_static(ff::BANK_TJENT, round($price * ff::GTA_PERCENT), $ff['ff_id']);
 			
-			ess::$b->page->add_message('Du leier nå garasje med '.fwords("%d plass", "%d plasser", $places).' på <b>'.game::$bydeler[$this->gta->up->data['up_b_id']]['name'].'</b> hos firmaet <a href="&rpath;/ff/?ff_id='.$ff['ff_id'].'">'.htmlspecialchars($ff['ff_name']).'</a> for '.game::format_cash($price).'.');
+			ess::$b->page->add_message('Du leier nÃ¥ garasje med '.fwords("%d plass", "%d plasser", $places).' pÃ¥ <b>'.game::$bydeler[$this->gta->up->data['up_b_id']]['name'].'</b> hos firmaet <a href="&rpath;/ff/?ff_id='.$ff['ff_id'].'">'.htmlspecialchars($ff['ff_name']).'</a> for '.game::format_cash($price).'.');
 		}
 		
 		redirect::handle("/gta/garasje", redirect::ROOT);
@@ -890,7 +890,7 @@ class page_gta extends pages_player
 		$num = mysql_result($result, 0);
 		if ($num > 0)
 		{
-			ess::$b->page->add_message("Du kan ikke ha noen biler i garasjen om du ønsker å legge den ned.", "error");
+			ess::$b->page->add_message("Du kan ikke ha noen biler i garasjen om du Ã¸nsker Ã¥ legge den ned.", "error");
 			redirect::handle("/gta/garasje", redirect::ROOT);
 		}
 		
@@ -913,7 +913,7 @@ class page_gta extends pages_player
 		
 		echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Avslutte garasjeleie på '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Avslutte garasjeleie pÃ¥ '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<p class="c"><a href="&rpath;/gta/garasje">Tilbake</a></p>
 		<dl class="dd_right">
@@ -928,7 +928,7 @@ class page_gta extends pages_player
 		</dl>
 		<form action="" method="post">
 			<input type="hidden" name="b_id" value="'.$this->gta->up->data['up_b_id'].'" />
-			<p class="c">Er du sikker på at du ønsker å avslutte leien av denne garasjen? Du vil da miste garasjen i denne bydelen.</p>
+			<p class="c">Er du sikker pÃ¥ at du Ã¸nsker Ã¥ avslutte leien av denne garasjen? Du vil da miste garasjen i denne bydelen.</p>
 			<p class="c"><span class="red">'.show_sbutton("Avslutt leie", 'name="confirm"').'</span> <a href="&rpath;/gta/garasje">Tilbake</a></p>
 		</form>
 	</div>
@@ -993,18 +993,18 @@ class page_gta extends pages_player
 			// endret ikke antall?
 			elseif ($places == $garasje['ugg_places'])
 			{
-				ess::$b->page->add_message("Du må fylle inn en annen kapasitet enn hva den er i dag.", "error");
+				ess::$b->page->add_message("Du mÃ¥ fylle inn en annen kapasitet enn hva den er i dag.", "error");
 			}
 			
 			elseif ($places < 1 || $places > $limit)
 			{
-				ess::$b->page->add_message("Ugyldig antall for antall plasser du ønsker å leie.", "error");
+				ess::$b->page->add_message("Ugyldig antall for antall plasser du Ã¸nsker Ã¥ leie.", "error");
 			}
 			
 			// har for mange biler?
 			elseif ($places < $ug_num)
 			{
-				ess::$b->page->add_message("Du kan ikke sette kapasiteten lavere enn antall biler som er i garasjen. Det er for øyeblikket ".fwords("%d bil", "%d biler", $ug_num)." i garasjen.", "error");
+				ess::$b->page->add_message("Du kan ikke sette kapasiteten lavere enn antall biler som er i garasjen. Det er for Ã¸yeblikket ".fwords("%d bil", "%d biler", $ug_num)." i garasjen.", "error");
 			}
 			
 			else
@@ -1034,14 +1034,14 @@ class page_gta extends pages_player
 						}
 					}
 					
-					// økes
+					// Ã¸kes
 					else
 					{
-						// forsøk å trekk fra pengene
+						// forsÃ¸k Ã¥ trekk fra pengene
 						ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = {$this->gta->up->id} AND up_cash >= $price");
 						if (ess::$b->db->affected_rows() == 0)
 						{
-							ess::$b->page->add_message("Du har ikke råd til å leie så mange plasser hos dette firmaet.", "error");
+							ess::$b->page->add_message("Du har ikke rÃ¥d til Ã¥ leie sÃ¥ mange plasser hos dette firmaet.", "error");
 						}
 						
 						else
@@ -1069,7 +1069,7 @@ class page_gta extends pages_player
 				
 				echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Endre kapasitet for garasje på '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Endre kapasitet for garasje pÃ¥ '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<dl class="dd_right">
 			<dt>Utleiefirma</dt>
@@ -1090,7 +1090,7 @@ class page_gta extends pages_player
 				<dt>Kostnad for endring</dt>
 				<dd>'.game::format_cash($price).'</dd>' : '').'
 			</dl>
-			<p class="c">'.show_sbutton("Utfør endringer", 'name="confirm"').' <a href="&rpath;/gta/garasje/endre">Tilbake</a></p>
+			<p class="c">'.show_sbutton("UtfÃ¸r endringer", 'name="confirm"').' <a href="&rpath;/gta/garasje/endre">Tilbake</a></p>
 		</form>
 	</div>
 </div>';
@@ -1101,7 +1101,7 @@ class page_gta extends pages_player
 		
 		echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Endre kapasitet for garasje på '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Endre kapasitet for garasje pÃ¥ '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<p class="c"><a href="&rpath;/gta/garasje/detaljer">Tilbake</a></p>
 		<dl class="dd_right">
@@ -1117,16 +1117,16 @@ class page_gta extends pages_player
 			<input type="hidden" name="placeso" value="'.$garasje['ugg_places'].'" />
 			<input type="hidden" name="b_id" value="'.$this->gta->up->data['up_b_id'].'" />
 			<dl class="dd_right">
-				<dt>Nåværende kapasitet</dt>
+				<dt>NÃ¥vÃ¦rende kapasitet</dt>
 				<dd>'.game::format_num($garasje['ugg_places']).'</dd>
 				<dt>Maksimal kapasitet</dt>
 				<dd>'.game::format_num($limit).'</dd>
-				<dt>Ønsket kapasitet</dt>
+				<dt>Ã˜nsket kapasitet</dt>
 				<dd><input type="text" class="styled w40" name="places" id="gta_places" value="'.game::format_num(intval(postval("places", $garasje['ugg_places']))).'" /></dd>
 			</dl>
 			<p class="c">'.show_sbutton("Fortsett").'</p>
 		</form>
-		<p class="c">Husk at det kan hende det lønner seg å bytte til et <a href="&rpath;/gta/garasje/detaljer">annet firma</a>.</p>
+		<p class="c">Husk at det kan hende det lÃ¸nner seg Ã¥ bytte til et <a href="&rpath;/gta/garasje/detaljer">annet firma</a>.</p>
 	</div>
 </div>';
 	}
@@ -1160,7 +1160,7 @@ class page_gta extends pages_player
 		
 		echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Garasjedetaljer på '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Garasjedetaljer pÃ¥ '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<p class="c"><a href="&rpath;/gta/garasje">Tilbake</a></p>
 		<dl class="dd_right">
@@ -1174,14 +1174,14 @@ class page_gta extends pages_player
 			<dd>'.ess::$b->date->get($garasje['ugg_time_next_rent'])->format().'</dd>
 		</dl>
 		<dl class="dd_right">
-			<dt>Første leie</dt>
+			<dt>FÃ¸rste leie</dt>
 			<dd>'.ess::$b->date->get($garasje['ugg_time'])->format().'</dd>
 			<dt>Totalt betalt</dt>
 			<dd>'.game::format_cash($garasje['ugg_cost_total']).'</dd>
 			<dt>Gjennomsnittlig daglig pris</dt>
 			<dd>'.game::format_cash($garasje['ugg_cost_total'] / ceil(($garasje['ugg_time_next_rent'] - $garasje['ugg_time']) / 86400)).'</dd>
 		</dl>
-		<p>Leie for neste periode må betales innen betalingsfristen'.($can_pay ? '. <a href="&rpath;/gta/garasje/betale">Betal nå &raquo;</a>' : ' og blir mulig 3 dager før fristen går ut.').'</p>
+		<p>Leie for neste periode mÃ¥ betales innen betalingsfristen'.($can_pay ? '. <a href="&rpath;/gta/garasje/betale">Betal nÃ¥ &raquo;</a>' : ' og blir mulig 3 dager fÃ¸r fristen gÃ¥r ut.').'</p>
 		<p class="c"><a href="&rpath;/gta/garasje/endre">Endre kapasitet</a> | <a href="&rpath;/gta/garasje/avslutt">Avslutt leie</a></p>
 	</div>
 </div>';
@@ -1193,7 +1193,7 @@ class page_gta extends pages_player
 <div class="bg1_c xsmall">
 	<h1 class="bg1">Andre utleiefirmaer<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
-		<p>Det er mulig å bytte til et annet garasjefirma. Da må leien for denne garasjen først avsluttes, og deretter må ny garasje kjøpes.</p>
+		<p>Det er mulig Ã¥ bytte til et annet garasjefirma. Da mÃ¥ leien for denne garasjen fÃ¸rst avsluttes, og deretter mÃ¥ ny garasje kjÃ¸pes.</p>
 			<table class="table center tablemb">
 			<thead>
 				<tr>
@@ -1236,7 +1236,7 @@ class page_gta extends pages_player
 			WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
 		$garasje = mysql_fetch_assoc($result);
 		
-		// har vi ingen garasje eller kan ikke betale leie nå?
+		// har vi ingen garasje eller kan ikke betale leie nÃ¥?
 		if (!$garasje || !gta::can_pay($garasje['ugg_time_next_rent']))
 		{
 			redirect::handle("/gta/garasje", redirect::ROOT);
@@ -1250,7 +1250,7 @@ class page_gta extends pages_player
 		// beregn pris for neste periode
 		$price = $garasje['ugg_places'] * $ff['price'];
 		
-		// utføre betaling?
+		// utfÃ¸re betaling?
 		if (isset($_POST['pay']))
 		{
 			$places = (int) postval("places");
@@ -1279,7 +1279,7 @@ class page_gta extends pages_player
 				ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = {$this->gta->up->id} AND up_cash >= $price");
 				if (ess::$b->db->affected_rows() == 0)
 				{
-					ess::$b->page->add_message("Du har ikke råd til å betale for denne leien.", "error");
+					ess::$b->page->add_message("Du har ikke rÃ¥d til Ã¥ betale for denne leien.", "error");
 				}
 				
 				else
@@ -1305,7 +1305,7 @@ class page_gta extends pages_player
 						// gi pengene til firmaet
 						ff::bank_static(ff::BANK_TJENT, round($price * ff::GTA_PERCENT), $ff['ff_id']);
 						
-						ess::$b->page->add_message('Du har utvidet leieavtalen på <b>'.game::$bydeler[$this->gta->up->data['up_b_id']]['name'].'</b> hos firmaet <a href="&rpath;/ff/?ff_id='.$ff['ff_id'].'">'.htmlspecialchars($ff['ff_name']).'</a> med 7 dager for '.game::format_cash($price).'.');
+						ess::$b->page->add_message('Du har utvidet leieavtalen pÃ¥ <b>'.game::$bydeler[$this->gta->up->data['up_b_id']]['name'].'</b> hos firmaet <a href="&rpath;/ff/?ff_id='.$ff['ff_id'].'">'.htmlspecialchars($ff['ff_name']).'</a> med 7 dager for '.game::format_cash($price).'.');
 					}
 					
 					redirect::handle("/gta/garasje", redirect::ROOT);
@@ -1315,7 +1315,7 @@ class page_gta extends pages_player
 		
 		echo '
 <div class="bg1_c xsmall">
-	<h1 class="bg1">Betale leie for garasje på '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Betale leie for garasje pÃ¥ '.htmlspecialchars($this->gta->up->bydel['name']).'<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<p class="c"><a href="&rpath;/gta/garasje">Tilbake</a></p>
 		<dl class="dd_right">
@@ -1336,9 +1336,9 @@ class page_gta extends pages_player
 				<dt>Total leiepris neste periode</dt>
 				<dd>'.game::format_cash($price).'</dd>
 			</dl>
-			<p class="c">'.show_sbutton("Utfør betaling for neste leie", 'name="pay"').'</p>
+			<p class="c">'.show_sbutton("UtfÃ¸r betaling for neste leie", 'name="pay"').'</p>
 		</form>
-		<p class="c">Husk at det kan hende det lønner seg å bytte til et <a href="&rpath;/gta/garasje/detaljer">annet firma</a>. Du kan også <a href="&rpath;/gta/garasje/endre">justere kapasiteten</a> før du betaler for å få billigere leie.</p>
+		<p class="c">Husk at det kan hende det lÃ¸nner seg Ã¥ bytte til et <a href="&rpath;/gta/garasje/detaljer">annet firma</a>. Du kan ogsÃ¥ <a href="&rpath;/gta/garasje/endre">justere kapasiteten</a> fÃ¸r du betaler for Ã¥ fÃ¥ billigere leie.</p>
 	</div>
 </div>';
 	}
@@ -1350,7 +1350,7 @@ class page_gta extends pages_player
 	{
 		ess::$b->page->add_title("Statistikk");
 		
-		// hent antall forsøk og vellykkede spredt på hver bydel
+		// hent antall forsÃ¸k og vellykkede spredt pÃ¥ hver bydel
 		$stats_totalt = array();
 		$result = ess::$b->db->query("
 			SELECT b_id, MAX(time_last) max_time_last, SUM(count) sum_count, SUM(success) sum_success
@@ -1375,7 +1375,7 @@ class page_gta extends pages_player
 		if (count($stats_totalt) == 0)
 		{
 			echo '
-		<p>Du har ikke gjennomført noen forsøk på biltyveri.</p>';
+		<p>Du har ikke gjennomfÃ¸rt noen forsÃ¸k pÃ¥ biltyveri.</p>';
 		}
 		
 		else
@@ -1385,9 +1385,9 @@ class page_gta extends pages_player
 			<thead>
 				<tr>
 					<th>Bydel</th>
-					<th>Antall forsøk</th>
+					<th>Antall forsÃ¸k</th>
 					<th>Antall vellykkede</th>
-					<th>Forrige forsøk</th>
+					<th>Forrige forsÃ¸k</th>
 				</tr>
 			</thead>
 			<tbody class="r">';
@@ -1417,7 +1417,7 @@ class page_gta extends pages_player
 					echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
 					<td class="l">'.htmlspecialchars($bydel['name']).'</td>
-					<td class="c dark" colspan="3"><i>Ingen forsøk</i></td>
+					<td class="c dark" colspan="3"><i>Ingen forsÃ¸k</i></td>
 				</tr>';
 				}
 			}

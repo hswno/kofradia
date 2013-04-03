@@ -2,12 +2,12 @@
 
 require "base.php";
 
-// TODO: lenke fra min side må endres
+// TODO: lenke fra min side mÃ¥ endres
 
 $up = login::$user->player;
 if (isset($_GET['up_id']) && ((access::has("mod") && isset($_GET['stats'])) || (access::has("sadmin") && KOFRADIA_DEBUG)))
 {
-	// forsøk å finn spilleren
+	// forsÃ¸k Ã¥ finn spilleren
 	$up = player::get((int) getval("up_id"));
 	if (!$up)
 	{
@@ -18,7 +18,7 @@ if (isset($_GET['up_id']) && ((access::has("mod") && isset($_GET['stats'])) || (
 	redirect::store("poker?up_id=$up->id");
 	
 	echo '
-<p class="c">Du viser pokersiden som tilhører '.$up->profile_link().'.'.(!isset($_GET['stats']) ? '<br /><b>Viktig:</b> Utfordringer du gjør her vil bli gjort som denne spilleren, og ikke din egen.' : '').'</p>';
+<p class="c">Du viser pokersiden som tilhÃ¸rer '.$up->profile_link().'.'.(!isset($_GET['stats']) ? '<br /><b>Viktig:</b> Utfordringer du gjÃ¸r her vil bli gjort som denne spilleren, og ikke din egen.' : '').'</p>';
 }
 
 $poker = new page_poker($up);

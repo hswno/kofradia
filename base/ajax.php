@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Diverse funksjoner for å behandle AJAX kall
+ * Diverse funksjoner for Ã¥ behandle AJAX kall
  * @static
  */
 class ajax
@@ -14,13 +14,13 @@ class ajax
 		require "essentials.php";
 	}
 	
-	/** Forespørsel er ugyldig */
+	/** ForespÃ¸rsel er ugyldig */
 	const TYPE_INVALID = 1;
 	
-	/** Forespørselen er OK */
+	/** ForespÃ¸rselen er OK */
 	const TYPE_OK = 2;
 	
-	/** Forespørselen finnes ikke */
+	/** ForespÃ¸rselen finnes ikke */
 	const TYPE_404 = 3;
 	
 	/** Standard retur */
@@ -71,7 +71,7 @@ class ajax
 	/** Print ren tekst */
 	public static function text($data, $type = NULL)
 	{
-		header("Content-Type: text/plain; charset=iso-8859-1");
+		header("Content-Type: text/plain; charset=utf-8");
 		if ($type) self::$type = $type;
 		self::set_headers();
 		
@@ -82,7 +82,7 @@ class ajax
 	/** Print HTML */
 	public static function html($data, $type = NULL)
 	{
-		header("Content-Type: text/html; charset=iso-8859-1");
+		header("Content-Type: text/html; charset=utf-8");
 		if ($type) self::$type = $type;
 		self::set_headers();
 		
@@ -93,11 +93,11 @@ class ajax
 	/** Print XML */
 	public static function xml($data, $type = NULL)
 	{
-		header("Content-Type: text/xml; charset=iso-8859-1");
+		header("Content-Type: text/xml; charset=utf-8");
 		if ($type) self::$type = $type;
 		self::set_headers();
 		
-		echo '<?xml version="1.0" encoding="ISO-8859-1"?>'.$data;
+		echo '<?xml version="1.0" encoding="utf-8"?>'.$data;
 		die;
 	}
 	
@@ -118,7 +118,7 @@ class ajax
 	
 	/**
 	 * Valider session ID
-	 * Må gis ved $_POST['sid']
+	 * MÃ¥ gis ved $_POST['sid']
 	 */
 	public static function validate_sid()
 	{
@@ -145,12 +145,12 @@ class ajax
 	}
 	
 	/**
-	 * Krev at brukeren ikke har noen aktiv lås
-	 * @param boolean $allow_crew tillate crew å vise siden?
+	 * Krev at brukeren ikke har noen aktiv lÃ¥s
+	 * @param boolean $allow_crew tillate crew Ã¥ vise siden?
 	 */
 	public static function validate_lock($allow_crew = false)
 	{
-		// har vi lås?
+		// har vi lÃ¥s?
 		if (login::check_lock())
 		{
 			// crew?

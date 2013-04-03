@@ -41,7 +41,7 @@ if (isset($_GET['r']))
 		// sett cookie - gyldig i 2 uker
 		setcookie($__server['cookie_prefix'] . "rid", "{$row['up_id']}", time()+1209600, $__server['cookie_path'], $__server['cookie_domain']);
 		
-		#ess::$b->page->add_message("Du må være registrert for å vise denne siden.", "error");
+		#ess::$b->page->add_message("Du mÃ¥ vÃ¦re registrert for Ã¥ vise denne siden.", "error");
 	}
 	redirect::handle();
 }
@@ -73,7 +73,7 @@ class registrer
 		$this->clean();
 	}
 	
-	// slett gamle oppføringer
+	// slett gamle oppfÃ¸ringer
 	function clean()
 	{
 		ess::$b->db->query("DELETE FROM registration WHERE expire < ".time());
@@ -83,7 +83,7 @@ class registrer
 	// gjennoppta riktig trinn
 	function restore()
 	{
-		// er vi på noe trinn nå?
+		// er vi pÃ¥ noe trinn nÃ¥?
 		if (isset($_SESSION[$GLOBALS['__server']['session_prefix'].'reg']['step']))
 		{
 			$this->step = $_SESSION[$GLOBALS['__server']['session_prefix'].'reg']['step'];
@@ -101,7 +101,7 @@ class registrer
 			// finnes ikke?
 			if (mysql_num_rows($result) == 0)
 			{
-				ess::$b->page->add_message("Fant ikke oppføringen. Prøv på nytt.", "error");
+				ess::$b->page->add_message("Fant ikke oppfÃ¸ringen. PrÃ¸v pÃ¥ nytt.", "error");
 				$this->trash();
 				redirect::handle();
 			}
@@ -109,7 +109,7 @@ class registrer
 			// lagre info
 			$this->info = mysql_fetch_assoc($result);
 			
-			// ønsker å avbryte?
+			// Ã¸nsker Ã¥ avbryte?
 			if (isset($_POST['abort']))
 			{
 				ess::$b->page->add_message("Din registrering ble avbrytet!");
@@ -185,7 +185,7 @@ class registrer
 				$age = $n_year - $b_aar - (($n_month < $b_maaned || ($b_maaned == $n_month && $n_day < $b_dag)) ? 1 : 0);
 				$birth = $b_aar."-".str_pad($b_maaned, 2, "0", STR_PAD_LEFT)."-".str_pad($b_dag, 2, "0", STR_PAD_LEFT);
 				
-				// sjekk om fødselsdatoen er gyldig
+				// sjekk om fÃ¸dselsdatoen er gyldig
 				$birth_date = ess::$b->date->get();
 				$birth_date->setDate($b_aar, $b_maaned, $b_dag);
 				$birth_valid = $birth_date->format("Y-m-d") == $birth;
@@ -225,35 +225,35 @@ class registrer
 				// sjekk e-post (2)
 				elseif ($epost1 != $epost2)
 				{
-					ess::$b->page->add_message("Den gjentatte e-postadressen var ikke lik den første.", "error");
+					ess::$b->page->add_message("Den gjentatte e-postadressen var ikke lik den fÃ¸rste.", "error");
 				}
 				
-				// sjekk fødselsdato
+				// sjekk fÃ¸dselsdato
 				elseif ($b_dag < 1 || $b_dag > 31)
 				{
-					ess::$b->page->add_message("Du må velge en gyldig dag.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge en gyldig dag.", "error");
 				}
 				elseif ($b_maaned < 1 || $b_maaned > 12)
 				{
-					ess::$b->page->add_message("Du må velge en gyldig måned.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge en gyldig mÃ¥ned.", "error");
 				}
 				elseif ($b_aar < 1900 || $b_aar > ess::$b->date->get()->format("Y"))
 				{
-					ess::$b->page->add_message("Du må velge et gyldig år.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge et gyldig Ã¥r.", "error");
 				}
 				
-				// ugyldig fødselsdato?
+				// ugyldig fÃ¸dselsdato?
 				elseif (!$birth_valid)
 				{
-					ess::$b->page->add_message("Datoen du fylte inn for fødselsdatoen din eksisterer ikke.");
+					ess::$b->page->add_message("Datoen du fylte inn for fÃ¸dselsdatoen din eksisterer ikke.");
 				}
 				
 				// sjekk alder
 				elseif ($age < 13)
 				{
-					putlog("ABUSE", "%c9%bUNDER ALDERSGRENSEN:%b%c %u{$_SERVER['REMOTE_ADDR']}%u prøvde å registrere seg med fødselsdato %u{$birth}%u (%u{$age}%u år) og e-posten %u{$epost1}%u!");
+					putlog("ABUSE", "%c9%bUNDER ALDERSGRENSEN:%b%c %u{$_SERVER['REMOTE_ADDR']}%u prÃ¸vde Ã¥ registrere seg med fÃ¸dselsdato %u{$birth}%u (%u{$age}%u Ã¥r) og e-posten %u{$epost1}%u!");
 					
-					ess::$b->page->add_message("Du må ha fylt 13 år for å registrere deg og spille Kofradia!", "error");
+					ess::$b->page->add_message("Du mÃ¥ ha fylt 13 Ã¥r for Ã¥ registrere deg og spille Kofradia!", "error");
 					
 					redirect::handle("", redirect::ROOT);
 				}
@@ -261,7 +261,7 @@ class registrer
 				// sjekk eneste bruker
 				elseif (!$forste_bruker)
 				{
-					ess::$b->page->add_message("I følge betingelsene kan du kun ha en bruker. Bruk den!", "error");
+					ess::$b->page->add_message("I fÃ¸lge betingelsene kan du kun ha en bruker. Bruk den!", "error");
 					redirect::handle("", redirect::ROOT);
 				}
 				
@@ -276,13 +276,13 @@ class registrer
 					if ($row = mysql_fetch_assoc($result1))
 					{
 						$time = game::timespan($row['expire'], game::TIME_ABS | game::TIME_FULL);
-						ess::$b->page->add_message("E-postadressen er allerede aktivt i registeringssystemet. Sjekk e-posten for e-postkode eller vent $time, for så å prøve igjen.", "error");
+						ess::$b->page->add_message("E-postadressen er allerede aktivt i registeringssystemet. Sjekk e-posten for e-postkode eller vent $time, for sÃ¥ Ã¥ prÃ¸ve igjen.", "error");
 					}
 					
 					// allerede en spiller som har e-posten?
 					elseif ($row = mysql_fetch_assoc($result2))
 					{
-						putlog("ABUSE", "%c9%bREGISTRER KONTO:%b%c %u{$_SERVER['REMOTE_ADDR']}%u prøvde å registrere seg en e-post som allerede finnes: %u{$epost1}%u!");
+						putlog("ABUSE", "%c9%bREGISTRER KONTO:%b%c %u{$_SERVER['REMOTE_ADDR']}%u prÃ¸vde Ã¥ registrere seg en e-post som allerede finnes: %u{$epost1}%u!");
 						ess::$b->page->add_message("Denne e-posten er allerede i bruk.", "error");
 						redirect::handle("", redirect::ROOT);
 					}
@@ -300,23 +300,23 @@ class registrer
 						$email = new email();
 						$email->text = 'Hei,
 
-Du har begynt registrering av bruker på Kofradia.
+Du har begynt registrering av bruker pÃ¥ Kofradia.
 Dersom du ikke har bedt om denne e-posten kan du se bort ifra den.
 
-For å bekrefte e-postadressen din må du følge denne lenken:
+For Ã¥ bekrefte e-postadressen din mÃ¥ du fÃ¸lge denne lenken:
 '.$__server['path'].'/registrer?e='.$code.'
 
 Din verifiseringskode er: '.$code.'
 
-Forespørselen ble utført fra '.$_SERVER['REMOTE_ADDR'].'.
+ForespÃ¸rselen ble utfÃ¸rt fra '.$_SERVER['REMOTE_ADDR'].'.
 
-Du må fortsette innen '.game::timespan(7200, game::TIME_FULL | game::TIME_NOBOLD).' ('.ess::$b->date->get(time()+7200)->format(date::FORMAT_SEC).'). Etter den tid må du be om ny e-post.
+Du mÃ¥ fortsette innen '.game::timespan(7200, game::TIME_FULL | game::TIME_NOBOLD).' ('.ess::$b->date->get(time()+7200)->format(date::FORMAT_SEC).'). Etter den tid mÃ¥ du be om ny e-post.
 
 --
 www.kofradia.no';
 						$email->headers['X-SMafia-IP'] = $_SERVER['REMOTE_ADDR'];
 						$email->headers['Reply-To'] = "henvendelse@smafia.no";
-						$email->send($epost1, "Starte registrering på Kofradia");
+						$email->send($epost1, "Starte registrering pÃ¥ Kofradia");
 						
 						ess::$b->page->add_message("En e-post med verifiseringskode har blitt sendt til <b>".htmlspecialchars($epost1)."</b>. Sjekk e-posten snarest!");
 						redirect::handle("?e");
@@ -334,7 +334,7 @@ www.kofradia.no';
 				// sjekk e-postkode
 				if (empty($ecode))
 				{
-					ess::$b->page->add_message("Du må fylle ut e-postkoden du har fått på epost.", "error");
+					ess::$b->page->add_message("Du mÃ¥ fylle ut e-postkoden du har fÃ¥tt pÃ¥ epost.", "error");
 				}
 				
 				// fortsett
@@ -345,14 +345,14 @@ www.kofradia.no';
 					
 					if (!($row = mysql_fetch_assoc($result)))
 					{
-						putlog("ABUSE", "%c9%bE-POST KODE:%b%c %u{$_SERVER['REMOTE_ADDR']}%u prøvde å fortsette registreringen med ugyldig e-postkode (%u$ecode%u)!");
+						putlog("ABUSE", "%c9%bE-POST KODE:%b%c %u{$_SERVER['REMOTE_ADDR']}%u prÃ¸vde Ã¥ fortsette registreringen med ugyldig e-postkode (%u$ecode%u)!");
 						ess::$b->page->add_message("Fant ikke e-postkoden i databasen! Kontroller at den er riktig og evt. be om ny e-postkode.", "error");
 					}
 					
-					// fant oppføringen
+					// fant oppfÃ¸ringen
 					else
 					{
-						// oppdater oppføringen
+						// oppdater oppfÃ¸ringen
 						ess::$b->db->query("UPDATE registration SET verified = 1 WHERE id = {$row['id']}");
 						$_SESSION[$GLOBALS['__server']['session_prefix'].'reg'] = array(
 							"id" => $row['id'],
@@ -366,8 +366,8 @@ www.kofradia.no';
 		}
 		
 		echo '
-<p><b>Velkommen</b> til Kofradia sine nettsider! Kofradia er et tekstbassert nettspill som handler om å utføre forskjellige funksjoner for å stige i gradene. I tillegg finnes det både forum og diverse annen informasjon på siden!</p>
-<p>På denne siden oppretter du din bruker og spiller. Merk! Det er kun lov å ha én bruker. Har du allerede en bruker fra før har du ikke lov til å registrere ny bruker.</p>';
+<p><b>Velkommen</b> til Kofradia sine nettsider! Kofradia er et tekstbassert nettspill som handler om Ã¥ utfÃ¸re forskjellige funksjoner for Ã¥ stige i gradene. I tillegg finnes det bÃ¥de forum og diverse annen informasjon pÃ¥ siden!</p>
+<p>PÃ¥ denne siden oppretter du din bruker og spiller. Merk! Det er kun lov Ã¥ ha Ã©n bruker. Har du allerede en bruker fra fÃ¸r har du ikke lov til Ã¥ registrere ny bruker.</p>';
 		
 		if (!isset($_REQUEST['e']))
 		{
@@ -384,7 +384,7 @@ www.kofradia.no';
 			<dt>Gjenta e-postadresse</dt>
 			<dd><input type="text" name="epost2" value="'.htmlspecialchars(postval("epost2")).'" class="styled w150" /></dd>
 			
-			<dt>Fødselsdato</dt>
+			<dt>FÃ¸dselsdato</dt>
 			<dd>
 				<select name="b_dag">
 					<option value="">Dag</option>';
@@ -400,7 +400,7 @@ www.kofradia.no';
 			echo '
 				</select>
 				<select name="b_maaned">
-					<option value="">Måned</option>';
+					<option value="">MÃ¥ned</option>';
 			
 			global $_lang;
 			$active = postval("b_maaned");
@@ -413,7 +413,7 @@ www.kofradia.no';
 			echo '
 				</select>
 				<select name="b_aar">
-					<option value="">År</option>';
+					<option value="">Ã…r</option>';
 			
 			$active = postval("b_aar");
 			for ($i = ess::$b->date->get()->format("Y"); $i >= 1900; $i--)
@@ -426,9 +426,9 @@ www.kofradia.no';
 				</select>
 			</dd>
 			
-			<dd><input type="checkbox" name="forste_bruker" id="c1" /><label for="c1"> Jeg har ingen aktiv bruker fra før</label></dd>
+			<dd><input type="checkbox" name="forste_bruker" id="c1" /><label for="c1"> Jeg har ingen aktiv bruker fra fÃ¸r</label></dd>
 		</dl>
-		<p class="c">'.show_sbutton("Gå til neste trinn").'</p>
+		<p class="c">'.show_sbutton("GÃ¥ til neste trinn").'</p>
 	</div>
 </form>';
 		}
@@ -438,7 +438,7 @@ www.kofradia.no';
 			ess::$b->page->add_js_domready('$("verife").focus();');
 			echo '
 <p><b>Verifiseringskode</b></p>
-<p>Når du har mottatt e-post etter å ha fylt inn e-postadresse og fødelsdato, mottar du en verifiseringskode som fylles inn her. Du kan deretter fortsette din registrering.</p>
+<p>NÃ¥r du har mottatt e-post etter Ã¥ ha fylt inn e-postadresse og fÃ¸delsdato, mottar du en verifiseringskode som fylles inn her. Du kan deretter fortsette din registrering.</p>
 <form action="registrer" method="post">
 	<input type="hidden" name="step" value="2" />
 	<div class="registrer_felt">
@@ -458,11 +458,11 @@ www.kofradia.no';
 	function step3()
 	{
 		$referers = array(
-			1 => array("Via google eller en annen søkeside", false),
+			1 => array("Via google eller en annen sÃ¸keside", false),
 			array("En venn tipset meg", false),
-			array("Leste det på en nettside", "Lenke til nettsiden"),
-			array("Så en reklameannonse", "Lenke til nettsiden"),
-			array("Så det i et forum", "Lenke til forumet"),
+			array("Leste det pÃ¥ en nettside", "Lenke til nettsiden"),
+			array("SÃ¥ en reklameannonse", "Lenke til nettsiden"),
+			array("SÃ¥ det i et forum", "Lenke til forumet"),
 			array("Annet", "Spesifiser")
 		);
 		
@@ -482,7 +482,7 @@ www.kofradia.no';
 			$referer1 = postval("referer1");
 			$referer2 = trim(postval("referer2"));
 			
-			// diverse spørringer
+			// diverse spÃ¸rringer
 			$result1 = ess::$b->db->query("SELECT ".ess::$b->db->quote($brukernavn, false)." REGEXP regex AS m, error FROM regex_checks WHERE (type = 'reg_user_special' OR type = 'reg_user_strength') HAVING m = 1");
 			$result2 = ess::$b->db->query("SELECT up_id FROM users_players WHERE up_name = ".ess::$b->db->quote($brukernavn));
 			$result3 = ess::$b->db->query("SELECT id FROM registration WHERE user = ".ess::$b->db->quote($brukernavn));
@@ -501,7 +501,7 @@ www.kofradia.no';
 			}
 			elseif (mysql_num_rows($result3) > 0)
 			{
-				ess::$b->page->add_message("Noen holder allerede på å registrere seg med dette spillernavnet. Velg et annet.", "error");
+				ess::$b->page->add_message("Noen holder allerede pÃ¥ Ã¥ registrere seg med dette spillernavnet. Velg et annet.", "error");
 			}
 			
 			// sjekk passord
@@ -513,7 +513,7 @@ www.kofradia.no';
 			}
 			elseif ($passord1 == $brukernavn)
 			{
-				ess::$b->page->add_message("Passordet kan ikke være det samme som spillernavnet.", "error");
+				ess::$b->page->add_message("Passordet kan ikke vÃ¦re det samme som spillernavnet.", "error");
 			}
 			elseif ($passord1 != $passord2)
 			{
@@ -523,11 +523,11 @@ www.kofradia.no';
 			// sjekk referer
 			elseif (!isset($referers[$referer1]))
 			{
-				ess::$b->page->add_message("Velg et gyldig alternativ for hvor du hørte om Kofradia.", "error");
+				ess::$b->page->add_message("Velg et gyldig alternativ for hvor du hÃ¸rte om Kofradia.", "error");
 			}
 			elseif ($referers[$referer1][1] && empty($referer2))
 			{
-				ess::$b->page->add_message("Fyll ut feltet for mer informasjon for hvor du hørte om Kofradia.", "error");
+				ess::$b->page->add_message("Fyll ut feltet for mer informasjon for hvor du hÃ¸rte om Kofradia.", "error");
 			}
 			
 			// fortsett
@@ -572,21 +572,21 @@ function checkReferer(elm)
 <form action="registrer" method="post">
 	<input type="hidden" name="abort" />
 	<h1>Brukerinformasjon</h1>
-	<p class="h_right">'.show_sbutton("Avbryt registrering", 'onclick="return confirm(\'Er du sikker på at du vil AVBRYTE?\')"').'</p>
+	<p class="h_right">'.show_sbutton("Avbryt registrering", 'onclick="return confirm(\'Er du sikker pÃ¥ at du vil AVBRYTE?\')"').'</p>
 </form>
-<p>Det er nå tid for å velge spillernavn og passord. Spillernavnet vil du ikke kunne endre senere, mens passordet kan endres når du ønsker og nullstilles via e-post.</p>
-<p>Tips: Trykk &laquo;Gå videre&raquo; for å sjekke om spillernavnet er ledig før du fyller inn passordet for å slippe å fylle inn passordet hver gang.</p>
+<p>Det er nÃ¥ tid for Ã¥ velge spillernavn og passord. Spillernavnet vil du ikke kunne endre senere, mens passordet kan endres nÃ¥r du Ã¸nsker og nullstilles via e-post.</p>
+<p>Tips: Trykk &laquo;GÃ¥ videre&raquo; for Ã¥ sjekke om spillernavnet er ledig fÃ¸r du fyller inn passordet for Ã¥ slippe Ã¥ fylle inn passordet hver gang.</p>
 <boxes />
 <form action="registrer" method="post">
 	<input type="hidden" name="step" value="3" />
 	<dl class="dl_30">
-		<dt>Ønsket spillernavn</dt>
+		<dt>Ã˜nsket spillernavn</dt>
 		<dd><input type="text" name="brukernavn" value="'.htmlspecialchars(postval("brukernavn")).'" class="styled w120" /></dd>
 		<dt>Passord</dt>
 		<dd><input type="password" name="passord1" class="styled w120" /></dd>
 		<dt>Gjenta passord</dt>
 		<dd><input type="password" name="passord2" class="styled w120" /></dd>
-		<dt>Hvor hørte du om SM?</dt>
+		<dt>Hvor hÃ¸rte du om SM?</dt>
 		<dd>
 			<select name="referer1" id="referer_select" onchange="checkReferer(this)">';
 		
@@ -607,7 +607,7 @@ function checkReferer(elm)
 		</dd>
 		<dt class="referer2p" id="referer2i">Spesifiser</dt>
 		<dd class="referer2p"><input type="text" name="referer2" value="'.htmlspecialchars(postval("referer2")).'" class="styled w250" /></dd>
-		<dd>'.show_sbutton("Gå videre").'</dd>
+		<dd>'.show_sbutton("GÃ¥ videre").'</dd>
 	</dl>
 </form>';
 		
@@ -642,13 +642,13 @@ function checkReferer(elm)
 			// er ikke alderen bekreftet?
 			elseif (!$alder)
 			{
-				ess::$b->page->add_message("Hvis du ikke har fylt 13 år kan du dessverre ikke registrere deg her.", "error");
+				ess::$b->page->add_message("Hvis du ikke har fylt 13 Ã¥r kan du dessverre ikke registrere deg her.", "error");
 			}
 			
-			// sjekk for første bruker
+			// sjekk for fÃ¸rste bruker
 			elseif (!$forste_bruker)
 			{
-				ess::$b->page->add_message("Hvis du allerede har en bruker fra før så bruk den! Å opprette ny konto gjør det bare dumt for deg selv og kan i værste tilfelle føre til politianmeldelse.", "error");
+				ess::$b->page->add_message("Hvis du allerede har en bruker fra fÃ¸r sÃ¥ bruk den! Ã… opprette ny konto gjÃ¸r det bare dumt for deg selv og kan i vÃ¦rste tilfelle fÃ¸re til politianmeldelse.", "error");
 			}
 			
 			else
@@ -657,7 +657,7 @@ function checkReferer(elm)
 				$result = ess::$b->db->query("SELECT id FROM bydeler WHERE active = 1 ORDER BY RAND()");
 				$bydel = mysql_result($result, 0);
 				
-				// sett opp nødvendig info
+				// sett opp nÃ¸dvendig info
 				$user = ess::$b->db->quote($this->info['user']);
 				$pass = ess::$b->db->quote($this->info['pass']);
 				$email = ess::$b->db->quote($this->info['email']);
@@ -708,7 +708,7 @@ function checkReferer(elm)
 				ess::$b->db->query("INSERT INTO users_players_rank SET upr_up_id = $up_id");
 				ranklist::update();
 				
-				// slett registrasjonsoppføringen
+				// slett registrasjonsoppfÃ¸ringen
 				ess::$b->db->query("DELETE FROM registration WHERE id = {$this->id}");
 				
 				ess::$b->db->commit();
@@ -717,7 +717,7 @@ function checkReferer(elm)
 				$email = new email();
 				$email->text = 'Hei,
 
-Du har registrert deg som '.$this->info['user'].' på Kofradia.
+Du har registrert deg som '.$this->info['user'].' pÃ¥ Kofradia.
 
 Velkommen til spillet!
 
@@ -727,7 +727,7 @@ www.kofradia.no';
 				$email->headers['Reply-To'] = "henvendelse@smafia.no";
 				$email->send($this->info['email'], "Velkommen til Kofradia");
 				
-				ess::$b->page->add_message('Velkommen til Kofradia!<br /><br />Du er nå registrert som <b>'.$this->info['user'].'</b> og automatisk logget inn.<br /><br />Sjekk ut menyen til venstre så ser du hva vi har å tilby i dag.<br /><br />Hvis du har noen spørsmål ta en titt under <a href="'.ess::$s['relative_path'].'/node">hjelp</a> og ta evt. kontakt med <a href="support/">support</a> om du ikke finner svar på det du lurer på!<br /><br />Ikke glem og les gjennom <a href="'.ess::$s['relative_path'].'/node/6">reglene for forumene</a> før du skriver i forumet. Lykke til i spillet!');
+				ess::$b->page->add_message('Velkommen til Kofradia!<br /><br />Du er nÃ¥ registrert som <b>'.$this->info['user'].'</b> og automatisk logget inn.<br /><br />Sjekk ut menyen til venstre sÃ¥ ser du hva vi har Ã¥ tilby i dag.<br /><br />Hvis du har noen spÃ¸rsmÃ¥l ta en titt under <a href="'.ess::$s['relative_path'].'/node">hjelp</a> og ta evt. kontakt med <a href="support/">support</a> om du ikke finner svar pÃ¥ det du lurer pÃ¥!<br /><br />Ikke glem og les gjennom <a href="'.ess::$s['relative_path'].'/node/6">reglene for forumene</a> fÃ¸r du skriver i forumet. Lykke til i spillet!');
 				
 				// hent antall medlemmer
 				$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_access_level < {$_game['access_noplay']} AND up_access_level != 0");
@@ -736,7 +736,7 @@ www.kofradia.no';
 				// logg inn brukeren
 				login::do_login($u_id, $this->info['pass'], LOGIN_TYPE_TIMEOUT, false);
 				
-				// slett registrasjonsoppføringen fra session etc
+				// slett registrasjonsoppfÃ¸ringen fra session etc
 				$this->trash();
 				
 				// sjekk om det er mulig multi
@@ -753,7 +753,7 @@ www.kofradia.no';
 					$names = array();
 					while ($row = mysql_fetch_assoc($result)) $names[] = $row['up_name'];
 					
-					putlog("CREWCHAN", "%b%c4NY REGISTERT, MULIG MULTI:%c%b (#$up_id) %u{$this->info['user']}%u registrerte seg. Andre spillere på IP-en: ".implode(", ", $names).". {$__server['path']}/admin/brukere/finn?ip=".rawurlencode($_SERVER['REMOTE_ADDR']));
+					putlog("CREWCHAN", "%b%c4NY REGISTERT, MULIG MULTI:%c%b (#$up_id) %u{$this->info['user']}%u registrerte seg. Andre spillere pÃ¥ IP-en: ".implode(", ", $names).". {$__server['path']}/admin/brukere/finn?ip=".rawurlencode($_SERVER['REMOTE_ADDR']));
 				}
 				
 				// videresend til hovedsiden
@@ -765,10 +765,10 @@ www.kofradia.no';
 <form action="registrer" method="post">
 	<input type="hidden" name="abort" />
 	<h1>Bekreftelse av betingelsene</h1>
-	<p class="h_right">'.show_sbutton("Avbryt registrering", 'onclick="return confirm(\'Er du sikker på at du vil AVBRYTE?\')"').'</p>
+	<p class="h_right">'.show_sbutton("Avbryt registrering", 'onclick="return confirm(\'Er du sikker pÃ¥ at du vil AVBRYTE?\')"').'</p>
 </form>
 <p>
-	På denne siden finner du en oversikt over betingelsene. Betingelsene er ikke lange og er kjapt å lese igjennom. Det er viktig at du er klar over innholdet i disse betingelsene og at du følger dem. Følger du ikke disse betingelsene vil brukeren din bli deaktivert. For å kunne opprette må du godta betingelsene.
+	PÃ¥ denne siden finner du en oversikt over betingelsene. Betingelsene er ikke lange og er kjapt Ã¥ lese igjennom. Det er viktig at du er klar over innholdet i disse betingelsene og at du fÃ¸lger dem. FÃ¸lger du ikke disse betingelsene vil brukeren din bli deaktivert. For Ã¥ kunne opprette mÃ¥ du godta betingelsene.
 </p>
 <boxes />
 <form action="registrer" method="post">
@@ -781,10 +781,10 @@ www.kofradia.no';
 		<input type="checkbox" name="betingelser" id="betingelser" /><label for="betingelser"> Jeg har lest gjennom og aksepterer betingelsene</label>
 	</p>
 	<p>
-		<input type="checkbox" name="alder" id="alder" /><label for="alder"> Jeg har fylt 13 år</label>
+		<input type="checkbox" name="alder" id="alder" /><label for="alder"> Jeg har fylt 13 Ã¥r</label>
 	</p>
 	<p>
-		<input type="checkbox" name="forste_bruker" id="forste_bruker" /><label for="forste_bruker"> Jeg har ingen bruker som er aktivert fra før av</label> <span class="dark">(Hvis du allerede har en bruker, må du deaktivere den <u>før</u> du registrerer deg på nytt.)</span>
+		<input type="checkbox" name="forste_bruker" id="forste_bruker" /><label for="forste_bruker"> Jeg har ingen bruker som er aktivert fra fÃ¸r av</label> <span class="dark">(Hvis du allerede har en bruker, mÃ¥ du deaktivere den <u>fÃ¸r</u> du registrerer deg pÃ¥ nytt.)</span>
 	</p>
 	<p>
 		'.show_sbutton("Opprett bruker").'
@@ -793,7 +793,7 @@ www.kofradia.no';
 <form action="registrer" method="post">
 	<input type="hidden" name="abort" />
 	<p>
-		'.show_sbutton("Avbryt registrering", 'onclick="return confirm(\'Er du sikker på at du vil AVBRYTE?\')"').'
+		'.show_sbutton("Avbryt registrering", 'onclick="return confirm(\'Er du sikker pÃ¥ at du vil AVBRYTE?\')"').'
 	</p>
 </form>';
 	}

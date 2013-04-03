@@ -12,7 +12,7 @@ global $irc_networks;
 
 /*
 
-dette må settes i lokale innstillinger:
+dette mÃ¥ settes i lokale innstillinger:
 
 global $irc_networks;
 $irc_networks = array(
@@ -55,7 +55,7 @@ if (!isset($irc_networks[$network]))
 }
 $network = $irc_networks[$network];
 
-// sørg for at det ikke er noen time limit
+// sÃ¸rg for at det ikke er noen time limit
 @set_time_limit(0);
 
 class irc_info_bot extends irc_info
@@ -154,7 +154,7 @@ class hs_irc
 		#$this->clear();
 	}
 	
-	// tøm alt og sett det opp "riktig"
+	// tÃ¸m alt og sett det opp "riktig"
 	function clear()
 	{
 		$this->socket = false;
@@ -255,7 +255,7 @@ class hs_irc
 	{
 		global $_base;
 		
-		// kjøre timer?
+		// kjÃ¸re timer?
 		$time = microtime(true);
 		if ($time > $this->next)
 		{
@@ -270,7 +270,7 @@ class hs_irc
 					$this->timers[$id][2] = $time + $timer[1];
 					$this->debug(NULL, "Timer: {$timer[0]}");
 					
-					// kjør timer
+					// kjÃ¸r timer
 					switch ($timer[0])
 					{
 						case "STATUS":
@@ -282,7 +282,7 @@ class hs_irc
 							
 							else
 							{
-								// hent antall pålogget
+								// hent antall pÃ¥logget
 								$time = 300;
 								
 								$last = time()-$time;
@@ -291,7 +291,7 @@ class hs_irc
 								mysql_free_result($result);
 								
 								$time = game::timespan($time, game::TIME_FULL | game::TIME_NOBOLD);
-								$this->msg($this->connected_cid, "#kofradia", "%c3php-cron: %bAntall pålogget siste $time%b: %u$ant%u");
+								$this->msg($this->connected_cid, "#kofradia", "%c3php-cron: %bAntall pÃ¥logget siste $time%b: %u$ant%u");
 							}
 							
 						break;
@@ -306,7 +306,7 @@ class hs_irc
 								{
 									if (!isset($this->sockets[$cid]))
 									{
-										// ikke tilkoblet - forsøk å koble til
+										// ikke tilkoblet - forsÃ¸k Ã¥ koble til
 										$this->connect($cid);
 										break;
 									}
@@ -347,7 +347,7 @@ class hs_irc
 								break;
 							}
 							
-							// gå gjennom hver melding og legg til der dem skal
+							// gÃ¥ gjennom hver melding og legg til der dem skal
 							while ($row = mysql_fetch_assoc($result))
 							{
 								$delay = time() - $row['li_time'];
@@ -382,7 +382,7 @@ class hs_irc
 							$limit = min($limit, $num);
 							#$_base->db->query("UPDATE log_irc SET li_deleted = 1, li_deleted_time = ".time()." WHERE li_network = ".$_base->db->quote($this->settings['name'])." AND li_deleted = 0 ORDER BY li_time LIMIT $limit");
 							
-							// forsøk å slette meldingene 3 ganger
+							// forsÃ¸k Ã¥ slette meldingene 3 ganger
 							for ($i = 0; $i < 3; $i++)
 							{
 								$val = $i == 2;
@@ -424,7 +424,7 @@ class hs_irc
 			
 			$select = socket_select($read, $write, $except, 0, $this->select_delay);
 			
-			// ingenting å lese?
+			// ingenting Ã¥ lese?
 			if ($select === false)
 			{
 				$this->critical_error("socket_select returned false (Err: ".socket_strerror(socket_last_error()).")");
@@ -465,7 +465,7 @@ class hs_irc
 				// legg til i tmp
 				$this->clients[$cid]['tmp'] .= $data;
 				
-				// gå gjennom hver linje utenom den siste (siden den mangler linjebrudd)
+				// gÃ¥ gjennom hver linje utenom den siste (siden den mangler linjebrudd)
 				while (($pos = strpos($this->clients[$cid]['tmp'], "\n")) !== false)
 				{
 					$line = substr($this->clients[$cid]['tmp'], 0, $pos);
@@ -812,7 +812,7 @@ class hs_irc
 						
 						if ($log)
 						{
-							// logg forespørselen
+							// logg forespÃ¸rselen
 							file_put_contents("irclog-".$this->settings['name'].".log", date("r") . " {$user['nick']}!{$user['ident']}@{$user['host']} $type $arg $content\n", FILE_APPEND);
 						}
 						
@@ -851,7 +851,7 @@ class hs_irc
 									mysql_free_result($result);
 									
 									$time = game::timespan($time, game::TIME_FULL | game::TIME_NOBOLD);
-									$this->msg($cid, $arg, "%bAntall pålogget siste $time%b: %u$ant%u");
+									$this->msg($cid, $arg, "%bAntall pÃ¥logget siste $time%b: %u$ant%u");
 								break;
 								
 								case "!info":
@@ -889,7 +889,7 @@ class hs_irc
 			$this->debug($cid, $line);
 			$this->handle_error($cid, "Error occured..");
 			
-			// koble til på nytt
+			// koble til pÃ¥ nytt
 			#$this->connect($cid);
 			break;
 			
@@ -987,7 +987,7 @@ class hs_irc
 	}*/
 	
 	/**
-	 * Nodesøk
+	 * NodesÃ¸k
 	 */
 	protected function node_search($cid, $dest, $search)
 	{
@@ -1010,7 +1010,7 @@ class hs_irc
 			return;
 		}
 		
-		// sett opp søkekriteriene
+		// sett opp sÃ¸kekriteriene
 		$search_list = search_query($search);
 		$search_list = $search_list[1];
 		$search_list2 = $search_list; // for delvise treff
@@ -1020,7 +1020,7 @@ class hs_irc
 			$q = '/(\\P{L}|^)'.preg_replace(array('/([\\/\\\\\\[\\]()$.+?|{}])/', '/\\*\\*+/', '/\\*/'), array('\\\\$1', '*', '\\S*'), $q).'(\\P{L}|$)/i';
 		}
 		
-		// sett opp søkeliste hvor vi søker med * på slutten av ordene
+		// sett opp sÃ¸keliste hvor vi sÃ¸ker med * pÃ¥ slutten av ordene
 		foreach ($search_list2 as &$q)
 		{
 			$q = '/'.preg_replace(array('/([\\/\\\\\\[\\]()$.+?|{}])/', '/\\*\\*+/', '/\\*/'), array('\\\\$1', '*', '\\S*'), $q).'/i';
@@ -1081,7 +1081,7 @@ class hs_irc
 			$number = $row['number'];
 		}
 		
-		// sett opp søkeresultater
+		// sett opp sÃ¸keresultater
 		$result = array();
 		$points = array();
 		$points2 = array();
@@ -1090,7 +1090,7 @@ class hs_irc
 		{
 			if ($row['data']['node_type'] != "container") continue;
 			
-			// utfør søk
+			// utfÃ¸r sÃ¸k
 			$found = true;
 			$p = 0;
 			$p2 = 0;
@@ -1099,7 +1099,7 @@ class hs_irc
 				$ok = false;
 				$matches = null;
 				
-				// søk i teksten
+				// sÃ¸k i teksten
 				if (preg_match_all($regex, $row['data']['plain'], $matches))
 				{
 					$ok = true;
@@ -1112,7 +1112,7 @@ class hs_irc
 					$p2 += count($matches[0]);
 				}
 				
-				// søk i tittelen
+				// sÃ¸k i tittelen
 				if (preg_match_all($regex, $row['data']['node_title'], $matches))
 				{
 					$ok = true;
@@ -1138,13 +1138,13 @@ class hs_irc
 			}
 		}
 		
-		// vis søkeresultater
+		// vis sÃ¸keresultater
 		if (count($result) == 0)
 		{
 			$this->msg($cid, $dest, "Ingen treff ble funnet.");
 		}
 		
-		// sorter søkeresultatene
+		// sorter sÃ¸keresultatene
 		array_multisort($points, SORT_DESC, SORT_NUMERIC, $points2, SORT_DESC, SORT_NUMERIC, $result);
 		
 		$this->msg($cid, $dest, count($result)." treff ble funnet - ".ess::$s['path'].'/node/search?q='.urlencode($search));

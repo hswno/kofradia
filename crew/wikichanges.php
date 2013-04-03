@@ -2,7 +2,7 @@
 
 require "config.php";
 
-// hvilke oppføringer skal vi hente fra?
+// hvilke oppfÃ¸ringer skal vi hente fra?
 $last = login::$user->params->get("wiki_last_seen");
 
 if (isset(game::$settings['wiki_last_changed']))

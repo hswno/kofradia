@@ -19,7 +19,7 @@ $status = array(
 	"crew" => array(
 		0 => "Ny",
 		1 => "Under behandling",
-		2 => "Venter på svar",
+		2 => "Venter pÃ¥ svar",
 		3 => "Ferdig behandlet",
 		4 => "Slettet"
 	),
@@ -42,7 +42,7 @@ if (isset($_GET['a']) && access::has("mod", NULL, NULL, true))
 	{
 		echo '
 <h1>Henvendelser</h1>
-<p>Du må logge inn for utvidede tilganger for å få tilgang til henvendelsene som er sendt inn.</p>';
+<p>Du mÃ¥ logge inn for utvidede tilganger for Ã¥ fÃ¥ tilgang til henvendelsene som er sendt inn.</p>';
 		
 		$_base->page->load();
 	}
@@ -83,7 +83,7 @@ if (isset($_GET['a']) && access::has("mod", NULL, NULL, true))
 			// ingen endringer
 			elseif ($content == "" && $n_status == $h['h_status'])
 			{
-				$_base->page->add_message("Ingen endringer ble utført.", "error");
+				$_base->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 			}
 			
 			// status til slettet og melding?
@@ -92,14 +92,14 @@ if (isset($_GET['a']) && access::has("mod", NULL, NULL, true))
 				$_base->page->add_message("Kan ikke legge til melding samtidig som status er/blir satt til slettet uten at den kun er synlig for Crewet.", "error");
 			}
 			
-			// forhåndsvise?
+			// forhÃ¥ndsvise?
 			elseif (isset($_POST['preview']))
 			{
-				$_base->page->add_message("Viser forhåndsvisning.");
+				$_base->page->add_message("Viser forhÃ¥ndsvisning.");
 				$preview = true;
 			}
 			
-			// utfør endringene
+			// utfÃ¸r endringene
 			else
 			{
 				$set = array();
@@ -128,7 +128,7 @@ if (isset($_GET['a']) && access::has("mod", NULL, NULL, true))
 				// oppdater cache
 				tasks::set("henvendelser", mysql_result($_base->db->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0"), 0));
 				
-				$_base->page->add_message("Endringene ble utført.".($email_content || $email_status ? ' E-post ble sendt.' : ''));
+				$_base->page->add_message("Endringene ble utfÃ¸rt.".($email_content || $email_status ? ' E-post ble sendt.' : ''));
 				
 				// sende e-post?
 				if ($email_content || $email_status)
@@ -159,14 +159,14 @@ Ny status: {$status['other'][$n_status]}";
 					{
 						$email->text .= "
 
-Denne henvendelsen trenger svar/mer informasjon. Gå inn på henvendelsen ved hjelp av linken ovenfor.";
+Denne henvendelsen trenger svar/mer informasjon. GÃ¥ inn pÃ¥ henvendelsen ved hjelp av linken ovenfor.";
 					}
 					
 					elseif ($email_content)
 					{
 						$email->text .= "
 
-For å lese og evt. besvare denne henvendelsen ytterligere må du gå inn på henvendelsen ved hjelp av linken ovenfor.";
+For Ã¥ lese og evt. besvare denne henvendelsen ytterligere mÃ¥ du gÃ¥ inn pÃ¥ henvendelsen ved hjelp av linken ovenfor.";
 					}
 					
 					$email->text .= "
@@ -280,7 +280,7 @@ Denne e-posten kan ikke besvares.";
 </div>
 <div class="henvendelser_meldinger">';
 		
-		// forhåndsvisning?
+		// forhÃ¥ndsvisning?
 		$preview_row = false;
 		if ($preview)
 		{
@@ -302,7 +302,7 @@ Denne e-posten kan ikke besvares.";
 			
 			echo '
 	<div class="henvendelser_melding'.($row['hm_type'] == 1 ? ' hm_crew' : '').'"'.($preview ? ' id="scroll_here"' : '').'>
-		<p class="hm_title"><span class="hm_by">'.($preview ? '<b>Forhåndsvisning:</b> ' : '').($row['hm_crew'] == 0 ? htmlspecialchars($h['h_name']) : 'Crew: <user id="'.$row['hm_up_id'].'" />').($row['hm_time'] > $h['h_last_visit'] ? ' (<b>IKKE SETT</b>)' : '').'</span> '.$_base->date->get($row['hm_time'])->format(date::FORMAT_SEC).'</p>
+		<p class="hm_title"><span class="hm_by">'.($preview ? '<b>ForhÃ¥ndsvisning:</b> ' : '').($row['hm_crew'] == 0 ? htmlspecialchars($h['h_name']) : 'Crew: <user id="'.$row['hm_up_id'].'" />').($row['hm_time'] > $h['h_last_visit'] ? ' (<b>IKKE SETT</b>)' : '').'</span> '.$_base->date->get($row['hm_time'])->format(date::FORMAT_SEC).'</p>
 		<div class="p hm_content">'.($bb ? (($data = game::format_data($row['hm_content'])) == "" ? '<i>Mangler data.</i>' : $data) : '<pre>'.nl2br(htmlspecialchars($row['hm_content'])).'</pre>').'</div>
 		'.($row['hm_type'] == 1 ? '<div class="hm_crewonly">Kun synlig for Crew</div>
 		' : '').'<p class="hm_footer">IP-adresse: <a href="admin/brukere/finn?ip='.urlencode($row['hm_ip']).'">'.htmlspecialchars($row['hm_ip']).'</a><br />('.htmlspecialchars($row['hm_browser']).')</p>
@@ -313,7 +313,7 @@ Denne e-posten kan ikke besvares.";
 </div>
 <div class="h_reply">
 	<p class="h_title">Behandle henvendelse</p>
-	<p>Statusen på henvendelsen kan endres uten at det må legges til en besvarelse. I så fall må besvarelse feltet være helt tomt.</p>
+	<p>Statusen pÃ¥ henvendelsen kan endres uten at det mÃ¥ legges til en besvarelse. I sÃ¥ fall mÃ¥ besvarelse feltet vÃ¦re helt tomt.</p>
 	<form action="" method="post">
 		<input type="hidden" name="reply" />
 		<div class="henv_left">
@@ -328,15 +328,15 @@ Denne e-posten kan ikke besvares.";
 			0 = ny (ikke behandlet)
 				kun ved nye meldinger fra bruker
 			1 = under behandling
-				når som helst
-			2 = venter på svar
-				når som helst
+				nÃ¥r som helst
+			2 = venter pÃ¥ svar
+				nÃ¥r som helst
 				send e-post
 			3 = lukket
-				når som helst
+				nÃ¥r som helst
 				send e-post
 			4 = slettet
-				når som helst
+				nÃ¥r som helst
 				kan ikke sende e-post
 		*/
 		
@@ -353,7 +353,7 @@ Denne e-posten kan ikke besvares.";
 			$boxes[] = '<input type="radio" name="status" value="'.$id.'" id="status_'.$id.'"'.($checked_id == $id && ($checked = true) ? ' checked="checked"' : '').' /><label for="status_'.$id.'"> '.htmlspecialchars($name).'</label>'.$suffix;
 		}
 		
-		// ingen endring (kan ikke være "ny" (id = 0))
+		// ingen endring (kan ikke vÃ¦re "ny" (id = 0))
 		if ($h['h_status'] != 0) array_unshift($boxes, '<input type="radio" name="status" value="-1" id="status_none"'.(!$checked ? ' checked="checked"' : '').' /><label for="status_none"> Ingen endring ('.htmlspecialchars(strtolower($status['crew'][$h['h_status']])).')</label>');
 		
 		echo '
@@ -363,7 +363,7 @@ Denne e-posten kan ikke besvares.";
 			</p>
 		</div>
 		<div class="clear"></div>
-		<p class="c">'.show_sbutton("Utfør", 'name="add"').' '.show_sbutton("Forhåndsvis", 'name="preview"').'</p>
+		<p class="c">'.show_sbutton("UtfÃ¸r", 'name="add"').' '.show_sbutton("ForhÃ¥ndsvis", 'name="preview"').'</p>
 	</form>
 </div>';
 	}
@@ -538,7 +538,7 @@ if (isset($_SESSION[$GLOBALS['__server']['session_prefix'].'henvendelser_email']
 if (isset($_GET['logout']) && $user)
 {
 	unset($_SESSION[$GLOBALS['__server']['session_prefix'].'henvendelser_email']);
-	$_base->page->add_message("Du er nå logget ut fra dine henvendelser.");
+	$_base->page->add_message("Du er nÃ¥ logget ut fra dine henvendelser.");
 	redirect::handle();
 }
 
@@ -561,13 +561,13 @@ if (isset($_REQUEST['id']))
 	$id = intval($_REQUEST['id']);
 	$email = $user ? $user : requestval('email');
 	
-	// finn oppføringen
+	// finn oppfÃ¸ringen
 	$result = $_base->db->query("SELECT h_id, h_email FROM henvendelser WHERE h_random = $id AND h_email = ".$_base->db->quote($email)." AND h_status != 4 ORDER BY h_hm_time DESC LIMIT 1");
 	$row = mysql_fetch_assoc($result);
 	
 	if (!$row)
 	{
-		$_base->page->add_message("Fant ikke oppføringen.", "error");
+		$_base->page->add_message("Fant ikke oppfÃ¸ringen.", "error");
 		redirect::handle();
 	}
 	
@@ -579,7 +579,7 @@ if (isset($_REQUEST['id']))
 			$_SESSION[$GLOBALS['__server']['session_prefix'].'henvendelser_last_hit'] = time();
 		}
 		
-		#$_base->page->add_message("Du er nå logget inn som ".htmlspecialchars($row['h_email']).".");
+		#$_base->page->add_message("Du er nÃ¥ logget inn som ".htmlspecialchars($row['h_email']).".");
 		redirect::handle("henvendelser?h_id={$row['h_id']}");
 	}
 }
@@ -597,25 +597,25 @@ if (isset($_POST['new']) && (isset($_POST['add']) || isset($_POST['preview'])))
 	// sjekk kategori
 	if (!isset($categories[$category]))
 	{
-		$_base->page->add_message("Du må velge en kategori.", "error");
+		$_base->page->add_message("Du mÃ¥ velge en kategori.", "error");
 	}
 	
 	// sjekk navn
 	elseif (strlen($name) == 0)
 	{
-		$_base->page->add_message("Du må fylle ut et navn.", "error");
+		$_base->page->add_message("Du mÃ¥ fylle ut et navn.", "error");
 	}
 	
 	// sjekk e-post
 	elseif (!game::validemail($email))
 	{
-		$_base->page->add_message("Du må skrive inn en gyldig e-postadresse.", "error");
+		$_base->page->add_message("Du mÃ¥ skrive inn en gyldig e-postadresse.", "error");
 	}
 	
 	// sjekk emne
 	elseif (strlen($subject) == 0)
 	{
-		$_base->page->add_message("Du må fylle ut et emne.", "error");
+		$_base->page->add_message("Du mÃ¥ fylle ut et emne.", "error");
 	}
 	
 	// sjekk innhold
@@ -627,14 +627,14 @@ if (isset($_POST['new']) && (isset($_POST['add']) || isset($_POST['preview'])))
 	elseif (isset($_POST['preview']))
 	{
 		$preview = true;
-		$_base->page->add_message("Viser forhåndsvisning.");
+		$_base->page->add_message("Viser forhÃ¥ndsvisning.");
 	}
 	
 	else
 	{
 		$_base->db->begin();
 		
-		// legg til hovedoppføring
+		// legg til hovedoppfÃ¸ring
 		$random = rand(10000, 99999);
 		$_base->db->query("INSERT INTO henvendelser SET h_name = ".$_base->db->quote($name).", h_category = ".$_base->db->quote($categories[$category]).", h_email = ".$_base->db->quote($email).", h_subject = ".$_base->db->quote($subject).", h_time = ".time().", h_hm_time = ".time().", h_random = $random");
 		$h_id = $_base->db->insert_id();
@@ -652,9 +652,9 @@ if (isset($_POST['new']) && (isset($_POST['add']) || isset($_POST['preview'])))
 		$mail = new email();
 		$mail->text = "Hei $name,
 
-Din henvendelse er nå levert til Kofradia Crewet. Henvendelsen vil bli besvart hvis det er behov for det, og du vil motta e-post når det blir gjort endringer til din henvendelse.
+Din henvendelse er nÃ¥ levert til Kofradia Crewet. Henvendelsen vil bli besvart hvis det er behov for det, og du vil motta e-post nÃ¥r det blir gjort endringer til din henvendelse.
 
-Du kan når som helst logge inn og lese din henvendelse og legge til ytterligere informasjon og nye meldinger. Da er du nødt til å logge inn med en spesiell ID sammen med e-posten din.
+Du kan nÃ¥r som helst logge inn og lese din henvendelse og legge til ytterligere informasjon og nye meldinger. Da er du nÃ¸dt til Ã¥ logge inn med en spesiell ID sammen med e-posten din.
 
 Din ID er: $random
 E-post registert: $email
@@ -694,7 +694,7 @@ $content
 		
 		if ($user)
 		{
-			$_base->page->add_message("Din henvendelse er levert. Sjekk også e-posten din.");
+			$_base->page->add_message("Din henvendelse er levert. Sjekk ogsÃ¥ e-posten din.");
 		}
 		else
 		{
@@ -721,8 +721,8 @@ if ($user)
 <div class="section w350 center">
 	<h2>Ny henvendelse</h2>
 	<p>Husk at hvis denne henvendelsen er relatert noen andre av dine henvendelser er det bedre at du legger inn <u>svar</u> i de henvendelsene <u>enn at du oppretter en ny henvendelse</u>.</p>
-	<p><u>Det kan ta tid før dine henvendelser blir besvart.</u> Respekter dette og ikke send inn gjentatte nye henvendelser.</p>
-	<p>Hvis henvendelsen ikke er markert som <u>ferdig behandlet</u>, vil den hele tiden komme opp i vårt system.</p>
+	<p><u>Det kan ta tid fÃ¸r dine henvendelser blir besvart.</u> Respekter dette og ikke send inn gjentatte nye henvendelser.</p>
+	<p>Hvis henvendelsen ikke er markert som <u>ferdig behandlet</u>, vil den hele tiden komme opp i vÃ¥rt system.</p>
 	<form action="" method="post" autocomplete="off">
 		<input type="hidden" name="new" />
 		<dl class="dl_30 dl_2x">
@@ -751,10 +751,10 @@ echo '
 			<dd><input type="text" name="subject" value="'.htmlspecialchars(postval("subject")).'" class="styled w150" /></dd>
 			<dt>Din henvendelse</dt>
 			<dd><textarea name="content" rows="10" cols="35">'.htmlspecialchars(postval("content")).'</textarea></dd>'.($preview ? '
-			<dt>Forhåndsvisning</dt>
+			<dt>ForhÃ¥ndsvisning</dt>
 			<dd>'.game::format_data($content).'</dd>' : '').'
 		</dl>
-		<p class="c">'.show_sbutton("Send inn henvendelse", 'name="add"').' '.show_sbutton("Forhåndsvisning", 'name="preview"').'</p>
+		<p class="c">'.show_sbutton("Send inn henvendelse", 'name="add"').' '.show_sbutton("ForhÃ¥ndsvisning", 'name="preview"').'</p>
 	</form>
 </div>';
 		$_base->page->load();
@@ -793,7 +793,7 @@ echo '
 			elseif (isset($_POST['preview']))
 			{
 				$preview = true;
-				$_base->page->add_message("Viser forhåndsvisning");
+				$_base->page->add_message("Viser forhÃ¥ndsvisning");
 			}
 			
 			else
@@ -839,7 +839,7 @@ $content
 <p class="h_info"><span class="h_title">'.htmlspecialchars($h['h_category']).': '.htmlspecialchars($h['h_subject']).'</span> '.$status['other'][$h['h_status']].'</p>
 <div class="henvendelser_meldinger">';
 		
-		// forhåndsvisning?
+		// forhÃ¥ndsvisning?
 		$preview_row = false;
 		if ($preview)
 		{
@@ -859,7 +859,7 @@ $content
 			
 			echo '
 	<div class="henvendelser_melding"'.($preview ? ' id="scroll_here"' : '').'>
-		<p class="hm_title"><span class="hm_by">'.($preview ? '<b>Forhåndsvisning:</b> ' : '').($row['hm_crew'] == 0 ? htmlspecialchars($h['h_name']) : '<b>Besvarelse</b>').'</span> '.$_base->date->get($row['hm_time'])->format(date::FORMAT_SEC).'</p>
+		<p class="hm_title"><span class="hm_by">'.($preview ? '<b>ForhÃ¥ndsvisning:</b> ' : '').($row['hm_crew'] == 0 ? htmlspecialchars($h['h_name']) : '<b>Besvarelse</b>').'</span> '.$_base->date->get($row['hm_time'])->format(date::FORMAT_SEC).'</p>
 		<div class="p hm_content">'.($bb ? game::format_data($row['hm_content']) : '<pre>'.nl2br(htmlspecialchars($row['hm_content'])).'</pre>').'</div>'.($row['hm_crew'] == 0 ? '
 		<p class="hm_footer">IP-adresse: '.htmlspecialchars($row['hm_ip']).'<br />('.htmlspecialchars($row['hm_browser']).')</p>' : '').'
 	</div>';
@@ -871,7 +871,7 @@ $content
 	<form action="" method="post">
 		<input type="hidden" name="reply" />
 		<p><textarea name="content" rows="7" cols="50">'.htmlspecialchars(postval("content")).'</textarea></p>
-		<p>'.show_sbutton("Legg til melding", 'name="add"').' '.show_sbutton("Forhåndsvis", 'name="preview"').'</p>
+		<p>'.show_sbutton("Legg til melding", 'name="add"').' '.show_sbutton("ForhÃ¥ndsvis", 'name="preview"').'</p>
 	</form>
 </div>';
 	}
@@ -978,7 +978,7 @@ if (isset($_GET['forgot']))
 
 Du har bedt om en oversikt over dine henvendelser som er sendt inn til Kofradia.
 
-Du kan når som helst logge inn og lese dine henvendelse og legge til ytterligere informasjon og nye meldinger. Da er du nødt til å logge inn med en spesiell ID sammen med e-posten din.
+Du kan nÃ¥r som helst logge inn og lese dine henvendelse og legge til ytterligere informasjon og nye meldinger. Da er du nÃ¸dt til Ã¥ logge inn med en spesiell ID sammen med e-posten din.
 
 ---
 
@@ -999,7 +999,7 @@ Denne e-posten kan ikke besvares.
 Takk for din henvendelse.";
 			$mail->send(strtolower($email), "Dine henvendelser");
 			
-			$_base->page->add_message("E-post er nå sendt til <b>".htmlspecialchars(strtolower($email))."</b> med detaljer.");
+			$_base->page->add_message("E-post er nÃ¥ sendt til <b>".htmlspecialchars(strtolower($email))."</b> med detaljer.");
 			redirect::handle("henvendelser");
 		}
 	}
@@ -1009,7 +1009,7 @@ Takk for din henvendelse.";
 <p class="h_right"><a href="henvendelser">Tilbake</a></p>
 <div class="section w300 center">
 	<h2>Glemt ID</h2>
-	<p>Ved å benytte dette skjemaet vil du få tilsendt liten oversikt over alle dine henvendelser og ID-er tilknyttet de.</p>
+	<p>Ved Ã¥ benytte dette skjemaet vil du fÃ¥ tilsendt liten oversikt over alle dine henvendelser og ID-er tilknyttet de.</p>
 	<form action="" method="post" autocomplete="off">
 		<dl class="dd_right dl_2x">
 			<dt>E-postadresse</dt>
@@ -1030,9 +1030,9 @@ Takk for din henvendelse.";
 echo '
 <div class="section w350 center">
 	<h2>Ny henvendelse</h2>
-	<p>Har du allerede sendt inn henvendelse? Bruk <a href="henvendelser?forgot">denne siden</a> til å motta link. <u>Svar</u> i en evt. innsendt henvendelse, i stedet for å opprette ny.</p>
-	<p><u>Det kan ta tid før dine henvendelser blir besvart.</u> Respekter dette og ikke send inn gjentatte nye henvendelser.</p>
-	<p>Hvis henvendelsen ikke er markert som <u>ferdig behandlet</u>, vil den hele tiden komme opp i vårt system.</p>
+	<p>Har du allerede sendt inn henvendelse? Bruk <a href="henvendelser?forgot">denne siden</a> til Ã¥ motta link. <u>Svar</u> i en evt. innsendt henvendelse, i stedet for Ã¥ opprette ny.</p>
+	<p><u>Det kan ta tid fÃ¸r dine henvendelser blir besvart.</u> Respekter dette og ikke send inn gjentatte nye henvendelser.</p>
+	<p>Hvis henvendelsen ikke er markert som <u>ferdig behandlet</u>, vil den hele tiden komme opp i vÃ¥rt system.</p>
 	<form action="" method="post" autocomplete="off">
 		<input type="hidden" name="new" />
 		<dl class="dl_30 dl_2x">
@@ -1063,15 +1063,15 @@ echo '
 			<dd><input type="text" name="subject" value="'.htmlspecialchars(postval("subject")).'" class="styled w150" /></dd>
 			<dt>Din henvendelse</dt>
 			<dd><textarea name="content" rows="10" cols="35">'.htmlspecialchars(postval("content")).'</textarea></dd>'.($preview ? '
-			<dt>Forhåndsvisning</dt>
+			<dt>ForhÃ¥ndsvisning</dt>
 			<dd>'.game::format_data($content).'</dd>' : '').'
 		</dl>
-		<p class="c">'.show_sbutton("Send inn henvendelse", 'name="add"').' '.show_sbutton("Forhåndsvis", 'name="preview"').'</p>
+		<p class="c">'.show_sbutton("Send inn henvendelse", 'name="add"').' '.show_sbutton("ForhÃ¥ndsvis", 'name="preview"').'</p>
 	</form>
 </div>
 <div class="section w350 center">
 	<h2>Mine henvendelser</h2>
-	<p class="j">For å få tilgang til henvendelsene du har sendt inn må du logge inn. Du får ny ID ved hver henvendelse, men alle ID-ene gir deg tilgang til alle henvendelsene.</p>
+	<p class="j">For Ã¥ fÃ¥ tilgang til henvendelsene du har sendt inn mÃ¥ du logge inn. Du fÃ¥r ny ID ved hver henvendelse, men alle ID-ene gir deg tilgang til alle henvendelsene.</p>
 	<form action="" method="post" autocomplete="off">
 		<dl class="dl_30 dl_2x">
 			<dt>ID - <a href="henvendelser?forgot">Glemt ID?</a></dt>

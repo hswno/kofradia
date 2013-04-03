@@ -3,8 +3,8 @@
  * Skrevet av Henrik Steen
  * www.henrist.net
  *
- * Beskyttet av åndsverkloven
- * Alle rettigheter tilhører Henrik Steen dersom ikke annet er oppgitt
+ * Beskyttet av Ã¥ndsverkloven
+ * Alle rettigheter tilhÃ¸rer Henrik Steen dersom ikke annet er oppgitt
  *
  * Copyright (c) 2010 All rights reserved
  */
@@ -48,11 +48,11 @@ var SupportHenvendelse = new Class({
 				.removeClass("hide")
 				.fade("in");
 			
-			// forhåndsvis innhold
+			// forhÃ¥ndsvis innhold
 			preview_bb(null, $("support_reply_text").get("value"), [], "support_reply_preview_view");
 		});
 		
-		// fjerne forhåndsvisningen
+		// fjerne forhÃ¥ndsvisningen
 		$$("#support_reply_preview h2").addEvent("click", function()
 		{
 			$("support_reply_preview").addClass("hide");
@@ -131,14 +131,14 @@ var SupportHenvendelse = new Class({
 	/** Starte timer */
 	timer_start: function()
 	{
-		// skal ikke starte, evt. kjører?
+		// skal ikke starte, evt. kjÃ¸rer?
 		if (!this.timer_enabled || this.timer_state) return;
 		this.timer_state = true;
 		
-		// må opprette xhr?
+		// mÃ¥ opprette xhr?
 		if (!this.xhr) this.create_xhr();
 		
-		// oppdater info nå
+		// oppdater info nÃ¥
 		this.xhr.send();
 		
 		// stopp mulig timer og aktiver ny
@@ -149,7 +149,7 @@ var SupportHenvendelse = new Class({
 	/** Stopp timer */
 	timer_stop: function()
 	{
-		// kjører ikke?
+		// kjÃ¸rer ikke?
 		if (!this.timer_state) return;
 		this.timer_state = false;
 		

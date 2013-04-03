@@ -21,7 +21,7 @@ function checkTabEnter(e, textarea)
 			var begin = textarea.value.substr(0, textarea.selectionStart);
 			var end = textarea.value.substr(textarea.selectionEnd);
 			
-			// finn forrige \n før begin
+			// finn forrige \n fÃ¸r begin
 			var tabs = "";
 			var line_start = begin.lastIndexOf("\n");
 			//if (line_start != -1) {

@@ -12,7 +12,7 @@ echo '
 <div class="bg1_c">
 	<h1 class="bg1">Pokerkort<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p>Dette er et eksempel på pokerkort.</p>';
+		<p>Dette er et eksempel pÃ¥ pokerkort.</p>';
 
 $e = 0;
 foreach (array("klover", "spar", "ruter", "hjerter") as $farge)

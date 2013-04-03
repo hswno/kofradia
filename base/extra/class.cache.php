@@ -5,10 +5,10 @@ cache::init();
 
 class cache
 {
-	/** Prefiks for nøkkelen */
+	/** Prefiks for nÃ¸kkelen */
 	protected static $prefix = null;
 	
-	/** For å deaktivere caching */
+	/** For Ã¥ deaktivere caching */
 	protected static $disabled = false;
 	
 	/**

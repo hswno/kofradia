@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Dette scriptet henter topp 10 spillere på ranklista
- * mellom 21:00 dagen før og 21:00 i dag og gir bonus
+ * Dette scriptet henter topp 10 spillere pÃ¥ ranklista
+ * mellom 21:00 dagen fÃ¸r og 21:00 i dag og gir bonus
  * til spillerene
  */
 
@@ -14,7 +14,7 @@ $date_from = $d->format("U");
 $d->modify("+1 day");
 $date_to = $d->format("U");
 
-// tabell over hvor mange prosent bonus man får
+// tabell over hvor mange prosent bonus man fÃ¥r
 $tabell = array(
 	1 => .3,
 	.27,

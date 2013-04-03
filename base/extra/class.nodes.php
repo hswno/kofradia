@@ -26,7 +26,7 @@ nodes::main();
 class nodes
 {
 	/**
-	 * Standard node (første som skal vises)
+	 * Standard node (fÃ¸rste som skal vises)
 	 */
 	public static $default_node = 1;
 	
@@ -181,7 +181,7 @@ class nodes
 			// gi tilgang
 			if (self::$node_info['node_enabled'] > 0)
 			{
-				ess::$b->page->add_message("En av foreldrene til denne siden er deaktivert og derfor er også denne siden deaktivert. Du kan vise den fordi du er logget inn.");
+				ess::$b->page->add_message("En av foreldrene til denne siden er deaktivert og derfor er ogsÃ¥ denne siden deaktivert. Du kan vise den fordi du er logget inn.");
 			}
 			else
 			{
@@ -198,7 +198,7 @@ class nodes
 			
 			if ($ant == 0)
 			{
-				ess::$b->page->add_message("Det finnes ingen deaktiverte enheter på denne siden.");
+				ess::$b->page->add_message("Det finnes ingen deaktiverte enheter pÃ¥ denne siden.");
 			}
 			else
 			{
@@ -340,7 +340,7 @@ class nodes
 	}
 	
 	/**
-	 * Hent ut typenavnet på en enhet i noden
+	 * Hent ut typenavnet pÃ¥ en enhet i noden
 	 * @param array $unit
 	 */
 	public static function content_type($unit)
@@ -447,7 +447,7 @@ class nodes
 			{
 				$row = self::$nodes[$row];
 				
-				// er vi på denne? (uthev den)
+				// er vi pÃ¥ denne? (uthev den)
 				$active = $row['node_id'] == self::$node_id || (!$expand_more && in_array($row['node_id'], $parent_nodes)) ? ' class="active"' : '';
 				
 				// innholdet

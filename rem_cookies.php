@@ -20,5 +20,5 @@ echo $u;
 
 echo '
 <br />
-Hvis du laster denne siden umiddelbart på nytt og den sletter flere (samme) cookies må du sannsynligvis slette cookies manuelt i nettleseren din.<br />
-Se i så fall <a href="http://www.aboutcookies.org/Default.aspx?page=2">http://www.aboutcookies.org/Default.aspx?page=2</a>';
+Hvis du laster denne siden umiddelbart pÃ¥ nytt og den sletter flere (samme) cookies mÃ¥ du sannsynligvis slette cookies manuelt i nettleseren din.<br />
+Se i sÃ¥ fall <a href="http://www.aboutcookies.org/Default.aspx?page=2">http://www.aboutcookies.org/Default.aspx?page=2</a>';

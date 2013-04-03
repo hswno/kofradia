@@ -84,7 +84,7 @@ class page_julekalender extends pages_player
 		echo '
 	<p>Viser dag: '.$day.'. desember</p>
 	<p><a href="&rpath;/?jul">Tilbake til oversikten</a></p>
-	<p>Spørsmål: '.$data[$day]['j_question'].'</p>
+	<p>SpÃ¸rsmÃ¥l: '.$data[$day]['j_question'].'</p>
 	<p>Riktig svar: '.$data[$day]['j_answer'].'</p>
 	<form action="?jul&amp;day='.$day.'" method="post">
 		<p><i>Velg de som har gitt riktig besvarelse:</i></p>
@@ -158,10 +158,10 @@ class page_julekalender extends pages_player
 			}
 
 			$status = $day > $today
-				? 'Uåpnet'
+				? 'UÃ¥pnet'
 				: ($day == $today
 					? 'Dagens luke'
-					: ($row['j_status'] == 1 ? 'Avsluttet' : '<a href="?jul&amp;day='.$day.'">Må behandles</a>'));
+					: ($row['j_status'] == 1 ? 'Avsluttet' : '<a href="?jul&amp;day='.$day.'">MÃ¥ behandles</a>'));
 
 			$deltakere = isset($stats[$day]) ? $stats[$day]['num_up'] : '&nbsp;';
 			if ($row['j_status'] == 1 && isset($stats[$day])) $deltakere .= ' ('.$stats[$day]['num_correct'].' riktig)';
@@ -191,7 +191,7 @@ class page_julekalender extends pages_player
 		$my_answers = $this->obj->load_my_answers();
 
 		if ($day != $today) {
-			ess::$b->page->add_message("Du forsøkte å legge til svar på en annen dag.", "error");
+			ess::$b->page->add_message("Du forsÃ¸kte Ã¥ legge til svar pÃ¥ en annen dag.", "error");
 			return;
 		}
 
@@ -210,7 +210,7 @@ class page_julekalender extends pages_player
 				redirect::handle();
 			}
 
-			ess::$b->page->add_message("Du må fylle inn et svar.", "error");
+			ess::$b->page->add_message("Du mÃ¥ fylle inn et svar.", "error");
 			return;
 		}
 
@@ -269,7 +269,7 @@ class page_julekalender extends pages_player
 			if (!$day) {
 				echo '
 					<div class="jul_data">
-						<p>Ingen spørsmål denne dagen.</p>
+						<p>Ingen spÃ¸rsmÃ¥l denne dagen.</p>
 					</div>';
 			}
 			
@@ -277,7 +277,7 @@ class page_julekalender extends pages_player
 			elseif ($day['j_day'] > $today) {
 				echo '
 					<div class="jul_data">
-						<p>Kom tilbake '.$n.'. desember for å se denne luken.</p>
+						<p>Kom tilbake '.$n.'. desember for Ã¥ se denne luken.</p>
 					</div>';
 			}
 
@@ -301,7 +301,7 @@ class page_julekalender extends pages_player
 					};
 					
 					if (isset($answers[$day['j_day']][1]))
-						$winners[] = 'Førsteplass: '.sentences_list(array_map($user, $answers[$day['j_day']][1]));
+						$winners[] = 'FÃ¸rsteplass: '.sentences_list(array_map($user, $answers[$day['j_day']][1]));
 
 					if (isset($answers[$day['j_day']][2]))
 						$winners[] = 'Deltakerpremie: '.sentences_list(array_map($user, $answers[$day['j_day']][2]));
@@ -332,7 +332,7 @@ class page_julekalender extends pages_player
 			// dagens luke?
 			else {
 				$up_alert = $my_answer && $my_answer['jb_up_id'] != $this->up->id ? '
-							<p><i style="color: #FF0000"><b>Obs!</b> Ditt svar gjelder ikke din nåværende spiller. Du må trykke &quot;svar&quot; for å delta med din nye spiller.</i></p>' : '';
+							<p><i style="color: #FF0000"><b>Obs!</b> Ditt svar gjelder ikke din nÃ¥vÃ¦rende spiller. Du mÃ¥ trykke &quot;svar&quot; for Ã¥ delta med din nye spiller.</i></p>' : '';
 
 				echo '
 					<div class="jul_data">
@@ -354,8 +354,8 @@ class page_julekalender extends pages_player
 		--></div>
 		<div class="jul_notes">
 			<p>Det velges en tilfeldig vinner hver dag blant alle korrekte svar. Premie: 10 mill kr og 1 500 poeng.</p>
-			<p>Det velges også ut en tilfeldig deltaker hver dag av alle som deltar: Premie 5 mill kr og 1 000 poeng.</p>
-			<p>Dobbel premie på julaften.</p>
+			<p>Det velges ogsÃ¥ ut en tilfeldig deltaker hver dag av alle som deltar: Premie 5 mill kr og 1 000 poeng.</p>
+			<p>Dobbel premie pÃ¥ julaften.</p>
 		</div>
 	</section>
 </article>';

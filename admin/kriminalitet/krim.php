@@ -14,7 +14,7 @@ if (mysql_num_rows($result) == 0)
 $krim = mysql_fetch_assoc($result);
 $bydel = &game::$bydeler[$krim['b_id']];
 
-// hent statistikk: antall brukere forsøkt, antall forsøk totalt, antall vellykkede, antall brukere med vellykkede
+// hent statistikk: antall brukere forsÃ¸kt, antall forsÃ¸k totalt, antall vellykkede, antall brukere med vellykkede
 $result = $_base->db->query("SELECT COUNT(ks_up_id) num_users, SUM(count) sum_count, SUM(success) sum_success, COUNT(IF(success > 0, 1, NULL)) num_success FROM kriminalitet_status WHERE krimid = {$krim['id']}");
 $stats = mysql_fetch_assoc($result);
 
@@ -24,7 +24,7 @@ $_base->page->add_title($krim['name']);
 // endre tekster
 if (isset($_POST['change_texts']))
 {
-	// noen å slette?
+	// noen Ã¥ slette?
 	if (isset($_POST['slett']) && is_array($_POST['slett']))
 	{
 		$slett = array();
@@ -36,7 +36,7 @@ if (isset($_POST['change_texts']))
 		$_base->page->add_message(count($slett).' tekst(er) ble slettet!');
 	}
 	
-	// noen å legge til?
+	// noen Ã¥ legge til?
 	if (isset($_POST['success']) && is_array($_POST['success']))
 	{
 		$add = array();
@@ -72,14 +72,14 @@ if (isset($_POST['change_texts']))
 }
 
 
-// rediger oppføring?
+// rediger oppfÃ¸ring?
 if (isset($_POST['title']))
 {
 	$title = trim(postval("title"));
 	
 	if (strlen($title) < 5)
 	{
-		$_base->page->add_message("Tittelen må være på 4 eller flere tegn.", "error");
+		$_base->page->add_message("Tittelen mÃ¥ vÃ¦re pÃ¥ 4 eller flere tegn.", "error");
 	}
 	
 	else
@@ -109,7 +109,7 @@ echo '
 </p>
 <form action="krim?id='.$krim['id'].'" method="post">
 	<div class="section w300">
-		<h2>Oppføring</h2>
+		<h2>OppfÃ¸ring</h2>
 		<dl class="dd_right">
 			<dt>Tittel</dt>
 			<dd><input type="text" name="title" value="'.htmlspecialchars(postval("title", $krim['name'])).'" class="styled w200" /></dd>
@@ -128,16 +128,16 @@ echo '
 			</dd>
 		</dl>
 	</div>
-	<p class="c">'.show_sbutton("Oppdater oppføring").'</p>
+	<p class="c">'.show_sbutton("Oppdater oppfÃ¸ring").'</p>
 </form>
 <div class="section w300">
 	<h2>Statistikk</h2>
 	<dl class="dd_right">
-		<dt>Antall brukere forsøkt</dt>
+		<dt>Antall brukere forsÃ¸kt</dt>
 		<dd>'.game::format_number($stats['num_users']).'</dd>
 		<dt>Antall brukere med vellykkede</dt>
 		<dd>'.game::format_number($stats['num_success']).($stats['num_users'] > 0 ? ' ('.game::format_number($stats['num_success']/$stats['num_users']*100, 1).' %)' : '').'</dd>
-		<dt>Totalt antall forsøk</dt>
+		<dt>Totalt antall forsÃ¸k</dt>
 		<dd>'.game::format_number($stats['sum_count']).'</dd>
 		<dt>Totalt antall vellykkede</dt>
 		<dd>'.game::format_number($stats['sum_success']).($stats['sum_count'] > 0 ? ' ('.game::format_number($stats['sum_success']/$stats['sum_count']*100, 1).' %)' : '').'</dd>
@@ -215,8 +215,8 @@ echo '
 echo '
 	<div class="section center w300">
 		<h2>Vellykkede tekster</h2>
-		<p class="h_right"><a href="javascript:void(0)" onclick="krim.create(\'success\')">Ny oppføring</a></p>
-		<p>Bruk dette for å erstatte tekst:</p>
+		<p class="h_right"><a href="javascript:void(0)" onclick="krim.create(\'success\')">Ny oppfÃ¸ring</a></p>
+		<p>Bruk dette for Ã¥ erstatte tekst:</p>
 		<dl class="dd_right">
 			<dt>%cash</dt>
 			<dd>med gevinst (## kr)</dd>
@@ -256,7 +256,7 @@ echo '
 echo '
 	<div class="section center w300">
 		<h2>Mislykkede tekster</h2>
-		<p class="h_right"><a href="javascript:void(0)" onclick="krim.create(\'failure\')">Ny oppføring</a></p>
+		<p class="h_right"><a href="javascript:void(0)" onclick="krim.create(\'failure\')">Ny oppfÃ¸ring</a></p>
 		<table class="table tablem" width="100%">
 			<thead>
 				<tr>

@@ -13,8 +13,8 @@ echo '
 	<p>
 		<select name="data_file" onchange="this.form.submit()">
 			<option>Velg..</option>
-			<option value="graphs/users">Antall nye og døde brukere siste periode</option>
-			<option value="graphs/record_online">Rekord for antall pålogget</option>
+			<option value="graphs/users">Antall nye og dÃ¸de brukere siste periode</option>
+			<option value="graphs/record_online">Rekord for antall pÃ¥logget</option>
 			<option value="graphs/hits">Sidevisninger siste periode</option>
 			<option value="graphs/rank">Rankaktivitet siste periode</option>
 			<option value="graphs/rank_avg">Gjennomsnittlig rankaktivitet per bruker siste periode</option>

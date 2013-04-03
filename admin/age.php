@@ -33,10 +33,10 @@ echo '
 	<h2>Beregn alder</h2>
 	<form action="" method="post">
 		<dl class="dd_right">
-			<dt>Fødselsdato</dt>
+			<dt>FÃ¸dselsdato</dt>
 			<dd><input type="text" name="birth" value="'.htmlspecialchars(postval("birth", '0000-00-00')).'" class="styled w80" /></dd>'.($age !== false ? '
 			<dt>'.$_POST['birth'].' gir</dt>
-			<dd>'.$age.' år</dd>' : '').'
+			<dd>'.$age.' Ã¥r</dd>' : '').'
 		</dl>
 		<p class="c">'.show_sbutton("Beregn alder").'</p>
 	</form>

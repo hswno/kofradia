@@ -17,7 +17,7 @@ while ($row = mysql_fetch_assoc($result))
 
 $ofc = new OFC();
 $c = new OFC_Colours();
-$ofc->title(new OFC_Title("Rekord for antall pålogget"));
+$ofc->title(new OFC_Title("Rekord for antall pÃ¥logget"));
 $ofc->tooltip()->title("font-size: 13px;font-weight:bold");
 
 $info = array(
@@ -30,7 +30,7 @@ $info = array(
 foreach ($info as $key => $title)
 {
 	$bar = new OFC_Charts_Area();
-	$bar->dot_style()->type("solid-dot")->dot_size(3)->halo_size(2)->tip("Rekord for #x_label#:<br>#val# i løpet av $title");
+	$bar->dot_style()->type("solid-dot")->dot_size(3)->halo_size(2)->tip("Rekord for #x_label#:<br>#val# i lÃ¸pet av $title");
 	$bar->text($title);
 	$bar->values(array_values($sitestats[$key]));
 	$bar->colour($c->pick());

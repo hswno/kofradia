@@ -5,9 +5,9 @@ essentials::load_module("poker_round");
 /*
  * Ulike state:
  * 1=nytt spill
- * 2=valgt kort, på lista
+ * 2=valgt kort, pÃ¥ lista
  * 3=blir utfordret
- * 4=fullført
+ * 4=fullfÃ¸rt
  * 5=tidsavbrudd starter
  * 
  * Ulike winner:
@@ -39,7 +39,7 @@ class page_poker extends pages_player
 			ess::$b->page->load();
 		}
 		
-		// sjekk om vi holder på å utfordre
+		// sjekk om vi holder pÃ¥ Ã¥ utfordre
 		$this->check_challenge();
 		
 		// har vi startet en runde?
@@ -51,7 +51,7 @@ class page_poker extends pages_player
 		// skal vi utfordre?
 		$this->challenge();
 		
-		// vis skjema for å opprette utfordring
+		// vis skjema for Ã¥ opprette utfordring
 		$this->show_create();
 		
 		// vis liste over pokerrundene som er aktive
@@ -64,11 +64,11 @@ class page_poker extends pages_player
 	}
 	
 	/**
-	 * Holder vi på å utfordre?
+	 * Holder vi pÃ¥ Ã¥ utfordre?
 	 */
 	protected function check_challenge()
 	{
-		// holder vi på å utfordre?
+		// holder vi pÃ¥ Ã¥ utfordre?
 		$result = ess::$b->db->query("
 			SELECT poker_id, poker_starter_up_id, poker_challenger_up_id, poker_starter_cards, poker_challenger_cards, poker_time_start, poker_time_challenge, poker_cash, poker_state, poker_prize
 			FROM poker
@@ -110,24 +110,24 @@ class page_poker extends pages_player
 		if (!isset($_POST['amount']) || $this->is_starter) return;
 		$amount = game::intval($_POST['amount']);
 		
-		// for lite beløp?
+		// for lite belÃ¸p?
 		if (bccomp($amount, self::MIN_BET) == -1)
 		{
-			ess::$b->page->add_message("Du må satse minimum ".game::format_cash(self::MIN_BET).".", "error");
+			ess::$b->page->add_message("Du mÃ¥ satse minimum ".game::format_cash(self::MIN_BET).".", "error");
 			redirect::handle();
 		}
 		
-		// ikke råd?
+		// ikke rÃ¥d?
 		if (bccomp($amount, $this->up->data['up_cash']) == 1)
 		{
-			ess::$b->page->add_message("Du har ikke så mye penger på hånda.", "error");
+			ess::$b->page->add_message("Du har ikke sÃ¥ mye penger pÃ¥ hÃ¥nda.", "error");
 			redirect::handle();
 		}
 		
 		// nonstatuser?
 		if (bccomp($amount, 10000) == 1 && MAIN_SERVER && (access::is_nostat() && $this->up->data['up_u_id'] != 1))
 		{
-			ess::$b->page->add_message("Nostat kan ikke spille poker med beløp over 10 000 kr.", "error");
+			ess::$b->page->add_message("Nostat kan ikke spille poker med belÃ¸p over 10 000 kr.", "error");
 			redirect::handle();
 		}
 		
@@ -137,7 +137,7 @@ class page_poker extends pages_player
 		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = ".$this->up->id." AND up_cash >= $amount");
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Du har ikke så mye penger på hånda.", "error");
+			ess::$b->page->add_message("Du har ikke sÃ¥ mye penger pÃ¥ hÃ¥nda.", "error");
 			redirect::handle();
 		}
 		
@@ -167,25 +167,25 @@ class page_poker extends pages_player
 		$row = mysql_fetch_assoc($result);
 		if (!$row)
 		{
-			ess::$b->page->add_message("Fant ikke utfordringen. Noen kan ha kommet før deg!", "error");
+			ess::$b->page->add_message("Fant ikke utfordringen. Noen kan ha kommet fÃ¸r deg!", "error");
 			redirect::handle();
 		}
 		
-		// ikke råd?
+		// ikke rÃ¥d?
 		if (bccomp($row['poker_cash'], $this->up->data['up_cash']) == 1)
 		{
-			ess::$b->page->add_message("Du har ikke så mye penger på hånda.", "error");
+			ess::$b->page->add_message("Du har ikke sÃ¥ mye penger pÃ¥ hÃ¥nda.", "error");
 			redirect::handle();
 		}
 		
 		// nostatuser?
 		if (bccomp($row['poker_cash'], 10000) == 1 && MAIN_SERVER && (access::is_nostat() && $this->up->data['up_u_id'] != 1))
 		{
-			ess::$b->page->add_message("Nostat kan ikke spille poker med beløp over 10 000 kr.", "error");
+			ess::$b->page->add_message("Nostat kan ikke spille poker med belÃ¸p over 10 000 kr.", "error");
 			redirect::handle();
 		}
 		
-		// sett opp pokerhånd
+		// sett opp pokerhÃ¥nd
 		$poker1 = new CardsPoker(explode(",", $row['poker_starter_cards']));
 		$poker2 = new CardsPoker();
 		$poker2->remove_cards($poker1->get_cards());
@@ -196,7 +196,7 @@ class page_poker extends pages_player
 		
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Fant ikke utfordringen. Noen kan ha kommet før deg!", "error");
+			ess::$b->page->add_message("Fant ikke utfordringen. Noen kan ha kommet fÃ¸r deg!", "error");
 			redirect::handle();
 		}
 		
@@ -206,7 +206,7 @@ class page_poker extends pages_player
 		// ble ikke brukeren oppdatert?
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Du har ikke så mye penger på hånda.", "error");
+			ess::$b->page->add_message("Du har ikke sÃ¥ mye penger pÃ¥ hÃ¥nda.", "error");
 			
 			// fjern challenge
 			ess::$b->db->query("UPDATE poker SET poker_state = 2, poker_challenger_up_id = 0, poker_challenger_cards = '', poker_time_challenge = 0 WHERE poker_id = {$row['poker_id']}");
@@ -245,7 +245,7 @@ class page_poker extends pages_player
 	<div class="bg1">
 		<form action="" method="post">
 			<dl class="dd_right">
-				<dt id="poker_amount_set">Beløp</dt>
+				<dt id="poker_amount_set">BelÃ¸p</dt>
 				<dd><input type="text" id="poker_amount" name="amount" value="'.game::format_cash($innsats).'" class="styled w120" /> '.show_sbutton("Start").'</dd>
 			</dl>
 		</form>
@@ -335,7 +335,7 @@ class page_poker extends pages_player
 							}
 						});
 						
-						// fjern alle nåværende spillere
+						// fjern alle nÃ¥vÃ¦rende spillere
 						self.tbody.empty();
 						
 						// legg til nye spillere
@@ -427,7 +427,7 @@ class page_poker extends pages_player
 					<thead>
 						<tr>
 							<th>Spiller</th>
-							<th>Beløp</th>
+							<th>BelÃ¸p</th>
 							<th>Tid</th>'.(access::has("admin") ? '
 							<th>Kort</th>' : '').'
 						</tr>
@@ -521,7 +521,7 @@ class page_poker extends pages_player
 					<th>Motstander</th>
 					<th>Tid</th>
 					<th>Din/motstanderens kombinasjon</th>
-					<th>Beløp</th>
+					<th>BelÃ¸p</th>
 					<th>Resultat</th>
 				</tr>
 			</thead>
@@ -607,7 +607,7 @@ class page_poker extends pages_player
 		if ($total == 0)
 		{
 			echo '
-		<p class="c">Ingen pokerrunder er registrert på deg.</p>';
+		<p class="c">Ingen pokerrunder er registrert pÃ¥ deg.</p>';
 		}
 		
 		else
@@ -644,7 +644,7 @@ class page_poker extends pages_player
 						<th>Motstander</th>
 						<th>Tid</th>
 						<th>Din/motstanderens kombinasjon</th>
-						<th>Beløp</th>
+						<th>BelÃ¸p</th>
 						<th>Resultat</th>
 					</tr>
 				</thead>
@@ -689,7 +689,7 @@ class page_poker extends pages_player
 						<th>Motstander</th>
 						<th>Tid</th>
 						<th>Din/motstanderens kombinasjon</th>
-						<th>Beløp</th>
+						<th>BelÃ¸p</th>
 						<th>Resultat</th>
 					</tr>
 				</thead>

@@ -12,10 +12,10 @@
 require "../../base/ajax.php";
 ajax::validate_sid();
 
-// kontroller lås
+// kontroller lÃ¥s
 ajax::validate_lock(true);
 
-// hent forumtråd
+// hent forumtrÃ¥d
 essentials::load_module("forum");
 $topic = new forum_topic_ajax(postval("topic_id"));
 

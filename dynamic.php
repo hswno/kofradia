@@ -37,7 +37,7 @@ switch ($page)
 		{
 			if (!isset($_POST['poll']) || !is_array($_POST['poll']) || count($_POST['poll']) > 1)
 			{
-				$_base->page->add_message("Du må velge et alternativ.", "error");
+				$_base->page->add_message("Du mÃ¥ velge et alternativ.", "error");
 				redirect::handle("", redirect::ROOT);
 			}
 			
@@ -62,7 +62,7 @@ switch ($page)
 			// allerede stemt?
 			if (mysql_result($result, 0, "pv_po_id"))
 			{
-				$_base->page->add_message("Du har allerede stemt på avstemningen &laquo;".htmlspecialchars($poll['p_title'])."&raquo;.", "error");
+				$_base->page->add_message("Du har allerede stemt pÃ¥ avstemningen &laquo;".htmlspecialchars($poll['p_title'])."&raquo;.", "error");
 				redirect::handle("", redirect::ROOT);
 			}
 			
@@ -79,7 +79,7 @@ switch ($page)
 			$_base->db->query("INSERT IGNORE INTO polls_votes SET pv_p_id = $p_id, pv_po_id = $po_id, pv_up_id = ".login::$user->player->id.", pv_time = ".time());
 			if ($_base->db->affected_rows() > 0)
 			{
-				$_base->page->add_message("Du har avgitt stemme på avstemningen &laquo;".htmlspecialchars($poll['p_title'])."&raquo;.");
+				$_base->page->add_message("Du har avgitt stemme pÃ¥ avstemningen &laquo;".htmlspecialchars($poll['p_title'])."&raquo;.");
 				$_base->db->query("UPDATE polls_options SET po_votes = po_votes + 1 WHERE po_id = {$option['po_id']}");
 				$_base->db->query("UPDATE polls SET p_votes = p_votes + 1 WHERE p_id = $p_id");
 				
@@ -91,7 +91,7 @@ switch ($page)
 				$_base->page->add_message("Din stemme ble ikke registrert.", "error");
 			}
 			
-			// sende til forum tråden?
+			// sende til forum trÃ¥den?
 			if ($poll['p_ft_id'])
 			{
 				redirect::handle("/forum/topic?id={$poll['p_ft_id']}", redirect::ROOT);
@@ -156,7 +156,7 @@ switch ($page)
 <div class="bg1_c xsmall">
 	<h2 class="bg1">'.htmlspecialchars($poll['p_title']).'<span class="left2"></span><span class="right2"></span></h2>
 	<div class="bg1">
-		<p><b>Periode:</b><br />'.(empty($poll['p_time_start']) ? 'Til '.(empty($poll['p_time_end']) ? 'ubestemt' : $_base->date->get($poll['p_time_end'])->format()) : 'Fra '.$_base->date->get($poll['p_time_start'])->format().' til '.(empty($poll['p_time_end']) ? 'ubestemt' : $_base->date->get($poll['p_time_end'])->format()).($poll['p_time_end'] > time() ? ' (pågår)' : '')).'</p>
+		<p><b>Periode:</b><br />'.(empty($poll['p_time_start']) ? 'Til '.(empty($poll['p_time_end']) ? 'ubestemt' : $_base->date->get($poll['p_time_end'])->format()) : 'Fra '.$_base->date->get($poll['p_time_start'])->format().' til '.(empty($poll['p_time_end']) ? 'ubestemt' : $_base->date->get($poll['p_time_end'])->format()).($poll['p_time_end'] > time() ? ' (pÃ¥gÃ¥r)' : '')).'</p>
 		<p><b>Antall stemmer:</b> '.game::format_number($poll['votes']).'</p>';
 				
 				if (($bb = game::format_data($poll['p_text'])) != "")

@@ -29,28 +29,28 @@ class params_update extends params
 		$this->link_column = $column;
 		$this->link_where = $where;
 		
-		// hente innhold og låse cellen?
+		// hente innhold og lÃ¥se cellen?
 		if ($text === -1)
 		{
 			$this->lock();
 		}
 		
-		// eller legge til tekst fra før
+		// eller legge til tekst fra fÃ¸r
 		else
 		{
 			$this->add_text($text);
 		}
 	}
 	
-	/** Lås raden cellen befinner seg i og hent friske verdier */
+	/** LÃ¥s raden cellen befinner seg i og hent friske verdier */
 	public function lock()
 	{
-		// allerede låst?
+		// allerede lÃ¥st?
 		if ($this->locked) return;
 		$this->locked = true;
 
-		// er ikke låst i databasemodulen?
-		// lås raden og hent friske verdier
+		// er ikke lÃ¥st i databasemodulen?
+		// lÃ¥s raden og hent friske verdier
 		if (!ess::$b->db->transaction) ess::$b->db->begin();
 		
 		$result = ess::$b->db->query("SELECT $this->link_column FROM $this->link_table WHERE $this->link_where LIMIT 1 FOR UPDATE");
@@ -63,7 +63,7 @@ class params_update extends params
 	/** Fjern en enhet */
 	public function remove($name, $save = false)
 	{
-		// kontroller lås
+		// kontroller lÃ¥s
 		if (!$this->locked)
 		{
 			$this->lock();
@@ -90,7 +90,7 @@ class params_update extends params
 	/** Oppdater/legg til en enhet */
 	public function update($name, $value, $save = false)
 	{
-		// kontroller lås
+		// kontroller lÃ¥s
 		if (!$this->locked)
 		{
 			$this->lock();
@@ -110,7 +110,7 @@ class params_update extends params
 	/** Lagre params til cellen */
 	public function commit($free = true)
 	{
-		// ikke låst?
+		// ikke lÃ¥st?
 		if (!$this->locked)
 		{
 			throw new HSException("params_update->commit: Cannot commit unlocked row.");
@@ -129,7 +129,7 @@ class params_update extends params
 		ess::$b->db->query("UPDATE $this->link_table SET $this->link_column = ".ess::$b->db->quote($this->build())." WHERE $this->link_where LIMIT 1");
 		$this->changed_state = false;
 		
-		// frigjøre?
+		// frigjÃ¸re?
 		if ($free)
 		{
 			ess::$b->db->commit();

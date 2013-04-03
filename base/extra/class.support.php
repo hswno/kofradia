@@ -73,7 +73,7 @@ td.support_important {
 				self::action_panel();
 			break;
 			
-			// søk
+			// sÃ¸k
 			case "search":
 				self::action_search();
 			break;
@@ -158,13 +158,13 @@ td.support_important {
 		$su->init();
 	}
 	
-	/** Søkefunksjon */
+	/** SÃ¸kefunksjon */
 	public static function action_search()
 	{
 		access::need("crewet");
-		ess::$b->page->add_title("Søk");
+		ess::$b->page->add_title("SÃ¸k");
 		
-		// hvem som skal ha kunnet skrevet det man søker på
+		// hvem som skal ha kunnet skrevet det man sÃ¸ker pÃ¥
 		$search_from = array(
 			1 => array("Alle", ""),
 			array("Meg selv", " AND sum_up_id = up_ref.up_id"),
@@ -205,8 +205,8 @@ td.support_important {
 			}
 		}
 		
-		// søke kun blant den som sendte inn henvendelsen eller de som svarte?
-		// MERK: tar ikke høyde for at brukere skifter spiller
+		// sÃ¸ke kun blant den som sendte inn henvendelsen eller de som svarte?
+		// MERK: tar ikke hÃ¸yde for at brukere skifter spiller
 		$search_by = array(
 			1 => array("Alle", ""),
 			array("Innsender", " AND sum_up_id = su_up_id"),
@@ -265,13 +265,13 @@ td.support_important {
 		$sort->append("desc", "Tid", "sum_time DESC");
 		$sort->set_active(postval("sort"), 5);
 		
-		// søkeskjema
+		// sÃ¸keskjema
 		echo '
-<h1>Søk i support</h1>
+<h1>SÃ¸k i support</h1>
 <p class="h_right"><a href="./">Tilbake</a></p>
 <form action="" method="post">
 	<div class="section" style="width: 410px; margin-left: auto; margin-right: auto">
-		<h2>Søk</h2>
+		<h2>SÃ¸k</h2>
 		<dl class="dl_20 dl_2x">
 			<dt>Tittel</dt>
 			<dd><input type="text" name="title" value="'.htmlspecialchars(postval("title")).'" class="styled w150" /></dd>
@@ -324,32 +324,32 @@ td.support_important {
 			</dd>
 		</dl>
 		<h3 class="c">
-			'.show_sbutton("Utfør søk", 'name="search"').'
+			'.show_sbutton("UtfÃ¸r sÃ¸k", 'name="search"').'
 		</h3>
 	</div>
 </form>';
 		
 		
-		// søke?
+		// sÃ¸ke?
 		if (isset($_POST['search']))
 		{
 			$title_search = postval("title");
 			$text_search = postval("text");
 			
-			// finn ut delene av spørringen
+			// finn ut delene av spÃ¸rringen
 			$title_parts = search_query($title_search);
 			$text_parts = search_query($text_search);
 			
 			if (count($title_parts[0]) == 0 && count($text_parts[0]) == 0 && $search_from_id != 4 && $search_kat_query == "")
 			{
 				echo '
-<h2>Søkeresultater</h2>
-<p>Ingen søkekriterier.</p>';
+<h2>SÃ¸keresultater</h2>
+<p>Ingen sÃ¸kekriterier.</p>';
 			} 
 			
 			else
 			{
-				// sett opp søkespørringen
+				// sett opp sÃ¸kespÃ¸rringen
 				$search = "";
 				if (count($title_parts[0]) > 0)
 				{
@@ -363,7 +363,7 @@ td.support_important {
 				// sortering
 				$sort_info = $sort->active();
 				
-				// sidetall - hent henvendelsene på denne siden
+				// sidetall - hent henvendelsene pÃ¥ denne siden
 				$pagei = new pagei(pagei::ACTIVE_POST, "side", pagei::PER_PAGE, 50);
 				$result = $pagei->query("
 					SELECT su_id, su_up_id, su_category, su_title, su_time, su_solved, sum_id, sum_up_id, sum_time, sum_text, up_sum.up_name, up_sum.up_access_level
@@ -402,8 +402,8 @@ td.support_important {
 				$info = implode(" ", $info);
 				
 				echo '
-<h2>Søkeresultater</h2>
-<p>Søkekriterier: '.$info.'</p>';
+<h2>SÃ¸keresultater</h2>
+<p>SÃ¸kekriterier: '.$info.'</p>';
 				
 				// fant vi noe?
 				if ($pagei->total == 0)
@@ -459,7 +459,7 @@ td.support_important {
 						echo '
 			<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
 				<td class="sum_up">'.game::profile_link($row['sum_up_id'], $row['up_name'], $row['up_access_level']).'</td>
-				<td><a href="./?a=show&amp;su_id='.$row['su_id'].'">'.htmlspecialchars($row['su_title']).'</a>'.($row['su_solved'] == 0 ? ' <span class="su_not_solved">(Uløst)</span>' : '').'</td>
+				<td><a href="./?a=show&amp;su_id='.$row['su_id'].'">'.htmlspecialchars($row['su_title']).'</a>'.($row['su_solved'] == 0 ? ' <span class="su_not_solved">(UlÃ¸st)</span>' : '').'</td>
 				<td class="dark">'.htmlspecialchars($content).' ('.$length.' tegn)</td>
 				<td class="su_time">'.ess::$b->date->get($row['sum_time'])->format().'</td>
 			</tr>';
@@ -576,7 +576,7 @@ td.support_important {
 			<th>Siste melding</th>
 		</tr>';
 		
-		// sidetall - hent henvendelsene på denne siden
+		// sidetall - hent henvendelsene pÃ¥ denne siden
 		$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 50);
 		$result = $pagei->query("
 			SELECT su_id, su_up_id, su_category, su_title, su_time, su_solved, COUNT(sum1.sum_id) AS num_sum, MAX(sum1.sum_id) AS max_sum_id, sum2.sum_up_id, sum2.sum_time, sum2.sum_id
@@ -596,7 +596,7 @@ td.support_important {
 		{
 			echo '
 		<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
-			<td><a href="./?a=show&amp;su_id='.$row['su_id'].'">'.htmlspecialchars($row['su_title']).'</a>'.($row['su_solved'] == 0 ? ' <span class="support_not_solved">(uløst)</span>' : '').($oppsummering ? '<br />
+			<td><a href="./?a=show&amp;su_id='.$row['su_id'].'">'.htmlspecialchars($row['su_title']).'</a>'.($row['su_solved'] == 0 ? ' <span class="support_not_solved">(ulÃ¸st)</span>' : '').($oppsummering ? '<br />
 				<span class="support_category">'.htmlspecialchars(self::$kategorier[$row['su_category']]['name']) : '').'</td>
 			<td><user id="'.$row['su_up_id'].'" /></td>
 			<td class="r">'.$row['num_sum'].'</td>
@@ -630,7 +630,7 @@ td.support_important {
 		$blokkering = blokkeringer::check(blokkeringer::TYPE_SUPPORT);
 		if ($blokkering)
 		{
-			ess::$b->page->add_message("Du er blokkert fra å sende inn henvendelser til support. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
+			ess::$b->page->add_message("Du er blokkert fra Ã¥ sende inn henvendelser til support. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
 			return;
 		}
 		
@@ -650,7 +650,7 @@ td.support_important {
 				
 				if ($wait > 0)
 				{
-					ess::$b->page->add_message('Du må vente '.game::counter($wait).' før du kan sende inn en ny henvendelse.', "error");
+					ess::$b->page->add_message('Du mÃ¥ vente '.game::counter($wait).' fÃ¸r du kan sende inn en ny henvendelse.', "error");
 					return;
 				}
 			}
@@ -670,7 +670,7 @@ td.support_important {
 		// for kort tittel?
 		if (strlen($tittel) < 1)
 		{
-			ess::$b->page->add_message("Du må fylle ut en tittel.", "error");
+			ess::$b->page->add_message("Du mÃ¥ fylle ut en tittel.", "error");
 			return;
 		}
 		
@@ -684,7 +684,7 @@ td.support_important {
 		// mangler innhold?
 		if (empty($innhold))
 		{
-			ess::$b->page->add_message("Du må fylle inn en tekst for din henvendelse.", "error");
+			ess::$b->page->add_message("Du mÃ¥ fylle inn en tekst for din henvendelse.", "error");
 			return;
 		}
 		
@@ -704,17 +704,17 @@ td.support_important {
 		
 		putlog("CREWCHAN", "%c11%bSUPPORT HENVENDELSE%b%c: %u".login::$user->player->data['up_name']."%u leverte en henvendelse til support - %u{$tittel}%u i kategorien %u".self::$kategorier[$kategori]['name']."%u - ".ess::$s['spath']."/support/?a=show&su_id=$su_id");
 		
-		ess::$b->page->add_message("Din henvendelse er nå levert og vil bli besvart når vi får mulighet til å behandle den.");
+		ess::$b->page->add_message("Din henvendelse er nÃ¥ levert og vil bli besvart nÃ¥r vi fÃ¥r mulighet til Ã¥ behandle den.");
 		redirect::handle("?a=show&su_id=$su_id");
 	}
 	
-	/** Vis skjema for å sende inn ny henvendelse */
+	/** Vis skjema for Ã¥ sende inn ny henvendelse */
 	protected static function show_new_form()
 	{
 		ess::$b->page->add_js_domready('
 	$("previewButton").addEvent("click", function()
 	{
-		$("previewContainer").set("html", "<p>Laster inn forhåndsvisning..</p>");
+		$("previewContainer").set("html", "<p>Laster inn forhÃ¥ndsvisning..</p>");
 		$("previewOuter").setStyle("display", "block");
 		if ($("previewOuter").getPosition().y > window.getScroll().y + window.getSize().y)
 		{
@@ -728,7 +728,7 @@ td.support_important {
 	<h2 class="bg1">Ny henvendelse<span class="left2"></span><span class="right2"></span></h2>
 	<div class="bg1">
 		<boxes />
-		<p>Husk og les gjennom <a href="'.ess::$s['relative_path'].'/node">hjelpesidene</a> før du sender inn din henvendelse. Finner du ikke det du ser etter kan du sende inn en henvendelse her som alle i Crewet får mulighet til å svare på.</p>
+		<p>Husk og les gjennom <a href="'.ess::$s['relative_path'].'/node">hjelpesidene</a> fÃ¸r du sender inn din henvendelse. Finner du ikke det du ser etter kan du sende inn en henvendelse her som alle i Crewet fÃ¥r mulighet til Ã¥ svare pÃ¥.</p>
 		<form action="./" method="post">
 			<dl class="dl_20">
 				<dt>Kategori</dt>
@@ -751,9 +751,9 @@ td.support_important {
 				<dt>Beskrivelse</dt>
 				<dd><textarea name="innhold" id="textContent" style="width: 90%" rows="10">'.htmlspecialchars(requestval('innhold')).'</textarea></dd>
 			</dl>
-			<p class="c">'.show_sbutton("Send inn spørsmål").' '.show_button("Forhåndsvis", 'accesskey="p" id="previewButton"').'</p>
+			<p class="c">'.show_sbutton("Send inn spÃ¸rsmÃ¥l").' '.show_button("ForhÃ¥ndsvis", 'accesskey="p" id="previewButton"').'</p>
 			<div style="display: none" id="previewOuter">
-				<p>Forhåndsvisning:</p>
+				<p>ForhÃ¥ndsvisning:</p>
 				<div class="p" id="previewContainer"></div>
 			</div>
 		</form>
@@ -761,7 +761,7 @@ td.support_important {
 </div>';
 	}
 	
-	/** Vis informasjon for panel på forsiden */
+	/** Vis informasjon for panel pÃ¥ forsiden */
 	protected static function show_main_panel_info()
 	{
 		if (!access::has("crewet")) return;
@@ -786,8 +786,8 @@ td.support_important {
 			<thead>
 				<tr>
 					<th>Kategori</th>
-					<th>Antall spørsmål</th>
-					<th>Nye spørsmål</th>
+					<th>Antall spÃ¸rsmÃ¥l</th>
+					<th>Nye spÃ¸rsmÃ¥l</th>
 				</tr>
 			</thead>
 			<tbody>';
@@ -815,7 +815,7 @@ td.support_important {
 				</tr>
 			</tbody>
 		</table>
-		<p class="c"><a href="./?a=search">Søk i support &raquo;</a></p>
+		<p class="c"><a href="./?a=search">SÃ¸k i support &raquo;</a></p>
 	</div>
 </div>';
 		
@@ -1011,7 +1011,7 @@ td.support_important {
 			$data['su'][$w] += (int) $row['num_su'];
 		}
 		
-		// reverser så nyeste kommer sist
+		// reverser sÃ¥ nyeste kommer sist
 		$data['labels'] = array_reverse($data['labels']);
 		$data['sum'] = array_reverse($data['sum']);
 		$data['su'] = array_reverse($data['su']);
@@ -1099,7 +1099,7 @@ class support_henvendelse
 	/** Egen henvendelse? */
 	public $own;
 	
-	/** Løst? */
+	/** LÃ¸st? */
 	public $solved;
 	
 	/**
@@ -1160,7 +1160,7 @@ class support_henvendelse
 	{
 		ess::$b->page->add_title("Henvendelse", $this->data['su_title']);
 		
-		// avslutte henvendelsen uten å svare?
+		// avslutte henvendelsen uten Ã¥ svare?
 		if (isset($_POST['close']))
 		{
 			$this->close();
@@ -1176,7 +1176,7 @@ class support_henvendelse
 		$this->show();
 	}
 	
-	/** Lukke henvendelsen uten å svare */
+	/** Lukke henvendelsen uten Ã¥ svare */
 	protected function close()
 	{
 		if (!$this->solved)
@@ -1201,14 +1201,14 @@ class support_henvendelse
 		redirect::handle("?a=show&su_id={$this->data['su_id']}");
 	}
 	
-	/** Forsøk å legg til ny melding i henvendelsen */
+	/** ForsÃ¸k Ã¥ legg til ny melding i henvendelsen */
 	protected function handle_reply()
 	{
 		// sjekk for blokkering
 		$blokkering = blokkeringer::check(blokkeringer::TYPE_SUPPORT);
 		if ($blokkering)
 		{
-			ess::$b->page->add_message("Du er blokkert fra å sende inn henvendelser til support. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
+			ess::$b->page->add_message("Du er blokkert fra Ã¥ sende inn henvendelser til support. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br /><b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
 			return;
 		}
 		
@@ -1217,7 +1217,7 @@ class support_henvendelse
 		// tom tekst?
 		if (empty($text))
 		{
-			ess::$b->page->add_message("Du må fylle inn en melding.", "error");
+			ess::$b->page->add_message("Du mÃ¥ fylle inn en melding.", "error");
 			return;
 		}
 		
@@ -1237,7 +1237,7 @@ class support_henvendelse
 				
 				if ($wait > 0)
 				{
-					ess::$b->page->add_message('Du må vente '.game::counter($wait).' før du kan legge til nytt svar.', "error");
+					ess::$b->page->add_message('Du mÃ¥ vente '.game::counter($wait).' fÃ¸r du kan legge til nytt svar.', "error");
 					return;
 				}
 			}
@@ -1248,7 +1248,7 @@ class support_henvendelse
 		$last_sum = mysql_num_rows($result) > 0 ? mysql_result($result, 0) : 0;
 		if (!isset($_POST['last_sum']) || $_POST['last_sum'] != $last_sum)
 		{
-			ess::$b->page->add_message("Nytt svar har blitt lagt til siden du viste siden sist. Trykk legg til melding på nytt for å fortsette.", "error");
+			ess::$b->page->add_message("Nytt svar har blitt lagt til siden du viste siden sist. Trykk legg til melding pÃ¥ nytt for Ã¥ fortsette.", "error");
 			return;
 		}
 		
@@ -1262,7 +1262,7 @@ class support_henvendelse
 		
 		ess::$b->db->query("UPDATE support SET su_solved = $su_solved WHERE su_id = {$this->data['su_id']}");
 		
-		// sende logg til spilleren som henvendelsen tilhører?
+		// sende logg til spilleren som henvendelsen tilhÃ¸rer?
 		if (!$this->own)
 		{
 			global $_game;
@@ -1284,7 +1284,7 @@ class support_henvendelse
 	/** Vis henvendelsen */
 	protected function show()
 	{
-		// øk visningstelleren
+		// Ã¸k visningstelleren
 		$this->increase_view_counter();
 		
 		echo '
@@ -1319,10 +1319,10 @@ class support_henvendelse
 		}
 		else
 		{
-			// knapp for å avslutte henvendelsen
+			// knapp for Ã¥ avslutte henvendelsen
 			echo '
 			<td>
-				Åpen / under behandling<br />
+				Ã…pen / under behandling<br />
 				<form action="" method="post">'.show_sbutton("Avslutt henvendelsen", 'name="close" style="margin-top: 3px"').'</form>
 			</td>';
 		}
@@ -1332,7 +1332,7 @@ class support_henvendelse
 	</tbody>
 </table>';
 		
-		// vis skjema for å svare på henvendelsen
+		// vis skjema for Ã¥ svare pÃ¥ henvendelsen
 		$this->show_reply_form();
 		
 		// hent meldingene
@@ -1375,7 +1375,7 @@ class support_henvendelse
 <div style="margin-bottom: 50px"></div>';
 	}
 	
-	/** Øke visningstelleren */
+	/** Ã˜ke visningstelleren */
 	protected function increase_view_counter()
 	{
 		// hvilket felt skal oppdateres?
@@ -1391,7 +1391,7 @@ class support_henvendelse
 		ess::$b->db->query("UPDATE support SET $f = $f + 1 WHERE su_id = {$this->data['su_id']}");
 	}
 	
-	/** Vise skjema for å legge til ny melding */
+	/** Vise skjema for Ã¥ legge til ny melding */
 	protected function show_reply_form()
 	{
 		global $__server;
@@ -1399,14 +1399,14 @@ class support_henvendelse
 		if ($this->own && $this->solved)
 		{
 			echo '
-<p class="center" style="width: 300px">Du kan legge til ny melding i denne henvendelsen hvis det er mer knyttet til henvendelsen du ønsker svar på.</p>';
+<p class="center" style="width: 300px">Du kan legge til ny melding i denne henvendelsen hvis det er mer knyttet til henvendelsen du Ã¸nsker svar pÃ¥.</p>';
 		}
 		
 		// finn ID til siste melding
 		$result = ess::$b->db->query("SELECT sum_id FROM support_messages WHERE sum_su_id = {$this->data['su_id']} ORDER BY sum_time DESC LIMIT 1");
 		$last_sum = mysql_num_rows($result) > 0 ? mysql_result($result, 0) : 0;
 		
-		// vis skjema for å legge til ny melding
+		// vis skjema for Ã¥ legge til ny melding
 		ess::$b->page->add_css('
 #support_reply_header { cursor: pointer }
 #support_reply_preview h2 { cursor: pointer; color: #CCFF00 }
@@ -1427,16 +1427,16 @@ class support_henvendelse
 			<input type="hidden" name="last_sum" value="'.$last_sum.'" />
 			<p>Tekst:</p>
 			<p><textarea name="text" rows="10" cols="30" id="support_reply_text" style="width: 97%">'.htmlspecialchars(postval("text")).'</textarea></p>'.(!$this->own ? '
-			<p><input type="checkbox" name="solve"'.($_SERVER['REQUEST_METHOD'] != "POST" || isset($_POST['solve']) ? ' checked="checked"' : '').' id="support_solve" /><label for="support_solve"> Marker henvendelsen som avsluttet (spørsmål besvart/problem løst)</label></p>' : '').'
-			<p class="c">'.show_sbutton("Legg til melding").' <a class="button" id="support_reply_preview_button">Forhåndsvis</a></p>
+			<p><input type="checkbox" name="solve"'.($_SERVER['REQUEST_METHOD'] != "POST" || isset($_POST['solve']) ? ' checked="checked"' : '').' id="support_solve" /><label for="support_solve"> Marker henvendelsen som avsluttet (spÃ¸rsmÃ¥l besvart/problem lÃ¸st)</label></p>' : '').'
+			<p class="c">'.show_sbutton("Legg til melding").' <a class="button" id="support_reply_preview_button">ForhÃ¥ndsvis</a></p>
 		</form>
 	</div>
 </div>'.($this->own ? '' : '
 <div id="support_reply_status">'.$this->status().'</div>').'
 <div class="bg1_c hide" id="support_reply_preview" style="width: 500px">
-	<h2 class="bg1">Forhåndsvisning<span class="left2"></span><span class="right2"></span></h2>
+	<h2 class="bg1">ForhÃ¥ndsvisning<span class="left2"></span><span class="right2"></span></h2>
 	<div class="bg1">
-		<div class="p" id="support_reply_preview_view">Forhåndsvisning..</div>
+		<div class="p" id="support_reply_preview_view">ForhÃ¥ndsvisning..</div>
 	</div>
 </div>';
 	}
@@ -1447,7 +1447,7 @@ class support_henvendelse
 		$this->params->lock();
 		$status = unserialize($this->params->get("repliers"));
 		
-		// oppdater oppføringen for denne spilleren
+		// oppdater oppfÃ¸ringen for denne spilleren
 		$expire = time() - 300;
 		if (isset($status[login::$user->player->id]) && $status[login::$user->player->id]['last'] >= $expire)
 		{
@@ -1464,7 +1464,7 @@ class support_henvendelse
 		// lagre liste
 		$this->params->update("repliers", serialize($status), true);
 		
-		// sett opp liste over spillere som har begynt å svare
+		// sett opp liste over spillere som har begynt Ã¥ svare
 		$list = array();
 		$expire = time() - 180; // vis de som har blitt oppdatert innen 3 min
 		foreach ($status as $up_id => $data)
@@ -1478,7 +1478,7 @@ class support_henvendelse
 		$ul = array();
 		foreach ($list as $up_id => $last)
 		{
-			$ul[] = '<li><user id="'.$up_id.'" /> åpnet svarskjemaet '.ess::$b->date->get($status[$up_id]['first'])->format(date::FORMAT_SEC).' ('.game::timespan($status[$up_id]['first'], game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).') -- oppdatert '.game::timespan($last, game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).'</p>';
+			$ul[] = '<li><user id="'.$up_id.'" /> Ã¥pnet svarskjemaet '.ess::$b->date->get($status[$up_id]['first'])->format(date::FORMAT_SEC).' ('.game::timespan($status[$up_id]['first'], game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).') -- oppdatert '.game::timespan($last, game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).'</p>';
 		}
 		
 		ajax::html(parse_html('
@@ -1494,7 +1494,7 @@ class support_henvendelse
 		$status = unserialize($this->params->get("repliers"));
 		if (!is_array($status)) $status = array();
 		
-		// sett opp liste over spillere som har begynt å svare
+		// sett opp liste over spillere som har begynt Ã¥ svare
 		$list = array();
 		$expire = time() - 180; // vis de som har blitt oppdatert innen 3 min
 		foreach ($status as $up_id => $data)
@@ -1508,7 +1508,7 @@ class support_henvendelse
 		$ul = array();
 		foreach ($list as $up_id => $last)
 		{
-			$ul[] = '<li><user id="'.$up_id.'" /> åpnet svarskjemaet '.ess::$b->date->get($status[$up_id]['first'])->format(date::FORMAT_SEC).' ('.game::timespan($status[$up_id]['first'], game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).') -- oppdatert '.game::timespan($last, game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).'</p>';
+			$ul[] = '<li><user id="'.$up_id.'" /> Ã¥pnet svarskjemaet '.ess::$b->date->get($status[$up_id]['first'])->format(date::FORMAT_SEC).' ('.game::timespan($status[$up_id]['first'], game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).') -- oppdatert '.game::timespan($last, game::TIME_ABS | game::TIME_PAST | game::TIME_FULL).'</p>';
 		}
 		
 		if (count($ul) == 0) return '';
@@ -1526,7 +1526,7 @@ class support_henvendelse
 		$this->params->lock();
 		$status = unserialize($this->params->get("repliers"));
 		
-		// oppdater oppføringen for denne spilleren
+		// oppdater oppfÃ¸ringen for denne spilleren
 		if (isset($status[login::$user->player->id]))
 		{
 			unset($status[login::$user->player->id]);

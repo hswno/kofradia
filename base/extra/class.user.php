@@ -30,13 +30,13 @@ class user
 	public $player;
 	
 	/**
-	 * Informasjon om lås
+	 * Informasjon om lÃ¥s
 	 * @var array
 	 */
 	public $lock;
 	
 	/**
-	 * Er brukeren låst?
+	 * Er brukeren lÃ¥st?
 	 */
 	public $lock_state;
 	
@@ -100,7 +100,7 @@ class user
 			login::$user = $this;
 		}
 		
-		// fjern variablene som skal lastes når de blir benyttet
+		// fjern variablene som skal lastes nÃ¥r de blir benyttet
 		unset($this->params);
 		unset($this->player);
 		unset($this->lock);
@@ -110,11 +110,11 @@ class user
 	}
 	
 	/**
-	 * Fiks objektet hvis det har vært serialized
+	 * Fiks objektet hvis det har vÃ¦rt serialized
 	 */
 	public function __wakeup()
 	{
-		// slett objektene på nytt hvis de ikke er initialisert med __get
+		// slett objektene pÃ¥ nytt hvis de ikke er initialisert med __get
 		if (!isset($this->params)) unset($this->params);
 		if (!isset($this->player)) unset($this->player);
 		if (!isset($this->lock)) unset($this->lock);
@@ -122,7 +122,7 @@ class user
 	}
 	
 	/**
-	 * Last inn objekter først når de skal benyttes
+	 * Last inn objekter fÃ¸rst nÃ¥r de skal benyttes
 	 */
 	public function __get($name)
 	{
@@ -142,7 +142,7 @@ class user
 				return $this->player;
 			break;
 			
-			// lås
+			// lÃ¥s
 			case "lock":
 			case "lock_state":
 				$this->check_lock();
@@ -166,7 +166,7 @@ class user
 		ess::$b->db->query("UPDATE users SET u_access_level = 1 WHERE u_id = $this->id AND u_access_level = 0");
 		if (ess::$b->db->affected_rows() == 0) return false;
 		
-		putlog("CREWCHAN", "%bAktivering%b: Brukeren {$this->data['u_email']} ({$this->player->data['up_name']}) er nå aktivert igjen {$__server['path']}/min_side?u_id=$this->id");
+		putlog("CREWCHAN", "%bAktivering%b: Brukeren {$this->data['u_email']} ({$this->player->data['up_name']}) er nÃ¥ aktivert igjen {$__server['path']}/min_side?u_id=$this->id");
 		return true;
 	}
 	
@@ -197,7 +197,7 @@ class user
 		ess::$b->db->query("UPDATE users SET u_access_level = 0, u_deactivated_time = {$this->data['u_deactivated_time']}, u_deactivated_up_id = $by_up->id, u_deactivated_reason = ".ess::$b->db->quote($reason).", u_deactivated_note = ".ess::$b->db->quote($note)." WHERE u_id = $this->id AND u_access_level != 0");
 		if (ess::$b->db->affected_rows() == 0) return false;
 		
-		// logg ut alle øktene
+		// logg ut alle Ã¸ktene
 		ess::$b->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_u_id = $this->id AND ses_active = 1");
 		
 		if ($by_up->id == $this->player->id) $info = 'deaktiverte seg selv';
@@ -211,7 +211,7 @@ class user
 	}
 	
 	/**
-	 * Er brukeren låst pga. manglende data?
+	 * Er brukeren lÃ¥st pga. manglende data?
 	 */
 	protected function check_lock()
 	{
@@ -223,7 +223,7 @@ class user
 			$this->lock[] = "pass";
 		}
 		
-		// er ikke fødselsdato ført opp?
+		// er ikke fÃ¸dselsdato fÃ¸rt opp?
 		if (empty($this->data['u_birth']) || $this->data['u_birth'] == "0000-00-00")
 		{
 			$this->lock[] = "birth";
@@ -239,9 +239,9 @@ class user
 	}
 	
 	/**
-	 * Endre tilgangsnivå
-	 * @param integer $level nytt tilgangsnivå
-	 * @param bool $no_update_up ikke oppdatere det visuelle tilgangsnivået til spilleren?
+	 * Endre tilgangsnivÃ¥
+	 * @param integer $level nytt tilgangsnivÃ¥
+	 * @param bool $no_update_up ikke oppdatere det visuelle tilgangsnivÃ¥et til spilleren?
 	 */
 	public function change_level($level, $no_update_up = NULL)
 	{
@@ -250,12 +250,12 @@ class user
 		
 		ess::$b->db->begin();
 		
-		// forsøk å endre tilgangsnivået fra nåværende
+		// forsÃ¸k Ã¥ endre tilgangsnivÃ¥et fra nÃ¥vÃ¦rende
 		ess::$b->db->query("UPDATE users SET u_access_level = $level WHERE u_id = $this->id AND u_access_level = {$this->data['u_access_level']}");
 		if (!ess::$b->db->affected_rows() > 0) return false;
 		$this->data['u_access_level'] = $level;
 		
-		// endre spilleren også?
+		// endre spilleren ogsÃ¥?
 		if ($this->player->active && !$no_update_up)
 		{
 			ess::$b->db->query("UPDATE users_players SET up_access_level = $level WHERE up_id = {$this->player->id}");
@@ -263,7 +263,7 @@ class user
 			// endre rankliste?
 			/*if ($level < $_game['access_noplay'] && $this->player->data['up_access_level'] >= $_game['access_noplay'])
 			{
-				// øk tallplasseringen til de under spilleren
+				// Ã¸k tallplasseringen til de under spilleren
 				ess::$b->db->query("
 					UPDATE users_players, (SELECT up_id ref_up_id FROM users_players WHERE up_points = {$this->player->data['up_points']} AND up_id != {$this->player->id} AND up_access_level < {$_game['access_noplay']} LIMIT 1) ref
 					SET up_rank_pos = up_rank_pos + 1 WHERE ref_up_id IS NULL AND up_points < {$this->player->data['up_points']}");

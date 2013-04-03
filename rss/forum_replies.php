@@ -22,7 +22,7 @@ if (isset($_GET['forum']))
 $forums = array(
 	1 => "Game",
 	2 => "Off-topic",
-	3 => "Salg/søknad",
+	3 => "Salg/sÃ¸knad",
 	4 => "Support"
 );
 
@@ -59,5 +59,5 @@ while ($row = mysql_fetch_assoc($result))
 	$rss->item($item);
 }
 
-header("Content-Type: application/rss+xml; charset=ISO-8859-1");
+header("Content-Type: application/rss+xml; charset=utf-8");
 echo $rss->generate();

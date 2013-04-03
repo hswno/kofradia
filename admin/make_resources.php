@@ -45,7 +45,7 @@ echo '
 				<td><input type="test" name="rankpoeng_abs" class="styled w80" value="-1" /></td>
 			</tr>
 			<tr>
-				<th colspan="2" style="text-align: center">'.show_sbutton("Utfør!").'</th>
+				<th colspan="2" style="text-align: center">'.show_sbutton("UtfÃ¸r!").'</th>
 			</tr>
 		</tbody>
 	</table>

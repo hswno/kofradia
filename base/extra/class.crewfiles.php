@@ -14,10 +14,10 @@ class crewfiles
 	/** Adresse til mappen som inneholder dataene */
 	public static $path;
 	
-	/** Alle tilgangsnivåene som skal være tilgjengelig */
+	/** Alle tilgangsnivÃ¥ene som skal vÃ¦re tilgjengelig */
 	public static $access_levels = array("forum_mod", "mod", "admin", "sadmin");
 	
-	/** Egne navn på tilgangsnivåene (for å kunne ha Senioradministrator) */
+	/** Egne navn pÃ¥ tilgangsnivÃ¥ene (for Ã¥ kunne ha Senioradministrator) */
 	public static $access_levels_name = array("sadmin" => "Senioradministrator");
 	
 	/** Initialize */
@@ -121,7 +121,7 @@ class crewfiles
 	}
 	
 	/**
-	 * Generer liste med tilgangsnivå brukeren har tilgang til og som kan settes på mappene
+	 * Generer liste med tilgangsnivÃ¥ brukeren har tilgang til og som kan settes pÃ¥ mappene
 	 */
 	public static function get_access_levels()
 	{
@@ -138,7 +138,7 @@ class crewfiles
 	}
 	
 	/**
-	 * Valider tilgangsnivå
+	 * Valider tilgangsnivÃ¥
 	 */
 	public static function validate_access_level($access_level)
 	{
@@ -147,8 +147,8 @@ class crewfiles
 	}
 	
 	/**
-	 * Kontroller tilgangsnivå
-	 * Hvis data hentes fra SESSION, må brukeren være logget inn som crew først
+	 * Kontroller tilgangsnivÃ¥
+	 * Hvis data hentes fra SESSION, mÃ¥ brukeren vÃ¦re logget inn som crew fÃ¸rst
 	 */
 	public static function access($access_name, $allow_extended_access_login = NULL)
 	{
@@ -159,14 +159,14 @@ class crewfiles
 	}
 	
 	/**
-	 * Hente ut navn for tilgangsnivå
-	 * Sjekker først i lokal array
+	 * Hente ut navn for tilgangsnivÃ¥
+	 * Sjekker fÃ¸rst i lokal array
 	 * @param string $access_level tilgangsnavn (f.eks. admin)
 	 * @return string tilgangstittel (f.eks. Administrator)
 	 */
 	public static function access_name($access_level)
 	{
-		// forsøk å hente fra denne klassen
+		// forsÃ¸k Ã¥ hente fra denne klassen
 		if (isset(self::$access_levels_name[$access_level]))
 		{
 			return self::$access_levels_name[$access_level];
@@ -364,10 +364,10 @@ class crewfiles_directory
 				throw new HSException("Fant ikke frem til parent mappe med ID $parent_id");
 			}
 			
-			// allerede gått gjennom parent? (løkke funnet)
+			// allerede gÃ¥tt gjennom parent? (lÃ¸kke funnet)
 			if (isset($dirs[$row['cfd_id']]))
 			{
-				throw new HSException("Parent-løkke funnet ved mappe ID $parent_id");
+				throw new HSException("Parent-lÃ¸kke funnet ved mappe ID $parent_id");
 			}
 			
 			$parent_id = $row['cfd_parent_cfd_id'];
@@ -380,7 +380,7 @@ class crewfiles_directory
 	
 	/**
 	 * Hent ut path (alle mapper som er ovenfor)
-	 * @param $root string adresse til root med / på slutten
+	 * @param $root string adresse til root med / pÃ¥ slutten
 	 */
 	public function get_path($root)
 	{
@@ -399,11 +399,11 @@ class crewfiles_directory
 	/** Finn antall undermapper og filer */
 	public function get_count()
 	{
-		// antall mapper i denne mappen må være lik null for at mappen skal kunne slettes
+		// antall mapper i denne mappen mÃ¥ vÃ¦re lik null for at mappen skal kunne slettes
 		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_directories WHERE cfd_parent_cfd_id = $this->id");
 		$this->count_dirs = mysql_result($result, 0, 0);
 		
-		// antall filer i denne mappen må være lik null for at mappen skal kunne slettes
+		// antall filer i denne mappen mÃ¥ vÃ¦re lik null for at mappen skal kunne slettes
 		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_files WHERE cff_cfd_id = $this->id");
 		$this->count_files = mysql_result($result, 0, 0);
 	}
@@ -435,7 +435,7 @@ class crewfiles_directory
 		// ikke tilgang?
 		if (!$this->access())
 		{
-			// dette skal være sjekket allerede
+			// dette skal vÃ¦re sjekket allerede
 			throw new HSException("Brukeren har ikke tilgang til filene i denne mappen.");
 		}
 		
@@ -470,11 +470,11 @@ class crewfiles_directory
 			throw new HSException("Rotmappe kan ikke slettes.");
 		}
 		
-		// antall mapper i denne mappen må være lik null for at mappen skal kunne slettes
+		// antall mapper i denne mappen mÃ¥ vÃ¦re lik null for at mappen skal kunne slettes
 		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_directories WHERE cfd_parent_cfd_id = $this->id");
 		if (mysql_result($result, 0, 0) > 0) return false;
 		
-		// antall filer i denne mappen må være lik null for at mappen skal kunne slettes
+		// antall filer i denne mappen mÃ¥ vÃ¦re lik null for at mappen skal kunne slettes
 		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_files WHERE cff_cfd_id = $this->id");
 		if (mysql_result($result, 0, 0) > 0) return false;
 		
@@ -496,7 +496,7 @@ class crewfiles_directory
 		// ikke logget inn?
 		if (!crewfiles::$up)
 		{
-			throw new HSException("Ingen spillerobjekt er registert for å kunne opprette en mappe.");
+			throw new HSException("Ingen spillerobjekt er registert for Ã¥ kunne opprette en mappe.");
 		}
 		
 		// opprett mappen
@@ -581,8 +581,8 @@ class crewfiles_directory
 		// ikke logget inn?
 		if (!crewfiles::$up)
 		{
-			// anonym Exception for at $data ikke skal gå ut
-			throw new HSException("Ingen spillerobjekt er registert for å kunne laste opp fil.", sysreport::EXCEPTION_ANONYMOUS);
+			// anonym Exception for at $data ikke skal gÃ¥ ut
+			throw new HSException("Ingen spillerobjekt er registert for Ã¥ kunne laste opp fil.", sysreport::EXCEPTION_ANONYMOUS);
 		}
 		
 		// opprett fil
@@ -731,7 +731,7 @@ class crewfiles_file
 	{
 		global $_base;
 		
-		// antall revisjoner må være lik null for at filen skal kunne slettes
+		// antall revisjoner mÃ¥ vÃ¦re lik null for at filen skal kunne slettes
 		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_revisions WHERE cfr_cff_id = $this->id");
 		if (mysql_result($result, 0, 0) > 0) return false;
 		
@@ -787,7 +787,7 @@ class crewfiles_file
 			return "404";
 		}
 		
-		// har vi ikke tilgang til å flytte filer til denne mappen? (ikke filtilgang)
+		// har vi ikke tilgang til Ã¥ flytte filer til denne mappen? (ikke filtilgang)
 		if (!$dir->access())
 		{
 			return "no_access";
@@ -813,8 +813,8 @@ class crewfiles_file
 		// ikke logget inn?
 		if (!crewfiles::$up)
 		{
-			// anonym Exception for at $data ikke skal gå ut
-			throw new HSException("Ingen spillerobjekt er registert for å kunne laste opp fil.", sysreport::EXCEPTION_ANONYMOUS);
+			// anonym Exception for at $data ikke skal gÃ¥ ut
+			throw new HSException("Ingen spillerobjekt er registert for Ã¥ kunne laste opp fil.", sysreport::EXCEPTION_ANONYMOUS);
 		}
 		
 		// sett opp adresse til ny fil
@@ -836,7 +836,7 @@ class crewfiles_file
 		// mislykket?
 		if ($size === false)
 		{
-			// anonym Exception for at $data ikke skal gå ut
+			// anonym Exception for at $data ikke skal gÃ¥ ut
 			throw new HSException("Kunne ikke opprette fil $path.", sysreport::EXCEPTION_ANONYMOUS);
 		}
 		
@@ -916,7 +916,7 @@ class crewfiles_revision
 	}
 	
 	/**
-	 * Finn filen denne revisjonen tilhører
+	 * Finn filen denne revisjonen tilhÃ¸rer
 	 * @return crewfiles_file
 	 */
 	public function get_file()
@@ -982,7 +982,7 @@ class crewfiles_revision
 	{
 		global $_base;
 		
-		// sørg for at tittelen (filename) ikke inneholder noen ugyldige tegn
+		// sÃ¸rg for at tittelen (filename) ikke inneholder noen ugyldige tegn
 		$title = crewfiles::filter_filename($title);
 		
 		// lagre endringer

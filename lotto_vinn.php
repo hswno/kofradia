@@ -29,7 +29,7 @@ echo '
 	<h1 class="bg1">Lotto: Historie<span class="left"></span><span class="right"></span></h1>
 	<p class="h_left"><a href="lotto">&laquo; Tilbake</a></p>
 	<div class="bg1">
-		<p class="c">Her er en oversikt over alle gangene du har vunnet på lotto!</p>';
+		<p class="c">Her er en oversikt over alle gangene du har vunnet pÃ¥ lotto!</p>';
 
 
 // antall vinn og totalt vunnet
@@ -40,7 +40,7 @@ $won = mysql_result($result, 0, 1);
 if ($ant == 0)
 {
 	echo '
-		<p class="c"><b>Du har aldri vunnet på lotto!</b></p>';
+		<p class="c"><b>Du har aldri vunnet pÃ¥ lotto!</b></p>';
 }
 
 else
@@ -53,7 +53,7 @@ else
 		<table class="table center game" id="lotto_vinn" width="100%">
 			<thead>
 				<tr>
-					<th>Når</th>
+					<th>NÃ¥r</th>
 					<th>Plassering</th>
 					<th>Premie</th>
 					<th>Vinnerlodd</th>

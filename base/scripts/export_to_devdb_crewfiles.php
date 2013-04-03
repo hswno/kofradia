@@ -2,7 +2,7 @@
 
 global $files;
 
-// kjør session for å unngå feil når player::get lastes
+// kjÃ¸r session for Ã¥ unngÃ¥ feil nÃ¥r player::get lastes
 session_start();
 
 // eksporter databasen med exportscriptet
@@ -28,7 +28,7 @@ foreach ($data as $r)
 		continue;
 	}
 	
-	echo "Kjører {$r[1]} gjennom gzip.\n";
+	echo "KjÃ¸rer {$r[1]} gjennom gzip.\n";
 	
 	shell_exec("gzip -9 ".escapeshellarg($r[1]));
 	$r[1] .= ".gz";

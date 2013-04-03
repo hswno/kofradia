@@ -18,20 +18,20 @@ $rentetabell = array(
 	array('0', 0)
 );
 
-// pålogget siste 12 timene
+// pÃ¥logget siste 12 timene
 $time = time();
 $last_online = $time - 43200;
 
 // lagre backup
 save_user_backup();
 
-// lås brukertabellen
+// lÃ¥s brukertabellen
 ess::$b->db->query("LOCK TABLES users_players WRITE");
 
-// sett last_interest feltet til bankbeløpet så vi kan beregne forskjell
+// sett last_interest feltet til bankbelÃ¸pet sÃ¥ vi kan beregne forskjell
 ess::$b->db->query("UPDATE users_players SET up_interest_last = 0 WHERE up_interest_last != 0");
 
-// gå gjennom hvert rentenivå og gi renter
+// gÃ¥ gjennom hvert rentenivÃ¥ og gi renter
 $last0 = 0;
 $last1 = 0;
 foreach ($rentetabell as $row)
@@ -58,7 +58,7 @@ ess::$b->db->query("
 	SET up_interest_total = up_interest_total + up_interest_last, up_interest_num = up_interest_num + 1, up_log_new = up_log_new + 1
 	WHERE up_interest_last > 0");
 
-// lås opp brukertabellen
+// lÃ¥s opp brukertabellen
 ess::$b->db->query("UNLOCK TABLES");
 
 // lagre logg melding

@@ -6,7 +6,7 @@
 
 /*
 
-Energien øker hvert minutt med 1 % av nåværende verdi, og med minimum 10 energipoeng.
+Energien Ã¸ker hvert minutt med 1 % av nÃ¥vÃ¦rende verdi, og med minimum 10 energipoeng.
 
 */
 
@@ -55,7 +55,7 @@ ess::$b->db->query("
 		AND up_brom_ff_time < $time");
 
 
-// finn spillere som ikke har mer helse og som dør
+// finn spillere som ikke har mer helse og som dÃ¸r
 $result = ess::$b->db->query("SELECT up_id, up_attacked_time, up_attacked_up_id, up_attacked_ff_id_list FROM users_players WHERE up_access_level != 0 AND up_health <= 0");
 while ($row = mysql_fetch_assoc($result))
 {
@@ -64,7 +64,7 @@ while ($row = mysql_fetch_assoc($result))
 	
 	$by_up = $player->bleed_handle();
 	
-	// sett spilleren død
+	// sett spilleren dÃ¸d
 	$ret = $player->dies(false, $by_up);
 	
 	// trigger

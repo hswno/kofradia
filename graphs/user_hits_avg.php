@@ -17,7 +17,7 @@ if (isset($_GET['up_id']) && access::has("mod"))
 	$up_name = mysql_result($result, 0, "up_name");
 }
 
-// annen måned?
+// annen mÃ¥ned?
 $date = $_base->date->get();
 if (isset($_GET['date']))
 {

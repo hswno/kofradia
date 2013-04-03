@@ -6,7 +6,7 @@ class autologin
 	const TYPE_RESET_PASS = 1;
 	
 	/**
-	 * Generer autologin oppføring for en bruker
+	 * Generer autologin oppfÃ¸ring for en bruker
 	 * @param int $u_id
 	 * @param int $expire
 	 * @param optional string $redirect

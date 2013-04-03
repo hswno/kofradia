@@ -3,7 +3,7 @@
 class patch
 {
 	/**
-	 * Kjør patch fra diff() på en tekst.
+	 * KjÃ¸r patch fra diff() pÃ¥ en tekst.
 	 * 
 	 * @param string $original
 	 * @param string $diff

@@ -1,4 +1,4 @@
 <?php
 
-// kjør lottokonkurranse
+// kjÃ¸r lottokonkurranse
 lotto::run_comp();

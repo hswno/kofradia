@@ -9,22 +9,22 @@ class forum
 	public $info;
 	public $params;
 	
-	/** Ventetid før ny forumtråd kan opprettes */
+	/** Ventetid fÃ¸r ny forumtrÃ¥d kan opprettes */
 	public $wait_topic = 0;
 	
-	/** Ventetid før nytt forumsvar kan legges til */
+	/** Ventetid fÃ¸r nytt forumsvar kan legges til */
 	public $wait_reply = 0;
 	
-	/** Rankkrav for ny forumtråd */
+	/** Rankkrav for ny forumtrÃ¥d */
 	const TOPIC_MIN_RANK = 4;
 	
-	/** Minste tillatt lengde i tittelen til en forumtråd */
+	/** Minste tillatt lengde i tittelen til en forumtrÃ¥d */
 	const TOPIC_TITLE_MIN_LENGTH = 5;
 	
-	/** Lengde tillatt lengde i tittelen til en forumtråd */
+	/** Lengde tillatt lengde i tittelen til en forumtrÃ¥d */
 	const TOPIC_TITLE_MAX_LENGTH = 40;
 	
-	/** Minste tillatt lengde i en forumtråd */
+	/** Minste tillatt lengde i en forumtrÃ¥d */
 	const TOPIC_MIN_LENGTH = 25;
 	
 	/** Minste tillatt lengde i et forumsvar */
@@ -34,7 +34,7 @@ class forum
 	public static $fs_check = true;
 	
 	/**
-	 * FF forumet tilhører
+	 * FF forumet tilhÃ¸rer
 	 * @var ff
 	 */
 	public $ff;
@@ -110,7 +110,7 @@ class forum
 	}
 	
 	/**
-	 * Hent navn på forumet
+	 * Hent navn pÃ¥ forumet
 	 */
 	public function get_name()
 	{
@@ -128,7 +128,7 @@ class forum
 	/** Sjekk om vi har tilgang */
 	public function check_access()
 	{
-		// tilhører et ff?
+		// tilhÃ¸rer et ff?
 		if ($this->ff && !$this->ff->access(true))
 		{
 			return false;
@@ -221,7 +221,7 @@ class forum
 		// ingen RSS for FF
 		if ($this->ff) return;
 		
-		ess::$b->page->add_head('<link rel="alternate" href="'.ess::$s['relative_path'].'/rss/forum_topics?forum='.$this->id.'" type="application/rss+xml" title="Siste forumtråder i '.htmlspecialchars($this->get_name()).'" />');
+		ess::$b->page->add_head('<link rel="alternate" href="'.ess::$s['relative_path'].'/rss/forum_topics?forum='.$this->id.'" type="application/rss+xml" title="Siste forumtrÃ¥der i '.htmlspecialchars($this->get_name()).'" />');
 		ess::$b->page->add_head('<link rel="alternate" href="'.ess::$s['relative_path'].'/rss/forum_replies?forum='.$this->id.'" type="application/rss+xml" title="Siste forumsvar i '.htmlspecialchars($this->get_name()).'" />');
 	}
 	
@@ -240,7 +240,7 @@ class forum
 		// crewet har ikke sperrer
 		if (access::has("crewet")) return;
 		
-		// ventetid for ny forumtråd
+		// ventetid for ny forumtrÃ¥d
 		if (login::$user->data['u_forum_topic_time'] > 0)
 		{
 			$this->wait_topic = max(0, login::$user->data['u_forum_topic_time'] + game::$settings['delay_forum_new']['value'] - time());
@@ -254,7 +254,7 @@ class forum
 	}
 	
 	/**
-	 * Sjekk om vi er blokkert fra å utføre forumhandlinger
+	 * Sjekk om vi er blokkert fra Ã¥ utfÃ¸re forumhandlinger
 	 * @return boolean (true=blokkert, false=ikke)
 	 */
 	public function check_block()
@@ -274,14 +274,14 @@ class forum
 		return false;
 	}
 	
-	/** Blokkert fra å utføre forumhandlinger */
+	/** Blokkert fra Ã¥ utfÃ¸re forumhandlinger */
 	protected function blocked($blokkering)
 	{
-		ess::$b->page->add_message("Du er blokkert fra å utføre handlinger i forumet. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br />\n"
+		ess::$b->page->add_message("Du er blokkert fra Ã¥ utfÃ¸re handlinger i forumet. Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).".<br />\n"
 			."<b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), "error");
 	}
 	
-	/** Kontroller rankkrav for å skrive i en topic */
+	/** Kontroller rankkrav for Ã¥ skrive i en topic */
 	public function check_rank()
 	{
 		// crewet har uansett tilgang
@@ -295,7 +295,7 @@ class forum
 	}
 	
 	/**
-	 * Legg til ny forumtråd
+	 * Legg til ny forumtrÃ¥d
 	 * @param string $title
 	 * @param string $text
 	 * @param integer $type
@@ -315,7 +315,7 @@ class forum
 			return;
 		}
 		
-		// kontroller ventetid før nytt forumsvar kan legges til
+		// kontroller ventetid fÃ¸r nytt forumsvar kan legges til
 		$this->check_timers();
 		if ($this->wait_topic > 0)
 		{
@@ -355,13 +355,13 @@ class forum
 			$set .= ", ft_type = $type";
 		}
 		
-		// sette som låst/ulåst
+		// sette som lÃ¥st/ulÃ¥st
 		if ($locked !== NULL)
 		{
 			$set .= ", ft_locked = ".($locked ? 1 : 0);
 		}
 		
-		// legg til forumtråden
+		// legg til forumtrÃ¥den
 		ess::$b->db->query("INSERT INTO forum_topics SET ft_title = ".ess::$b->db->quote($title).", ft_text = ".ess::$b->db->quote($text).", ft_time = ".time().", ft_up_id = ".login::$user->player->id.", ft_fse_id = $this->id$set");
 		$topic_id = ess::$b->db->insert_id();
 		
@@ -376,7 +376,7 @@ class forum
 			ess::$b->db->query("UPDATE users, users_players SET up_forum_num_topics = up_forum_num_topics + 1, u_forum_topic_time = ".time()." WHERE up_id = ".login::$user->player->id." AND u_id = up_u_id");
 		}
 		
-		// oppdater tid om nødvendig
+		// oppdater tid om nÃ¸dvendig
 		$this->update_change_time();
 		
 		// logg
@@ -386,38 +386,38 @@ class forum
 			"ft_type" => ($type !== NULL ? $type : 1)
 		));
 		
-		// fullført
+		// fullfÃ¸rt
 		$this->add_topic_complete($topic_id);
 	}
 	
-	/** Har ikke høy nok rank for å skrive i forumet */
+	/** Har ikke hÃ¸y nok rank for Ã¥ skrive i forumet */
 	protected function add_topic_error_rank()
 	{
 		// sett opp ranknavnet
 		$rank_info = game::$ranks['items_number'][self::TOPIC_MIN_RANK][$rank_id];
 		
-		ess::$b->page->add_message("Du har ikke høy nok rank for å skrive i dette forumet. Du må ha nådd ranken <b>".htmlspecialchars($rank_info['name'])."</b>.", "error");
+		ess::$b->page->add_message("Du har ikke hÃ¸y nok rank for Ã¥ skrive i dette forumet. Du mÃ¥ ha nÃ¥dd ranken <b>".htmlspecialchars($rank_info['name'])."</b>.", "error");
 	}
 	
 	/**
-	 * Må vente før ny forumtråd kan legges til
+	 * MÃ¥ vente fÃ¸r ny forumtrÃ¥d kan legges til
 	 * @param integer $wait ventetid
 	 */
 	protected function add_topic_error_wait($wait)
 	{
-		ess::$b->page->add_message("Du må vente ".game::counter($wait)." før du kan opprette ny forumtråd.", "error");
+		ess::$b->page->add_message("Du mÃ¥ vente ".game::counter($wait)." fÃ¸r du kan opprette ny forumtrÃ¥d.", "error");
 	}
 	
-	/** For kort eller lang lengde i tittelen til forumtråden */
+	/** For kort eller lang lengde i tittelen til forumtrÃ¥den */
 	protected function add_topic_error_length_title()
 	{
-		ess::$b->page->add_message("Tittelen kan ikke inneholde færre enn ".forum::TOPIC_TITLE_MIN_LENGTH." eller flere enn ".forum::TOPIC_TITLE_MAX_LENGTH." tegn.", "error");
+		ess::$b->page->add_message("Tittelen kan ikke inneholde fÃ¦rre enn ".forum::TOPIC_TITLE_MIN_LENGTH." eller flere enn ".forum::TOPIC_TITLE_MAX_LENGTH." tegn.", "error");
 	}
 	
-	/** For kort lengde i innholdet til forumtråden */
+	/** For kort lengde i innholdet til forumtrÃ¥den */
 	protected function add_topic_error_length()
 	{
-		ess::$b->page->add_message("Forumtråden kan ikke inneholde færre enn ".forum::TOPIC_MIN_LENGTH." bokstaver/tall.", "error");
+		ess::$b->page->add_message("ForumtrÃ¥den kan ikke inneholde fÃ¦rre enn ".forum::TOPIC_MIN_LENGTH." bokstaver/tall.", "error");
 	}
 	
 	/** Ugyldig type */
@@ -426,12 +426,12 @@ class forum
 		ess::$b->page->add_message("Ugyldig type.", "error");
 	}
 	
-	/** Forumtråden ble redigert */
+	/** ForumtrÃ¥den ble redigert */
 	protected function add_topic_complete($topic_id)
 	{
-		ess::$b->page->add_message("Forumtråden ble opprettet.");
+		ess::$b->page->add_message("ForumtrÃ¥den ble opprettet.");
 		
-		// send til forumtråden
+		// send til forumtrÃ¥den
 		redirect::handle("/forum/topic?id=$topic_id", redirect::ROOT);
 	}
 	
@@ -441,14 +441,14 @@ class forum
 		// oppdater innstillinger hvis crewforum
 		if ($this->id >= 5 && $this->id <= 7)
 		{
-			// oppdatere brukeren for å unngå markering om noe nytt?
+			// oppdatere brukeren for Ã¥ unngÃ¥ markering om noe nytt?
 			$t = isset(game::$settings["forum_{$this->id}_last_change"]) ? game::$settings["forum_{$this->id}_last_change"]['value'] : false;
 			$l = login::$user->params->get("forum_{$this->id}_last_view");
 			
 			$time = time();
 			if ($t && $l >= $t)
 			{
-				// sett visningstidspunkt til nå for å unngå oppdatering
+				// sett visningstidspunkt til nÃ¥ for Ã¥ unngÃ¥ oppdatering
 				login::$user->params->update("forum_{$this->id}_last_view", $time, true);
 			}
 			
@@ -514,16 +514,16 @@ class forum
 		$member = $this->ff->members['members'][$up_id];
 		
 		$ret = ' <span class="f_stilling">[<span class="f_stilling_i">'.ucfirst($member->get_priority_name()).'</span>]</span>';
-		$ret .= ' <span class="f_stilling">[<span class="f_stilling_i">'.fwords("%d tråd", "%d tråder", $member->data['ffm_forum_topics']).', '.$member->data['ffm_forum_replies'].' svar</span>]</span>';
+		$ret .= ' <span class="f_stilling">[<span class="f_stilling_i">'.fwords("%d trÃ¥d", "%d trÃ¥der", $member->data['ffm_forum_topics']).', '.$member->data['ffm_forum_replies'].' svar</span>]</span>';
 		
 		return $ret;
 	}
 	
 	/**
-	 * Lag HTML for hovedinnlegget i en forumtråd
+	 * Lag HTML for hovedinnlegget i en forumtrÃ¥d
 	 * @param array $data
 	 * 
-	 * $data må inneholde:
+	 * $data mÃ¥ inneholde:
 	 * 
 	 * ft_id
 	 * ft_time
@@ -571,7 +571,7 @@ class forum
 			<a href="'.ess::$s['relative_path'].'/js" rel="ft,'.$data['ft_id'].'" class="report_link forum_report">Rapporter</a>';
 		}
 		
-		// verktøy
+		// verktÃ¸y
 		if (login::$logged_in && ($this->fmod || $data['ft_up_id'] == login::$user->player->id))
 		{
 			$right .= '
@@ -621,10 +621,10 @@ class forum
 	}
 	
 	/**
-	 * Lag HTML for forhåndsvisning av hovedinnlegget i en forumtråd
+	 * Lag HTML for forhÃ¥ndsvisning av hovedinnlegget i en forumtrÃ¥d
 	 * @param array $data
 	 * 
-	 * $data må inneholde:
+	 * $data mÃ¥ inneholde:
 	 * 
 	 * ft_id [optional]
 	 * ft_time [optional]
@@ -666,7 +666,7 @@ class forum
 	<div class="forum_topic">
 		<h2 class="forum_title"><a href="'.(isset($data['ft_id']) ? 'topic?id='.$data['ft_id'] : 'forum').'" class="forum_permlink r4">#1</a> - '.$date->format(date::FORMAT_NOTIME).' <b>'.$date->format("H:i:s").'</b> - Av '.game::profile_link($data['ft_up_id'], $data['up_name'], $data['up_access_level']).$player_ff_position.'</h2>
 		<p class="h_left"><a href="#default_container"><img src="'.STATIC_LINK.'/other/up.gif" title="Til toppen" /></a></p>
-		<p class="h_right" style="text-transform: uppercase; margin: -17px 10px 0 !important; color: #DDD">Forhåndsvisning</p>';
+		<p class="h_right" style="text-transform: uppercase; margin: -17px 10px 0 !important; color: #DDD">ForhÃ¥ndsvisning</p>';
 		
 		// profilbildet og rank
 		$img = '
@@ -707,7 +707,7 @@ class forum
 	 * Lag HTML for et forumsvar
 	 * @param array $data
 	 * 
-	 * $data må inneholde:
+	 * $data mÃ¥ inneholde:
 	 * 
 	 * ft_fse_id
 	 * ft_id
@@ -761,7 +761,7 @@ class forum
 			<a href="'.ess::$s['relative_path'].'/js" rel="fr,'.$data['fr_id'].'" class="report_link forum_report">Rapporter</a>';
 		}
 		
-		// verktøy
+		// verktÃ¸y
 		if ($this->fmod || (login::$logged_in && $data['fr_up_id'] == login::$user->player->id))
 		{
 			$right .= '
@@ -773,11 +773,11 @@ class forum
 				$right .= '
 			<a href="'.ess::$s['relative_path'].'/forum/topic?id='.$data['ft_id'].'&amp;delete_reply='.$data['fr_id'].'&amp;sid='.login::$info['ses_id'].'" class="forum_link_reply_delete" rel="'.$data['fr_id'].'"><img src="'.STATIC_LINK.'/other/delete.gif" alt="Slett" /></a>';
 				
-				// annonsere svaret på nytt?
+				// annonsere svaret pÃ¥ nytt?
 				if ($data['ft_fse_id'] >= 5 && $data['ft_fse_id'] <= 7)
 				{
 					$right .= '
-			<a href="#" class="forum_link_reply_announce" rel="'.$data['fr_id'].'" title="Annonser svaret på nytt i spillelogg og crewkanal"><img src="'.STATIC_LINK.'/icon/arrow_out.png" alt="Annonser" /></a>';
+			<a href="#" class="forum_link_reply_announce" rel="'.$data['fr_id'].'" title="Annonser svaret pÃ¥ nytt i spillelogg og crewkanal"><img src="'.STATIC_LINK.'/icon/arrow_out.png" alt="Annonser" /></a>';
 				}
 			}
 			
@@ -832,10 +832,10 @@ class forum
 	}
 	
 	/**
-	 * Lag HTML for forhåndsvisning av et forumsvar
+	 * Lag HTML for forhÃ¥ndsvisning av et forumsvar
 	 * @param array $data
 	 * 
-	 * $data må inneholde:
+	 * $data mÃ¥ inneholde:
 	 *
 	 * ft_id
 	 * fr_text
@@ -868,7 +868,7 @@ class forum
 	<div class="forum_topic">
 		<h2 class="forum_title"><a href="topic?id='.$data['ft_id'].'" class="forum_permlink r4">#XX</a> - '.$date->format(date::FORMAT_NOTIME).' <b>'.$date->format("H:i:s").'</b> - Av '.game::profile_link($data['fr_up_id'], $data['up_name'], $data['up_access_level']).$player_ff_position.(isset($data['fs_new']) && $data['fs_new'] ? ' <span class="fs_new">(Ny)</span>' : '').'</h2>
 		<p class="h_left"><a href="#default_header_wrap"><img src="'.STATIC_LINK.'/other/up.gif" title="Til toppen" /></a></p>
-		<p class="h_right" style="text-transform: uppercase; margin: -17px 10px 0 !important; color: #DDD">Forhåndsvisning</p>';
+		<p class="h_right" style="text-transform: uppercase; margin: -17px 10px 0 !important; color: #DDD">ForhÃ¥ndsvisning</p>';
 		
 		// profilbildet og rank
 		$img = '
@@ -907,15 +907,15 @@ class forum
 	
 	/**
 	 * Sjekk lengde for en bb-tekst
-	 * Tillatter kun a-z, A-Z, æøåÆØÅ, 0-9 som tegn
+	 * Tillatter kun a-z, A-Z, Ã¦Ã¸Ã¥Ã†Ã˜Ã…, 0-9 som tegn
 	 * @param string $data
 	 */
 	public static function check_length($data)
 	{
-		// gjør om data til kun tillatte tegn
+		// gjÃ¸r om data til kun tillatte tegn
 		$data = trim($data);
 		$plain = htmlspecialchars_decode(strip_tags(game::format_data($data)));
-		$plain = preg_replace("/[^a-zA-ZæøåÆØÅ0-9]/", '', $plain);
+		$plain = preg_replace("/[^a-zA-ZÃ¦Ã¸Ã¥Ã†Ã˜Ã…0-9]/", '', $plain);
 		
 		// sjekk lengden
 		return strlen($plain);
@@ -952,41 +952,41 @@ class forum_ajax extends forum
 		ajax::text("ERROR:403-FORUM", ajax::TYPE_INVALID);
 	}
 	
-	/** Blokkert fra å utføre forumhandlinger */
+	/** Blokkert fra Ã¥ utfÃ¸re forumhandlinger */
 	protected function blocked($blokkering)
 	{
-		ajax::html("Du er blokkert fra å utføre handlinger i forumet.<br />Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC)." (".game::counter($blokkering['ub_time_expire']-time()).").<br />\n"
+		ajax::html("Du er blokkert fra Ã¥ utfÃ¸re handlinger i forumet.<br />Blokkeringen varer til ".ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC)." (".game::counter($blokkering['ub_time_expire']-time()).").<br />\n"
 			."<b>Begrunnelse:</b> ".game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt."), ajax::TYPE_INVALID);
 	}
 	
-	/** Har ikke høy nok rank for å skrive i forumet */
+	/** Har ikke hÃ¸y nok rank for Ã¥ skrive i forumet */
 	protected function add_topic_error_rank()
 	{
 		// sett opp ranknavnet
 		$rank_info = game::$ranks['items_number'][self::TOPIC_MIN_RANK][$rank_id];
 		
-		ajax::html("Du har ikke høy nok rank for å skrive i dette forumet. Du må ha nådd ranken <b>".htmlspecialchars($rank_info['name'])."</b>.", ajax::TYPE_INVALID);
+		ajax::html("Du har ikke hÃ¸y nok rank for Ã¥ skrive i dette forumet. Du mÃ¥ ha nÃ¥dd ranken <b>".htmlspecialchars($rank_info['name'])."</b>.", ajax::TYPE_INVALID);
 	}
 	
 	/**
-	 * Må vente før ny forumtråd kan legges til
+	 * MÃ¥ vente fÃ¸r ny forumtrÃ¥d kan legges til
 	 * @param integer $wait ventetid
 	 */
 	protected function add_topic_error_wait($wait)
 	{
-		ajax::html("Du må vente ".game::counter($wait)." før du kan opprette ny forumtråd.", ajax::TYPE_INVALID);
+		ajax::html("Du mÃ¥ vente ".game::counter($wait)." fÃ¸r du kan opprette ny forumtrÃ¥d.", ajax::TYPE_INVALID);
 	}
 	
-	/** For kort eller lang lengde i tittelen til forumtråden */
+	/** For kort eller lang lengde i tittelen til forumtrÃ¥den */
 	protected function add_topic_error_length_title()
 	{
-		ajax::html("Tittelen kan ikke inneholde færre enn ".forum::TOPIC_TITLE_MIN_LENGTH." eller flere enn ".forum::TOPIC_TITLE_MAX_LENGTH." tegn.", ajax::TYPE_INVALID);
+		ajax::html("Tittelen kan ikke inneholde fÃ¦rre enn ".forum::TOPIC_TITLE_MIN_LENGTH." eller flere enn ".forum::TOPIC_TITLE_MAX_LENGTH." tegn.", ajax::TYPE_INVALID);
 	}
 	
-	/** For kort lengde i innholdet til forumtråden */
+	/** For kort lengde i innholdet til forumtrÃ¥den */
 	protected function add_topic_error_length()
 	{
-		ajax::html("Forumtråden kan ikke inneholde færre enn ".forum::TOPIC_MIN_LENGTH." bokstaver/tall.", ajax::TYPE_INVALID);
+		ajax::html("ForumtrÃ¥den kan ikke inneholde fÃ¦rre enn ".forum::TOPIC_MIN_LENGTH." bokstaver/tall.", ajax::TYPE_INVALID);
 	}
 	
 	/** Ugyldig type */
@@ -995,10 +995,10 @@ class forum_ajax extends forum
 		ajax::html("Ugyldig type.", ajax::TYPE_INVALID);
 	}
 	
-	/** Forumtråden ble redigert */
+	/** ForumtrÃ¥den ble redigert */
 	protected function add_topic_complete($topic_id)
 	{
-		ess::$b->page->add_message("Forumtråden ble opprettet.");
+		ess::$b->page->add_message("ForumtrÃ¥den ble opprettet.");
 		
 		ajax::text("REDIRECT:".ess::$s['relative_path']."/forum/topic?id=$topic_id");
 	}
@@ -1014,20 +1014,20 @@ class forum_control extends forum
 }
 
 /**
- * Forumtråd
+ * ForumtrÃ¥d
  */
 class forum_topic
 {
 	/** Antall forumsvar per side */
 	public $replies_per_page = 20;
 	
-	/** Ventetid før en forumtråd kan slettes */
+	/** Ventetid fÃ¸r en forumtrÃ¥d kan slettes */
 	const WAIT_DELETE_TOPIC = 300; // 5 minutter
 	
-	/** ID-en til forumtråden */
+	/** ID-en til forumtrÃ¥den */
 	public $id;
 	
-	/** Informasjon om forumtråden */
+	/** Informasjon om forumtrÃ¥den */
 	public $info;
 	
 	/**
@@ -1037,7 +1037,7 @@ class forum_topic
 	public $forum;
 	
 	/**
-	 * Etter hvor lang tid en forumtråd blir slettet at den blir utilgjengelig for FF
+	 * Etter hvor lang tid en forumtrÃ¥d blir slettet at den blir utilgjengelig for FF
 	 */
 	const FF_HIDE_TIME = 172800; // 48 timer
 	
@@ -1050,7 +1050,7 @@ class forum_topic
 	{
 		$this->id = (int) $topic_id;
 		
-		// hent informasjon om forumtråden
+		// hent informasjon om forumtrÃ¥den
 		$seen_q = login::$logged_in ? "fs_ft_id = ft_id AND fs_u_id = ".login::$user->id : "FALSE";
 		$result = ess::$b->db->query("
 			SELECT
@@ -1083,7 +1083,7 @@ class forum_topic
 			}
 		}
 		
-		// fant ikke forumtråden eller slettet uten tilgang?
+		// fant ikke forumtrÃ¥den eller slettet uten tilgang?
 		if (!$this->info || $this->info['ft_deleted'] != 0)
 		{
 			// hvor lenge etter den er slettet vi kan vise den
@@ -1102,13 +1102,13 @@ class forum_topic
 			}
 		}
 		
-		// sett opp antall forumsvar som skal vises på hver side
+		// sett opp antall forumsvar som skal vises pÃ¥ hver side
 		if (login::$logged_in && login::$user->data['u_forum_per_page'] > 1) $this->replies_per_page = max(1, min(100, login::$user->data['u_forum_per_page'])); 
 	}
 	
 	/**
-	 * Hent full informasjon om forumtråden
-	 * For å kunne bruke HTML-malen
+	 * Hent full informasjon om forumtrÃ¥den
+	 * For Ã¥ kunne bruke HTML-malen
 	 * @return array
 	 */
 	public function extended_info()
@@ -1121,13 +1121,13 @@ class forum_topic
 	/** Slettet, men tilgang */
 	protected function deleted_with_access()
 	{
-		ess::$b->page->add_message("Denne forumtråden er slettet. Du har alikevel tilgang til å vise den.");
+		ess::$b->page->add_message("Denne forumtrÃ¥den er slettet. Du har alikevel tilgang til Ã¥ vise den.");
 	}
 	
 	/** Slettet og uten tilgang, eller finnes ikke */
 	protected function error_404()
 	{
-		ess::$b->page->add_message("Fant ikke forumtråden.", "error");
+		ess::$b->page->add_message("Fant ikke forumtrÃ¥den.", "error");
 		redirect::handle("/forum/", redirect::ROOT);
 	}
 	
@@ -1138,20 +1138,20 @@ class forum_topic
 		$this->forum->require_access();
 	}
 	
-	/** Redirect til forumtråden */
+	/** Redirect til forumtrÃ¥den */
 	public function redirect()
 	{
 		redirect::handle("/forum/topic?id=$this->id", redirect::ROOT);
 	}
 	
 	/**
-	 * Slett forumtråden
+	 * Slett forumtrÃ¥den
 	 */
 	public function delete()
 	{
 		if (!login::$logged_in) throw new HSNotLoggedIn();
 		
-		// kontroller tilgang til forumtråden
+		// kontroller tilgang til forumtrÃ¥den
 		if ($this->info['ft_up_id'] != login::$user->player->id && !$this->forum->fmod)
 		{
 			$this->delete_error_403();
@@ -1168,19 +1168,19 @@ class forum_topic
 		// kontroller blokkering
 		if ($this->forum->check_block()) return;
 		
-		// kontroller ventetid før forumtråden kan slettes
+		// kontroller ventetid fÃ¸r forumtrÃ¥den kan slettes
 		if (!$this->forum->fmod)
 		{
 			$wait = $this->info['ft_time'] - time() + self::WAIT_DELETE_TOPIC;
 			if ($wait > 0)
 			{
-				// må vente
+				// mÃ¥ vente
 				$this->delete_error_wait($wait);
 				return;
 			}
 		}
 		
-		// slett forumtråden
+		// slett forumtrÃ¥den
 		if (!$this->delete_action())
 		{
 			// anta at den allerede er slettet
@@ -1191,50 +1191,50 @@ class forum_topic
 		// logg
 		forum_log::add_topic_deleted($this);
 		
-		// fullført
+		// fullfÃ¸rt
 		$this->delete_complete();
 	}
 	
-	/** Utfør selve slettingen av forumtråden */
+	/** UtfÃ¸r selve slettingen av forumtrÃ¥den */
 	protected function delete_action()
 	{
-		// forsøk å slett forumtråden
+		// forsÃ¸k Ã¥ slett forumtrÃ¥den
 		ess::$b->db->query("UPDATE forum_topics SET ft_deleted = ".time()." WHERE ft_id = $this->id AND ft_deleted = 0");
 		return ess::$b->db->affected_rows() > 0;
 	}
 	
-	/** Forumtråden er allerede slettet */
+	/** ForumtrÃ¥den er allerede slettet */
 	protected function delete_dupe()
 	{
-		ess::$b->page->add_message("Forumtråden er allerede slettet.", "error");
+		ess::$b->page->add_message("ForumtrÃ¥den er allerede slettet.", "error");
 		$this->forum->redirect();
 	}
 	
-	/** Forumtråden ble slettet */
+	/** ForumtrÃ¥den ble slettet */
 	protected function delete_complete()
 	{
-		ess::$b->page->add_message("Forumtråden ble slettet.");
+		ess::$b->page->add_message("ForumtrÃ¥den ble slettet.");
 		$this->forum->redirect();
 	}
 	
-	/** Ikke tilgang til å slette forumtråden */
+	/** Ikke tilgang til Ã¥ slette forumtrÃ¥den */
 	protected function delete_error_403()
 	{
-		ess::$b->page->add_message("Du har ikke tilgang til å slette denne forumtråden.", "error");
+		ess::$b->page->add_message("Du har ikke tilgang til Ã¥ slette denne forumtrÃ¥den.", "error");
 		$this->redirect();
 	}
 	
 	/**
-	 * Må vente før forumtråden kan slettes
+	 * MÃ¥ vente fÃ¸r forumtrÃ¥den kan slettes
 	 * @param integer $wait ventetid
 	 */
 	protected function delete_error_wait($wait)
 	{
-		ess::$b->page->add_message("Du må vente 5 minutter før du kan slette emnet etter å ha opprettet det. Du må vente i ".game::counter($wait)." før du kan slette det.", "error");
+		ess::$b->page->add_message("Du mÃ¥ vente 5 minutter fÃ¸r du kan slette emnet etter Ã¥ ha opprettet det. Du mÃ¥ vente i ".game::counter($wait)." fÃ¸r du kan slette det.", "error");
 		$this->redirect();
 	}
 	
-	/** Gjenopprett forumtråden */
+	/** Gjenopprett forumtrÃ¥den */
 	public function restore()
 	{
 		// er ikke slettet?
@@ -1244,7 +1244,7 @@ class forum_topic
 			return;
 		}
 		
-		// gjenopprett forumtråden
+		// gjenopprett forumtrÃ¥den
 		if (!$this->restore_action())
 		{
 			// anta at den allerede er gjenopprettet
@@ -1255,52 +1255,52 @@ class forum_topic
 		// logg
 		forum_log::add_topic_restored($this);
 		
-		// fullført
+		// fullfÃ¸rt
 		$this->restore_complete();
 	}
 	
-	/** Forumtråden er allerede gjenopprettet */
+	/** ForumtrÃ¥den er allerede gjenopprettet */
 	protected function restore_dupe()
 	{
-		ess::$b->page->add_message("Forumtråden er allerede gjenopprettet.", "error");
+		ess::$b->page->add_message("ForumtrÃ¥den er allerede gjenopprettet.", "error");
 		$this->redirect();
 	}
 	
-	/** Utfør selve gjenopprettelsen av forumtråden */
+	/** UtfÃ¸r selve gjenopprettelsen av forumtrÃ¥den */
 	protected function restore_action()
 	{
-		// forsøk å gjenopprett forumtråden
+		// forsÃ¸k Ã¥ gjenopprett forumtrÃ¥den
 		ess::$b->db->query("UPDATE forum_topics SET ft_deleted = 0 WHERE ft_id = $this->id AND ft_deleted != 0");
 		return ess::$b->db->affected_rows() > 0;
 	}
 	
-	/** Forumtråden ble gjenopprettet */
+	/** ForumtrÃ¥den ble gjenopprettet */
 	protected function restore_complete()
 	{
-		ess::$b->page->add_message("Forumtråden ble gjenopprettet.");
+		ess::$b->page->add_message("ForumtrÃ¥den ble gjenopprettet.");
 		$this->redirect();
 	}
 	
 	/**
-	 * Rediger forumtråden
+	 * Rediger forumtrÃ¥den
 	 * @param string $title
 	 * @param string $text
 	 * @param integer $section (forumkategori)
-	 * @param integer $type (trådtype)
+	 * @param integer $type (trÃ¥dtype)
 	 * @param boolean $locked
 	 */
 	public function edit($title, $text, $section = NULL, $type = NULL, $locked = NULL)
 	{
 		if (!login::$logged_in) throw new HSNotLoggedIn();
 		
-		// kontroller tilgang til forumtråden
+		// kontroller tilgang til forumtrÃ¥den
 		if ($this->info['ft_up_id'] != login::$user->player->id && !$this->forum->fmod)
 		{
 			$this->edit_error_403();
 			return;
 		}
 		
-		// er tråden låst?
+		// er trÃ¥den lÃ¥st?
 		if ($this->info['ft_locked'] != 0 && !$this->forum->fmod)
 		{
 			$this->edit_error_locked();
@@ -1361,7 +1361,7 @@ class forum_topic
 			$only_moved = false;
 		}
 		
-		// sette som låst/ulåst
+		// sette som lÃ¥st/ulÃ¥st
 		if ($locked !== NULL && $locked != ($this->info['ft_locked'] != 0))
 		{
 			$update .= ", ft_locked = ".($locked ? 1 : 0);
@@ -1378,13 +1378,13 @@ class forum_topic
 		// bare flyttet?
 		if ($only_moved && $this->info['ft_title'] == $title && $this->info['ft_text'] == $text)
 		{
-			// rediger forumtråden
+			// rediger forumtrÃ¥den
 			ess::$b->db->query("UPDATE forum_topics SET ft_title = ".ess::$b->db->quote($title)."$update WHERE ft_id = $this->id");
 			
 			// ble ikke oppdatert?
 			if (ess::$b->db->affected_rows() == 0)
 			{
-				// mest sannsynlig finnes ikke forumtråden, eller så er det oppdatert to ganger samme sekund med samme innhold av samme bruker
+				// mest sannsynlig finnes ikke forumtrÃ¥den, eller sÃ¥ er det oppdatert to ganger samme sekund med samme innhold av samme bruker
 				$this->edit_error_failed();
 				return;
 			}
@@ -1398,17 +1398,17 @@ class forum_topic
 			// logg
 			forum_log::add_topic_moved($this, $old_data);
 			
-			// fullført
+			// fullfÃ¸rt
 			$this->edit_complete();
 		}
 		
-		// rediger forumtråden
+		// rediger forumtrÃ¥den
 		ess::$b->db->query("UPDATE forum_topics SET ft_title = ".ess::$b->db->quote($title).", ft_text = ".ess::$b->db->quote($text).", ft_last_edit = ".time().", ft_last_edit_up_id = ".login::$user->player->id."$update WHERE ft_id = $this->id");
 		
 		// ble ikke oppdatert?
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			// mest sannsynlig finnes ikke forumtråden, eller så er det oppdatert to ganger samme sekund med samme innhold av samme bruker
+			// mest sannsynlig finnes ikke forumtrÃ¥den, eller sÃ¥ er det oppdatert to ganger samme sekund med samme innhold av samme bruker
 			$this->edit_error_failed();
 			return;
 		}
@@ -1433,7 +1433,7 @@ class forum_topic
 		}
 		if ($locked !== NULL && $locked != ($this->info['ft_locked'] != 0))
 		{
-			// låst/ulåst
+			// lÃ¥st/ulÃ¥st
 			$old_data['ft_locked'] = $this->info['ft_locked'] != 0;
 			$this->info['ft_locked'] = ($locked ? 1 : 0);
 		}
@@ -1455,38 +1455,38 @@ class forum_topic
 		// logg
 		forum_log::add_topic_edited($this, $old_data);
 		
-		// fullført
+		// fullfÃ¸rt
 		$this->edit_complete();
 	}
 	
 	/** Redigering feilet */
 	protected function edit_error_failed()
 	{
-		ess::$b->page->add_message("Forumtråden ble ikke redigert.", "error");
+		ess::$b->page->add_message("ForumtrÃ¥den ble ikke redigert.", "error");
 	}
 	
-	/** Har ikke tilgang til å redigere forumtråden */
+	/** Har ikke tilgang til Ã¥ redigere forumtrÃ¥den */
 	protected function edit_error_403()
 	{
-		ess::$b->page->add_message("Du har ikke tilgang til å redigere denne forumtråden.", "error");
+		ess::$b->page->add_message("Du har ikke tilgang til Ã¥ redigere denne forumtrÃ¥den.", "error");
 	}
 	
-	/** Forumtråden er låst */
+	/** ForumtrÃ¥den er lÃ¥st */
 	protected function edit_error_locked()
 	{
-		ess::$b->page->add_message("Denne forumtråden er låst. Du kan ikke redigere den.", "error");
+		ess::$b->page->add_message("Denne forumtrÃ¥den er lÃ¥st. Du kan ikke redigere den.", "error");
 	}
 	
-	/** For kort eller lang lengde i tittelen til forumtråden */
+	/** For kort eller lang lengde i tittelen til forumtrÃ¥den */
 	protected function edit_error_length_title()
 	{
-		ess::$b->page->add_message("Tittelen kan ikke inneholde færre enn ".forum::TOPIC_TITLE_MIN_LENGTH." eller flere enn ".forum::TOPIC_TITLE_MAX_LENGTH." tegn.", "error");
+		ess::$b->page->add_message("Tittelen kan ikke inneholde fÃ¦rre enn ".forum::TOPIC_TITLE_MIN_LENGTH." eller flere enn ".forum::TOPIC_TITLE_MAX_LENGTH." tegn.", "error");
 	}
 	
-	/** For kort lengde i innholdet til forumtråden */
+	/** For kort lengde i innholdet til forumtrÃ¥den */
 	protected function edit_error_length()
 	{
-		ess::$b->page->add_message("Forumtråden kan ikke inneholde færre enn ".forum::TOPIC_MIN_LENGTH." bokstaver/tall.", "error");
+		ess::$b->page->add_message("ForumtrÃ¥den kan ikke inneholde fÃ¦rre enn ".forum::TOPIC_MIN_LENGTH." bokstaver/tall.", "error");
 	}
 	
 	/** Ugyldig forumkategori */
@@ -1501,29 +1501,29 @@ class forum_topic
 		ess::$b->page->add_message("Ugyldig type.", "error");
 	}
 	
-	/** Ingen endringer ble utført */
+	/** Ingen endringer ble utfÃ¸rt */
 	protected function edit_error_nochange()
 	{
-		ess::$b->page->add_message("Ingen endringer ble utført.", "error");
+		ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 	}
 	
-	/** Forumtråden ble redigert */
+	/** ForumtrÃ¥den ble redigert */
 	protected function edit_complete()
 	{
-		ess::$b->page->add_message("Forumtråden ble redigert.");
+		ess::$b->page->add_message("ForumtrÃ¥den ble redigert.");
 		
-		// send til forumtråden
+		// send til forumtrÃ¥den
 		redirect::handle("/forum/topic?id={$this->id}", redirect::ROOT);
 	}
 	
 	/**
-	 * Hent ut et bestemt forumsvar i forumtråden
+	 * Hent ut et bestemt forumsvar i forumtrÃ¥den
 	 * @param integer $reply_id
 	 * @return forum_reply
 	 */
 	public function get_reply($reply_id)
 	{
-		// forsøk å hent forumsvaret
+		// forsÃ¸k Ã¥ hent forumsvaret
 		$reply = new forum_reply($reply_id, $this);
 		
 		// fant ikke?
@@ -1538,21 +1538,21 @@ class forum_topic
 	/**
 	 * Legg til nytt forumsvar
 	 * @param string $text
-	 * @param boolean $no_concatenate ikke sammenslå med evt. forrige forumsvar
-	 * @param boolean $announce annonser på IRC/spilleloggen
+	 * @param boolean $no_concatenate ikke sammenslÃ¥ med evt. forrige forumsvar
+	 * @param boolean $announce annonser pÃ¥ IRC/spilleloggen
 	 */
 	public function add_reply($text, $no_concatenate, $announce)
 	{
 		if (!login::$logged_in) throw new HSNotLoggedIn();
 		
-		// er forumtråden låst?
+		// er forumtrÃ¥den lÃ¥st?
 		if ($this->info['ft_locked'] != 0 && !$this->forum->fmod)
 		{
 			$this->add_reply_error_locked();
 			return;
 		}
 		
-		// er forumtråden slettet?
+		// er forumtrÃ¥den slettet?
 		if ($this->info['ft_deleted'] != 0)
 		{
 			$this->add_reply_error_deleted();
@@ -1562,7 +1562,7 @@ class forum_topic
 		// kontroller blokkering
 		if ($this->forum->check_block()) return;
 		
-		// kontroller ventetid før nytt forumsvar kan legges til
+		// kontroller ventetid fÃ¸r nytt forumsvar kan legges til
 		$this->forum->check_timers();
 		if ($this->forum->wait_reply > 0)
 		{
@@ -1578,18 +1578,18 @@ class forum_topic
 			return;
 		}
 		
-		// sjekk om vi skal sammenslå dette med det siste forumsvaret
+		// sjekk om vi skal sammenslÃ¥ dette med det siste forumsvaret
 		if (!$no_concatenate)
 		{
 			// hent siste forumsvaret
 			$result = ess::$b->db->query("SELECT fr_id, fr_up_id, fr_time FROM forum_replies WHERE fr_ft_id = $this->id AND fr_deleted = 0 ORDER BY fr_time DESC LIMIT 1");
 			$row = mysql_fetch_assoc($result);
 			
-			// fant forumsvar, og tilhører brukeren
+			// fant forumsvar, og tilhÃ¸rer brukeren
 			// forumsvaret er nyere enn 6 timer
 			if ($row && $row['fr_up_id'] == login::$user->player->id && (time()-$row['fr_time']) < 21600)
 			{
-				// slå sammen med dette forumsvaret
+				// slÃ¥ sammen med dette forumsvaret
 				$text = "\n\n[hr]\n\n$text";
 				ess::$b->db->query("UPDATE forum_replies SET fr_text = CONCAT(fr_text, ".ess::$b->db->quote($text)."), fr_last_edit = ".time().", fr_last_edit_up_id = ".login::$user->player->id." WHERE fr_id = {$row['fr_id']}");
 				
@@ -1611,7 +1611,7 @@ class forum_topic
 		ess::$b->db->query("INSERT INTO forum_replies SET fr_time = ".time().", fr_up_id = ".login::$user->player->id.", fr_text = ".ess::$b->db->quote($text).", fr_ft_id = $this->id");
 		$reply_id = ess::$b->db->insert_id();
 		
-		// oppdater forumtråden med antall forumsvar og siste forumsvar
+		// oppdater forumtrÃ¥den med antall forumsvar og siste forumsvar
 		ess::$b->db->query("UPDATE forum_topics SET ft_replies = ft_replies + 1, ft_last_reply = $reply_id WHERE ft_id = $this->id");
 		
 		// oppdater spilleren
@@ -1631,41 +1631,41 @@ class forum_topic
 			$reply->announce();
 		}
 		
-		// oppdater tid om nødvendig
+		// oppdater tid om nÃ¸dvendig
 		$this->forum->update_change_time();
 		
 		// logg
 		forum_log::add_reply_added($this, $reply_id);
 		
-		// fullført
+		// fullfÃ¸rt
 		$this->add_reply_complete($reply_id);
 	}
 	
-	/** Forumtråden er låst */
+	/** ForumtrÃ¥den er lÃ¥st */
 	protected function add_reply_error_locked()
 	{
-		ess::$b->page->add_message("Denne forumtråden er låst. Du kan ikke opprette forumsvar i den.", "error");
+		ess::$b->page->add_message("Denne forumtrÃ¥den er lÃ¥st. Du kan ikke opprette forumsvar i den.", "error");
 	}
 	
-	/** Forumtråden er slettet */
+	/** ForumtrÃ¥den er slettet */
 	protected function add_reply_error_deleted()
 	{
-		ess::$b->page->add_message("Denne forumtråden er slettet. Du kan ikke opprette forumsvar i den.", "error");
+		ess::$b->page->add_message("Denne forumtrÃ¥den er slettet. Du kan ikke opprette forumsvar i den.", "error");
 	}
 	
 	/**
-	 * Må vente før nytt forumsvar kan legges til
+	 * MÃ¥ vente fÃ¸r nytt forumsvar kan legges til
 	 * @param integer $wait ventetid
 	 */
 	protected function add_reply_error_wait($wait)
 	{
-		ess::$b->page->add_message("Du må vente ".game::counter($wait)." før du kan opprette forumsvaret.", "error");
+		ess::$b->page->add_message("Du mÃ¥ vente ".game::counter($wait)." fÃ¸r du kan opprette forumsvaret.", "error");
 	}
 	
 	/** For kort lengde i forumsvaret */
 	protected function add_reply_error_length()
 	{
-		ess::$b->page->add_message("Forumsvaret kan ikke inneholde færre enn ".forum::REPLY_MIN_LENGTH." bokstaver/tall.", "error");
+		ess::$b->page->add_message("Forumsvaret kan ikke inneholde fÃ¦rre enn ".forum::REPLY_MIN_LENGTH." bokstaver/tall.", "error");
 	}
 	
 	/**
@@ -1674,7 +1674,7 @@ class forum_topic
 	 */
 	protected function add_reply_merged($reply_id)
 	{
-		ess::$b->page->add_message("Siden det siste forumsvaret tilhørte deg, har teksten blitt redigert inn i det forumsvaret.");
+		ess::$b->page->add_message("Siden det siste forumsvaret tilhÃ¸rte deg, har teksten blitt redigert inn i det forumsvaret.");
 		redirect::handle("/forum/topic?id={$this->id}&replyid=$reply_id", redirect::ROOT);
 	}
 	
@@ -1689,7 +1689,7 @@ class forum_topic
 }
 
 /**
- * Forumtråd (ajax)
+ * ForumtrÃ¥d (ajax)
  */
 class forum_topic_ajax extends forum_topic
 {
@@ -1715,28 +1715,28 @@ class forum_topic_ajax extends forum_topic
 		ajax::text("ERROR:EDIT-FAILED", ajax::TYPE_INVALID);
 	}
 	
-	/** Har ikke tilgang til å redigere forumtråden */
+	/** Har ikke tilgang til Ã¥ redigere forumtrÃ¥den */
 	protected function edit_error_403()
 	{
 		ajax::text("ERROR:403-TOPIC", ajax::TYPE_INVALID);
 	}
 	
-	/** Forumtråden er låst */
+	/** ForumtrÃ¥den er lÃ¥st */
 	protected function edit_error_locked()
 	{
-		ajax::text("Forumtråden er låst. Du kan ikke redigere den.", ajax::TYPE_INVALID);
+		ajax::text("ForumtrÃ¥den er lÃ¥st. Du kan ikke redigere den.", ajax::TYPE_INVALID);
 	}
 	
-	/** For kort eller lang lengde i tittelen til forumtråden */
+	/** For kort eller lang lengde i tittelen til forumtrÃ¥den */
 	protected function edit_error_length_title()
 	{
-		ajax::text("Tittelen kan ikke inneholde færre enn ".forum::TOPIC_TITLE_MIN_LENGTH." eller flere enn ".forum::TOPIC_TITLE_MAX_LENGTH." tegn.", ajax::TYPE_INVALID);
+		ajax::text("Tittelen kan ikke inneholde fÃ¦rre enn ".forum::TOPIC_TITLE_MIN_LENGTH." eller flere enn ".forum::TOPIC_TITLE_MAX_LENGTH." tegn.", ajax::TYPE_INVALID);
 	}
 	
-	/** For kort lengde i innholdet til forumtråden */
+	/** For kort lengde i innholdet til forumtrÃ¥den */
 	protected function edit_error_length()
 	{
-		ajax::text("Forumtråden kan ikke inneholde færre enn ".forum::TOPIC_MIN_LENGTH." bokstaver/tall.", ajax::TYPE_INVALID);
+		ajax::text("ForumtrÃ¥den kan ikke inneholde fÃ¦rre enn ".forum::TOPIC_MIN_LENGTH." bokstaver/tall.", ajax::TYPE_INVALID);
 	}
 	
 	/** Ugyldig forumkategori */
@@ -1751,45 +1751,45 @@ class forum_topic_ajax extends forum_topic
 		ajax::text("ERROR:INVALID-TYPE", ajax::TYPE_INVALID);
 	}
 	
-	/** Ingen endringer ble utført */
+	/** Ingen endringer ble utfÃ¸rt */
 	protected function edit_error_nochange()
 	{
-		ajax::text("Ingen endringer ble utført.", ajax::TYPE_INVALID);
+		ajax::text("Ingen endringer ble utfÃ¸rt.", ajax::TYPE_INVALID);
 	}
 	
-	/** Forumtråden ble redigert */
+	/** ForumtrÃ¥den ble redigert */
 	protected function edit_complete()
 	{
-		ess::$b->page->add_message("Endringene i forumtråden ble lagret.");
+		ess::$b->page->add_message("Endringene i forumtrÃ¥den ble lagret.");
 		
 		ajax::text("REDIRECT:".ess::$s['relative_path']."/forum/topic?id={$this->id}");
 	}
 	
-	/** Forumet er låst */
+	/** Forumet er lÃ¥st */
 	protected function add_reply_error_locked()
 	{
-		ajax::text("Forumtråden er låst. Du kan ikke legge til nye forumsvar.", ajax::TYPE_INVALID);
+		ajax::text("ForumtrÃ¥den er lÃ¥st. Du kan ikke legge til nye forumsvar.", ajax::TYPE_INVALID);
 	}
 	
-	/** Forumet er låst */
+	/** Forumet er lÃ¥st */
 	protected function add_reply_error_deleted()
 	{
-		ajax::text("Forumtråden er slettet. Du kan ikke legge til nye forumsvar.", ajax::TYPE_INVALID);
+		ajax::text("ForumtrÃ¥den er slettet. Du kan ikke legge til nye forumsvar.", ajax::TYPE_INVALID);
 	}
 	
 	/**
-	 * Må vente før nytt forumsvar kan legges til
+	 * MÃ¥ vente fÃ¸r nytt forumsvar kan legges til
 	 * @param integer $wait ventetid
 	 */
 	protected function add_reply_error_wait($wait)
 	{
-		ajax::html("Du må vente ".game::counter($wait)." før du kan opprette forumsvaret.", ajax::TYPE_INVALID);
+		ajax::html("Du mÃ¥ vente ".game::counter($wait)." fÃ¸r du kan opprette forumsvaret.", ajax::TYPE_INVALID);
 	}
 	
 	/** For kort lengde i forumsvaret */
 	protected function add_reply_error_length()
 	{
-		ajax::text("Forumsvaret kan ikke inneholde færre enn ".forum::REPLY_MIN_LENGTH." bokstaver/tall.", ajax::TYPE_INVALID);
+		ajax::text("Forumsvaret kan ikke inneholde fÃ¦rre enn ".forum::REPLY_MIN_LENGTH." bokstaver/tall.", ajax::TYPE_INVALID);
 	}
 	
 	/**
@@ -1798,7 +1798,7 @@ class forum_topic_ajax extends forum_topic
 	 */
 	protected function add_reply_merged($reply_id)
 	{
-		ess::$b->page->add_message("Siden det siste forumsvaret tilhørte deg, har teksten blitt redigert inn i det forumsvaret.");
+		ess::$b->page->add_message("Siden det siste forumsvaret tilhÃ¸rte deg, har teksten blitt redigert inn i det forumsvaret.");
 		
 		ajax::text("REDIRECT:".ess::$s['relative_path']."/forum/topic?id={$this->id}&replyid=$reply_id");
 	}
@@ -1812,13 +1812,13 @@ class forum_topic_ajax extends forum_topic
 	}
 	
 	/**
-	 * Hent ut et bestemt forumsvar i forumtråden
+	 * Hent ut et bestemt forumsvar i forumtrÃ¥den
 	 * @param integer $reply_id
 	 * @return forum_reply_ajax
 	 */
 	public function get_reply($reply_id)
 	{
-		// forsøk å hent forumsvaret
+		// forsÃ¸k Ã¥ hent forumsvaret
 		$reply = new forum_reply_ajax($reply_id, $this);
 		
 		// fant ikke?
@@ -1843,7 +1843,7 @@ class forum_reply
 	public $info;
 	
 	/**
-	 * Forumtråden
+	 * ForumtrÃ¥den
 	 * @var forum_topic
 	 */
 	public $topic;
@@ -1870,13 +1870,13 @@ class forum_reply
 			return;
 		}
 		
-		// hent forumtråden
+		// hent forumtrÃ¥den
 		if ($topic) $this->get_topic($topic);
 	}
 	
 	/**
 	 * Hent full informasjon om forumsvaret
-	 * For å kunne bruke HTML-malen
+	 * For Ã¥ kunne bruke HTML-malen
 	 * @return array
 	 */
 	public function extended_info()
@@ -1918,7 +1918,7 @@ class forum_reply
 	}
 	
 	/**
-	 * Hent informasjon om forumtråden
+	 * Hent informasjon om forumtrÃ¥den
 	 * @param forum_topic $topic 
 	 */
 	public function get_topic($topic = NULL)
@@ -1941,7 +1941,7 @@ class forum_reply
 		}
 	}
 	
-	/** Hent forumtråd objekt */
+	/** Hent forumtrÃ¥d objekt */
 	protected function get_topic_obj($topic_id)
 	{
 		return new forum_topic($topic_id);
@@ -1955,7 +1955,7 @@ class forum_reply
 		// slettet?
 		if ($this->info['fr_deleted'] != 0)
 		{
-			// send til forumtråden
+			// send til forumtrÃ¥den
 			redirect::handle("/forum/topic?id={$this->info['fr_ft_id']}", redirect::ROOT);
 		}
 		
@@ -1988,7 +1988,7 @@ class forum_reply
 			return;
 		}
 		
-		// er forumtråden låst?
+		// er forumtrÃ¥den lÃ¥st?
 		if ($this->topic->info['ft_locked'] != 0 && !$this->topic->forum->fmod)
 		{
 			$this->delete_error_locked();
@@ -2009,27 +2009,27 @@ class forum_reply
 		// logg
 		forum_log::add_reply_deleted($this);
 		
-		// fullført
+		// fullfÃ¸rt
 		$this->delete_complete();
 	}
 	
-	/** Forumtråden er låst */
+	/** ForumtrÃ¥den er lÃ¥st */
 	protected function delete_error_locked()
 	{
-		ess::$b->page->add_message("Denne forumtråden er låst. Du kan ikke slette forumsvaret.", "error");
+		ess::$b->page->add_message("Denne forumtrÃ¥den er lÃ¥st. Du kan ikke slette forumsvaret.", "error");
 	}
 	
-	/** Utfør selve slettingen av forumsvaret */
+	/** UtfÃ¸r selve slettingen av forumsvaret */
 	protected function delete_action()
 	{
-		// forsøk å slett forumsvaret
+		// forsÃ¸k Ã¥ slett forumsvaret
 		ess::$b->db->query("UPDATE forum_replies SET fr_deleted = 1 WHERE fr_id = $this->id AND fr_deleted = 0");
 		if (ess::$b->db->affected_rows() == 0) return false;
 		
-		// var dette siste forumsvar i forumtråden?
+		// var dette siste forumsvar i forumtrÃ¥den?
 		if ($this->id == $this->topic->info['ft_last_reply'])
 		{
-			// hent siste forumsvaret i forumtråden
+			// hent siste forumsvaret i forumtrÃ¥den
 			$result = ess::$b->db->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_deleted = 0 ORDER BY fr_id DESC LIMIT 1");
 			$reply_id = mysql_num_rows($result) > 0 ? mysql_result($result, 0) : 0;
 			if (!$reply_id) $reply_id = "NULL";
@@ -2081,7 +2081,7 @@ class forum_reply
 		// har vi noe neste forumsvar?
 		if ($row = mysql_fetch_assoc($result))
 		{
-			// hent antall forumsvar før dette forumsvaret
+			// hent antall forumsvar fÃ¸r dette forumsvaret
 			$result = ess::$b->db->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < {$row['fr_id']} AND fr_deleted = 0");
 			$skip = mysql_result($result, 0);
 			
@@ -2096,7 +2096,7 @@ class forum_reply
 	/** Gjenopprett forumsvaret */
 	public function restore()
 	{
-		// kontroller tilgang til å gjenopprettet forumsvaret
+		// kontroller tilgang til Ã¥ gjenopprettet forumsvaret
 		if (!$this->topic->forum->fmod)
 		{
 			$this->error_403();
@@ -2123,31 +2123,31 @@ class forum_reply
 		// logg
 		forum_log::add_reply_restored($this);
 		
-		// fullført
+		// fullfÃ¸rt
 		$this->restore_complete();
 	}
 	
-	/** Utfør selve gjenopprettingen av forumsvaret */
+	/** UtfÃ¸r selve gjenopprettingen av forumsvaret */
 	protected function restore_action()
 	{
-		// forsøk å gjenopprett forumsvaret
+		// forsÃ¸k Ã¥ gjenopprett forumsvaret
 		ess::$b->db->query("UPDATE forum_replies SET fr_deleted = 0 WHERE fr_id = $this->id AND fr_deleted != 0");
 		if (ess::$b->db->affected_rows() == 0) return false;
 		
-		// er dette det siste forumsvaret i forumtråden?
+		// er dette det siste forumsvaret i forumtrÃ¥den?
 		if ($this->id > $this->topic->info['ft_last_reply'])
 		{
 			// sett som siste forumsvar
 			ess::$b->db->query("UPDATE forum_topics SET ft_last_reply = $this->id, ft_replies = ft_replies + 1 WHERE ft_id = {$this->topic->id}");
 		}
 		
-		// øk telleren over antall forumsvar
+		// Ã¸k telleren over antall forumsvar
 		else
 		{
 			ess::$b->db->query("UPDATE forum_topics SET ft_replies = ft_replies + 1 WHERE ft_id = {$this->topic->id}");
 		}
 		
-		// øk telleren til brukeren over antall forumsvar
+		// Ã¸k telleren til brukeren over antall forumsvar
 		if ($this->topic->forum->ff)
 		{
 			ess::$b->db->query("UPDATE ff_members SET ffm_forum_replies = ffm_forum_replies + 1 WHERE ffm_up_id = {$this->info['fr_up_id']} AND ffm_ff_id = {$this->topic->forum->ff->id}");
@@ -2173,7 +2173,7 @@ class forum_reply
 	/** Forumsvaret ble gjenopprettet */
 	protected function restore_complete()
 	{
-		ess::$b->page->add_message("Forumsvaret ble gjenopprettet. Antall forumsvar brukeren har hatt ble økt med 1.");
+		ess::$b->page->add_message("Forumsvaret ble gjenopprettet. Antall forumsvar brukeren har hatt ble Ã¸kt med 1.");
 		
 		// send til forumsvaret
 		redirect::handle("/forum/topic?id={$this->topic->id}&replyid=$this->id", redirect::ROOT);
@@ -2190,7 +2190,7 @@ class forum_reply
 		// kontroller tilgang til forumsvaret
 		if (!$this->require_access()) return;
 		
-		// er forumtråden låst?
+		// er forumtrÃ¥den lÃ¥st?
 		if ($this->topic->info['ft_locked'] != 0 && !$this->topic->forum->fmod)
 		{
 			$this->edit_error_locked();
@@ -2208,7 +2208,7 @@ class forum_reply
 			return;
 		}
 		
-		// ingen endringer utført?
+		// ingen endringer utfÃ¸rt?
 		if ($text == $this->info['fr_text'])
 		{
 			$this->edit_error_nochange();
@@ -2221,7 +2221,7 @@ class forum_reply
 		// ble ikke oppdatert?
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			// mest sannsynlig finnes ikke forumsvaret, eller så er det oppdatert to ganger samme sekund med samme innhold av samme bruker
+			// mest sannsynlig finnes ikke forumsvaret, eller sÃ¥ er det oppdatert to ganger samme sekund med samme innhold av samme bruker
 			$this->edit_error_failed();
 			return;
 		}
@@ -2238,7 +2238,7 @@ class forum_reply
 		// logg
 		forum_log::add_reply_edited($this, $old_data);
 		
-		// fullført
+		// fullfÃ¸rt
 		$this->edit_complete();
 	}
 	
@@ -2248,22 +2248,22 @@ class forum_reply
 		ess::$b->page->add_message("Forumsvaret ble ikke redigert.", "error");
 	}
 	
-	/** Forumtråden er låst */
+	/** ForumtrÃ¥den er lÃ¥st */
 	protected function edit_error_locked()
 	{
-		ess::$b->page->add_message("Denne forumtråden er låst. Du kan ikke redigere forumsvar i den.", "error");
+		ess::$b->page->add_message("Denne forumtrÃ¥den er lÃ¥st. Du kan ikke redigere forumsvar i den.", "error");
 	}
 	
 	/** For kort lengde i forumsvaret */
 	protected function edit_error_length()
 	{
-		ess::$b->page->add_message("Forumsvaret kan ikke inneholde færre enn ".forum::REPLY_MIN_LENGTH." bokstaver/tall.", "error");
+		ess::$b->page->add_message("Forumsvaret kan ikke inneholde fÃ¦rre enn ".forum::REPLY_MIN_LENGTH." bokstaver/tall.", "error");
 	}
 	
-	/** Ingen endringer ble utført */
+	/** Ingen endringer ble utfÃ¸rt */
 	protected function edit_error_nochange()
 	{
-		ess::$b->page->add_message("Ingen endringer ble utført.", "error");
+		ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.", "error");
 	}
 	
 	/** Forumsvaret ble redigert */
@@ -2277,7 +2277,7 @@ class forum_reply
 	
 	/**
 	 * Annonser forumsvaret
-	 * Kan også brukes for å annonsere et forumsvar på nytt
+	 * Kan ogsÃ¥ brukes for Ã¥ annonsere et forumsvar pÃ¥ nytt
 	 */
 	public function announce()
 	{
@@ -2303,7 +2303,7 @@ class forum_reply
 		// normalt forum?
 		if ($this->topic->forum->id <= 4)
 		{
-			// logg på IRC
+			// logg pÃ¥ IRC
 			putlog("INFO", "FORUMSVAR (Crew): (".$this->topic->forum->get_name().") '{$name}' svarte i '{$this->topic->info['ft_title']}' ".ess::$s['path']."/forum/topic?id={$this->topic->id}&replyid=$this->id");
 		}
 		
@@ -2326,7 +2326,7 @@ class forum_reply
  */
 class forum_reply_ajax extends forum_reply
 {
-	/** Hent forumtråd objekt */
+	/** Hent forumtrÃ¥d objekt */
 	protected function get_topic_obj($topic_id)
 	{
 		return new forum_topic_ajax($topic_id);
@@ -2338,10 +2338,10 @@ class forum_reply_ajax extends forum_reply
 		ajax::text("ERROR:403-REPLY", ajax::TYPE_INVALID);
 	}
 	
-	/** Forumtråden er låst */
+	/** ForumtrÃ¥den er lÃ¥st */
 	protected function delete_error_locked()
 	{
-		ajax::text("Forumtråden er låst. Du kan ikke slette forumsvaret.", ajax::TYPE_INVALID);
+		ajax::text("ForumtrÃ¥den er lÃ¥st. Du kan ikke slette forumsvaret.", ajax::TYPE_INVALID);
 	}
 	
 	/** Forumsvaret er allerede slettet */
@@ -2376,22 +2376,22 @@ class forum_reply_ajax extends forum_reply
 		ajax::text("ERROR:EDIT-FAILED", ajax::TYPE_INVALID);
 	}
 	
-	/** Forumtråden er låst */
+	/** ForumtrÃ¥den er lÃ¥st */
 	protected function edit_error_locked()
 	{
-		ajax::text("Forumtråden er låst. Du kan ikke redigere forumsvaret.", ajax::TYPE_INVALID);
+		ajax::text("ForumtrÃ¥den er lÃ¥st. Du kan ikke redigere forumsvaret.", ajax::TYPE_INVALID);
 	}
 	
 	/** For kort lengde i forumsvaret */
 	protected function edit_error_length()
 	{
-		ajax::text("Forumsvaret kan ikke inneholde færre enn ".forum::REPLY_MIN_LENGTH." bokstaver/tall.", ajax::TYPE_INVALID);
+		ajax::text("Forumsvaret kan ikke inneholde fÃ¦rre enn ".forum::REPLY_MIN_LENGTH." bokstaver/tall.", ajax::TYPE_INVALID);
 	}
 	
-	/** Ingen endringer ble utført */
+	/** Ingen endringer ble utfÃ¸rt */
 	protected function edit_error_nochange()
 	{
-		ajax::text("Ingen endringer ble utført.", ajax::TYPE_INVALID);
+		ajax::text("Ingen endringer ble utfÃ¸rt.", ajax::TYPE_INVALID);
 	}
 	
 	/** Forumsvaret ble redigert */
@@ -2408,10 +2408,10 @@ class forum_reply_ajax extends forum_reply
  */
 class forum_log
 {
-	/** Handling: Forumtråd slettet */
+	/** Handling: ForumtrÃ¥d slettet */
 	const TOPIC_DELETED = 1;
 	
-	/** Handling: Forumtråd gjenopprettet */
+	/** Handling: ForumtrÃ¥d gjenopprettet */
 	const TOPIC_RESTORED = 5;
 	
 	/** Handling: Forumsvar slettet */
@@ -2478,7 +2478,7 @@ class forum_log
 	}
 	
 	/**
-	 * Legg til forumtråd
+	 * Legg til forumtrÃ¥d
 	 * @param forum $forum
 	 * @param array $data (ft_id, ft_title, ft_type)
 	 */
@@ -2487,7 +2487,7 @@ class forum_log
 		// finn ut hvor loggen skal plasseres
 		$location = "INFO";
 		
-		// crewforum, crewforum arkiv eller idémyldringsforumet
+		// crewforum, crewforum arkiv eller idÃ©myldringsforumet
 		if ($forum->id >= 5 && $forum->id <= 7)
 		{
 			$location = "CREWCHAN";
@@ -2536,11 +2536,11 @@ class forum_log
 		}
 		
 		// legg til som logg
-		self::putlog($forum, $location, "FORUMTRÅD: (".$forum->get_name().") '".login::$user->player->data['up_name']."' opprettet '{$data['ft_title']}' ".ess::$s['path']."/forum/topic?id={$data['ft_id']}");
+		self::putlog($forum, $location, "FORUMTRÃ…D: (".$forum->get_name().") '".login::$user->player->data['up_name']."' opprettet '{$data['ft_title']}' ".ess::$s['path']."/forum/topic?id={$data['ft_id']}");
 	}
 	
 	/**
-	 * Slettet forumtråd
+	 * Slettet forumtrÃ¥d
 	 * @param forum_topic $topic
 	 */
 	public static function add_topic_deleted(forum_topic $topic)
@@ -2550,7 +2550,7 @@ class forum_log
 		
 		// hvor skal loggen? (vanlig logg eller crewchan)
 		$location = $topic->forum->id >= 5 && $topic->forum->id <= 7 ? 'CREWCHAN' : 'LOG';
-		self::putlog($topic->forum, $location, "FORUMTRÅD SLETTET: '".login::$user->player->data['up_name']."' slettet forumtråden med ID {$topic->id} ({$topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$topic->id}");
+		self::putlog($topic->forum, $location, "FORUMTRÃ…D SLETTET: '".login::$user->player->data['up_name']."' slettet forumtrÃ¥den med ID {$topic->id} ({$topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$topic->id}");
 		
 		// legg til crewlogg
 		if (self::is_crewlog($topic->forum, $topic->info['ft_up_id']))
@@ -2569,7 +2569,7 @@ class forum_log
 	}
 	
 	/**
-	 * Gjenopprettet forumtråd
+	 * Gjenopprettet forumtrÃ¥d
 	 * @param forum_topic $topic
 	 */
 	public static function add_topic_restored(forum_topic $topic)
@@ -2579,7 +2579,7 @@ class forum_log
 		
 		// hvor skal loggen? (vanlig logg eller crewchan)
 		$location = $topic->forum->id >= 5 && $topic->forum->id <= 7 ? 'CREWCHAN' : 'LOG';
-		self::putlog($topic->forum, $location, "FORUMTRÅD GJENOPPRETTET: '".login::$user->player->data['up_name']."' gjenoppretttet forumtråden med ID {$topic->id} ({$topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$topic->id}");
+		self::putlog($topic->forum, $location, "FORUMTRÃ…D GJENOPPRETTET: '".login::$user->player->data['up_name']."' gjenoppretttet forumtrÃ¥den med ID {$topic->id} ({$topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$topic->id}");
 		
 		// legg til crewlogg
 		if (self::is_crewlog($topic->forum, $topic->info['ft_up_id']))
@@ -2598,7 +2598,7 @@ class forum_log
 	}
 	
 	/**
-	 * Flytt forumtråd
+	 * Flytt forumtrÃ¥d
 	 * @param forum_topic $topic
 	 * @param array $old_data array med data som ble erstattet
 	 */
@@ -2609,7 +2609,7 @@ class forum_log
 		
 		// legg til som vanlig logg
 		$location = $topic->forum->id >= 5 && $topic->forum->id <= 7 ? 'CREWCHAN' : 'LOG';
-		self::putlog($topic->forum, $location, "FORUMTRÅD FLYTTET: '".login::$user->player->data['up_name']."' flyttet forumtråden med ID {$topic->id} ({$topic->info['ft_title']}) fra $from til $to ".ess::$s['path']."/forum/topic?id={$topic->id}");
+		self::putlog($topic->forum, $location, "FORUMTRÃ…D FLYTTET: '".login::$user->player->data['up_name']."' flyttet forumtrÃ¥den med ID {$topic->id} ({$topic->info['ft_title']}) fra $from til $to ".ess::$s['path']."/forum/topic?id={$topic->id}");
 		
 		// legg til hendelse
 		if ($topic->info['ft_up_id'] != login::$user->player->id)
@@ -2617,11 +2617,11 @@ class forum_log
 			player::add_log_static("forum_topic_move", "{$topic->id}:".urlencode($topic->info['ft_title']).":".urlencode($from).":".urlencode($to), null, $topic->info['ft_up_id']);
 		}
 		
-		// TODO: er det nødvendig med crewlogg?
+		// TODO: er det nÃ¸dvendig med crewlogg?
 	}
 	
 	/**
-	 * Rediger forumtråd
+	 * Rediger forumtrÃ¥d
 	 * @param forum_topic $topic
 	 * @param array $old_data array med data som ble erstattet (title, text, section(obj forum), type, locked)
 	 */
@@ -2629,7 +2629,7 @@ class forum_log
 	{
 		// legg til som vanlig logg
 		$location = $topic->forum->id >= 5 && $topic->forum->id <= 7 ? 'CREWCHAN' : 'LOG';
-		self::putlog($topic->forum, $location, "FORUMTRÅD REDIGERT: '".login::$user->player->data['up_name']."' redigerte forumtråden med ID {$topic->id} ({$topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$topic->id}");
+		self::putlog($topic->forum, $location, "FORUMTRÃ…D REDIGERT: '".login::$user->player->data['up_name']."' redigerte forumtrÃ¥den med ID {$topic->id} ({$topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$topic->id}");
 		
 		// legg til crewlogg
 		if (self::is_crewlog($topic->forum, $topic->info['ft_up_id']))
@@ -2665,7 +2665,7 @@ class forum_log
 	}
 	
 	/**
-	 * Legg til formsvar (sammenslått med forrige svar)
+	 * Legg til formsvar (sammenslÃ¥tt med forrige svar)
 	 * @param forum_topic $topic
 	 * @param integer $reply_id
 	 */
@@ -2673,7 +2673,7 @@ class forum_log
 	{
 		// hvor skal loggen? (vanlig logg eller crewchan)
 		$location = $topic->forum->id >= 5 && $topic->forum->id <= 7 ? 'CREWCHAN' : 'LOG';
-		self::putlog($topic->forum, $location, "FORUMSVAR (sammenslått): (".$topic->forum->get_name().") '".login::$user->player->data['up_name']."' svarte i '{$topic->info['ft_title']}' ".ess::$s['path']."/forum/topic?id={$topic->id}&replyid=$reply_id");
+		self::putlog($topic->forum, $location, "FORUMSVAR (sammenslÃ¥tt): (".$topic->forum->get_name().") '".login::$user->player->data['up_name']."' svarte i '{$topic->info['ft_title']}' ".ess::$s['path']."/forum/topic?id={$topic->id}&replyid=$reply_id");
 	}
 	
 	/**
@@ -2687,7 +2687,7 @@ class forum_log
 		
 		// hvor skal loggen? (vanlig logg eller crewchan)
 		$location = $reply->topic->forum->id >= 5 && $reply->topic->forum->id <= 7 ? 'CREWCHAN' : 'LOG';
-		self::putlog($reply->topic->forum, $location, "FORUMSVAR SLETTET: '".login::$user->player->data['up_name']."' slettet forumsvaret med ID {$reply->id} i forumtråden med ID {$reply->topic->id} ({$reply->topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$reply->topic->id}&replyid=$reply->id");
+		self::putlog($reply->topic->forum, $location, "FORUMSVAR SLETTET: '".login::$user->player->data['up_name']."' slettet forumsvaret med ID {$reply->id} i forumtrÃ¥den med ID {$reply->topic->id} ({$reply->topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$reply->topic->id}&replyid=$reply->id");
 		
 		// legg til crewlogg
 		if (self::is_crewlog($reply->topic->forum, $reply->info['fr_up_id']))
@@ -2711,7 +2711,7 @@ class forum_log
 		
 		// hvor skal loggen? (vanlig logg eller crewchan)
 		$location = $reply->topic->forum->id >= 5 && $reply->topic->forum->id <= 7 ? 'CREWCHAN' : 'LOG';
-		self::putlog($reply->topic->forum, $location, "FORUMSVAR GJENOPPRETTET: '".login::$user->player->data['up_name']."' gjenopprettet forumsvaret med ID {$reply->id} i forumtråden med ID {$reply->topic->id} ({$reply->topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$reply->topic->id}&replyid=$reply->id");
+		self::putlog($reply->topic->forum, $location, "FORUMSVAR GJENOPPRETTET: '".login::$user->player->data['up_name']."' gjenopprettet forumsvaret med ID {$reply->id} i forumtrÃ¥den med ID {$reply->topic->id} ({$reply->topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$reply->topic->id}&replyid=$reply->id");
 		
 		// legg til crewlogg
 		if (self::is_crewlog($reply->topic->forum, $reply->info['fr_up_id']))
@@ -2733,7 +2733,7 @@ class forum_log
 	{
 		// legg til som vanlig logg
 		$location = $reply->topic->forum->id >= 5 && $reply->topic->forum->id <= 7 ? 'CREWCHAN' : 'LOG';
-		self::putlog($reply->topic->forum, $location, "FORUMSVAR REDIGERT: '".login::$user->player->data['up_name']."' redigerte forumsvaret med ID {$reply->id} i forumtråden med ID {$reply->topic->id} ({$reply->topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$reply->topic->id}&replyid=$reply->id");
+		self::putlog($reply->topic->forum, $location, "FORUMSVAR REDIGERT: '".login::$user->player->data['up_name']."' redigerte forumsvaret med ID {$reply->id} i forumtrÃ¥den med ID {$reply->topic->id} ({$reply->topic->info['ft_title']}) ".ess::$s['path']."/forum/topic?id={$reply->topic->id}&replyid=$reply->id");
 		
 		// legg til crewlogg
 		if (self::is_crewlog($reply->topic->forum, $reply->info['fr_up_id']))

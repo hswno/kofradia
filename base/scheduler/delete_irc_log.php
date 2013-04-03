@@ -8,4 +8,4 @@ $result = $_base->db->query("DELETE FROM log_irc WHERE li_deleted = 1 AND li_del
 $ant = $_base->db->affected_rows();
 
 // infomelding
-putlog("LOG", "log_irc: Antall oppføringer fjernet: ".game::format_number($ant));
+putlog("LOG", "log_irc: Antall oppfÃ¸ringer fjernet: ".game::format_number($ant));

@@ -83,35 +83,35 @@ class gamelog
 		6 => "Systeminfo",
 		7 => "Crewforum Emne",
 		8 => "Crewforum Svar",
-		9 => "Bankoverføring",
+		9 => "BankoverfÃ¸ring",
 		10 => "Lotto",
 		11 => "Crewforum (arkiv) Emne",
 		12 => "Crewforum (arkiv) Svar",
 		13 => "Generel Informasjon",
 		14 => "Fengsel",
-		15 => "Fengseldusør returnert",
+		15 => "FengseldusÃ¸r returnert",
 		16 => "Rankbonus",
 		17 => "Vervebonus",
 		18 => "Informasjon",
 		19 => "Poker tidsavbrudd",
 		20 => "Oppdrag",
-		21 => "Døde",
-		25 => "Idémyldring Emne",
-		26 => "Idémyldring Svar",
+		21 => "DÃ¸de",
+		25 => "IdÃ©myldring Emne",
+		26 => "IdÃ©myldring Svar",
 		31 => "Support",
 		32 => "Blokkering",
 		33 => "Advarsel",
-		34 => "Søknader",
-		35 => "Spiller døde",
+		34 => "SÃ¸knader",
+		35 => "Spiller dÃ¸de",
 		36 => "Vitne",
 		37 => "Mistet beskyttelse",
 		38 => "Angrepet",
-		39 => "Mistet våpen",
+		39 => "Mistet vÃ¥pen",
 		40 => "Kastet ut av bomberom",
 		41 => "Plassert i bomberom",
 		42 => "Motta penger fra etterlyst",
 		43 => "Returnert penger fra etterlyst",
-		44 => "Lagt til på etterlyst",
+		44 => "Lagt til pÃ¥ etterlyst",
 		45 => "Kuleauksjon uten bud",
 		46 => "Kuleauksjon vunnet",
 		47 => "Garasje mistet",
@@ -121,14 +121,14 @@ class gamelog
 		61 => "FF fjernet invitasjon",
 		62 => "FF endret posisjon",
 		63 => "FF sparket",
-		64 => "FF dødd",
-		65 => "FF dødd (invitert)",
+		64 => "FF dÃ¸dd",
+		65 => "FF dÃ¸dd (invitert)",
 		66 => "FF endret overordnet",
 		67 => "FF diverse",
 		68 => "FF posisjon",
 		69 => "FF mistet posisjon",
 		70 => "FF overtatt",
-		80 => "Forumtråd flyttet"
+		80 => "ForumtrÃ¥d flyttet"
 	);
 	
 	/**
@@ -154,12 +154,12 @@ class gamelog
 			break;
 			
 			case "fengsel":
-				$dusor = empty($note) ? '' : ' og mottok dusøren på '.game::format_cash($note);
-				$melding = '[user id='.$num.'] brøt deg ut av fengselet'.$dusor.'!';
+				$dusor = empty($note) ? '' : ' og mottok dusÃ¸ren pÃ¥ '.game::format_cash($note);
+				$melding = '[user id='.$num.'] brÃ¸t deg ut av fengselet'.$dusor.'!';
 			break;
 			
 			case "fengsel_dusor_return":
-				$melding = 'Ingen hadde brutt deg ut av fengsel innen du kom ut og du fikk tilbake dusøren på '.game::format_cash($num).'.';
+				$melding = 'Ingen hadde brutt deg ut av fengsel innen du kom ut og du fikk tilbake dusÃ¸ren pÃ¥ '.game::format_cash($num).'.';
 			break;
 			
 			case "renter":
@@ -234,21 +234,21 @@ class gamelog
 				$melding = '<user id="'.$u[0].'" /> svarte i <a href="forum/topic?id='.$num.$replyid.'">'.htmlspecialchars($u[1]).'</a> i crewforumet (arkiv).';
 			break;
 			
-			// emne i idémyldringsforumet
+			// emne i idÃ©myldringsforumet
 			case "crewforumi_emne":
 				$u = explode(":", $note, 2);
 				$html = true;
-				$melding = '<user id="'.$u[0].'" /> opprettet <a href="forum/topic?id='.$num.'">'.htmlspecialchars($u[1]).'</a> i idémyldringsforumet.';
+				$melding = '<user id="'.$u[0].'" /> opprettet <a href="forum/topic?id='.$num.'">'.htmlspecialchars($u[1]).'</a> i idÃ©myldringsforumet.';
 			break;
 			
-			// svar i idémyldringsforumet
+			// svar i idÃ©myldringsforumet
 			case "crewforumi_svar":
 				$u = explode(":", $note, 2);
 				$s = explode("#", $u[0]);
 				$u[0] = $s[0];
 				$replyid = isset($s[1]) ? '&amp;replyid='.$s[1] : '';
 				$html = true;
-				$melding = '<user id="'.$u[0].'" /> svarte i <a href="forum/topic?id='.$num.$replyid.'">'.htmlspecialchars($u[1]).'</a> i idémyldringsforumet.';
+				$melding = '<user id="'.$u[0].'" /> svarte i <a href="forum/topic?id='.$num.$replyid.'">'.htmlspecialchars($u[1]).'</a> i idÃ©myldringsforumet.';
 			break;
 			
 			case "bankoverforing":
@@ -259,7 +259,7 @@ class gamelog
 			case "lotto":
 				$info = explode(":", $note);
 				$data = array();
-				$data[] = 'Du kom på <b>'.$info[0].'</b>. plass i lotto';
+				$data[] = 'Du kom pÃ¥ <b>'.$info[0].'</b>. plass i lotto';
 				$data[] = 'vant <b>'.game::format_cash($num).'</b>';
 				if (isset($info[1])) $data[] = 'mottok <b>'.game::format_num($info[1]).'</b> poeng';
 				$melding = sentences_list($data)."!";
@@ -294,11 +294,11 @@ class gamelog
 				$melding = $note;
 			break;
 			
-			// døde
+			// dÃ¸de
 			case "dead":
 				// syntax: instant(int:0/1)
 				$html = true;
-				$melding = $note ? "Du ble angrepet og klarte ikke å stå i mot angrepet. Du døde." : "Du døde på grunn av lav energi og lav helse.";
+				$melding = $note ? "Du ble angrepet og klarte ikke Ã¥ stÃ¥ i mot angrepet. Du dÃ¸de." : "Du dÃ¸de pÃ¥ grunn av lav energi og lav helse.";
 			break;
 			
 			case "support":
@@ -319,7 +319,7 @@ class gamelog
 			
 			case "blokkering":
 				// ny blokkering: 1:type:end:reason
-				// blokkering endret: 2:type:end:reason end og reason kan være blank hvis feltet ikke ble endret
+				// blokkering endret: 2:type:end:reason end og reason kan vÃ¦re blank hvis feltet ikke ble endret
 				// blokkering fjernet: 3:type
 				$info = explode(":", $note);
 				$blokkering = isset(blokkeringer::$types[$num]) ? blokkeringer::$types[$num]['userlog'] : '(type ukjent: '.$num.')';
@@ -327,19 +327,19 @@ class gamelog
 				{
 					// ny blokkering
 					case 1:
-						$melding = 'Du har blitt blokkert fra å '.$blokkering.'. Varer til '.ess::$b->date->get($info[1])->format().'. Begrunnelse: '.urldecode($info[2]);
+						$melding = 'Du har blitt blokkert fra Ã¥ '.$blokkering.'. Varer til '.ess::$b->date->get($info[1])->format().'. Begrunnelse: '.urldecode($info[2]);
 					break;
 					
 					// blokkering endret
 					case 2:
-						$melding = 'Blokkeringen for å '.$blokkering.' har blitt endret.';
+						$melding = 'Blokkeringen for Ã¥ '.$blokkering.' har blitt endret.';
 						if ($info[1] != "") $melding .= ' Ny varighet til '.ess::$b->date->get($info[1])->format().'.';
 						if ($info[2] != "") $melding .= ' Ny begrunnelse: '.urldecode($info[2]);
 					break;
 					
 					// blokkering fjernet
 					case 3:
-						$melding = 'Blokkeringen for å '.$blokkering.' har blitt fjernet.';
+						$melding = 'Blokkeringen for Ã¥ '.$blokkering.' har blitt fjernet.';
 					break;
 				}
 			break;
@@ -347,14 +347,14 @@ class gamelog
 			case "advarsel":
 				// type:reason
 				$info = explode(":", $note, 2);
-				$melding = 'Du har fått en advarsel fra Crewet (kategori: '.urldecode($info[0]).'). Begrunnelse: '.urldecode($info[1]);
+				$melding = 'Du har fÃ¥tt en advarsel fra Crewet (kategori: '.urldecode($info[0]).'). Begrunnelse: '.urldecode($info[1]);
 			break;
 			
 			case "soknader":
-				// av enkelthetskyld (og praktiske årsaker) blir meldinger lagt til med full tekst fra søknadssystemet
+				// av enkelthetskyld (og praktiske Ã¥rsaker) blir meldinger lagt til med full tekst fra sÃ¸knadssystemet
 				// dette kan utvidees ved en senere anledning
-				// syntax: html:Din søknad [..]
-				// syntax: bb:Din søknad [..]
+				// syntax: html:Din sÃ¸knad [..]
+				// syntax: bb:Din sÃ¸knad [..]
 				$info = explode(":", $note, 2);
 				if ($info[0] == "html")
 				{
@@ -367,10 +367,10 @@ class gamelog
 				}
 			break;
 			
-			// spiller bløde ihjel etter angrep
+			// spiller blÃ¸de ihjel etter angrep
 			case "player_bleed":
 				$html = true;
-				$melding = '<user id="'.$num.'" /> døde av skadene som ble påført i ditt tidligere angrep.';
+				$melding = '<user id="'.$num.'" /> dÃ¸de av skadene som ble pÃ¥fÃ¸rt i ditt tidligere angrep.';
 			break;
 			
 			// vitne
@@ -389,7 +389,7 @@ class gamelog
 				// syntax: gammel_beskyttelse_navn:ny_beskyttelse_navn:ny_beskyttelse_state (navn er urlencode-ed)
 				$info = explode(":", $note);
 				$html = true;
-				$melding = 'Du mistet din beskyttelse <b>'.htmlspecialchars(urldecode($info[0])).'</b>. Du har nå <b>'.htmlspecialchars(urldecode($info[1])).'</b> som beskyttelse med en status på <b>'.game::format_num($info[2]*100, 2).' %</b>.';
+				$melding = 'Du mistet din beskyttelse <b>'.htmlspecialchars(urldecode($info[0])).'</b>. Du har nÃ¥ <b>'.htmlspecialchars(urldecode($info[1])).'</b> som beskyttelse med en status pÃ¥ <b>'.game::format_num($info[2]*100, 2).' %</b>.';
 			break;
 			
 			// angrepet?
@@ -418,7 +418,7 @@ class gamelog
 				// mistet vi penger?
 				if (!empty($info[10]))
 				{
-					$melding .= ' Angriperen fikk i tillegg med seg <b>'.game::format_cash($info[10]).'</b> fra hånda di.';
+					$melding .= ' Angriperen fikk i tillegg med seg <b>'.game::format_cash($info[10]).'</b> fra hÃ¥nda di.';
 				}
 				
 				// ble vi flyttet til en annen bydel?
@@ -428,7 +428,7 @@ class gamelog
 				}
 			break;
 			
-			// mistet/nedgradert våpen
+			// mistet/nedgradert vÃ¥pen
 			case "weapon_lost":
 				// syntax 1: weapon_id:weapon_name:bullets (num = 0)
 				// syntax 2: weapon_id:weapon_name:bullets:new_weapon:new_training (num = 1)
@@ -437,18 +437,18 @@ class gamelog
 				
 				if ($num == 1)
 				{
-					$melding = 'Våpentreningen falt under 25 % og ditt våpen <b>'.htmlspecialchars(urldecode($info[1])).'</b>'.($info[2] > 0 ? ' med <b>'.$info[2].'</b> kuler' : '').' ble nedgradert til våpnet <b>'.htmlspecialchars(urldecode($info[3])).'</b> med '.game::format_num($info[4]*100).' % våpentrening og 0 kuler.';
+					$melding = 'VÃ¥pentreningen falt under 25 % og ditt vÃ¥pen <b>'.htmlspecialchars(urldecode($info[1])).'</b>'.($info[2] > 0 ? ' med <b>'.$info[2].'</b> kuler' : '').' ble nedgradert til vÃ¥pnet <b>'.htmlspecialchars(urldecode($info[3])).'</b> med '.game::format_num($info[4]*100).' % vÃ¥pentrening og 0 kuler.';
 				}
 				
 				else
 				{
-					$melding = 'Våpentreningen falt under 25 % og du mistet våpenet <b>'.htmlspecialchars(urldecode($info[1])).'</b>'.($info[2] > 0 ? ' og <b>'.$info[2].'</b> kuler' : '').'.';
+					$melding = 'VÃ¥pentreningen falt under 25 % og du mistet vÃ¥penet <b>'.htmlspecialchars(urldecode($info[1])).'</b>'.($info[2] > 0 ? ' og <b>'.$info[2].'</b> kuler' : '').'.';
 				}
 			break;
 			
 			// kastet ut av bomberom
 			case "bomberom_kicked":
-				// syntax: up_id(som utfører handlingen):urlencode(ff_name):up_brom_expire(når vi egentlig skulle gå ut av bomberommet) num=ff_id
+				// syntax: up_id(som utfÃ¸rer handlingen):urlencode(ff_name):up_brom_expire(nÃ¥r vi egentlig skulle gÃ¥ ut av bomberommet) num=ff_id
 				$info = explode(":", $note);
 				$html = true;
 				
@@ -457,7 +457,7 @@ class gamelog
 			
 			// plassert i bomberom
 			case "bomberom_set":
-				// syntax: up_id(som utfører handlingen):urlencode(ff_name):up_brom_expire(hvor lenge vi er inne) num=ff_id
+				// syntax: up_id(som utfÃ¸rer handlingen):urlencode(ff_name):up_brom_expire(hvor lenge vi er inne) num=ff_id
 				$info = explode(":", $note);
 				$html = true;
 				
@@ -470,19 +470,19 @@ class gamelog
 				$info = explode(":", $note);
 				$html = true;
 				
-				$melding = '<user id="'.$info[0].'" /> '.(!empty($info[2]) ? 'ble skadet av ditt angrep' : 'døde etter ditt angrep').' og du mottok '.game::format_cash($num).' som'.(!empty($info[2]) ? ' del av det' : '').' spilleren var etterlyst for.';
+				$melding = '<user id="'.$info[0].'" /> '.(!empty($info[2]) ? 'ble skadet av ditt angrep' : 'dÃ¸de etter ditt angrep').' og du mottok '.game::format_cash($num).' som'.(!empty($info[2]) ? ' del av det' : '').' spilleren var etterlyst for.';
 			break;
 			
 			// fikk tilbake penger fra etterlyst fordi spiller ble deaktivert
 			case "etterlyst_deactivate":
 				// syntax: up_id(som ble deaktivert)
 				$html = true;
-				$melding = '<user id="'.$note.'" /> ble deaktivert og du fikk tilbake '.game::format_cash($num).' fra etterlyst som du hadde plassert på spilleren.';
+				$melding = '<user id="'.$note.'" /> ble deaktivert og du fikk tilbake '.game::format_cash($num).' fra etterlyst som du hadde plassert pÃ¥ spilleren.';
 			break;
 			
-			// lagt til på etterlyst
+			// lagt til pÃ¥ etterlyst
 			case "etterlyst_add":
-				$melding = 'En spiller la til en dusør for deg på '.game::format_cash($num).'.';
+				$melding = 'En spiller la til en dusÃ¸r for deg pÃ¥ '.game::format_cash($num).'.';
 			break;
 			
 			// kuleauksjon avsluttet uten bud
@@ -494,17 +494,17 @@ class gamelog
 			
 			// vinner kuleauksjon
 			case "auksjon_kuler_won":
-				// syntax: a_id(auksjonen):amount(beløp man vant med) num=antall kuler
+				// syntax: a_id(auksjonen):amount(belÃ¸p man vant med) num=antall kuler
 				$info = explode(":", $note);
 				$html = true;
-				$melding = 'Du vant <a href="'.ess::$s['relative_path'].'/auksjoner?a_id='.$info[0].'">auksjonen</a> for kuler med ditt bud på '.game::format_cash($info[1]).' og mottok '.$num.' kuler.';
+				$melding = 'Du vant <a href="'.ess::$s['relative_path'].'/auksjoner?a_id='.$info[0].'">auksjonen</a> for kuler med ditt bud pÃ¥ '.game::format_cash($info[1]).' og mottok '.$num.' kuler.';
 			break;
 			
 			// mistet garasje
 			case "garage_lost":
 				// syntax: urlencode(bydel) num=antal biler
 				$html = true;
-				$melding = 'Du mistet garasjen din på '.htmlspecialchars(urldecode($note)).($num > 0 ? ' og '.fwords("den ene bilen", "de %d bilene", $num).' som var i garasjen' : '').'.';
+				$melding = 'Du mistet garasjen din pÃ¥ '.htmlspecialchars(urldecode($note)).($num > 0 ? ' og '.fwords("den ene bilen", "de %d bilene", $num).' som var i garasjen' : '').'.';
 			break;
 			
 			// FF-systemet
@@ -581,14 +581,14 @@ class gamelog
 				// refstring,name
 				$info = explode(":", $note, 2);
 				$html = true;
-				$melding = ucfirst($info[0]).' <b>'.htmlspecialchars(urldecode($info[1])).'</b> har blitt oppløst.';
+				$melding = ucfirst($info[0]).' <b>'.htmlspecialchars(urldecode($info[1])).'</b> har blitt opplÃ¸st.';
 			break;
 			
 			case "ff_dead_invited":
 				// refstring,name
 				$info = explode(":", $note, 2);
 				$html = true;
-				$melding = ucfirst($info[0]).' <b>'.htmlspecialchars(urldecode($info[1])).'</b> som du var invitert til har blitt oppløst.';
+				$melding = ucfirst($info[0]).' <b>'.htmlspecialchars(urldecode($info[1])).'</b> som du var invitert til har blitt opplÃ¸st.';
 			break;
 			
 			case "ff_diverse":
@@ -607,18 +607,18 @@ class gamelog
 				// ff_id:ff_name_org:ff_name_new:ff_type_ref:ff_stilling
 				$info = explode(":", $note, 5);
 				$html = true;
-				$melding = 'Ditt angrep førte til at '.htmlspecialchars(urldecode($info[3])).' '.htmlspecialchars(urldecode($info[1])).' ble stående uten '.htmlspecialchars(urldecode($info[4])).'. Du tok derfor over '.htmlspecialchars(urldecode($info[3])).' som fikk navnet <a href="ff/?ff_id='.$info[0].'">'.htmlspecialchars(urldecode($info[2])).'</a>.';
+				$melding = 'Ditt angrep fÃ¸rte til at '.htmlspecialchars(urldecode($info[3])).' '.htmlspecialchars(urldecode($info[1])).' ble stÃ¥ende uten '.htmlspecialchars(urldecode($info[4])).'. Du tok derfor over '.htmlspecialchars(urldecode($info[3])).' som fikk navnet <a href="ff/?ff_id='.$info[0].'">'.htmlspecialchars(urldecode($info[2])).'</a>.';
 			break;
 			
-			// forumtråd flyttet
+			// forumtrÃ¥d flyttet
 			case "forum_topic_move":
 				// ft_id, ft_title, fromname, toname, up_id(hvem gjorde det)
 				$info = explode(":", $note);
 				$html = true;
-				$melding = 'Din forumtråd <a href="'.ess::$s['relative_path'].'/forum/topic?id='.$info[0].'">'.htmlspecialchars(urldecode($info[1])).'</a> ble flyttet fra '.htmlspecialchars(urldecode($info[2])).' til '.htmlspecialchars(urldecode($info[3])).'.';
+				$melding = 'Din forumtrÃ¥d <a href="'.ess::$s['relative_path'].'/forum/topic?id='.$info[0].'">'.htmlspecialchars(urldecode($info[1])).'</a> ble flyttet fra '.htmlspecialchars(urldecode($info[2])).' til '.htmlspecialchars(urldecode($info[3])).'.';
 			break;
 			
-			// prestasjon oppnådd
+			// prestasjon oppnÃ¥dd
 			case "achievement":
 				// count(repetisjonsnummer), ac_name, prize
 				// num: ac_id
@@ -627,13 +627,13 @@ class gamelog
 				
 				$rep = $info[0] > 1 ? ' for '.$info[0].'. gang' : '';
 				$prize = !empty($info[2]) ? ' og mottok '.$info[2] : '';
-				$melding = 'Du oppnådde prestasjonen &laquo;'.htmlspecialchars(urldecode($info[1]))."&raquo;".$rep.$prize.'.';
+				$melding = 'Du oppnÃ¥dde prestasjonen &laquo;'.htmlspecialchars(urldecode($info[1]))."&raquo;".$rep.$prize.'.';
 			break;
 			
 			// hall of fame
 			case "hall_of_fame":
 				$html = true;
-				$melding = 'Du ble den '.$note.' og havnet på <a href="'.ess::$s['rpath'].'/hall_of_fame">Hall of Fame</a>!';
+				$melding = 'Du ble den '.$note.' og havnet pÃ¥ <a href="'.ess::$s['rpath'].'/hall_of_fame">Hall of Fame</a>!';
 			break;
 			
 			default:

@@ -24,7 +24,7 @@ echo '
 <div class="bg1_c small">
 	<h1 class="bg1">Generer params<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p>Her kan du generere params for å bruke i databasen osv.</p>'.($params ? '
+		<p>Her kan du generere params for Ã¥ bruke i databasen osv.</p>'.($params ? '
 		<p>Resultat:</p>
 		<p><input type="text" value="'.htmlspecialchars($params->build()).'" class="styled w300" /></p>' : '').'
 		<form action="" method="post">

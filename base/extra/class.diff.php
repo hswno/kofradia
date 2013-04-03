@@ -3,7 +3,7 @@
 class diff
 {
 	/**
-	 * Returnere diff(1) format mellom to tekster. Kan så brukes i patch() funksjonen.
+	 * Returnere diff(1) format mellom to tekster. Kan sÃ¥ brukes i patch() funksjonen.
 	 * 
 	 * @param string $text_old
 	 * @param string $text_new
@@ -39,7 +39,7 @@ class diff
 		$current_new = 0;
 		$actions = array();
 		
-		// gå gjennom dataen
+		// gÃ¥ gjennom dataen
 		while ($current_old < count($lines_old) && $current_new < count($lines_new))
 		{
 			// lik linje?
@@ -51,7 +51,7 @@ class diff
 				continue;
 			}
 			
-			// finn korteste bevegelse fra nåværende plassering
+			// finn korteste bevegelse fra nÃ¥vÃ¦rende plassering
 			$best_old = count($lines_old);
 			$best_new = count($lines_new);
 			$s_old = $current_old;
@@ -113,7 +113,7 @@ class diff
 			}
 		}
 		
-		// gjenstående linjer
+		// gjenstÃ¥ende linjer
 		while ($current_old < count($lines_old))
 		{
 			// slettede elementer

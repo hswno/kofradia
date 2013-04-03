@@ -81,7 +81,7 @@ class page_min_side
 		// hent informasjon om det vi skal vise
 		if (isset($_GET['up_id']))
 		{
-			// forsøk å hent denne spilleren
+			// forsÃ¸k Ã¥ hent denne spilleren
 			$up_id = (int) $_GET['up_id'];
 			if ($up_id != login::$user->data['u_active_up_id'])
 			{
@@ -91,19 +91,19 @@ class page_min_side
 				$player = login::$user->player;
 			}
 			
-			// er ikke dette vår spiller?
+			// er ikke dette vÃ¥r spiller?
 			if (!$player->data || login::$user->id != $player->data['up_u_id'])
 			{
-				// må logge inn i utvidede tilganger?
+				// mÃ¥ logge inn i utvidede tilganger?
 				if ($player->data && login::$extended_access && !login::$extended_access['authed'])
 				{
 					redirect::handle("extended_access?orign=".urlencode($_SERVER['REQUEST_URI']));
 				}
 				
-				// har vi ikke tilgang til å vise andre spillere?
+				// har vi ikke tilgang til Ã¥ vise andre spillere?
 				elseif (!access::has("crewet"))
 				{
-					ess::$b->page->add_message('Du har ikke tilgang til å vise andre spillere enn dine egne. <a href="min_side">Tilbake</a>', "error");
+					ess::$b->page->add_message('Du har ikke tilgang til Ã¥ vise andre spillere enn dine egne. <a href="min_side">Tilbake</a>', "error");
 					ess::$b->page->load();
 				}
 				
@@ -124,17 +124,17 @@ class page_min_side
 		// hent informasjon om det vi skal vise
 		elseif (isset($_GET['u_id']))
 		{
-			// forsøk å hent brukeren
+			// forsÃ¸k Ã¥ hent brukeren
 			$u_id = (int) $_GET['u_id'];
 			$user = $u_id == login::$user->id ? login::$user : new user($u_id);
 			
-			// er ikke dette vår bruker?
+			// er ikke dette vÃ¥r bruker?
 			if (!$user->data || login::$user->id != $user->id)
 			{
-				// har vi ikke tilgang til å vise andre spillere?
+				// har vi ikke tilgang til Ã¥ vise andre spillere?
 				if (!access::has("crewet"))
 				{
-					ess::$b->page->add_message('Du har ikke tilgang til å vise andre brukere enn din egen. <a href="min_side">Tilbake</a>', "error");
+					ess::$b->page->add_message('Du har ikke tilgang til Ã¥ vise andre brukere enn din egen. <a href="min_side">Tilbake</a>', "error");
 					ess::$b->page->load();
 				}
 				
@@ -178,8 +178,8 @@ class page_min_side
 		// informasjon om at dette er en annen person sin bruker/spiller
 		if (!self::$active_own && false)
 		{
-			if (self::$active_type == "player") ess::$b->page->add_message("Denne spilleren tilhører ikke deg.");
-			else ess::$b->page->add_message("Denne brukeren tilhører ikke deg.");
+			if (self::$active_type == "player") ess::$b->page->add_message("Denne spilleren tilhÃ¸rer ikke deg.");
+			else ess::$b->page->add_message("Denne brukeren tilhÃ¸rer ikke deg.");
 		}
 		
 		// overskrift

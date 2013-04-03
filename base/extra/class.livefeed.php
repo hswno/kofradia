@@ -1,14 +1,14 @@
 <?php
 
 /*
- * Live-feed er en oversikt på forsiden med de siste nye handlingene i spillet
+ * Live-feed er en oversikt pÃ¥ forsiden med de siste nye handlingene i spillet
  * som alle spillere skal kunne se
  */
 
 class livefeed
 {
 	/**
-	 * Legg til oppføring
+	 * Legg til oppfÃ¸ring
 	 */
 	public static function add_row($html, $time = null)
 	{
@@ -17,12 +17,12 @@ class livefeed
 		
 		if (empty($html)) throw new HSException("Mangler HTML.");
 		
-		// legg til oppføringen
+		// legg til oppfÃ¸ringen
 		ess::$b->db->query("INSERT INTO livefeed SET lf_time = $time, lf_html = ".ess::$b->db->quote($html));
 	}
 	
 	/**
-	 * Hent siste oppføringene
+	 * Hent siste oppfÃ¸ringene
 	 */
 	public static function get_latest($limit = 20)
 	{

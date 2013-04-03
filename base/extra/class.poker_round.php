@@ -59,7 +59,7 @@ class poker_round
 			$this->text2 = $this->poker2->solve_text($this->solve2);
 		}
 		
-		// gått ut på tid?
+		// gÃ¥tt ut pÃ¥ tid?
 		if ($this->data['poker_state'] == self::STATE_CHALLENGE && $this->data['poker_time_challenge'] <= time() - self::MAX_CHALLENGE_TIME)
 		{
 			$this->auto_play();
@@ -144,10 +144,10 @@ class poker_round
 	
 	protected function challenge_save($dont_save = null, $auto = null)
 	{
-		// avgjør vinner
+		// avgjÃ¸r vinner
 		$winner = CardsPoker::compare($this->solve1, $this->solve2);
 		
-		// avgjør gevinst
+		// avgjÃ¸r gevinst
 		$prize = $winner[0] == 0 ? $this->data['poker_cash'] : bcmul($this->data['poker_cash'], 2);
 		
 		// oppdater
@@ -268,7 +268,7 @@ class poker_round
 	}
 	
 	/**
-	 * Spiller dør/blir deaktivert
+	 * Spiller dÃ¸r/blir deaktivert
 	 */
 	public static function player_dies(player $up)
 	{
@@ -280,7 +280,7 @@ class poker_round
 		
 		while ($row = mysql_fetch_assoc($result))
 		{
-			// forsøk å trekk tilbake
+			// forsÃ¸k Ã¥ trekk tilbake
 			$round = new poker_round($row);
 			$round->pullback();
 		}
@@ -306,7 +306,7 @@ class poker_round
 
 class poker_round_interactive extends poker_round
 {
-	/** Tid det må gå før en runde kan trekkes tilbake */
+	/** Tid det mÃ¥ gÃ¥ fÃ¸r en runde kan trekkes tilbake */
 	const PULLBACK_TIME = 180;
 	protected $can_pullback;
 	
@@ -331,7 +331,7 @@ class poker_round_interactive extends poker_round
 			$replace = array(0,1,2,3,4);
 			if (isset($_POST['kort']) && is_array($_POST['kort']))
 			{
-				// gå gjennom hver og fjern fra den vi skal beholde
+				// gÃ¥ gjennom hver og fjern fra den vi skal beholde
 				for ($i = 0; $i < 5; $i++)
 				{
 					if (isset($_POST['kort'][$i])) unset($replace[$i]);
@@ -361,7 +361,7 @@ class poker_round_interactive extends poker_round
 			// kan trekkes tilbake?
 			$this->can_pullback = access::has("admin") || $this->data['poker_time_start'] + self::PULLBACK_TIME <= time();
 			
-			// ønsker vi å trekke tilbake?
+			// Ã¸nsker vi Ã¥ trekke tilbake?
 			if ($this->can_pullback && isset($_POST['pullback']))
 			{
 				// kontroller ID
@@ -389,7 +389,7 @@ class poker_round_interactive extends poker_round
 				$replace = array(0,1,2,3,4);
 				if (isset($_POST['kort']) && is_array($_POST['kort']))
 				{
-					// gå gjennom hver og fjern fra den vi skal beholde
+					// gÃ¥ gjennom hver og fjern fra den vi skal beholde
 					for ($i = 0; $i < 5; $i++)
 					{
 						if (isset($_POST['kort'][$i])) unset($replace[$i]);
@@ -426,7 +426,7 @@ class poker_round_interactive extends poker_round
 		if ($new)
 		{
 			echo '
-		<p>Du har nå startet et nytt pokerspill og fortsetter ved å velge de kortene du vil <u>beholde</u>. Når du har trykket fortsett kommer du opp på listen for utfordrere og andre kan spille mot deg.</p>
+		<p>Du har nÃ¥ startet et nytt pokerspill og fortsetter ved Ã¥ velge de kortene du vil <u>beholde</u>. NÃ¥r du har trykket fortsett kommer du opp pÃ¥ listen for utfordrere og andre kan spille mot deg.</p>
 		<form action="" method="post">
 		<input type="hidden" name="state1" value="'.$this->id.'" />';
 		}
@@ -436,7 +436,7 @@ class poker_round_interactive extends poker_round
 			$time_left = $this->data['poker_time_challenge'] + self::MAX_CHALLENGE_TIME - time();
 			
 			echo '
-		<p>Du må fullføre din utfordring innen <b>'.game::counter($time_left, true).'</b>. Dersom du ikke fullfører vil spillet automatisk velge kort for deg.</p>
+		<p>Du mÃ¥ fullfÃ¸re din utfordring innen <b>'.game::counter($time_left, true).'</b>. Dersom du ikke fullfÃ¸rer vil spillet automatisk velge kort for deg.</p>
 		<form action="" method="post">
 		<input type="hidden" name="state3" value="'.$this->id.'" />';
 		}
@@ -477,7 +477,7 @@ class poker_round_interactive extends poker_round
 		echo '
 		<div class="poker_cards_section">
 			<p><b>Dine kort:</b> '.($is_starter ? $this->text1 : $this->text2).'</p>'.($challenge ? '
-			<p>Marker de kortene du ønsker å <u>beholde</u>.</p>' : '').'
+			<p>Marker de kortene du Ã¸nsker Ã¥ <u>beholde</u>.</p>' : '').'
 			<p>';
 		
 		if ($new || $challenge)
@@ -513,7 +513,7 @@ class poker_round_interactive extends poker_round
 				if ($winner[1])
 				{
 					echo '
-		<p class="poker_res_lost">Dere fikk samme kombinasjon, men motstanderen din hadde høyere highcard. Du tapte runden...</p>';
+		<p class="poker_res_lost">Dere fikk samme kombinasjon, men motstanderen din hadde hÃ¸yere highcard. Du tapte runden...</p>';
 				}
 				
 				else
@@ -528,7 +528,7 @@ class poker_round_interactive extends poker_round
 				if ($winner[1])
 				{
 					echo '
-		<p class="poker_res_won">Dere fikk samme kombinasjon, men du hadde høyere highcard og vant '.game::format_cash($this->data['poker_prize']).'!</p>';
+		<p class="poker_res_won">Dere fikk samme kombinasjon, men du hadde hÃ¸yere highcard og vant '.game::format_cash($this->data['poker_prize']).'!</p>';
 				}
 				
 				else
@@ -549,7 +549,7 @@ class poker_round_interactive extends poker_round
 		{
 			echo (access::has("admin") ? '
 			<p class="c"><input type="checkbox" name="renew" id="renew"'.(isset($_POST['renew']) ? ' checked="checked"' : '').'><label for="renew"> Ikke avslutt runden</label></p>' : '').'
-			<p class="c">'.show_sbutton("Velg kort og åpne runden").'</p>
+			<p class="c">'.show_sbutton("Velg kort og Ã¥pne runden").'</p>
 			</form>';
 		}
 		
@@ -566,7 +566,7 @@ class poker_round_interactive extends poker_round
 			echo '
 			<form action="" method="post">
 				<input type="hidden" name="pullback" value="'.$this->id.'" />
-				<p class="c">Pokerrunden har ligget ute i mer enn '.game::timespan(self::PULLBACK_TIME, game::TIME_FULL).' og du kan trekke den tilbake for å få igjen pengene og evt. legge deg ut på nytt.</p>
+				<p class="c">Pokerrunden har ligget ute i mer enn '.game::timespan(self::PULLBACK_TIME, game::TIME_FULL).' og du kan trekke den tilbake for Ã¥ fÃ¥ igjen pengene og evt. legge deg ut pÃ¥ nytt.</p>
 				<p class="c">'.show_sbutton("Trekk tilbake pokerrunden").'</p>
 			</form>';
 		}
@@ -574,13 +574,13 @@ class poker_round_interactive extends poker_round
 		elseif ($this->data['poker_state'] == self::STATE_FREE)
 		{
 			echo '
-			<p class="c">Hvis ingen utfordrer deg i løpet av '.game::timespan(self::PULLBACK_TIME, game::TIME_FULL).' vil du kunne trekke tilbake runden.</p>';
+			<p class="c">Hvis ingen utfordrer deg i lÃ¸pet av '.game::timespan(self::PULLBACK_TIME, game::TIME_FULL).' vil du kunne trekke tilbake runden.</p>';
 		}
 		
 		elseif ($is_starter && $this->data['poker_state'] == self::STATE_CHALLENGE)
 		{
 			echo '
-			<p class="c">Venter på at <user id="'.$this->data['poker_challenger_up_id'].'" /> skal velge kort...</p>';
+			<p class="c">Venter pÃ¥ at <user id="'.$this->data['poker_challenger_up_id'].'" /> skal velge kort...</p>';
 		}
 		
 		echo '

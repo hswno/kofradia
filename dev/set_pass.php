@@ -20,7 +20,7 @@ if (isset($_POST['u_id']))
 	
 	elseif ($pass == "")
 	{
-		ess::$b->page->add_message("Passordet kan ikke være tomt.", "error");
+		ess::$b->page->add_message("Passordet kan ikke vÃ¦re tomt.", "error");
 	}
 	
 	else
@@ -41,7 +41,7 @@ if (isset($_POST['u_id']))
 ess::$b->page->add_js_domready('$("u_id").focus();');
 
 echo '
-<h1>Sett passord på en bruker</h1>
+<h1>Sett passord pÃ¥ en bruker</h1>
 <p><a href="./">Tilbake</a></p>
 <form action="" method="post">
 	<dl class="dl_15">

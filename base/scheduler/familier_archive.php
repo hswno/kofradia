@@ -1,14 +1,14 @@
 <?php
 
-// TODO: må legge inn resten av strukturen fra gamle firma
+// TODO: mÃ¥ legge inn resten av strukturen fra gamle firma
 echo '
-Arkivering av FF er foreløpig deaktivert.';
+Arkivering av FF er forelÃ¸pig deaktivert.';
 
 return;
 
 global $_base;
 
-// hent de familiene som døde ut for mer enn 30 dager siden
+// hent de familiene som dÃ¸de ut for mer enn 30 dager siden
 $expire = time() - 86400*30;
 $result = $_base->db->query("SELECT ff_id, ff_name FROM ff WHERE ff_inactive != 0 AND ff_inactive_time IS NOT NULL AND ff_inactive_time < $expire");
 $ff_ids = array();

@@ -6,7 +6,7 @@
 class protection
 {
 	/**
-	 * Maksimal beskyttelse (som blir brukt til å regne ut beskyttelsen)
+	 * Maksimal beskyttelse (som blir brukt til Ã¥ regne ut beskyttelsen)
 	 */
 	const MAX_PROTECTION = 50;
 	
@@ -21,7 +21,7 @@ class protection
 	 */
 	public static $protections = array(
 		1 => array(
-			"name" => "Hettegenser m/stålplate",
+			"name" => "Hettegenser m/stÃ¥lplate",
 			"price" => 400000,
 			"strength" => 15,
 			"rank" => 0
@@ -91,7 +91,7 @@ class protection
 	 */
 	public function __construct($id, $state, player $up)
 	{
-		// har kjøpt beskyttelse?
+		// har kjÃ¸pt beskyttelse?
 		if (isset(self::$protections[$id]))
 		{
 			$this->id = $id;
@@ -113,7 +113,7 @@ class protection
 		// beregn vektverdi
 		$weight = $this->calc_weight($up);
 		
-		// har vi kjøpt beskyttelse?
+		// har vi kjÃ¸pt beskyttelse?
 		if ($this->data)
 		{
 			// beregn utgangspunkt for styrkeverdi
@@ -142,7 +142,7 @@ class protection
 	}
 	
 	/**
-	 * Kalkuler beskyttelse man får med vektpoengene
+	 * Kalkuler beskyttelse man fÃ¥r med vektpoengene
 	 * @param player $up spiller som angriper
 	 */
 	public function calc_weight(player $up)
@@ -160,7 +160,7 @@ class protection
 			}
 			else
 			{
-				// finn nærmeste verdi
+				// finn nÃ¦rmeste verdi
 				if ($pos < 1)
 				{
 					$vekt += reset(self::$vekt_familie);
@@ -186,7 +186,7 @@ class protection
 			
 			elseif ($diff != 0)
 			{
-				// hent maksimalt (må være over 0, som tilsier at vi kan velge siste alternativ)
+				// hent maksimalt (mÃ¥ vÃ¦re over 0, som tilsier at vi kan velge siste alternativ)
 				$vekt += end(self::$vekt_rankdiff);
 			}
 			
@@ -206,12 +206,12 @@ class protection
 			}
 		}
 		
-		// maksimalt kan den være 0,5
+		// maksimalt kan den vÃ¦re 0,5
 		return min($vekt, 0.5);
 	}
 	
 	/**
-	 * Sørg for korrekt svekkelse av beskyttelse og evt. utbytting
+	 * SÃ¸rg for korrekt svekkelse av beskyttelse og evt. utbytting
 	 * @return boolean false hvis selve beskyttelsen ble byttet, evt.
 	 * @return float verdien beskyttelsen sank
 	 */
@@ -227,7 +227,7 @@ class protection
 		// under 20 %?
 		if ($v < 0.2)
 		{
-			// har vi noe beskyttelse å bytte til?
+			// har vi noe beskyttelse Ã¥ bytte til?
 			if ($this->id > 1)
 			{
 				// bytt beskyttelse
@@ -257,7 +257,7 @@ class protection
 }
 
 /**
- * Våpen
+ * VÃ¥pen
  */
 class weapon
 {
@@ -267,12 +267,12 @@ class weapon
 	const MAX_ATTACK_HEALTH = 10000;
 	
 	/**
-	 * Hvor mye våpentrening man får når man får nedgradert våpen
+	 * Hvor mye vÃ¥pentrening man fÃ¥r nÃ¥r man fÃ¥r nedgradert vÃ¥pen
 	 */
 	const DOWNGRADE_TRAINING = 0.5;
 	
 	/**
-	 * De ulike våpnene
+	 * De ulike vÃ¥pnene
 	 */
 	public static $weapons = array(
 		1 => array(
@@ -346,7 +346,7 @@ class weapon
 	);
 	
 	/**
-	 * Rankpoeng ved mislykket drapsforsøk (blir overført fra offer til angriper)
+	 * Rankpoeng ved mislykket drapsforsÃ¸k (blir overfÃ¸rt fra offer til angriper)
 	 */
 	public static $rankpoeng_try = array(
 		1 => 0,
@@ -365,7 +365,7 @@ class weapon
 	);
 	
 	/**
-	 * Rankpoeng ved mislykket drapsforsøk for spesialrank
+	 * Rankpoeng ved mislykket drapsforsÃ¸k for spesialrank
 	 */
 	public static $rankpoeng_try_special = array(
 		1 => 3500,
@@ -374,7 +374,7 @@ class weapon
 	);
 	
 	/**
-	 * Faktor i forhold til rankpoeng ved drapsforsøk
+	 * Faktor i forhold til rankpoeng ved drapsforsÃ¸k
 	 */
 	public static $rankpoeng_ratio = array(
 		-5 => 0.5,
@@ -394,7 +394,7 @@ class weapon
 	const RANKPOENG_RATIO_HIGH = 5;
 	
 	/**
-	 * Hent våpenobjekt
+	 * Hent vÃ¥penobjekt
 	 */
 	public static function get($id, player $up)
 	{
@@ -489,7 +489,7 @@ class weapon
 		// ble drept?
 		if ($ret['drept'])
 		{
-			// øk wanted nivået
+			// Ã¸k wanted nivÃ¥et
 			$ret['fengsel'] = $this->up->fengsel_rank($ret['rankpoeng'], true);
 		}
 		
@@ -510,7 +510,7 @@ class weapon
 		ess::$b->db->query("UPDATE users_players SET up_energy = GREATEST(0, up_energy * $m) WHERE up_id = {$this->up->id}");
 		$this->up->data['up_energy'] = max(0, $this->up->data['up_energy'] * $m);
 		
-		// gjennomfør transaksjon
+		// gjennomfÃ¸r transaksjon
 		if (!$transaction_before) ess::$b->db->commit();
 		
 		return $ret;

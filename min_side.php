@@ -5,7 +5,7 @@ require "base.php";
 
 if (isset($_GET['up_id']) && isset($_GET['u_id']))
 {
-	ess::$b->page->add_message("Ukjent forespørsel.", "error");
+	ess::$b->page->add_message("Ukjent forespÃ¸rsel.", "error");
 	ess::$b->page->load();
 }
 

@@ -5,7 +5,7 @@ define("ALLOW_GUEST", true);
 require "base.php";
 
 // logge inn?
-// tar seg også av eventuell nødvendig reauth ved ukjent IP
+// tar seg ogsÃ¥ av eventuell nÃ¸dvendig reauth ved ukjent IP
 if (!login::$logged_in)
 {
 	new page_logginn();

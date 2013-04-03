@@ -23,7 +23,7 @@ if (isset($_POST['u_id']))
 			// logg inn utvidede tilganger
 			login::extended_access_login();
 			
-			ess::$b->page->add_message("Du er nå logget inn som #$user->id (".htmlspecialchars($user->data['u_email']).", ".$user->player->profile_link().").");
+			ess::$b->page->add_message("Du er nÃ¥ logget inn som #$user->id (".htmlspecialchars($user->data['u_email']).", ".$user->player->profile_link().").");
 			redirect::handle("", redirect::ROOT);
 		}
 		
@@ -48,7 +48,7 @@ if (isset($_POST['up_name']))
 			// logg inn utvidede tilganger
 			login::extended_access_login();
 			
-			ess::$b->page->add_message("Du er nå logget inn som ".$player->profile_link()." (".htmlspecialchars($player->user->data['u_email']).").");
+			ess::$b->page->add_message("Du er nÃ¥ logget inn som ".$player->profile_link()." (".htmlspecialchars($player->user->data['u_email']).").");
 			redirect::handle("", redirect::ROOT);
 		}
 		

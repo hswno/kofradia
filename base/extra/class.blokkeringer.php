@@ -33,55 +33,55 @@ class blokkeringer
 	public static $types = array(
 		1 => array(
 			"title" => "Forum",
-			"description" => "Hindre en bruker i å opprette nye tråder og svar, samt redigere egne tråder og svar.",
+			"description" => "Hindre en bruker i Ã¥ opprette nye trÃ¥der og svar, samt redigere egne trÃ¥der og svar.",
 			"access" => "forum_mod",
-			"userlog" => "utføre handlinger i forumet"
+			"userlog" => "utfÃ¸re handlinger i forumet"
 		),
 		2 => array(
 			"title" => "Meldinger",
-			"description" => "Hindre en bruker i å sende ut meldinger til andre spillere enn Crewet.",
+			"description" => "Hindre en bruker i Ã¥ sende ut meldinger til andre spillere enn Crewet.",
 			"access" => "mod",
 			"userlog" => "sende meldinger til andre spillere enn Crewet"
 		),
 		3 => array(
 			"title" => "Profiltekst",
-			"description" => "Hindre en bruker i å redigere profilteksten sin.",
+			"description" => "Hindre en bruker i Ã¥ redigere profilteksten sin.",
 			"access" => "forum_mod",
 			"userlog" => "redigere profilteksten din"
 		),
 		4 => array(
 			"title" => "Rapporteringer",
-			"description" => "Hindre en bruker i å sende inn rapporteringer.",
+			"description" => "Hindre en bruker i Ã¥ sende inn rapporteringer.",
 			"access" => "crewet",
 			"userlog" => "sende inn rapporteringer"
 		),
 		5 => array(
 			"title" => "Support",
-			"description" => "Hindre en bruker i å sende inn henvendelser til support.",
+			"description" => "Hindre en bruker i Ã¥ sende inn henvendelser til support.",
 			"access" => "forum_mod",
 			"userlog" => "sende inn henvendelser til support"
 		),
 		6 => array(
 			"title" => "Deaktivere",
-			"description" => "Hindre en bruker i å deaktivere sin egen spiller/bruker.",
+			"description" => "Hindre en bruker i Ã¥ deaktivere sin egen spiller/bruker.",
 			"access" => "mod",
 			"userlog" => "deaktivere din egen spiller/bruker"
 		),
 		7 => array(
 			"title" => "E-postadresse",
-			"description" => "Hindre en bruker i å bytte e-postadresse.",
+			"description" => "Hindre en bruker i Ã¥ bytte e-postadresse.",
 			"access" => "mod",
 			"userlog" => "bytte e-postadresse"
 		),
 		8 => array(
 			"title" => "Signatur",
-			"description" => "Hindre en bruker i å redigere signaturen sin.",
+			"description" => "Hindre en bruker i Ã¥ redigere signaturen sin.",
 			"access" => "forum_mod",
 			"userlog" => "redigere signaturen din"
 		),
 		9 => array(
 			"title" => "Profilbilde",
-			"description" => "Hindre en bruker i å fjerne, legge til, eller endre profilbildet sitt.",
+			"description" => "Hindre en bruker i Ã¥ fjerne, legge til, eller endre profilbildet sitt.",
 			"access" => "forum_mod",
 			"userlog" => "fjerne, legge til eller endre profilbildet ditt"
 		)
@@ -139,7 +139,7 @@ class blokkeringer
 			return false;
 		}
 		
-		// returner første raden
+		// returner fÃ¸rste raden
 		return mysql_fetch_assoc($result);
 	}
 	
@@ -180,7 +180,7 @@ class blokkeringer
 		// kontroller at tidspunktet er fremover i tid
 		if ($expire <= time())
 		{
-			throw new HSException("Sluttidspunktet for blokkeringen må være fremover i tid.");
+			throw new HSException("Sluttidspunktet for blokkeringen mÃ¥ vÃ¦re fremover i tid.");
 		}
 		
 		// kontroller at det ikke finnes noen blokkering
@@ -219,13 +219,13 @@ class blokkeringer
 		// kontroller at tidspunktet er fremover i tid
 		if ($expire <= time())
 		{
-			throw new HSException("Sluttidspunktet for blokkeringen må være fremover i tid.");
+			throw new HSException("Sluttidspunktet for blokkeringen mÃ¥ vÃ¦re fremover i tid.");
 		}
 		
-		// hent nåværende informasjon
+		// hent nÃ¥vÃ¦rende informasjon
 		$res = self::get_info($ub_id);
 		
-		// forsøk å oppdater blokkeringen
+		// forsÃ¸k Ã¥ oppdater blokkeringen
 		ess::$b->db->query("UPDATE users_ban SET ub_time_expire = $expire, ub_reason = ".ess::$b->db->quote($log).", ub_note = ".ess::$b->db->quote($note)." WHERE ub_id = $ub_id AND ub_time_expire > ".time());
 		$aff = ess::$b->db->affected_rows();
 		
@@ -256,10 +256,10 @@ class blokkeringer
 	{
 		$ub_id = (int) $ub_id;
 		
-		// hent nåværende informasjon
+		// hent nÃ¥vÃ¦rende informasjon
 		$res = self::get_info($ub_id);
 		
-		// forsøk å sett tidspunktet til nå
+		// forsÃ¸k Ã¥ sett tidspunktet til nÃ¥
 		ess::$b->db->query("UPDATE users_ban SET ub_time_expire = ".time()." WHERE ub_id = $ub_id AND ub_time_expire > ".time());
 		$aff = ess::$b->db->affected_rows();
 		

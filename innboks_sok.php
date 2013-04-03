@@ -25,7 +25,7 @@ if (isset($_GET['u_id']) && access::has("admin"))
 	$show_deleted = true;
 	echo '
 <h1 class="scroll_here">Meldinger Admin</h1>
-<p>Du viser meldingene som tilhører '.game::profile_link($user->player->data['up_id'], $user->player->data['up_name'], $user->player->data['up_access_level']).'</p>';
+<p>Du viser meldingene som tilhÃ¸rer '.game::profile_link($user->player->data['up_id'], $user->player->data['up_name'], $user->player->data['up_access_level']).'</p>';
 	
 	redirect::store("innboks_sok?u_id=$u_id");
 }
@@ -34,7 +34,7 @@ if (isset($_GET['u_id']) && access::has("admin"))
 putlog("PROFILVIS", "%c5%bVIS-MELDINGER-SOK:%b%c %u".login::$user->player->data['up_name']."%u ({$_SERVER['REQUEST_URI']})");
 
 
-// hvem som skal ha kunnet skrevet det man søker på
+// hvem som skal ha kunnet skrevet det man sÃ¸ker pÃ¥
 $search_from = array(
 	1 => array("Alle", ""),
 	array("Meg selv", " AND im_up_id = up_ref.up_id"),
@@ -81,7 +81,7 @@ if ($search_from_id == 4)
 
 
 //$title = ucwords($search_where[$search_where_id][0]);
-$_base->page->add_title("Meldinger", "Søk");
+$_base->page->add_title("Meldinger", "SÃ¸k");
 
 
 
@@ -97,13 +97,13 @@ $sort->append("asc", "Dato", "im_time");
 $sort->append("desc", "Dato", "im_time DESC");
 $sort->set_active(postval("sort"), 7);
 
-// søkeform
+// sÃ¸keform
 echo '
-<h1>Søk - Meldinger</h1>
+<h1>SÃ¸k - Meldinger</h1>
 <p class="h_right"><a href="'.htmlspecialchars(game::address("innboks", $_GET)).'">Tilbake</a></p>
 <form action="'.htmlspecialchars(game::address(PHP_SELF, $_GET, array("alle", "innboks", "utboks", "side"))).'" method="post">
 	<div class="section" style="width: 410px; margin-left: auto; margin-right: auto">
-		<h2>Søk</h2>
+		<h2>SÃ¸k</h2>
 		<dl class="dl_20 dl_2x">
 			<dt>Tittel</dt>
 			<dd><input type="text" name="title" value="'.htmlspecialchars(postval("title")).'" class="styled w150" /></dd>
@@ -129,7 +129,7 @@ echo '
 			<dd><input type="radio" id="f_'.$key.'" name="f" value="'.$key.'"'.($search_from_id == $key ? ' checked="checked"' : '').' onclick="$(\'u_name\').focus()" /><label for="f_'.$key.'"> Spesifiser: </label><input type="text" name="u" value="'.htmlspecialchars(postval("u")).'" class="styled w100" id="u_name" onfocus="$(\'f_'.$key.'\').checked=true" /></dd>
 		</dl>
 		<h3 class="c">
-			'.show_sbutton("Utfør søk", 'name="search"').'
+			'.show_sbutton("UtfÃ¸r sÃ¸k", 'name="search"').'
 		</h3>
 	</div>
 </form>';
@@ -137,13 +137,13 @@ echo '
 
 
 
-// søke?
+// sÃ¸ke?
 if (isset($_POST['search']))
 {
 	$title_search = postval("title");
 	$text_search = postval("text");
 	
-	// finn ut delene av spørringen
+	// finn ut delene av spÃ¸rringen
 	$title_parts = search_query($title_search);
 	$text_parts = search_query($text_search);
 	
@@ -151,16 +151,16 @@ if (isset($_POST['search']))
 	{
 		echo '
 <h2>
-	Søkeresultater
+	SÃ¸keresultater
 </h2>
 <p>
-	Skal du ikke søke etter noe?!
+	Skal du ikke sÃ¸ke etter noe?!
 </p>';
 	}
 	
 	else
 	{
-		// sett opp søkespørringen
+		// sett opp sÃ¸kespÃ¸rringen
 		$search = "";
 		if (count($title_parts[0]) > 0)
 		{
@@ -171,7 +171,7 @@ if (isset($_POST['search']))
 			$search .= " AND id_text".implode(" AND id_text", $text_parts[0]);
 		}
 		
-		// søke i slettede meldinger?
+		// sÃ¸ke i slettede meldinger?
 		$deleted = $show_deleted ? " AND im_deleted = 0" : " AND ir_deleted = 0";
 		
 		// sortering
@@ -220,8 +220,8 @@ if (isset($_POST['search']))
 		$info = implode(" ", $info);
 		
 		echo '
-<h2>Søkeresultater</h2>
-<p class="h_right">Søker etter: '.$info.'</p>';
+<h2>SÃ¸keresultater</h2>
+<p class="h_right">SÃ¸ker etter: '.$info.'</p>';
 		
 		// fant vi noe?
 		if ($pagei->total == 0)
@@ -283,13 +283,13 @@ if (isset($_POST['search']))
 				
 				echo '
 			<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
-				<td class="it_u">'.($row['im_up_id'] == $user->player->id ? '<span class="utgaaende">Utgående</span>' : game::profile_link($row['im_up_id'], $row['up_name'], $row['up_access_level'])).'</td>
+				<td class="it_u">'.($row['im_up_id'] == $user->player->id ? '<span class="utgaaende">UtgÃ¥ende</span>' : game::profile_link($row['im_up_id'], $row['up_name'], $row['up_access_level'])).'</td>
 				<td><a href="innboks_les?id='.$row['it_id'].'&amp;goto='.$row['im_id'].'">'.htmlspecialchars($row['it_title']).'</a>'.($row['ir_unread'] == 1
 					? ' <span class="ny">(Ny!)</span>' : ($row['ir_unread'] > 1
 					? ' <span class="ny">('.$row['ir_unread'].' nye!)</span>' : '')).($row['ir_deleted'] != 0
 					? ' <span class="slettet">(Slettet)</span>' : '').($row['ir_up_id'] != $user->player->id || !$user->player->active
-					? ' <span class="it_locked">(Låst)</span>' : '').($row['ir_marked'] != 0
-					? ' <span class="ir_marked">(Til oppfølging)</span>' : '').'</td>
+					? ' <span class="it_locked">(LÃ¥st)</span>' : '').($row['ir_marked'] != 0
+					? ' <span class="ir_marked">(Til oppfÃ¸lging)</span>' : '').'</td>
 				<td class="dark">'.htmlspecialchars($content).' ('.$length.' tegn)</td>
 				<td class="it_dato">'.$_base->date->get($row['im_time'])->format().'</td>
 			</tr>';

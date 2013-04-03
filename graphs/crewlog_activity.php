@@ -4,7 +4,7 @@ require "graphs_base.php";
 ajax::require_user();
 global $_base;
 
-// må være medlem av crewet
+// mÃ¥ vÃ¦re medlem av crewet
 access::need("crewet");
 
 // hent informasjon om crewloggen

@@ -35,7 +35,7 @@ if (isset($pages[2]) && $pages[2] == "raw" && !isset($pages[3]) && ($page == "re
 	// vise raw for fil?
 	if ($page == "fil")
 	{
-		// hent data, kontroller taginfo og tilgangsnivÂ
+		// hent data, kontroller taginfo og tilgangsniv√•
 		$file = crewfiles::get_file($taginfo[0]);
 		if (!$file || !$file->validate_tag($taginfo[1]) || !$file->access(true))
 		{
@@ -52,10 +52,10 @@ if (isset($pages[2]) && $pages[2] == "raw" && !isset($pages[3]) && ($page == "re
 		}
 	}
 	
-	// direkte pÂ en revisjon
+	// direkte p√• en revisjon
 	else
 	{
-		// hent data, kontroller taginfo og tilgangsnivÂ
+		// hent data, kontroller taginfo og tilgangsniv√•
 		$revision = crewfiles::get_revision($taginfo[0]);
 		if (!$revision || !$revision->validate_tag($taginfo[1]) || !$revision->access(true))
 		{
@@ -201,7 +201,7 @@ if ($page == "map")
 			<th>&nbsp;</th>
 			<th width="80">Revisjoner</th>
 			<th width="165">Aktiv revisjon</th>
-			<th width="60">St¯rrelse</th>
+			<th width="60">St√∏rrelse</th>
 		</tr>
 	</thead>
 	<tbody>';
@@ -217,7 +217,7 @@ if ($page == "map")
 					$description = '<span class="no_desc">Ingen beskrivelse.</span>';
 				}
 				
-				// krever tilgangsnivÂ?
+				// krever tilgangsniv√•?
 				$access_info = '';
 				if (!empty($file['cff_access_level']))
 				{
@@ -295,7 +295,7 @@ if ($page == "mappe")
 		// ikke logget inn?
 		if (!login::$logged_in)
 		{
-			$_base->page->add_message("Du mÂ vÊre logget inn for Â kunne opprette en mappe.");
+			$_base->page->add_message("Du m√• v√¶re logget inn for √• kunne opprette en mappe.");
 			redirect::handle();
 		}
 		
@@ -306,7 +306,7 @@ if ($page == "mappe")
 			$description = trim(postval("description"));
 			$access_level = trim(postval("access_level"));
 			
-			// ingen tilgangsnivÂ?
+			// ingen tilgangsniv√•?
 			if (empty($access_level))
 			{
 				$access_level = NULL;
@@ -315,13 +315,13 @@ if ($page == "mappe")
 			// kontroller tittel
 			if (strlen($title) < 3)
 			{
-				$_base->page->add_message("Tittelen kan ikke vÊre mindre enn 3 tegn.", "error");
+				$_base->page->add_message("Tittelen kan ikke v√¶re mindre enn 3 tegn.", "error");
 			}
 			
-			// kontroller tilgangsnivÂ
+			// kontroller tilgangsniv√•
 			elseif ($access_level !== NULL && !crewfiles::validate_access_level($access_level))
 			{
-				$_base->page->add_message("Ugyldig tilgangsnivÂ.", "error");
+				$_base->page->add_message("Ugyldig tilgangsniv√•.", "error");
 			}
 			
 			// legg til mappen
@@ -347,7 +347,7 @@ if ($page == "mappe")
 			<dd><input type="text" name="title" id="dir_title" value="'.htmlspecialchars(postval("title")).'" class="styled w300" /></dd>
 			<dt>Beskrivelse</dt>
 			<dd><textarea name="description" rows="10" cols="50" style="width: 98%">'.htmlspecialchars(postval("description")).'</textarea></dd>
-			<dt>TilgangsnivÂ</dt>
+			<dt>Tilgangsniv√•</dt>
 			<dd>
 				<select name="access_level">
 					<option value="">Alle</option>';
@@ -385,7 +385,7 @@ if ($page == "mappe")
 		// sjekk at mappen er tom
 		if (!$dir->delete())
 		{
-			$_base->page->add_message("Mappen mÂ vÊre tom f¯r den kan slettes.", "error");
+			$_base->page->add_message("Mappen m√• v√¶re tom f√∏r den kan slettes.", "error");
 			redirect::handle();
 		}
 		
@@ -413,7 +413,7 @@ if ($page == "mappe")
 		// vis skjema
 		echo '
 <h1 class="path_all">Slette mappe: '.$hierarchy.'</h1>
-<p>Er du sikker pÂ at du ¯nsker Â slette denne mappen?</p>
+<p>Er du sikker p√• at du √∏nsker √• slette denne mappen?</p>
 <form action="" method="post">
 	<p>'.show_sbutton("Ja, slett mappen", 'name="confirm"').' <a href="'.$mappeurl.'" class="button">Nei, avbryt</a></p>
 </form>';
@@ -424,10 +424,10 @@ if ($page == "mappe")
 	// handling: rediger mappeinformasjon
 	if ($subpage == "edit")
 	{
-		// ikke h¯yt nok tilgangsnivÂ?
+		// ikke h√∏yt nok tilgangsniv√•?
 		if (!$dir->access)
 		{
-			$_base->page->add_message('Du har ikke tilgang til Â redigere denne mappen. Denne mappen er begrenset til <b>'.crewfiles::access_name($dir->info['cfd_access_level']).'</b>.', "error");
+			$_base->page->add_message('Du har ikke tilgang til √• redigere denne mappen. Denne mappen er begrenset til <b>'.crewfiles::access_name($dir->info['cfd_access_level']).'</b>.', "error");
 			redirect::handle();
 		}
 		
@@ -445,7 +445,7 @@ if ($page == "mappe")
 			$description = trim(postval("description"));
 			$access_level = trim(postval("access_level"));
 			
-			// ingen tilgangsnivÂ?
+			// ingen tilgangsniv√•?
 			if (empty($access_level))
 			{
 				$access_level = NULL;
@@ -454,19 +454,19 @@ if ($page == "mappe")
 			// kontroller tittel
 			if (strlen($title) < 3)
 			{
-				$_base->page->add_message("Tittelen kan ikke vÊre mindre enn 3 tegn.", "error");
+				$_base->page->add_message("Tittelen kan ikke v√¶re mindre enn 3 tegn.", "error");
 			}
 			
-			// kontroller tilgangsnivÂ
+			// kontroller tilgangsniv√•
 			elseif ($access_level !== NULL && !crewfiles::validate_access_level($access_level))
 			{
-				$_base->page->add_message("Ugyldig tilgangsnivÂ.", "error");
+				$_base->page->add_message("Ugyldig tilgangsniv√•.", "error");
 			}
 			
 			// ingen endringer?
 			elseif ($title == $dir->info['cfd_title'] && $description == $dir->info['cfd_description'] && $access_level == $dir->info['cfd_access_level'])
 			{
-				$_base->page->add_message("Ingen endringer ble utf¯rt.");
+				$_base->page->add_message("Ingen endringer ble utf√∏rt.");
 				redirect::handle();
 			}
 			
@@ -493,7 +493,7 @@ if ($page == "mappe")
 			<dd><input type="text" name="title" id="dir_title" value="'.htmlspecialchars(postval("title", $dir->info['cfd_title'])).'" class="styled w300" /></dd>
 			<dt>Beskrivelse</dt>
 			<dd><textarea name="description" rows="10" cols="50" style="width: 98%">'.htmlspecialchars(postval("description", $dir->info['cfd_description'])).'</textarea></dd>
-			<dt>TilgangsnivÂ</dt>
+			<dt>Tilgangsniv√•</dt>
 			<dd>
 				<select name="access_level">
 					<option value="">Alle</option>';
@@ -531,7 +531,7 @@ if ($page == "mappe")
 		// flytte mappen?
 		if (isset($_POST['cfd_id']))
 		{
-			// fors¯k Â flytt mappen
+			// fors√∏k √• flytt mappen
 			$status = $dir->move(intval($_POST['cfd_id']));
 			
 			if ($status !== true)
@@ -539,7 +539,7 @@ if ($page == "mappe")
 				switch ($status)
 				{
 					case "no_change":
-						$_base->page->add_message("Ingen endringer ble utf¯rt.");
+						$_base->page->add_message("Ingen endringer ble utf√∏rt.");
 					break;
 					
 					case "inherit":
@@ -547,7 +547,7 @@ if ($page == "mappe")
 					break;
 					
 					case "404":
-						$_base->page->add_message("Fant ikke mÂlmappen.", "error");
+						$_base->page->add_message("Fant ikke m√•lmappen.", "error");
 					break;
 					
 					default:
@@ -577,7 +577,7 @@ if ($page == "mappe")
 	<legend>Ny plassering</legend>
 	<form action="" method="post">
 		<dl class="dl_150px dl_2x">
-			<dt>NÂvÊrende plassering</dt>
+			<dt>N√•v√¶rende plassering</dt>
 			<dd>'.$hierarchy.'</dd>
 			<dt>Ny plassering</dt>
 			<dd>
@@ -619,7 +619,7 @@ if ($page == "mappe")
 		// ikke logget inn?
 		if (!login::$logged_in)
 		{
-			$_base->page->add_message("Du mÂ vÊre logget inn for Â kunne laste opp filer.", "error");
+			$_base->page->add_message("Du m√• v√¶re logget inn for √• kunne laste opp filer.", "error");
 			redirect::handle();
 		}
 		
@@ -652,7 +652,7 @@ if ($page == "mappe")
 			// sjekk at filen ble lastet opp riktig
 			if (!is_uploaded_file($src))
 			{
-				$_base->page->add_message("Noe gikk galt under opplasting av filen. Pr¯v pÂ nytt.");
+				$_base->page->add_message("Noe gikk galt under opplasting av filen. Pr√∏v p√• nytt.");
 			}
 			
 			else
@@ -662,23 +662,23 @@ if ($page == "mappe")
 				$description_rev = trim(postval("description_rev"));
 				$access_level = trim(postval("access_level"));
 				
-				// ingen tilgangsnivÂ?
+				// ingen tilgangsniv√•?
 				if (empty($access_level))
 				{
 					$access_level = NULL;
 				}
 				
-				// kontroller tilgangsnivÂ
+				// kontroller tilgangsniv√•
 				elseif (!crewfiles::validate_access_level($access_level))
 				{
-					$_base->page->add_message("Ugyldig tilgangsnivÂ. Ingen tilgangsnivÂ ble satt.");
+					$_base->page->add_message("Ugyldig tilgangsniv√•. Ingen tilgangsniv√• ble satt.");
 					$access_level = NULL;
 				}
 				
 				// ikke spesifisert tittel?
 				if (empty($title))
 				{
-					// sett opp tittel basert pÂ filnavnet uten etternavn og forkort om n¯dvendig
+					// sett opp tittel basert p√• filnavnet uten etternavn og forkort om n√∏dvendig
 					$title = $name;
 					if (($pos = strrpos($title, ".")) !== false)
 					{
@@ -687,7 +687,7 @@ if ($page == "mappe")
 					if (strlen($title) > 100) $title = substr($title, 0, 100);
 				}
 				
-				// forkort filnavn om n¯dvendig
+				// forkort filnavn om n√∏dvendig
 				if (strlen($name) > 100)
 				{
 					$pos = strrpos($title, ".");
@@ -706,7 +706,7 @@ if ($page == "mappe")
 				$revision = $dir->upload($title, $description_file, $description_rev, $access_level, $name, $mime, $src);
 				$path = $rooturl.'fil/'.$revision->get_file()->id.'-'.urlencode(crewfiles::generate_tagname($revision->get_file()->info['cff_title']));
 				
-				// melding pÂ crewchan
+				// melding p√• crewchan
 				putlog("CREWCHAN", "%u".login::$user->player->data['up_name']."%u lastet opp %u{$revision->get_file()->info['cff_title']}%u: {$__server['absolute_path']}$path");
 				
 				// melding og redirect
@@ -730,9 +730,9 @@ if ($page == "mappe")
 			<dd><input type="text" name="title" class="styled w300" /></dd>
 			<dt>Beskrivelse for <abbr title="Blir vist i filoversikten">filen</abbr></dt>
 			<dd><textarea name="description_file" rows="10" cols="50" style="width: 98%">'.htmlspecialchars(postval("description_file")).'</textarea></dd>
-			<dt>Beskrivelse for <abbr title="Blir kun vist nÂr man gÂr inn i filen og ser pÂ listen over revisjoner">revisjonen</abbr></dt>
+			<dt>Beskrivelse for <abbr title="Blir kun vist n√•r man g√•r inn i filen og ser p√• listen over revisjoner">revisjonen</abbr></dt>
 			<dd><textarea name="description_rev" rows="10" cols="50" style="width: 98%">'.htmlspecialchars(postval("description_rev")).'</textarea></dd>
-			<dt>TilgangsnivÂ</dt>
+			<dt>Tilgangsniv√•</dt>
 			<dd>
 				<select name="access_level">
 					<option value="">Alle</option>';
@@ -827,7 +827,7 @@ if ($page == "mappe")
 	if ($dir->info['cfd_id'] == 0)
 	{
 		echo '
-<p>Velkommen til filsystemet til Crewet! Dette systemet er ment for Â vÊre et knytepunkt for filer som er relevant for Crewet. Har du skrevet en idÈ eller liknende er det bare Â laste opp!</p>
+<p>Velkommen til filsystemet til Crewet! Dette systemet er ment for √• v√¶re et knytepunkt for filer som er relevant for Crewet. Har du skrevet en id√© eller liknende er det bare √• laste opp!</p>
 <p><a href="'.$rooturl.'map">Trykk her for oversikt over alle filene i systemet &raquo;</a></p>';
 	}
 	
@@ -852,7 +852,7 @@ if ($page == "mappe")
 		$i = 0;
 		foreach ($dirs as $row)
 		{
-			// krever tilgangsnivÂ?
+			// krever tilgangsniv√•?
 			$access_info = '<span class="no_desc">Ikke satt</span>';
 			if (!empty($row['cfd_access_level']))
 			{
@@ -889,14 +889,14 @@ if ($page == "mappe")
 <fieldset>
 	<legend>Filer</legend>';
 		
-		// krever tilgangsnivÂ?
+		// krever tilgangsniv√•?
 		if (!empty($dir->info['cfd_access_level']))
 		{
 			echo '
-	<p style="margin-bottom: 0">Filene i denne mappen er kun synlig for brukere med tilgangsnivÂ <b>'.crewfiles::access_name($dir->info['cfd_access_level']).'</b>.</p>';
+	<p style="margin-bottom: 0">Filene i denne mappen er kun synlig for brukere med tilgangsniv√• <b>'.crewfiles::access_name($dir->info['cfd_access_level']).'</b>.</p>';
 		}
 		
-		// er det noen filer Â vise?
+		// er det noen filer √• vise?
 		if ($count_files > 0)
 		{
 			echo '
@@ -908,7 +908,7 @@ if ($page == "mappe")
 				<th>&nbsp;</th>
 				<th width="80">Revisjoner</th>
 				<th width="165">Aktiv revisjon</th>
-				<th width="60">St¯rrelse</th>
+				<th width="60">St√∏rrelse</th>
 			</tr>
 		</thead>
 		<tbody>';
@@ -931,7 +931,7 @@ if ($page == "mappe")
 					$description = '<span class="no_desc">Ingen beskrivelse.</span>';
 				}
 				
-				// krever tilgangsnivÂ?
+				// krever tilgangsniv√•?
 				$access_info = '';
 				if (!empty($row['cff_access_level']))
 				{
@@ -1004,7 +1004,7 @@ elseif ($page == "fil")
 		redir_root();
 	}
 	
-	// hent data, kontroller taginfo og tilgangsnivÂ
+	// hent data, kontroller taginfo og tilgangsniv√•
 	$file = crewfiles::get_file($taginfo[0]);
 	if (!$file || !$file->validate_tag($taginfo[1]) || !$file->access)
 	{
@@ -1029,7 +1029,7 @@ elseif ($page == "fil")
 		// sjekk at filen ikke inneholder noen revisjoner
 		if (!$file->delete())
 		{
-			$_base->page->add_message("Filen kan ikke inneholde noen revisjoner for Â bli slettet.", "error");
+			$_base->page->add_message("Filen kan ikke inneholde noen revisjoner for √• bli slettet.", "error");
 			redirect::handle();
 		}
 		
@@ -1052,7 +1052,7 @@ elseif ($page == "fil")
 		// vis skjema
 		echo '
 <h1 class="path_all">Slette fil: '.$hierarchy.'</h1>
-<p>Er du sikker pÂ at du ¯nsker Â slette denne filen?</p>
+<p>Er du sikker p√• at du √∏nsker √• slette denne filen?</p>
 <form action="" method="post">
 	<p>'.show_sbutton("Ja, slett filen", 'name="confirm"').' <a href="'.$filurl.'" class="button">Nei, avbryt</a></p>
 </form>';
@@ -1071,7 +1071,7 @@ elseif ($page == "fil")
 			$access_level = trim(postval("access_level"));
 			$hidden = isset($_POST['hidden']);
 			
-			// ingen tilgangsnivÂ?
+			// ingen tilgangsniv√•?
 			if (empty($access_level))
 			{
 				$access_level = NULL;
@@ -1080,19 +1080,19 @@ elseif ($page == "fil")
 			// kontroller tittel
 			if (strlen($title) < 3)
 			{
-				$_base->page->add_message("Tittelen kan ikke vÊre mindre enn 3 tegn.", "error");
+				$_base->page->add_message("Tittelen kan ikke v√¶re mindre enn 3 tegn.", "error");
 			}
 			
-			// kontroller tilgangsnivÂ
+			// kontroller tilgangsniv√•
 			elseif ($access_level !== NULL && !crewfiles::validate_access_level($access_level))
 			{
-				$_base->page->add_message("Ugyldig tilgangsnivÂ.", "error");
+				$_base->page->add_message("Ugyldig tilgangsniv√•.", "error");
 			}
 			
 			// ingen endringer?
 			elseif ($title == $file->info['cff_title'] && $description == $file->info['cff_description'] && $access_level == $file->info['cff_access_level'] && ($hidden ? 1 : 0) == $file->info['cff_hidden'])
 			{
-				$_base->page->add_message("Ingen endringer ble utf¯rt.");
+				$_base->page->add_message("Ingen endringer ble utf√∏rt.");
 				redirect::handle();
 			}
 			
@@ -1122,7 +1122,7 @@ elseif ($page == "fil")
 			<dd><input type="text" name="title" id="file_title" value="'.htmlspecialchars(postval("title", $file->info['cff_title'])).'" class="styled w300" /></dd>
 			<dt>Beskrivelse</dt>
 			<dd><textarea name="description" rows="10" cols="50" style="width: 98%">'.htmlspecialchars(postval("description", $file->info['cff_description'])).'</textarea></dd>
-			<dt>TilgangsnivÂ</dt>
+			<dt>Tilgangsniv√•</dt>
 			<dd>
 				<select name="access_level">
 					<option value="">Alle</option>';
@@ -1138,7 +1138,7 @@ elseif ($page == "fil")
 		echo '
 				</select>
 			</dd>
-			<dt><label for="file_hidden"><abbr title="Skjuler filen fra mappen. Filen kan vises ved Â trykke pÂ &laquo;Vis skjulte filer&raquo;.">Skjul filen</abbr></label></dt>
+			<dt><label for="file_hidden"><abbr title="Skjuler filen fra mappen. Filen kan vises ved √• trykke p√• &laquo;Vis skjulte filer&raquo;.">Skjul filen</abbr></label></dt>
 			<dd><input type="checkbox" name="hidden" id="file_hidden"'.$hidden.' /></dd>
 		</dl>
 		<p>'.show_sbutton("Lagre endringer").' <a href="'.$filurl.'">Avbryt</a></p>
@@ -1155,7 +1155,7 @@ elseif ($page == "fil")
 		// flytte filen?
 		if (isset($_POST['cfd_id']))
 		{
-			// fors¯k Â flytt filen
+			// fors√∏k √• flytt filen
 			$status = $file->move(intval($_POST['cfd_id']));
 			
 			if ($status !== true)
@@ -1163,15 +1163,15 @@ elseif ($page == "fil")
 				switch ($status)
 				{
 					case "no_change":
-						$_base->page->add_message("Ingen endringer ble utf¯rt.");
+						$_base->page->add_message("Ingen endringer ble utf√∏rt.");
 					break;
 					
 					case "no_access":
-						$_base->page->add_message("Du har ikke filtilgang til mappen du ¯nsker Â flytte filen til.", "error");
+						$_base->page->add_message("Du har ikke filtilgang til mappen du √∏nsker √• flytte filen til.", "error");
 					break;
 					
 					case "404":
-						$_base->page->add_message("Fant ikke mÂlmappen.", "error");
+						$_base->page->add_message("Fant ikke m√•lmappen.", "error");
 					break;
 					
 					default:
@@ -1201,7 +1201,7 @@ elseif ($page == "fil")
 	<legend>Ny plassering</legend>
 	<form action="" method="post">
 		<dl class="dl_150px dl_2x">
-			<dt>NÂvÊrende plassering</dt>
+			<dt>N√•v√¶rende plassering</dt>
 			<dd>'.$hierarchy.'</dd>
 			<dt>Ny plassering</dt>
 			<dd>
@@ -1233,7 +1233,7 @@ elseif ($page == "fil")
 		// ikke logget inn?
 		if (!login::$logged_in)
 		{
-			$_base->page->add_message("Du mÂ vÊre logget inn for Â kunne laste opp nye revisjoner.", "error");
+			$_base->page->add_message("Du m√• v√¶re logget inn for √• kunne laste opp nye revisjoner.", "error");
 			redirect::handle();
 		}
 		
@@ -1248,7 +1248,7 @@ elseif ($page == "fil")
 			// sjekk at filen ble lastet opp riktig
 			if (!is_uploaded_file($src))
 			{
-				$_base->page->add_message("Noe gikk galt under opplasting av filen. Pr¯v pÂ nytt.");
+				$_base->page->add_message("Noe gikk galt under opplasting av filen. Pr√∏v p√• nytt.");
 			}
 			
 			else
@@ -1256,7 +1256,7 @@ elseif ($page == "fil")
 				$description = trim(postval("description"));
 				$set_active = isset($_POST['set_active']);
 				
-				// forkort filnavn om n¯dvendig
+				// forkort filnavn om n√∏dvendig
 				if (strlen($name) > 100)
 				{
 					$pos = strrpos($title, ".");
@@ -1275,7 +1275,7 @@ elseif ($page == "fil")
 				$revision = $file->upload($name, $description, $mime, $src, $set_active);
 				$active = $set_active ? ' Revisjonen ble satt som aktiv revisjon.' : '';
 				
-				// melding pÂ crewchan
+				// melding p√• crewchan
 				$path = $rooturl.'rev/'.$revision->id.'-'.urlencode(crewfiles::generate_tagname($revision->info['cfr_title']));
 				putlog("CREWCHAN", "%u".login::$user->player->data['up_name']."%u lastet opp ny revisjon til %u{$file->info['cff_title']}%u: {$__server['absolute_path']}$path");
 				
@@ -1332,11 +1332,11 @@ elseif ($page == "fil")
 <div class="p">'.$description.'</div>';
 	}
 	
-	// krever tilgangsnivÂ?
+	// krever tilgangsniv√•?
 	if (!empty($file->info['cff_access_level']))
 	{
 		echo '
-	<p>Denne filen er kun synlig for brukere med tilgangsnivÂ <b>'.crewfiles::access_name($file->info['cff_access_level']).'</b>.</p>';
+	<p>Denne filen er kun synlig for brukere med tilgangsniv√• <b>'.crewfiles::access_name($file->info['cff_access_level']).'</b>.</p>';
 	}
 	
 	// skjult?
@@ -1351,7 +1351,7 @@ elseif ($page == "fil")
 <fieldset>
 	<legend>Revisjoner</legend>';
 	
-	// er det noen revisjoner Â vise?
+	// er det noen revisjoner √• vise?
 	if ($count_revisions > 0)
 	{
 		echo '
@@ -1362,7 +1362,7 @@ elseif ($page == "fil")
 				<th>Beskrivelse</th>
 				<th width="165">Lastet opp</th>
 				<th>Av</th>
-				<th width="60">St¯rrelse</th>
+				<th width="60">St√∏rrelse</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -1433,7 +1433,7 @@ elseif ($page == "rev")
 		redir_root();
 	}
 	
-	// hent data, kontroller taginfo og tilgangsnivÂ
+	// hent data, kontroller taginfo og tilgangsniv√•
 	$revision = crewfiles::get_revision($taginfo[0]);
 	if (!$revision || !$revision->validate_tag($taginfo[1]) || !$revision->get_file()->access)
 	{
@@ -1461,14 +1461,14 @@ elseif ($page == "rev")
 		// ikke logget inn?
 		if (!login::$logged_in)
 		{
-			$_base->page->add_message("Du mÂ vÊre logget inn for Â kunne slette revisjoner.", "error");
+			$_base->page->add_message("Du m√• v√¶re logget inn for √• kunne slette revisjoner.", "error");
 			redirect::handle();
 		}
 		
-		// har vi ikke tilgang til Â slette denne revisjonen?
+		// har vi ikke tilgang til √• slette denne revisjonen?
 		if ($revision->info['cfr_up_id'] != login::$user->player->id && !access::has("admin"))
 		{
-			$_base->page->add_message("Denne revisjonen tilh¯rer ikke deg. Du har derfor ikke tilgang til Â slette revisjonen.", "error");
+			$_base->page->add_message("Denne revisjonen tilh√∏rer ikke deg. Du har derfor ikke tilgang til √• slette revisjonen.", "error");
 			redirect::handle();
 		}
 		
@@ -1494,7 +1494,7 @@ elseif ($page == "rev")
 		// vis skjema
 		echo '
 <h1 class="path_all">Slette revisjon: '.$hierarchy.'</h1>
-<p>Er du sikker pÂ at du ¯nsker Â slette denne revisjonen?</p>
+<p>Er du sikker p√• at du √∏nsker √• slette denne revisjonen?</p>
 <div class="warning">
 	<p>Revisjonen vil bli slettet permanent.</p>
 </div>
@@ -1531,7 +1531,7 @@ elseif ($page == "rev")
 		{
 			// sett som aktiv
 			$revision->set_active();
-			$_base->page->add_message("Revisjonen er nÂ satt som aktiv revisjon.");
+			$_base->page->add_message("Revisjonen er n√• satt som aktiv revisjon.");
 		}
 		
 		redirect::handle();
@@ -1550,13 +1550,13 @@ elseif ($page == "rev")
 			// kontroller tittel
 			if (strlen($title) < 3)
 			{
-				$_base->page->add_message("Tittelen kan ikke vÊre mindre enn 3 tegn.", "error");
+				$_base->page->add_message("Tittelen kan ikke v√¶re mindre enn 3 tegn.", "error");
 			}
 			
 			// ingen endringer?
 			elseif ($title == $revision->info['cfr_title'] && $description == $revision->info['cfr_description'] && $mime == $revision->info['cfr_mime'])
 			{
-				$_base->page->add_message("Ingen endringer ble utf¯rt.");
+				$_base->page->add_message("Ingen endringer ble utf√∏rt.");
 				redirect::handle();
 			}
 			

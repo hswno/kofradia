@@ -3,14 +3,14 @@
 class page_bydeler extends pages_player
 {
 	/**
-	 * Energi for å reise med taxi
+	 * Energi for Ã¥ reise med taxi
 	 */
 	const TAXI_ENERGY = 1000;
 	
 	const TAXI_PRICE_KM = 20000;
 	const TAXI_POINTS_KM = 5; // multiplisert med ranknummer
 	
-	const GTA_ENERGY_LOW = 100; // energi avhengig av skade på bil
+	const GTA_ENERGY_LOW = 100; // energi avhengig av skade pÃ¥ bil
 	const GTA_ENERGY_HIGH = 3000;
 	const GTA_PRICE_KM = 2000;
 	
@@ -24,7 +24,7 @@ class page_bydeler extends pages_player
 	
 	/**
 	 * Beregn prisfaktor for GTA for verdi
-	 * @param int $points antall poeng bilen gir når den stjeles
+	 * @param int $points antall poeng bilen gir nÃ¥r den stjeles
 	 */
 	protected static function get_gta_factor_points($points)
 	{
@@ -33,7 +33,7 @@ class page_bydeler extends pages_player
 	
 	/**
 	 * Beregn prisfaktor for GTA for skade
-	 * @param int $damage skade på bilen (0-99)
+	 * @param int $damage skade pÃ¥ bilen (0-99)
 	 */
 	protected static function get_gta_factor_damage($damage)
 	{
@@ -42,7 +42,7 @@ class page_bydeler extends pages_player
 	
 	/**
 	 * Beregn energi for GTA
-	 * @param int $damage skade på bilen (0-99)
+	 * @param int $damage skade pÃ¥ bilen (0-99)
 	 */
 	protected static function get_gta_energy($damage)
 	{
@@ -50,11 +50,11 @@ class page_bydeler extends pages_player
 	}
 	
 	/**
-	 * Finn koordinater på kartet utifra ressurs
+	 * Finn koordinater pÃ¥ kartet utifra ressurs
 	 */
 	public static function koordinat_ressurs($x, $y)
 	{
-		// TODO: flytt ressursene slik at denne funksjonen blir unødvendig
+		// TODO: flytt ressursene slik at denne funksjonen blir unÃ¸dvendig
 		$res = array(
 			round($x / 3 * 1.589) - 40,
 			round($y / 3 * 1.589) - 27
@@ -125,11 +125,11 @@ class page_bydeler extends pages_player
 	}
 	
 	/**
-	 * Ikke nok penger til å reise
+	 * Ikke nok penger til Ã¥ reise
 	 */
 	protected function reise_error_cash($bydel)
 	{
-		ess::$b->page->add_message("Du har ikke nok penger til å reise til ".htmlspecialchars($bydel['name']).".", "error");
+		ess::$b->page->add_message("Du har ikke nok penger til Ã¥ reise til ".htmlspecialchars($bydel['name']).".", "error");
 		redirect::handle();
 	}
 	
@@ -188,13 +188,13 @@ class page_bydeler extends pages_player
 			
 			if (!$this->gta_garage[$bydel['id']]['garage'])
 			{
-				ess::$b->page->add_message('Du har ingen garasje på <b>'.htmlspecialchars($bydel['name']).'</b> og kan ikke reise dit med bil.', "error");
+				ess::$b->page->add_message('Du har ingen garasje pÃ¥ <b>'.htmlspecialchars($bydel['name']).'</b> og kan ikke reise dit med bil.', "error");
 				redirect::handle();
 			}
 			
 			if ($this->gta_garage[$bydel['id']]['garage_free'] == 0)
 			{
-				ess::$b->page->add_message('Det er ingen ledige plasser i garasjen på <b>'.htmlspecialchars($bydel['name']).'</b>.', "error");
+				ess::$b->page->add_message('Det er ingen ledige plasser i garasjen pÃ¥ <b>'.htmlspecialchars($bydel['name']).'</b>.', "error");
 				redirect::handle();
 			}
 			
@@ -206,7 +206,7 @@ class page_bydeler extends pages_player
 			{
 				if (!isset($_POST['bil']))
 				{
-					ess::$b->page->add_message("Du må velge en bil du ønsker å reise med.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge en bil du Ã¸nsker Ã¥ reise med.", "error");
 				}
 				
 				else
@@ -217,7 +217,7 @@ class page_bydeler extends pages_player
 				// TODO
 			}
 			
-			// vis skjema for å velge en bil å reise med
+			// vis skjema for Ã¥ velge en bil Ã¥ reise med
 			ess::$b->page->add_title($bydel['name'], "Reis med bil");
 			
 			// hent bilene i garasjen
@@ -282,9 +282,9 @@ class page_bydeler extends pages_player
 		if (isset($_POST['taxi']))
 		{
 			// har vi ikke nok energi?
-			if (!$this->up->energy_check(self::TAXI_ENERGY*1.3)) // pluss på 30 % så man ikke kan ende opp på 0 % energi
+			if (!$this->up->energy_check(self::TAXI_ENERGY*1.3)) // pluss pÃ¥ 30 % sÃ¥ man ikke kan ende opp pÃ¥ 0 % energi
 			{
-				ess::$b->page->add_message("Du har ikke nok energi for å reise med taxi.", "error");
+				ess::$b->page->add_message("Du har ikke nok energi for Ã¥ reise med taxi.", "error");
 				redirect::handle();
 			}
 			
@@ -296,13 +296,13 @@ class page_bydeler extends pages_player
 			$points = round($distance * self::TAXI_POINTS_KM * $this->up->rank['number']);
 			
 			// har ikke nok rank?
-			if ($this->up->data['up_points'] < $points * 2) // må ha dobbelte
+			if ($this->up->data['up_points'] < $points * 2) // mÃ¥ ha dobbelte
 			{
-				ess::$b->page->add_message("Du har ikke nok rank til å reise til ".htmlspecialchars($bydel['name']).".", "error");
+				ess::$b->page->add_message("Du har ikke nok rank til Ã¥ reise til ".htmlspecialchars($bydel['name']).".", "error");
 				redirect::handle();
 			}
 			
-			// forsøk å reis
+			// forsÃ¸k Ã¥ reis
 			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price, up_b_id = {$bydel['id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id." AND up_cash >= $price AND up_b_id != {$bydel['id']}");
 			
 			// feilet?
@@ -315,7 +315,7 @@ class page_bydeler extends pages_player
 					$this->reise_error_in($bydel);
 				}
 				
-				// hadde ikke råd
+				// hadde ikke rÃ¥d
 				$this->reise_error_cash($bydel);
 			}
 			
@@ -349,7 +349,7 @@ class page_bydeler extends pages_player
 		
 		if (!$bil)
 		{
-			ess::$b->page->add_message("Fant ikke bilen du valgte. Prøv på nytt.", "error");
+			ess::$b->page->add_message("Fant ikke bilen du valgte. PrÃ¸v pÃ¥ nytt.", "error");
 			return;
 		}
 		
@@ -357,19 +357,19 @@ class page_bydeler extends pages_player
 		$energy = self::get_gta_energy($bil['damage']);
 		
 		// har vi ikke nok energi?
-		if (!$this->up->energy_check($energy*1.3)) // pluss på 30 % så man ikke kan ende opp på 0 % energi
+		if (!$this->up->energy_check($energy*1.3)) // pluss pÃ¥ 30 % sÃ¥ man ikke kan ende opp pÃ¥ 0 % energi
 		{
-			ess::$b->page->add_message("Du har ikke nok energi for å reise med denne bilen.", "error");
+			ess::$b->page->add_message("Du har ikke nok energi for Ã¥ reise med denne bilen.", "error");
 			return;
 		}
 		
-		// forsøk å reis
+		// forsÃ¸k Ã¥ reis
 		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price, up_b_id = {$bydel['id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id." AND up_cash >= $price AND up_b_id != {$bydel['id']}");
 		
 		// feilet?
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			// anta dårlig råd
+			// anta dÃ¥rlig rÃ¥d
 			$this->reise_error_cash($bydel);
 			return;
 		}
@@ -392,7 +392,7 @@ class page_bydeler extends pages_player
 	{
 		global $_game;
 		
-		$expire = time() - 604800; // tell kun spillere som har vært pålogget siste uken
+		$expire = time() - 604800; // tell kun spillere som har vÃ¦rt pÃ¥logget siste uken
 		$result = ess::$b->db->query("SELECT up_b_id, COUNT(up_id) AS ant, SUM(up_cash) AS money FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_last_online > $expire GROUP BY up_b_id");
 		while ($row = mysql_fetch_assoc($result))
 		{
@@ -491,7 +491,7 @@ class page_bydeler extends pages_player
 		$gta = new gta($this->up);
 		$this->gta_garage = $gta->get_bydeler_info();
 		
-		// sett opp antall biler i nåværende bydel
+		// sett opp antall biler i nÃ¥vÃ¦rende bydel
 		if (!isset($this->gta_garage[$this->up->data['up_b_id']]))
 		{
 			$this->gta_count = 0;
@@ -519,7 +519,7 @@ class page_bydeler extends pages_player
 		// hent familierangering
 		$ff_list = ff::get_fam_points_rank();
 		
-		// deaktiver høyre side
+		// deaktiver hÃ¸yre side
 		//define("DISABLE_RIGHT_COL", true);
 		
 		ess::$b->page->add_css('
@@ -646,7 +646,7 @@ class page_bydeler extends pages_player
 			{
 				$type = ff::$types[$row['ff_type']];
 				echo '
-		<p>Du er invitert til '.$type['refobj'].' <a href="'.$__server['relative_path'].'/ff/?ff_id='.$row['ff_id'].'">'.htmlspecialchars($row['ff_name']).'</a> som '.$type['priority'][$row['ffm_priority']].' ('.ess::$b->date->get($row['ffm_date_join'])->format(date::FORMAT_NOTIME).') - <a href="'.$__server['relative_path'].'/ff/?ff_id='.$row['ff_id'].'">Godta/avslå</a></p>';
+		<p>Du er invitert til '.$type['refobj'].' <a href="'.$__server['relative_path'].'/ff/?ff_id='.$row['ff_id'].'">'.htmlspecialchars($row['ff_name']).'</a> som '.$type['priority'][$row['ffm_priority']].' ('.ess::$b->date->get($row['ffm_date_join'])->format(date::FORMAT_NOTIME).') - <a href="'.$__server['relative_path'].'/ff/?ff_id='.$row['ff_id'].'">Godta/avslÃ¥</a></p>';
 			}
 			
 			echo '
@@ -658,15 +658,15 @@ class page_bydeler extends pages_player
 		{
 			echo '
 <div class="bg1_c medium bydeler_br bydeler_ressurs bydeler_ressurs_familie">
-	<h1 class="bg1">Konkurranse om å danne broderskap<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Konkurranse om Ã¥ danne broderskap<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<table class="table center tablem">
 			<thead>
 				<tr>
 					<th>Avsluttes</th>
-					<th>Gjenstår</th>
+					<th>GjenstÃ¥r</th>
 					<th>Antall broderskap</th>
-					<th>Gjenstående broderskap</th>
+					<th>GjenstÃ¥ende broderskap</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -690,8 +690,8 @@ class page_bydeler extends pages_player
 			
 			$create_link = login::$logged_in
 				? ($this->up->rank['number'] < ff::$types[1]['priority_rank'][1]
-					? ' - Du har ikke høy nok rank til å opprette et broderskap'
-					: ' - Du har høy nok rank - <a href="'.$__server['relative_path'].'/ff/?create">Opprett broderskap &raquo;</a>')
+					? ' - Du har ikke hÃ¸y nok rank til Ã¥ opprette et broderskap'
+					: ' - Du har hÃ¸y nok rank - <a href="'.$__server['relative_path'].'/ff/?create">Opprett broderskap &raquo;</a>')
 				: '';
 			
 			echo '
@@ -814,7 +814,7 @@ class page_bydeler extends pages_player
 						<dl class="dd_right">
 							<dt>Spillere</dt>
 							<dd>'.game::format_number($bydel['num_players']).'</dd>
-							<dt>Penger i omløp</dt>
+							<dt>Penger i omlÃ¸p</dt>
 							<dd>'.game::format_cash($bydel['sum_money']).'</dd>
 						</dl>';
 			
@@ -845,12 +845,12 @@ class page_bydeler extends pages_player
 				if (!$this->up->energy_check(self::TAXI_ENERGY*1.3))
 				{
 					echo '
-								<p>Du har ikke nok energi til å ta taxi hit.</p>';
+								<p>Du har ikke nok energi til Ã¥ ta taxi hit.</p>';
 				}
-				elseif ($this->up->data['up_points'] < $taxi_points * 2) // må ha dobbelte
+				elseif ($this->up->data['up_points'] < $taxi_points * 2) // mÃ¥ ha dobbelte
 				{
 					echo '
-								<p>Du har ikke høy nok rank til å ta taxi hit.</p>';
+								<p>Du har ikke hÃ¸y nok rank til Ã¥ ta taxi hit.</p>';
 				}
 				else
 				{
@@ -862,7 +862,7 @@ class page_bydeler extends pages_player
 				if ($this->gta_count == 0)
 				{
 					echo '
-								<p>Du har ingen biler i bydelen du oppholder deg i for å reise med.</p>';
+								<p>Du har ingen biler i bydelen du oppholder deg i for Ã¥ reise med.</p>';
 				}
 				elseif (!$this->gta_garage[$bydel['id']]['garage'])
 				{
@@ -877,7 +877,7 @@ class page_bydeler extends pages_player
 				else
 				{
 					echo '
-								<p>'.show_sbutton("Kjør egen bil", 'name="gta"').'</p>';
+								<p>'.show_sbutton("KjÃ¸r egen bil", 'name="gta"').'</p>';
 				}
 				
 				// teleportere

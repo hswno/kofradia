@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Forhåndsvisning av forumsvar
+ * ForhÃ¥ndsvisning av forumsvar
  * 
  * Inndata:
  * - topic_id
@@ -12,12 +12,12 @@
 require "../../base/ajax.php";
 ajax::require_user();
 
-// kontroller lås
+// kontroller lÃ¥s
 ajax::validate_lock(true);
 
 global $_base, $_game;
 
-// mangler forumtråd id?
+// mangler forumtrÃ¥d id?
 if (!isset($_POST['topic_id']))
 {
 	ajax::text("ERROR:MISSING", ajax::TYPE_INVALID);
@@ -26,13 +26,13 @@ if (!isset($_POST['topic_id']))
 $text = postval("text");
 if (empty($text)) $text = "Mangler innhold.";
 
-// forhåndsviser vi et redigert forumsvar?
+// forhÃ¥ndsviser vi et redigert forumsvar?
 if (isset($_POST['reply_id']))
 {
 	// hent forum modulen
 	essentials::load_module("forum");
 	
-	// hent forumtråden og forumsvaret
+	// hent forumtrÃ¥den og forumsvaret
 	$topic = new forum_topic_ajax($_POST['topic_id']);
 	$reply = $topic->get_reply($_POST['reply_id']);
 	
@@ -49,7 +49,7 @@ if (isset($_POST['reply_id']))
 	$data['fr_last_edit_up_id'] = login::$user->player->id;
 }
 
-// forhåndsviser nytt forumsvar (bruk egen brukerdata)
+// forhÃ¥ndsviser nytt forumsvar (bruk egen brukerdata)
 else
 {
 	// sett opp data

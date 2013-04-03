@@ -21,7 +21,7 @@ class Card
 	 */
 	public static $groups = array(
 		"name" => array(1 => "klover", "spar", "ruter", "hjerter"),
-		"title" => array(1 => "kløver", "spar", "ruter", "hjerter")
+		"title" => array(1 => "klÃ¸ver", "spar", "ruter", "hjerter")
 	);
 	
 	/** KortID (1-52) */
@@ -42,7 +42,7 @@ class Card
 		$id = (int) $id;
 		if ($id < 1 || $id > 52)
 		{
-			throw new HSException("KortID må være mellom 1 og 52.");
+			throw new HSException("KortID mÃ¥ vÃ¦re mellom 1 og 52.");
 		}
 		
 		$this->id = $id;

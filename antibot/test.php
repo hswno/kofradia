@@ -13,7 +13,7 @@ $antibot->check_required();
 if (isset($_POST['inc']))
 {
 	$antibot->increase_counter();
-	$_base->page->add_message("Telleren ble økt med 1");
+	$_base->page->add_message("Telleren ble Ã¸kt med 1");
 	redirect::handle();
 }
 
@@ -27,7 +27,7 @@ echo '
 
 <form action="" method="post">
 	<p>
-		<input type="submit" name="inc" value="Øk telleren" />
+		<input type="submit" name="inc" value="Ã˜k telleren" />
 	</p>
 </form>';
 

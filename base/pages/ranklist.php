@@ -23,7 +23,7 @@ class page_ranklist
 		if (isset($_GET['update']) && access::has("crewet"))
 		{
 			ranklist::flush();
-			ess::$b->page->add_message("Ranklisten skal nå være oppdatert.");
+			ess::$b->page->add_message("Ranklisten skal nÃ¥ vÃ¦re oppdatert.");
 		}
 		
 		// vise komplett liste?
@@ -52,7 +52,7 @@ class page_ranklist
 		if (isset($_GET['show_nsu']))
 		{
 			$nsu = "";
-			ess::$b->page->add_message("Du viser også brukere som ikke vises på vanlig statistikk!");
+			ess::$b->page->add_message("Du viser ogsÃ¥ brukere som ikke vises pÃ¥ vanlig statistikk!");
 		}
 		else
 		{
@@ -97,7 +97,7 @@ class page_ranklist
 					<th>#</th>
 					<th>Spillernavn</th>
 					<th>Rank</th>
-					<th>Sist pålogget</th>'.(access::has("mod") ? '
+					<th>Sist pÃ¥logget</th>'.(access::has("mod") ? '
 					<th>Rankpoeng</th>
 					<th>&nbsp;</th>' : '').'
 				</tr>

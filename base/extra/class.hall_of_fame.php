@@ -51,23 +51,23 @@ class hall_of_fame
 			$data['rank_kill'][$row['number']] = false;
 		}
 		
-		// første familie
+		// fÃ¸rste familie
 		$data['familie'][] = false;
 		
 		// topp rangert familie
 		$data['familie_rank'][] = false;
 		
-		// første eier av ulike FF
+		// fÃ¸rste eier av ulike FF
 		foreach (array_keys(ff::$types) as $id)
 		{
 			$data['ff_owner'][$id] = false;
 		}
 		
-		// første spiller i ulike pengeranker
+		// fÃ¸rste spiller i ulike pengeranker
 		$i = 0;
 		foreach (array_reverse(ess::$g['cash']) as $name => $val)
 		{
-			// hopp over første 6 pengerankene
+			// hopp over fÃ¸rste 6 pengerankene
 			if (++$i < 7) continue;
 			
 			$data['cash_num'][$i] = false;
@@ -77,7 +77,7 @@ class hall_of_fame
 	}
 	
 	/**
-	 * Oppdater en Hall of Fame (oppnådd)
+	 * Oppdater en Hall of Fame (oppnÃ¥dd)
 	 */
 	protected static function set_data($name, $sub, $data, $extra = null)
 	{
@@ -102,8 +102,8 @@ class hall_of_fame
 		if ($up) $up->add_log("hall_of_fame", $text);
 		
 		// ff-logg
-		if ($name == "familie") $extra->add_log("info", 'Broderskapet ble det første broderskap i spillet og havnet på <a href="&rpath;/hall_of_fame">Hall of Fame</a>!');
-		elseif ($name == "familie_rank") $extra->add_log("info", 'Broderskapet har for øyeblikket flest poeng av alle broderskap på spillet i historien og havnet på <a href="&rpath;/hall_of_fame">Hall of Fame</a>!');
+		if ($name == "familie") $extra->add_log("info", 'Broderskapet ble det fÃ¸rste broderskap i spillet og havnet pÃ¥ <a href="&rpath;/hall_of_fame">Hall of Fame</a>!');
+		elseif ($name == "familie_rank") $extra->add_log("info", 'Broderskapet har for Ã¸yeblikket flest poeng av alle broderskap pÃ¥ spillet i historien og havnet pÃ¥ <a href="&rpath;/hall_of_fame">Hall of Fame</a>!');
 		
 		self::cache_load(true);
 		return $affected;
@@ -141,22 +141,22 @@ class hall_of_fame
 		switch ($name)
 		{
 			case "rank":
-				return 'første spilleren til å oppnå ranken '.game::$ranks['items_number'][$sub]['name'];
+				return 'fÃ¸rste spilleren til Ã¥ oppnÃ¥ ranken '.game::$ranks['items_number'][$sub]['name'];
 			
 			case "rank_kill":
-				return 'første spilleren til å drepe en '.game::$ranks['items_number'][$sub]['name'];
+				return 'fÃ¸rste spilleren til Ã¥ drepe en '.game::$ranks['items_number'][$sub]['name'];
 			
 			case "familie":
-				return 'første familien i spillet';
+				return 'fÃ¸rste familien i spillet';
 			
 			case "familie_rank":
 				return 'topp rangert broderskap i spillet med '.game::format_num($data['ff_points_sum']).' poeng';
 			
 			case "ff_owner":
-				return 'første spilleren til å eie '.($sub == 1 ? 'en' : 'et').' '.ff::$types[$sub]['typename'];
+				return 'fÃ¸rste spilleren til Ã¥ eie '.($sub == 1 ? 'en' : 'et').' '.ff::$types[$sub]['typename'];
 			
 			case "cash_num":
-				return 'første spilleren til å oppnå pengeplasseringen &laquo;'.self::get_cash_pos($sub).'&raquo;';
+				return 'fÃ¸rste spilleren til Ã¥ oppnÃ¥ pengeplasseringen &laquo;'.self::get_cash_pos($sub).'&raquo;';
 		}
 		
 		throw new HSException("Ukjent type.");
@@ -184,7 +184,7 @@ class hall_of_fame
 	}
 	
 	/**
-	 * Sjekk om vi har utført en Hall of Fame
+	 * Sjekk om vi har utfÃ¸rt en Hall of Fame
 	 */
 	public static function check_new($name, $sub)
 	{
@@ -192,7 +192,7 @@ class hall_of_fame
 	}
 	
 	/**
-	 * Trigger for å sjekke om vi har utført en Hall of Fame
+	 * Trigger for Ã¥ sjekke om vi har utfÃ¸rt en Hall of Fame
 	 */
 	public static function trigger($name, $data, player $up = null)
 	{
@@ -203,13 +203,13 @@ class hall_of_fame
 		{
 			// rankplassering
 			case "rank":
-				// utfør kun på positive forandringer
+				// utfÃ¸r kun pÃ¥ positive forandringer
 				if ($data['points_rel'] < 0) return;
 				
 				// har ikke ranken forandret seg?
 				if ($data['rank'] <= 0) return;
 				
-				// allerede oppnådd eller ukjent?
+				// allerede oppnÃ¥dd eller ukjent?
 				$num = $up->rank['number'];
 				if (!self::check_new("rank", $num)) return;
 				
@@ -221,16 +221,16 @@ class hall_of_fame
 				// bare skadet angrep?
 				if (isset($data['attack']) && !$data['attack']['drept']) return;
 				
-				// allerede oppnådd eller ukjent?
+				// allerede oppnÃ¥dd eller ukjent?
 				$rank = $data['up']->rank['number'];
 				if (!self::check_new("rank_kill", $rank)) return;
 				
 				self::set_data("rank_kill", $rank, array("up_attacker" => $up->id, "up_died" => $data['up']->id), $up);
 			break;
 			
-			// første familie
+			// fÃ¸rste familie
 			case "familie":
-				// allerede oppnådd eller ukjent?
+				// allerede oppnÃ¥dd eller ukjent?
 				if (!self::check_new("familie", null)) return;
 				
 				self::set_data("familie", null, array("ff_id" => $data->id, "ff_name" => $data->data['ff_name']), $data);
@@ -238,13 +238,13 @@ class hall_of_fame
 			
 			// eier av FF
 			case "ff_owner":
-				// allerede oppnådd eller ukjent?
+				// allerede oppnÃ¥dd eller ukjent?
 				if (!self::check_new("ff_owner", $data->data['ff_type'])) return;
 				
 				// hent eier
 				if (!$up)
 				{
-					// skulle det ved en feil være flere eiere velger vi uansett bare den første
+					// skulle det ved en feil vÃ¦re flere eiere velger vi uansett bare den fÃ¸rste
 					if (!isset($data->members['members_priority'][1])) return;
 					$up = reset($data->members['members_priority'][1]);
 					$up = $up->up;
@@ -255,13 +255,13 @@ class hall_of_fame
 			
 			// pengerank
 			case "cash_num":
-				// finn totalt beløp
+				// finn totalt belÃ¸p
 				$sum = bcadd($up->data['up_cash'], $up->data['up_bank']);
 				
 				// finn pengeranknummer
 				$num = game::cash_name_number($sum);
 				
-				// allerede oppnådd eller ukjent?
+				// allerede oppnÃ¥dd eller ukjent?
 				if (!self::check_new("cash_num", $num)) return;
 				
 				self::set_data("cash_num", $num, $up->id, $up);
@@ -278,7 +278,7 @@ class hall_of_fame
 						return;
 					}
 					
-					// slett forrige oppføring
+					// slett forrige oppfÃ¸ring
 					ess::$b->db->query("DELETE FROM hall_of_fame WHERE hof_name = 'familie_rank'");
 				}
 				

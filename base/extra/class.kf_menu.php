@@ -35,7 +35,7 @@ class kf_menu
 							<li><a href="#" id="f_bomberomfirma" class="bydeler_vis_bomberomfirma">Bomberom</a></li>
 							<li><a href="#" id="f_garasjeutleiefirma" class="bydeler_vis_garasjeutleiefirma">Utleiefirma</a></li>
 							<li><a href="#" id="f_sykehusfirma" class="bydeler_vis_sykehusfirma">Sykehus</a></li>
-							<li><a href="#" id="f_vapbesfirma" class="bydeler_vis_vapbesfirma" title="Våpen, kuler og beskyttelse">Våpen/besk.</a></li>
+							<li><a href="#" id="f_vapbesfirma" class="bydeler_vis_vapbesfirma" title="VÃ¥pen, kuler og beskyttelse">VÃ¥pen/besk.</a></li>
 						</ul>
 					</li>
 				</ul>';
@@ -110,16 +110,16 @@ class kf_menu
 		$ret .= '
 				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=1" class="menu-icon menu-forum">Game forum<span class="icon"></span></a></li>
 				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=2" class="menu-icon menu-forum">Off-topic forum<span class="icon"></span></a></li>
-				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=3" class="menu-icon menu-forum">Salg/søknad forum<span class="icon"></span></a></li>
+				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=3" class="menu-icon menu-forum">Salg/sÃ¸knad forum<span class="icon"></span></a></li>
 			</ul>';
 		
 		$ret .= '
 			<ul>
 				<li><a href="'.ess::$s['relative_path'].'/node" class="menu-icon menu-help"><b>Hjelp</b> / Support<span class="icon"></span></a></li>'.(!$lock ? '
-				<li><a href="'.ess::$s['relative_path'].'/soknader" class="menu-icon menu-sokn">Søknader<span class="icon"></span></a></li>'.(!isset(self::$data['is_avstemning']) || !self::$data['is_avstemning'] ? '
+				<li><a href="'.ess::$s['relative_path'].'/soknader" class="menu-icon menu-sokn">SÃ¸knader<span class="icon"></span></a></li>'.(!isset(self::$data['is_avstemning']) || !self::$data['is_avstemning'] ? '
 				<li><a href="'.ess::$s['relative_path'].'/polls" class="menu-icon menu-avst">Avstemninger<span class="icon"></span></a></li>' : '').'
 				<li><a href="'.ess::$s['relative_path'].'/ranklist" class="menu-icon menu-rankl">Ranklist<span class="icon"></span></a></li>
-				<li><a href="'.ess::$s['relative_path'].'/online_list" class="menu-icon menu-online">Spillere pålogget<span class="icon"></span></a></li>' : '').'
+				<li><a href="'.ess::$s['relative_path'].'/online_list" class="menu-icon menu-online">Spillere pÃ¥logget<span class="icon"></span></a></li>' : '').'
 				<li><a href="'.ess::$s['relative_path'].'/crewet" class="menu-icon menu-crew">Crewet<span class="icon"></span></a></li>'.(!$lock ? '
 				<li><a href="'.ess::$s['relative_path'].'/statistikk" class="menu-icon menu-stats">Statistikk<span class="icon"></span></a></li>' : '').'
 				<li><a href="'.ess::$s['relative_path'].'/donasjon" class="menu-icon menu-donate">Donasjoner<span class="icon"></span></a></li>
@@ -129,7 +129,7 @@ class kf_menu
 		{
 			$ret .= '
 			<ul>
-				<li><a href="&rpath;/dev/" class="menu-icon menu-devt">Utviklerverktøy<span class="icon"></span></a></li>
+				<li><a href="&rpath;/dev/" class="menu-icon menu-devt">UtviklerverktÃ¸y<span class="icon"></span></a></li>
 			</ul>';
 		}
 		

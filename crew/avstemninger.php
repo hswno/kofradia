@@ -60,7 +60,7 @@ if (isset($pages[2]) && preg_match("/^\\d+\$/D", $pages[2]))
 			
 			if (strlen($title) < 3)
 			{
-				$_base->page->add_message("Tittelen mÂ inneholde minst 3 tegn.", "error");
+				$_base->page->add_message("Tittelen m√• inneholde minst 3 tegn.", "error");
 				$error = true;
 			}
 			
@@ -131,11 +131,11 @@ function setNow(elm, event)
 			<p><input type="text" name="title" class="styled w200" value="'.htmlspecialchars(postval("title", $poll['p_title'])).'" /></p>
 			<p><b>Beskrivelse:</b></p>
 			<p><textarea name="text" style="width: 90%" rows="15">'.htmlspecialchars(postval("text", $poll['p_text'])).'</textarea></p>
-			<p><b>Dato/tid start:</b> (<a href="#" onclick="setNow($(\'time_start\'), event)">Sett inn nÂvÊrende tidspunkt</a>)</p>
+			<p><b>Dato/tid start:</b> (<a href="#" onclick="setNow($(\'time_start\'), event)">Sett inn n√•v√¶rende tidspunkt</a>)</p>
 			<p><input type="text" name="time_start" id="time_start" class="styled w100" value="'.htmlspecialchars(postval("time_start", empty($poll['p_time_start']) ? '' : $_base->date->get($poll['p_time_start'])->format("d.m.Y H:i"))).'" /></p>
-			<p><b>Dato/tid slutt:</b> (<a href="#" onclick="setNow($(\'time_end\'), event)">Sett inn nÂvÊrende tidspunkt</a>)</p>
+			<p><b>Dato/tid slutt:</b> (<a href="#" onclick="setNow($(\'time_end\'), event)">Sett inn n√•v√¶rende tidspunkt</a>)</p>
 			<p><input type="text" name="time_end" id="time_end" class="styled w100" value="'.htmlspecialchars(postval("time_end", empty($poll['p_time_end']) ? '' : $_base->date->get($poll['p_time_end'])->format("d.m.Y H:i"))).'" /></p>
-			<p>Dato/tid mÂ vÊre i formatet <u>dag<b>.</b>mÂned<b>.</b>Âr time<b>:</b>minutt</u>, eksempel: 2.11.2008 22:33.</p>
+			<p>Dato/tid m√• v√¶re i formatet <u>dag<b>.</b>m√•ned<b>.</b>√•r time<b>:</b>minutt</u>, eksempel: 2.11.2008 22:33.</p>
 			<p>'.show_sbutton("Lagre endringer").' <a href="'.$__server['relative_path'].'/polls/admin/'.$poll['p_id'].'">Avbryt</a></p>
 		</form>
 	</div>
@@ -147,10 +147,10 @@ function setNow(elm, event)
 	// rediger forum malen?
 	if (isset($pages[3]) && $pages[3] == "forum_template")
 	{
-		// finnes allerede en forum trÂd?
+		// finnes allerede en forum tr√•d?
 		if ($poll['p_ft_id'])
 		{
-			$_base->page->add_message("Det er allerede en forum trÂd tilknyttet denne avstemningen.");
+			$_base->page->add_message("Det er allerede en forum tr√•d tilknyttet denne avstemningen.");
 			redirect::handle();
 		}
 		
@@ -205,7 +205,7 @@ function setNow(elm, event)
 			<p>Du endrer avstemningen &laquo;'.htmlspecialchars($poll['p_title']).'&raquo;. ('.($poll['p_active'] == 0 ? 'Ikke aktiv' : '<b>Aktiv</b>').')</p>
 			<p><label for="active"><b>Aktiver opprettelse av forum emne</b> </label><input type="checkbox" name="active"'.($params->get("forum_active") ? ' checked="checked"' : '').' id="active" /></p>
 			<p><b>Tittel:</b> &laquo;Avstemning: '.htmlspecialchars($poll['p_title']).'&raquo;</p>
-			<p><b>Innhold til forum trÂden:</b></p>
+			<p><b>Innhold til forum tr√•den:</b></p>
 			<p><textarea name="text" style="width: 90%" rows="15">'.htmlspecialchars(postval("text", $params->get("forum_text"))).'</textarea></p>
 			<p><b>Opprettes av ('.($params->get("forum_up_id") ? '<user id="'.$params->get("forum_up_id").'" />' : 'Ikke satt').'):</b></p>
 			<p>'.(access::has("admin") ? 'Bruker ID: <input type="text" name="up_id" class="styled w100" value="'.htmlspecialchars($params->get("forum_up_id")).'" />' : '<user id="'.login::$user->player->id.'" />').'</p>
@@ -223,7 +223,7 @@ function setNow(elm, event)
 		// har avstemningen noen alternativer?
 		if (count($poll['options']) > 0)
 		{
-			$_base->page->add_message("Du kan ikke slette en avstemning med alternativer. Slett alternativene f¯rst.", "error");
+			$_base->page->add_message("Du kan ikke slette en avstemning med alternativer. Slett alternativene f√∏rst.", "error");
 			redirect::handle();
 		}
 		
@@ -247,7 +247,7 @@ function setNow(elm, event)
 	<p class="h_left"><a href="'.$__server['relative_path'].'/polls/admin/'.$poll['p_id'].'">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<form action="'.$__server['relative_path'].'/polls/admin/'.$poll['p_id'].'/delete?sid='.login::$info['ses_id'].'" method="post">
-			<p>Du er i ferd med Â slette avstemningen &laquo;'.htmlspecialchars($poll['p_title']).'&raquo;.</p>'.(!empty($bb) ? '
+			<p>Du er i ferd med √• slette avstemningen &laquo;'.htmlspecialchars($poll['p_title']).'&raquo;.</p>'.(!empty($bb) ? '
 			<p><b>Beskrivelse:</b></p>
 			<div style="border: 1px solid #1F1F1F; padding: 0 10px">
 				<div class="p">'.$bb.'</div>
@@ -266,7 +266,7 @@ function setNow(elm, event)
 		// har vi ingen alternativer?
 		if (count($poll['options']) == 0)
 		{
-			$_base->page->add_message("Avstemningen mÂ inneholde minimum 2 alternativer f¯r den kan aktiveres.", "error");
+			$_base->page->add_message("Avstemningen m√• inneholde minimum 2 alternativer f√∏r den kan aktiveres.", "error");
 			redirect::handle();
 		}
 		
@@ -275,7 +275,7 @@ function setNow(elm, event)
 		
 		// sett aktiv
 		$_base->db->query("UPDATE polls SET p_active = 1 WHERE p_id = {$poll['p_id']}");
-		$_base->page->add_message("Avstemningen er nÂ satt til aktiv.");
+		$_base->page->add_message("Avstemningen er n√• satt til aktiv.");
 		
 		// slett cache
 		cache::delete("polls_list");
@@ -308,7 +308,7 @@ function setNow(elm, event)
 			$text = trim(postval("text"));
 			if (strlen($text) < 1)
 			{
-				$_base->page->add_message("Alternativet mÂ inneholde minst 1 tegn.", "error");
+				$_base->page->add_message("Alternativet m√• inneholde minst 1 tegn.", "error");
 			}
 			
 			else
@@ -363,7 +363,7 @@ function setNow(elm, event)
 			$text = trim(postval("text"));
 			if (strlen($text) < 1)
 			{
-				$_base->page->add_message("Alternativet mÂ inneholde minst 1 tegn.", "error");
+				$_base->page->add_message("Alternativet m√• inneholde minst 1 tegn.", "error");
 			}
 			
 			else
@@ -385,9 +385,9 @@ function setNow(elm, event)
 	<p class="h_left"><a href="'.$__server['relative_path'].'/polls/admin/'.$poll['p_id'].'">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<form action="'.$__server['relative_path'].'/polls/admin/'.$poll['p_id'].'/'.$po_id.'?sid='.login::$info['ses_id'].'" method="post">
-			<p>Du redigerer et alternativ som tilh¯rer avstemningen &laquo;'.htmlspecialchars($poll['p_title']).'&raquo;.</p>
+			<p>Du redigerer et alternativ som tilh√∏rer avstemningen &laquo;'.htmlspecialchars($poll['p_title']).'&raquo;.</p>
 			<p><b>Antall stemmer</b> dette alternativet har: '.game::format_number($po['po_votes']).'</p>
-			<p><b>NÂvÊre innhold:</b></p>
+			<p><b>N√•v√¶re innhold:</b></p>
 			<div class="p">'.game::bb_to_html($po['po_text']).'</div>
 			<p><b>Nytt innhold:</b></p>
 			<p><textarea name="text" style="width: 90%" rows="2">'.htmlspecialchars(postval("text", $po['po_text'])).'</textarea></p>
@@ -421,7 +421,7 @@ function setNow(elm, event)
 		// avstemningen er aktiv og dette er det siste alternativet?
 		if ($poll['p_active'] != 0 && count($poll['options']) == 2)
 		{
-			$_base->page->add_message("Avstemningen er aktiv og mÂ inneholde minimum 2 alternativer. Du kan derfor ikke slette dette alternativet.", "error");
+			$_base->page->add_message("Avstemningen er aktiv og m√• inneholde minimum 2 alternativer. Du kan derfor ikke slette dette alternativet.", "error");
 			redirect::handle();
 		}
 		
@@ -444,7 +444,7 @@ function setNow(elm, event)
 	<p class="h_left"><a href="'.$__server['relative_path'].'/polls/admin/'.$poll['p_id'].'">&laquo; Tilbake</a></p>
 	<div class="bg1">
 		<form action="'.$__server['relative_path'].'/polls/admin/'.$poll['p_id'].'/'.$po_id.'/delete?sid='.login::$info['ses_id'].'" method="post">
-			<p>Du er i ferd med Â slette alternativ som tilh¯rer avstemningen &laquo;'.htmlspecialchars($poll['p_title']).'&raquo;.</p>
+			<p>Du er i ferd med √• slette alternativ som tilh√∏rer avstemningen &laquo;'.htmlspecialchars($poll['p_title']).'&raquo;.</p>
 			<p><b>Innhold:</b></p>
 			<div class="p">'.game::bb_to_html($po['po_text']).'</div>
 			<p><span class="red">'.show_sbutton("Slett alternativ", 'name="delete"').'</span> <a href="'.$__server['relative_path'].'/polls/admin/'.$poll['p_id'].'">Avbryt</a></p>
@@ -523,7 +523,7 @@ if (isset($pages[2]) && $pages[2] == "new")
 		// minimum lengde = 3 tegn
 		if (strlen($title) < 3)
 		{
-			$_base->page->add_message("Tittel mÂ inneholde minst 3 tegn.", "error");
+			$_base->page->add_message("Tittel m√• inneholde minst 3 tegn.", "error");
 		}
 		
 		else

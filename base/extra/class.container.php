@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Klasse for å lage forskjellige verdier i en tekst (liknende en javascript array)
+ * Klasse for Ã¥ lage forskjellige verdier i en tekst (liknende en javascript array)
  */
 class container
 {
@@ -23,7 +23,7 @@ class container
 	}
 	
 	/**
-	 * For å "kryptere" teksten så den ikke blander seg med noe annet
+	 * For Ã¥ "kryptere" teksten sÃ¥ den ikke blander seg med noe annet
 	 *
 	 * @param string $string
 	 * @param string $delimiter
@@ -35,7 +35,7 @@ class container
 	}
 	
 	/**
-	 * For å dele opp delene/teksten til en array
+	 * For Ã¥ dele opp delene/teksten til en array
 	 * 
 	 * @param string $string
 	 * @param string $delimiter

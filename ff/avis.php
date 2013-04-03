@@ -72,7 +72,7 @@ class page_ff_avis
 	}
 	
 	/**
-	 * Behandle forespørsel
+	 * Behandle forespÃ¸rsel
 	 */
 	protected function page_handle()
 	{
@@ -147,7 +147,7 @@ class page_ff_avis
 			// sjekk tittel
 			if (strlen($title) < 5)
 			{
-				ess::$b->page->add_message("Tittelen må inneholde minimum 5 tegn.", "error");
+				ess::$b->page->add_message("Tittelen mÃ¥ inneholde minimum 5 tegn.", "error");
 			}
 			elseif (strlen($title) > 30)
 			{
@@ -241,7 +241,7 @@ class page_ff_avis
 		ess::$b->page->add_title("Rediger artikkel");
 		
 		// publisert?
-		// redaktører kan redigere publiserte artikler - også sine egne - så lenge utgivelsen ikke er publisert
+		// redaktÃ¸rer kan redigere publiserte artikler - ogsÃ¥ sine egne - sÃ¥ lenge utgivelsen ikke er publisert
 		if ($ffna->data['ffna_published'] != 0 && !$this->ff->mod)
 		{
 			if (!$this->ff->access(2))
@@ -252,7 +252,7 @@ class page_ff_avis
 			
 			elseif ($ffna->ffn && $ffna->ffn->data['ffn_published'] != 0)
 			{
-				ess::$b->page->add_message("Utgivelsen denne artikkelen tilhører er publisert. Artikkelen kan derfor ikke redigeres.", "error");
+				ess::$b->page->add_message("Utgivelsen denne artikkelen tilhÃ¸rer er publisert. Artikkelen kan derfor ikke redigeres.", "error");
 				redirect::handle();
 			}
 		}
@@ -267,7 +267,7 @@ class page_ff_avis
 			// sjekk tittel
 			if (strlen($title) < 5)
 			{
-				ess::$b->page->add_message("Tittelen må inneholde minimum 5 tegn.", "error");
+				ess::$b->page->add_message("Tittelen mÃ¥ inneholde minimum 5 tegn.", "error");
 			}
 			elseif (strlen($title) > 30)
 			{
@@ -286,7 +286,7 @@ class page_ff_avis
 				// ingen endringer?
 				if ($title == $ffna->data['ffna_title'] && $text == $ffna->data['ffna_text'])
 				{
-					ess::$b->page->add_message("Ingen endringer ble utført.");
+					ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.");
 				}
 				else
 				{
@@ -294,8 +294,8 @@ class page_ff_avis
 					ess::$b->page->add_message("Endringene ble lagret.");
 					
 					// lagre i loggen?
-					// hvis artikkelen er publisert er det kun moderator og redaktør som kan redigere
-					// hvis det er en redaktør som endrer, lagre i loggen
+					// hvis artikkelen er publisert er det kun moderator og redaktÃ¸r som kan redigere
+					// hvis det er en redaktÃ¸r som endrer, lagre i loggen
 					if ($ffna->data['ffna_published'] != 0 && !$this->ff->mod)
 					{
 						// data: ffna_id,up_id,ffna_up_id,ffna_title_org,ffna_title_new,ffna_text_old,ffna_text_new
@@ -385,7 +385,7 @@ class page_ff_avis
 		// sjekk tekst
 		if (strlen($text_plain) < 20)
 		{
-			ess::$b->page->add_message("Innholdet må inneholde minimum 20 bokstaver/tall før artikkelen kan publiseres.", "error");
+			ess::$b->page->add_message("Innholdet mÃ¥ inneholde minimum 20 bokstaver/tall fÃ¸r artikkelen kan publiseres.", "error");
 			redirect::handle();
 		}
 		
@@ -397,7 +397,7 @@ class page_ff_avis
 			// sjekk pris
 			if ($price < 0)
 			{
-				ess::$b->page->add_message("Prisen kan ikke være negativ.", "error");
+				ess::$b->page->add_message("Prisen kan ikke vÃ¦re negativ.", "error");
 			}
 			
 			// publiser
@@ -405,7 +405,7 @@ class page_ff_avis
 			{
 				ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_published = 1, ffna_published_time = ".time().", ffna_price = $price WHERE ffna_id = $ffna->id");
 				
-				ess::$b->page->add_message("Artikkelen er nå publisert. Redaktøren kan nå legge til artikkelen i en utgivelse.");
+				ess::$b->page->add_message("Artikkelen er nÃ¥ publisert. RedaktÃ¸ren kan nÃ¥ legge til artikkelen i en utgivelse.");
 				redirect::handle();
 			}
 		}
@@ -425,7 +425,7 @@ class page_ff_avis
 			<dt>Salgspris</dt>
 			<dd><input type="text" name="price" value="'.game::format_cash(postval("price", $ffna->data['ffna_price'])).'" class="styled w80 r" /></dd>
 		</dl>
-		<p>Når du publiserer artikkelen blir artikkelen synlig for redaktøren. Artikkelen kan da legges til i en utgivelse. Når utgivelsen blir publisert, vil du få utbetalt salgsprisen du oppgir nedenfor.</p>
+		<p>NÃ¥r du publiserer artikkelen blir artikkelen synlig for redaktÃ¸ren. Artikkelen kan da legges til i en utgivelse. NÃ¥r utgivelsen blir publisert, vil du fÃ¥ utbetalt salgsprisen du oppgir nedenfor.</p>
 		<p class="c">'.show_sbutton("Publiser artikkelen", 'name="publish"').'</p>
 	</div>
 </form>';
@@ -516,7 +516,7 @@ class page_ff_avis
 		<dd>'.game::format_cash($ffna->data['ffna_price']).'</dd>
 		<dt>Utgivelse</dt>
 		<dd>'.($ffna->data['ffna_ffn_id'] == 0 ? 'Ingen' : '<a href="avis?ff_id='.$this->ff->id.'&amp;u&amp;ffn='.$ffna->data['ffna_ffn_id'].'">'.htmlspecialchars($ffna->ffn->data['ffn_title']).'</a>'.($ffna->ffn->data['ffn_published'] == 0 ? ' (ikke publisert)' : ' (publisert '.ess::$b->date->get($ffna->ffn->data['ffn_published_time'])->format().')'))).'</dd>
-		<dt>'.($ffna->data['ffna_ffn_id'] ? 'Plassering' : 'Forhåndsvisning').'</dt>
+		<dt>'.($ffna->data['ffna_ffn_id'] ? 'Plassering' : 'ForhÃ¥ndsvisning').'</dt>
 		<dd>';
 		
 		// finn ut hvilken template som skal benyttes og vis informasjon
@@ -556,7 +556,7 @@ class page_ff_avis
 			
 			if (!$ok)
 			{
-				// har vi plassering? er plasseringen fremdeles gyldig? (i tilfelle den har vært tilegnet en utgivelse men fjernet fra utgivelsen og fått ny template)
+				// har vi plassering? er plasseringen fremdeles gyldig? (i tilfelle den har vÃ¦rt tilegnet en utgivelse men fjernet fra utgivelsen og fÃ¥tt ny template)
 				$params = new params($ffna->data['ffna_theme_parameters']);
 				$t = $params->get("template");
 				if ($t && isset(ff_avis::$templates[$t]) && isset(ff_avis::$templates[$t]['areas'][$ffna->data['ffna_theme_position']]))
@@ -566,7 +566,7 @@ class page_ff_avis
 				}
 				else
 				{
-					// benytt første template som standard
+					// benytt fÃ¸rste template som standard
 					$f = ff_avis::$templates;
 					$k = key($f);
 					$template = new ff_avis_template($k);
@@ -605,14 +605,14 @@ class page_ff_avis
 		';
 		}
 		
-		// legg til dummytekst på de plasseringene det ikke er artikler
+		// legg til dummytekst pÃ¥ de plasseringene det ikke er artikler
 		$template->add_dummy_text();
 		
 		echo '</dd>
 	</dl>
 	</form>
 </div>
-<h2 class="c">Forhåndsvisning</h2>'.$template->build();
+<h2 class="c">ForhÃ¥ndsvisning</h2>'.$template->build();
 	}
 	
 	/**
@@ -738,7 +738,7 @@ class page_ff_avis
 			// sjekk tittel
 			if (strlen($title) < 5)
 			{
-				ess::$b->page->add_message("Tittelen må inneholde minimum 5 tegn.", "error");
+				ess::$b->page->add_message("Tittelen mÃ¥ inneholde minimum 5 tegn.", "error");
 			}
 			elseif (strlen($title) > 35)
 			{
@@ -748,7 +748,7 @@ class page_ff_avis
 			// sjekk beskrivelse
 			/*elseif (strlen($desc_plain) < 30)
 			{
-				ess::$b->page->add_message("Beskrivelsen må inneholde minimum 30 tegn.", "error");
+				ess::$b->page->add_message("Beskrivelsen mÃ¥ inneholde minimum 30 tegn.", "error");
 			}*/
 			elseif (strlen($desc_plain) > 200)
 			{
@@ -758,13 +758,13 @@ class page_ff_avis
 			// ugyldig pris?
 			elseif ($price < 0)
 			{
-				ess::$b->page->add_message("Salgsprisen kan ikke være negativ.", "error");
+				ess::$b->page->add_message("Salgsprisen kan ikke vÃ¦re negativ.", "error");
 			}
 			
 			// ugyldig template?
 			elseif (!$template)
 			{
-				ess::$b->page->add_message("Du må velge en template.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge en template.", "error");
 			}
 			elseif (!isset(ff_avis::$templates[$template]))
 			{
@@ -879,7 +879,7 @@ class page_ff_avis
 			$this->pub_ffna_move($ffn);
 		}
 		
-		// forhåndsvis utgivelse
+		// forhÃ¥ndsvis utgivelse
 		elseif (isset($_GET['preview']))
 		{
 			$this->pub_preview($ffn);
@@ -930,7 +930,7 @@ class page_ff_avis
 			// sjekk tittel
 			if (strlen($title) < 5)
 			{
-				ess::$b->page->add_message("Tittelen må inneholde minimum 5 tegn.", "error");
+				ess::$b->page->add_message("Tittelen mÃ¥ inneholde minimum 5 tegn.", "error");
 			}
 			elseif (strlen($title) > 35)
 			{
@@ -946,7 +946,7 @@ class page_ff_avis
 			// ugyldig pris?
 			elseif ($price < 0)
 			{
-				ess::$b->page->add_message("Salgsprisen kan ikke være negativ.", "error");
+				ess::$b->page->add_message("Salgsprisen kan ikke vÃ¦re negativ.", "error");
 			}
 			
 			// lagre endringer
@@ -955,7 +955,7 @@ class page_ff_avis
 				// ingen endringer?
 				if ($price == $ffn->data['ffn_cost'] && $title == $ffn->data['ffn_title'] && $desc == $ffn->data['ffn_description'])
 				{
-					ess::$b->page->add_message("Ingen endringer ble utført.");
+					ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.");
 				}
 				else
 				{
@@ -1011,7 +1011,7 @@ class page_ff_avis
 			// ugyldig pris?
 			if ($price < 0)
 			{
-				ess::$b->page->add_message("Salgsprisen kan ikke være negativ.", "error");
+				ess::$b->page->add_message("Salgsprisen kan ikke vÃ¦re negativ.", "error");
 			}
 			
 			// lagre endringer
@@ -1020,7 +1020,7 @@ class page_ff_avis
 				// ingen endringer?
 				if ($price == $ffn->data['ffn_cost'])
 				{
-					ess::$b->page->add_message("Ingen endringer ble utført.");
+					ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.");
 				}
 				else
 				{
@@ -1066,10 +1066,10 @@ class page_ff_avis
 		$result = ess::$b->db->query("SELECT COUNT(ffna_id) FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id");
 		$ffna_count = mysql_result($result, 0);
 		
-		// kan ikke være noen artikler
+		// kan ikke vÃ¦re noen artikler
 		if ($ffna_count > 0)
 		{
-			ess::$b->page->add_message("Alle artiklene i utgivelsen må fjernes før utgivelsen selv kan slettes.", "error");
+			ess::$b->page->add_message("Alle artiklene i utgivelsen mÃ¥ fjernes fÃ¸r utgivelsen selv kan slettes.", "error");
 			redirect::handle();
 		}
 		
@@ -1117,7 +1117,7 @@ class page_ff_avis
 			// kontroller fil
 			if (!is_uploaded_file($_FILES['logo']['tmp_name']))
 			{
-				ess::$b->page->add_message("Noe gikk galt. Prøv på nytt.", "error");
+				ess::$b->page->add_message("Noe gikk galt. PrÃ¸v pÃ¥ nytt.", "error");
 				redirect::handle("avis?ff_id={$this->ff->id}&u&ffn=$ffn->id&logo");
 			}
 			
@@ -1125,19 +1125,19 @@ class page_ff_avis
 			$data = file_get_contents($_FILES['logo']['tmp_name']);
 			if ($data === false)
 			{
-				ess::$b->page->add_message("Noe gikk galt. Prøv på nytt.", "error");
+				ess::$b->page->add_message("Noe gikk galt. PrÃ¸v pÃ¥ nytt.", "error");
 				redirect::handle("avis?ff_id={$this->ff->id}&u&ffn=$ffn->id&logo");
 			}
 			
-			// åpne med GD
+			// Ã¥pne med GD
 			$img = imagecreatefromstring($data);
 			if ($img === false)
 			{
-				ess::$b->page->add_message("Bildet kunne ikke bli lest. Prøv et annet bilde av type JPEG, PNG, GIF eller WBMP.", "error");
+				ess::$b->page->add_message("Bildet kunne ikke bli lest. PrÃ¸v et annet bilde av type JPEG, PNG, GIF eller WBMP.", "error");
 				redirect::handle("avis?ff_id={$this->ff->id}&u&ffn=$ffn->id&logo");
 			}
 			
-			// kontroller bredde/høyde (maks 620x100) og resize
+			// kontroller bredde/hÃ¸yde (maks 620x100) og resize
 			$resize = false;
 			if (imagesx($img) > 620)
 			{
@@ -1188,12 +1188,12 @@ function vis_bilde(elm)
 <p class="c">Ny logo | <a href="avis?ff_id='.$this->ff->id.'&amp;u&amp;ffn='.$ffn->id.'">Tilbake</a></p>
 <div class="section center w300">
 	<h2>Ny logo</h2>
-	<p>Dette er logoen som vil bli vist på toppen av utgivelsen. Maks 620px i bredde og 100px i høyde.</p>
+	<p>Dette er logoen som vil bli vist pÃ¥ toppen av utgivelsen. Maks 620px i bredde og 100px i hÃ¸yde.</p>
 	<form action="" method="post" enctype="multipart/form-data">
 		<dl class="dd_right dl_2x">
 			<dt>Velg bilde</dt>
 			<dd><input type="file" name="logo" onchange="vis_bilde(this)" /></dd>
-			<dt>Forhåndsvisning</dt>
+			<dt>ForhÃ¥ndsvisning</dt>
 			<dd><div id="img_preview">Venter</div></dd>
 		</dl>
 		<p class="c">'.show_sbutton("Last opp logo").'</p>
@@ -1254,7 +1254,7 @@ function vis_bilde(elm)
 				$position = postval("theme_position");
 				if (($pos = strpos($position, ":")) === false)
 				{
-					ess::$b->page->add_message("Du må velge en plassering.", "error");
+					ess::$b->page->add_message("Du mÃ¥ velge en plassering.", "error");
 				}
 				
 				else
@@ -1332,7 +1332,7 @@ function vis_bilde(elm)
 				if (isset($articles[$key]))
 				{
 					echo '
-						<option value="'.htmlspecialchars($key).':1">'.htmlspecialchars($area).' (øverst)</option>';
+						<option value="'.htmlspecialchars($key).':1">'.htmlspecialchars($area).' (Ã¸verst)</option>';
 					
 					foreach ($articles[$key] as $row)
 					{
@@ -1495,7 +1495,7 @@ function vis_bilde(elm)
 			$position = postval("theme_position");
 			if (($pos = strpos($position, ":")) === false)
 			{
-				ess::$b->page->add_message("Du må velge en plassering.", "error");
+				ess::$b->page->add_message("Du mÃ¥ velge en plassering.", "error");
 			}
 			
 			else
@@ -1521,7 +1521,7 @@ function vis_bilde(elm)
 					// samme?
 					elseif ($area == $ffna['ffna_theme_position'] && $priority == $ffna['ffna_theme_priority'])
 					{
-						ess::$b->page->add_message("Ingen endringer ble utført.");
+						ess::$b->page->add_message("Ingen endringer ble utfÃ¸rt.");
 						redirect::handle();
 					}
 					
@@ -1590,7 +1590,7 @@ function vis_bilde(elm)
 			if (isset($articles[$key]))
 			{
 				echo '
-						<option value="'.htmlspecialchars($key).':1"'.($here && $pri == 1 ? ' selected="selected"' : '').'>'.htmlspecialchars($area).' (øverst)'.($here && $pri == 1 ? ' (valgt)' : '').'</option>';
+						<option value="'.htmlspecialchars($key).':1"'.($here && $pri == 1 ? ' selected="selected"' : '').'>'.htmlspecialchars($area).' (Ã¸verst)'.($here && $pri == 1 ? ' (valgt)' : '').'</option>';
 				
 				foreach ($articles[$key] as $row)
 				{
@@ -1625,7 +1625,7 @@ function vis_bilde(elm)
 	}
 	
 	/**
-	 * Forhåndsvis utgivelse
+	 * ForhÃ¥ndsvis utgivelse
 	 */
 	protected function pub_preview(ff_avis_utgivelse $ffn)
 	{
@@ -1661,29 +1661,29 @@ function vis_bilde(elm)
 		
 		if (strlen($desc_plain) < 30)
 		{
-			ess::$b->page->add_message("Beskrivelsen for utgivelsen må inneholde minimum 30 bokstaver/tall før den kan publiseres.", "error");
+			ess::$b->page->add_message("Beskrivelsen for utgivelsen mÃ¥ inneholde minimum 30 bokstaver/tall fÃ¸r den kan publiseres.", "error");
 			redirect::handle();
 		}
 		
-		// sjekk når siste publisering ble utført
+		// sjekk nÃ¥r siste publisering ble utfÃ¸rt
 		$result = ess::$b->db->query("SELECT ffn_published_time FROM ff_newspapers WHERE ffn_ff_id = {$this->ff->id} AND ffn_published != 0 ORDER BY ffn_published_time DESC LIMIT 1");
 		$last = mysql_num_rows($result) > 0 ? mysql_result($result, 0) : 0;
 		
-		// har det gått lang nok tid?
+		// har det gÃ¥tt lang nok tid?
 		$delay = ff_avis::FFN_PUBLISH_DELAY+$last - time();
 		if ($delay > 0)
 		{
-			ess::$b->page->add_message("Du må vente ".game::timespan(ff_avis::FFN_PUBLISH_DELAY, game::TIME_FULL)." mellom hver utgivelse som utføres. Gjenstår før neste utgivelse kan publiseres: ".game::timespan($delay, game::TIME_FULL).".", "error");
+			ess::$b->page->add_message("Du mÃ¥ vente ".game::timespan(ff_avis::FFN_PUBLISH_DELAY, game::TIME_FULL)." mellom hver utgivelse som utfÃ¸res. GjenstÃ¥r fÃ¸r neste utgivelse kan publiseres: ".game::timespan($delay, game::TIME_FULL).".", "error");
 			redirect::handle();
 		}
 		
 		// hent artiklene med pris
 		$result = ess::$b->db->query("SELECT ffna_id, ffna_up_id, ffna_title, ffna_price FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_title");
 		
-		// for få artikler?
+		// for fÃ¥ artikler?
 		if (mysql_num_rows($result) < 4)
 		{
-			ess::$b->page->add_message("Utgivelsen må inneholde minimum 4 artikler for å bli publisert.", "error");
+			ess::$b->page->add_message("Utgivelsen mÃ¥ inneholde minimum 4 artikler for Ã¥ bli publisert.", "error");
 			redirect::handle();
 		}
 		
@@ -1714,7 +1714,7 @@ function vis_bilde(elm)
 			// kontroller pris
 			if ($price != $total_price)
 			{
-				ess::$b->page->add_message("Det ser ut som prisen har endret seg. Prøv på nytt.", "error");
+				ess::$b->page->add_message("Det ser ut som prisen har endret seg. PrÃ¸v pÃ¥ nytt.", "error");
 			}
 			
 			// kontroller sid
@@ -1723,7 +1723,7 @@ function vis_bilde(elm)
 				ess::$b->page->add_message("Ugyldig.", "error");
 			}
 			
-			// kontroller pengenivået i firma banken
+			// kontroller pengenivÃ¥et i firma banken
 			elseif ($total_price > 0 && $this->ff->data['ff_bank'] < $total_price)
 			{
 				ess::$b->page->add_message("Det er ikke nok penger i firmabanken.", "error");
@@ -1748,7 +1748,7 @@ function vis_bilde(elm)
 					// utbetal til journalistene
 					ess::$b->db->query("UPDATE users_players, ff_members, (SELECT ffna_up_id, SUM(ffna_price) AS ffna_sum, COUNT(ffna_price) AS ffna_count FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id AND ffna_price > 0 GROUP BY ffna_up_id) AS ref SET up_bank = up_bank + ffna_sum, up_bank_received = up_bank_received + ffna_sum, up_bank_profit = up_bank_profit + ffna_sum, up_bank_num_received = up_bank_num_received + ffna_count, up_log_new = up_log_new + ffna_count, ffm_earnings = ffm_earnings + ffna_sum WHERE ffna_up_id = up_id AND ffm_up_id = up_id AND ffm_ff_id = {$this->ff->id}");
 					
-					// lagre overføringslogg
+					// lagre overfÃ¸ringslogg
 					ess::$b->db->query("INSERT INTO bank_log (bl_sender_up_id, bl_receiver_up_id, amount, time) SELECT ".login::$user->player->id.", ffna_up_id, ffna_price, ".time()." FROM users_players, ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id AND ffna_up_id = up_id AND ffna_price > 0");
 					
 					// spillelogg
@@ -1759,7 +1759,7 @@ function vis_bilde(elm)
 					// live-feed
 					livefeed::add_row('Avisutgivelsen <a href="'.ess::$s['relative_path'].'/ff/avis?ff_id='.$this->ff->id.'&amp;ffn='.$ffn->id.'">'.htmlspecialchars($ffn->data['ffn_title']).'</a> ble publisert av <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->ff->id.'">'.htmlspecialchars($this->ff->data['ff_name']).'</a>.');
 					
-					ess::$b->page->add_message("Utgivelsen er nå publisert.");
+					ess::$b->page->add_message("Utgivelsen er nÃ¥ publisert.");
 					redirect::handle();
 				}
 			}
@@ -1856,8 +1856,8 @@ function vis_bilde(elm)
 		// link: ny artikkel
 		$more .= $access2 || $this->ff->mod ? ' | <a href="avis?ff_id='.$this->ff->id.'&amp;u&amp;ffn='.$ffn->id.'&amp;add_ffna">Legg til artikkel</a>' : '';
 		
-		// link: forhåndsvis
-		$more .= $ffn->data['ffn_published'] == 0 ? ' | <a href="avis?ff_id='.$this->ff->id.'&amp;u&amp;ffn='.$ffn->id.'&amp;preview">Forhåndsvis</a>' : ' | <a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$ffn->id.'">Vis publisert utgivelse</a>';
+		// link: forhÃ¥ndsvis
+		$more .= $ffn->data['ffn_published'] == 0 ? ' | <a href="avis?ff_id='.$this->ff->id.'&amp;u&amp;ffn='.$ffn->id.'&amp;preview">ForhÃ¥ndsvis</a>' : ' | <a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$ffn->id.'">Vis publisert utgivelse</a>';
 		
 		// link: publiser/fjern publisering
 		if ($this->ff->access(1) || $this->ff->mod)
@@ -2026,7 +2026,7 @@ function vis_bilde(elm)
 		redirect::store("avis?ff_id={$this->ff->id}&ffn=$ffn->id");
 		ess::$b->page->add_title($ffn->data['ffn_title']);
 		
-		// hent kjøpsinformasjon
+		// hent kjÃ¸psinformasjon
 		$ffnp = null;
 		if (login::$logged_in)
 		{
@@ -2046,10 +2046,10 @@ function vis_bilde(elm)
 			redirect::handle("avis?ff_id={$this->ff->id}&u&ffn=$ffn->id");
 		}
 		
-		// må vi kjøpe avisutgivelsen?
+		// mÃ¥ vi kjÃ¸pe avisutgivelsen?
 		if ($this->ff->active && (!login::$logged_in || (!$this->ff->access() && !access::is_nostat() && !$ffnp)))
 		{
-			// har ikke kjøpt avisen, men avisen er gratis?
+			// har ikke kjÃ¸pt avisen, men avisen er gratis?
 			if (login::$logged_in && (!$ffnp && $ffn->data['ffn_cost'] == 0))
 			{
 				// opprett rad for betaling
@@ -2061,12 +2061,12 @@ function vis_bilde(elm)
 				redirect::handle();
 			}
 			
-			// må kjøpe avisen
+			// mÃ¥ kjÃ¸pe avisen
 			else
 			{
-				ess::$b->page->add_title("Kjøp utgivelse");
+				ess::$b->page->add_title("KjÃ¸p utgivelse");
 				
-				// kjøpe?
+				// kjÃ¸pe?
 				if (login::$logged_in && isset($_POST['buy']))
 				{
 					$sid = postval("sid");
@@ -2079,16 +2079,16 @@ function vis_bilde(elm)
 					// har prisen endret seg?
 					elseif ($price != $ffn->data['ffn_cost'])
 					{
-						ess::$b->page->add_message("Prisen har endret seg. Du må utføre handlingen på nytt.", "error");
+						ess::$b->page->add_message("Prisen har endret seg. Du mÃ¥ utfÃ¸re handlingen pÃ¥ nytt.", "error");
 					}
 					
 					// har ikke nok penger
 					elseif (login::$user->player->data['up_cash'] < $ffn->data['ffn_cost'])
 					{
-						ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
+						ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda.", "error");
 					}
 					
-					// kjøp utgivelse
+					// kjÃ¸p utgivelse
 					else
 					{
 						// trekk fra pengene fra brukeren
@@ -2102,12 +2102,12 @@ function vis_bilde(elm)
 						if ($ffn->data['ffn_cost'] != 0 && ess::$b->db->affected_rows() == 0)
 						{
 							ess::$b->db->rollback();
-							ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
+							ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda.", "error");
 						}
 						
 						else
 						{
-							// legg til oppføring
+							// legg til oppfÃ¸ring
 							ess::$b->db->query("INSERT INTO ff_newspapers_payments SET ffnp_ffn_id = $ffn->id, ffnp_up_id = ".login::$user->player->id.", ffnp_cost = {$ffn->data['ffn_cost']}, ffnp_time = ".time());
 							
 							// gi pengene til firmaet
@@ -2120,7 +2120,7 @@ function vis_bilde(elm)
 							ess::$b->db->query("UPDATE ff_newspapers SET ffn_sold = ffn_sold + 1, ffn_income = ffn_income + {$ffn->data['ffn_cost']} WHERE ffn_id = $ffn->id");
 							ess::$b->db->commit();
 							
-							ess::$b->page->add_message("Du har kjøpt utgivelsen for ".game::format_cash($ffn->data['ffn_cost']).".");
+							ess::$b->page->add_message("Du har kjÃ¸pt utgivelsen for ".game::format_cash($ffn->data['ffn_cost']).".");
 							redirect::handle();
 						}
 					}
@@ -2128,7 +2128,7 @@ function vis_bilde(elm)
 				
 				
 				echo '
-<p class="c">'.htmlspecialchars($ffn->data['ffn_title']).' | Kjøp utgivelse | <a href="avis?ff_id='.$this->ff->id.'">Tilbake</a></p>
+<p class="c">'.htmlspecialchars($ffn->data['ffn_title']).' | KjÃ¸p utgivelse | <a href="avis?ff_id='.$this->ff->id.'">Tilbake</a></p>
 <div class="section center w200">
 	<h2>Utgivelseinformasjon</h2>
 	<dl class="dd_right">
@@ -2175,20 +2175,20 @@ function vis_bilde(elm)
 	<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 	<input type="hidden" name="price" value="'.$ffn->data['ffn_cost'].'" />
 	<div class="section center w200">
-		<h2>Kjøp utgivelse</h2>
-		<p>Før du får tilgang til denne utgivelsen må du kjøpe den.</p>
+		<h2>KjÃ¸p utgivelse</h2>
+		<p>FÃ¸r du fÃ¥r tilgang til denne utgivelsen mÃ¥ du kjÃ¸pe den.</p>
 		<dl class="dd_right">
 			<dt>Pris</dt>
 			<dd>'.game::format_cash($ffn->data['ffn_cost']).'</dd>
 		</dl>
-		<p class="c">'.show_sbutton("Kjøp utgivelse", 'name="buy"').'</p>
+		<p class="c">'.show_sbutton("KjÃ¸p utgivelse", 'name="buy"').'</p>
 	</div>
 </form>';
 				}
 				else
 				{
 					echo '
-<p class="c">Du må <a href="&rpath;/">logge inn</a> for å kjøpe og lese denne utgivelsen.</p>';
+<p class="c">Du mÃ¥ <a href="&rpath;/">logge inn</a> for Ã¥ kjÃ¸pe og lese denne utgivelsen.</p>';
 				}
 				
 				$this->ff->load_page();
@@ -2242,8 +2242,8 @@ function vis_bilde(elm)
 		<dd>'.game::format_number($row['ffn_sold']).'</dd>
 		<dt>Pris</dt>
 		<dd>'.game::format_cash($row['ffn_cost']).'</dd>
-		<dt>Kjøpt?</dt>
-		<dd>'.($row['ffnp_time'] ? '<a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$row['ffn_id'].'">Ja</a> ('.ess::$b->date->get($row['ffnp_time'])->format().')' : 'Nei [<a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$row['ffn_id'].'">Kjøp</a>]').(access::is_nostat() ? ' (nostat)' : '').'</dd>
+		<dt>KjÃ¸pt?</dt>
+		<dd>'.($row['ffnp_time'] ? '<a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$row['ffn_id'].'">Ja</a> ('.ess::$b->date->get($row['ffnp_time'])->format().')' : 'Nei [<a href="avis?ff_id='.$this->ff->id.'&amp;ffn='.$row['ffn_id'].'">KjÃ¸p</a>]').(access::is_nostat() ? ' (nostat)' : '').'</dd>
 	</dl>
 	<div class="p">'.$this->ff->format_description($row['ffn_description']).'</div>
 </div>';

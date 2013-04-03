@@ -1,7 +1,7 @@
 <?php
 
-// denne filen sørger for riktig behandling av skjemaene på siden
-// og sjekker om en bruker har utført samme skjema en gang tidligere
+// denne filen sÃ¸rger for riktig behandling av skjemaene pÃ¥ siden
+// og sjekker om en bruker har utfÃ¸rt samme skjema en gang tidligere
 
 /*
 
@@ -24,7 +24,7 @@ class form
 	public $user = NULL;
 	public $hash = false;
 	public $active = false;
-	public $invalid_text = "Ugyldig inntasting. Gå tilbake og prøv på nytt!";
+	public $invalid_text = "Ugyldig inntasting. GÃ¥ tilbake og prÃ¸v pÃ¥ nytt!";
 	
 	// opprett objektet og opprett ny kode eller hent aktiv
 	function form($area)
@@ -35,7 +35,7 @@ class form
 		$this->u_id = login::$user->id;
 		$this->user = login::$user->player->data['up_name'];
 		
-		// har vi noen aktive som ikke er fullført?
+		// har vi noen aktive som ikke er fullfÃ¸rt?
 		$result = $_base->db->query("SELECT * FROM forms WHERE forms_area = ".$_base->db->quote($this->area)." AND forms_u_id = {$this->u_id} AND forms_attempts = 0 LIMIT 1");
 		
 		if ($row = mysql_fetch_assoc($result))
@@ -48,7 +48,7 @@ class form
 	// opprett ny ID
 	function create()
 	{
-		// har vi en fra før av?
+		// har vi en fra fÃ¸r av?
 		if ($this->active)
 		{
 			#putlog("SPAMLOG", "%c11%bFORMS-OLD%b%c: %u{$this->user}%u was returned with a old hash (%u{$this->area}%u)");
@@ -68,7 +68,7 @@ class form
 		return $this->hash;
 	}
 	
-	// formen er utført med denne hashen
+	// formen er utfÃ¸rt med denne hashen
 	function validate($hash, $info = "")
 	{
 		if (strlen($hash) > 13)
@@ -99,7 +99,7 @@ class form
 				$log = $_base->db->quote("Time: ".$_base->date->get()->format("d.m.Y H:i:s")."; URI: ".$_SERVER['REQUEST_URI']."; User-agent: ".$_SERVER['HTTP_USER_AGENT'].(!empty($info) ? '; '.$info : ''));
 				$_base->db->query("UPDATE forms SET forms_attempts = forms_attempts + 1, forms_log = IF(ISNULL(forms_log), $log, CONCAT(forms_log, '\n', $log)), forms_last_time = ".time()." WHERE forms_area = ".$_base->db->quote($this->area)." AND forms_hash = $hash_sql AND forms_u_id = $this->u_id");
 				
-				if ($row['forms_attempts'] > 0) putlog("ABUSE", "%c13%bFORMS-ABUSE:%b%c %u{$this->user}%u utførte samme formdata på nytt! (Gjentakelse: %c4%u".($row['attempts']+1)."%u%c; Area: %u{$this->area}%u; Hash: $hash; IP:%c5 {$_SERVER['REMOTE_ADDR']}%c".(!empty($info) ? '; Info: '.$info : '').")");
+				if ($row['forms_attempts'] > 0) putlog("ABUSE", "%c13%bFORMS-ABUSE:%b%c %u{$this->user}%u utfÃ¸rte samme formdata pÃ¥ nytt! (Gjentakelse: %c4%u".($row['attempts']+1)."%u%c; Area: %u{$this->area}%u; Hash: $hash; IP:%c5 {$_SERVER['REMOTE_ADDR']}%c".(!empty($info) ? '; Info: '.$info : '').")");
 				
 				// over 5 ganger? -> avbryt
 				if ($row['forms_attempts'] >= 1)
@@ -114,7 +114,7 @@ class form
 			
 			else
 			{
-				putlog("ABUSE", "%c4%bFORMS-ABUSE:%b%c %u{$this->user}%u utførte formdata med ugyldig hash! (Area: %u{$this->area}%u; Hash: $hash)".(!empty($info) ? '; Info: '.$info : '').")");
+				putlog("ABUSE", "%c4%bFORMS-ABUSE:%b%c %u{$this->user}%u utfÃ¸rte formdata med ugyldig hash! (Area: %u{$this->area}%u; Hash: $hash)".(!empty($info) ? '; Info: '.$info : '').")");
 				
 				$_base->page->add_message($this->invalid_text, "error");
 				putlog("ABUSE", "%c4%bFORMS-ABUSE:%b%c Skjemaet til %u{$this->user}%u ble avbrutt pga. manglende hash.");

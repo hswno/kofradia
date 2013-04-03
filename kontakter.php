@@ -31,10 +31,10 @@ if (isset($_GET['add']))
 		redirect::handle();
 	}
 	
-	// død?
+	// dÃ¸d?
 	if ($player['up_access_level'] == 0)
 	{
-		$_base->page->add_message('Spilleren <user id="'.$player['up_id'].'" /> er død og kan ikke legges til.', "error");
+		$_base->page->add_message('Spilleren <user id="'.$player['up_id'].'" /> er dÃ¸d og kan ikke legges til.', "error");
 		redirect::handle("/p/".rawurlencode($player['up_name'])."/".$player['up_id'], redirect::ROOT);
 	}
 	
@@ -68,7 +68,7 @@ if (isset($_GET['add']))
 		// for lang?
 		if (strlen($text) > 200)
 		{
-			$_base->page->add_message("Informasjonen var for lang. Kan ikke være mer enn 200 tegn (uten BB koder).", "error");
+			$_base->page->add_message("Informasjonen var for lang. Kan ikke vÃ¦re mer enn 200 tegn (uten BB koder).", "error");
 		}
 		
 		// ugyldig?
@@ -84,11 +84,11 @@ if (isset($_GET['add']))
 			
 			if ($type == 1)
 			{
-				$_base->page->add_message('<user id="'.$player['up_id'].'" /> er nå lagt til i din kontaktliste.');
+				$_base->page->add_message('<user id="'.$player['up_id'].'" /> er nÃ¥ lagt til i din kontaktliste.');
 			}
 			else
 			{	
-				$_base->page->add_message('<user id="'.$player['up_id'].'" /> er nå blokkert.');
+				$_base->page->add_message('<user id="'.$player['up_id'].'" /> er nÃ¥ blokkert.');
 			}
 			
 			$_base->db->query("UPDATE users SET u_contacts_update_time = ".time()." WHERE u_id = ".login::$user->id);
@@ -115,14 +115,14 @@ if (isset($_GET['add']))
 				<textarea name="info" rows="5" cols="25" style="width: 165px" id="ptx">'.htmlspecialchars(postval("info")).'</textarea>
 			</dd>
 			
-			<dt'.(isset($_POST['preview']) && isset($_POST['info']) ? '' : ' style="display: none"').' id="pdt">Forhåndsvisning</dt>
+			<dt'.(isset($_POST['preview']) && isset($_POST['info']) ? '' : ' style="display: none"').' id="pdt">ForhÃ¥ndsvisning</dt>
 			<dd'.(isset($_POST['preview']) && isset($_POST['info']) ? '' : ' style="display: none"').' id="pdd">'.(!isset($_POST['info']) || empty($_POST['info']) ? 'Tomt?!' : game::bb_to_html($_POST['info'])).'</dd>
 			<div class="clear"></div>
 		</dl>
 		<h3 class="c">
 			'.show_sbutton("Legg til", 'name="add"').'
 			'.show_sbutton("Avbryt", 'name="abort"').'
-			'.show_sbutton("Forhåndsvis", 'name="preview" onclick="previewDL(event, \'ptx\', \'pdt\', \'pdd\')"').'
+			'.show_sbutton("ForhÃ¥ndsvis", 'name="preview" onclick="previewDL(event, \'ptx\', \'pdt\', \'pdd\')"').'
 		</h3>
 	</div>
 </form>';
@@ -136,14 +136,14 @@ if (isset($_GET['edit']))
 	// avbryte
 	if (isset($_POST['abort'])) redirect::handle();
 	
-	// hent oppføringen
+	// hent oppfÃ¸ringen
 	$id = intval($_GET['edit']);
 	$result = $_base->db->query("SELECT uc_id, uc_contact_up_id, uc_type, uc_time, uc_info, up_name, up_access_level, up_last_online FROM users_contacts LEFT JOIN users_players ON up_id = uc_contact_up_id WHERE uc_id = $id AND uc_u_id = ".login::$user->id);
 	
 	// finnes ikke?
 	if (mysql_num_rows($result) == 0)
 	{
-		$_base->page->add_message("Fant ikke oppføringen.", "error");
+		$_base->page->add_message("Fant ikke oppfÃ¸ringen.", "error");
 		redirect::handle();
 	}
 	
@@ -159,7 +159,7 @@ if (isset($_GET['edit']))
 		// for lang?
 		if (strlen($text) > 200)
 		{
-			$_base->page->add_message(($row['uc_type'] == 1 ? 'Informasjonen' : 'Begrunnelsen')." var for lang. Kan ikke være mer enn 200 tegn (uten BB koder).", "error");
+			$_base->page->add_message(($row['uc_type'] == 1 ? 'Informasjonen' : 'Begrunnelsen')." var for lang. Kan ikke vÃ¦re mer enn 200 tegn (uten BB koder).", "error");
 		}
 		
 		// ugyldig?
@@ -209,14 +209,14 @@ if (isset($_GET['edit']))
 				<textarea name="info" rows="5" cols="25" style="width: 165px" id="ptx">'.htmlspecialchars(postval("info", $row['uc_info'])).'</textarea>
 			</dd>
 			
-			<dt'.(isset($_POST['preview']) && isset($_POST['info']) ? '' : ' style="display: none"').' id="pdt">Forhåndsvisning</dt>
+			<dt'.(isset($_POST['preview']) && isset($_POST['info']) ? '' : ' style="display: none"').' id="pdt">ForhÃ¥ndsvisning</dt>
 			<dd'.(isset($_POST['preview']) && isset($_POST['info']) ? '' : ' style="display: none"').' id="pdd">'.(!isset($_POST['info']) || empty($_POST['info']) ? 'Tomt?!' : game::bb_to_html($_POST['info'])).'</dd>
 			<div class="clear"></div>
 		</dl>
 		<h3 class="c">
 			'.show_sbutton("Lagre", 'name="save"').'
 			'.show_sbutton("Avbryt", 'name="abort"').'
-			'.show_sbutton("Forhåndsvis", 'name="preview" onclick="previewDL(event, \'ptx\', \'pdt\', \'pdd\')"').'
+			'.show_sbutton("ForhÃ¥ndsvis", 'name="preview" onclick="previewDL(event, \'ptx\', \'pdt\', \'pdd\')"').'
 		</h3>
 	</div>
 </form>';
@@ -259,7 +259,7 @@ if (isset($_GET['del']))
 	// ikke i listen?
 	if (!isset(login::$info['contacts'][$type][$player['up_id']]))
 	{
-		$_base->page->add_message('<user id="'.$player['up_id'].'" /> er ikke i listen fra før.', "error");
+		$_base->page->add_message('<user id="'.$player['up_id'].'" /> er ikke i listen fra fÃ¸r.', "error");
 		redirect::handle();
 	}
 	
@@ -290,14 +290,14 @@ if (isset($_POST['del']))
 	// mangler spillere?
 	if (!isset($_POST['id']) || !is_array($_POST['id']))
 	{
-		$_base->page->add_message("Du må merke noen spillere først.", "error");
+		$_base->page->add_message("Du mÃ¥ merke noen spillere fÃ¸rst.", "error");
 		redirect::handle();
 	}
 	
 	$ids = array_unique(array_map("intval", $_POST['id']));
 	if (count($ids) == 0)
 	{
-		$_base->page->add_message("Du må merke noen spillere først.", "error");
+		$_base->page->add_message("Du mÃ¥ merke noen spillere fÃ¸rst.", "error");
 		redirect::handle();
 	}
 	
@@ -359,7 +359,7 @@ echo '
 <h1 id="kontakter">Kontakter</h1>
 
 <p>
-	Her er en oversikt over dine kontakter. Disse kontaktene får et eget bilde ved siden av spillernavnet når spillernavnet blir vist på siden. For å legge til en kontakt må du trykke på kontaktlinken øverst i profilen til vedkommende.
+	Her er en oversikt over dine kontakter. Disse kontaktene fÃ¥r et eget bilde ved siden av spillernavnet nÃ¥r spillernavnet blir vist pÃ¥ siden. For Ã¥ legge til en kontakt mÃ¥ du trykke pÃ¥ kontaktlinken Ã¸verst i profilen til vedkommende.
 </p>';
 
 if (count($contacts[1]) == 0)
@@ -380,7 +380,7 @@ else
 		<thead>
 			<tr>
 				<th>Kontakt (<a href="#" class="box_handle_toggle" rel="idk">Merk alle</a>) '.$sort_k->show_link(0, 1).'</th>
-				<th>Sist pålogget '.$sort_k->show_link(2, 3).'</th>
+				<th>Sist pÃ¥logget '.$sort_k->show_link(2, 3).'</th>
 				<th>Lagt til '.$sort_k->show_link(4, 5).'</th>
 				<th>Informasjon</th>
 				<th>&nbsp;</th>
@@ -405,7 +405,7 @@ else
 		</tbody>
 	</table>
 	<p class="c">
-		'.show_sbutton("Fjern", 'onclick="return confirm(\'Sikker på at du vil fjerne de valgte oppføringene?\')"').'
+		'.show_sbutton("Fjern", 'onclick="return confirm(\'Sikker pÃ¥ at du vil fjerne de valgte oppfÃ¸ringene?\')"').'
 	</p>
 </form>';
 }
@@ -415,10 +415,10 @@ echo '
 <h1 id="blokkeringer">Blokkeringsliste</h1>
 
 <p>
-	Her er en oversikt over hvem du har blokkert. Disse kontaktene kan ikke sende deg meldinger og får et bilde ved siden av spillernavnet når spillernavnet blir vist på siden. For å legge til en blokkering må du trykke på blokkeringslinken øverst i profilen til vedkommende.
+	Her er en oversikt over hvem du har blokkert. Disse kontaktene kan ikke sende deg meldinger og fÃ¥r et bilde ved siden av spillernavnet nÃ¥r spillernavnet blir vist pÃ¥ siden. For Ã¥ legge til en blokkering mÃ¥ du trykke pÃ¥ blokkeringslinken Ã¸verst i profilen til vedkommende.
 </p>
 <p>
-	Begrunnelsen som er satt opp hos vedkommende vil komme opp som begrunnelse når en blokkert spiller forsøker å sende deg en melding og liknende.
+	Begrunnelsen som er satt opp hos vedkommende vil komme opp som begrunnelse nÃ¥r en blokkert spiller forsÃ¸ker Ã¥ sende deg en melding og liknende.
 </p>';
 
 if (count($contacts[2]) == 0)
@@ -439,7 +439,7 @@ else
 		<thead>
 			<tr>
 				<th>Blokkert (<a href="#" class="box_handle_toggle" rel="idb">Merk alle</a>) '.$sort_b->show_link(0, 1).'</th>
-				<th>Sist pålogget '.$sort_b->show_link(2, 3).'</th>
+				<th>Sist pÃ¥logget '.$sort_b->show_link(2, 3).'</th>
 				<th>Lagt til '.$sort_b->show_link(4, 5).'</th>
 				<th>Begrunnelse</th>
 				<th>&nbsp;</th>
@@ -464,7 +464,7 @@ else
 		</tbody>
 	</table>
 	<p class="c">
-		'.show_sbutton("Fjern", 'onclick="return confirm(\'Sikker på at du vil fjerne de valgte oppføringene?\')"').'
+		'.show_sbutton("Fjern", 'onclick="return confirm(\'Sikker pÃ¥ at du vil fjerne de valgte oppfÃ¸ringene?\')"').'
 	</p>
 </form>';
 }

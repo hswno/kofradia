@@ -26,16 +26,16 @@ class page_lotto
 	/** Tidspunkt for neste trekning */
 	protected $next;
 	
-	/** Siste gang vi kjøpte lodd */
+	/** Siste gang vi kjÃ¸pte lodd */
 	protected $last;
 	
-	/** Ventetid før vi kan kjøpe lodd */
+	/** Ventetid fÃ¸r vi kan kjÃ¸pe lodd */
 	protected $wait;
 	
 	/** Aktiv runde? */
 	protected $active;
 	
-	/** Informasjon om nåværende lottorunde */
+	/** Informasjon om nÃ¥vÃ¦rende lottorunde */
 	protected $info;
 	
 	/**
@@ -47,7 +47,7 @@ class page_lotto
 		
 		login::$user->player->fengsel_require_no();
 		login::$user->player->bomberom_require_no();
-		login::$user->player->energy_require(self::ENERGY * 1.3); // legg til 30 % på kravet
+		login::$user->player->energy_require(self::ENERGY * 1.3); // legg til 30 % pÃ¥ kravet
 		
 		ess::$b->page->add_title("Lotto");
 		
@@ -58,7 +58,7 @@ class page_lotto
 		// sjekk for aktiv runde, ventetid osv
 		$this->check_active();
 		
-		// ber vi om å kjøpe lodd?
+		// ber vi om Ã¥ kjÃ¸pe lodd?
 		if (isset($_POST['lodd']))
 		{
 			$this->lodd_kjop();
@@ -84,25 +84,25 @@ class page_lotto
 		
 		if ($this->active)
 		{
-			// kan vi kjøpe lodd?
+			// kan vi kjÃ¸pe lodd?
 			if ($this->info['antall_lodd'] < lotto::$lodd_maks)
 			{
 				$form_check = '<input type="hidden" name="hash" value="'.$this->form->create().'" />';
 				$antall = min(lotto::$lodd_maks_om_gangen, floor(login::$user->player->data['up_cash']/lotto::get_lodd_price()));
 				
 				echo '
-					<form action="" method="post">'.$form_check.'<input type="hidden" name="b" value="Gjenstående lodd" /><input type="hidden" name="lodd" value="'.$antall.'" /></form>'.(time() < lotto::PRICE_CHANGE+43200 ? '
-					<p class="c">Pris per lodd '.(time() < lotto::PRICE_CHANGE ? 'blir' : 'ble').' økt til <span style="color: #DD3333">'.game::format_cash(lotto::PRICE).'</span> kl. '.ess::$b->date->get(lotto::PRICE_CHANGE)->format("H:i").'</p>' : '').'
+					<form action="" method="post">'.$form_check.'<input type="hidden" name="b" value="GjenstÃ¥ende lodd" /><input type="hidden" name="lodd" value="'.$antall.'" /></form>'.(time() < lotto::PRICE_CHANGE+43200 ? '
+					<p class="c">Pris per lodd '.(time() < lotto::PRICE_CHANGE ? 'blir' : 'ble').' Ã¸kt til <span style="color: #DD3333">'.game::format_cash(lotto::PRICE).'</span> kl. '.ess::$b->date->get(lotto::PRICE_CHANGE)->format("H:i").'</p>' : '').'
 					<form action="" method="post">
 						'.$form_check.'
 						<dl class="dd_right center" style="width: 80%">
-							<dt>Gjenstående lodd</dt>
+							<dt>GjenstÃ¥ende lodd</dt>
 							<dd>'.game::format_number(lotto::$lodd_maks-$this->info['antall_lodd']).'</dd>
-							<dt>Antall kjøpt</dt>
+							<dt>Antall kjÃ¸pt</dt>
 							<dd>'.game::format_number($this->info['antall_lodd']).'</dd>
 							<dt>Pris per lodd</dt>
 							<dd>'.game::format_cash(lotto::get_lodd_price()).'</dd>'.($this->wait > 0 ? '
-							<dt>Må vente</dt>
+							<dt>MÃ¥ vente</dt>
 							<dd style="color: #FF0000">'.game::counter($this->wait, true).'</dd>' : '
 							<dt>Ventetid</dt>
 							<dd>'.game::timespan(lotto::$ventetid, game::TIME_FULL).'</dd>
@@ -110,7 +110,7 @@ class page_lotto
 						<dl class="dd_right dl_2x center" style="width: 80%">
 							<dt>Antall lodd</dt>
 							<dd><input type="text" value="'.$antall.'" class="styled w40 r" name="lodd" maxlength="3" /></dd>
-							<dd>'.show_sbutton("Kjøp lodd").'</dd>').'
+							<dd>'.show_sbutton("KjÃ¸p lodd").'</dd>').'
 						</dl>
 					</form>';
 			}
@@ -119,7 +119,7 @@ class page_lotto
 		else
 		{
 			echo '
-					<p class="c">Lottorunden er for øyeblikket ikke aktiv.</p>';
+					<p class="c">Lottorunden er for Ã¸yeblikket ikke aktiv.</p>';
 		}
 		
 		echo '
@@ -132,7 +132,7 @@ class page_lotto
 					<dl class="dd_right">
 						<dt>Antall lodd solgt totalt denne runden</dt>
 						<dd>'.game::format_number($this->info['totalt_lodd']).'</dd>
-						<dt>Antall spillere som har kjøpt lodd</dt>
+						<dt>Antall spillere som har kjÃ¸pt lodd</dt>
 						<dd>'.game::format_number($this->info['brukere']).'</dd>
 						<dt><b>Potten</b></dt>
 						<dd><b>'.game::format_cash($this->info['pott']).'</b></dd>
@@ -160,7 +160,7 @@ class page_lotto
 		echo '
 						</tbody>
 					</table>
-					<p class="c">Poengene tar utgangspunkt i at '.lotto::PLAYERS_TOP.' spillere eller flere deltar. Ved færre deltakere vil poengene bli redusert.</p>
+					<p class="c">Poengene tar utgangspunkt i at '.lotto::PLAYERS_TOP.' spillere eller flere deltar. Ved fÃ¦rre deltakere vil poengene bli redusert.</p>
 				</div>
 			</div>
 		</div> 
@@ -176,7 +176,7 @@ class page_lotto
 		if (mysql_num_rows($result) == 0)
 		{
 			echo '
-					<p>Ingen trekninger har blitt gjennomført.</p>';
+					<p>Ingen trekninger har blitt gjennomfÃ¸rt.</p>';
 		}
 		
 		else
@@ -244,7 +244,7 @@ class page_lotto
 	 */
 	protected function check_active()
 	{
-		// finn ut om vi er i en aktiv periode (kan kjøpe lodd) og når neste trekning skjer
+		// finn ut om vi er i en aktiv periode (kan kjÃ¸pe lodd) og nÃ¥r neste trekning skjer
 		$date = ess::$b->date->get();
 		$this->active = ($date->format("i")/2 % 15) != 7;
 		
@@ -275,14 +275,14 @@ class page_lotto
 	}
 	
 	/**
-	 * Kjøpe lodd
+	 * KjÃ¸pe lodd
 	 */
 	protected function lodd_kjop()
 	{
 		// nostat?
 		if (access::is_nostat() && !access::has("sadmin") && MAIN_SERVER)
 		{
-			ess::$b->page->add_message("Du har ikke tilgang til å spille lotto. (NoStat)", "error");
+			ess::$b->page->add_message("Du har ikke tilgang til Ã¥ spille lotto. (NoStat)", "error");
 			redirect::handle();
 		}
 		
@@ -297,14 +297,14 @@ class page_lotto
 		// ikke aktiv?
 		if (!$this->active)
 		{
-			ess::$b->page->add_message("Lottoen er ikke aktiv for øyeblikket!", "error");
+			ess::$b->page->add_message("Lottoen er ikke aktiv for Ã¸yeblikket!", "error");
 			redirect::handle();
 		}
 		
 		// ventetid?
 		if ($this->wait > 0)
 		{
-			ess::$b->page->add_message('Du må vente '.game::counter($this->wait, true).' før du kan kjøpe nye lodd!', "error");
+			ess::$b->page->add_message('Du mÃ¥ vente '.game::counter($this->wait, true).' fÃ¸r du kan kjÃ¸pe nye lodd!', "error");
 			redirect::handle();
 		}
 		
@@ -313,21 +313,21 @@ class page_lotto
 		// ikke gyldig?
 		if ($lodd < 1)
 		{
-			ess::$b->page->add_message("Du må minimum kjøpe ett lodd!", "error");
+			ess::$b->page->add_message("Du mÃ¥ minimum kjÃ¸pe ett lodd!", "error");
 			redirect::handle();
 		}
 		
 		// for mange lodd?
 		if ($lodd > lotto::$lodd_maks_om_gangen)
 		{
-			ess::$b->page->add_message("Du kan maks kjøpe ".game::format_number(lotto::$lodd_maks_om_gangen)." lodd på en gang!", "error");
+			ess::$b->page->add_message("Du kan maks kjÃ¸pe ".game::format_number(lotto::$lodd_maks_om_gangen)." lodd pÃ¥ en gang!", "error");
 			redirect::handle();
 		}
 		
-		// kan vi kjøpe så mange lodd?
+		// kan vi kjÃ¸pe sÃ¥ mange lodd?
 		if ($lodd > lotto::$lodd_maks - $this->info['antall_lodd'])
 		{
-			ess::$b->page->add_message("Du kan ikke kjøpe så mange lodd!", "error");
+			ess::$b->page->add_message("Du kan ikke kjÃ¸pe sÃ¥ mange lodd!", "error");
 			redirect::handle();
 		}
 		
@@ -338,7 +338,7 @@ class page_lotto
 		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - ($lodd * ".$lodd_price.") WHERE up_id = ".login::$user->player->id." AND up_cash >= ($lodd * ".$lodd_price.")");
 		if (ess::$b->db->affected_rows() == 0)
 		{
-			ess::$b->page->add_message("Du har ikke nok penger på hånda!", "error");
+			ess::$b->page->add_message("Du har ikke nok penger pÃ¥ hÃ¥nda!", "error");
 			redirect::handle();
 		}
 		
@@ -351,7 +351,7 @@ class page_lotto
 		// energi
 		login::$user->player->energy_use(self::ENERGY);
 		
-		ess::$b->page->add_message("Du har kjøpt <b>".game::format_number($lodd)."</b> lottolodd for <b>".game::format_cash($lodd * $lodd_price)."</b>!");
+		ess::$b->page->add_message("Du har kjÃ¸pt <b>".game::format_number($lodd)."</b> lottolodd for <b>".game::format_cash($lodd * $lodd_price)."</b>!");
 		$this->antibot->increase_counter();
 		
 		redirect::handle();
