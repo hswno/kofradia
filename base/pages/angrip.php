@@ -9,6 +9,12 @@ class page_angrip extends pages_player
 	const ENERGY_NOT_FOUND = 1500;
 	
 	/**
+	 * Tidsbegrensing for angrep
+	 * @var limit_attack
+	 */
+	protected $limit_attack;
+
+	/**
 	 * Anti-bot for angrep
 	 * @var antibot
 	 */
@@ -103,6 +109,13 @@ class page_angrip extends pages_player
 			array(1356973200, 1357059600, "Angrepsfunksjonen er stengt på nyttårsaften frem til kl 18:00 1. januar.") // nyttår 2012-2013 (kl 18 den 31 - kl 18 den 1)
 		);
 		$locked = false;
+
+		$limit_attcak = (date('H') >= 20 && date('H') < 22);
+		if (!$limit_attack) 
+		{
+			$locked = "Du kan kun angripe spillere mellom klokken 20.00 og 22.00.";
+		}
+
 		foreach ($lock as $period)
 		{
 			if ($period[0] <= time() && $period[1] >= time())
@@ -151,7 +164,7 @@ class page_angrip extends pages_player
 			return;
 		}
 		
-		// kan vi ikke utføre angrep nå?
+		// er drapsfunksjonen deaktivert?
 		if (DISABLE_ANGREP && !access::has("mod"))
 		{
 			echo '
