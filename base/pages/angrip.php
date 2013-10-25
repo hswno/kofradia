@@ -110,7 +110,7 @@ class page_angrip extends pages_player
 		);
 		$locked = false;
 
-		$limit_attcak = (date('H') >= 20 && date('H') < 22);
+		$limit_attack = (date('H') >= 20 && date('H') < 22);
 		if (!$limit_attack) 
 		{
 			$locked = "Du kan kun angripe spillere mellom klokken 20.00 og 22.00.";
