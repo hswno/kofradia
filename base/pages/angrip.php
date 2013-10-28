@@ -97,17 +97,31 @@ class page_angrip extends pages_player
 	 */
 	protected function page_attack_show()
 	{
+		// er drapsfunksjonen deaktivert?
+		if (DISABLE_ANGREP && !access::has("mod"))
+		{
+			echo '
+<div class="bg1_c xxsmall">
+	<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
+	<div class="bg1">
+		<p>Funksjonen er for øyeblikket deaktivert.</p>
+	</div>
+</div>';
+			
+			return;
+		}
+
 		// kan vi ikke angripe nå?
 		$lock = array(
-			array(1356325200, 1356411600, "Angrepsfunksjonen er stengt på julaften frem til kl 06:00 1. juledag. Endringer i tidspunkt kan komme."), // julaften 2012 (kl 06 den 24 - kl 06 den 25)
-			array(1356973200, 1357059600, "Angrepsfunksjonen er stengt på nyttårsaften frem til kl 18:00 1. januar.") // nyttår 2012-2013 (kl 18 den 31 - kl 18 den 1)
+			array(1387839600, 1387925940, "Angrepsfunksjonen er stengt på julaften."), // julaften 2012 (kl 06 den 24 - kl 06 den 25)
+			array(1388444400, 1388530740, "Angrepsfunksjonen er stengt på nyttårsaften.") // nyttår 2012-2013 (kl 18 den 31 - kl 18 den 1)
 		);
 		$locked = false;
 
 		$limit_attack = (date('H') >= 20 && date('H') < 22);
 		if (!$limit_attack) 
 		{
-			$locked = "Du kan kun angripe spillere mellom klokken 20.00 og 22.00.";
+			$locked = "Du kan kun angripe spillere mellom klokken 20:00 og 22:00.";
 		}
 
 		foreach ($lock as $period)
@@ -152,20 +166,6 @@ class page_angrip extends pages_player
 	<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<p>Du har ikke nok energi for å utføre et drapsforsøk for øyeblikket.</p>
-	</div>
-</div>';
-			
-			return;
-		}
-		
-		// er drapsfunksjonen deaktivert?
-		if (DISABLE_ANGREP && !access::has("mod"))
-		{
-			echo '
-<div class="bg1_c xxsmall">
-	<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
-	<div class="bg1">
-		<p>Funksjonen er for øyeblikket deaktivert.</p>
 	</div>
 </div>';
 			
