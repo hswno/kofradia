@@ -715,7 +715,7 @@ if ($wp->load_user($player->id) && $wp->update())
 		// vis info
 		echo '
 <div class="section wp" style="width: 250px; margin-left: auto; margin-right: auto">
-	<h3><a href="http://whatpulse.org/stats/profile.php?uid='.$wp->user_id.'">WhatPulse informasjon</a></h3>
+	<h3><a href="http://whatpulse.org/s'.$wp->user_id.'">WhatPulse informasjon</a></h3>
 	<p class="h_right"><a href="'.$__server['relative_path'].'/diverse/whatpulse/">Legg til i profil</a></p>
 	<dl class="dl_40">';
 		
