@@ -7,12 +7,6 @@ class page_angrip extends pages_player
 	
 	/** Energi vi bruker når vi ikke finner en spiller */
 	const ENERGY_NOT_FOUND = 1500;
-	
-	/**
-	 * Tidsbegrensing for angrep
-	 * @var limit_attack
-	 */
-	protected $limit_attack;
 
 	/**
 	 * Anti-bot for angrep
