@@ -15,7 +15,7 @@ $_whatpulse = array(
 		"LastPulse" => "Siste pulse",
 		"Pulses" => "Antall pulse",
 		"Rank" => "Rankering",
-		"TeamName" => "Team Navn"
+		"Team" => "Team Navn"
 	),
 	
 	// 0 => PlainText, 1 => Number, 2 => DateTime, 3 => Date, 4 => Precision, 5 => Miles->KM
@@ -31,7 +31,7 @@ $_whatpulse = array(
 		"LastPulse" => 3,
 		"Pulses" => 1,
 		"Rank" => 1,
-		"TeamName" => 0
+		"Team" => 6
 	)
 );
 
@@ -212,6 +212,9 @@ class whatpulse
 			
 			// Miles
 			case 5: $value = game::format_number($value*1.609344, 1) . " km"; break;
+			
+			// TeamName
+			case 6: $value = $_whatpulse['Team']['Name'];
 			
 			// Tekst
 			default: $value = htmlspecialchars($value);

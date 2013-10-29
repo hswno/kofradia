@@ -82,7 +82,7 @@ if (mysql_num_rows($result) == 0)
 				if (isset($_POST['confirm']))
 				{
 					$params = new params();
-					$params->update("fields", "UserID,AccountName,GeneratedTime,DateJoined,TotalKeyCount,AvKPS,TotalMouseClicks,AvCPS");
+					$params->update("fields", "UserID,AccountName,GeneratedTime,DateJoined,Keys,AvKPS,Clicks,AvCPS");
 					$params_text = $params->build();
 					
 					$_base->db->query("INSERT INTO stats_whatpulse SET sw_userid = $id, sw_up_id = ".$player->id.", sw_time_add = ".time().", sw_params = ".$_base->db->quote($params_text));
@@ -337,7 +337,7 @@ function wpNySeperator(form)
 		echo '
 					
 				<dt>Profil</dt>
-				<dd><a href="http://whatpulse.org/stats/profile.php?uid='.$wp->user_id.'" target="_blank">Vis WP profil</a></dd>
+				<dd><a href="http://whatpulse.org/'.$wp->user_id.'" target="_blank">Vis WP profil</a></dd>
 				
 				<dt>Fjern</dt>
 				<dd><input type="submit" name="wpFjern" value="Fjern fra Kofradia kontoen" class="button" onclick="return confirm(\'Er du sikker på at du ønsker å fjerne WhatPulse informasjonen fra Kofradia kontoen din?\')" /></dd>
