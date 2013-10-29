@@ -18,7 +18,7 @@ $_whatpulse = array(
 		"Team" => "Team Navn"
 	),
 	
-	// 0 => PlainText, 1 => Number, 2 => DateTime, 3 => Date, 4 => Precision, 5 => Miles->KM
+	// 0 => PlainText, 1 => Number, 2 => DateTime, 3 => Date, 4 => Precision, 5 => Miles->KM, 6 => Get TeamName
 	"types" => array(
 		"UserID" => 0,
 		"AccountName" => 0,
