@@ -214,8 +214,8 @@ class whatpulse
 			case 5: $value = game::format_number($value*1.609344, 1) . " km"; break;
 			
 			// TeamName
-			case 6: $value = $_whatpulse['Team']['Name'];
-			
+			case 6: $value = $_whatpulse['Team']->Name;
+
 			// Tekst
 			default: $value = htmlspecialchars($value);
 		}
