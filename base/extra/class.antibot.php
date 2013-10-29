@@ -518,7 +518,7 @@ class antibot_generate
 		$pre = ob_get_contents();
 		@ob_clean();
 		
-		imagejpeg($img, "", 100);
+		imagejpeg($img, null, 100);
 		$data = ob_get_contents();
 		@ob_clean();
 		
