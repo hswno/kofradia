@@ -6,3 +6,4 @@ crewstuff
 test.php
 base/data/trac_rss.php
 *.swp
+error_log
