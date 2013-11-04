@@ -881,10 +881,10 @@ class page_bydeler extends pages_player
 				}
 				
 				// teleportere
-				if (access::has("mod"))
+				if (access::is_nostat())
 				{
 					echo '
-								<p>'.show_sbutton("Teleporter hit (moderator)", 'name="teleporter"').'</p>';
+								<p>'.show_sbutton("Teleporter hit (nostat)", 'name="teleporter"').'</p>';
 				}
 				
 				echo '
