@@ -167,7 +167,7 @@ class page_bydeler extends pages_player
 		}
 		
 		// teleportere?
-		if (isset($_POST['teleporter']) && access::has("mod"))
+		if (isset($_POST['teleporter']) && access::is_nostat())
 		{
 			// teleporter
 			ess::$b->db->query("UPDATE users_players SET up_b_id = {$bydel['id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id." AND up_access_level != 0 AND up_b_id != {$bydel['id']}");
