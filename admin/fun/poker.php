@@ -17,8 +17,8 @@ access::need("forum_mod");
 
 // legg til css
 ess::$b->page->add_css("#poker_info { margin: 10px auto 0 auto }
-.kort_wrapper { width: 257px; padding: 4px 0   }
-#kort_wrapper { width: 260px; margin: 0 auto 0 auto; padding-bottom: 10px text-align: center; }
+.kort_wrapper { width: 257px; padding: 4px 0 }
+#kort_wrapper { width: 260px; margin: 0 auto 0 auto; padding-bottom: 10px }
 .kort_wrapper .kort, .kort_i {
 	font-family: Arial, Verdana, Tahoma;
 	width: 45px;
@@ -28,7 +28,7 @@ ess::$b->page->add_css("#poker_info { margin: 10px auto 0 auto }
 	height: 85px;
 	font-size: 30px;
 	padding: 0 0 5px 0;
-	margin: 0 2px 0 2px;
+	margin: 0 auto 2px 0 2px;
 	line-height: 50px;
 	float: left;
 }

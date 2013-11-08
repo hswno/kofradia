@@ -23,7 +23,7 @@ class lotto
 	/**
 	 * Antall spillere hvor grensen mellom nedsettelse av bevinst går
 	 */
-	const PLAYERS_TOP = 10;
+	const PLAYERS_TOP = 5;
 	
 	/**
 	 * Finn prisen på lotto-lodd
