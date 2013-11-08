@@ -197,7 +197,7 @@ else
 <p align="center">
 	<b>Resultat:</b>
 </p>
-<div class="kort_wrapper">
+<div class="kort_wrapper" align="center">
 	<div class="kort_i kg_'.$kort[0][1].'">'.$tegn[$kort[0][0]].'<br />'.$farger[$kort[0][1]][1].'</div>
 	<div class="kort_i kg_'.$kort[1][1].'">'.$tegn[$kort[1][0]].'<br />'.$farger[$kort[1][1]][1].'</div>
 	<div class="kort_i kg_'.$kort[2][1].'">'.$tegn[$kort[2][0]].'<br />'.$farger[$kort[2][1]][1].'</div>
@@ -420,7 +420,7 @@ else
 	<p align="center">
 		<b>Marker de kortene du vil <u>beholde</u>:</b>
 	</p>
-	<div class="kort_wrapper" >
+	<div class="kort_wrapper" align="center">
 		<div class="kort kg_'.$kort[0][1].'">'.$tegn[$kort[0][0]].'<br />'.$farger[$kort[0][1]][1].'<input type="checkbox" name="kort[0]" /></div>
 		<div class="kort kg_'.$kort[1][1].'">'.$tegn[$kort[1][0]].'<br />'.$farger[$kort[1][1]][1].'<input type="checkbox" name="kort[1]" /></div>
 		<div class="kort kg_'.$kort[2][1].'">'.$tegn[$kort[2][0]].'<br />'.$farger[$kort[2][1]][1].'<input type="checkbox" name="kort[2]" /></div>
