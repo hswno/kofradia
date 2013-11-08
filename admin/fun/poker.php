@@ -13,7 +13,7 @@ global $_game;
 
 ess::$b->page->add_title("Moderator poker");
 access::need_nostat();
-//access::need("mod");
+access::need("forum_mod");
 
 // legg til css
 ess::$b->page->add_css("#poker_info { margin: 10px auto 0 auto }
