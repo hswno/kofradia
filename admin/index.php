@@ -41,7 +41,7 @@ echo '
 				</div>
 				<h2 class="bg1">Andre ting<span class="left2"></span><span class="right2"></span></h2>
 				<div class="bg1">
-					<p><a href="fun/poker">Poker (originale)</a> <span class="c_mod">(Moderator)</span> - Spill poker med deg selv.</p>
+					<p><a href="fun/poker">Poker (originale)</a> <span class="c_mod">(Nostat)</span> - Spill poker med deg selv.</p>
 					<p><a href="penger">Juster pengenivå</a> <span class="c_mod">(Moderator)</span> - Juster ditt eget pengenivå slik at du kan spille poker osv.</p>
 				</div>
 			</div>

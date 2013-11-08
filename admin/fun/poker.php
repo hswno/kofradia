@@ -13,7 +13,7 @@ global $_game;
 
 ess::$b->page->add_title("Moderator poker");
 access::need_nostat();
-access::need("mod");
+//access::need("mod");
 
 // legg til css
 ess::$b->page->add_css("#poker_info { margin: 10px auto 0 auto }
@@ -43,7 +43,7 @@ ess::$b->page->add_css("#poker_info { margin: 10px auto 0 auto }
 echo '
 <h1>Poker</h1>
 <p align="center">
-	15. april 2007: Da kan moderatorene ha det morsomt med den gamle pokerversjonen!
+	15. april 2007: Da kan moderatorene og nostat ha det morsomt med den gamle pokerversjonen!
 </p>
 <!--<p>
 	<b style="color: #FF0000">Oppdatering 4. mars:</b> Nå er det gjort litt endringer på gevinstene og man vinner kun på 1 par dersom man har 9, 10, J, Q, K eller A. Maksimumsgrensen er også fjernet.
