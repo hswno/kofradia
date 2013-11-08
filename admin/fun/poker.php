@@ -30,7 +30,7 @@ ess::$b->page->add_css("#poker_info { margin: 10px auto 0 auto }
 	padding: 0 0 5px 0;
 	margin: 0 2px 0 2px;
 	line-height: 50px;
-	float: center;
+	float: left;
 }
 .kort_wrapper .kort {
 	background: #488C9F;
