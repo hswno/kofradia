@@ -93,6 +93,7 @@ else
 			$birth = explode("-", $player['u_birth']);
 			
 			echo '
+			<td class="r">'.(empty($player['u_birth']) || $player['u_birth'] == "0000-00-00" ? 'Ikke registrert' : intval($birth[2]).". ".$_lang['months'][intval($birth[1])]." ".$birth[0]).'</td>
 			<td>'.game::profile_link($player['up_id'], $player['up_name'], $player['up_access_level']).'</td>
 			<td><a href="finn?email='.urlencode($player['u_email']).'">'.htmlspecialchars($player['u_email']).'</a></td>
 			<td>'.$_base->date->get($player['up_created_time'])->format(date::FORMAT_SEC).'</td>
@@ -100,8 +101,8 @@ else
 			<td class="r">'.game::timespan($player['up_last_online'], game::TIME_ABS | game::TIME_SHORT | game::TIME_NOBOLD).'</td>
 			<td class="r">'.game::format_number($player['up_hits']).'</td>
 			<td class="r">'.game::format_number($player['up_points']).'</td>
-			<td class="r">'.game::format_cash($player['money']).'</td>
-			<td class="r">'.(empty($player['u_birth']) || $player['u_birth'] == "0000-00-00" ? 'Ikke registrert' : intval($birth[2]).". ".$_lang['months'][intval($birth[1])]." ".$birth[0]).'</td>';
+			<td class="r">'.game::format_cash($player['money']).'</td>';
+			
 		}
 		
 		echo '
