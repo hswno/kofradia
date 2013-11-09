@@ -96,6 +96,9 @@ body {
 	display: none;
 }
 
+td {
+	color: #7a7a7a;
+}
 
 /* headings */
 h1, h2, h3, h4 {
