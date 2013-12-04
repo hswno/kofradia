@@ -890,53 +890,53 @@ class game
 			// kode som kun skal kjøres en gang
 			$replaces_single = array(
 				// carrage returns
-				'/~\r~u/' => '',
+				'#~\r~u#' => '',
 				
 				// raw html i BB kode (ved hjelp av "passphrase"
-				'/~\[html=([a-z0-9]+)\](.+?)\[\/html=\1\]~iseu/' => 'game::html_add(\'$1\', \'$2\')',
+				'#~\[html=([a-z0-9]+)\](.+?)\[/html=\1\]~iseu#' => 'game::html_add(\'$1\', \'$2\')',
 				
 				// nobb -> ikke formatter bb kodene inni denne..
-				'/~\[nobb\](.+?)\[\/nobb\]~iseu/' => 'game::nobb_add(\'$1\')',
+				'#~\[nobb\](.+?)\[/nobb\]~iseu#' => 'game::nobb_add(\'$1\')',
 				
 				// linkonly -> til bruk for youtube-adresser
-				'/~\[linkonly\](.+?)\[\/linkonly\]~iseu/' => 'game::linkonly_add(\'$1\')',
+				'#~\[linkonly\](.+?)\[/linkonly\]~iseu#' => 'game::linkonly_add(\'$1\')',
 				
 				// kommentarer -> skjul alt
-				'/~\[comment\](.+?)\[\/comment\]~isu/' => '#',
-				'/~\[comment=([^\]]+)\](.+?)\[\/comment\]~isu/' => '<span style="border: 1px solid #333333; background-color: #222222; padding: 2px">#$1</span>',
-				'/~\[comment hide\](.+?)\[\/comment\]~isu/' => '',
+				'#~\[comment\](.+?)\[/comment\]~isu#' => '#',
+				'#~\[comment=([^\]]+)\](.+?)\[/comment\]~isu#' => '<span style="border: 1px solid #333333; background-color: #222222; padding: 2px">#$1</span>',
+				'#~\[comment hide\](.+?)\[/comment\]~isu#' => '',
 				
 				// hide -> ikke vis
-				'/~\[hide\](.+?)\[\/hide\]~isu/' => '',
+				'#~\[hide\](.+?)\[/hide\]~isu#' => '',
 				
 				// youtube videoer
-				'/~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(https?:\/\/)?(www.)?youtube.com\/v\/([0-9a-z_\-]{11})[^\s<>&\\\]*~iu/' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$3"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$3" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object><br />Adresse: <a href="$0">$0</a>',
+				'#~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(https?://)?(www.)?youtube.com/v/([0-9a-z_\-]{11})[^\s<>&\\\]*~iu#' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$3"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$3" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object><br />Adresse: <a href="$0">$0</a>',
 				
-				'/~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(https?:\/\/)?(www.)?youtube.com\/.+v=([0-9a-z_\-]{11})[^\s<]*~iu/' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$3"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$3" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
+				'#~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(https?://)?(www.)?youtube.com/.+v=([0-9a-z_\-]{11})[^\s<]*~iu#' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$3"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$3" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
-				'/~\[youtube\].+v=([0-9a-z_\.]+).*\[/youtube\]~iu/' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$1"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
+				'#~\[youtube\].+v=([0-9a-z_\.]+).*\[/youtube\]~iu#' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$1"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
-				'/~\[youtube\](https?://(www.)?youtube.com/.+?)\[/youtube\]~iu/' => '<object width="425" height="350"><param name="movie" value="$1"></param><param name="wmode" value="transparent"></param><embed src="$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
+				'#~\[youtube\](https?://(www.)?youtube.com/.+?)\[/youtube\]~iu#' => '<object width="425" height="350"><param name="movie" value="$1"></param><param name="wmode" value="transparent"></param><embed src="$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
 				// bilder
-				'/~\[img\]([^\["\'\n]+)\[/img\]~ieu/' => 'game::secure_img_addr(\'$1\')',
+				'#~\[img\]([^\["\'\n]+)\[/img\]~ieu#' => 'game::secure_img_addr(\'$1\')',
 				
 				// internettadresser
-				'/~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu/' => '<a href="$1" target="_blank">$1</a>',
-				'/~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu/' => '<a href="http://$1" target="_blank">$1</a>',
+				'#~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu#' => '<a href="$1" target="_blank">$1</a>',
+				'#~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu#' => '<a href="http://$1" target="_blank">$1</a>',
 				
 				// intern adresse på nettstedet
-				'/~\[iurl=/?([^\]\n]*)\](.+?)\[/iurl\]~ieu/' => '\'<a href="'.$__server['absolute_path'].'/$1">\'.stripslashes(\'$2\').\'</a>\'',
+				'#~\[iurl=/?([^\]\n]*)\](.+?)\[/iurl\]~ieu#' => '\'<a href="'.$__server['absolute_path'].'/$1">\'.stripslashes(\'$2\').\'</a>\'',
 				
 				// brukere
-				'/~\[user=([0-9a-zA-Z\-_ ]+)\]~iu/' => '<user="$1" />',
-				'/~\[user id=([0-9]+)\]~iu/' => '<user id="$1" />',
+				'#~\[user=([0-9a-zA-Z\-_ ]+)\]~iu#' => '<user="$1" />',
+				'#~\[user id=([0-9]+)\]~iu#' => '<user id="$1" />',
 				
 				// firma/familie-lenke
-				'/~\[ff=([0-9]+)\]~u/' => '<ff_link>$1</ff_link>',
+				'#~\[ff=([0-9]+)\]~u#' => '<ff_link>$1</ff_link>',
 				
 				// hr
-				'/~\[hr\](\n)?~iu/' => '<div class="hr"></div>'
+				'#~\[hr\](\n)?~iu#' => '<div class="hr"></div>'
 			);
 			
 			// kode som kan kjøres flere ganger
