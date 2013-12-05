@@ -1367,7 +1367,7 @@ class page_gta extends pages_player
 		$bydeler = $this->gta->get_bydeler_info();
 		
 		echo '
-<h1>Statistikk for GTA</h1>
+<h1>Statistikk for biltyveri</h1>
 <div class="bg1_c small">
 	<h1 class="bg1">Bydeler<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">';
