@@ -41,12 +41,14 @@ class page_julekalender extends pages_player
 		return $obj ? $d : $d->format("j");
 	}
 
-	private function check_if_sunreal() {
-		return ((login::$user->id == 21900) && (access::has("forum_mod")));
+	private function check_access_julekalender() {
+		$sunreal = ((login::$user->id == 21900) && (access::has("forum_mod")));
+
+		return (access::has("admin") || $sunreal);
 	}
 
 	private function admin() {
-		if (!access::has("admin") || !$this->check_if_sunreal()) return;
+		if (!$this->check_access_julekalender()) return;
 
 		echo '
 <section>
@@ -237,7 +239,7 @@ class page_julekalender extends pages_player
 		$n = 0;
 		$today = $this->get_today();
 
-		$admin_link = (access::has("admin") || $this->check_if_sunreal()) ? ' - <a href="?jul">admin</a>' : '';
+		$admin_link = $this->check_access_julekalender() ? ' - <a href="?jul">admin</a>' : '';
 
 		echo '
 <article id="julekalender">
