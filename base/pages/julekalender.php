@@ -42,7 +42,7 @@ class page_julekalender extends pages_player
 	}
 
 	private function admin() {
-		if (!access::has("admin")) return;
+		if (!access::has("admin") || login::$user-> != 21900) return;
 
 		echo '
 <section>
@@ -233,7 +233,7 @@ class page_julekalender extends pages_player
 		$n = 0;
 		$today = $this->get_today();
 
-		$admin_link = access::has("admin") ? ' - <a href="?jul">admin</a>' : '';
+		$admin_link = (access::has("admin") || login::$user->id == 21900) ? ' - <a href="?jul">admin</a>' : '';
 
 		echo '
 <article id="julekalender">
