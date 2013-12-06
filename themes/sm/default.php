@@ -689,7 +689,7 @@ class theme_sm_default
 		$data = '
 			<ul id="clinks">
 				<li><a href="'.ess::$s['relative_path'].'/crew/">Crew</a> - <a href="'.ess::$s['relative_path'].'/crew/crewlogg">logg</a> - '.$wiki_link.'</li>
-				<li><a href="'.ess::$s['relative_path'].'/crewstuff/f/" target="_blank">Filer</a> - <a href="https://kofradia.no/crewstuff/trac/report/13" target="_blank">Trac</a> - <a href="https://kofradia.no/crewstuff/" target="_blank">Stuff</a></li>';
+				<li><a href="'.ess::$s['relative_path'].'/crewstuff/f/" target="_blank">Filer</a> - <a href="http://github.com/hswno/kofradia" target="_blank">GitHub</a> - <a href="https://kofradia.no/crewstuff/" target="_blank">Stuff</a></li>';
 		
 		if (access::has("crewet")) $data .= '
 				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=5"'.($fc[5] ? ' class="crew_updates"' : '').'>Crewforum</a> - <a href="'.ess::$s['relative_path'].'/forum/forum?id=6"'.($fc[6] ? ' class="crew_updates"' : '').'>arkiv</a></li>
@@ -699,7 +699,6 @@ class theme_sm_default
                 <li><a href="'.ess::$s['relative_path'].'/forum/forum?id=4">Evalueringsforum</a></li>';
 
 		if (access::has("crewet")) $data .= '
-				<li><a href="'.ess::$s['relative_path'].'/crew/trac_rss">Trac timeline</a></li>
 				<li><a href="'.ess::$s['relative_path'].'/crew/rapportering">Rapportering</a></li>
 				<li><a href="'.ess::$s['relative_path'].'/support/?a=panel&amp;kategori=oppsummering">Support-panel</a></li>';
 
