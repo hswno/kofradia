@@ -279,11 +279,11 @@ h1 { font-size: 23px; }
 	}
 	
 	/**
-	 * Sende enkel e-post til Henrik
+	 * Sende enkel e-post til Henrik og Daniel
 	 */
 	public static function email($title, $data)
 	{
-		$to = "Henrik Steen <henrist@henrist.net>";
+		$to = "Henrik Steen <henrist@henrist.net>, Daniel <daniel@kofradia.no>";
 		
 		$email = new email();
 		$email->text($data);
