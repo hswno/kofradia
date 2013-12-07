@@ -1,11 +1,11 @@
 <?php
 
-require "../base.php";
+require "../../base.php";
 global $_base;
 
+$_base->page->add_title("Penger");
 access::need_nostat();
 access::need("forum_mod");
-$_base->page->add_title("Penger");
 
 
 // gi oss selv penger?
@@ -24,7 +24,7 @@ if (isset($_POST['cash']))
 		$_base->db->query("UPDATE users_players SET up_cash = $cash, up_bank = 0 WHERE up_id = ".login::$user->player->id." AND $cash <= 10000000000");
 		$_base->page->add_message("Du har nå nøyaktig <b>".game::format_cash($cash)."</b> på hånda og <b>0 kr</b> i banken!");
 		
-		putlog("LOG", "%b%c8MODERATOR PENGER:%c%b %u".login::$user->player->data['up_name']."%u endret penene sine til nøyaktig %u".game::format_cash($cash)."%u. Tidligere kontant: ".game::format_cash(login::$user->player->data['up_cash']).". Tidligere i banken: ".game::format_cash(login::$user->player->data['up_bank']).".");
+		putlog("LOG", "%b%NOSTAT PENGER:%c%b %u".login::$user->player->data['up_name']."%u endret pengene sine til nøyaktig %u".game::format_cash($cash)."%u. Tidligere kontant: ".game::format_cash(login::$user->player->data['up_cash']).". Tidligere i banken: ".game::format_cash(login::$user->player->data['up_bank']).".");
 	}
 	redirect::handle();
 }
@@ -39,7 +39,7 @@ $igjen = mysql_result($result, 0, 2);
 echo '
 <h1>Penger</h1>
 <p>
-	Som en moderator kan du nå gi deg selv penger, og kan maksimalt ha 10 mrd ved hjelp av denne funksjonen. Ønsker du mer må du spille deg opp på for eksempel pokerfunksjonen.
+	Som en NoStat-bruker kan du nå gi deg selv penger, og kan maksimalt ha 10 mrd ved hjelp av denne funksjonen. Ønsker du mer må du spille deg opp på for eksempel pokerfunksjonen.
 </p>';
 
 
