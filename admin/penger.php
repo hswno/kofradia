@@ -4,6 +4,7 @@ require "../base.php";
 global $_base;
 
 access::need_nostat();
+access::need("forum_mod");
 $_base->page->add_title("Penger");
 
 
