@@ -340,6 +340,7 @@ p + .table,
 span.c_idemyldrer { color: #F9E600 }
 span.c_forum_mod { color: #FF6600 }
 span.c_mod { color: #33CCFF }
+span.c_seniormod { color: #104E8B }
 span.c_admin { color: #CCFF00 }
 span.c_system { color: #8888FF }
 span.c_deactivated { color: #FF0000 }
@@ -347,6 +348,7 @@ span.c_deactivated { color: #FF0000 }
 span.c_idemyldrer span { color: #AAAAAA }
 span.c_forum_mod span { color: #AAAAAA }
 span.c_mod span { color: #AAAAAA }
+span.c_seniormod span { color: #AAAAAA }
 span.c_admin span { color: #AAAAAA }
 span.c_system span { color: #AAAAAA }
 span.c_deactivated span { color: #AAAAAA }
@@ -354,6 +356,7 @@ span.c_deactivated span { color: #AAAAAA }
 .c_idemyldrer:hover span { color: #F9E600 }
 .c_forum_mod:hover span { color: #FF6600 }
 .c_mod:hover span { color: #33CCFF }
+.c_seniormod:hover span { color: #104E8B }
 .c_admin:hover span { color: #CCFF00 }
 .c_system:hover span { color: #8888FF }
 /*.c_deactivated:hover span { color: #FF0000 }*/

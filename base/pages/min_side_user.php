@@ -3225,6 +3225,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				4 => "Forummoderator",
 				6 => "Forummoderator (nostat)",
 				5 => "Moderator",
+				11 => "Seniormoderator"
 			);
 			if (access::has("sadmin")) $levels[7] = "Administrator";
 			if (access::has("sadmin")) $levels[8] = "Superadministrator";

@@ -15,7 +15,7 @@ class crewfiles
 	public static $path;
 	
 	/** Alle tilgangsnivåene som skal være tilgjengelig */
-	public static $access_levels = array("forum_mod", "mod", "admin", "sadmin");
+	public static $access_levels = array("forum_mod", "mod", "seniormod", "admin", "sadmin");
 	
 	/** Egne navn på tilgangsnivåene (for å kunne ha Senioradministrator) */
 	public static $access_levels_name = array("sadmin" => "Senioradministrator");
