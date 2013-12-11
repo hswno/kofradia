@@ -81,6 +81,7 @@ class page_credits
 					<li><user="Goldfinger" /></li>
 					<li><user="Greenboy" /></li>
 					<li><user="Homecoming" /></li>
+					<li><user="Mithrandir" /></li>
 					<li><user="Speedy" /></li>
 				</ul>
 			</div>
@@ -89,11 +90,14 @@ class page_credits
 				<ul>
 					<li><user="aNdersK" /></li>
 					<li><user="ChrisF" /></li>
+					<li><user="Constantin" /></li>
 					<li><user="Franc Lucas" /></li>
 					<li><user="Jonas" /></li>
 					<li><user="Nicko" /></li>
+					<li><user="Rulingen" /></li>
 					<li><user="Shero" /></li>
 					<li><user="Sunniva" /></li>
+					<li><user="Wonderful" /></li>
 				</ul>
 				<h3>Support Operatører</h3>
 				<ul>
