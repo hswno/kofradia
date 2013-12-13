@@ -14,11 +14,18 @@ function github_cidr_match($ip, $range)
 
 // sjekk at dette er GitHub
 if (!github_cidr_match($_SERVER['REMOTE_ADDR'], "192.30.252.0/22") || !isset($_POST['payload'])) {
+	putlog("CREWCHAN", "%bgithub invalid request%b");
 	die("Bye, bitch!");
 }
 
 $event = $_SERVER['HTTP_X_GITHUB_EVENT'];
 $payload = json_decode($_POST['payload']);
+
+putlog("CREWCHAN", "%bgithub event:%b $event");
+
+function github_info($title, $text, $payload) {
+	putlog("CREWCHAN", "%bGitHub $title%b: $text");
+}
 
 switch ($event) {
 	case "push":
@@ -26,11 +33,13 @@ switch ($event) {
 		break;
 
 	case "issues":
-		//TODO: issues
+		// issues - closed, opened, reopened
+		$types = array("closed" => "lukket", "opened" => "opprettet", "reopened" => "gjenåpnet");
+		github_info("Issue {$payload['action']}", "{$payload['sender']['login']} {$types[$payload['action']]} issuen #{$payload['issue']['number']} ({$payload['issue']['title']}) {$payload['issue']['html_url']}");
 		break;
 
 	case "issue_comment":
-		putlog("CREWCHAN", "%bGitHub Kommentar:%b %u{$payload['sender']['login']}%u svarte på kommentaren #{$payload['issue']['number']} ({$payload['issue']['title']}) {$payload['comment']['html_url']}");
+		github_info("Issue", "%u{$payload['sender']['login']}%u svarte på issuen #{$payload['issue']['number']} ({$payload['issue']['title']}) {$payload['comment']['html_url']}");
 		break;
 
 	case "commit_comment":
