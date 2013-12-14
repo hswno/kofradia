@@ -25,7 +25,7 @@ class github_handle
 
 	public function __construct() {
 		$this->event = $_SERVER['HTTP_X_GITHUB_EVENT'];
-		$this->payload = json_decode($_POST['payload']);
+		$this->payload = json_decode($_POST['payload'], true);
 		$this->handle_event($this->event);
 	}
 
