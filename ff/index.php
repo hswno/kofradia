@@ -858,7 +858,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			<p><a href="./?ff_id='.$this->ff->id.'">&laquo; Tilbake</a></p>
 			<p>For å kunne se informasjonen om de andre broderskapene, må det betales et beløp på '.game::format_cash(ff::COMPETITION_INFO_COST).'. Da får man vite hvor mye de andre broderskapene har ranket i forhold til ditt broderskap.</p>
 			<p>Denne informasjonen gjelder kun det tidspunktet informasjonen ble kjøpt. Etter det har gått 6 timer kan ny informasjon kjøpes.</p>
-			<p>Kun boss har mulighet til å kjøpe denne informasjonen. Alle medlemmene i broderskapet kan se oversikten når den er kjøpt.</p>';
+			<p>Kun Capofamiglia har mulighet til å kjøpe denne informasjonen. Alle medlemmene i broderskapet kan se oversikten når den er kjøpt.</p>';
 					
 					if ($this->ff->access(1))
 					{
