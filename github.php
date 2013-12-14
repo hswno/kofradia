@@ -33,12 +33,27 @@ class github_handle
 		putlog("CREWCHAN", "%bGitHub - $title%b: $text");
 	}
 
+	private function get_action($action, $actions) {
+		if (!isset($actions[$action])) {
+			return "unknown: $action";
+		}
+
+		return $actions[$action];
+	}
+
 	public function handle_event() {
 		switch ($this->event) {
-			//case "push":
-
-				//TODO: push
-				//break;
+			case "push":
+				foreach ($this->payload['commits'] as $commit) {
+					$msg = sprintf("%%u%s%%u pushet kode til %s (%s) (%s): %s",
+						$commit['author']['name'] ?: $commit['author']['email'],
+						$this->payload['repository']['name'],
+						$this->payload['ref'],
+						$commit['url']
+						$commit['message']);
+					$this->info("Kildekode", $msg);
+				}
+				break;
 
 			case "issues":
 				// issues - closed, opened, reopened
@@ -81,9 +96,17 @@ class github_handle
 				//TODO: pull_request_review_comment
 				//break;
 
-			//case "gollum":
-				//TODO: gollum
-				//break;
+			case "gollum":
+				foreach ($this->payload['pages'] as $page) {
+					$action = $this->get_action($page['action'], array("edited" => "oppdaterte", "created" => "opprettet"));
+					$msg = sprintf("%%u%s%%u %s %s %s",
+						$this->payload['sender']['login'],
+						$action,
+						$page['title'],
+						$page['html_url']);
+					$this->info("Wiki", $msg);
+				}
+				break;
 
 			//case "watch":
 				//TODO: watch
@@ -114,13 +137,13 @@ class github_handle
 				//break;
 
 			default:
-				putlog("CREWCHAN", "%bukjent github event:%b $event");
+				putlog("CREWCHAN", "%bukjent github event:%b {$this->event}");
 				if (MAIN_SERVER) {
 					$data = sprintf("%s\nevent: %s\npayload:\n%s\n\n",
 						date("r"),
 						$this->event,
 						print_r($this->payload, true));
-					file_put_contents("../github.log", $data);
+					file_put_contents("../github.log", $data, FILE_APPEND);
 				}
 		}
 	}
