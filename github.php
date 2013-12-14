@@ -29,7 +29,7 @@ class github_handle
 		$this->handle_event($this->event);
 	}
 
-	private function info($title, $text, $payload) {
+	private function info($title, $text) {
 		putlog("CREWCHAN", "%bGitHub - $title%b: $text");
 	}
 
