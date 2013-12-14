@@ -49,7 +49,7 @@ class github_handle
 						$commit['author']['name'] ?: $commit['author']['email'],
 						$this->payload['repository']['name'],
 						$this->payload['ref'],
-						$commit['url']
+						$commit['url'],
 						$commit['message']);
 					$this->info("Kildekode", $msg);
 				}
