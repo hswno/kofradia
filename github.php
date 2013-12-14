@@ -38,7 +38,7 @@ class github_handle
 			//case "push":
 
 				//TODO: push
-				break;
+				//break;
 
 			case "issues":
 				// issues - closed, opened, reopened
@@ -63,55 +63,55 @@ class github_handle
 
 			//case "commit_comment":
 				//TODO: commit_comment
-				break;
+				////break;
 
 			//case "create":
 				//TODO: create
-				break;
+				//break;
 
 			//case "delete":
 				//TODO: delete
-				break;
+				//break;
 
 			//case "pull_request":
 				//TODO: pull_request
-				break;
+				//break;
 
 			//case "pull_request_review_comment":
 				//TODO: pull_request_review_comment
-				break;
+				//break;
 
 			//case "gollum":
 				//TODO: gollum
-				break;
+				//break;
 
 			//case "watch":
 				//TODO: watch
-				break;
+				//break;
 
 			//case "release":
 				//TODO: release
-				break;
+				//break;
 
 			//case "fork":
 				//TODO: fork
-				break;
+				//break;
 
 			//case "member":
 				//TODO: member
-				break;
+				//break;
 
 			//case "public":
 				//TODO: public
-				break;
+				//break;
 
 			//case "team_add":
 				//TODO: team_add
-				break;
+				//break;
 
 			//case "status":
 				//TODO: status
-				break;
+				//break;
 
 			default:
 				putlog("CREWCHAN", "%bukjent github event:%b $event");
