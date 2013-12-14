@@ -26,7 +26,7 @@ class github_handle
 	public function __construct() {
 		$this->event = $_SERVER['HTTP_X_GITHUB_EVENT'];
 		$this->payload = json_decode($_POST['payload']);
-		$this->handle_event($event);
+		$this->handle_event($this->event);
 	}
 
 	private function info($title, $text, $payload) {
@@ -44,21 +44,21 @@ class github_handle
 				// issues - closed, opened, reopened
 				$types = array("closed" => "lukket", "opened" => "opprettet", "reopened" => "gjenåpnet");
 				$msg = sprintf("%s %s issue #%d (%s) %s",
-					$payload['sender']['login'],
-					$types[$payload['action']],
-					$payload['issue']['number'],
-					$payload['issue']['title'],
-					$payload['issue']['html_url']);
-				$this->github_info("Issue {$payload['action']}", $msg);
+					$this->payload['sender']['login'],
+					$types[$this->payload['action']],
+					$this->payload['issue']['number'],
+					$this->payload['issue']['title'],
+					$this->payload['issue']['html_url']);
+				$this->info("Issue {$payload['action']}", $msg);
 				break;
 
 			case "issue_comment":
 				$msg = sprintf("%%u%s%%u svarte på issue #%d (%s) %s"
-					$payload['sender']['login'],
-					$payload['issue']['number'],
-					$payload['issue']['title'],
-					$payload['comment']['html_url']);
-				$this->github_info("Issue", $msg);
+					$this->payload['sender']['login'],
+					$this->payload['issue']['number'],
+					$this->payload['issue']['title'],
+					$this->payload['comment']['html_url']);
+				$this->info("Issue", $msg);
 				break;
 
 			//case "commit_comment":
