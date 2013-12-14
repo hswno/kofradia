@@ -14,84 +14,116 @@ function github_cidr_match($ip, $range)
 
 // sjekk at dette er GitHub
 if (!github_cidr_match($_SERVER['REMOTE_ADDR'], "192.30.252.0/22") || !isset($_POST['payload'])) {
-	putlog("CREWCHAN", "%bgithub invalid request%b");
+	//putlog("CREWCHAN", "%bgithub invalid request%b");
 	die("Bye, bitch!");
 }
 
-$event = $_SERVER['HTTP_X_GITHUB_EVENT'];
-$payload = json_decode($_POST['payload']);
+class github_handle
+{
+	private $event;
+	private $payload;
 
-putlog("CREWCHAN", "%bgithub event:%b $event");
+	public function __construct() {
+		$this->event = $_SERVER['HTTP_X_GITHUB_EVENT'];
+		$this->payload = json_decode($_POST['payload']);
+		$this->handle_event($event);
+	}
 
-function github_info($title, $text, $payload) {
-	putlog("CREWCHAN", "%bGitHub $title%b: $text");
+	private function info($title, $text, $payload) {
+		putlog("CREWCHAN", "%bGitHub - $title%b: $text");
+	}
+
+	public function handle_event() {
+		switch ($this->event) {
+			//case "push":
+
+				//TODO: push
+				break;
+
+			case "issues":
+				// issues - closed, opened, reopened
+				$types = array("closed" => "lukket", "opened" => "opprettet", "reopened" => "gjenåpnet");
+				$msg = sprintf("%s %s issue #%d (%s) %s",
+					$payload['sender']['login'],
+					$types[$payload['action']],
+					$payload['issue']['number'],
+					$payload['issue']['title'],
+					$payload['issue']['html_url']);
+				$this->github_info("Issue {$payload['action']}", $msg);
+				break;
+
+			case "issue_comment":
+				$msg = sprintf("%%u%s%%u svarte på issue #%d (%s) %s"
+					$payload['sender']['login'],
+					$payload['issue']['number'],
+					$payload['issue']['title'],
+					$payload['comment']['html_url']);
+				$this->github_info("Issue", $msg);
+				break;
+
+			//case "commit_comment":
+				//TODO: commit_comment
+				break;
+
+			//case "create":
+				//TODO: create
+				break;
+
+			//case "delete":
+				//TODO: delete
+				break;
+
+			//case "pull_request":
+				//TODO: pull_request
+				break;
+
+			//case "pull_request_review_comment":
+				//TODO: pull_request_review_comment
+				break;
+
+			//case "gollum":
+				//TODO: gollum
+				break;
+
+			//case "watch":
+				//TODO: watch
+				break;
+
+			//case "release":
+				//TODO: release
+				break;
+
+			//case "fork":
+				//TODO: fork
+				break;
+
+			//case "member":
+				//TODO: member
+				break;
+
+			//case "public":
+				//TODO: public
+				break;
+
+			//case "team_add":
+				//TODO: team_add
+				break;
+
+			//case "status":
+				//TODO: status
+				break;
+
+			default:
+				putlog("CREWCHAN", "%bukjent github event:%b $event");
+				if (MAIN_SERVER) {
+					$data = sprintf("%s\nevent: %s\npayload:\n%s\n\n",
+						date("r"),
+						$this->event,
+						print_r($this->payload, true));
+					file_put_contents("../github.log", $data);
+				}
+		}
+	}
 }
 
-switch ($event) {
-	case "push":
-		//TODO: push
-		break;
-
-	case "issues":
-		// issues - closed, opened, reopened
-		$types = array("closed" => "lukket", "opened" => "opprettet", "reopened" => "gjenåpnet");
-		github_info("Issue {$payload['action']}", "{$payload['sender']['login']} {$types[$payload['action']]} issuen #{$payload['issue']['number']} ({$payload['issue']['title']}) {$payload['issue']['html_url']}");
-		break;
-
-	case "issue_comment":
-		github_info("Issue", "%u{$payload['sender']['login']}%u svarte på issuen #{$payload['issue']['number']} ({$payload['issue']['title']}) {$payload['comment']['html_url']}");
-		break;
-
-	case "commit_comment":
-		//TODO: commit_comment
-		break;
-
-	case "create":
-		//TODO: create
-		break;
-
-	case "delete":
-		//TODO: delete
-		break;
-
-	case "pull_request":
-		//TODO: pull_request
-		break;
-
-	case "pull_request_review_comment":
-		//TODO: pull_request_review_comment
-		break;
-
-	case "gollum":
-		//TODO: gollum
-		break;
-
-	case "watch":
-		//TODO: watch
-		break;
-
-	case "release":
-		//TODO: release
-		break;
-
-	case "fork":
-		//TODO: fork
-		break;
-
-	case "member":
-		//TODO: member
-		break;
-
-	case "public":
-		//TODO: public
-		break;
-
-	case "team_add":
-		//TODO: team_add
-		break;
-
-	case "status":
-		//TODO: status
-		break;
-
-}
+new github_handle();
