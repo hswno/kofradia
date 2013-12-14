@@ -53,7 +53,7 @@ class github_handle
 				break;
 
 			case "issue_comment":
-				$msg = sprintf("%%u%s%%u svarte på issue #%d (%s) %s"
+				$msg = sprintf("%%u%s%%u svarte på issue #%d (%s) %s",
 					$this->payload['sender']['login'],
 					$this->payload['issue']['number'],
 					$this->payload['issue']['title'],
