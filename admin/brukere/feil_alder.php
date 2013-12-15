@@ -113,7 +113,7 @@ else
 		$n_year = $date->format("Y");
 
 		$age = ($birth == 'Ikke registrert' ? 0 : $n_year - $birth_array[0] - (($n_month < $birth_array[1] || ($birth_array[1] == $n_month && $n_day < $birth_array[2])) ? 1 : 0));
-var_dump($row);
+
 		$birthdate = ($age == 0 ? $birth : $birth. ' (' .$age. ' år)' );
 
 		echo '
