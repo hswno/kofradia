@@ -941,6 +941,9 @@ td.support_important {
 			<th colspan="3">Administratorer</th>
 		</tr>'.self::show_stats_users($players, 7, $reply_users, $last_online).'
 		<tr>
+			<th colspan="3">Seniormoderatorer</th>
+		</tr>'.self::show_stats_users($players, 11, $reply_users, $last_online).'
+		<tr>
 			<th colspan="3">Moderatorer</th>
 		</tr>'.self::show_stats_users($players, 5, $reply_users, $last_online).'
 		<tr>
