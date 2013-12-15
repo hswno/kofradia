@@ -104,8 +104,8 @@ else
 		
 		$count = count($row);
 
-		$birth_array = explode("-", $player['u_birth']);
-		$birth = (empty($player['u_birth']) || $player['u_birth'] == "0000-00-00" ? 'Ikke registrert' : intval($birth_array[2]).". ".$_lang['months'][intval($birth_array[1])]." ".$birth_array[0]);
+		$birth_array = explode("-", $row[0]['u_birth']);
+		$birth = (empty($row[0]['u_birth']) || $row[0]['u_birth'] == "0000-00-00" ? 'Ikke registrert' : intval($birth_array[2]).". ".$_lang['months'][intval($birth_array[1])]." ".$birth_array[0]);
 		
 		
 		$date = $_base->date->get();
