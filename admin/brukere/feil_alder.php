@@ -21,8 +21,6 @@ $options = array(
 );
 $time = isset($_GET['filter']) && $_GET['filter'] > 0 ? intval($_GET['filter']) : 172800;
 
-
-
 // hent fødselsdato for når man er 13 år
 $find_date = strtotime("-13 year", time());
 $legal_year = date('Y-m-d', $find_date);
@@ -105,6 +103,7 @@ else
 		$count = count($row);
 
 		$birth_array = explode("-", $row[0]['u_birth']);
+
 		$birth = (empty($row[0]['u_birth']) || $row[0]['u_birth'] == "0000-00-00" ? 'Ikke registrert' : intval($birth_array[2]).". ".$_lang['months'][intval($birth_array[1])]." ".$birth_array[0]);
 		
 		
@@ -114,8 +113,8 @@ else
 		$n_year = $date->format("Y");
 
 		$age = ($birth == 'Ikke registrert' ? 0 : $n_year - $birth_array[0] - (($n_month < $birth_array[1] || ($birth_array[1] == $n_month && $n_day < $birth_array[2])) ? 1 : 0));
-
-		$birthdate = $birth + ($age == 0 ? '' : '(' .$age. ' år)' );
+var_dump($row);
+		$birthdate = ($age == 0 ? $birth : $birth. ' (' .$age. ' år)' );
 
 		echo '
 		<tr'.((++$i % 2 == 0) ? ' class="color"' : '').'>
