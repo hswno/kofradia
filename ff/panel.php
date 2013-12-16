@@ -238,6 +238,14 @@ class page_ff_panel
 				<dd>'.game::format_num($up_bullets).($up_bullets_a ? ' ('.game::format_num($up_bullets_a).')' : '').'</dd>
 			</dl>';
 				
+				// de som ikke er nostat skal ikke få ta ut kuler fra Kofradia Crew
+				if ((!access::is_nostat() && ($this->ff->data['ff_id'] == 1))
+				{
+					echo '
+					<p>Du kan ikke ta ut kuler fra '.htmlspecialchars($this->ff->data['ff_name']).'</p>';
+					return;
+				}
+
 				// kan vi ikke ta ut kuler?
 				$p = $this->ff->uinfo->data['ffm_priority'];
 				if ($p > 3)
