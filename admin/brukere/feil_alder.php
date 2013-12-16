@@ -19,7 +19,7 @@ $options = array(
 	1209600,
 	2419200
 );
-$time = isset($_GET['filter']) && $_GET['filter'] > 0 ? intval($_GET['filter']) : 172800;
+$time = isset($_GET['filter']) && $_GET['filter'] > 0 ? intval($_GET['filter']) : 604800;
 
 // hent fødselsdato for når man er 13 år
 $find_date = strtotime("-13 year", time());
@@ -53,7 +53,7 @@ $result = $_base->db->query("
 	FROM users_players 
 		JOIN users ON up_u_id = u_id 
 	WHERE up_access_level != 0 AND up_last_online > ".(time()-$time)." AND STR_TO_DATE(".$legal_year.", '%Y-%m-%d') > u_birth
-	ORDER BY u_birth DESC, u_online_ip, up_name LIMIT 5");
+	ORDER BY u_birth DESC, u_online_ip, up_name");
 
 //u_birth < STR_TO_DATE(".$legal_year.", '%Y-%m-%d') OR u_birth >= STR_TO_DATE(".$older_year.", '%Y-%m-%d')
 
@@ -106,7 +106,7 @@ else
 
 		$birth = (empty($row[0]['u_birth']) || $row[0]['u_birth'] == "0000-00-00" ? 'Ikke registrert' : intval($birth_array[2]).". ".$_lang['months'][intval($birth_array[1])]." ".$birth_array[0]);
 		
-		
+		// Hent dagens dato
 		$date = $_base->date->get();
 		$n_day = $date->format("j");
 		$n_month = $date->format("n");
