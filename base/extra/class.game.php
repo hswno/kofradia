@@ -487,8 +487,8 @@ class game
 		
 		$rep = array(
 			// internettadresser
-			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="$1" target="_blank">$1</a>',
-			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="http://$1" target="_blank">$1</a>'
+			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-_%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="$1" target="_blank">$1</a>',
+			'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-_%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="http://$1" target="_blank">$1</a>'
 		);
 		$code_from = array_keys($rep);
 		$code_to = array_values($rep);
@@ -922,8 +922,8 @@ class game
 				'~\[img\]([^\["\'\n]+)\[/img\]~ieu' => 'game::secure_img_addr(\'$1\')',
 				
 				// internettadresser
-				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="$1" target="_blank">$1</a>',
-				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="http://$1" target="_blank">$1</a>',
+				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-_%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="$1" target="_blank">$1</a>',
+				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-_%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="http://$1" target="_blank">$1</a>',
 				
 				// intern adresse på nettstedet
 				'~\[iurl=/?([^\]\n]*)\](.+?)\[/iurl\]~ieu' => '\'<a href="'.$__server['absolute_path'].'/$1">\'.stripslashes(\'$2\').\'</a>\'',
