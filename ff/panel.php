@@ -243,60 +243,63 @@ class page_ff_panel
 				{
 					echo '
 					<p>Du kan ikke ta ut kuler fra '.htmlspecialchars($this->ff->data['ff_name']).'</p>';
-					return;
-				}
-
-				// kan vi ikke ta ut kuler?
-				$p = $this->ff->uinfo->data['ffm_priority'];
-				if ($p > 3)
-				{
-					echo '
-			<p>Du kan ikke ta ut kuler, men kan få <user id="'.$this->ff->uinfo->data['ffm_parent_up_id'].'" /> til å gi deg kuler fra broderskapet.</p>';
-				}
+				} 
 				
-				else
+				else 
 				{
+
+					// kan vi ikke ta ut kuler?
+					$p = $this->ff->uinfo->data['ffm_priority'];
+					if ($p > 3)
+					{
+						echo '
+						<p>Du kan ikke ta ut kuler, men kan få <user id="'.$this->ff->uinfo->data['ffm_parent_up_id'].'" /> til å gi deg kuler fra broderskapet.</p>';
+					}
+					
+					else
+					{
 					// spillere vi kan ta ut kuler til
-					$s_up = postval("bullets_up");
-					$other = array();
-					
-					// kan vi ta ut kuler for kun underordnede under seg selv? (har pri 3)
-					if ($p == 3 && isset($this->ff->members['members_parent'][login::$user->player->id]))
-					{
-						foreach ($this->ff->members['members_parent'][login::$user->player->id] as $ffm) $other[] = $ffm;
-					}
-					
-					// kan vi ta ut kuler for alle underordnede? (har pri 1 og 2)
-					elseif ($p < 3 && isset($this->ff->members['members_priority'][4]))
-					{
-						foreach ($this->ff->members['members_priority'][4] as $ffm) $other[] = $ffm;
-					}
-					
-					// har vi noen underordnede?
-					$sub = '';
-					if ($other)
-					{
-						$sub = '
-					<select name="bullets_up">
-						<option value="">Til meg</option>';
+						$s_up = postval("bullets_up");
+						$other = array();
 						
-						foreach ($other as $ffm)
+					// kan vi ta ut kuler for kun underordnede under seg selv? (har pri 3)
+						if ($p == 3 && isset($this->ff->members['members_parent'][login::$user->player->id]))
 						{
-							$sub .= '
-						<option value="'.$ffm->data['ffm_up_id'].'"'.($s_up == $ffm->data['ffm_up_id'] ? ' selected="selected"' : '').'>'.htmlspecialchars($ffm->data['up_name']).'</option>';
+							foreach ($this->ff->members['members_parent'][login::$user->player->id] as $ffm) $other[] = $ffm;
 						}
 						
-						$sub .= '
-					</select>';
+					// kan vi ta ut kuler for alle underordnede? (har pri 1 og 2)
+						elseif ($p < 3 && isset($this->ff->members['members_priority'][4]))
+						{
+							foreach ($this->ff->members['members_priority'][4] as $ffm) $other[] = $ffm;
+						}
+						
+					// har vi noen underordnede?
+						$sub = '';
+						if ($other)
+						{
+							$sub = '
+							<select name="bullets_up">
+							<option value="">Til meg</option>';
+							
+							foreach ($other as $ffm)
+							{
+								$sub .= '
+								<option value="'.$ffm->data['ffm_up_id'].'"'.($s_up == $ffm->data['ffm_up_id'] ? ' selected="selected"' : '').'>'.htmlspecialchars($ffm->data['up_name']).'</option>';
+							}
+							
+							$sub .= '
+							</select>';
+						}
+						
+						echo '
+						<form action="" method="post">
+						<p class="c">'.$sub.'
+						<input type="text" name="bullets_out" value="'.htmlspecialchars(postval("bullets_out")).'" class="styled w30" />
+						'.show_sbutton("Ta ut").'
+						</p>
+						</form>';
 					}
-					
-					echo '
-			<form action="" method="post">
-				<p class="c">'.$sub.'
-					<input type="text" name="bullets_out" value="'.htmlspecialchars(postval("bullets_out")).'" class="styled w30" />
-					'.show_sbutton("Ta ut").'
-				</p>
-			</form>';
 				}
 				
 				echo '
