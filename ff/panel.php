@@ -239,7 +239,7 @@ class page_ff_panel
 			</dl>';
 				
 				// de som ikke er nostat skal ikke få ta ut kuler fra Kofradia Crew
-				if ((!access::is_nostat() && ($this->ff->data['ff_id'] == 1))
+				if (!access::is_nostat() && ($this->ff->data['ff_id'] == 1))
 				{
 					echo '
 					<p>Du kan ikke ta ut kuler fra '.htmlspecialchars($this->ff->data['ff_name']).'</p>';
