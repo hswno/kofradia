@@ -2536,7 +2536,7 @@ www.kofradia.no';
 			$links = array();
 			$links[] = '<a href="'.htmlspecialchars(page_min_side::addr("crew", "", "user")).'">Min bruker</a>';
 			$links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "")).'"'.($subpage2 == "" ? ' class="active"' : '').'>Oversikt</a>';
-			if (access::has("admin")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=rank")).'"'.($subpage2 == "rank" ? ' class="active"' : '').'>Juster rank</a>';
+			if (access::has("seniormod")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=rank")).'"'.($subpage2 == "rank" ? ' class="active"' : '').'>Juster rank</a>';
 			if (access::has("mod")) $links[] = '<a href="'.htmlspecialchars(page_min_side::addr(NULL, "b=name")).'"'.($subpage2 == "name" ? ' class="active"' : '').'>Endre spillernavn</a>';
 			
 			echo '
@@ -2680,7 +2680,7 @@ www.kofradia.no';
 			}
 			
 			// juster ranken til spilleren
-			elseif ($subpage2 == "rank" && access::has("admin"))
+			elseif ($subpage2 == "rank" && access::has("seniormod"))
 			{
 				// endre?
 				if (isset($_POST['rel']) || isset($_POST['abs']))
