@@ -59,7 +59,7 @@ else
 		echo '
 		<div class="section">
 			<h2>'.$_base->date->get($round['time'])->format().'</h2>
-			<p class="h_right">'.game::format_number($round['total_lodd']).' lodd, '.game::format_number($round['total_users']).' bruker'.($round['total_users'] == 1 ? '' : 'e').'</p>
+			<p class="h_right">'.game::format_number($round['total_lodd']).' lodd, '.game::format_number($round['total_users']).' spiller'.($round['total_users'] == 1 ? '' : 'e').'</p>
 			<dl class="dd_right">';
 		
 		foreach ($round['users'] as $num => $row)
