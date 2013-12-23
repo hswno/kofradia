@@ -487,7 +487,7 @@ class page_auksjoner_auksjon extends pages_player
 		}
 		
 		// slette bud
-		if (isset($_POST['del_bid']) && $this->auksjon->status == auksjon::STATUS_ACTIVE)
+		if (isset($_POST['del_bid']) && $this->auksjon->status == auksjon::STATUS_ACTIVE && $this->auksjon->data['a_type'] != auksjon::TYPE_KULER)
 		{
 			$this->bid_delete();
 		}
@@ -726,6 +726,7 @@ class page_auksjoner_auksjon extends pages_player
 	
 	/**
 	 * Trekke tilbake bud
+	 * Bud på kuleauksjoner skal ikke trekkes tilbake
 	 */
 	protected function bid_delete()
 	{
@@ -817,7 +818,7 @@ class page_auksjoner_auksjon extends pages_player
 			FROM auksjoner_bud
 			WHERE ab_a_id = {$this->auksjon->id} AND ab_up_id = {$this->up->id} AND ab_active != 0");
 		$bud_own = mysql_fetch_assoc($result);
-		$bud_own_locked = time() > $bud_own['ab_time'] + auksjon::MAX_TIME_REMOVE;
+		$bud_own_locked = $this->auksjon->data['a_type'] == auksjon::TYPE_KULER || time() > $bud_own['ab_time'] + auksjon::MAX_TIME_REMOVE;
 		
 		$type = auksjon_type::get($this->auksjon->data['a_type']);
 		
@@ -952,9 +953,20 @@ class page_auksjoner_auksjon extends pages_player
 					<p>Du må by minimum '.game::format_cash($this->auksjon->data['a_bid_jump']).' høyere enn '.($bud_lead['ab_up_id'] == $this->up->id ? 'ditt forrige bud' : 'det forrige budet til <user id="'.$bud_lead['ab_up_id'].'" />').' på '.game::format_cash($bud_lead['ab_bid']).'.</p>';
 				}
 				
-				echo '
+				// bud på kuler kan ikke trekkes tilbake
+				// TODO: om noe kan trekkes tilbake bør bestemmes av auksjonen, ikke logikken i koden her
+				if ($this->auksjon->data['a_type'] == auksjon::TYPE_KULER)
+				{
+					echo '
+					<p><b>Budet er bindende og kan ikke trekkes tilbake!</b></p>
+					<p>Dersom noen byr over deg, vil budet ditt bli inaktivt og du får pengene igjen.</p>';
+				}
+				else
+				{
+					echo '
 					<p>Du kan trekke tilbake budet ditt innen det har gått '.game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL).'. Etter '.game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL | game::TIME_NOBOLD).' er budet ditt bindende og det kan ikke trekkes tilbake.</p>
 					<p>Dersom noen byr over deg, vil budet ditt bli inaktivt og du får pengene igjen etter at budet har stått i '.game::timespan(auksjon::MAX_TIME_REMOVE, game::TIME_FULL | game::TIME_NOBOLD).'.</p>';
+				}
 			}
 			
 			// har vi bydd?
