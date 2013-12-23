@@ -24,7 +24,7 @@ global $_base, $_game;
 essentials::load_module("forum");
 
 // kontroller forumkategori og tilgang
-$forum = new forum_ajax(postval("forum_id"));
+$forum = new \Kofradia\Forum\CategoryAjax(postval("forum_id"));
 $forum->require_access();
 
 // forsøk å legg til forumtråden

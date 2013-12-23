@@ -17,7 +17,7 @@ class page_topic_new
 	 */
 	public function __construct()
 	{
-		$this->forum = new forum(getval("f"));
+		$this->forum = new \Kofradia\Forum\Category(getval("f"));
 		$this->forum->require_access();
 		$this->forum->add_title();
 		ess::$b->page->add_title("Ny forumtråd");
@@ -36,7 +36,7 @@ class page_topic_new
 		if (!$this->forum->check_rank())
 		{
 			// sett opp ranknavnet
-			$rank_info = game::$ranks['items_number'][forum::TOPIC_MIN_RANK];
+			$rank_info = game::$ranks['items_number'][\Kofradia\Forum\Category::TOPIC_MIN_RANK];
 			
 			echo '
 <div class="bg1_c xsmall">
@@ -125,7 +125,7 @@ class page_topic_new
 			$data = array("ft_text" => postval("text"));
 			
 			echo '
-			<div class="forum">'.forum::template_topic_preview($data).'
+			<div class="forum">'.\Kofradia\Forum\Category::template_topic_preview($data).'
 			</div>';
 		}
 		

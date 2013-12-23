@@ -62,7 +62,7 @@ if ($topic['ft_deleted'] != 0 && !access::has("forum_mod"))
 essentials::load_module("forum");
 
 // kontroller tilgang til forumet
-$forum = new forum_ajax($topic['ft_fse_id']);
+$forum = new \Kofradia\Forum\CategoryAjax($topic['ft_fse_id']);
 $forum->require_access();
 
 // mangler svarliste?
@@ -132,7 +132,7 @@ if (count($id_list) > 0)
 		$data = $row;
 		$data['ft_fse_id'] = $forum->id;
 		$data['ft_id'] = $id;
-		$data['fs_new'] = $topic['fs_time'] < $row['fr_time'] && forum::$fs_check;
+		$data['fs_new'] = $topic['fs_time'] < $row['fr_time'] && \Kofradia\Forum\Category::$fs_check;
 		
 		$updated[$row['fr_id']] = $forum->template_topic_reply($data);
 		
@@ -169,7 +169,7 @@ if ($get_new)
 		$data = $row;
 		$data['ft_fse_id'] = $forum->id;
 		$data['ft_id'] = $id;
-		$data['fs_new'] = $topic['fs_time'] < $row['fr_time'] && forum::$fs_check;
+		$data['fs_new'] = $topic['fs_time'] < $row['fr_time'] && \Kofradia\Forum\Category::$fs_check;
 		
 		$new[$row['fr_id']] = $forum->template_topic_reply($data);
 		$time_last = $row['fr_time'];
@@ -193,7 +193,7 @@ $xml = '
 // forumtråden oppdatert?
 if (((int)$topic['ft_last_edit']) != $topic_last_edit)
 {
-	$topic_obj = new forum_topic_ajax($id, $forum);
+	$topic_obj = new \Kofradia\Forum\TopicAjax($id, $forum);
 	
 	$xml .= '
 	<tupdated last_edit="'.$topic_obj->info['ft_last_edit'].'">'.htmlspecialchars(parse_html($forum->template_topic($topic_obj->extended_info()))).'</tupdated>';

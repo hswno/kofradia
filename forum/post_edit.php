@@ -15,7 +15,7 @@ $edit_type = getval("type");
 if ($edit_type == "emne")
 {
 	// finn emnet
-	$topic = new forum_topic(getval("id"));
+	$topic = new \Kofradia\Forum\Topic(getval("id"));
 	
 	// lagre endringer?
 	if (isset($_POST['save']))
@@ -52,7 +52,7 @@ if ($edit_type == "emne")
 			<dl class="dl_2x">
 				<dt>Tittel</dt>
 				<dd>
-					<input type="text" name="title" id="topic_title" class="styled w200" value="'.htmlspecialchars(postval("title", $topic->info['ft_title'])).'" maxlength="'.forum::TOPIC_TITLE_MAX_LENGTH.'" />';
+					<input type="text" name="title" id="topic_title" class="styled w200" value="'.htmlspecialchars(postval("title", $topic->info['ft_title'])).'" maxlength="'.\Kofradia\Forum\Category::TOPIC_TITLE_MAX_LENGTH.'" />';
 	
 	if (!$topic->forum->ff || access::has("mod"))
 	{
@@ -60,7 +60,7 @@ if ($edit_type == "emne")
 					<select name="section" id="topic_section">';
 		
 		// hent alle forumkategoriene vi har tilgang til
-		$sections = forum::get_forum_list();
+		$sections = \Kofradia\Forum\Category::get_forum_list();
 		$section = isset($_POST['section']) && isset($sections[$_POST['section']]) ? ((int) $_POST['section']) : $topic->info['ft_fse_id'];
 		foreach ($sections as $row)
 		{
@@ -117,7 +117,7 @@ if ($edit_type == "emne")
 		$data['ft_last_edit_up_id'] = login::$user->player->id;
 		
 		// vis forhåndsvisning
-		echo forum::template_topic_preview($data);
+		echo \Kofradia\Forum\Category::template_topic_preview($data);
 	}
 	
 	echo '
@@ -137,7 +137,7 @@ if ($edit_type == "emne")
 elseif ($edit_type == "svar")
 {
 	// hent forumsvaret
-	$reply = new forum_reply(getval("id"));
+	$reply = new \Kofradia\Forum\Reply(getval("id"));
 	
 	// fant ikke forumsvaret?
 	if (!$reply->info)
@@ -190,7 +190,7 @@ elseif ($edit_type == "svar")
 		
 		// vis forhåndsvisning
 		echo '
-		<div class="forum">'.forum::template_topic_reply_preview($data).'
+		<div class="forum">'.\Kofradia\Forum\Category::template_topic_reply_preview($data).'
 		</div>';
 	}
 	

@@ -33,7 +33,7 @@ if (isset($_POST['reply_id']))
 	essentials::load_module("forum");
 	
 	// hent forumtråden og forumsvaret
-	$topic = new forum_topic_ajax($_POST['topic_id']);
+	$topic = new \Kofradia\Forum\TopicAjax($_POST['topic_id']);
 	$reply = $topic->get_reply($_POST['reply_id']);
 	
 	// fant ikke forumsvaret?
@@ -63,8 +63,8 @@ else
 		"upr_rank_pos" => login::$user->player->data['upr_rank_pos'],
 		"up_forum_signature" => login::$user->player->data['up_forum_signature'],
 		"up_profile_image_url" => login::$user->player->data['up_profile_image_url'],
-		"fs_new" => forum::$fs_check
+		"fs_new" => \Kofradia\Forum\Category::$fs_check
 	);
 }
 
-ajax::html(parse_html(forum::template_topic_reply_preview($data)));
+ajax::html(parse_html(\Kofradia\Forum\Category::template_topic_reply_preview($data)));

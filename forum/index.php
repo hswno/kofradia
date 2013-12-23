@@ -6,7 +6,7 @@ require "../base.php";
 ess::$b->page->add_title("Forum");
 
 // hent forumene
-$forum = forum::get_forum_list();
+$forum = \Kofradia\Forum\Category::get_forum_list();
 
 echo '
 <div class="bg1_c small bg1_padding">

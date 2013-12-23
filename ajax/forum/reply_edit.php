@@ -38,7 +38,7 @@ if (!isset($_POST['last_edit']))
 
 // hent forumsvaret
 essentials::load_module("forum");
-$reply = new forum_reply_ajax($_POST['reply_id']);
+$reply = new \Kofradia\Forum\ReplyAjax($_POST['reply_id']);
 
 // fant ikke forumsvaret?
 if (!$reply->info)

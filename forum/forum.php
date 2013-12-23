@@ -16,7 +16,7 @@ class page_forum
 	 */
 	public function __construct()
 	{
-		$this->forum = new forum(getval("id"));
+		$this->forum = new \Kofradia\Forum\Category(getval("id"));
 		$this->forum->require_access();
 		$this->forum->add_title();
 		
@@ -50,7 +50,7 @@ class page_forum
 			// ff
 			if ($this->forum->ff && !access::has("mod"))
 			{
-				ess::$b->page->add_message("Du viser også forumtråder som ble slettet for mindre enn ".game::timespan(forum_topic::FF_HIDE_TIME, game::TIME_FULL)." siden.");
+				ess::$b->page->add_message("Du viser også forumtråder som ble slettet for mindre enn ".game::timespan(\Kofradia\Forum\Topic::FF_HIDE_TIME, game::TIME_FULL)." siden.");
 			}
 			
 			else
@@ -82,7 +82,7 @@ class page_forum
 		
 		
 		// hvor lenge etter den er slettet vi kan vise den
-		$access_expire = max(time() - forum_topic::FF_HIDE_TIME, $this->forum->ff ? $this->forum->ff->data['ff_time_reset'] : 0);
+		$access_expire = max(time() - \Kofradia\Forum\Topic::FF_HIDE_TIME, $this->forum->ff ? $this->forum->ff->data['ff_time_reset'] : 0);
 		
 		// finn ut hvor mange topics det er
 		$expire_deleted = $show_deleted ? (!$this->forum->ff || access::has("mod") ? "" : " AND (ft_deleted = 0 OR ft_deleted > $access_expire)") : " AND ft_deleted = 0";
@@ -108,7 +108,7 @@ class page_forum
 		$fs_count = 0;
 		
 		// markere alle emner og svar som lest?
-		if (isset($_GET['fs_force']) && login::$logged_in && forum::$fs_check)
+		if (isset($_GET['fs_force']) && login::$logged_in && \Kofradia\Forum\Category::$fs_check)
 		{
 			// legg til og oppdater innleggene på denne siden
 			ess::$b->db->query("
@@ -162,7 +162,7 @@ class page_forum
 					// sjekke status?
 					$fs_info = '';
 					$fs_link_suffix = '';
-					if (forum::$fs_check)
+					if (\Kofradia\Forum\Category::$fs_check)
 					{
 						if (empty($row['fs_time']))
 						{
@@ -197,7 +197,7 @@ class page_forum
 				// sjekke status?
 				$fs_info = '';
 				$fs_link_suffix = '';
-				if (forum::$fs_check)
+				if (\Kofradia\Forum\Category::$fs_check)
 				{
 					if (empty($row['fs_time']))
 					{
@@ -355,7 +355,7 @@ class page_forum
 		if ($show_deleted)
 		{
 			// hvor lenge etter den er slettet vi kan vise den
-			$access_expire = max(time() - forum_topic::FF_HIDE_TIME, $this->forum->ff ? $this->forum->ff->data['ff_time_reset'] : 0);
+			$access_expire = max(time() - \Kofradia\Forum\Topic::FF_HIDE_TIME, $this->forum->ff ? $this->forum->ff->data['ff_time_reset'] : 0);
 			
 			// kan vi se alle?
 			if (!$this->forum->ff || access::has("mod"))

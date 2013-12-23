@@ -17,7 +17,7 @@ ajax::validate_lock(true);
 
 // hent forumtråd
 essentials::load_module("forum");
-$topic = new forum_topic_ajax(postval("topic_id"));
+$topic = new \Kofradia\Forum\TopicAjax(postval("topic_id"));
 
 // hent forumsvaret
 $reply = $topic->get_reply(postval("reply_id"));

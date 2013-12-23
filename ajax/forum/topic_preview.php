@@ -27,7 +27,7 @@ if (isset($_POST['topic_id']))
 	essentials::load_module("forum");
 	
 	// hent forumtråden
-	$topic = new forum_topic_ajax($_POST['topic_id']);
+	$topic = new \Kofradia\Forum\TopicAjax($_POST['topic_id']);
 	
 	// sett opp data
 	$data = $topic->extended_info();
@@ -45,4 +45,4 @@ else
 	);
 }
 
-ajax::html(parse_html(forum::template_topic_preview($data)));
+ajax::html(parse_html(\Kofradia\Forum\Category::template_topic_preview($data)));

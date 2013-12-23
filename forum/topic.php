@@ -35,7 +35,7 @@ class page_forum_topic
 		
 		// hent forumtråd
 		essentials::load_module("forum");
-		$this->topic = new forum_topic(getval("id"));
+		$this->topic = new \Kofradia\Forum\Topic(getval("id"));
 		$this->fmod = $this->topic->forum->fmod;
 		
 		// sett standard redirect
@@ -169,7 +169,7 @@ class page_forum_topic
 		}
 		
 		// skal vi gå til nyeste melding?
-		elseif (isset($_GET['fs']) && forum::$fs_check)
+		elseif (isset($_GET['fs']) && \Kofradia\Forum\Category::$fs_check)
 		{
 			// har vi ikke status?
 			if (empty($this->topic->info['fs_time']))
@@ -360,7 +360,7 @@ class page_forum_topic
 				$row['ft_fse_id'] = $this->topic->forum->id;
 				$row['ft_id'] = $this->topic->id;
 				$row['reply_num'] = ++$reply_num;
-				$row['fs_new'] = forum::$fs_check && $this->topic->info['fs_time'] < $row['fr_time'];
+				$row['fs_new'] = \Kofradia\Forum\Category::$fs_check && $this->topic->info['fs_time'] < $row['fr_time'];
 				
 				if ($reply_id == $row['fr_id'])
 					$row['class_extra'] = 'forum_focus';
@@ -451,10 +451,10 @@ class page_forum_topic
 				"upr_rank_pos" => login::$user->player->data['upr_rank_pos'],
 				"up_forum_signature" => login::$user->player->data['up_forum_signature'],
 				"up_profile_image_url" => login::$user->player->data['up_profile_image_url'],
-				"fs_new" => forum::$fs_check
+				"fs_new" => \Kofradia\Forum\Category::$fs_check
 			);
 			
-			echo forum::template_topic_reply_preview($data);
+			echo \Kofradia\Forum\Category::template_topic_reply_preview($data);
 		}
 		
 		echo '</div>

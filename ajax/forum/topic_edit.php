@@ -42,7 +42,7 @@ if (!isset($_POST['last_edit']))
 
 // hent forumtråden
 essentials::load_module("forum");
-$topic = new forum_topic_ajax($_POST['topic_id']);
+$topic = new \Kofradia\Forum\TopicAjax($_POST['topic_id']);
 
 // kontroller at forumtråden ikke har blitt endret siden sist oppdatert
 $last_edit = (int) $_POST['last_edit'];

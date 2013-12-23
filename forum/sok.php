@@ -13,7 +13,7 @@ if (isset($_GET['f']) || isset($_GET['fa']))
 }
 
 // hent forumene og sett opp forumene vi har tilgang til
-$sections = forum::get_forum_list();
+$sections = \Kofradia\Forum\Category::get_forum_list();
 
 $_base->page->add_title("Forum", "Søk");
 

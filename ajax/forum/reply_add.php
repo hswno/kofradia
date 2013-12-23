@@ -25,7 +25,7 @@ if (!isset($_POST['topic_id']))
 
 // hent forumtråd
 essentials::load_module("forum");
-$topic = new forum_topic_ajax($_POST['topic_id']);
+$topic = new \Kofradia\Forum\TopicAjax($_POST['topic_id']);
 
 // forsøk å legg til forumsvaret
 $topic->add_reply(postval("text"), postval("no_concatenate") == "1", postval("announce") == "1");
