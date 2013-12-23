@@ -1,7 +1,5 @@
 <?php
 
-require "base/mod.php_source.php";
-
 ob_start();
 
 // The images that contains a number from 0 to 9

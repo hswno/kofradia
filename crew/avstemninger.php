@@ -1,7 +1,5 @@
 <?php
 
-require dirname(dirname(__FILE__))."/base/mod.php_source.php";
-
 // krev at dette scriptet hentes av dynamic.php
 if (!defined("BASE_LOADED")) die("No direct access.");
 
