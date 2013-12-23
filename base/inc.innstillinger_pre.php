@@ -2,6 +2,7 @@
 
 // grunnpath
 define("ROOT", dirname(dirname(__FILE__)));
+define("BASEPATH", dirname(__FILE__));
 
 // IP-adresse for å hoppe over lockdown status på hovedserveren
 // regex

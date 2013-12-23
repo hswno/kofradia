@@ -1,14 +1,7 @@
 <?php
 
-/** Autoloader */
-function __autoload($name)
-{
-	// trenger ikke å gjennomføre noen sjekk på inndata
-	// skal være hardkodet uansett (ingen user_func eller noe)
-	// bruker essentials::load_module
-	essentials::load_module($name);
-}
-
+// sett autoloader
+spl_autoload_register(array("essentials", "load_module"));
 
 /**
  * Dumpe en verdi
