@@ -35,7 +35,7 @@ class GitHub extends \Kofradia\Controller
 		switch ($this->event) {
 			case "push":
 				foreach ($this->payload['commits'] as $commit) {
-					$msg = sprintf("%%u%s%%u pushet kode til %s (%s) (%s): %s",
+					$msg = sprintf("%%u%s%%u pushet kode til %s (%s) %s %s",
 						$commit['author']['name'] ?: $commit['author']['email'],
 						$this->payload['repository']['name'],
 						$this->payload['ref'],
