@@ -2,18 +2,8 @@
 
 require "base/essentials.php";
 
-function github_cidr_match($ip, $range)
-{
-	list ($subnet, $bits) = explode('/', $range);
-	$ip = ip2long($ip);
-	$subnet = ip2long($subnet);
-	$mask = -1 << (32 - $bits);
-	$subnet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
-	return ($ip & $mask) == $subnet;
-}
-
 // sjekk at dette er GitHub
-if (!github_cidr_match($_SERVER['REMOTE_ADDR'], "192.30.252.0/22") || !isset($_POST['payload'])) {
+if (!\Kofradia\Network\Helpers::cidr_match($_SERVER['REMOTE_ADDR'], "192.30.252.0/22") || !isset($_POST['payload'])) {
 	//putlog("CREWCHAN", "%bgithub invalid request%b");
 	die("Bye, bitch!");
 }
