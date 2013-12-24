@@ -1,5 +1,7 @@
 <?php namespace Kofradia\Controller;
 
+use \Kofradia\GitHub\Hendelser;
+
 class GitHub extends \Kofradia\Controller
 {
 	public function action_index()
@@ -13,6 +15,20 @@ class GitHub extends \Kofradia\Controller
 		$this->event = $_SERVER['HTTP_X_GITHUB_EVENT'];
 		$this->payload = json_decode($_POST['payload'], true);
 		$this->handle_event($this->event);
+	}
+
+	/**
+	 * Mark GitHub-events as seen and redirect to GitHub
+	 */
+	public function action_updateSeenAndGotoGitHub()
+	{
+		if (\login::$logged_in && \access::has("crewet"))
+		{
+			$events = new \Kofradia\GitHub\Hendelser();
+			$events->setUserUpdated(\login::$user);
+		}
+
+		\redirect::handle("https://github.com/hswno/kofradia/pulse", \redirect::ABSOLUTE);
 	}
 
 	private $event;
@@ -132,6 +148,17 @@ class GitHub extends \Kofradia\Controller
 
 		// log all request (actually just for debugging)
 		$this->log_payload();
+
+		// mark it
+		$github = new Hendelser();
+		if ($this->event == "push")
+		{
+			$github->incCodeChange();
+		}
+		else
+		{
+			$github->incOtherChange();
+		}
 	}
 
 	private function log_payload()

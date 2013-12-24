@@ -596,66 +596,23 @@ class theme_sm_default
 			}
 		}
 		
-		// nye hendelser i Trac?
-		global $_trac_rss;
-		@include_once ROOT."/base/data/trac_rss.php";
-		if (!isset($_trac_rss))
+		// hendelser fra GitHub
+		$github = new \Kofradia\GitHub\Hendelser();
+		if (!$github->userHasActivated(login::$user))
 		{
 			$boxes[] = array(
-				null,
-				'Trac RSS fil ble ikke funnet.',
-				true);
+				ess::$s['relative_path'].'/github-catchup',
+				'Du vil nå motta nye hendelser fra GitHub her. Trykk her for å se de siste hendelsene.');
 		}
 		else
 		{
-			// har ikke brukeren vært innom status siden enda?
-			$last = login::$user->params->get("trac_last_changeset");
-			if (!$last)
-			{
-				$boxes[] = array(
-					ess::$s['relative_path'].'/crew/trac_rss?show=changeset',
-					'Du vil nå motta nye hendelser om <b>endringer i Subversion</b> fra Trac her. Trykk her for å se de siste hendelser.');
-			}
+			$num_changes = $github->getUserCodeBehind(login::$user) + $github->getUserOtherBehind(login::$user);
 			
-			// nye hendelser?
-			elseif ($last < $_trac_rss['last_changeset'])
-			{
-				// finn ut antall nye hendelser
-				$new = 0;
-				foreach ($_trac_rss['data_changeset'] as $item)
-				{
-					if ($item['time'] <= $last) break;
-					$new++;
-				}
-				
-				$boxes[] = array(
-					ess::$s['relative_path'].'/crew/trac_rss?show=changeset',
-					'Det er <b>'.$new.'</b> usett'.($new == 1 ? '' : 'e').' hendelse'.($new == 1 ? '' : 'r').' i Trac (endringer i <b>Git</b>).');
-			}
-			
-			// har ikke brukeren vært innom status siden enda?
-			$last = login::$user->params->get("trac_last_other");
-			if (!$last)
+			if ($num_changes > 0)
 			{
 				$boxes[] = array(
-					ess::$s['relative_path'].'/crew/trac_rss?show=other',
-					'Du vil nå motta nye hendelser om <b>endringer i wikien og tickets</b> fra Trac her. Trykk her for å se siste hendelser.');
-			}
-			
-			// nye hendelser?
-			elseif ($last < $_trac_rss['last_other'])
-			{
-				// finn ut antall nye hendelser
-				$new = 0;
-				foreach ($_trac_rss['data_other'] as $item)
-				{
-					if ($item['time'] <= $last) break;
-					$new++;
-				}
-				
-				$boxes[] = array(
-					ess::$s['relative_path'].'/crew/trac_rss?show=other',
-					'Det er <b>'.$new.'</b> usett'.($new == 1 ? '' : 'e').' hendelse'.($new == 1 ? '' : 'r').' i Trac.');
+					ess::$s['relative_path'].'/github-catchup',
+					'Det er <b>'.$num_changes.'</b> ny'.($num_changes == 1 ? '' : 'e').' hendelse'.($num_changes == 1 ? '' : 'r').' i GitHub.');
 			}
 		}
 		
