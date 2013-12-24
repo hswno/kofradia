@@ -54,7 +54,7 @@ class GitHub extends \Kofradia\Controller
 					$this->payload['issue']['number'],
 					$this->payload['issue']['title'],
 					$this->payload['issue']['html_url']);
-				$this->info("Issue {$payload['action']}", $msg);
+				$this->info("Issue ".$this->payload['action'], $msg);
 				break;
 
 			case "issue_comment":
