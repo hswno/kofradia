@@ -52,7 +52,7 @@ RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^([^?]*)($|\?.*$) $1.php$2
 
 RewriteCond %{THE_REQUEST} GET\ ([^?]+)\.php(\?.*)?\ HTTP
-RewriteRule ^([^?]*)\.php($|\?.*$) /$1$2 [NE,R=301]
+RewriteRule ^([^?]*)\.php($|\?.*$) /$1$2 [NE,R=301,L]
 
 # for /crew/
 RewriteCond %{HTTP_HOST} ^www.streetzmafia.net$ [NC,OR]
