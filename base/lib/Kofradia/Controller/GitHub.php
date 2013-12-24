@@ -127,13 +127,21 @@ class GitHub extends \Kofradia\Controller
 
 			default:
 				putlog("CREWCHAN", "%bukjent github event:%b {$this->event}");
-				if (MAIN_SERVER) {
-					$data = sprintf("%s\nevent: %s\npayload:\n%s\n\n",
-						date("r"),
-						$this->event,
-						print_r($this->payload, true));
-					file_put_contents("../github.log", $data, FILE_APPEND);
-				}
+		}
+
+		// log all request (actually just for debugging)
+		$this->log_payload();
+	}
+
+	private function log_payload()
+	{
+		if (MAIN_SERVER)
+		{
+			$data = sprintf("%s\nevent: %s\npayload:\n%s\n\n",
+				date("r"),
+				$this->event,
+				print_r($this->payload, true));
+			file_put_contents("../github.log", $data, FILE_APPEND);
 		}
 	}
 }
