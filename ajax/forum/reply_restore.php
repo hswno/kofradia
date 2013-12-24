@@ -16,7 +16,6 @@ ajax::validate_sid();
 ajax::validate_lock(true);
 
 // hent forumtråd
-essentials::load_module("forum");
 $topic = new \Kofradia\Forum\TopicAjax(postval("topic_id"));
 
 // hent forumsvaret

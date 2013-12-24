@@ -58,9 +58,6 @@ if ($topic['ft_deleted'] != 0 && !access::has("forum_mod"))
 	ajax::text("ERROR:404-TOPIC", ajax::TYPE_INVALID);
 }
 
-// hent inn forum modulen
-essentials::load_module("forum");
-
 // kontroller tilgang til forumet
 $forum = new \Kofradia\Forum\CategoryAjax($topic['ft_fse_id']);
 $forum->require_access();

@@ -34,7 +34,6 @@ class page_forum_topic
 		}
 		
 		// hent forumtråd
-		essentials::load_module("forum");
 		$this->topic = new \Kofradia\Forum\Topic(getval("id"));
 		$this->fmod = $this->topic->forum->fmod;
 		

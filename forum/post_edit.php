@@ -5,9 +5,6 @@ global $_base, $__server;
 
 access::no_guest();
 
-// hent inn forum modulen
-essentials::load_module("forum");
-
 // hva skal redigeres?
 $edit_type = getval("type");
 

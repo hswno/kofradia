@@ -24,7 +24,6 @@ if (!isset($_POST['topic_id']))
 }
 
 // hent forumtråd
-essentials::load_module("forum");
 $topic = new \Kofradia\Forum\TopicAjax($_POST['topic_id']);
 
 // forsøk å legg til forumsvaret

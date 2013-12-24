@@ -20,9 +20,6 @@ ajax::validate_lock(true);
 
 global $_base, $_game;
 
-// hent forum modulen
-essentials::load_module("forum");
-
 // kontroller forumkategori og tilgang
 $forum = new \Kofradia\Forum\CategoryAjax(postval("forum_id"));
 $forum->require_access();

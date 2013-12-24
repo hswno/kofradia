@@ -29,9 +29,6 @@ if (empty($text)) $text = "Mangler innhold.";
 // forhåndsviser vi et redigert forumsvar?
 if (isset($_POST['reply_id']))
 {
-	// hent forum modulen
-	essentials::load_module("forum");
-	
 	// hent forumtråden og forumsvaret
 	$topic = new \Kofradia\Forum\TopicAjax($_POST['topic_id']);
 	$reply = $topic->get_reply($_POST['reply_id']);
