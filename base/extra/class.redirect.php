@@ -44,7 +44,8 @@ class redirect
 			
 			else
 			{
-				$location = PHP_SELF;
+				$location = $_SERVER['REQUEST_URI'];
+				//$location = PHP_SELF;
 				$from = self::SERVER;
 			}
 		}
