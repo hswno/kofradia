@@ -13,8 +13,8 @@ class Polls extends \Kofradia\Controller {
 		
 		// hent avstemningene
 		$pagei = new \pagei(\pagei::PER_PAGE, 10, \pagei::ACTIVE_GET, "side");
-		if (isset($pages[1])) $pagei->__construct(\pagei::ACTIVE, intval($pages[1]));
-		$polls = Poll::getPolls($pagei, \login::$user);
+		$pagei->__construct(\pagei::ACTIVE, intval($page));
+		$polls = Poll::getPolls($pagei, \login::$logged_in ? \login::$user : null);
 
 		return View::forge("polls/poll_list", array(
 			"polls" => $polls,
