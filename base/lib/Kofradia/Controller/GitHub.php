@@ -20,6 +20,7 @@ class GitHub extends \Kofradia\Controller
 
 	private function info($title, $text) {
 		putlog("CREWCHAN", "%bGitHub - $title%b: $text");
+		putlog("INFO", "%bGitHub - $title%b: $text");
 	}
 
 	private function get_action($action, $actions) {
