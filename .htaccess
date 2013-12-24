@@ -11,7 +11,6 @@ RewriteCond %{HTTP_HOST} !^localhost$ [NC]
 RewriteRule ^(.*)$ https://kofradia.no/$1 [R,L]
 
 # Egendefinerte adresser
-RewriteRule ^polls($|/) /dynamic.php [L]
 RewriteRule ^p/([0-9a-zA-Z\-_\ ]+)$ /profil.php?name=$1 [QSA,L]
 RewriteRule ^p/([0-9a-zA-Z\-_\ ]+)/([0-9]+)$ /profil.php?name=$1&id=$2 [QSA,L]
 RewriteRule ^blog($|/)(.*)$ http://kofradia.no/blogg/$2 [R=301,L]

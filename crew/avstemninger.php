@@ -3,7 +3,11 @@
 // krev at dette scriptet hentes av dynamic.php
 if (!defined("BASE_LOADED")) die("No direct access.");
 
-global $__server, $pages, $_base; // $pages har data fra [2] og ut
+$pages = explode("/", ltrim($pathinfo, "/"));
+array_unshift($pages, "");
+array_unshift($pages, "");
+
+global $__server, $_base; // $pages har data fra [2] og ut
 
 // administrere avstemninger for crewet
 access::need("forum_mod");
