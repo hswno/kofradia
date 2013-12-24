@@ -63,6 +63,10 @@ RewriteCond %{HTTP_HOST} ^www.streetzmafia.net$ [NC,OR]
 RewriteCond %{HTTP_HOST} ^kofradia.no$ [NC]
 RewriteRule /crew/trac_rss(.php)? /crewstuff/trac_rss.php [R,L]
 
+# Send 404 til hovedscriptet
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ route.php [L]
 
 Options All -Indexes
 DirectoryIndex index.php index.html

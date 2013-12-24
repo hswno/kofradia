@@ -469,8 +469,36 @@ legend { color: #FFFFFF; background-color: #222222; padding: 3px 5px; border: 3p
 		
 		die;
 	}
-}
 
+	/**
+	 * Håndter routes
+	 */
+	public function handle_route()
+	{
+		$url = ltrim($_SERVER['REQUEST_URI'], "/");
+		if (($pos = mb_strpos($url, "?")) !== false) $url = mb_substr($url, 0, $pos);
+
+		$routes = require BASEPATH . "/routes.php";
+		if (!isset($routes[$url]))
+		{
+			page_not_found();
+			die;
+		}
+
+		// route syntax: controllername@methodname
+		// controllername can be subnamespaced (e.g. My\Thing => \Kofradia\Controller\My\Thing)
+		$route = $routes[$url];
+
+		$pos = strpos($route, "@");
+		$classname = "\\Kofradia\\Controller\\".substr($route, 0, $pos);
+		$method = "action_".substr($route, $pos+1);
+
+		$class = new ReflectionClass($classname);
+
+		$class->getMethod($method)->invoke($class->newInstance());
+		#ess::$b->page->load();
+	}
+}
 
 /**
  * Utvidelse av DateTime objektet
