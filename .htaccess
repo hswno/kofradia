@@ -61,7 +61,6 @@ RewriteRule /crew/wikichanges.php /crewstuff/wikichanges.php [R,L]
 
 RewriteCond %{HTTP_HOST} ^www.streetzmafia.net$ [NC,OR]
 RewriteCond %{HTTP_HOST} ^kofradia.no$ [NC]
-RewriteRule /crew/trac_rss(.php)? /crewstuff/trac_rss.php [R,L]
 
 # Send 404 til hovedscriptet
 RewriteCond %{REQUEST_FILENAME} !-f

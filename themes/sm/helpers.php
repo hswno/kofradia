@@ -162,7 +162,7 @@ html, body {
 		<div id="node_crewm">
 			<p class="first">
 				<a href="'.ess::$s['relative_path'].'/crew/">Crew</a> (<a href="https://kofradia.no/crewstuff/" target="_blank">Stuff</a>)<br />
-				<a href="https://kofradia.no/crewstuff/trac/" target="_blank">Trac</a><br />
+				<a href="https://github.com/hswno/kofradia/pulse" target="_blank">GitHub</a><br />
 				<a href="'.ess::$s['relative_path'].'/crew/htpass">HT-pass</a>
 			</p>';
 					
@@ -170,7 +170,6 @@ html, body {
 			<p>
 				<a href="'.ess::$s['relative_path'].'/forum/forum?id=5">Crewforum</a> (<a href="'.ess::$s['relative_path'].'/forum/forum?id=6">arkiv</a>)<br />
 				<a href="'.ess::$s['relative_path'].'/forum/forum?id=7">Idémyldringsforum</a><br />
-				<a href="'.ess::$s['relative_path'].'/crew/trac_rss">Trac hendelser</a>
 			</p>';
 					
 					foreach (self::get_extended_access_boxes() as $box)

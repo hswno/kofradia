@@ -36,7 +36,7 @@ if (login::$logged_in)
 <div id="doc_crewm">
 	<p class="first">
 		<a href="'.$__server['relative_path'].'/crew/">Crew</a> (<a href="https://kofradia.no/crewstuff/" target="_blank">Stuff</a>)<br />
-		<a href="https://kofradia.no/crewstuff/trac/" target="_blank">Trac</a><br />
+		<a href="https://github.com/hswno/kofradia/pulse" target="_blank">GitHub</a><br />
 		<a href="'.$__server['relative_path'].'/crew/htpass">HT-pass</a>
 	</p>';
 			
@@ -44,7 +44,6 @@ if (login::$logged_in)
 	<p>
 		<a href="'.$__server['relative_path'].'/forum/forum?id=5">Crewforum</a> (<a href="'.$__server['relative_path'].'/forum/forum?id=6">arkiv</a>)<br />
 		<a href="'.$__server['relative_path'].'/forum/forum?id=7">Idémyldringsforum</a><br />
-		<a href="'.$__server['relative_path'].'/crew/trac_rss">Trac hendelser</a>
 	</p>';
 			
 			foreach (theme_helper::get_extended_access_boxes() as $box)
