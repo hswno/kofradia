@@ -11,6 +11,8 @@ if (!login::$logged_in)
 	ess::$b->page->load();
 }
 
+require "helpers.php";
+
 class theme_sm_default
 {
 	protected static $locked = false;
@@ -71,7 +73,7 @@ class theme_sm_default
 		<div id="default_header_img"></div>
 		<div id="default_header">';
 		
-		$boxes = self::get_extended_access_boxes();
+		$boxes = theme_helper::get_extended_access_boxes();
 		if ($boxes)
 		{
 			echo '
@@ -543,80 +545,6 @@ class theme_sm_default
 </div>';
 		
 		ess::$b->page->add_content_right($content, 1);
-	}
-	
-	protected static function get_extended_access_boxes()
-	{
-		if (!isset(login::$extended_access)) return;
-		if (!login::extended_access_is_authed()) return;
-		
-		$boxes = array();
-		
-		// support meldinger
-		if (access::has("crewet"))
-		{
-			$row = tasks::get("support");
-			if ($row['t_ant'] > 0)
-			{
-				$boxes[] = array(
-					ess::$s['relative_path'].'/support/?a=panel&amp;kategori=oppsummering',
-					'Det er <b>'.$row['t_ant'].'</b> '.fword("ubesvart supportmelding", "ubesvarte supportmeldinger", $row['t_ant']).'!');
-			}
-		}
-		
-		// hent antall nye rapporteringer fra cache
-		$row = tasks::get("rapporteringer");
-		if ($row['t_ant'] > 0)
-		{
-			$boxes[] = array(
-				ess::$s['relative_path'].'/crew/rapportering',
-				'Det er <b>'.$row['t_ant'].'</b> '.fword("ubehandlet rapportering", "ubehandlede rapporteringer", $row['t_ant']).'.');
-		}
-		
-		// hent antall nye søknader fra cache
-		$row = tasks::get("soknader");
-		if ($row['t_ant'] > 0)
-		{
-			$boxes[] = array(
-				ess::$s['relative_path'].'/crew/soknader',
-				'Det er <b>'.$row['t_ant'].'</b> '.fword("ubehandlet søknad", "ubehandlede søknader", $row['t_ant']).'.');
-		}
-		
-		// antall ubesvarte henvendelser
-		if (access::has("mod"))
-		{
-			// hent antall nye henvendelser fra cache
-			$row = tasks::get("henvendelser");
-			
-			if ($row['t_ant'] > 0)
-			{
-				$boxes[] = array(
-					ess::$s['relative_path'].'/henvendelser?a',
-					'Det er <b>'.$row['t_ant'].'</b> '.fword("ny henvendelse", "nye henvendelser", $row['t_ant']).' som er ubesvart.');
-			}
-		}
-		
-		// hendelser fra GitHub
-		$github = new \Kofradia\GitHub\Hendelser();
-		if (!$github->userHasActivated(login::$user))
-		{
-			$boxes[] = array(
-				ess::$s['relative_path'].'/github-catchup',
-				'Du vil nå motta nye hendelser fra GitHub her. Trykk her for å se de siste hendelsene.');
-		}
-		else
-		{
-			$num_changes = $github->getUserCodeBehind(login::$user) + $github->getUserOtherBehind(login::$user);
-			
-			if ($num_changes > 0)
-			{
-				$boxes[] = array(
-					ess::$s['relative_path'].'/github-catchup',
-					'Det er <b>'.$num_changes.'</b> ny'.($num_changes == 1 ? '' : 'e').' hendelse'.($num_changes == 1 ? '' : 'r').' i GitHub.');
-			}
-		}
-		
-		return $boxes;
 	}
 	
 	protected static function get_extended_access_links()

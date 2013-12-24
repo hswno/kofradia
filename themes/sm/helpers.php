@@ -173,79 +173,10 @@ html, body {
 				<a href="'.ess::$s['relative_path'].'/crew/trac_rss">Trac hendelser</a>
 			</p>';
 					
-					// support meldinger
-					$ant_support = game::$settings['support_ubesvart']['value'];
-					if ($ant_support > 0 && access::has("forum_mod"))
+					foreach (self::get_extended_access_boxes() as $box)
 					{
-						$extended .= '
-			<div class="link_box"><a href="'.ess::$s['relative_path'].'/support/panel">Det er <b>'.$ant_support.'</b> ubesvart'.($ant_support == 1 ? '' : 'e').' supportmelding'.($ant_support == 1 ? '' : 'er').'!</a></div>';
-					}
-					
-					
-					// antall ubesvarte henvendelser
-					if (access::has("mod"))
-					{
-						// hent antall nye henvendelser
-						$result = ess::$b->db->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0");
-						$ant = mysql_result($result, 0);
-						
-						if ($ant > 0)
-						{
-							$extended .= '
-			<div class="link_box"><a href="'.ess::$s['relative_path'].'/henvendelser?a">Det er <b>'.$ant.'</b> nye henvendelser som er ubesvart.</a></div>';
-						}
-					}
-					
-					// nye hendelser i Trac?
-					global $_trac_rss;
-					@include_once ROOT."/base/data/trac_rss.php";
-					if (isset($_trac_rss))
-					{
-						// har ikke brukeren vært innom status siden enda?
-						$last = login::$user->params->get("trac_last_changeset");
-						if (!$last)
-						{
-							$extended .= '
-			<div class="link_box"><a href="'.ess::$s['relative_path'].'/crew/trac_rss?show=changeset">Du vil nå motta nye hendelser om <b>endringer i Subversion</b> fra Trac her. Trykk her for å se de siste hendelser.</a></div>';
-						}
-						
-						// nye hendelser?
-						elseif ($last < $_trac_rss['last_changeset'])
-						{
-							// finn ut antall nye hendelser
-							$new = 0;
-							foreach ($_trac_rss['data_changeset'] as $item)
-							{
-								if ($item['time'] <= $last) break;
-								$new++;
-							}
-							
-							$extended .= '
-			<div class="link_box"><a href="'.ess::$s['relative_path'].'/crew/trac_rss?show=changeset">Det er <b>'.$new.'</b> usett'.($new == 1 ? '' : 'e').' hendelse'.($new == 1 ? '' : 'r').' i Trac (endringer i <b>Git</b>).</a></div>';
-						}
-						
-						// har ikke brukeren vært innom status siden enda?
-						$last = login::$user->params->get("trac_last_other");
-						if (!$last)
-						{
-							$extended .= '
-			<div class="link_box"><a href="'.ess::$s['relative_path'].'/crew/trac_rss?show=other">Du vil nå motta nye hendelser om <b>endringer i wikien og tickets</b> fra Trac her. Trykk her for å se siste hendelser.</a></div>';
-						}
-						
-						// nye hendelser?
-						elseif ($last < $_trac_rss['last_other'])
-						{
-							// finn ut antall nye hendelser
-							$new = 0;
-							foreach ($_trac_rss['data_other'] as $item)
-							{
-								if ($item['time'] <= $last) break;
-								$new++;
-							}
-							
-							$extended .= '
-			<div class="link_box"><a href="'.ess::$s['relative_path'].'/crew/trac_rss?show=other">Det er <b>'.$new.'</b> usett'.($new == 1 ? '' : 'e').' hendelse'.($new == 1 ? '' : 'r').' i Trac.</a></div>';
-						}
+						echo '
+			<div class="link_box"><a href="'.$box[0].'">'.$box[1].'</a></div>';
 					}
 					
 					$extended .= '
@@ -407,5 +338,82 @@ html, body {
 		</p>';
 		
 		return $this->get_box("&raquo; Beste ranker siste 24 timer", $data, null, "login_ranker");
+	}
+
+	/**
+	 * Hent diverse infobokser for crew
+	 */
+	public static function get_extended_access_boxes()
+	{
+		if (!isset(login::$extended_access)) return;
+		if (!login::extended_access_is_authed()) return;
+		
+		$boxes = array();
+		
+		// support meldinger
+		if (access::has("crewet"))
+		{
+			$row = tasks::get("support");
+			if ($row['t_ant'] > 0)
+			{
+				$boxes[] = array(
+					ess::$s['relative_path'].'/support/?a=panel&amp;kategori=oppsummering',
+					'Det er <b>'.$row['t_ant'].'</b> '.fword("ubesvart supportmelding", "ubesvarte supportmeldinger", $row['t_ant']).'!');
+			}
+		}
+		
+		// hent antall nye rapporteringer fra cache
+		$row = tasks::get("rapporteringer");
+		if ($row['t_ant'] > 0)
+		{
+			$boxes[] = array(
+				ess::$s['relative_path'].'/crew/rapportering',
+				'Det er <b>'.$row['t_ant'].'</b> '.fword("ubehandlet rapportering", "ubehandlede rapporteringer", $row['t_ant']).'.');
+		}
+		
+		// hent antall nye søknader fra cache
+		$row = tasks::get("soknader");
+		if ($row['t_ant'] > 0)
+		{
+			$boxes[] = array(
+				ess::$s['relative_path'].'/crew/soknader',
+				'Det er <b>'.$row['t_ant'].'</b> '.fword("ubehandlet søknad", "ubehandlede søknader", $row['t_ant']).'.');
+		}
+		
+		// antall ubesvarte henvendelser
+		if (access::has("mod"))
+		{
+			// hent antall nye henvendelser fra cache
+			$row = tasks::get("henvendelser");
+			
+			if ($row['t_ant'] > 0)
+			{
+				$boxes[] = array(
+					ess::$s['relative_path'].'/henvendelser?a',
+					'Det er <b>'.$row['t_ant'].'</b> '.fword("ny henvendelse", "nye henvendelser", $row['t_ant']).' som er ubesvart.');
+			}
+		}
+		
+		// hendelser fra GitHub
+		$github = new \Kofradia\GitHub\Hendelser();
+		if (!$github->userHasActivated(login::$user))
+		{
+			$boxes[] = array(
+				ess::$s['relative_path'].'/github-catchup',
+				'Du vil nå motta nye hendelser fra GitHub her. Trykk her for å se de siste hendelsene.');
+		}
+		else
+		{
+			$num_changes = $github->getUserCodeBehind(login::$user) + $github->getUserOtherBehind(login::$user);
+			
+			if ($num_changes > 0)
+			{
+				$boxes[] = array(
+					ess::$s['relative_path'].'/github-catchup',
+					'Det er <b>'.$num_changes.'</b> ny'.($num_changes == 1 ? '' : 'e').' hendelse'.($num_changes == 1 ? '' : 'r').' i GitHub.');
+			}
+		}
+		
+		return $boxes;
 	}
 }
