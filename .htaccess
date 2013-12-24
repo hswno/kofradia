@@ -59,9 +59,6 @@ RewriteCond %{HTTP_HOST} ^www.streetzmafia.net$ [NC,OR]
 RewriteCond %{HTTP_HOST} ^kofradia.no$ [NC]
 RewriteRule /crew/wikichanges.php /crewstuff/wikichanges.php [R,L]
 
-RewriteCond %{HTTP_HOST} ^www.streetzmafia.net$ [NC,OR]
-RewriteCond %{HTTP_HOST} ^kofradia.no$ [NC]
-
 # Send 404 til hovedscriptet
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
