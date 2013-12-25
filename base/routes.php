@@ -27,6 +27,7 @@ return array(
 	"betingelser"  => "Misc@betingelser",
 	"credits"      => "Misc@credits",
 	"donasjon"     => "Donations@index",
+	"min_side"     => "MinSide@index",
 
 	"ranklist"     => "Game\\Ranklist@index",
 );
