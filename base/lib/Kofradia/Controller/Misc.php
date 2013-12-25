@@ -14,7 +14,7 @@ class Misc extends \Kofradia\Controller {
 		// tar seg også av eventuell nødvendig reauth ved ukjent IP
 		if (!$this->user)
 		{
-			new page_logginn();
+			new \page_logginn();
 			return;
 		}
 
