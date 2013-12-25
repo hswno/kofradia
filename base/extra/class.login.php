@@ -142,6 +142,7 @@ class login
 			$secure = $_COOKIE[$__server['cookie_prefix'] . "s"];
 			if ($secure == 1)
 			{
+				defined("LOGIN_FORCE_SSL") || define("LOGIN_FORCE_SSL", true);
 				force_https();
 			}
 			
@@ -285,6 +286,7 @@ class login
 						$cookie_expire = self::$info['ses_expire_type'] == LOGIN_TYPE_BROWSER ? 0 : time()+31536000;
 						setcookie($__server['cookie_prefix'] . "s", 1, $cookie_expire, $__server['cookie_path'], $__server['cookie_domain']);
 						
+						defined("LOGIN_FORCE_SSL") || define("LOGIN_FORCE_SSL", true);
 						force_https();
 					}
 					
@@ -299,6 +301,7 @@ class login
 						$_base->db->query("UPDATE sessions SET ses_secure = 1 WHERE ses_id = $sid"); 
 						
 						// krev https
+						defined("LOGIN_FORCE_SSL") || define("LOGIN_FORCE_SSL", true);
 						force_https();
 						self::$info['ses_secure'] = true;
 					}
