@@ -4,6 +4,6 @@ class Angrep extends \Kofradia\Controller\Game {
 	public function action_index()
 	{
 		$this->needUser();
-		new \page_angrip(login::$user->player);
+		new \page_angrip($this->user->player);
 	}
 }
