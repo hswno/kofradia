@@ -42,7 +42,7 @@ RewriteRule ^x$ /scripts/extra.php [r,nc]
 RewriteRule ^p\|(.+)$ /profil.php?name=$1 [r,nc]
 
 #RewriteRule ^(.+/)?$ /$1index.php [R,NC]
-RewriteRule ^(.+/)?index.php$ /$1 [R=301,NC,NE]
+RewriteRule ^(.+/)?index.php$ /$1 [R=301,NC,NE,L]
 
 # Fjerne .php extension
 RewriteCond %{REQUEST_FILENAME} !-f
