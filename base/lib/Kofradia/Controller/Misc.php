@@ -6,6 +6,11 @@ use \Kofradia\Donation;
 
 class Misc extends \Kofradia\Controller {
 	/**
+	 * Ikke styr ssl foer kontrolleren
+	 */
+	protected $ssl = null;
+
+	/**
 	 * Main page
 	 */
 	public function action_index()
@@ -14,6 +19,7 @@ class Misc extends \Kofradia\Controller {
 		// tar seg også av eventuell nødvendig reauth ved ukjent IP
 		if (!$this->user)
 		{
+			force_https();
 			new \page_logginn();
 			return;
 		}
