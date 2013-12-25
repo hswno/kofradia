@@ -61,7 +61,7 @@ RewriteRule /crew/wikichanges.php /crewstuff/wikichanges.php [R,L]
 # Send 404 til hovedscriptet
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ route.php [L]
+RewriteRule ^(.*)$ index.php [L]
 
 Options All -Indexes
 DirectoryIndex index.php index.html

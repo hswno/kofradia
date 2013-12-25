@@ -1,26 +1,10 @@
 <?php
 
-class page_credits
-{
-	/**
-	 * Construct
-	 */
-	public function __construct()
-	{
-		ess::$b->page->add_title("Takk til");
-		
-		$this->show();
-		
-		ess::$b->page->load();
-	}
-	
-	/**
-	 * Vis siden
-	 */
-	protected function show()
-	{
-		// css
-		ess::$b->page->add_css('
+// data:
+// array(\Kofradia\Donasjon, ..) $donations
+
+// css
+\ess::$b->page->add_css('
 .credits_wrap {
 	padding: 0 9px;
 }
@@ -37,8 +21,8 @@ class page_credits
 }
 .credits_g_left { float: left; width: 39% }
 .credits_g_right { float: right; width: 39% }');
-		
-		echo '
+
+?>
 <h1>Takk til</h1>
 <p>Vi ønsker å takke alle personer som har hjulpet Kofradia på en eller flere måter. Uten dem hadde ikke Kofradia vært det det er i dag, og vi setter virkelig pris på hjelpen de har bidratt med. Nedenfor er noen av de vi ønsker å takke spesielt:</p>
 
@@ -130,43 +114,44 @@ class page_credits
 			<p class="h_right"><a href="donasjon">Doner &raquo;</a></p>
 			<p>Donasjoner er det som hjelper å holde balanse i økonomien til spillet. Vi har en del utgifter, men ingen inntekter, og derfor setter vi stor pris på de som ønsker å donere penger til oss.</p>
 			<div class="section">
-				<h3>Siste donasjoner</h3>';
-		
-		// hent donasjonene
-		$result = ess::$b->db->query("SELECT d_up_id, d_time FROM donations ORDER BY d_time DESC LIMIT 15");
-		if (mysql_num_rows($result) == 0)
-		{
-			echo '
+				<h3>Siste donasjoner</h3>
+
+<?php
+
+if (!$donations)
+{
+	echo '
 				<p>Ingen donasjoner.</p>';
-		}
-		
-		else
-		{
-			echo '
+}
+
+else
+{
+	echo '
 				<dl class="dd_right">';
-			
-			while ($row = mysql_fetch_assoc($result))
-			{
-				$user = $row['d_up_id'] ? '<user id="'.$row['d_up_id'].'" />' : 'Anonym';
-				echo '
-					<dt>'.$user.'</dt>
-					<dd>'.ess::$b->date->get($row['d_time'])->format(date::FORMAT_NOTIME).'</dd>';
-			}
-			
-			echo '
-				</dl>';
-		}
-		
+
+	foreach ($donations as $donation)
+	{
+		$up_id = $donation->getPlayerID();
+		$user = $up_id ? '<user id="'.$up_id.'" />' : 'Anonym';
+
 		echo '
+					<dt>'.$user.'</dt>
+					<dd>'.\ess::$b->date->get($donation->getTime())->format(date::FORMAT_NOTIME).'</dd>';
+	}
+
+	echo '
+				</dl>';
+}
+
+?>
+
 			</div>
 			<p><a href="donasjon?vis">Vis full oversikt &raquo;</a></p>
 		</div>
 		<div class="section">
 			<h2>Annet</h2>
 			<p>Mange av ikonene våre er hentet fra ikon-pakken til <a href="http://famfamfam.com/lab/icons/silk/">famfamfam.com</a>:</p>
-			<p class="c"><a href="http://famfamfam.com/lab/icons/silk/"><img src="'.STATIC_LINK.'/icon/famfamfam.png" alt="Ikoner fra famfamfam.com" /></a></p>
+			<p class="c"><a href="http://famfamfam.com/lab/icons/silk/"><img src="<?php echo STATIC_LINK; ?>/icon/famfamfam.png" alt="Ikoner fra famfamfam.com" /></a></p>
 		</div>
 	</div>
-</div>';
-	}
-}
+</div>
