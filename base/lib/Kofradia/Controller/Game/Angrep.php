@@ -1,6 +1,6 @@
 <?php namespace Kofradia\Controller\Game;
 
-class Angrip extends \Kofradia\Controller\Game {
+class Angrep extends \Kofradia\Controller\Game {
 	public function action_index()
 	{
 		$this->needUser();
