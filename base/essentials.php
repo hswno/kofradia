@@ -475,48 +475,8 @@ legend { color: #FFFFFF; background-color: #222222; padding: 3px 5px; border: 3p
 	 */
 	public function handle_route()
 	{
-		$url = ltrim($_SERVER['REQUEST_URI'], "/");
-		if (($pos = mb_strpos($url, "?")) !== false) $url = mb_substr($url, 0, $pos);
-
-		$routes = require BASEPATH . "/routes.php";
-		$controller = null;
-		$arguments = array();
-		if (!isset($routes[$url]))
-		{
-			// try some regex
-			$match = false;
-			foreach ($routes as $check => $controller)
-			{
-				$check = sprintf('~^%s$~i', $check);
-				if ($match = preg_match($check, $url, $matches))
-				{
-					$arguments = $matches;
-					array_shift($arguments);
-					break;
-				}
-			}
-
-			if (!$match)
-			{
-				page_not_found();
-				die;
-			}
-		}
-		else
-		{
-			// route syntax: controllername@methodname
-			// controllername can be subnamespaced (e.g. My\Thing => \Kofradia\Controller\My\Thing)
-			$controller = $routes[$url];
-		}
-
-		$pos = strpos($controller, "@");
-		$classname = "\\Kofradia\\Controller\\".substr($controller, 0, $pos);
-		$method = "action_".substr($controller, $pos+1);
-
-		$class = new ReflectionClass($classname);
-
-		echo $class->getMethod($method)->invokeArgs($class->newInstance(), $arguments);
-		ess::$b->page->load();
+		$route = \Kofradia\Route::getRoute();
+		$route->process();
 	}
 }
 
