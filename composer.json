@@ -1,0 +1,13 @@
+{
+	"name": "kofradia/kofradia",
+	"description": "Kofradia - Kampen om broderskapet",
+	"keywords": ["Kofradia", "Henrik Steen Webutvikling"],
+	"require": {
+
+	},
+	"autoload": {
+		"psr-0": {
+			"Kofradia\\": "app/src"
+		}
+	}
+}

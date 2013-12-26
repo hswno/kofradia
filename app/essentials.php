@@ -265,46 +265,7 @@ class essentials
 				require $old_file;
 				return;
 			}
-
-			// check for PSR-0 compliance
-			if (static::load_module_check_folder(PATH_APP."/src/", $name))
-			{
-				return;
-			}
-
-			throw new Exception("Fant ikke modulen $name.");
 		}
-	}
-
-	/**
-	 * Sjekk for kodefil i en mappe med utgangspunkt i PSR-0
-	 *
-	 * @param string $folder folder to search
-	 * @param string $name full string for namespace+class
-	 * @return boolean true hvis kodefilen ble funnet og lastet inn
-	 */
-	private static function load_module_check_folder($folder, $name)
-	{
-		// each namespace have their own folder
-		// classname (not namespace) with _ transforms to subdirectory
-
-		$name = ltrim($name, "\\");
-		$path = "";
-		
-		if ($lastPos = strrpos($name, "\\"))
-		{
-			$path = substr($name, 0, $lastPos+1);
-			$name = substr($name, $lastPos+1);
-			$path = str_replace("\\", DIRECTORY_SEPARATOR, $path);
-		}
-
-		$path = rtrim($folder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $path . str_replace("_", DIRECTORY_SEPARATOR, $name) . ".php";
-		if (is_readable($path))
-		{
-			return require $path;
-		}
-
-		return false;
 	}
 	
 	/** Sjekk lock status */

@@ -9,3 +9,4 @@ app/inc.innstillinger_local.php
 app/gamelogs
 *.swp
 error_log
+/vendor

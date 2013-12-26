@@ -2,6 +2,7 @@
 
 // sett autoloader
 spl_autoload_register(array("essentials", "load_module"));
+require PATH_ROOT."/vendor/autoload.php";
 
 /**
  * Dumpe en verdi
