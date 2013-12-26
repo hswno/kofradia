@@ -291,7 +291,7 @@ class login
 					}
 					
 					// skal være tvunget til https?
-					if ($__server['https_support'] && !self::$info['ses_secure'] && ((self::$info['u_access_level'] != 0 && self::$info['u_access_level'] != 1) || self::$info['u_force_ssl'] != 0))
+					if ($__server['https_support'] && !self::$info['ses_secure'] && ((self::$info['u_access_level'] != 0 && self::$info['u_access_level'] != 1) || self::$info['u_force_ssl'] != 0 || defined("FORCE_HTTPS_ALWAYS")))
 					{
 						// endre secure cookie
 						$cookie_expire = self::$info['ses_expire_type'] == LOGIN_TYPE_BROWSER ? 0 : time()+31536000;
@@ -654,7 +654,7 @@ class login
 		$timeout = 900;
 		
 		// secure only
-		$secure_only = $__server['https_support'] && ($secure_only || ($user['u_access_level'] != 1 && $user['u_access_level'] != 0) || $user['u_force_ssl'] != 0);
+		$secure_only = $__server['https_support'] && ($secure_only || ($user['u_access_level'] != 1 && $user['u_access_level'] != 0) || $user['u_force_ssl'] != 0 || defined("FORCE_HTTPS_ALWAYS"));
 		
 		$expire_type = (int) $expire_type;
 		$expire = $expire_type == LOGIN_TYPE_BROWSER ? time()+60*60*48 : ($expire_type == LOGIN_TYPE_TIMEOUT ? time()+$timeout : time()+31536000);
@@ -947,5 +947,13 @@ class login
 		$t = $date->format("U") - $date->format("i")*60 - $date->format("s");
 		
 		return $t;
+	}
+
+	/**
+	 * Krever vi SSL for visninger?
+	 */
+	public static function is_force_https()
+	{
+		return HTTPS && (defined("FORCE_HTTPS_ALWAYS") || (login::$logged_in && login::$info['ses_secure']));
 	}
 }

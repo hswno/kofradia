@@ -43,7 +43,7 @@ if (!ess::$b->page->js_disable)
 <script src="'.ess::$s['relative_path'].'/js/default.js?update='.@filemtime(dirname(dirname(dirname("js/default.js")))).'" type="text/javascript"></script>';
 	
 	ess::$b->page->add_js('var serverTime='.(round(microtime(true)+ess::$b->date->timezone->getOffset(ess::$b->date->get()), 3)*1000).',relative_path='.js_encode(ess::$s['relative_path']).',static_link='.js_encode(STATIC_LINK).',imgs_http='.js_encode(IMGS_HTTP).',pcookie='.js_encode(ess::$s['cookie_prefix']).';');
-	if (login::$logged_in) ess::$b->page->add_js('var pm_new='.login::$user->data['u_inbox_new'].',log_new='.(login::$user->player->data['up_log_new']+login::$user->player->data['up_log_ff_new']).',http_path='.js_encode(ess::$s['http_path']).',https_path='.js_encode(ess::$s['https_path'] ? ess::$s['https_path'] : ess::$s['http_path']).',use_https='.(HTTPS && login::$logged_in && login::$info['ses_secure'] ? "true" : "false").';');
+	if (login::$logged_in) ess::$b->page->add_js('var pm_new='.login::$user->data['u_inbox_new'].',log_new='.(login::$user->player->data['up_log_new']+login::$user->player->data['up_log_ff_new']).',http_path='.js_encode(ess::$s['http_path']).',https_path='.js_encode(ess::$s['https_path'] ? ess::$s['https_path'] : ess::$s['http_path']).',use_https='.(login::is_force_https() ? "true" : "false").';');
 	if (defined("LOCK") && LOCK) ess::$b->page->add_js('var theme_lock=true;');
 }
 

@@ -21,6 +21,8 @@ define("DISABLE_ANGREP", time() < 1276542000);
 define("DISABLE_BUY_VAP", time() < 1276542000);
 define("DISABLE_BUY_PROT", time() < 1276196400);
 
+// sett alltid https
+define("FORCE_HTTPS_ALWAYS", true); // verdien spiller ingen rolle, det sjekkes kun om den er definert
 
 // spillinnstillinger
 global $_game;

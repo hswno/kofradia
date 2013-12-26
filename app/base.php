@@ -66,7 +66,7 @@ class base
 	protected function check_ssl()
 	{
 		// kontroller https status
-		if (defined("FORCE_HTTPS"))
+		if (defined("FORCE_HTTPS") || defined("FORCE_HTTPS_ALWAYS"))
 		{
 			force_https();
 		}
