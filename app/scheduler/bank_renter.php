@@ -1,7 +1,9 @@
 <?php
 
-essentials::load_module("save_user_backup", "func");
-essentials::load_module("game");
+if (!function_exists("save_user_backup"))
+{
+	require PATH_APP . "/extra/func.save_user_backup.php";
+}
 
 putlog("INFO", "Renter! :D");
 

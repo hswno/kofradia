@@ -99,7 +99,6 @@ class page_drap extends pages_player
 		else
 		{
 			// hent alle FF hvor spilleren var medlem
-			essentials::load_module("ff");
 			$result_ff = ess::$b->db->query("
 				SELECT ffm_up_id, ffm_priority, ff_id, ff_inactive, IFNULL(ffm_ff_name, ff_name) ffm_ff_name, ff_type
 				FROM

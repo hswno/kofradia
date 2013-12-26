@@ -374,7 +374,6 @@ class page_ff_id extends pages_player
 			die("Har ingen bydel.");
 		}
 		
-		essentials::load_module("bydeler");
 		$map = new bydeler_map();
 		$map->mini_map($this->ff->data['br_id']);
 		$map->push();
@@ -492,8 +491,6 @@ class page_ff_id extends pages_player
 	 */
 	protected function stats_attack(&$stats)
 	{
-		essentials::load_module("OFC");
-		
 		// sett opp diagram for pengeflyt
 		$elm_id = $this->stats_ofc_build("attack", array(
 				array("Mislykkede angrep", "#x_label#<br>#val# mislykkede", array_values($stats['ffsd_attack_failed_num']), OFC_Colours::$colours[0]),
@@ -530,8 +527,6 @@ class page_ff_id extends pages_player
 	 */
 	protected function stats_pengeflyt(&$stats)
 	{
-		essentials::load_module("OFC");
-		
 		// sett opp diagram for pengeflyt
 		$elm_id = $this->stats_ofc_build("pengeflyt", array(
 				array("Penger inn", "#x_label#<br>#val# kr inn", array_values($stats['ffsd_money_in']), OFC_Colours::$colours[0]),

@@ -8,6 +8,10 @@
 	"autoload": {
 		"psr-0": {
 			"Kofradia\\": "app/src"
-		}
+		},
+		"classmap": [
+			"app/extra",
+			"app/pages"
+		]
 	}
 }

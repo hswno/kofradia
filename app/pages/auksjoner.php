@@ -1,6 +1,5 @@
 <?php
 
-essentials::load_module("auksjon");
 class page_auksjoner extends pages_player
 {
 	/**

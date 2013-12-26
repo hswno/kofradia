@@ -77,7 +77,6 @@ class page_ff_avis
 	protected function page_handle()
 	{
 		ess::$b->page->add_css_file(ess::$s['relative_path']."/ff/avis.css");
-		essentials::load_module("ff_avis");
 		
 		// administrasjon av artikler?
 		if (isset($_GET['a']))

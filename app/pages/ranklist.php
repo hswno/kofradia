@@ -159,7 +159,6 @@ class page_ranklist
 			LIMIT 15");
 		
 		// hent familier hvor spilleren er medlem
-		essentials::load_module("ff");
 		$result_ff = ess::$b->db->query("
 			SELECT ffm_up_id, ffm_priority, ff_id, ff_type, ff_name
 			FROM

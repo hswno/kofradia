@@ -32,7 +32,6 @@ class ajax_inbox
 		$a = $_GET['a'];
 		
 		// forsøk å hent tråden
-		essentials::load_module("inbox_thread");
 		if (!($thread = inbox_thread_ajax::get($it_id)))
 		{
 			// fant ikke tråden

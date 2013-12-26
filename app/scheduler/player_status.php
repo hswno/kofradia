@@ -77,7 +77,6 @@ while ($row = mysql_fetch_assoc($result))
 }
 
 // finn spillere som skal miste FF
-essentials::load_module("ff");
 $result = ess::$b->db->query("
 	SELECT up_id
 	FROM users_players

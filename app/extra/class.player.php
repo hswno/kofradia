@@ -285,7 +285,6 @@ class player
 			
 			// prestasjoner
 			case "achievements":
-				essentials::load_module("achievements");
 				$this->achievements = new achievements_player($this);
 				return $this->achievements;
 			break;
@@ -1086,7 +1085,6 @@ www.kofradia.no';
 		);
 		
 		// behandle FF
-		essentials::load_module("ff");
 		$result = ess::$b->db->query("
 			SELECT ff_id
 			FROM ff_members
@@ -1855,8 +1853,6 @@ www.kofradia.no';
 	{
 		// cachet?
 		if (isset($this->ff_list)) return $this->ff_list;
-		
-		essentials::load_module("ff");
 		
 		$result = ess::$b->db->query("
 			SELECT ff_id, ff_name, ff_type, ff_is_crew, ffm_status, ffm_priority

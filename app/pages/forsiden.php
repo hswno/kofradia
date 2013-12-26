@@ -413,7 +413,6 @@ class page_forsiden extends pages_player
 		}
 		
 		// hent familier hvor spilleren er medlem
-		essentials::load_module("ff");
 		$result_ff = ess::$b->db->query("
 			SELECT ffm_up_id, ffm_priority, ff_id, ff_type, ff_name
 			FROM
@@ -489,7 +488,6 @@ class page_forsiden extends pages_player
 	<p>Aktive auksjoner</p>
 	<dl class="dd_right">';
 		
-		essentials::load_module("auksjon");
 		while ($row = mysql_fetch_assoc($result))
 		{
 			$type = auksjon_type::get($row['a_type']);

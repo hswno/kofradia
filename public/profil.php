@@ -479,7 +479,6 @@ echo '
 	<div id="profile_right">';
 
 // hent FF
-essentials::load_module("ff");
 $expire = time() - 86400; // vis familier/firmaer man mistet medlemskap i siste 24 timer dersom spilleren er deaktivert
 $where = !$player->active ? " AND ffm_status = ".ff_member::STATUS_DEACTIVATED." AND (ffm_date_part IS NULL OR ffm_date_part > $expire)" : " AND ffm_status = ".ff_member::STATUS_MEMBER." AND ff_inactive = 0";
 $result = ess::$b->db->query("

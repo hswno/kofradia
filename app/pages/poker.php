@@ -1,7 +1,5 @@
 <?php
 
-essentials::load_module("poker_round");
-
 /*
  * Ulike state:
  * 1=nytt spill

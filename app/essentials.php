@@ -194,7 +194,6 @@ class essentials
 		{
 			case "db":
 				// hent inn databasemodulen
-				self::load_module("db_wrap");
 				$this->db = $this->db_debug ? new db_wrap_debug() : new db_wrap();
 				
 				// koble til databasen
@@ -216,55 +215,6 @@ class essentials
 			
 			default:
 				throw new HSException("Ukjent modul: $module");
-		}
-	}
-	
-	/**
-	 * Hent inn tilleggscript (gjerne slags moduler)
-	 * Sørger for at samme script ikke blir lastet inn flere ganger
-	 * @param string $name delvis navn på scriptet
-	 * @param string $type type script (class, func, div)
-	 */
-	public static function load_module($name, $type = "class")
-	{
-		static $loaded = array();
-		
-		// aliaser
-		$aliases = array(
-			"weapon" => "drap",
-			"protection" => "drap"
-		);
-		if (isset($aliases[$name])) $name = $aliases[$name];
-		
-		// allerede lastet inn? (for å slippe require_once)
-		if (in_array($name, $loaded)) return;
-		
-		// type må være class eller func
-		if ($type != "class" && $type != "func" && $type != "div")
-		{
-			if (isset($GLOBALS['load_module_ignore'])) return;
-			throw new HSException("Ugyldig type: $type");
-		}
-		
-		if (isset($GLOBALS['load_module_ignore']) && !file_exists(PATH_APP."/extra/".$type.".".$name.".php")) return;
-		$loaded[] = $name;
-		
-		// en side-klasse?
-		if (mb_substr($name, 0, 5) == "page_")
-		{
-			$name = mb_substr($name, 5);
-			require PATH_APP."/pages/$name.php";
-		}
-		
-		else
-		{
-			// check for old syntax
-			$old_file = PATH_APP."/extra/$type.$name.php";
-			if (is_readable($old_file))
-			{
-				require $old_file;
-				return;
-			}
 		}
 	}
 	

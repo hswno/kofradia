@@ -2138,8 +2138,6 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		}
 		unset($num);
 		
-		essentials::load_module("OFC");
-		
 		// sett opp data for rank
 		$data_rank = array(array("Tidligere medlemmer", "Tidligere medlemmer: #val# %", array_values($stats[0]), OFC_Colours::$colours[0]));
 		$i = 0;

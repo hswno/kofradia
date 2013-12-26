@@ -1,7 +1,6 @@
 <?php
 
 // sett autoloader
-spl_autoload_register(array("essentials", "load_module"));
 require PATH_ROOT."/vendor/autoload.php";
 
 /**
@@ -28,11 +27,7 @@ function sess_start($value = false)
 	}
 	
 	ess::$b->dt("sess_start_pre");
-	
-	// sett slik at __autoload behandler mulige objekt pent
-	$GLOBALS['load_module_ignore'] = true;
-	@session_start();
-	unset($GLOBALS['load_module_ignore']);
+	session_start();
 	
 	ess::$b->dt("sess_start_post");
 	return true;

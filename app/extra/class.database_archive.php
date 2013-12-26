@@ -604,7 +604,6 @@ class database_archive
 		$num = mysql_result($result, 0);
 		
 		// nullstill data for deaktiverte medlemmer
-		essentials::load_module("ff");
 		ess::$b->db->query("
 			UPDATE ff_members
 			SET ffm_donate = 0, ffm_params = NULL, ffm_forum_topics = 0, ffm_forum_replies = 0, ffm_earnings = 0, ffm_earnings_ff = 0, ffm_pay_points = NULL, ffm_log_new = 0

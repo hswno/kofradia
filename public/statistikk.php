@@ -501,8 +501,6 @@ $stats_dam = get_df_stats("up_attack_damaged_num", $ff_id_list);
 $up_ff = array();
 if (count($ff_id_list) > 0)
 {
-	essentials::load_module("ff");
-	
 	$up_list = implode(",", array_unique($ff_id_list));
 	$result_ff = ess::$b->db->query("
 		SELECT ffm_up_id, ffm_priority, ff_id, IFNULL(ffm_ff_name, ff_name) ffm_ff_name, ff_type

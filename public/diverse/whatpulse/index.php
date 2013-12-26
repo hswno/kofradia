@@ -1,8 +1,10 @@
 <?php
 
 require "../../base.php";
-essentials::load_module("whatpulse");
 global $_whatpulse, $_base;
+
+// sørg for at whatpulse-innstillingene lastes inn
+class_exists("whatpulse"); // brukes kun for autoloader
 
 access::no_guest();
 $_base->page->add_title("WhatPulse");
