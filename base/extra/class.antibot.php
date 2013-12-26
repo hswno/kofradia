@@ -102,7 +102,7 @@ class antibot
 		// oppdater anti-bot status
 		$this->update_status("redir");
 		
-		if (!$redirect) $redirect = PHP_SELF;
+		if (!$redirect) $redirect = $_SERVER['REQUEST_URI'];
 		$ret = "&ret=".urlencode($redirect);
 		redirect::handle("/antibot/sjekk?name=".urlencode($this->name).$ret, redirect::ROOT);
 	}
