@@ -30,4 +30,7 @@ return array(
 	"min_side"     => "MinSide@index",
 
 	"ranklist"     => "Game\\Ranklist@index",
+
+	// statistikk
+	"antall_online_top" => "Stats@online_top",
 );

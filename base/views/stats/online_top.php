@@ -1,34 +1,10 @@
 <?php
 
-require "base.php";
-global $_base;
+// data:
+// $sitestats
+// $sitestats_max
 
-$_base->page->add_title("Antall pålogget rekorder");
-
-// hent stats
-$result = $_base->db->query("SELECT name, extra, value, time FROM sitestats");
-$sitestats = array();
-$sitestats_max = array();
-
-while ($row = mysql_fetch_assoc($result))
-{
-	$sitestats[$row['name']][$row['extra']] = $row;
-	$sitestats[$row['name']][$row['extra']] = $row;
-	
-	if (!array_key_exists($row['name'], $sitestats_max))
-	{
-		$sitestats_max[$row['name']] = $row;
-	}
-	else
-	{
-		if ($row['value'] > $sitestats_max[$row['name']]['value'])
-		{
-			$sitestats_max[$row['name']] = $row;
-		}
-	}
-}
-
-$_base->page->add_css('
+\ess::$b->page->add_css('
 .stats_rekord tbody th, .stats_rekord tbody td {
 	text-align: right;
 }');
@@ -71,5 +47,3 @@ echo '
 		</tr>
 	</tbody>
 </table>';
-
-$_base->page->load();
