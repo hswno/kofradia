@@ -4,6 +4,8 @@
 .buildpath
 crewstuff
 test.php
-base/data/trac_rss.php
+app/data/trac_rss.php
+app/inc.innstillinger_local.php
+app/gamelogs
 *.swp
 error_log
