@@ -1,7 +1,8 @@
 #!/bin/bash
-
 # Dette scriptet genererer phpDoc som vises på
 # https://kofradia.no/docs/
+
+cd /var/www/kofradia.no/docs/
 
 # Oppdater koden
 git pull || exit
