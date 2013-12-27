@@ -20,7 +20,7 @@ do
 done
 
 cd kofradia
-composer install
+composer install --no-dev --optimize-autoloader
 cd ..
 
 lynx --dump http://kofradia.serask.vpn.hsw.no/apc_clear_cache.php
