@@ -5,6 +5,9 @@
 	"require": {
 
 	},
+	"require-dev": {
+		"phpdocumentor/phpdocumentor": "2.*"
+	},
 	"autoload": {
 		"psr-0": {
 			"Kofradia\\": "app/src"
