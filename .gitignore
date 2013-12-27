@@ -10,3 +10,5 @@ app/gamelogs
 *.swp
 error_log
 /vendor
+composer.lock
+public-docs
