@@ -16,3 +16,7 @@ Se http://getcomposer.org/doc/00-intro.md#installation-nix for info om å sette 
 
 Når Composer er satt opp må vi laste inn systemet, og må derfor kjøre install-kommandoen i rotmappa, f.eks. slik:
 ```php composer.phar install```
+
+## Dokumentasjon
+Dokumentasjon i utgangspunkt med phpDoc genereres hver natt kl 03, og ellers ved behov, og er tilgjengelig her:
+https://kofradia.no/docs/
