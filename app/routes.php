@@ -33,4 +33,11 @@ return array(
 
 	// statistikk
 	"antall_online_top" => "Stats@online_top",
+
+	// kontakter
+	"kontakter"                 => "Users\\Contacts@list",
+	"kontakter/add/([0-9]+)"    => "Users\\Contacts@add",
+	"kontakter/edit/([0-9]+)"   => "Users\\Contacts@edit",
+	"kontakter/delete"          => "Users\\Contacts@delete_many",
+	"kontakter/delete/([0-9]+)" => "Users\\Contacts@delete",
 );

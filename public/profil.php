@@ -241,15 +241,15 @@ if (login::$logged_in && $player->data['up_access_level'] != 0 && $player->data[
 {
 	// allerede kontakt?
 	if (isset(login::$info['contacts'][1][$player->id])) echo '
-	<a href="'.$__server['relative_path'].'/kontakter?del=contact&amp;id='.$player->id.'&amp;sid='.login::$info['ses_id'].'">Kontakt (-)</a>';
+	<a href="'.$__server['relative_path'].'/kontakter/delete/'.$player->id.'?sid='.login::$info['ses_id'].'">Kontakt (-)</a>';
 	else echo '
-	<a href="'.$__server['relative_path'].'/kontakter?add=contact&amp;id='.$player->id.'">Kontakt (+)</a>';
+	<a href="'.$__server['relative_path'].'/kontakter/add/'.$player->id.'">Kontakt (+)</a>';
 
 	// allerede blokkert?
 	if (isset(login::$info['contacts'][2][$player->id])) echo '
-	<a href="'.$__server['relative_path'].'/kontakter?del=block&amp;id='.$player->id.'&amp;sid='.login::$info['ses_id'].'">Blokkert (-)</a>';
+	<a href="'.$__server['relative_path'].'/kontakter/delete/'.$player->id.'?sid='.login::$info['ses_id'].'&amp;type=block">Blokkert (-)</a>';
 	else echo '
-	<a href="'.$__server['relative_path'].'/kontakter?add=block&amp;id='.$player->id.'">Blokkert (+)</a>';
+	<a href="'.$__server['relative_path'].'/kontakter/add/'.$player->id.'?type=block">Blokkert (+)</a>';
 	
 	// melding
 	echo '

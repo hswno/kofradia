@@ -1,5 +1,7 @@
 <?php
 
+use \Kofradia\Users\Contact;
+
 /**
  * Brukersystemet
  */
@@ -284,5 +286,25 @@ class user
 		ess::$b->db->commit();
 		
 		return true;
+	}
+
+	/**
+	 * Hent kontaktlisten
+	 *
+	 * @return array(\Kofradia\Users\Contact, ..)
+	 */
+	public function getContacts()
+	{
+		return Contact::getContacts($this);
+	}
+
+	/**
+	 * Oppdater tidsstempel for når kontaktlisten sist ble endret
+	 */
+	public function updateContactsTime()
+	{
+		\ess::$b->db->query("
+			UPDATE users SET u_contacts_update_time = ".time()."
+			WHERE u_id = ".$this->id);
 	}
 }

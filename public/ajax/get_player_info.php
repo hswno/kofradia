@@ -123,23 +123,23 @@ if (isset($_POST['html']))
 		if ($is_contact == 1)
 		{
 			echo '
-				<li><a href="'.$__server['relative_path'].'/kontakter?del=contact&amp;id='.$player['up_id'].'&amp;sid='.login::$info['ses_id'].'">Fjern fra kontaktlisten</a></li>';
+				<li><a href="'.$__server['relative_path'].'/kontakter/delete/'.$player['up_id'].'?sid='.login::$info['ses_id'].'">Fjern fra kontaktlisten</a></li>';
 		}
 		else
 		{
 			echo '
-				<li><a href="'.$__server['relative_path'].'/kontakter?add=contact&amp;id='.$player['up_id'].'">Legg til som kontakt</a></li>';
+				<li><a href="'.$__server['relative_path'].'/kontakter/add/'.$player['up_id'].'">Legg til som kontakt</a></li>';
 		}
 		
 		if ($is_block == 1)
 		{
 			echo '
-				<li><a href="'.$__server['relative_path'].'/kontakter?del=block&amp;id='.$player['up_id'].'&amp;sid='.login::$info['ses_id'].'">Fjern fra blokkering</a></li>';
+				<li><a href="'.$__server['relative_path'].'/kontakter/delete/'.$player['up_id'].'?sid='.login::$info['ses_id'].'">Fjern fra blokkering</a></li>';
 		}
 		else
 		{
 			echo '
-				<li><a href="'.$__server['relative_path'].'/kontakter?add=block&amp;id='.$player['up_id'].'">Blokker</a></li>';
+				<li><a href="'.$__server['relative_path'].'/kontakter/add/'.$player['up_id'].'?type=block">Blokker</a></li>';
 		}
 	}
 	
