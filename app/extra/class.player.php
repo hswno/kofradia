@@ -1163,6 +1163,14 @@ www.kofradia.no';
 		$pre = $absolute ? $__server['path'] : $__server['relative_path'];
 		return "$pre/min_side?up_id=$this->id";
 	}
+
+	/**
+	 * Redirect til profilen
+	 */
+	public function redirect_to()
+	{
+		return \redirect::handle($this->generate_profile_url(false, true), \redirect::ROOT);
+	}
 	
 	/**
 	 * Sett ned energien til spilleren
