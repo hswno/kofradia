@@ -216,7 +216,7 @@ class theme_sm_default
 		$revision = self::get_revision_info();
 		if ($revision) {
 			echo '
-		<p>Versjon <a href="https://github.com/hswno/kofradia/commit/'.$revision['commit'].'" title="'.htmlspecialchars($revision['message']).'">'.mb_substr($revision['commit'], 0, 8).'</a> oppdatert '.ess::$b->date->get($revision['date'])->format().'.</p>';
+		<p>Versjon <a href="https://github.com/hswno/kofradia/commit/'.$revision['commit'].'" title="'.htmlspecialchars($revision['message']).'">'.mb_substr($revision['commit'], 0, 8).'</a> oppdatert '.ess::$b->date->get($revision['date'])->format().'. <a href="&rpath;/github">Logg</a></p>';
 		} else {
 			echo '
 		<p>Versjonsinformasjon er utilgjengelig.</p>';
