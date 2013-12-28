@@ -1,6 +1,6 @@
 <?php namespace Kofradia\GitHub\Event;
 
-class IssueCommitEvent extends Issue {
+class IssueCommentEvent extends Issue {
 	/**
 	 * Create object from data by GitHub API
 	 *
