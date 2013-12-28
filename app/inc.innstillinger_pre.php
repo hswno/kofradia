@@ -4,6 +4,7 @@
 define("PATH_ROOT", dirname(dirname(__FILE__)));
 define("PATH_PUBLIC", PATH_ROOT."/public");
 define("PATH_APP", dirname(__FILE__));
+define("PATH_DATA", PATH_APP."/data");
 
 // IP-adresse for å hoppe over lockdown status på hovedserveren
 // regex
