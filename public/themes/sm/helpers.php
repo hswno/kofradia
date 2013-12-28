@@ -87,7 +87,7 @@ html, body {
 		google_ad_height = 600;
 		//-->
 		</script>
-		<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+		<script type="text/javascript" src="https://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 	</aside>' : '';
 		
 		$data = '<!DOCTYPE html>
@@ -107,7 +107,7 @@ html, body {
 		<h1><a href="'.ess::$s['rpath'].'/"><span>Kofradia.no - Kampen om broderskapet</span></a></h1>
 		
 		<aside id="facebook">'.($this->theme == "logginn" ? '
-			<iframe src="http://www.facebook.com/plugins/like.php?app_id=245125612176286&amp;href=http%3A%2F%2Fwww.facebook.com%2Fkofradia&amp;send=false&amp;layout=button_count&amp;width=60&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px; margin: 10px 0 13px" allowTransparency="true"></iframe>' : '
+			<iframe src="https://www.facebook.com/plugins/like.php?app_id=245125612176286&amp;href=http%3A%2F%2Fwww.facebook.com%2Fkofradia&amp;send=false&amp;layout=button_count&amp;width=60&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px; margin: 10px 0 13px" allowTransparency="true"></iframe>' : '
 			<p id="num">'.facebook::get_likes_num().'</p>').'
 			<p id="sub"><a href="http://www.facebook.com/kofradia">Støtt oss på facebook</a></p>
 		</aside>

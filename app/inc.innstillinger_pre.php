@@ -50,7 +50,7 @@ define("MAIN_SERVER", false);
 define("TEST_SERVER", false);
 
 // HTTP adresse til static filer
-define("STATIC_LINK", "http://www.kofradia.no/static");
+define("STATIC_LINK", "https://kofradia.no/static");
 #define("STATIC_LINK", "/static");
 
 

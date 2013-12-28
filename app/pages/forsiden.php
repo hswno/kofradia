@@ -270,7 +270,7 @@ class page_forsiden extends pages_player
 		
 		$data .= '
 	</ul>
-	<div style="text-align: center"><iframe src="http://www.facebook.com/plugins/like.php?app_id=245125612176286&amp;href=http%3A%2F%2Fwww.facebook.com%2Fkofradia&amp;send=false&amp;layout=button_count&amp;width=50&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px; margin: 10px auto" allowTransparency="true"></iframe></div>';
+	<div style="text-align: center"><iframe src="https://www.facebook.com/plugins/like.php?app_id=245125612176286&amp;href=http%3A%2F%2Fwww.facebook.com%2Fkofradia&amp;send=false&amp;layout=button_count&amp;width=50&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px; margin: 10px auto" allowTransparency="true"></iframe></div>';
 		
 		$this->put_box($data, "feed_data");
 	}
