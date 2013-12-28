@@ -108,7 +108,7 @@ class Hendelser {
 		$handlers = array(
 			"push"           => "Event\\PushEvent",
 			"issues"         => "Event\\IssueEvent",
-			"issue_commit"   => "Event\\IssueCommentEvent",
+			"issue_comment"   => "Event\\IssueCommentEvent",
 			"gollum"         => "Event\\WikiEvent",
 			"commit_comment" => "Event\\CommitCommentEvent",
 			//TODO: create
