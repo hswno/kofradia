@@ -20,7 +20,7 @@ trait TraitActionText {
 	 *
 	 * @return string
 	 */
-	public getActionText()
+	public function getActionText()
 	{
 		if (isset(static::$action_text[$this->action]))
 		{
