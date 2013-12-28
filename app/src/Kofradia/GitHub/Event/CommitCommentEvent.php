@@ -2,26 +2,29 @@
 
 use \Kofradia\GitHub\Event;
 
-abstract class Issue extends Event {
-	use TraitActionText;
-
+class CommitCommentEvent extends Event {
 	/**
 	 * Create object from data by GitHub API
 	 *
 	 * @param array Data from API
-	 * @return \Kofradia\GitHub\Event\IssueEvent
+	 * @return \Kofradia\GitHub\Event\CommitComment
 	 */
 	public static function process($data)
 	{
 		$event = parent::process($data);
-		$event->action = $data['action'];
 		$event->sender_name = $data['sender']['login'];
-		$event->number = $data['issue']['number'];
-		$event->title = $data['issue']['title'];
-		$event->url = $data['issue']['html_url'];
+		$event->url = $data['comment']['html_url'];
+		$event->commit_id = $data['comment']['commit_id'];
 
 		return $event;
 	}
+
+	/**
+	 * Name for this type of event
+	 *
+	 * @var string
+	 */
+	public $event_name = "commit_comment";
 
 	/**
 	 * Name of sender
@@ -31,25 +34,18 @@ abstract class Issue extends Event {
 	public $sender_name;
 
 	/**
-	 * Issue number
-	 *
-	 * @var int
-	 */
-	public $number;
-
-	/**
-	 * Issue title
-	 *
-	 * @var string
-	 */
-	public $title;
-
-	/**
 	 * Issue URL
 	 *
 	 * @var string
 	 */
 	public $url;
+
+	/**
+	 * Id for the commit
+	 *
+	 * @var string
+	 */
+	public $commit_id;
 
 	/**
 	 * Return message(s) describing event in HTML-format
@@ -58,12 +54,10 @@ abstract class Issue extends Event {
 	 */
 	public function getDescriptionHTML()
 	{
-		$text = sprintf('<u>%s</u> %s issue <a href="%s">#%d (%s)</a>',
+		$text = sprintf('<u>%s</u> la til <a href="%s">kommentar på commit %s</a>',
 			htmlspecialchars($this->sender_name),
-			htmlspecialchars($this->getActionText()),
 			htmlspecialchars($this->url),
-			htmlspecialchars($this->number),
-			htmlspecialchars($this->title));
+			htmlspecialchars(substr($this->commit_id, 10)));
 
 		return array($text);
 	}
@@ -75,11 +69,9 @@ abstract class Issue extends Event {
 	 */
 	public function getDescriptionIRC()
 	{
-		$text = sprintf("%%u%s%%u %s issue #%d (%s) %s",
+		$text = sprintf("%%u%s%%u la til kommentar på commit %s %s",
 			$this->sender_name,
-			$this->getActionText(),
-			$this->number,
-			$this->title,
+			substr($this->commit_id, 10),
 			$this->url);
 
 		return array($text);

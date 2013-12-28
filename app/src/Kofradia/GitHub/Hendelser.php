@@ -106,11 +106,11 @@ class Hendelser {
 	public static function processGitHubData($action, array $data)
 	{
 		$handlers = array(
-			"push"         => "Event\\PushEvent",
-			"issues"       => "Event\\IssueEvent",
-			"issue_commit" => "Event\\IssueCommentEvent",
-			"gollum"       => "Event\\WikiEvent"
-			//TODO: commit_comment
+			"push"           => "Event\\PushEvent",
+			"issues"         => "Event\\IssueEvent",
+			"issue_commit"   => "Event\\IssueCommentEvent",
+			"gollum"         => "Event\\WikiEvent",
+			"commit_comment" => "Event\\CommitCommitEvent",
 			//TODO: create
 			//TODO: delete
 			//TODO: pull_request
