@@ -37,7 +37,7 @@ RewriteRule ^faq$ /node [R=301]
 RewriteRule ^index$ / [NC,R=301]
 RewriteRule ^crew.php$ /crewet [NC,R=301]
 RewriteRule ^logginn.php(\?.*$|$) /$1 [N,R=301]
-RewriteRule ^([0-9]+)$ /registrer.php?r=$1 [nc]
+RewriteRule ^([0-9]+)$ /registrer?r=$1 [NC,L,R=302]
 RewriteRule ^x$ /scripts/extra.php [r,nc]
 RewriteRule ^p\|(.+)$ /profil.php?name=$1 [r,nc]
 

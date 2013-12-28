@@ -43,7 +43,7 @@ if (isset($_GET['r']))
 		
 		#ess::$b->page->add_message("Du må være registrert for å vise denne siden.", "error");
 	}
-	redirect::handle();
+	redirect::handle("/registrer", redirect::ROOT);
 }
 
 ess::$b->page->add_title("Register ny spiller");
