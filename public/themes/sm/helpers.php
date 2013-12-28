@@ -394,21 +394,21 @@ html, body {
 		}
 		
 		// hendelser fra GitHub
-		$github = new \Kofradia\GitHub\Hendelser();
-		if (!$github->userHasActivated(login::$user))
+		$github = \Kofradia\Users\GitHub::get(login::$user);
+		if (!$github->hasActivated())
 		{
 			$boxes[] = array(
-				ess::$s['relative_path'].'/github-catchup',
+				ess::$s['relative_path'].'/github',
 				'Du vil nå motta nye hendelser fra GitHub her. Trykk her for å se de siste hendelsene.');
 		}
 		else
 		{
-			$num_changes = $github->getUserCodeBehind(login::$user) + $github->getUserOtherBehind(login::$user);
+			$num_changes = $github->getCodeBehindCount() + $github->getOtherBehindCount();
 			
 			if ($num_changes > 0)
 			{
 				$boxes[] = array(
-					ess::$s['relative_path'].'/github-catchup',
+					ess::$s['relative_path'].'/github',
 					'Det er <b>'.$num_changes.'</b> ny'.($num_changes == 1 ? '' : 'e').' hendelse'.($num_changes == 1 ? '' : 'r').' i GitHub.');
 			}
 		}

@@ -3,11 +3,6 @@
 return array(
 	// index
 	""               => "Misc@index",
-
-	// GitHub-stuff
-	"github"         => "GitHub@index",
-	"github-catchup" => "GitHub@updateSeenAndGotoGitHub",
-
 	// polls
 	"polls"             => "Polls@index",
 	"polls/([0-9]+)"    => "Polls@index",
@@ -27,6 +22,7 @@ return array(
 	"betingelser"  => "Misc@betingelser",
 	"credits"      => "Misc@credits",
 	"donasjon"     => "Donations@index",
+	"github"       => "GitHub@index",
 	"min_side"     => "MinSide@index",
 
 	"ranklist"     => "Game\\Ranklist@index",

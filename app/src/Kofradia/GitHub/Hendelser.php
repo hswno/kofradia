@@ -2,38 +2,54 @@
 
 class Hendelser {
 	/**
-	 * Check if user is retrieving updates
+	 * Get events
 	 *
-	 * @return boolean
+	 * @param \pagei
+	 * @return array(\Kofradia\GitHub\Event, ..)
 	 */
-	public function userHasActivated(\user $user)
+	public static function getEvents(\pagei $pagei)
 	{
-		return !is_null($user->params->get("github_count_code")) || !is_null($user->params->get("github_count_other"));
+		$result = $pagei->query("
+			SELECT gl_id, gl_time, gl_event_type, gl_contents, gl_log_count
+			FROM github_log
+			ORDER BY gl_id DESC");
+		return static::parseResult($result);
 	}
 
 	/**
-	 * Set user to be up-to-date with changes
+	 * Get events later than specified id
+	 *
+	 * @param int The id, not inclusive
+	 * @return array(\Kofradia\GitHub\Event, ..)
 	 */
-	public function setUserUpdated(\user $user)
+	public static function getEventsSinceId($id)
 	{
-		$user->params->update("github_count_code", $this->getSetting("code"));
-		$user->params->update("github_count_other", $this->getSetting("other"), true);
+		$id = (int) $id;
+		$result = \ess::$b->db->query("
+			SELECT gl_id, gl_time, gl_event_type, gl_contents, gl_log_count
+			FROM github_log
+			WHERE gl_id > $id
+			ORDER BY gl_id DESC");
+		return static::parseResult($result);
 	}
 
 	/**
-	 * How many unseen events for code?
+	 * Parse query result
+	 *
+	 * @param mysql_result
+	 * @return array of events
 	 */
-	public function getUserCodeBehind(\user $user)
+	protected static function parseResult($result)
 	{
-		return $this->getSetting("code") - $user->params->get("github_count_code", 0);
-	}
+		$events = array();
+		while ($row = mysql_fetch_assoc($result))
+		{
+			$event = unserialize($row['gl_contents']);
+			$event->id = $row['gl_id'];
+			$events[] = $event;
+		}
 
-	/**
-	 * How many unseen events for other?
-	 */
-	public function getUserOtherBehind(\user $user)
-	{
-		return $this->getSetting("other") - $user->params->get("github_count_other", 0);
+		return $events;
 	}
 
 	/**
@@ -41,13 +57,14 @@ class Hendelser {
 	 *
 	 * @param string  Name of type (code|other)
 	 */
-	private function incSetting($name)
+	public static function incSetting($name, $inc = 1)
 	{
-		$name = \ess::$b->db->quote('github_count_'.$name);
+		$name = \ess::$b->db->quote('github_'.$name);
+		$inc = (int) $inc;
 
 		\ess::$b->db->query("
 			INSERT INTO settings SET name = $name, value = 1
-			ON DUPLICATE KEY UPDATE value = value + 1");
+			ON DUPLICATE KEY UPDATE value = value + $inc");
 
 		\Kofradia\Settings::reload();
 	}
@@ -57,24 +74,90 @@ class Hendelser {
 	 *
 	 * @return int
 	 */
-	private function getSetting($name)
+	public static function getSetting($name)
 	{
-		return (int) \Kofradia\Settings::get('github_count_'.$name, 0);
+		return (int) \Kofradia\Settings::get('github_'.$name, 0);
 	}
 
 	/**
-	 * Mark a change in code type
+	 * Add event from GitHub API to log
+	 *
+	 * @param string Name of action (e.g. push)
+	 * @param array Data from GitHub-API
+	 * @return \Kofradia\GitHub\Event
 	 */
-	public function incCodeChange()
+	public static function addEvent($action, array $data)
 	{
-		$this->incSetting('code');
+		if ($event = static::processGitHubData($action, $data))
+		{
+			$event->addLog();
+		}
+
+		return $event;
 	}
 
 	/**
-	 * Mark a change in other types
+	 * Process event from GitHub
+	 *
+	 * @param string Name of action (e.g. push)
+	 * @param array Data from GitHub-API
+	 * @return \Kofradia\GitHub\Event|null
 	 */
-	public function incOtherChange($time)
+	public static function processGitHubData($action, array $data)
 	{
-		$this->incSetting('other');
+		$handlers = array(
+			"push"         => "Event\\PushEvent",
+			"issues"       => "Event\\IssueEvent",
+			"issue_commit" => "Event\\IssueCommentEvent",
+			"gollum"       => "Event\\WikiEvent"
+			//TODO: commit_comment
+			//TODO: create
+			//TODO: delete
+			//TODO: pull_request
+			//TODO: pull_request_review_comment
+			//TODO: watch
+			//TODO: release
+			//TODO: fork
+			//TODO: member
+			//TODO: public
+			//TODO: team_add
+			//TODO: status
+		);
+
+		if (isset($handlers[$action]))
+		{
+			$handler = $handlers[$action];
+			return call_user_func(__NAMESPACE__."\\".$handler."::process", $data);
+		}
+
+		putlog("CREWCHAN", "%b%c4ukjent github event:%c%b $action");
+	}
+
+	/**
+	 * Get last id in database
+	 *
+	 * @return int
+	 */
+	public static function getLastId()
+	{
+		$result = \ess::$b->db->query("SELECT gl_id FROM github_log ORDER BY gl_id DESC LIMIT 1");
+		if ($row = mysql_fetch_assoc($result))
+		{
+			return $row['gl_id'];
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Delete old records
+	 */
+	public static function deleteOld()
+	{
+		// delete older than 30 days
+		$expire = time() - 86400 * 30;
+		\ess::$b->db->query("
+			DELETE FROM github_log
+			WHERE gl_time < $expire");
 	}
 }

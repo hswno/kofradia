@@ -17,6 +17,7 @@ class database_archive
 		self::handle_table_ff_bank_transactions();
 		self::handle_tables_inbox();
 		self::handle_tables_forum();
+		self::handle_table_github();
 	}
 	
 	/**
@@ -633,6 +634,17 @@ class database_archive
 		self::backup_table_export($table, true, true);
 		
 		putlog("NOTICE", "DATABASE ARKIVERING: FF-oppføringen med ID #$ff_id ble tatt backup av");
+	}
+
+	/**
+	 * Behandle forumet
+	 * Arkiverer tråder som ble slettet for mer enn 30 dager siden
+	 * Ikke slett fra crewforum
+	 */
+	public static function handle_table_github()
+	{
+		\Kofradia\GitHub\Hendelser::deleteOld();
+		putlog("NOTICE", "DATABASE OPPRYDDING: Slettet evt. gamle hendelser i GitHub-loggen");
 	}
 	
 	/**
