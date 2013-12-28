@@ -333,7 +333,7 @@ html, body {
 				<span class="rp_up">'.game::profile_link($player['up_id'], $player['up_name'], $player['up_access_level']).'</span><br />
 				<span class="rp_rank">'.$rank['name'].'</span>
 			</span>
-			<span class="rp_familie">'.(empty($player['ff_links']) ? '<i class="rp_no_familie">Ingen familie</i>' : implode(", ", $player['ff_links'])).'</span>
+			<span class="rp_familie">'.(empty($player['ff_links']) ? '<i class="rp_no_familie">Ingen broderskap</i>' : implode(", ", $player['ff_links'])).'</span>
 			<span class="clear"></span>
 		</p>';
 		

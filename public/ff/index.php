@@ -1899,7 +1899,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		<p>Du må ha en beskyttelse på minst 80 % for å kunne oppgradere til den neste beskyttelsen. Har du under 80 % må du først fornye den beskyttelsen du har.</p>
 		<p>Andre fordeler som gir økt beskyttelse:</p>
 		<ul class="spacer">
-			<li>Være medlem av en familie, høyere medlemskap gir økt beskyttelse</li>
+			<li>Være medlem av et broderskap, høyere medlemskap gir økt beskyttelse</li>
 			<li>Bli angrepet av en spiller med en rank annerledes enn egen, større avstand betyr svakere angrep</li>
 			<li>Oppnådd en av de 3 topp-plassering-rankene (men denne fordelen forsvinner hvis en spiller med høyere eller tilsvarende topp-plassering-rank angriper deg og blir svakere dersom angriper har lavere topp-plassering-rank)</li>
 		</ul> 
@@ -2825,7 +2825,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		{
 			echo '
 		<p>Du plasserte et broderskapmedlem i bomberom '.ess::$b->date->get($this->up->data['up_brom_ff_time'])->format().'.</p>
-		<p>Du må vente '.game::counter($familie_wait).' før du kan plassere et nytt familiemedlem i bomberom.</p>';
+		<p>Du må vente '.game::counter($familie_wait).' før du kan plassere et nytt broderskapmedlem i bomberom.</p>';
 		}
 	}
 	
