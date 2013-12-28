@@ -2,7 +2,7 @@
 
 # Dette scriptet symlinkes til ../
 # og kalles i ../ slik:
-# ./pull_all.sh
+# ./deploy.sh
 
 c=`pwd`
 if [[ "$c" != "/var/www/kofradia.no" ]]; then
@@ -31,7 +31,10 @@ done
 
 cd kofradia
 composer install --no-dev --optimize-autoloader
+
+./phinx migrate
 cd ..
+
 
 lynx --dump http://kofradia.serask.vpn.hsw.no/apc_clear_cache.php
 date
