@@ -8,8 +8,8 @@ return array(
 	),
 	"environments" => array(
 		"default_migration_table" => "phinxlog",
-		"default_database" => DBNAME,
-		"production" => array(
+		"default_database" => "configspec",
+		"configspec" => array(
 			"adapter" => "mysql",
 			"host"    => DBHOST,
 			"name"    => DBNAME,
