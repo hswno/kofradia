@@ -110,7 +110,7 @@ class Hendelser {
 			"issues"         => "Event\\IssueEvent",
 			"issue_commit"   => "Event\\IssueCommentEvent",
 			"gollum"         => "Event\\WikiEvent",
-			"commit_comment" => "Event\\CommitCommitEvent",
+			"commit_comment" => "Event\\CommitCommentEvent",
 			//TODO: create
 			//TODO: delete
 			//TODO: pull_request
