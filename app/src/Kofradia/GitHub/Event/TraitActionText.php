@@ -6,14 +6,14 @@ trait TraitActionText {
 	 *
 	 * @var array(string action => string text, ..)
 	 */
-	abstract public static $action_text;
+	public static $action_text;
 
 	/**
 	 * Name of action
 	 *
 	 * @var string
 	 */
-	abstract public $action;
+	public $action;
 
 	/**
 	 * Get description of action
