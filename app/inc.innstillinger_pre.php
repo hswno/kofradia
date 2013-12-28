@@ -13,6 +13,9 @@ define("ADMIN_IP", "/(10.8.0.6|127.0.0.1)/");
 // er HTTPS aktivert?
 define("HTTPS", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? "s" : ""));
 
+// sørg for at vi har HTTP_HOST
+if (!isset($_SERVER['HTTP_HOST'])) $_SERVER['HTTP_HOST'] = 'console';
+
 // last inn innstillinger spesifikt for serveren
 $local_settings = dirname(__FILE__) . "/inc.innstillinger_local.php";
 if (!file_exists($local_settings))

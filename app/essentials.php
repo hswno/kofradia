@@ -108,7 +108,6 @@ class essentials
 		if (!isset($_SERVER['REMOTE_ADDR'])) $_SERVER['REMOTE_ADDR'] = "127.0.0.1";
 		if (!isset($_SERVER['REQUEST_METHOD'])) $_SERVER['REQUEST_METHOD'] = "CRON";
 		if (!isset($_SERVER['REQUEST_URI'])) $_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'];
-		if (!isset($_SERVER['HTTP_HOST'])) $_SERVER['HTTP_HOST'] = "127.0.0.1";
 		if (!isset($_SERVER['HTTP_USER_AGENT'])) $_SERVER['HTTP_USER_AGENT'] = '';
 		if (!isset($_SERVER['HTTP_REFERER'])) $_SERVER['HTTP_REFERER'] = '';
 		define("PHP_SELF", $_SERVER['SCRIPT_NAME']);
