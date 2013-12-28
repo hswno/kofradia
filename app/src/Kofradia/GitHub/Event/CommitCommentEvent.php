@@ -57,7 +57,7 @@ class CommitCommentEvent extends Event {
 		$text = sprintf('<u>%s</u> la til <a href="%s">kommentar på commit %s</a>',
 			htmlspecialchars($this->sender_name),
 			htmlspecialchars($this->url),
-			htmlspecialchars(substr($this->commit_id, 10)));
+			htmlspecialchars(substr($this->commit_id, 0, 10)));
 
 		return array($text);
 	}
@@ -71,7 +71,7 @@ class CommitCommentEvent extends Event {
 	{
 		$text = sprintf("%%u%s%%u la til kommentar på commit %s %s",
 			$this->sender_name,
-			substr($this->commit_id, 10),
+			substr($this->commit_id, 0, 10),
 			$this->url);
 
 		return array($text);
