@@ -59,8 +59,8 @@ class GitHub extends \Kofradia\Controller
 		{
 			$data = sprintf("%s\nevent: %s\npayload:\n%s\n\n",
 				date("r"),
-				$this->event,
-				print_r($this->payload, true));
+				$event,
+				print_r($payload, true));
 			file_put_contents("../github.log", $data, FILE_APPEND);
 		}
 	}
