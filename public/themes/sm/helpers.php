@@ -36,7 +36,8 @@ class theme_helper
 		<p id="last">
 			<a href="https://hsw.no">Henrik Steen Webutvikling</a> - 
 			<a href="http://kofradia.no/blogg/">Blogg</a> - 
-			<a href="http://www.facebook.com/kofradia">Facebook</a>
+			<a href="http://www.facebook.com/kofradia">Facebook</a> - 
+			<a href="https://github.com/hswno/kofradia">GitHub</a>
 		</p>';
 		
 		return $data;
