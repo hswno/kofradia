@@ -6,8 +6,9 @@ RewriteRule ^a$ /addip.php [L]
 
 # sørg for korrekt adresse
 RewriteCond %{HTTP_HOST} !^kofradia.no$ [NC]
-RewriteCond %{HTTP_HOST} !.vpn.hsw.no$ [NC]
 RewriteCond %{HTTP_HOST} !^localhost$ [NC]
+RewriteCond %{HTTP_HOST} !.hsw.no$ [NC]
+RewriteCond %{HTTP_HOST} !.dev$ [NC]
 RewriteRule ^(.*)$ https://kofradia.no/$1 [R,L]
 
 # Egendefinerte adresser
