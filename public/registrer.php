@@ -6,6 +6,18 @@ require "base.php";
 global $__server;
 
 ess::$b->page->theme_file = "guest_simple";
+
+// logget inn og har vervelenke?
+if (login::$logged_in && isset($_GET['r']))
+{
+	// finn spilleren og redirect dit om mulig
+	if ($player = player::get($_GET['r']))
+	{
+		return $player->redirect_to();
+	}
+}
+
+
 access::no_user();
 
 ess::$b->page->add_css('
