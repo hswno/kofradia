@@ -11,4 +11,4 @@ git pull || exit
 composer install || exit
 
 # Kjør phpDocumentor
-php vendor/phpdocumentor/phpdocumentor/bin/phpdoc.php -d app -t public-docs
+php vendor/bin/phpdoc.php

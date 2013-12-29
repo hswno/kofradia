@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+	<title>Dokumentasjon for Kofradia</title>
+	<parser>
+		<target>public-docs</target>
+	</parser>
+	<transformer>
+		<target>public-docs</target>
+	</transformer>
+	<files>
+		<directory>app</directory>
+	</files>
+	<transformations>
+		<template name="clean" />
+	</transformations>
+</phpdoc>
