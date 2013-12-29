@@ -19,11 +19,12 @@ return array(
 	"utpressing"    => "Game\\Utpressing@index",
 
 	// diverse
-	"betingelser"  => "Misc@betingelser",
-	"credits"      => "Misc@credits",
-	"donasjon"     => "Donations@index",
-	"github"       => "GitHub@index",
-	"min_side"     => "MinSide@index",
+	"betingelser"     => "Misc@betingelser",
+	"credits"         => "Misc@credits",
+	"donasjon"        => "Donations@index",
+	"donasjon/notify" => "Donations@notify",
+	"github"          => "GitHub@index",
+	"min_side"        => "MinSide@index",
 
 	"ranklist"     => "Game\\Ranklist@index",
 

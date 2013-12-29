@@ -3,6 +3,19 @@
 // data:
 // <none>
 
+\ess::$b->page->add_js_domready('
+	var b = $("donation_public");
+	if (b)
+	{
+		b.addEvent("click", function()
+		{
+			var elm = $("donation_custom");
+			var oldval = elm.get("value");
+			elm.set("value", oldval.substring(0, oldval.length-1)+(b.get("checked") ? "1" : "0"));
+		});
+	}
+');
+
 ?>
 <div class="bg1_c small">
 	<h1 class="bg1">Donasjon<span class="left"></span><span class="right"></span></h1>
@@ -32,27 +45,25 @@
 				<div class="col">
 					<div class="section">
 						<h2>PayPal</h2>
-						<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-							<input type="hidden" name="cmd" value="_xclick" />
+						<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+							<input type="hidden" name="cmd" value="_donations" />
 							<input type="hidden" name="business" value="henrist@henrist.net" />
 							<input type="hidden" name="item_name" value="Donasjon til Kofradia" />
 							<input type="hidden" name="no_shipping" value="1" />
-							<input type="hidden" name="return" value="&rpath;/donasjon" />
-							<input type="hidden" name="cancel_return" value="&rpath;/donasjon" />
-							<!--<input type="hidden" name="no_note" value="1" />-->
+							<input type="hidden" name="return" value="&path;/donasjon" />
+							<input type="hidden" name="cancel_return" value="&path;/donasjon" />
+							<input type="hidden" name="no_note" value="1" />
 							<input type="hidden" name="currency_code" value="NOK" />
-							<input type="hidden" name="tax" value="0" />
-							<input type="hidden" name="lc" value="NO" />
-							<input type="hidden" name="bn" value="PP-DonationsBF" />
-							<input type="hidden" name="custom" value="<?php echo (login::$logged_in ? login::$info['ses_id'].':'.htmlspecialchars(login::$user->data['u_email']) : 'gjest-'.$_SERVER['REMOTE_ADDR']); ?>" /><?php echo (login::$logged_in ? '
-							<input type="hidden" name="on0" value="show_donator" />' : ''); ?>
+							<input type="hidden" name="lc" value="no_NO" />
+							<input type="hidden" name="custom" id="donation_custom" value="<?php echo (login::$logged_in ? login::$info['ses_id'].':'.login::$user->player->id : 'gjest:'.$_SERVER['REMOTE_ADDR']); ?>;public=1" />
+							<input type="hidden" name="notify_url" value="&path;/donasjon/notify" />
 							<dl class="dd_right dl_2x">
 								<dt>Beløp</dt>
 								<dd>NOK <input type="text" align="right" name="amount" size="3" value="50" class="styled w40" /></dd><?php echo (login::$logged_in ? '
-								<dt><label for="os0">Vis mitt nick ved donasjonen</label></dt>
-								<dd><input type="checkbox" name="os0" id="os0" value="1" checked="checked" /></dd>' : ''); ?>
+								<dt><label for="donation_public">Vis mitt nick ved donasjonen</label></dt>
+								<dd><input type="checkbox" id="donation_public" checked="checked" /></dd>' : ''); ?>
 							</dl>
-							<p class="c"><input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-butcc-donate.gif" border="0" name="submit" alt="Make payments with PayPal - it\'s fast, free and secure!" /></p>
+							<p class="c"><input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-butcc-donate.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!" /></p>
 						</form>
 					</div>
 				</div>
