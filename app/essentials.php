@@ -115,6 +115,7 @@ class essentials
 		// egen versjon av REDIRECT_URL (som ikke er tilgjengelig via CGI)
 		$_SERVER['REDIR_URL'] = $_SERVER['REQUEST_URI'];
 		if (($pos = mb_strpos($_SERVER['REDIR_URL'], "?")) !== false) $_SERVER['REDIR_URL'] = mb_substr($_SERVER['REDIR_URL'], 0, $pos);
+		define("ROUTE_URL", $_SERVER['REDIR_URL']);
 		
 		// hent innstillinger
 		require "inc.innstillinger_pre.php";

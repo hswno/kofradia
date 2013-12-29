@@ -170,8 +170,8 @@ class pagei
 		{
 			$rem = array($this->get_name);
 			if (is_array($page_1)) $rem = array_merge($rem, $page_1);
-			$page_1 = game::address(redirect::$location ?: PHP_SELF, $_GET, $rem);
-			$page_x = game::address(redirect::$location ?: PHP_SELF, $_GET, $rem, array($this->get_name => "_pageid_"));
+			$page_1 = game::address(redirect::$location ?: ROUTE_URL, $_GET, $rem);
+			$page_x = game::address(redirect::$location ?: ROUTE_URL, $_GET, $rem, array($this->get_name => "_pageid_"));
 		}
 		
 		// som <input> knapper?
