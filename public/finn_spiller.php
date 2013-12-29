@@ -236,7 +236,7 @@ if (isset($_REQUEST['finn']))
 	$query = "up_id, up_name, up_last_online, up_access_level, up_points, upr_rank_pos FROM users_players LEFT JOIN users_players_rank ON upr_up_id = up_id WHERE 1{$search_online[$search_online_id][1]}{$search_status[$search_status_id][1]}$search$search_ranks_query ORDER BY {$sort_info['params']}";
 	
 	$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 50);
-	$result = $pagei->query($query);
+	$result = $pagei->query($query, array_merge($user_parts[2], $text_parts[2]));
 	
 	$info = array();
 	foreach ($user_parts[1] as $part)

@@ -140,17 +140,22 @@ class pagei
 	}
 	
 	/** Utfør spørring */
-	public function query($query)
+	public function query($query, $prepared_parameters = array())
 	{
 		$query = preg_replace("/^\\s*SELECT\\s+/u", "", $query);
-		$result = \Kofradia\DB::get()->query("SELECT SQL_CALC_FOUND_ROWS $query LIMIT {$this->start}, {$this->per_page}");
+
+		$q = "SELECT SQL_CALC_FOUND_ROWS $query LIMIT {$this->start}, {$this->per_page}";
+		$result = \Kofradia\DB::get()->prepare($q);
+		$result->execute($prepared_parameters);
 		
 		// hvis vi ikke er på en gyldig side
 		if (!$this->found_rows() && $this->total > 0)
 		{
 			$this->set_active(1);
 			$this->calc();
-			$result = \Kofradia\DB::get()->query("SELECT $query LIMIT {$this->start}, {$this->per_page}");
+			
+			$result = \Kofradia\DB::get()->prepare($q);
+			$result->execute($prepared_parameters);
 		}
 		
 		return $result;

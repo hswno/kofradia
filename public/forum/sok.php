@@ -279,25 +279,27 @@ if (isset($_GET['qs']))
 		
 		$deleted = $search_deleted[$search_deleted_id][1];
 		$where = $search_where[$search_where_id];
-		
+
 		// hente tittel?
 		if ($search_title !== false)
 		{
-			\Kofradia\DB::get()->exec("
+			$p = \Kofradia\DB::get()->prepare("
 				INSERT INTO temp_results (tr_ft_id, tr_match_type)
 				SELECT ft_id, 'subject'
 				FROM forum_topics
 				WHERE 1$deleted$search_forums_query$search_from_topic_query$search_title");
+			$p->execute($title_parts[2]);
 		}
 		
 		// hente hovedinnleggene?
 		if ($where[1] && $search_text_topic !== false)
 		{
-			\Kofradia\DB::get()->exec("
+			$p = \Kofradia\DB::get()->prepare("
 				INSERT IGNORE INTO temp_results (tr_ft_id, tr_match_type)
 				SELECT ft_id, 'topic'
 				FROM forum_topics
 				WHERE 1$deleted$search_forums_query$search_from_topic_query$search_text_topic");
+			$p->execute($text_parts[2]);
 		}
 		
 		// hente svarene?
@@ -310,14 +312,15 @@ if (isset($_GET['qs']))
 					tr_fr_id INT(11) UNSIGNED NOT NULL DEFAULT 0
 				) ENGINE = MEMORY");
 			
-			\Kofradia\DB::get()->exec("
+			$p = \Kofradia\DB::get()->prepare("
 				INSERT INTO temp_results2
 				SELECT ft_id, fr_id
 				FROM
 					forum_topics,
 					forum_replies fr
 				WHERE ft_id = fr.fr_ft_id$deleted$search_forums_query$search_from_reply_query$search_text_reply");
-			
+			$p->execute($text_parts[2]);
+
 			// legg til i "funnene"
 			\Kofradia\DB::get()->exec("
 				INSERT IGNORE INTO temp_results

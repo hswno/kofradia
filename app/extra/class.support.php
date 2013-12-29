@@ -373,7 +373,7 @@ td.support_important {
 						users_players up_ref
 					WHERE up_ref.up_u_id = ".login::$user->id."{$search_from[$search_from_id][1]}{$search_by[$search_by_id][1]}$search_kat_query$search
 					GROUP BY sum_id".(count($text_parts[0]) == 0 && $search_from_id == 1 ? ", su_id" : "")."
-					ORDER BY {$sort_info['params']}");
+					ORDER BY {$sort_info['params']}", array_merge($title_parts[2], $text_parts[2]));
 				
 				$info = array();
 				foreach ($title_parts[1] as $part)

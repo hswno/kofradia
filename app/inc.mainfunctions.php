@@ -258,14 +258,22 @@ function search_query($input, $regexp = true)
 	
 	// sett opp selve sjekken
 	$parts = array();
+	$prepared = array();
 	foreach ($search as $key => $value)
 	{
-		$parts[$key] = $regexp
-			? " REGEXP '[[:<:]]" . addcslashes(preg_replace(array('/([\[\]()$.+?|{}])/', '/\*/'), array('[$1]', '.+'), mysql_real_escape_string($value)), '') . "[[:>:]]'"
-			: " LIKE '%" . strtr(mysql_real_escape_string($value), array('_' => '\\_', '%' => '\\%')) . "%'";
+		if ($regexp)
+		{
+			$parts[$key] = " REGEXP ?";
+			$prepared[$key] = "[[:<:]]" . preg_replace(array('/([\[\]()$.+?|{}])/', '/\*/'), array('[$1]', '.+'), $value) . "[[:>:]]";
+		}
+		else
+		{
+			$parts[$key] = " LIKE ?";
+			$prepared[$key] = "%" . strtr($value, array('_' => '\\_', '%' => '\\%')) . "%";
+		}
 	}
 	
-	return array($parts, $search);
+	return array($parts, $search, $prepared);
 }
 
 /**

@@ -190,7 +190,7 @@ if (isset($_POST['search']))
 				AND im_it_id= it_id{$search_from[$search_from_id][1]}
 				AND im_time <= ir_restrict_im_time
 				AND im_id = id_im_id$search
-			ORDER BY {$sort_info['params']}");
+			ORDER BY {$sort_info['params']}", array_merge($title_parts[2], $text_parts[2]));
 		
 		$info = array();
 		foreach ($title_parts[1] as $part)
