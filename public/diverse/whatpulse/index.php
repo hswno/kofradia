@@ -24,9 +24,9 @@ if (isset($_GET['up_id']) && access::has("mod"))
 }
 
 // sjekk om vi har WhatPulse registrert
-$result = $_base->db->query("SELECT sw_userid, sw_time_update, sw_xml, sw_params FROM stats_whatpulse WHERE sw_up_id = ".$player->id." FOR UPDATE");
+$result = \Kofradia\DB::get()->query("SELECT sw_userid, sw_time_update, sw_xml, sw_params FROM stats_whatpulse WHERE sw_up_id = ".$player->id." FOR UPDATE");
 
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 <h1>WhatPulse</h1>
@@ -87,7 +87,7 @@ if (mysql_num_rows($result) == 0)
 					$params->update("fields", "UserID,AccountName,GeneratedTime,DateJoined,Keys,AvKPS,Clicks,AvCPS");
 					$params_text = $params->build();
 					
-					$_base->db->query("INSERT INTO stats_whatpulse SET sw_userid = $id, sw_up_id = ".$player->id.", sw_time_add = ".time().", sw_params = ".$_base->db->quote($params_text));
+					\Kofradia\DB::get()->exec("INSERT INTO stats_whatpulse SET sw_userid = $id, sw_up_id = ".$player->id.", sw_time_add = ".time().", sw_params = ".\Kofradia\DB::quote($params_text));
 					putlog("NOTICE", "%c12%bWHATPULSE-OPPRETTELSE:%b%c (".$player->data['up_name'].") la til WhatPulse til sin profil (WPID: %u{$id}%u).");
 					
 					$_base->page->add_message("Du har nå koblet din WhatPulse konto til din konto her på Kofradia.<br />Du kan nå velge hvilke felt du ønsker å vise på profilen din.");
@@ -144,12 +144,12 @@ if (mysql_num_rows($result) == 0)
 
 else
 {
-	$wpInfo = mysql_fetch_assoc($result);
+	$wpInfo = $result->fetch();
 	
 	// fjerne fra Kofradia kontoen?
 	if (isset($_POST['wpFjern']))
 	{
-		$_base->db->query("DELETE FROM stats_whatpulse WHERE sw_up_id = ".$player->id);
+		\Kofradia\DB::get()->exec("DELETE FROM stats_whatpulse WHERE sw_up_id = ".$player->id);
 		$_base->page->add_message("WhatPulse informasjonen er nå fjernet fra din konto.");
 		putlog("NOTICE", "%c12%bWHATPULSE-FJERNING:%b%c (%u".$player->data['up_name']."%u) fjernet WhatPulse fra sin profil (WPID: %u{$wpInfo['sw_userid']}%u).");
 		redirect::handle();
@@ -221,7 +221,7 @@ else
 				$wp->params->update("fields", implode(",", $aktive));
 				$data = $wp->params->build();
 				
-				$_base->db->query("UPDATE stats_whatpulse SET sw_params = ".$_base->db->quote($data)." WHERE sw_up_id = ".$player->id);
+				\Kofradia\DB::get()->exec("UPDATE stats_whatpulse SET sw_params = ".\Kofradia\DB::quote($data)." WHERE sw_up_id = ".$player->id);
 				$_base->page->add_message("WhatPulse informasjonen ble oppdatert. Sjekk profilen din!");
 			}
 			

@@ -17,13 +17,13 @@ if (isset($_POST['up_id']))
 	if ($up_id)
 	{
 		// kontroller at brukeren finnes
-		$result = $_base->db->query("SELECT up_id, up_name, u_email, up_access_level FROM users_players, users WHERE up_id = $up_id AND up_u_id = u_id");
-		if (mysql_num_rows($result) == 0)
+		$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, u_email, up_access_level FROM users_players, users WHERE up_id = $up_id AND up_u_id = u_id");
+		if ($result->rowCount() == 0)
 		{
 			$_base->page->add_error("Fant ikke brukeren.");
 			redirect::handle();
 		}
-		$player = mysql_fetch_assoc($result);
+		$player = $result->fetch();
 	}
 	
 	// registrere donasjon?
@@ -57,7 +57,7 @@ if (isset($_POST['up_id']))
 		elseif (isset($_POST['approve']))
 		{
 			// legg til
-			$_base->db->query("INSERT INTO donations SET d_up_id = ".($up_id ? $up_id : 'NULL').", d_amount = $amount, d_time = ".$time->format("U"));
+			\Kofradia\DB::get()->exec("INSERT INTO donations SET d_up_id = ".($up_id ? $up_id : 'NULL').", d_amount = $amount, d_time = ".$time->format("U"));
 			
 			// tøm cache
 			cache::delete("donation_list");
@@ -110,12 +110,12 @@ if (isset($_POST['up_id']))
 if (isset($_POST['email']) && isset($_POST['value']))
 {
 	// finn brukere på denne e-posten
-	$result = $_base->db->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users, users_players WHERE u_email = ".$_base->db->quote($_POST['value'])." AND up_u_id = u_id ORDER BY up_last_online DESC");
+	$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users, users_players WHERE u_email = ".\Kofradia\DB::quote($_POST['value'])." AND up_u_id = u_id ORDER BY up_last_online DESC");
 	
 	echo box_start("Registrer donasjon - Søk etter bruker (e-post)", "small").'
 		<p>Søk (e-post): '.htmlspecialchars($_POST['value']).'</p>';
 	
-	if (mysql_num_rows($result) == 0)
+	if ($result->rowCount() == 0)
 	{
 		echo '
 		<p>Fant ingen brukere.</p>';
@@ -135,7 +135,7 @@ if (isset($_POST['email']) && isset($_POST['value']))
 			<tbody>';
 		
 		$i = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -157,12 +157,12 @@ if (isset($_POST['email']) && isset($_POST['value']))
 if (isset($_POST['id']) && isset($_POST['value']))
 {
 	// finn brukeren med denne iden
-	$result = $_base->db->query("SELECT up_id, up_name, u_email, up_access_level, up_last_online FROM users, users_players WHERE up_id = ".intval($_POST['value'])." AND u_id = up_u_id");
+	$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, u_email, up_access_level, up_last_online FROM users, users_players WHERE up_id = ".intval($_POST['value'])." AND u_id = up_u_id");
 	
 	echo box_start("Registrer donasjon - Søk etter bruker (id)", "small").'
 		<p>Søk (id): '.htmlspecialchars($_POST['value']).'</p>';
 	
-	if (mysql_num_rows($result) == 0)
+	if ($result->rowCount() == 0)
 	{
 		echo '
 		<p>Fant ingen brukere.</p>';
@@ -183,7 +183,7 @@ if (isset($_POST['id']) && isset($_POST['value']))
 			<tbody>';
 		
 		$i = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -205,12 +205,12 @@ if (isset($_POST['id']) && isset($_POST['value']))
 if (isset($_POST['user']) && isset($_POST['value']))
 {
 	// finn brukeren med dette spillernavnet
-	$result = $_base->db->query("SELECT up_id, up_name, u_email, up_access_level, up_last_online FROM users, users_players WHERE up_name = ".$_base->db->quote($_POST['value'])." AND up_u_id = u_id");
+	$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, u_email, up_access_level, up_last_online FROM users, users_players WHERE up_name = ".\Kofradia\DB::quote($_POST['value'])." AND up_u_id = u_id");
 	
 	echo box_start("Registrer donasjon - Søk etter spiller", "small").'
 		<p>Søk (spiller): '.htmlspecialchars($_POST['value']).'</p>';
 	
-	if (mysql_num_rows($result) == 0)
+	if ($result->rowCount() == 0)
 	{
 		echo '
 		<p>Fant ingen spillere.</p>';
@@ -231,7 +231,7 @@ if (isset($_POST['user']) && isset($_POST['value']))
 			<tbody>';
 		
 		$i = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>

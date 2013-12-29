@@ -210,8 +210,11 @@ class theme_sm_default
 		<p><a href="/">Kofradia</a> &copy; - Beskyttet av <a href="http://www.lovdata.no/all/nl-19610512-002.html" target="_blank">åndsverkloven</a> - Utviklet av <a href="http://www.henrist.net/" target="_blank">Henrik Steen</a></p>
 		<p><a href="'.ess::$s['relative_path'].'/betingelser">Betingelser for bruk</a> - Besøk <a href="irc://irc.quakenet.org/kofradia" target="_blank">#Kofradia</a> på QuakeNet<!-- <a href="'.ess::$s['relative_path'].'/forum/topic?id=85">(Hjelp)</a>--> - <a href="'.ess::$s['relative_path'].'/credits">Takk til</a></p>
 	</div>
-	<div id="default_bottom_2">
-		<p>Script: '.round(microtime(true)-SCRIPT_START-ess::$b->db->time, 4).' sek - Database: '.round(ess::$b->db->time, 4).' sek ('.ess::$b->db->queries.' spørring'.(ess::$b->db->queries == 1 ? '' : 'er').')<span id="js_time"></span></p>';
+	<div id="default_bottom_2">';
+
+		$profiler = \Kofradia\DB::getProfiler();
+		echo '
+		<p>Script: '.round(microtime(true)-SCRIPT_START-$profiler->time, 4).' sek - Database: '.round($profiler->time, 4).' sek ('.$profiler->num.' spørring'.($profiler->num == 1 ? '' : 'er').')<span id="js_time"></span></p>';
 		
 		$revision = self::get_revision_info();
 		if ($revision) {
@@ -261,21 +264,21 @@ class theme_sm_default
 			$time = time();
 			
 			// hent aktive avstemninger
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT p_id, p_title, p_text, p_ft_id, p_params, p_time_end
 				FROM polls
 				WHERE p_active != 0 AND p_time_start <= $time AND (p_time_end = 0 OR p_time_end > $time)
 				ORDER BY p_time_start DESC");
 			
 			// ingen avstemninger?
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				cache::store("polls_list", $polls, self::get_poll_cachetime());
 				cache::delete("polls_options_list");
 				return false;
 			}
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				// sjekk forum id
 				if (!$row['p_ft_id'])
@@ -290,21 +293,20 @@ class theme_sm_default
 						$title = "Avstemning: ".$row['p_title'];
 						
 						// forsøk å lag emnet først
-						ess::$b->db->begin();
-						$update = ess::$b->db->query("SELECT p_ft_id FROM polls WHERE p_id = {$row['p_id']} FOR UPDATE");
+						\Kofradia\DB::get()->beginTransaction();
+						$update = \Kofradia\DB::get()->query("SELECT p_ft_id FROM polls WHERE p_id = {$row['p_id']} FOR UPDATE");
 						
 						// fremdeles ingen emner opprettet
-						if (!mysql_result($update, 0))
+						if (!$result->rowCount())
 						{
 							// opprett
-							ess::$b->db->query("INSERT INTO forum_topics SET ft_type = 1, ft_title = ".ess::$b->db->quote($title).", ft_time = ".time().", ft_up_id = ".intval($up_id).", ft_text = ".ess::$b->db->quote($text).", ft_fse_id = 1, ft_locked = 0");
+							\Kofradia\DB::get()->exec("INSERT INTO forum_topics SET ft_type = 1, ft_title = ".\Kofradia\DB::quote($title).", ft_time = ".time().", ft_up_id = ".intval($up_id).", ft_text = ".\Kofradia\DB::quote($text).", ft_fse_id = 1, ft_locked = 0");
 							
-							// hent id
-							$id = ess::$b->db->insert_id();
+							$id = \Kofradia\DB::get()->lastInsertId();
 							$row['p_ft_id'] = $id;
 							
 							// oppdater avstemningen
-							ess::$b->db->query("UPDATE polls SET p_ft_id = $id WHERE p_id = {$row['p_id']}");
+							\Kofradia\DB::get()->exec("UPDATE polls SET p_ft_id = $id WHERE p_id = {$row['p_id']}");
 							
 							// melding på IRC
 							putlog("INFO", "%bFORUM EMNE%b: $title (%b".ess::$s['path']."/forum/topic?id=$id%b)\r\n");
@@ -312,10 +314,10 @@ class theme_sm_default
 						
 						else
 						{
-							$row['p_ft_id'] = mysql_result($update, 0);
+							$row['p_ft_id'] = $update->fetchColumn(0);
 						}
 						
-						ess::$b->db->commit();
+						\Kofradia\DB::get()->commit();
 					}
 				}
 				
@@ -341,11 +343,11 @@ class theme_sm_default
 			if (count($polls) > 0)
 			{
 				// hent alternativene
-				$result = ess::$b->db->query("
+				$result = \Kofradia\DB::get()->query("
 					SELECT po_id, po_p_id, po_text, po_votes
 					FROM polls_options
 					WHERE po_p_id IN (".implode(",", array_keys($polls)).")");
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$polls_options[$row['po_p_id']]['options'][$row['po_id']] = $row;
 					
@@ -366,11 +368,11 @@ class theme_sm_default
 		// har vi noen avstemninger å hente for?
 		if (count($polls) > 0)
 		{
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT pv_p_id, pv_po_id, pv_time
 				FROM polls_votes
 				WHERE pv_up_id = ".login::$user->player->id." AND pv_p_id IN (".implode(",", array_keys($polls)).")");
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$votes[$row['pv_p_id']] = $row;
 			}
@@ -391,14 +393,14 @@ class theme_sm_default
 		static $default_time = 3600; // 1 time standard cache tid
 		
 		$time = time();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT MIN(t) FROM (
 				SELECT MIN(p_time_end) t FROM polls WHERE p_active != 0 AND p_time_end > $time
 				UNION ALL
 				SELECT MIN(p_time_start) FROM polls WHERE p_active != 0 AND p_time_start > $time
 			) ref");
 		
-		$n = mysql_result($result, 0);
+		$n = $result->fetchColumn(0);
 		
 		// har ikke noe tidspunkt eller tid er over cache tid?
 		if (!$n || $time+$default_time <= $n)
@@ -513,9 +515,9 @@ class theme_sm_default
 		if (!$donations)
 		{
 			// lagre til cache for 10 minutter
-			$result = ess::$b->db->query("SELECT d_up_id, d_amount, d_time FROM donations ORDER BY d_time DESC LIMIT 6");
+			$result = \Kofradia\DB::get()->query("SELECT d_up_id, d_amount, d_time FROM donations ORDER BY d_time DESC LIMIT 6");
 			$donations = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$donations[] = $row;
 			}

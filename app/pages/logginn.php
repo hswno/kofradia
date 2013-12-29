@@ -74,8 +74,8 @@ class page_logginn
 					case LOGIN_ERROR_ACTIVATE:
 						global $uid;
 						// hent begrunnelse og info
-						$result = ess::$b->db->query("SELECT u_id, u_email, u_deactivated_reason, u_deactivated_time, up_name FROM users LEFT JOIN users_players ON up_id = u_active_up_id WHERE u_id = $uid");
-						$info = mysql_fetch_assoc($result);
+						$result = \Kofradia\DB::get()->query("SELECT u_id, u_email, u_deactivated_reason, u_deactivated_time, up_name FROM users LEFT JOIN users_players ON up_id = u_active_up_id WHERE u_id = $uid");
+						$info = $result->fetch();
 						$_SESSION[$GLOBALS['__server']['session_prefix'].'login_error'] = array("deactivated", $info);
 						
 						putlog("ABUSE", "%c8%bLOGG INN - DEAKTIVERT%b%c: %u{$_SERVER['REMOTE_ADDR']}%u forsøkte å logge inn på %u{$info['u_email']}%u som er en deaktivert bruker!");

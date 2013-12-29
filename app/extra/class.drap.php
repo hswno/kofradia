@@ -150,8 +150,8 @@ class protection
 		$vekt = 0;
 		
 		// sjekk for broderskapmedlemskap
-		$result = ess::$b->db->query("SELECT MIN(ffm_priority) FROM ff_members WHERE ffm_up_id = {$this->up->id} AND ffm_status = 1");
-		$pos = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT MIN(ffm_priority) FROM ff_members WHERE ffm_up_id = {$this->up->id} AND ffm_status = 1");
+		$pos = $result->fetchColumn(0);
 		if ($pos)
 		{
 			if (isset(self::$vekt_familie[$pos]))
@@ -231,7 +231,7 @@ class protection
 			if ($this->id > 1)
 			{
 				// bytt beskyttelse
-				ess::$b->db->query("UPDATE users_players SET up_protection_id = ".(--$this->id).", up_protection_state = 0.75 WHERE up_id = {$this->up->id}");
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_protection_id = ".(--$this->id).", up_protection_state = 0.75 WHERE up_id = {$this->up->id}");
 				$this->up->data['up_protection_state'] = 0.75;
 				unset($this->data);
 				$this->data = &self::$protections[$this->id];
@@ -250,7 +250,7 @@ class protection
 		// sett ny beskyttelsesvedi
 		$this->up->data['up_protection_state'] = $v;
 		$this->state = $v;
-		ess::$b->db->query("UPDATE users_players SET up_protection_state = $v WHERE up_id = {$this->up->id}");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_protection_state = $v WHERE up_id = {$this->up->id}");
 		
 		return $endring;
 	}
@@ -462,8 +462,7 @@ class weapon
 	 */
 	public function attack(player $up, $bullets)
 	{
-		$transaction_before = ess::$b->db->transaction;
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// beregn skadeprosent
 		$skade = $this->calc_damage($up, $bullets);
@@ -482,7 +481,7 @@ class weapon
 			"skadeprosent" => $skadeprosent));
 		if (!$ret)
 		{
-			if (!$transaction_before) ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			return false;
 		}
 		
@@ -507,11 +506,11 @@ class weapon
 		$m = $ret['drept'] ? 0.6 : 0.8; // faktoren med hvor mye energi man mister
 		$m *= $skadeprosent;
 		$m = 1 - $m;
-		ess::$b->db->query("UPDATE users_players SET up_energy = GREATEST(0, up_energy * $m) WHERE up_id = {$this->up->id}");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_energy = GREATEST(0, up_energy * $m) WHERE up_id = {$this->up->id}");
 		$this->up->data['up_energy'] = max(0, $this->up->data['up_energy'] * $m);
 		
 		// gjennomfør transaksjon
-		if (!$transaction_before) ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 		
 		return $ret;
 	}

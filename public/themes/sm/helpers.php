@@ -128,9 +128,11 @@ html, body {
 	<footer>'.$this->get_footer().'
 	</footer>
 	
-	<!--
-	Script: '.round(microtime(true)-SCRIPT_START-ess::$b->db->time, 4).' sek
-	Database: '.round(ess::$b->db->time, 4).' sek ('.ess::$b->db->queries.' spørring'.(ess::$b->db->queries == 1 ? '' : 'er').')
+	<!--';
+		$profiler = \Kofradia\DB::getProfiler();
+		$data .= '
+	Script: '.round(microtime(true)-SCRIPT_START-$profiler->time, 4).' sek
+	Database: '.round($profiler->time, 4).' sek ('.$profiler->num.' spørring'.($profiler->num == 1 ? '' : 'er').')
 	-->'.ess::$b->page->body_end.'
 </body>
 </html>';
@@ -227,14 +229,14 @@ html, body {
 		$limit = (int) ($limit ?: 5);
 		
 		// hent forumdata
-		$topics = ess::$b->db->query("
+		$topics = \Kofradia\DB::get()->query("
 			SELECT ft_id, ft_title, ft_time, ft_up_id, ft_fse_id, fse_name
 			FROM forum_topics
 				LEFT JOIN forum_sections ON ft_fse_id = fse_id
 			WHERE fse_id IN (1,2,3) AND ft_deleted = 0
 			ORDER BY ft_time DESC
 			LIMIT $limit");
-		$replies = ess::$b->db->query("
+		$replies = \Kofradia\DB::get()->query("
 			SELECT fr_id, fr_ft_id, fr_time, fr_up_id, ft_title, fse_name
 			FROM forum_replies
 				LEFT JOIN forum_topics ON fr_ft_id = ft_id AND ft_deleted = 0
@@ -245,7 +247,7 @@ html, body {
 		
 		$data = array();
 		$times = array();
-		while ($row = mysql_fetch_assoc($topics))
+		while ($row = $topics->fetch())
 		{
 			$data[] = array(
 				'topic_id' => $row['ft_id'],
@@ -257,7 +259,7 @@ html, body {
 			);
 			$times[] = $row['ft_time'];
 		}
-		while ($row = mysql_fetch_assoc($replies))
+		while ($row = $replies->fetch())
 		{
 			$data[] = array(
 				'topic_id' => $row['fr_ft_id'],

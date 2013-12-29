@@ -10,11 +10,12 @@ $up_name = login::$user->player->data['up_name'];
 if (isset($_GET['up_id']) && access::has("mod"))
 {
 	$up_id = (int) getval("up_id");
-	$result = $_base->db->query("SELECT up_u_id, up_id, up_name FROM users_players WHERE up_id = $up_id");
-	if (mysql_num_rows($result) == 0) ajax::text("ERROR:UP-404", ajax::TYPE_404);
+	$result = \Kofradia\DB::get()->query("SELECT up_u_id, up_id, up_name FROM users_players WHERE up_id = $up_id");
+	if ($result->rowCount() == 0) ajax::text("ERROR:UP-404", ajax::TYPE_404);
 	
-	$u_id = mysql_result($result, 0, "up_u_id");
-	$up_name = mysql_result($result, 0, "up_name");
+	$row = $result->fetch();
+	$u_id = $row['up_u_id'];
+	$up_name = $row['up_name'];
 }
 
 // annen måned?
@@ -46,13 +47,13 @@ for ($i = 1; $i <= 12; $i++)
 }
 
 // hent statistikk
-$result = $_base->db->query("SELECT MONTH(FROM_UNIXTIME(ft_time)) AS month, COUNT(ft_id) num FROM forum_topics JOIN users_players ON ft_up_id = up_id WHERE up_u_id = $u_id AND ft_time >= $time_from AND ft_time <= $time_to GROUP BY MONTH(FROM_UNIXTIME(ft_time))");
-while ($row = mysql_fetch_assoc($result))
+$result = \Kofradia\DB::get()->query("SELECT MONTH(FROM_UNIXTIME(ft_time)) AS month, COUNT(ft_id) num FROM forum_topics JOIN users_players ON ft_up_id = up_id WHERE up_u_id = $u_id AND ft_time >= $time_from AND ft_time <= $time_to GROUP BY MONTH(FROM_UNIXTIME(ft_time))");
+while ($row = $result->fetch())
 {
 	$stats1[$row['month']] = (int) $row['num'];
 }
-$result = $_base->db->query("SELECT MONTH(FROM_UNIXTIME(fr_time)) AS month, COUNT(fr_id) num FROM forum_replies JOIN users_players ON fr_up_id = up_id WHERE up_u_id = $u_id AND fr_time >= $time_from AND fr_time <= $time_to GROUP BY MONTH(FROM_UNIXTIME(fr_time))");
-while ($row = mysql_fetch_assoc($result))
+$result = \Kofradia\DB::get()->query("SELECT MONTH(FROM_UNIXTIME(fr_time)) AS month, COUNT(fr_id) num FROM forum_replies JOIN users_players ON fr_up_id = up_id WHERE up_u_id = $u_id AND fr_time >= $time_from AND fr_time <= $time_to GROUP BY MONTH(FROM_UNIXTIME(fr_time))");
+while ($row = $result->fetch())
 {
 	$stats2[$row['month']] = (int) $row['num'];
 }

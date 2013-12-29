@@ -7,7 +7,7 @@ global $_game, $__server, $_base;
 
 // hent egen informasjon
 // TODO: Velge kun det vi skal bruke?
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT
 		users_players.*,
 		upr_rank_pos,
@@ -21,13 +21,13 @@ $result = $_base->db->query("
 	GROUP BY up_id");
 
 // fant ikke?
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	ajax::text("ERROR:NO-USER", ajax::TYPE_404);
 }
 
 // les info
-$user = mysql_fetch_assoc($result);
+$user = $result->fetch();
 
 // profilbilde
 $profile_image = parse_html(player::get_profile_image_static($user['up_profile_image_url']));

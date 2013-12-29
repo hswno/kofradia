@@ -67,13 +67,13 @@ class page_poker extends pages_player
 	protected function check_challenge()
 	{
 		// holder vi på å utfordre?
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT poker_id, poker_starter_up_id, poker_challenger_up_id, poker_starter_cards, poker_challenger_cards, poker_time_start, poker_time_challenge, poker_cash, poker_state, poker_prize
 			FROM poker
 			WHERE poker_challenger_up_id = ".$this->up->id." AND poker_state IN (3,4) AND poker_challenger_seen = 0
 			LIMIT 1");
 		
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		if (!$row) return;
 		
 		$round = new poker_round_interactive($row);
@@ -85,13 +85,13 @@ class page_poker extends pages_player
 	 */
 	protected function check_start()
 	{
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT poker_id, poker_starter_up_id, poker_challenger_up_id, poker_starter_cards, poker_challenger_cards, poker_time_start, poker_time_challenge, poker_cash, poker_state, poker_prize
 			FROM poker
 			WHERE poker_starter_up_id = ".$this->up->id." AND poker_state <= 4 AND poker_starter_seen = 0
 			LIMIT 1");
 		
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		if (!$row) return;
 		
 		$round = new poker_round_interactive($row);
@@ -132,8 +132,8 @@ class page_poker extends pages_player
 		login::data_set("poker_siste_innsats", $amount);
 		
 		// trekk fra pengene fra spilleren
-		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = ".$this->up->id." AND up_cash >= $amount");
-		if (ess::$b->db->affected_rows() == 0)
+		$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = ".$this->up->id." AND up_cash >= $amount");
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Du har ikke så mye penger på hånda.", "error");
 			redirect::handle();
@@ -143,7 +143,7 @@ class page_poker extends pages_player
 		$poker = new CardsPoker();
 		$poker->new_cards(5);
 		
-		ess::$b->db->query("INSERT INTO poker SET poker_starter_up_id = ".$this->up->id.", poker_starter_cards = ".ess::$b->db->quote(implode(",", $poker->get_cards())).", poker_time_start = ".time().", poker_cash = $amount, poker_state = 1");
+		\Kofradia\DB::get()->exec("INSERT INTO poker SET poker_starter_up_id = ".$this->up->id.", poker_starter_cards = ".\Kofradia\DB::quote(implode(",", $poker->get_cards())).", poker_time_start = ".time().", poker_cash = $amount, poker_state = 1");
 		
 		redirect::handle();
 	}
@@ -157,12 +157,12 @@ class page_poker extends pages_player
 		
 		// finn utfordringen
 		$id = (int) $_POST['id'];
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT poker_id, poker_starter_up_id, poker_starter_cards, poker_time_start, poker_cash
 			FROM poker
 			WHERE poker_id = $id AND poker_state = 2 AND poker_starter_up_id != ".$this->up->id);
 		
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		if (!$row)
 		{
 			ess::$b->page->add_message("Fant ikke utfordringen. Noen kan ha kommet før deg!", "error");
@@ -190,24 +190,24 @@ class page_poker extends pages_player
 		$poker2->new_cards(5);
 		
 		// oppdater utfordringen
-		ess::$b->db->query("UPDATE poker SET poker_state = 3, poker_challenger_up_id = ".$this->up->id.", poker_challenger_cards = '".implode(",", $poker2->get_cards())."', poker_time_challenge = '".time()."' WHERE poker_id = {$row['poker_id']} AND poker_state = 2");
+		$a = \Kofradia\DB::get()->exec("UPDATE poker SET poker_state = 3, poker_challenger_up_id = ".$this->up->id.", poker_challenger_cards = '".implode(",", $poker2->get_cards())."', poker_time_challenge = '".time()."' WHERE poker_id = {$row['poker_id']} AND poker_state = 2");
 		
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Fant ikke utfordringen. Noen kan ha kommet før deg!", "error");
 			redirect::handle();
 		}
 		
 		// trekk fra pengene fra brukeren
-		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - {$row['poker_cash']} WHERE up_id = ".$this->up->id." AND up_cash >= {$row['poker_cash']}");
+		$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - {$row['poker_cash']} WHERE up_id = ".$this->up->id." AND up_cash >= {$row['poker_cash']}");
 		
 		// ble ikke brukeren oppdatert?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Du har ikke så mye penger på hånda.", "error");
 			
 			// fjern challenge
-			ess::$b->db->query("UPDATE poker SET poker_state = 2, poker_challenger_up_id = 0, poker_challenger_cards = '', poker_time_challenge = 0 WHERE poker_id = {$row['poker_id']}");
+			\Kofradia\DB::get()->exec("UPDATE poker SET poker_state = 2, poker_challenger_up_id = 0, poker_challenger_cards = '', poker_time_challenge = 0 WHERE poker_id = {$row['poker_id']}");
 			
 			redirect::handle();
 		}
@@ -260,8 +260,8 @@ class page_poker extends pages_player
 	<div class="bg1">';
 		
 		// hent alle utfordringene som utfordrer..
-		$result = ess::$b->db->query("SELECT poker_id, poker_starter_up_id, poker_time_start, poker_starter_cards, poker_cash FROM poker WHERE poker_state = 2 ORDER BY poker_cash");
-		$num = mysql_num_rows($result);
+		$result = \Kofradia\DB::get()->query("SELECT poker_id, poker_starter_up_id, poker_time_start, poker_starter_cards, poker_cash FROM poker WHERE poker_state = 2 ORDER BY poker_cash");
+		$num = $result->rowCount();
 		
 		// javascript for oppdatering
 		ess::$b->page->add_js_domready('
@@ -433,7 +433,7 @@ class page_poker extends pages_player
 					<tbody id="poker_players">';
 		
 		$i = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$attr = new attr("class");
 			if ($row['poker_starter_up_id'] != $this->up->id) $attr->add("box_handle");
@@ -475,14 +475,14 @@ class page_poker extends pages_player
 		// hent utfordringene (delt i starter og challenger)
 		$poker = array();
 		
-		$result = ess::$b->db->query("SELECT poker_id, poker_starter_up_id, poker_challenger_up_id, poker_starter_cards, poker_challenger_cards, poker_time_start, poker_time_challenge, poker_cash, poker_winner, poker_prize FROM poker WHERE poker_starter_up_id = ".$this->up->id." AND poker_state = 4 ORDER BY poker_time_challenge DESC LIMIT 5");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT poker_id, poker_starter_up_id, poker_challenger_up_id, poker_starter_cards, poker_challenger_cards, poker_time_start, poker_time_challenge, poker_cash, poker_winner, poker_prize FROM poker WHERE poker_starter_up_id = ".$this->up->id." AND poker_state = 4 ORDER BY poker_time_challenge DESC LIMIT 5");
+		while ($row = $result->fetch())
 		{
 			$poker[$row['poker_time_challenge'].$row['poker_id']] = $row;
 		}
 		
-		$result = ess::$b->db->query("SELECT poker_id, poker_starter_up_id, poker_challenger_up_id, poker_starter_cards, poker_challenger_cards, poker_time_start, poker_time_challenge, poker_cash, poker_winner, poker_prize FROM poker WHERE poker_challenger_up_id = ".$this->up->id." AND poker_state = 4 ORDER BY poker_time_challenge DESC LIMIT 5");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT poker_id, poker_starter_up_id, poker_challenger_up_id, poker_starter_cards, poker_challenger_cards, poker_time_start, poker_time_challenge, poker_cash, poker_winner, poker_prize FROM poker WHERE poker_challenger_up_id = ".$this->up->id." AND poker_state = 4 ORDER BY poker_time_challenge DESC LIMIT 5");
+		while ($row = $result->fetch())
 		{
 			$poker[$row['poker_time_challenge'].$row['poker_id']] = $row;
 		}
@@ -649,7 +649,7 @@ class page_poker extends pages_player
 				<tbody>';
 				
 				$i = 0;
-				while ($row = mysql_fetch_assoc($result_s))
+				while ($row = $result_s->fetch())
 				{
 					echo $this->stats_row($row, true, ++$i);
 				}
@@ -694,7 +694,7 @@ class page_poker extends pages_player
 				<tbody>';
 				
 				$i = 0;
-				while ($row = mysql_fetch_assoc($result_u))
+				while ($row = $result_u->fetch())
 				{
 					echo $this->stats_row($row, false, ++$i);
 				}

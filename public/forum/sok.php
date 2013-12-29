@@ -84,10 +84,10 @@ if ($search_from_id == 4)
 	else
 	{
 		// hent brukerene
-		$result = $_base->db->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE up_name IN (".implode(",", array_map(array($_base->db, "quote"), $names)).")");
+		$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE up_name IN (".implode(",", array_map(array($_base->db, "quote"), $names)).")");
 		
 		$players = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$players[$row['up_id']] = $row;
 			unset($names_lc[mb_strtolower($row['up_name'])]);
@@ -269,7 +269,7 @@ if (isset($_GET['qs']))
 		}
 		
 		// opprett temporary tabell
-		$_base->db->query("
+		\Kofradia\DB::get()->exec("
 			CREATE TEMPORARY TABLE temp_results (
 				tr_ft_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
 				tr_fr_id INT(11) UNSIGNED NULL DEFAULT NULL,
@@ -283,7 +283,7 @@ if (isset($_GET['qs']))
 		// hente tittel?
 		if ($search_title !== false)
 		{
-			$_base->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT INTO temp_results (tr_ft_id, tr_match_type)
 				SELECT ft_id, 'subject'
 				FROM forum_topics
@@ -293,7 +293,7 @@ if (isset($_GET['qs']))
 		// hente hovedinnleggene?
 		if ($where[1] && $search_text_topic !== false)
 		{
-			$_base->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT IGNORE INTO temp_results (tr_ft_id, tr_match_type)
 				SELECT ft_id, 'topic'
 				FROM forum_topics
@@ -304,13 +304,13 @@ if (isset($_GET['qs']))
 		if ($where[2] && $search_text_reply !== false)
 		{
 			$deleted = $search_deleted[$search_deleted_id][2];
-			$_base->db->query("
+			\Kofradia\DB::get()->exec("
 				CREATE TEMPORARY TABLE temp_results2 (
 					tr_ft_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
 					tr_fr_id INT(11) UNSIGNED NOT NULL DEFAULT 0
 				) ENGINE = MEMORY");
 			
-			$_base->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT INTO temp_results2
 				SELECT ft_id, fr_id
 				FROM
@@ -319,7 +319,7 @@ if (isset($_GET['qs']))
 				WHERE ft_id = fr.fr_ft_id$deleted$search_forums_query$search_from_reply_query$search_text_reply");
 			
 			// legg til i "funnene"
-			$_base->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT IGNORE INTO temp_results
 				SELECT DISTINCT tr_ft_id, tr_fr_id, 'reply'
 				FROM temp_results2");
@@ -419,7 +419,7 @@ if (isset($_GET['qs']))
 			
 			// vis hver topic
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>

@@ -99,7 +99,7 @@ class page_fengsel
 		else
 		{
 			// sett i fengsel
-			ess::$b->db->query("UPDATE users_players SET up_fengsel_time = ".(time()+$time)." WHERE up_id = ".$this->up->id);
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_fengsel_time = ".(time()+$time)." WHERE up_id = ".$this->up->id);
 			ess::$b->page->add_message("Du er nå i fengsel.");
 			redirect::handle();
 		}
@@ -117,7 +117,7 @@ class page_fengsel
 			redirect::handle();
 		}
 		
-		ess::$b->db->query("UPDATE users_players SET up_fengsel_time = ".time()." WHERE up_id = ".$this->up->id);
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_fengsel_time = ".time()." WHERE up_id = ".$this->up->id);
 		ess::$b->page->add_message("Du er nå ute av fengsel.");
 		redirect::handle();
 	}
@@ -179,13 +179,13 @@ class page_fengsel
 		}
 		
 		// forsøk å sett dusøren
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE users_players
 			SET up_cash = up_cash - $dusor + up_fengsel_dusor, up_fengsel_dusor = $dusor
 			WHERE up_id = {$this->up->id} AND up_fengsel_time = {$this->up->data['up_fengsel_time']} AND up_cash >= GREATEST(0, $dusor - up_fengsel_dusor)");
 		
 		// ble ikke endret?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Dusøren kunne ikke bli endret. Prøv på nytt.", "error");
 		}
@@ -281,11 +281,11 @@ class page_fengsel
 			$cash = round(max(0, 100 - $prob) / 100 * self::CASH_MAX);
 			
 			// sett som utbrytet
-			ess::$b->db->query("
+			$a = \Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_fengsel_time = ".(time()-1).", up_fengsel_dusor_total_out = up_fengsel_dusor_total_out + up_fengsel_dusor, up_fengsel_dusor = 0
 				WHERE up_id = {$up->id} AND up_fengsel_time = {$up->data['up_fengsel_time']} AND up_fengsel_dusor = {$up->data['up_fengsel_dusor']}");
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message('<user id="'.$up->id.'" /> er nok allerede brutt ut!', "error");
 				redirect::handle();
@@ -295,7 +295,7 @@ class page_fengsel
 			$up->data['up_fengsel_dusor'] = 0;
 			
 			// oppdater antall utbrytninger og gi evt. penger
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_fengsel_num_out_tries = up_fengsel_num_out_tries + 1, up_fengsel_num_out_success = up_fengsel_num_out_success + 1, up_cash = up_cash + $cash + $dusor, up_fengsel_dusor_total_in = up_fengsel_dusor_total_in + $dusor
 				WHERE up_id = ".$this->up->id);
@@ -331,7 +331,7 @@ class page_fengsel
 			$fengsel = $this->up->fengsel_rank($points, false, true);
 			
 			// oppdater antall utbrytninger (kun forsøk)
-			ess::$b->db->query("UPDATE users_players SET up_fengsel_num_out_tries = up_fengsel_num_out_tries + 1 WHERE up_id = ".$this->up->id);
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_fengsel_num_out_tries = up_fengsel_num_out_tries + 1 WHERE up_id = ".$this->up->id);
 			
 			if ($fengsel > 0)
 			{
@@ -415,7 +415,7 @@ class page_fengsel
 			WHERE up_fengsel_time > ".time()." AND up_access_level != 0
 			ORDER BY {$sort_info['params']}");
 		
-		$num = mysql_num_rows($result);
+		$num = $result->rowCount();
 		
 		echo '
 <div class="bg1_c '.($num == 0 ? 'xsmall' : 'xlarge').'">
@@ -449,7 +449,7 @@ class page_fengsel
 				<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$prefix = "";
 				$attr = new attr("class");

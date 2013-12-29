@@ -718,8 +718,8 @@ class game
 							$expire->modify("-21 days");
 							$expire = max($args->data['up_created_time'], $expire->format("U")); // maks tid: siste 21 dager eller siden reg (om registrert innen 30 dager)
 							
-							$result = ess::$b->db->query("SELECT SUM(uhi_points) FROM users_hits WHERE uhi_up_id = $args->id AND uhi_secs_hour >= $expire");
-							$points = (int) mysql_result($result, 0);
+							$result = \Kofradia\DB::get()->query("SELECT SUM(uhi_points) FROM users_hits WHERE uhi_up_id = $args->id AND uhi_secs_hour >= $expire");
+							$points = (int) $result->fetchColumn(0);
 							
 							if ($points == 0)
 							{
@@ -800,7 +800,7 @@ class game
 				if (mb_strpos($data, "[kontakter]") !== false)
 				{
 					// hent kontaktliste
-					$result = $_base->db->query("SELECT uc_contact_up_id, up_name, up_access_level, up_last_online FROM users_contacts LEFT JOIN users_players ON uc_contact_up_id = up_id WHERE uc_u_id = {$args->data['up_u_id']} AND uc_type = 1 ORDER BY up_name");
+					$result = \Kofradia\DB::get()->query("SELECT uc_contact_up_id, up_name, up_access_level, up_last_online FROM users_contacts LEFT JOIN users_players ON uc_contact_up_id = up_id WHERE uc_u_id = {$args->data['up_u_id']} AND uc_type = 1 ORDER BY up_name");
 					
 					$html = '
 <table class="table l tablem">
@@ -812,7 +812,7 @@ class game
 	</thead>
 	<tbody>';
 
-					while ($row = mysql_fetch_assoc($result))
+					while ($row = $result->fetch())
 					{
 						$html .= '
 		<tr>
@@ -833,7 +833,7 @@ class game
 				if (mb_strpos($data, "[blokkert]") !== false)
 				{
 					// hent blokkeringliste
-					$result = $_base->db->query("SELECT uc_contact_up_id, up_name, up_access_level, up_last_online FROM users_contacts LEFT JOIN users_players ON uc_contact_up_id = up_id WHERE uc_u_id = {$args->data['up_u_id']} AND uc_type = 2 ORDER BY up_name");
+					$result = \Kofradia\DB::get()->query("SELECT uc_contact_up_id, up_name, up_access_level, up_last_online FROM users_contacts LEFT JOIN users_players ON uc_contact_up_id = up_id WHERE uc_u_id = {$args->data['up_u_id']} AND uc_type = 2 ORDER BY up_name");
 					
 					$html = '
 <table class="table l tablem">
@@ -845,7 +845,7 @@ class game
 	</thead>
 	<tbody>';
 					
-					while ($row = mysql_fetch_assoc($result))
+					while ($row = $result->fetch())
 					{
 						$html .= '
 		<tr>
@@ -1337,8 +1337,8 @@ class game
 	 */
 	public static function fengsel_count()
 	{
-		$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_fengsel_time > ".time());
-		return mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE up_fengsel_time > ".time());
+		return $result->fetchColumn(0);
 	}
 	
 	/**
@@ -1359,7 +1359,7 @@ class game
 		$date_to = $d->format("U");
 		
 		// hent spiller
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, sum_uhi_points, up_points, up_last_online, up_profile_image_url, upr_rank_pos
 			FROM
 				(
@@ -1375,11 +1375,11 @@ class game
 				LEFT JOIN users_players_rank ON upr_up_id = up_id
 			WHERE uhi_up_id = up_id");
 		
-		if (mysql_num_rows($result) == 0) return array();
+		if ($result->rowCount() == 0) return array();
 		
 		$players = array();
 		$up_id = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$players[$row['up_id']] = $row;
 			$up_id[] = $row['up_id'];

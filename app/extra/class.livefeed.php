@@ -18,7 +18,7 @@ class livefeed
 		if (empty($html)) throw new HSException("Mangler HTML.");
 		
 		// legg til oppføringen
-		ess::$b->db->query("INSERT INTO livefeed SET lf_time = $time, lf_html = ".ess::$b->db->quote($html));
+		\Kofradia\DB::get()->exec("INSERT INTO livefeed SET lf_time = $time, lf_html = ".\Kofradia\DB::quote($html));
 	}
 	
 	/**
@@ -29,10 +29,10 @@ class livefeed
 		$limit = (int) $limit;
 		if ($limit <= 0) $limit = 1;
 		
-		$result = ess::$b->db->query("SELECT lf_time, lf_html FROM livefeed ORDER BY lf_time DESC, lf_id DESC LIMIT $limit");
+		$result = \Kofradia\DB::get()->query("SELECT lf_time, lf_html FROM livefeed ORDER BY lf_time DESC, lf_id DESC LIMIT $limit");
 		
 		$data = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$data[] = $row;
 		}

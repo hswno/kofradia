@@ -347,7 +347,7 @@ class page_min_side_stats
 		$date_to = $d->format("U");
 		
 		// hent statistikk
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, sum_uhi_points, up_points, up_last_online, up_profile_image_url, upr_rank_pos
 			FROM
 				(
@@ -368,7 +368,7 @@ class page_min_side_stats
 		$up_list = array();
 		$in_list = false;
 		$pos = null;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$players[] = $row;
 			$up_list[] = $row['up_id'];
@@ -379,16 +379,16 @@ class page_min_side_stats
 		if (!$in_list)
 		{
 			// hvor mange poeng har vi fått?
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT SUM(uhi_points) sum_uhi_points
 				FROM users_hits
 				WHERE uhi_up_id = ".page_min_side::$active_player->id." AND uhi_secs_hour >= $date_from AND uhi_secs_hour < $date_to");
-			$points = mysql_result($result, 0);
+			$points = $result->fetchColumn(0);
 			
 			if ($points > 0)
 			{
 				// finn plasseringen vår
-				$result = ess::$b->db->query("
+				$result = \Kofradia\DB::get()->query("
 					SELECT COUNT(uhi_up_id) FROM (
 						SELECT uhi_up_id, SUM(uhi_points) sum_uhi_points
 						FROM users_hits
@@ -398,7 +398,7 @@ class page_min_side_stats
 						HAVING sum_uhi_points > $points
 					) ref");
 				
-				$pos = mysql_result($result, 0)+1;
+				$pos = $result->fetchColumn(0)+1;
 			}
 		}
 		
@@ -561,11 +561,11 @@ class page_min_side_stats
 		$date = ess::$b->date->get();
 		$date->modify("-30 days");
 		$date->setTime(0, 0, 0);
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT SUM(CONVERT(poker_prize - poker_cash, SIGNED) * IF((poker_winner = 1 AND poker_starter_up_id = up_id) OR (poker_winner = 2 AND poker_challenger_up_id = up_id), 1, -1)) sum_result
 			FROM poker, users_players
 			WHERE poker_time_start >= ".$date->format("U")." AND up_u_id = ".page_min_side::$active_user->id." AND (up_id = poker_starter_up_id OR up_id = poker_challenger_up_id) AND poker_state = 4");
-		$poker_result = mysql_result($result, 0);
+		$poker_result = $result->fetchColumn(0);
 		
 		OFC::embed("stats_poker", "graphs/poker?up_id=".page_min_side::$active_player->id, "100%", 250);
 		OFC::embed("stats_poker_num", "graphs/pokernum?up_id=".page_min_side::$active_player->id, "100%", 250);

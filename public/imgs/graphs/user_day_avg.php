@@ -15,9 +15,9 @@ else
 	if ($BrukerID != $_SESSION['userinfo']['info']['id'] && !in_array("mod", $_SESSION['userinfo']['accesses'])) die("Du må være moderator eller høyere for å vise andre brukere!");
 }
 
-$result = $_base->db->query("SELECT id, user, ip, hits, last_online FROM users WHERE id = $BrukerID");
+$result = \Kofradia\DB::get()->query("SELECT id, user, ip, hits, last_online FROM users WHERE id = $BrukerID");
 
-if (!($user = mysql_fetch_assoc($result)))
+if (!($user = $result->fetch()))
 {
 	die("Fant ikke brukeren!");
 }
@@ -30,8 +30,8 @@ for ($i = 0; $i <= 23; $i++)
 
 
 // hent timestatistikk
-$result = $_base->db->query("SELECT HOUR(FROM_UNIXTIME(secs_hour)) AS hour, SUM(hits) AS hits FROM users_hits WHERE userid = $BrukerID GROUP BY HOUR(FROM_UNIXTIME(secs_hour))");
-while ($row = mysql_fetch_assoc($result))
+$result = \Kofradia\DB::get()->query("SELECT HOUR(FROM_UNIXTIME(secs_hour)) AS hour, SUM(hits) AS hits FROM users_hits WHERE userid = $BrukerID GROUP BY HOUR(FROM_UNIXTIME(secs_hour))");
+while ($row = $result->fetch())
 {
 	$stats[$row['hour']] = $row['hits'];
 }

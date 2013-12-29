@@ -20,7 +20,7 @@ class Poll
 			GROUP BY p_id
 			ORDER BY p_time_end != 0, p_time_end DESC, p_id DESC");
 
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			return array();
 		}
@@ -28,17 +28,17 @@ class Poll
 		$polls = array();
 
 		// les data
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$polls[$row['p_id']] = static::createFromData($row, $user);
 		}
 
 		// hent alternativene
-		$result = \ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT po_id, po_p_id, po_text, po_votes
 			FROM polls_options
 			WHERE po_p_id IN (".implode(",", array_keys($polls)).")");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			new PollOption($row, $polls[$row['po_p_id']]);
 		}
@@ -64,15 +64,15 @@ class Poll
 	 */
 	public static function load($poll_id, \user $user = null)
 	{
-		$poll_id = \ess::$b->db->quote($poll_id);
-		$result = \ess::$b->db->query("
+		$poll_id = \Kofradia\DB::quote($poll_id);
+		$result = \Kofradia\DB::get()->query("
 			SELECT p_id, p_active, p_ft_id, p_title, p_text, p_time_start, p_time_end".($user ? ", pv_po_id, pv_time" : "")."
 			FROM polls".($user ? "
 				LEFT JOIN polls_votes ON pv_up_id = ".$user->player->id." AND pv_p_id = p_id" : "")."
 			WHERE p_id = $poll_id
 			GROUP BY p_id");
 
-		if ($row = mysql_fetch_assoc($result))
+		if ($row = $result->fetch())
 		{
 			return static::createFromData($row, $user);
 		}
@@ -104,11 +104,11 @@ class Poll
 	{
 		$this->options = array();
 
-		$result = \ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT po_id, po_p_id, po_text, po_votes
 			FROM polls_options
 			WHERE po_p_id = $this->id");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			new PollOption($row, $this);
 		}
@@ -135,16 +135,16 @@ class Poll
 		}
 		else
 		{
-			$result = \ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT pv_po_id
 				FROM polls_votes
 				WHERE pv_p_id = $this->id AND pv_up_id = ".$user->player->id);
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				return null;
 			}
 
-			$option_id = mysql_result($result, 0);
+			$option_id = $result->fetchColumn(0);
 		}
 
 		return $this->findOption($option_id);

@@ -25,7 +25,7 @@ if (isset($_POST['ip']))
 		if (isset($_POST['confirm']))
 		{
 			// legg til oppføring
-			ess::$b->db->query("INSERT INTO ban_ip SET bi_ip_start = $ip, bi_ip_end = $ip, bi_time_start = ".time().", bi_time_end = ".($time == 0 ? 'NULL' : ($time+time())).", bi_reason = ".ess::$b->db->quote($begrunnelse).", bi_info = ".ess::$b->db->quote($interninfo));
+			\Kofradia\DB::get()->exec("INSERT INTO ban_ip SET bi_ip_start = $ip, bi_ip_end = $ip, bi_time_start = ".time().", bi_time_end = ".($time == 0 ? 'NULL' : ($time+time())).", bi_reason = ".\Kofradia\DB::quote($begrunnelse).", bi_info = ".\Kofradia\DB::quote($interninfo));
 			
 			// fjern mulig cache
 			cache::delete("ip_ok_$ip_str");

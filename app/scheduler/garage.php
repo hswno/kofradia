@@ -5,7 +5,7 @@
  */
 
 // hent garasjene som skal fjernes
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT ugg_up_id, ugg_b_id, COUNT(id) count_ug, up_access_level
 	FROM users_garage
 		LEFT JOIN users_gta ON ug_up_id = ugg_up_id AND b_id = ugg_b_id
@@ -13,7 +13,7 @@ $result = ess::$b->db->query("
 	WHERE ugg_time_next_rent <= ".time()."
 	GROUP BY ugg_id");
 
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$bydel = game::$bydeler[$row['ugg_b_id']]['name'];
 	
@@ -24,8 +24,8 @@ while ($row = mysql_fetch_assoc($result))
 	}
 	
 	// slett garasjen
-	ess::$b->db->query("DELETE FROM users_garage WHERE ugg_up_id = {$row['ugg_up_id']} AND ugg_b_id = {$row['ugg_b_id']}");
+	\Kofradia\DB::get()->exec("DELETE FROM users_garage WHERE ugg_up_id = {$row['ugg_up_id']} AND ugg_b_id = {$row['ugg_b_id']}");
 	
 	// slett evt. biler
-	ess::$b->db->query("DELETE FROM users_gta WHERE ug_up_id = {$row['ugg_up_id']} AND b_id = {$row['ugg_b_id']}");
+	\Kofradia\DB::get()->exec("DELETE FROM users_gta WHERE ug_up_id = {$row['ugg_up_id']} AND b_id = {$row['ugg_b_id']}");
 }

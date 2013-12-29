@@ -17,8 +17,8 @@ if (isset($_GET['load_logo']))
 		// hent utgivelsen
 		$ff_id = intval($_GET['ff_id']);
 		$ffn_id = intval($_GET['load_logo']);
-		$result = ess::$b->db->query("SELECT ffn_logo FROM ff_newspapers WHERE ffn_id = $ffn_id AND ffn_ff_id = $ff_id");
-		$ffn = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT ffn_logo FROM ff_newspapers WHERE ffn_id = $ffn_id AND ffn_ff_id = $ff_id");
+		$ffn = $result->fetch();
 		
 		// fant ikke?
 		if (!$ffn)
@@ -26,7 +26,7 @@ if (isset($_GET['load_logo']))
 			error("Fant ikke utgivelsen.");
 		}
 		
-		$data = mysql_result($result, 0);
+		$data = $result->fetchColumn(0);
 	}
 	
 	// har ikke logo?
@@ -162,8 +162,8 @@ class page_ff_avis
 			// legg til
 			else
 			{
-				ess::$b->db->query("INSERT INTO ff_newspapers_articles SET ffna_ff_id = {$this->ff->id}, ffna_created_time = ".time().", ffna_up_id = ".login::$user->player->id.", ffna_title = ".ess::$b->db->quote($title).", ffna_text = ".ess::$b->db->quote($text));
-				$ffna_id = ess::$b->db->insert_id();
+				\Kofradia\DB::get()->exec("INSERT INTO ff_newspapers_articles SET ffna_ff_id = {$this->ff->id}, ffna_created_time = ".time().", ffna_up_id = ".login::$user->player->id.", ffna_title = ".\Kofradia\DB::quote($title).", ffna_text = ".\Kofradia\DB::quote($text));
+				$ffna_id = \Kofradia\DB::get()->lastInsertId();
 				
 				ess::$b->page->add_message("Artikkelen ble opprettet.");
 				redirect::handle("avis?ff_id={$this->ff->id}&a&ffna=$ffna_id");
@@ -289,7 +289,7 @@ class page_ff_avis
 				}
 				else
 				{
-					ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_title = ".ess::$b->db->quote($title).", ffna_text = ".ess::$b->db->quote($text).", ffna_updated_time = ".time()." WHERE ffna_id = $ffna->id");
+					\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_title = ".\Kofradia\DB::quote($title).", ffna_text = ".\Kofradia\DB::quote($text).", ffna_updated_time = ".time()." WHERE ffna_id = $ffna->id");
 					ess::$b->page->add_message("Endringene ble lagret.");
 					
 					// lagre i loggen?
@@ -347,7 +347,7 @@ class page_ff_avis
 		// slette?
 		if (isset($_POST['delete']))
 		{
-			ess::$b->db->query("DELETE FROM ff_newspapers_articles WHERE ffna_id = $ffna->id");
+			\Kofradia\DB::get()->exec("DELETE FROM ff_newspapers_articles WHERE ffna_id = $ffna->id");
 			
 			ess::$b->page->add_message("Artikkelen ble slettet.");
 			redirect::handle("avis?ff_id={$this->ff->id}&a");
@@ -402,7 +402,7 @@ class page_ff_avis
 			// publiser
 			else
 			{
-				ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_published = 1, ffna_published_time = ".time().", ffna_price = $price WHERE ffna_id = $ffna->id");
+				\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_published = 1, ffna_published_time = ".time().", ffna_price = $price WHERE ffna_id = $ffna->id");
 				
 				ess::$b->page->add_message("Artikkelen er nå publisert. Redaktøren kan nå legge til artikkelen i en utgivelse.");
 				redirect::handle();
@@ -445,7 +445,7 @@ class page_ff_avis
 		}
 		else
 		{
-			ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_published = 0 WHERE ffna_id = $ffna->id");
+			\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_published = 0 WHERE ffna_id = $ffna->id");
 			ess::$b->page->add_message("Artikkelen er ikke lengre publisert.");
 		}
 		
@@ -548,7 +548,7 @@ class page_ff_avis
 					// lagre valget
 					$params = new params_update(-1, "ff_newspapers_articles", "ffna_theme_parameters", "ffna_id = {$ffna->data['ffna_id']}");
 					$params->update("template", $template->template_id);
-					ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_theme_position = ".ess::$b->db->quote($pos_name)." WHERE ffna_id = {$ffna->data['ffna_id']}");
+					\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_theme_position = ".\Kofradia\DB::quote($pos_name)." WHERE ffna_id = {$ffna->data['ffna_id']}");
 					$params->commit();
 				}
 			}
@@ -630,7 +630,7 @@ class page_ff_avis
 <p class="c">Denne siden viser kun <u>dine</u> artikler.</p>';
 		
 		// ingen artikler?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 <p class="c">Ingen artikler er opprettet.</p>';
@@ -654,7 +654,7 @@ class page_ff_avis
 	<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 		<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -773,8 +773,8 @@ class page_ff_avis
 			// legg til
 			else
 			{
-				ess::$b->db->query("INSERT INTO ff_newspapers SET ffn_ff_id = {$this->ff->id}, ffn_template = ".ess::$b->db->quote($template).", ffn_cost = $price, ffn_title = ".ess::$b->db->quote($title).", ffn_description = ".ess::$b->db->quote($desc).", ffn_created_time = ".time().", ffn_created_up_id = ".login::$user->player->id);
-				$ffn_id = ess::$b->db->insert_id();
+				\Kofradia\DB::get()->exec("INSERT INTO ff_newspapers SET ffn_ff_id = {$this->ff->id}, ffn_template = ".\Kofradia\DB::quote($template).", ffn_cost = $price, ffn_title = ".\Kofradia\DB::quote($title).", ffn_description = ".\Kofradia\DB::quote($desc).", ffn_created_time = ".time().", ffn_created_up_id = ".login::$user->player->id);
+				$ffn_id = \Kofradia\DB::get()->lastInsertId();
 				
 				ess::$b->page->add_message("Utgivelsen ble opprettet.");
 				redirect::handle("avis?ff_id={$this->ff->id}&u&ffn=$ffn_id");
@@ -958,7 +958,7 @@ class page_ff_avis
 				}
 				else
 				{
-					ess::$b->db->query("UPDATE ff_newspapers SET ffn_cost = $price, ffn_title = ".ess::$b->db->quote($title).", ffn_description = ".ess::$b->db->quote($desc)." WHERE ffn_id = $ffn->id");
+					\Kofradia\DB::get()->exec("UPDATE ff_newspapers SET ffn_cost = $price, ffn_title = ".\Kofradia\DB::quote($title).", ffn_description = ".\Kofradia\DB::quote($desc)." WHERE ffn_id = $ffn->id");
 					ess::$b->page->add_message("Endringene ble lagret.");
 				}
 				
@@ -1023,7 +1023,7 @@ class page_ff_avis
 				}
 				else
 				{
-					ess::$b->db->query("UPDATE ff_newspapers SET ffn_cost = $price WHERE ffn_id = $ffn->id");
+					\Kofradia\DB::get()->exec("UPDATE ff_newspapers SET ffn_cost = $price WHERE ffn_id = $ffn->id");
 					ess::$b->page->add_message("Endringene ble lagret.");
 				}
 				
@@ -1062,8 +1062,8 @@ class page_ff_avis
 		}
 		
 		// finn antall artikler
-		$result = ess::$b->db->query("SELECT COUNT(ffna_id) FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id");
-		$ffna_count = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(ffna_id) FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id");
+		$ffna_count = $result->fetchColumn(0);
 		
 		// kan ikke være noen artikler
 		if ($ffna_count > 0)
@@ -1075,7 +1075,7 @@ class page_ff_avis
 		// slette?
 		if (isset($_POST['delete']))
 		{
-			ess::$b->db->query("DELETE FROM ff_newspapers WHERE ffn_id = $ffn->id");
+			\Kofradia\DB::get()->exec("DELETE FROM ff_newspapers WHERE ffn_id = $ffn->id");
 			
 			ess::$b->page->add_message("Utgivelsen ble slettet.");
 			redirect::handle("avis?ff_id={$this->ff->id}&u");
@@ -1168,7 +1168,7 @@ class page_ff_avis
 			imagedestroy($img);
 			
 			// lagre bildet til databasen
-			ess::$b->db->query("UPDATE ff_newspapers SET ffn_logo = ".ess::$b->db->quote($data)." WHERE ffn_id = $ffn->id");
+			\Kofradia\DB::get()->exec("UPDATE ff_newspapers SET ffn_logo = ".\Kofradia\DB::quote($data)." WHERE ffn_id = $ffn->id");
 			
 			ess::$b->page->add_message("Logoen ble oppdatert.");
 			redirect::handle();
@@ -1216,8 +1216,8 @@ function vis_bilde(elm)
 		}
 		
 		// antall artikler - maks 8
-		$result = ess::$b->db->query("SELECT COUNT(ffna_id) FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id");
-		if (mysql_result($result, 0) > 8)
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(ffna_id) FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id");
+		if ($result->fetchColumn(0) > 8)
 		{
 			ess::$b->page->add_message("Kan ikke legge til flere enn 8 artikler i en utgivelse.", "error");
 			redirect::handle();
@@ -1230,8 +1230,8 @@ function vis_bilde(elm)
 		{
 			// hent informasjon
 			$ffna_id = intval(getval("ffna"));
-			$result = ess::$b->db->query("SELECT ffna_id, ffna_created_time, ffna_up_id, ffna_updated_time, ffna_title, LENGTH(ffna_text) AS ffna_text_length, ffna_published_time, ffna_price FROM ff_newspapers_articles WHERE ffna_id = $ffna_id AND ffna_ff_id = {$this->ff->id} AND ffna_ffn_id = 0 AND ffna_published != 0");
-			$ffna = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT ffna_id, ffna_created_time, ffna_up_id, ffna_updated_time, ffna_title, LENGTH(ffna_text) AS ffna_text_length, ffna_published_time, ffna_price FROM ff_newspapers_articles WHERE ffna_id = $ffna_id AND ffna_ff_id = {$this->ff->id} AND ffna_ffn_id = 0 AND ffna_published != 0");
+			$ffna = $result->fetch();
 			
 			if (!$ffna)
 			{
@@ -1240,9 +1240,9 @@ function vis_bilde(elm)
 			}
 			
 			// hent alle artiklene som er lagt til i utgivelsen
-			$result = ess::$b->db->query("SELECT ffna_id, ffna_title, ffna_theme_position, ffna_theme_priority FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_theme_priority");
+			$result = \Kofradia\DB::get()->query("SELECT ffna_id, ffna_title, ffna_theme_position, ffna_theme_priority FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_theme_priority");
 			$articles = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$articles[$row['ffna_theme_position']][] = $row;
 			}
@@ -1279,10 +1279,10 @@ function vis_bilde(elm)
 						else
 						{
 							// flytt artikler
-							ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_theme_priority = ffna_theme_priority + 1 WHERE ffna_ffn_id = $ffn->id AND ffna_theme_position = ".ess::$b->db->quote($area)." AND ffna_theme_priority >= $priority");
+							\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_theme_priority = ffna_theme_priority + 1 WHERE ffna_ffn_id = $ffn->id AND ffna_theme_position = ".\Kofradia\DB::quote($area)." AND ffna_theme_priority >= $priority");
 							
 							// legg til artikkelen
-							ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_ffn_id = $ffn->id, ffna_theme_position = ".ess::$b->db->quote($area).", ffna_theme_priority = $priority WHERE ffna_id = $ffna_id");
+							\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_ffn_id = $ffn->id, ffna_theme_position = ".\Kofradia\DB::quote($area).", ffna_theme_priority = $priority WHERE ffna_id = $ffna_id");
 							
 							ess::$b->page->add_message("Artikkelen ble tilegnet utgivelsen.");
 							redirect::handle();
@@ -1371,7 +1371,7 @@ function vis_bilde(elm)
 <p class="c">Denne siden viser publiserte artikler som ikke er tilegnet noen utgivelse.</p>';
 			
 			// ingen artikler?
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 <p class="c">Ingen artikler er tilgjengelig.</p>';
@@ -1396,7 +1396,7 @@ function vis_bilde(elm)
 	<tbody>';
 				
 				$i = 0;
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					echo '
 		<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -1432,8 +1432,8 @@ function vis_bilde(elm)
 		
 		// finn artikkelen
 		$ffna_id = intval(getval("remove_ffna"));
-		$result = ess::$b->db->query("SELECT ffna_id, ffna_ffn_id, ffna_theme_position, ffna_theme_priority FROM ff_newspapers_articles WHERE ffna_id = $ffna_id");
-		$ffna = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT ffna_id, ffna_ffn_id, ffna_theme_position, ffna_theme_priority FROM ff_newspapers_articles WHERE ffna_id = $ffna_id");
+		$ffna = $result->fetch();
 		
 		// fant ikke?
 		if (!$ffna || $ffna['ffna_ffn_id'] != $ffn->id)
@@ -1443,10 +1443,10 @@ function vis_bilde(elm)
 		}
 		
 		// fjern
-		ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_ffn_id = 0 WHERE ffna_id = $ffna_id AND ffna_ffn_id = $ffn->id");
+		\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_ffn_id = 0 WHERE ffna_id = $ffna_id AND ffna_ffn_id = $ffn->id");
 		
 		// flytt andre artikler
-		ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_theme_priority = ffna_theme_priority - 1 WHERE ffna_ffn_id = $ffn->id AND ffna_theme_position = ".ess::$b->db->quote($ffna['ffna_theme_position'])." AND ffna_theme_priority > {$ffna['ffna_theme_priority']}");
+		\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_theme_priority = ffna_theme_priority - 1 WHERE ffna_ffn_id = $ffn->id AND ffna_theme_position = ".\Kofradia\DB::quote($ffna['ffna_theme_position'])." AND ffna_theme_priority > {$ffna['ffna_theme_priority']}");
 		
 		ess::$b->page->add_message("Artikkelen ble fjernet.");
 		redirect::handle();
@@ -1469,8 +1469,8 @@ function vis_bilde(elm)
 		
 		// hent informasjon
 		$ffna_id = intval(getval("move_ffna"));
-		$result = ess::$b->db->query("SELECT ffna_id, ffna_created_time, ffna_up_id, ffna_updated_time, ffna_title, LENGTH(ffna_text) AS ffna_text_length, ffna_theme_position, ffna_theme_priority, ffna_published_time, ffna_price FROM ff_newspapers_articles WHERE ffna_id = $ffna_id AND ffna_ffn_id = $ffn->id");
-		$ffna = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT ffna_id, ffna_created_time, ffna_up_id, ffna_updated_time, ffna_title, LENGTH(ffna_text) AS ffna_text_length, ffna_theme_position, ffna_theme_priority, ffna_published_time, ffna_price FROM ff_newspapers_articles WHERE ffna_id = $ffna_id AND ffna_ffn_id = $ffn->id");
+		$ffna = $result->fetch();
 		
 		if (!$ffna)
 		{
@@ -1479,9 +1479,9 @@ function vis_bilde(elm)
 		}
 		
 		// hent alle artiklene som er lagt til i utgivelsen
-		$result = ess::$b->db->query("SELECT ffna_id, ffna_title, ffna_theme_position, ffna_theme_priority FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_theme_priority");
+		$result = \Kofradia\DB::get()->query("SELECT ffna_id, ffna_title, ffna_theme_position, ffna_theme_priority FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_theme_priority");
 		$articles = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$articles[$row['ffna_theme_position']][$row['ffna_id']] = $row;
 		}
@@ -1528,13 +1528,13 @@ function vis_bilde(elm)
 					else
 					{
 						// flytt artikler (for fjerning)
-						ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_theme_priority = ffna_theme_priority - 1 WHERE ffna_ffn_id = $ffn->id AND ffna_theme_position = ".ess::$b->db->quote($ffna['ffna_theme_position'])." AND ffna_theme_priority > {$ffna['ffna_theme_priority']}");
+						\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_theme_priority = ffna_theme_priority - 1 WHERE ffna_ffn_id = $ffn->id AND ffna_theme_position = ".\Kofradia\DB::quote($ffna['ffna_theme_position'])." AND ffna_theme_priority > {$ffna['ffna_theme_priority']}");
 						
 						// flytt artikler (for oppretting/flytting)
-						ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_theme_priority = ffna_theme_priority + 1 WHERE ffna_ffn_id = $ffn->id AND ffna_theme_position = ".ess::$b->db->quote($area)." AND ffna_theme_priority >= $priority");
+						\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_theme_priority = ffna_theme_priority + 1 WHERE ffna_ffn_id = $ffn->id AND ffna_theme_position = ".\Kofradia\DB::quote($area)." AND ffna_theme_priority >= $priority");
 						
 						// oppdater artikkelen
-						ess::$b->db->query("UPDATE ff_newspapers_articles SET ffna_theme_position = ".ess::$b->db->quote($area).", ffna_theme_priority = $priority WHERE ffna_id = $ffna_id");
+						\Kofradia\DB::get()->exec("UPDATE ff_newspapers_articles SET ffna_theme_position = ".\Kofradia\DB::quote($area).", ffna_theme_priority = $priority WHERE ffna_id = $ffna_id");
 						
 						ess::$b->page->add_message("Artikkelen ble flyttet.");
 						redirect::handle();
@@ -1665,8 +1665,8 @@ function vis_bilde(elm)
 		}
 		
 		// sjekk når siste publisering ble utført
-		$result = ess::$b->db->query("SELECT ffn_published_time FROM ff_newspapers WHERE ffn_ff_id = {$this->ff->id} AND ffn_published != 0 ORDER BY ffn_published_time DESC LIMIT 1");
-		$last = mysql_num_rows($result) > 0 ? mysql_result($result, 0) : 0;
+		$result = \Kofradia\DB::get()->query("SELECT ffn_published_time FROM ff_newspapers WHERE ffn_ff_id = {$this->ff->id} AND ffn_published != 0 ORDER BY ffn_published_time DESC LIMIT 1");
+		$last = $result->rowCount() > 0 ? $result->fetchColumn(0) : 0;
 		
 		// har det gått lang nok tid?
 		$delay = ff_avis::FFN_PUBLISH_DELAY+$last - time();
@@ -1677,10 +1677,10 @@ function vis_bilde(elm)
 		}
 		
 		// hent artiklene med pris
-		$result = ess::$b->db->query("SELECT ffna_id, ffna_up_id, ffna_title, ffna_price FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_title");
+		$result = \Kofradia\DB::get()->query("SELECT ffna_id, ffna_up_id, ffna_title, ffna_price FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_title");
 		
 		// for få artikler?
-		if (mysql_num_rows($result) < 4)
+		if ($result->rowCount() < 4)
 		{
 			ess::$b->page->add_message("Utgivelsen må inneholde minimum 4 artikler for å bli publisert.", "error");
 			redirect::handle();
@@ -1696,7 +1696,7 @@ function vis_bilde(elm)
 		// finn total pris for artiklene
 		$articles = array();
 		$articles_price = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$articles_price += $row['ffna_price'];
 			$articles[] = $row;
@@ -1730,30 +1730,30 @@ function vis_bilde(elm)
 			
 			else
 			{
-				ess::$b->db->begin();
+				\Kofradia\DB::get()->beginTransaction();
 				
 				// trekk fra pengene fra firmabanken
 				if ($total_price > 0 && !$this->ff->bank(ff::BANK_BETALING, $total_price, "Publisering av utgivelse: {$ffn->data['ffn_title']} (id: $ffn->id)"))
 				{
-					ess::$b->db->rollback();
+					\Kofradia\DB::get()->commit(); // var tidligere rollback, men trenger ikke være det
 					ess::$b->page->add_message("Det er ikke nok penger i firmabanken.", "error");
 				}
 				
 				else
 				{
 					// oppdater utgivelsen
-					ess::$b->db->query("UPDATE ff_newspapers SET ffn_published = 1, ffn_published_time = ".time().", ffn_published_up_id = ".login::$user->player->id." WHERE ffn_id = $ffn->id");
+					\Kofradia\DB::get()->exec("UPDATE ff_newspapers SET ffn_published = 1, ffn_published_time = ".time().", ffn_published_up_id = ".login::$user->player->id." WHERE ffn_id = $ffn->id");
 					
 					// utbetal til journalistene
-					ess::$b->db->query("UPDATE users_players, ff_members, (SELECT ffna_up_id, SUM(ffna_price) AS ffna_sum, COUNT(ffna_price) AS ffna_count FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id AND ffna_price > 0 GROUP BY ffna_up_id) AS ref SET up_bank = up_bank + ffna_sum, up_bank_received = up_bank_received + ffna_sum, up_bank_profit = up_bank_profit + ffna_sum, up_bank_num_received = up_bank_num_received + ffna_count, up_log_new = up_log_new + ffna_count, ffm_earnings = ffm_earnings + ffna_sum WHERE ffna_up_id = up_id AND ffm_up_id = up_id AND ffm_ff_id = {$this->ff->id}");
+					\Kofradia\DB::get()->exec("UPDATE users_players, ff_members, (SELECT ffna_up_id, SUM(ffna_price) AS ffna_sum, COUNT(ffna_price) AS ffna_count FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id AND ffna_price > 0 GROUP BY ffna_up_id) AS ref SET up_bank = up_bank + ffna_sum, up_bank_received = up_bank_received + ffna_sum, up_bank_profit = up_bank_profit + ffna_sum, up_bank_num_received = up_bank_num_received + ffna_count, up_log_new = up_log_new + ffna_count, ffm_earnings = ffm_earnings + ffna_sum WHERE ffna_up_id = up_id AND ffm_up_id = up_id AND ffm_ff_id = {$this->ff->id}");
 					
 					// lagre overføringslogg
-					ess::$b->db->query("INSERT INTO bank_log (bl_sender_up_id, bl_receiver_up_id, amount, time) SELECT ".login::$user->player->id.", ffna_up_id, ffna_price, ".time()." FROM users_players, ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id AND ffna_up_id = up_id AND ffna_price > 0");
+					\Kofradia\DB::get()->exec("INSERT INTO bank_log (bl_sender_up_id, bl_receiver_up_id, amount, time) SELECT ".login::$user->player->id.", ffna_up_id, ffna_price, ".time()." FROM users_players, ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id AND ffna_up_id = up_id AND ffna_price > 0");
 					
 					// spillelogg
-					ess::$b->db->query("INSERT INTO users_log (time, ul_up_id, type, note, num) SELECT ".time().", ffna_up_id, ".gamelog::$items['bankoverforing'].", CONCAT(ffna_price, ':Utbetaling for avisartikkel.'), ".login::$user->player->id." FROM users_players, ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id AND ffna_up_id = up_id AND ffna_price > 0");
+					\Kofradia\DB::get()->exec("INSERT INTO users_log (time, ul_up_id, type, note, num) SELECT ".time().", ffna_up_id, ".gamelog::$items['bankoverforing'].", CONCAT(ffna_price, ':Utbetaling for avisartikkel.'), ".login::$user->player->id." FROM users_players, ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id AND ffna_up_id = up_id AND ffna_price > 0");
 					
-					ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 					
 					// live-feed
 					livefeed::add_row('Avisutgivelsen <a href="'.ess::$s['relative_path'].'/ff/avis?ff_id='.$this->ff->id.'&amp;ffn='.$ffn->id.'">'.htmlspecialchars($ffn->data['ffn_title']).'</a> ble publisert av <a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$this->ff->id.'">'.htmlspecialchars($this->ff->data['ff_name']).'</a>.');
@@ -1826,7 +1826,7 @@ function vis_bilde(elm)
 		}
 		else
 		{
-			ess::$b->db->query("UPDATE ff_newspapers SET ffn_published = 0 WHERE ffn_id = $ffn->id");
+			\Kofradia\DB::get()->exec("UPDATE ff_newspapers SET ffn_published = 0 WHERE ffn_id = $ffn->id");
 			ess::$b->page->add_message("Utgivelsen er ikke lengre publisert.");
 		}
 		
@@ -1878,10 +1878,10 @@ function vis_bilde(elm)
 <p class="c">Artikler i utgivelsen</p>';
 		
 		// hent artiklene
-		$result = ess::$b->db->query("SELECT ffna_id, ffna_up_id, ffna_title, LENGTH(ffna_text) AS ffna_text_length, ffna_theme_position, ffna_theme_priority, ffna_price FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_theme_position, ffna_theme_priority");
+		$result = \Kofradia\DB::get()->query("SELECT ffna_id, ffna_up_id, ffna_title, LENGTH(ffna_text) AS ffna_text_length, ffna_theme_position, ffna_theme_priority, ffna_price FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_theme_position, ffna_theme_priority");
 		
 		// ingen artikler
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 <p class="c">Ingen artikler er tilegnet utgivelsen | <a href="avis?ff_id='.$this->ff->id.'&amp;u&amp;ffn='.$ffn->id.'&amp;add_ffna">Legg til artikkel</a></p>';
@@ -1908,7 +1908,7 @@ function vis_bilde(elm)
 			$template = ff_avis::$templates[$ffn->data['ffn_template']];
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 		<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>'.(login::$logged_in && ($access || $row['ffna_up_id'] == login::$user->player->id) ? '
@@ -1944,7 +1944,7 @@ function vis_bilde(elm)
 <p class="c">Avisutgivelser | <a href="avis?ff_id='.$this->ff->id.'&amp;u&amp;new">Opprett utgivelse</a></p>';
 		
 		// ingen utgivelser?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 <p class="c">Ingen utgivelser er opprettet.</p>';
@@ -1968,7 +1968,7 @@ function vis_bilde(elm)
 	<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 		<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -2029,8 +2029,8 @@ function vis_bilde(elm)
 		$ffnp = null;
 		if (login::$logged_in)
 		{
-			$result = ess::$b->db->query("SELECT ffnp_cost, ffnp_time FROM ff_newspapers_payments WHERE ffnp_ffn_id = $ffn->id AND ffnp_up_id = ".login::$user->player->id);
-			$ffnp = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT ffnp_cost, ffnp_time FROM ff_newspapers_payments WHERE ffnp_ffn_id = $ffn->id AND ffnp_up_id = ".login::$user->player->id);
+			$ffnp = $result->fetch();
 		}
 		
 		// ikke publisert?
@@ -2052,10 +2052,10 @@ function vis_bilde(elm)
 			if (login::$logged_in && (!$ffnp && $ffn->data['ffn_cost'] == 0))
 			{
 				// opprett rad for betaling
-				ess::$b->db->query("INSERT INTO ff_newspapers_payments SET ffnp_ffn_id = $ffn->id, ffnp_up_id = ".login::$user->player->id.", ffnp_cost = {$ffn->data['ffn_cost']}, ffnp_time = ".time());
+				\Kofradia\DB::get()->exec("INSERT INTO ff_newspapers_payments SET ffnp_ffn_id = $ffn->id, ffnp_up_id = ".login::$user->player->id.", ffnp_cost = {$ffn->data['ffn_cost']}, ffnp_time = ".time());
 				
 				// oppdater utgivelsen
-				ess::$b->db->query("UPDATE ff_newspapers SET ffn_sold = ffn_sold + 1, ffn_income = ffn_income + {$ffn->data['ffn_cost']} WHERE ffn_id = $ffn->id");
+				\Kofradia\DB::get()->exec("UPDATE ff_newspapers SET ffn_sold = ffn_sold + 1, ffn_income = ffn_income + {$ffn->data['ffn_cost']} WHERE ffn_id = $ffn->id");
 				
 				redirect::handle();
 			}
@@ -2093,31 +2093,28 @@ function vis_bilde(elm)
 						// trekk fra pengene fra brukeren
 						if ($ffn->data['ffn_cost'] != 0)
 						{
-							ess::$b->db->begin();
-							ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - {$ffn->data['ffn_cost']} WHERE up_id = ".login::$user->player->id." AND up_cash >= {$ffn->data['ffn_cost']}");
+							$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - {$ffn->data['ffn_cost']} WHERE up_id = ".login::$user->player->id." AND up_cash >= {$ffn->data['ffn_cost']}");
 						}
 						
 						// mislykket
-						if ($ffn->data['ffn_cost'] != 0 && ess::$b->db->affected_rows() == 0)
+						if ($ffn->data['ffn_cost'] != 0 && $a == 0)
 						{
-							ess::$b->db->rollback();
 							ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
 						}
 						
 						else
 						{
 							// legg til oppføring
-							ess::$b->db->query("INSERT INTO ff_newspapers_payments SET ffnp_ffn_id = $ffn->id, ffnp_up_id = ".login::$user->player->id.", ffnp_cost = {$ffn->data['ffn_cost']}, ffnp_time = ".time());
+							\Kofradia\DB::get()->exec("INSERT INTO ff_newspapers_payments SET ffnp_ffn_id = $ffn->id, ffnp_up_id = ".login::$user->player->id.", ffnp_cost = {$ffn->data['ffn_cost']}, ffnp_time = ".time());
 							
 							// gi pengene til firmaet
-							ess::$b->db->query("UPDATE ff SET ff_bank = ff_bank + {$ffn->data['ffn_cost']} WHERE ff_id = {$this->ff->id}");
+							\Kofradia\DB::get()->exec("UPDATE ff SET ff_bank = ff_bank + {$ffn->data['ffn_cost']} WHERE ff_id = {$this->ff->id}");
 							
 							// stats for firmaet
 							$ffn->ff->stats_update("money_in", $ffn->data['ffn_cost']);
 							
 							// oppdater utgivelsen
-							ess::$b->db->query("UPDATE ff_newspapers SET ffn_sold = ffn_sold + 1, ffn_income = ffn_income + {$ffn->data['ffn_cost']} WHERE ffn_id = $ffn->id");
-							ess::$b->db->commit();
+							\Kofradia\DB::get()->exec("UPDATE ff_newspapers SET ffn_sold = ffn_sold + 1, ffn_income = ffn_income + {$ffn->data['ffn_cost']} WHERE ffn_id = $ffn->id");
 							
 							ess::$b->page->add_message("Du har kjøpt utgivelsen for ".game::format_cash($ffn->data['ffn_cost']).".");
 							redirect::handle();
@@ -2139,10 +2136,10 @@ function vis_bilde(elm)
 	<p>Artikler:</p>';
 				
 				// hent artiklene
-				$result = ess::$b->db->query("SELECT ffna_title FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_title");
+				$result = \Kofradia\DB::get()->query("SELECT ffna_title FROM ff_newspapers_articles WHERE ffna_ffn_id = $ffn->id ORDER BY ffna_title");
 				
 				// ingen artikler?
-				if (mysql_num_rows($result) == 0)
+				if ($result->rowCount() == 0)
 				{
 					echo '
 	<p>Ingen artikler.</p>';
@@ -2154,7 +2151,7 @@ function vis_bilde(elm)
 					echo '
 	<ul>';
 					
-					while ($row = mysql_fetch_assoc($result))
+					while ($row = $result->fetch())
 					{
 						echo '
 		<li>'.htmlspecialchars($row['ffna_title']).'</li>';
@@ -2217,7 +2214,7 @@ function vis_bilde(elm)
 <p class="c">Utgivelser</p>';
 		
 		// ingen publiserte utgivelser?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 <p class="c">Ingen utgivelser er publisert.</p>';
@@ -2229,7 +2226,7 @@ function vis_bilde(elm)
 <p class="c">'.$pagei->total.' utgivelse'.($pagei->total == 1 ? '' : 'r').' er publisert:</p>';
 			
 			#$i = $pagei->total - ($pagei->per_page*($pagei->active-1));
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 <div class="section center w200">

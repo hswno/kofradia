@@ -95,13 +95,13 @@ class page_bomberom
 		}
 		
 		// hent liste over spillere som befinner seg i bomberommet
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, up_brom_expire
 			FROM users_players
 			WHERE up_brom_ff_id = {$this->ff->id} AND up_brom_expire > ".time()." AND up_access_level != 0
 			ORDER BY up_brom_expire DESC");
 		$players = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$players[] = $row;
 		}
@@ -190,13 +190,13 @@ class page_bomberom
 		
 		// er ikke spilleren i bomberommet?
 		$up_id = (int) $_POST['player'];
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT u_email, up_id, up_name, up_access_level, up_brom_expire
 			FROM users_players JOIN users ON up_u_id = u_id
 			WHERE up_id = $up_id AND up_brom_ff_id = {$this->ff->id} AND up_brom_expire > ".time()." AND up_access_level != 0");
 		
 		$cost = $this->fam ? self::KICK_PLAYER_COST_FAMILIE : self::KICK_PLAYER_COST;
-		$up = mysql_fetch_assoc($result);
+		$up = $result->fetch();
 		if (!$up)
 		{
 			ess::$b->page->add_message("Fant ikke spilleren.", "error");
@@ -212,32 +212,32 @@ class page_bomberom
 			// bekreft skjema
 			$form->validate(postval("h"), "Kast ut spiller fra bomberom");
 			
-			ess::$b->db->begin();
+			\Kofradia\DB::get()->beginTransaction();
 			
 			// forsøk å trekk fra pengene
 			if (!$this->ff->bank(ff::BANK_BETALING, $cost, "Kaste ut spilleren [user id={$up['up_id']}] fra bomberommet"))
 			{
 				ess::$b->page->add_message("Det er ikke nok penger i ".($this->fam ? "broderskapbanken" : "firmabanken").".", "error");
-				ess::$b->db->commit();
+				\Kofradia\DB::get()->commit();
 			}
 			
 			else
 			{
 				// finn en tilfeldig bydel å plassere spilleren
-				$result = ess::$b->db->query("SELECT id, name FROM bydeler WHERE active != 0 ORDER BY RAND() LIMIT 1");
-				$b_id = mysql_result($result, 0);
+				$result = \Kofradia\DB::get()->query("SELECT id, name FROM bydeler WHERE active != 0 ORDER BY RAND() LIMIT 1");
+				$b_id = $result->fetchColumn(0);
 				
 				// forsøk å trekk ut spilleren fra bomberommet
-				ess::$b->db->query("
+				$a = \Kofradia\DB::get()->exec("
 					UPDATE users_players
 					SET up_brom_expire = 0, up_b_id = {$b_id}
 					WHERE up_id = {$up['up_id']} AND up_brom_ff_id = {$this->ff->id} AND up_brom_expire = {$up['up_brom_expire']} AND up_access_level != 0");
 				
 				// feilet?
-				if (ess::$b->db->affected_rows() == 0)
+				if ($a == 0)
 				{
 					// avbryt transaksjon
-					ess::$b->db->rollback();
+					\Kofradia\DB::get()->rollback();
 					
 					ess::$b->page->add_message("Kunne ikke kaste ut spilleren fra bomberommet.", "error");
 				}
@@ -264,7 +264,7 @@ www.kofradia.no';
 					putlog("DF", "BOMBEROM: {$up['up_name']} ble kastet ut av bomberommet {$this->ff->data['ff_name']} av ".login::$user->player->data['up_name']." ".ess::$s['spath']."/min_side?up_id={$up['up_id']}");
 					
 					ess::$b->page->add_message('Du kastet ut <user id="'.$up['up_id'].'" /> fra bomberommet. '.($this->fam ? 'Broderskapet' : 'Firmaet').' betalte et gebyr på '.game::format_cash($cost).'.');
-					ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 					redirect::handle();
 				}
 			}

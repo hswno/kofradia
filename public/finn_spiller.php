@@ -313,7 +313,7 @@ if (isset($_REQUEST['finn']))
 	<tbody>';
 		
 		$i = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
 			$rank_name = $rank['name'].($rank['orig'] ? ' ('.$rank['orig'].')' : '');

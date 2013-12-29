@@ -34,10 +34,10 @@ if (isset($_POST['is'])) // is:ignore_self
 }
 
 // hent brukere
-$q2 = $_base->db->quote(str_replace("_", "\\_", $q));
-$result = $_base->db->query("SELECT SQL_CALC_FOUND_ROWS up_id, up_name, up_access_level FROM users_players WHERE {$exclude}up_name LIKE $q2 ORDER BY LENGTH(up_name), up_name LIMIT $limit");
-$result2 = $_base->db->query("SELECT FOUND_ROWS()");
-$num = mysql_result($result2, 0);
+$q2 = \Kofradia\DB::quote(str_replace("_", "\\_", $q));
+$result = \Kofradia\DB::get()->query("SELECT SQL_CALC_FOUND_ROWS up_id, up_name, up_access_level FROM users_players WHERE {$exclude}up_name LIKE $q2 ORDER BY LENGTH(up_name), up_name LIMIT $limit");
+$result2 = \Kofradia\DB::get()->query("SELECT FOUND_ROWS()");
+$num = $result2->fetchColumn(0);
 
 // logg
 putlog("LOG", "%c3%bFINN-SPILLER:%b%c %u".login::$user->player->data['up_name']."%u søkte etter %u{$q}%u!");
@@ -45,7 +45,7 @@ putlog("LOG", "%c3%bFINN-SPILLER:%b%c %u".login::$user->player->data['up_name'].
 // xml
 $data = '<userlist query="'.htmlspecialchars($q).'" limit="'.$limit.'" results="'.$num.'">';
 
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$data .= '<user up_id="'.$row['up_id'].'" up_name="'.htmlspecialchars($row['up_name']).'">'.htmlspecialchars(game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level'])).'</user>';
 }

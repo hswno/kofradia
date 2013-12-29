@@ -131,8 +131,8 @@ class pagei
 		global $_base;
 		
 		// hent antall
-		$result = $_base->db->query("SELECT FOUND_ROWS()");
-		$this->total = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT FOUND_ROWS()");
+		$this->total = $result->fetchColumn(0);
 		
 		// sjekk om vi er på OK side
 		// hvis returnerer false betyr det at vi er på en tom side
@@ -140,17 +140,17 @@ class pagei
 	}
 	
 	/** Utfør spørring */
-	public function query($query, $critical = true, $debug = false)
+	public function query($query)
 	{
 		$query = preg_replace("/^\\s*SELECT\\s+/u", "", $query);
-		$result = ess::$b->db->query("SELECT SQL_CALC_FOUND_ROWS $query LIMIT {$this->start}, {$this->per_page}", $critical, $debug);
+		$result = \Kofradia\DB::get()->query("SELECT SQL_CALC_FOUND_ROWS $query LIMIT {$this->start}, {$this->per_page}");
 		
 		// hvis vi ikke er på en gyldig side
 		if (!$this->found_rows() && $this->total > 0)
 		{
 			$this->set_active(1);
 			$this->calc();
-			$result = ess::$b->db->query("SELECT $query LIMIT {$this->start}, {$this->per_page}");
+			$result = \Kofradia\DB::get()->query("SELECT $query LIMIT {$this->start}, {$this->per_page}");
 		}
 		
 		return $result;

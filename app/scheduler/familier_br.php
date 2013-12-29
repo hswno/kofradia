@@ -4,16 +4,16 @@ global $_base;
 
 // hent de familiene som skal dø ut
 $expire = time();
-$result = $_base->db->query("SELECT fff_id, ff_id FROM ff_free LEFT JOIN ff ON ff_fff_id = fff_id AND ff_inactive = 0 AND ff_is_crew = 0 AND ff_br_id IS NULL WHERE fff_active = 2 AND fff_time_expire_br <= $expire");
+$result = \Kofradia\DB::get()->query("SELECT fff_id, ff_id FROM ff_free LEFT JOIN ff ON ff_fff_id = fff_id AND ff_inactive = 0 AND ff_is_crew = 0 AND ff_br_id IS NULL WHERE fff_active = 2 AND fff_time_expire_br <= $expire");
 
 $handled = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	// ikke behandlet?
 	if (!in_array($row['fff_id'], $handled))
 	{
 		// sett som behandlet
-		$_base->db->query("UPDATE ff_free SET fff_active = 0 WHERE fff_id = {$row['fff_id']}");
+		\Kofradia\DB::get()->exec("UPDATE ff_free SET fff_active = 0 WHERE fff_id = {$row['fff_id']}");
 		$handled[] = $row['fff_id'];
 	}
 	
@@ -31,7 +31,7 @@ while ($row = mysql_fetch_assoc($result))
 
 // sett scheduler til neste familie som skal dø ut hvis ikke valgt bygning
 $scheduler_skip_next = true;
-$_base->db->query("
+\Kofradia\DB::get()->exec("
 	UPDATE scheduler, (
 		SELECT MIN(fff_time_expire_br) fff_time, COUNT(fff_id) fff_count FROM ff_free WHERE fff_active = 2
 	) ref

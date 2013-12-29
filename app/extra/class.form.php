@@ -36,9 +36,9 @@ class form
 		$this->user = login::$user->player->data['up_name'];
 		
 		// har vi noen aktive som ikke er fullført?
-		$result = $_base->db->query("SELECT * FROM forms WHERE forms_area = ".$_base->db->quote($this->area)." AND forms_u_id = {$this->u_id} AND forms_attempts = 0 LIMIT 1");
+		$result = \Kofradia\DB::get()->query("SELECT * FROM forms WHERE forms_area = ".\Kofradia\DB::quote($this->area)." AND forms_u_id = {$this->u_id} AND forms_attempts = 0 LIMIT 1");
 		
-		if ($row = mysql_fetch_assoc($result))
+		if ($row = $result->fetch())
 		{
 			$this->active = $row;
 			$this->hash = $row['forms_hash'];
@@ -61,7 +61,7 @@ class form
 		// opprett ny
 		$this->hash = uniqid("");
 		$this->active = true;
-		$_base->db->query("INSERT INTO forms SET forms_area = ".$_base->db->quote($this->area).", forms_hash = '{$this->hash}', forms_u_id = {$this->u_id}, forms_created_time = ".time());
+		\Kofradia\DB::get()->exec("INSERT INTO forms SET forms_area = ".\Kofradia\DB::quote($this->area).", forms_hash = '{$this->hash}', forms_u_id = {$this->u_id}, forms_created_time = ".time());
 		
 		#putlog("SPAMLOG", "%c6%bFORMS-NEW%b%c: %u{$this->user}%u was returned with a %unew%u hash (%u{$this->area}%u)");
 		
@@ -78,12 +78,12 @@ class form
 		}
 		
 		global $_base;
-		$hash_sql = $_base->db->quote($hash);
+		$hash_sql = \Kofradia\DB::quote($hash);
 		
 		// er dette den aktive?
 		if ($hash == $this->hash && $this->hash != false)
 		{
-			$_base->db->query("DELETE FROM forms WHERE forms_hash = $hash_sql AND forms_u_id = $this->u_id");
+			\Kofradia\DB::get()->exec("DELETE FROM forms WHERE forms_hash = $hash_sql AND forms_u_id = $this->u_id");
 			$this->active = false;
 			return 1;
 		}
@@ -92,12 +92,12 @@ class form
 		{
 			// ikke aktiv
 			// finnes den i det hele tatt?
-			$result = $_base->db->query("SELECT * FROM forms WHERE forms_area = ".$_base->db->quote($this->area)." AND forms_u_id = $this->u_id AND forms_hash = $hash_sql");
+			$result = \Kofradia\DB::get()->query("SELECT * FROM forms WHERE forms_area = ".\Kofradia\DB::quote($this->area)." AND forms_u_id = $this->u_id AND forms_hash = $hash_sql");
 			
-			if ($row = mysql_fetch_assoc($result))
+			if ($row = $result->fetch())
 			{
-				$log = $_base->db->quote("Time: ".$_base->date->get()->format("d.m.Y H:i:s")."; URI: ".$_SERVER['REQUEST_URI']."; User-agent: ".$_SERVER['HTTP_USER_AGENT'].(!empty($info) ? '; '.$info : ''));
-				$_base->db->query("UPDATE forms SET forms_attempts = forms_attempts + 1, forms_log = IF(ISNULL(forms_log), $log, CONCAT(forms_log, '\n', $log)), forms_last_time = ".time()." WHERE forms_area = ".$_base->db->quote($this->area)." AND forms_hash = $hash_sql AND forms_u_id = $this->u_id");
+				$log = \Kofradia\DB::quote("Time: ".$_base->date->get()->format("d.m.Y H:i:s")."; URI: ".$_SERVER['REQUEST_URI']."; User-agent: ".$_SERVER['HTTP_USER_AGENT'].(!empty($info) ? '; '.$info : ''));
+				\Kofradia\DB::get()->exec("UPDATE forms SET forms_attempts = forms_attempts + 1, forms_log = IF(ISNULL(forms_log), $log, CONCAT(forms_log, '\n', $log)), forms_last_time = ".time()." WHERE forms_area = ".\Kofradia\DB::quote($this->area)." AND forms_hash = $hash_sql AND forms_u_id = $this->u_id");
 				
 				if ($row['forms_attempts'] > 0) putlog("ABUSE", "%c13%bFORMS-ABUSE:%b%c %u{$this->user}%u utførte samme formdata på nytt! (Gjentakelse: %c4%u".($row['attempts']+1)."%u%c; Area: %u{$this->area}%u; Hash: $hash; IP:%c5 {$_SERVER['REMOTE_ADDR']}%c".(!empty($info) ? '; Info: '.$info : '').")");
 				

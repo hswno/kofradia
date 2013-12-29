@@ -29,7 +29,7 @@ $tabell = array(
 );
 
 // hent statistikk
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT uhi_up_id, SUM(uhi_points) sum_uhi_points
 	FROM users_hits
 		JOIN users_players ON up_id = uhi_up_id AND up_access_level < ".ess::$g['access_noplay']." AND up_access_level != 0
@@ -41,7 +41,7 @@ $result = ess::$b->db->query("
 
 $total_bonus = 0;
 $i = 1;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$up = player::get($row['uhi_up_id']);
 	if ($up)

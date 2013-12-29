@@ -22,14 +22,14 @@ while (true)
 	if ($day == $today) break;
 }
 
-$result = $_base->db->query("SELECT DATE(FROM_UNIXTIME(up_created_time)) day, COUNT(up_id) count FROM users_players WHERE up_created_time >= $expire GROUP BY DATE(FROM_UNIXTIME(up_created_time))");
-while ($row = mysql_fetch_assoc($result))
+$result = \Kofradia\DB::get()->query("SELECT DATE(FROM_UNIXTIME(up_created_time)) day, COUNT(up_id) count FROM users_players WHERE up_created_time >= $expire GROUP BY DATE(FROM_UNIXTIME(up_created_time))");
+while ($row = $result->fetch())
 {
 	$stats_new[$row['day']] = (int) $row['count'];
 }
 
-$result = $_base->db->query("SELECT DATE(FROM_UNIXTIME(up_deactivated_time)) day, COUNT(up_id) count FROM users_players WHERE up_deactivated_time >= $expire GROUP BY DATE(FROM_UNIXTIME(up_deactivated_time))");
-while ($row = mysql_fetch_assoc($result))
+$result = \Kofradia\DB::get()->query("SELECT DATE(FROM_UNIXTIME(up_deactivated_time)) day, COUNT(up_id) count FROM users_players WHERE up_deactivated_time >= $expire GROUP BY DATE(FROM_UNIXTIME(up_deactivated_time))");
+while ($row = $result->fetch())
 {
 	$stats_die[$row['day']] = (int) $row['count'];
 }

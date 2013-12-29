@@ -41,11 +41,11 @@ echo '
 </form>';
 
 // hent brukerene
-$result = $_base->db->query("SELECT up_id, up_name, up_access_level, u_online_ip, up_created_time, u_email, up_last_online, up_hits, up_points, u_birth, up_cash+up_bank AS money, ref.ip_count FROM users_players JOIN users ON up_u_id = u_id, (SELECT u_online_ip AS ref_u_online_ip, COUNT(u_online_ip) AS ip_count FROM users JOIN users_players ON up_u_id = u_id WHERE up_access_level != 0 AND up_last_online > ".(time()-$time)." GROUP BY u_online_ip HAVING COUNT(u_online_ip) > 1) AS ref WHERE u_online_ip = ref_u_online_ip AND up_access_level != 0 AND up_last_online > ".(time()-$time)." ORDER BY ip_count DESC, u_online_ip, up_name");
+$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, u_online_ip, up_created_time, u_email, up_last_online, up_hits, up_points, u_birth, up_cash+up_bank AS money, ref.ip_count FROM users_players JOIN users ON up_u_id = u_id, (SELECT u_online_ip AS ref_u_online_ip, COUNT(u_online_ip) AS ip_count FROM users JOIN users_players ON up_u_id = u_id WHERE up_access_level != 0 AND up_last_online > ".(time()-$time)." GROUP BY u_online_ip HAVING COUNT(u_online_ip) > 1) AS ref WHERE u_online_ip = ref_u_online_ip AND up_access_level != 0 AND up_last_online > ".(time()-$time)." ORDER BY ip_count DESC, u_online_ip, up_name");
 
 // sett opp listen
 $list = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$list[$row['u_online_ip']][] = $row;
 }

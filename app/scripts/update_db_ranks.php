@@ -10,13 +10,13 @@ game::$ranks = array(
 );
 
 // hent rankene
-$result = ess::$b->db->query("SELECT id, name, points, rank_max_health, rank_max_energy FROM ranks ORDER BY points");
+$result = \Kofradia\DB::get()->query("SELECT id, name, points, rank_max_health, rank_max_energy FROM ranks ORDER BY points");
 
 // sett opp data
 $i = 0;
 $last_id = 0;
 
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	// oppdater need_points til den forrige raden
 	if ($last_id)
@@ -40,10 +40,10 @@ if ($last_id)
 }
 
 // hent rankene for posisjonene
-$result = ess::$b->db->query("SELECT pos, name FROM ranks_pos ORDER BY pos");
+$result = \Kofradia\DB::get()->query("SELECT pos, name FROM ranks_pos ORDER BY pos");
 
 $i = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$row['number'] = ++$i;
 	game::$ranks['pos'][$row['pos']] = $row;

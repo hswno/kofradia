@@ -42,16 +42,16 @@ class kriminalitet
 		// finn ut når vi sist utførte kriminalitet og ventetiden
 		$this->last = false;
 		$this->wait = false;
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT k.id, k.wait_time, k.name, s.last, k.b_id, ks_strength
 			FROM kriminalitet_status AS s, kriminalitet AS k
 			WHERE s.krimid = k.id AND s.ks_up_id = ".login::$user->player->id."
 			ORDER BY s.last DESC
 			LIMIT 1");
 		
-		if (mysql_num_rows($result) != 0)
+		if ($result->rowCount() != 0)
 		{
-			$this->last = mysql_fetch_assoc($result);
+			$this->last = $result->fetch();
 		
 			// er det noe ventetid?
 			$now = time();
@@ -77,7 +77,7 @@ class kriminalitet
 		
 		// hent kriminalitet i denne bydelen
 		$this->options = array();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT k.id, k.wait_time, k.name, k.points, k.img, k.max_strength, k.cash_min, k.cash_max, IFNULL(s.count,0) AS count, IFNULL(s.success,0) AS success, k_strength, ks_strength
 			FROM kriminalitet AS k LEFT JOIN kriminalitet_status AS s ON k.id = s.krimid AND s.ks_up_id = {$this->up->id}
 			WHERE k.b_id = {$this->up->data['up_b_id']}
@@ -85,7 +85,7 @@ class kriminalitet
 		
 		$probs = array();
 		$options = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// sett opp korrekt sannsynlighet
 			$row['prob'] = $this->calc_prob($row);
@@ -155,7 +155,7 @@ class kriminalitet
 			
 			// gi penger til spilleren
 			$cash = rand($krim['cash_min'], $krim['cash_max']);
-			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + $cash WHERE up_id = {$this->up->id}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + $cash WHERE up_id = {$this->up->id}");
 			$ret['cash'] = $cash;
 			
 			// trigger
@@ -171,14 +171,14 @@ class kriminalitet
 		
 		// oppdater kriminalitet-status
 		$s = $ret['success'] ? 2 : 1;
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			INSERT INTO kriminalitet_status
 			SET krimid = $id, ks_up_id = {$this->up->id}, count = 1, success = ".($ret['success'] ? 1 : 0).", last = ".time().", ks_strength = ks_strength + $s
 			ON DUPLICATE KEY
 			UPDATE count = count + 1, success = success + VALUES(success), last = VALUES(last), ks_strength = VALUES(ks_strength)");
 		
 		// oppdater kriminalitet
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE kriminalitet
 			SET k_strength = k_strength + $s
 			WHERE id = $id");
@@ -204,7 +204,7 @@ class kriminalitet
 		$rank = $success ? game::format_rank($points, $this->up->rank) : null;
 		
 		// hent en tilfeldig melding
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT text
 			FROM kriminalitet_text
 			WHERE krimid = $id AND outcome = ".($success ? 1 : 2)."
@@ -212,7 +212,7 @@ class kriminalitet
 			LIMIT 1");
 		
 		// har melding?
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		if ($row)
 		{
 			if ($success)
@@ -244,17 +244,18 @@ class kriminalitet
 	protected function get_prob_stats()
 	{
 		// hent minimal og maksimal strength for krims
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT MIN(k_strength) min_k_strength, MAX(k_strength) max_k_strength
 			FROM kriminalitet
 				JOIN bydeler ON kriminalitet.b_id = bydeler.id AND bydeler.active != 0");
-		$this->prob_k_min = mysql_result($result, 0, 0);
-		$this->prob_k_max = max(1, mysql_result($result, 0, 1));
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$this->prob_k_min = $row[0];
+		$this->prob_k_max = max(1, $row[1]);
 		
 		// hent stats for å sammenlikne med andre spillere
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT MAX(ks_strength)
 			FROM kriminalitet_status");
-		$this->prob_ks_max = mysql_result($result, 0);
+		$this->prob_ks_max = $result->fetchColumn(0);
 	}
 }

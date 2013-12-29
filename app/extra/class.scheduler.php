@@ -47,10 +47,10 @@ class scheduler
 		$this->second = (int) $this->date_now->format("s");
 		
 		// hent rutiner som skal utføres nå
-		$result = $_base->db->query("SELECT s_name, s_hours, s_minutes, s_seconds, s_file, s_count, s_previous, s_next FROM scheduler WHERE s_active = 1 AND s_next <= ".$this->start." AND s_expire < ".$this->start);
+		$result = \Kofradia\DB::get()->query("SELECT s_name, s_hours, s_minutes, s_seconds, s_file, s_count, s_previous, s_next FROM scheduler WHERE s_active = 1 AND s_next <= ".$this->start." AND s_expire < ".$this->start);
 		
 		// kjør rutiner som ble funnet
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$this->run($row);
 		}
@@ -156,10 +156,10 @@ class scheduler
 		global $_base;
 		
 		// marker som opptatt
-		$_base->db->query("UPDATE scheduler SET s_count = s_count + 1, s_previous = $this->start, s_expire = ".($this->start+600)." WHERE s_name = ".$_base->db->quote($row['s_name'])." AND s_count = {$row['s_count']}");
+		$a = \Kofradia\DB::get()->exec("UPDATE scheduler SET s_count = s_count + 1, s_previous = $this->start, s_expire = ".($this->start+600)." WHERE s_name = ".\Kofradia\DB::quote($row['s_name'])." AND s_count = {$row['s_count']}");
 		
 		// ikke oppdater - hopp over (en annen holder mest sannsynlig på)
-		if ($_base->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			return;
 		}
@@ -194,7 +194,7 @@ class scheduler
 		}
 		
 		$s_next = isset($scheduler_skip_next) ? '' : ', s_next = '.$next;
-		$_base->db->query("UPDATE scheduler SET s_expire = 0$s_next WHERE s_name = ".$_base->db->quote($row['s_name'])." AND s_count = ".($row['s_count'] + 1));
+		\Kofradia\DB::get()->exec("UPDATE scheduler SET s_expire = 0$s_next WHERE s_name = ".\Kofradia\DB::quote($row['s_name'])." AND s_count = ".($row['s_count'] + 1));
 	}
 	
 	/** Last inn rutine */

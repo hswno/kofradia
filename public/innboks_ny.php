@@ -23,13 +23,13 @@ class page_innboks_ny
 		// mottaker fra en lenke?
 		elseif (isset($_GET['mottaker']))
 		{
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT up_id, up_name, up_access_level
 				FROM users_players
-				WHERE up_name = ".ess::$b->db->quote($_GET['mottaker'])."
+				WHERE up_name = ".\Kofradia\DB::quote($_GET['mottaker'])."
 				ORDER BY up_access_level = 0, up_last_online DESC
 				LIMIT 1");
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$this->receivers[] = $row;
 			}
@@ -91,8 +91,8 @@ class page_innboks_ny
 		{
 			// kontroller at den ene mottakeren vi har valgt er i Crewet (tilgang til "crewet")
 			$row = reset($this->receivers);
-			$result = ess::$b->db->query("SELECT up_access_level FROM users_players WHERE up_id = {$row['up_id']}");
-			$row = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT up_access_level FROM users_players WHERE up_id = {$row['up_id']}");
+			$row = $result->fetch();
 			if (!$row || !in_array("crewet", access::types($row['up_access_level'])))
 			{
 				$blokkering_ok = false;
@@ -249,7 +249,7 @@ class page_innboks_ny
 		if (!$where) return null;
 		
 		// hent brukere og evt. blokk
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT u_active_up_id, u_access_level, up_id, up_name, up_access_level, uc_id, uc_info
 			FROM (
 				SELECT u_active_up_id, u_access_level, up_id, up_name, up_access_level, uc_id, uc_info
@@ -261,7 +261,7 @@ class page_innboks_ny
 		$this->errors = array();
 		$this->infos = array();
 		$receivers = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// seg selv?
 			if ($row['up_id'] == login::$user->player->id)
@@ -310,26 +310,26 @@ class page_innboks_ny
 				// forbeholdt mot å motta meldinger? (ikke crew)
 				elseif (in_array($row['up_access_level'], ess::$g['access']['block_pm']))
 				{
-					$result2 = ess::$b->db->query("
+					$result2 = \Kofradia\DB::get()->query("
 						SELECT uc_contact_up_id
 						FROM users_players, users_contacts
 						WHERE up_id = {$row['up_id']}
 						  AND up_u_id = uc_u_id
 						  AND uc_contact_up_id = ".login::$user->player->id."
 						  AND uc_type = 1");
-					$kontakt = mysql_num_rows($result2) > 0;
+					$kontakt = $result2->rowCount() > 0;
 					
 					// ikke kontakt? sjekk for mottatt melding innen 24 timer
 					if (!$kontakt)
 					{
 						$expire = time() - 86400;
-						$result2 = ess::$b->db->query("
+						$result2 = \Kofradia\DB::get()->query("
 							SELECT MAX(ir2.ir_restrict_im_time)
 							FROM inbox_rel AS ir1, inbox_rel AS ir2
 							WHERE ir1.ir_up_id = {$row['up_id']} AND ir1.ir_it_id = ir2.ir_it_id AND ir2.ir_up_id = ".login::$user->player->id." AND ir1.ir_deleted = 0");
 						
 						// for lenger enn 24 timer siden? --> kan ikke sende melding
-						if (mysql_num_rows($result2) == 0 || mysql_result($result2, 0) < $expire)
+						if ($result2->rowCount() == 0 || $result2->fetchColumn(0) < $expire)
 						{
 							$this->remove_player($row);
 							

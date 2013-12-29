@@ -8,9 +8,9 @@ $_base->page->add_title("Planlegger", "Status");
 echo '
 <h1>Planlegger - Status</h1>';
 
-$result = $_base->db->query("SELECT s_name, s_hours, s_minutes, s_seconds, s_file, s_description, s_count, s_previous, s_next, s_active FROM scheduler ORDER BY s_name");
+$result = \Kofradia\DB::get()->query("SELECT s_name, s_hours, s_minutes, s_seconds, s_file, s_description, s_count, s_previous, s_next, s_active FROM scheduler ORDER BY s_name");
 
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 <p>
@@ -21,7 +21,7 @@ if (mysql_num_rows($result) == 0)
 else
 {
 	$i = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$info = game::bb_to_html($row['s_description']);
 		

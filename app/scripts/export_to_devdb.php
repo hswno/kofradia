@@ -40,12 +40,12 @@ $no = array("smafia_database");
 // navn på filene som eksporteres
 $export_names = array("main");
 
-ess::$b->db->query("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
+\Kofradia\DB::get()->exec("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
 
 // opprett midlertidig database
 echo "* Oppretter midlertidig database ".sentences_list($nc)."\n";
 foreach ($nc as $name) {
-	ess::$b->db->query("CREATE DATABASE $name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci");
+	\Kofradia\DB::get()->exec("CREATE DATABASE $name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci");
 }
 
 // kopier over tabellstruktur fra tabellene
@@ -168,7 +168,7 @@ foreach ($tabeller as $x => $rows)
 	foreach ($rows as $row)
 	{
 		echo "  Oppretter tabellen {$nc[$x]}.$row\n";
-		ess::$b->db->query("CREATE TABLE {$nc[$x]}.$row LIKE {$no[$x]}.$row");
+		\Kofradia\DB::get()->exec("CREATE TABLE {$nc[$x]}.$row LIKE {$no[$x]}.$row");
 	}
 }
 
@@ -231,7 +231,7 @@ foreach ($alldata as $x => $rows)
 	foreach ($rows as $row)
 	{
 		echo "  Kopierer data fra {$no[$x]}.$row til {$nc[$x]}.$row..\n";
-		ess::$b->db->query("INSERT INTO {$nc[$x]}.$row SELECT * FROM {$no[$x]}.$row");
+		\Kofradia\DB::get()->exec("INSERT INTO {$nc[$x]}.$row SELECT * FROM {$no[$x]}.$row");
 	}
 }
 
@@ -267,7 +267,7 @@ $map = export_map(array(
 	"u_deactivated_up_id",
 	"u_deactivated_note" => "IF(u_deactivated_note IS NULL, NULL, 'dummy')"
 ));
-ess::$b->db->query("INSERT INTO {$nc[0]}.users
+\Kofradia\DB::get()->exec("INSERT INTO {$nc[0]}.users
 	({$map[0]})
 	SELECT {$map[1]}
 	FROM {$no[0]}.users");
@@ -326,17 +326,17 @@ if ($extended)
 }
 
 $map = export_map($data);
-ess::$b->db->query("INSERT INTO {$nc[0]}.users_players
+\Kofradia\DB::get()->exec("INSERT INTO {$nc[0]}.users_players
 	({$map[0]})
 	SELECT {$map[1]}
 	FROM {$no[0]}.users_players");
 
 // andre forandringer
 echo "\n* Andre endringer..\n";
-ess::$b->db->query("UPDATE {$nc[0]}.scheduler SET s_active = 0 WHERE s_name IN ('bank_renter_info', 'trac_rss', 'wordpress_entries')");
+\Kofradia\DB::get()->exec("UPDATE {$nc[0]}.scheduler SET s_active = 0 WHERE s_name IN ('bank_renter_info', 'trac_rss', 'wordpress_entries')");
 
 // korrigerer tasks
-ess::$b->db->query("UPDATE {$nc[0]}.tasks SET t_ant = 0, t_last = 0");
+\Kofradia\DB::get()->exec("UPDATE {$nc[0]}.tasks SET t_ant = 0, t_last = 0");
 
 // generer dummy-data
 // TODO: forumet
@@ -345,13 +345,13 @@ ess::$b->db->query("UPDATE {$nc[0]}.tasks SET t_ant = 0, t_last = 0");
 // TODO: support
 
 // dummy: donasjoner
-$result = ess::$b->db->query("SELECT up_id FROM {$no[0]}.users_players WHERE up_access_level != 0 AND up_last_online > ".(time()-86400*7)." ORDER BY RAND() LIMIT 15");
-while ($row = mysql_fetch_assoc($result))
+$result = \Kofradia\DB::get()->query("SELECT up_id FROM {$no[0]}.users_players WHERE up_access_level != 0 AND up_last_online > ".(time()-86400*7)." ORDER BY RAND() LIMIT 15");
+while ($row = $result->fetch())
 {
-	ess::$b->db->query("INSERT INTO {$nc[0]}.donations SET d_up_id = {$row['up_id']}, d_amount = ".rand(10,100).", d_time = ".(time()-rand(0, 604800)));
+	\Kofradia\DB::get()->exec("INSERT INTO {$nc[0]}.donations SET d_up_id = {$row['up_id']}, d_amount = ".rand(10,100).", d_time = ".(time()-rand(0, 604800)));
 }
 
-ess::$b->db->query("SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS");
+\Kofradia\DB::get()->exec("SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS");
 
 $files = array();
 foreach ($export_names as $name) {
@@ -369,7 +369,7 @@ foreach ($nc as $key => $name) {
 echo "\n* Dropper databasene ".sentences_list($nc)."\n";
 foreach ($nc as $name)
 {
-	ess::$b->db->query("DROP DATABASE $name");
+	\Kofradia\DB::get()->exec("DROP DATABASE $name");
 }
 
 echo "\nFullført.\n";

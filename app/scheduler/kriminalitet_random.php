@@ -22,19 +22,19 @@ $strength_add = $strength_high - $strength_low;
 $cash_add = $cash_high - $cash_low;
 
 // sett random verdier - start transaksjon
-$result = $_base->db->query("BEGIN");
+\Kofradia\DB::get()->beginTransaction();
 
 // varighet
-$_base->db->query("UPDATE kriminalitet SET wait_time = ROUND(RAND()*$time_add+$time_low)");
+\Kofradia\DB::get()->exec("UPDATE kriminalitet SET wait_time = ROUND(RAND()*$time_add+$time_low)");
 
 // poeng
-$_base->db->query("UPDATE kriminalitet SET points = ROUND(wait_time*(RAND()*$points_add+$points_low))");
+\Kofradia\DB::get()->exec("UPDATE kriminalitet SET points = ROUND(wait_time*(RAND()*$points_add+$points_low))");
 
 // strength
-$_base->db->query("UPDATE kriminalitet SET max_strength = ROUND(RAND()*$strength_add+$strength_low)");
+\Kofradia\DB::get()->exec("UPDATE kriminalitet SET max_strength = ROUND(RAND()*$strength_add+$strength_low)");
 
 // penger
-$_base->db->query("UPDATE kriminalitet SET cash_min = ROUND(RAND()*$cash_add+$cash_low)");
-$_base->db->query("UPDATE kriminalitet SET cash_max = ROUND(RAND()*($cash_high-cash_min)+cash_min)");
+\Kofradia\DB::get()->exec("UPDATE kriminalitet SET cash_min = ROUND(RAND()*$cash_add+$cash_low)");
+\Kofradia\DB::get()->exec("UPDATE kriminalitet SET cash_max = ROUND(RAND()*($cash_high-cash_min)+cash_min)");
 
-$_base->db->query("COMMIT");
+\Kofradia\DB::get()->commit();

@@ -82,11 +82,12 @@ else
 <p id="doc_userinfo">Du er ikke logget inn | <a href="'.$__server['relative_path'].'/?orign='.urlencode($_SERVER['REQUEST_URI']).'">Logg inn</a> | <a href="'.$__server['relative_path'].'/registrer">Registrer</a></p>';
 }
 
+$profiler = \Kofradia\DB::getProfiler();
 echo '
 <div id="doc_content">'.$_base->page->content.'
 </div>
 <div id="doc_footer">
-	<p id="doc_footer_left">Script: '.round(microtime(true)-SCRIPT_START-$_base->db->time, 4).' sek<span id="js_time"></span><br />Database: '.round($_base->db->time, 4).' sek ('.$_base->db->queries.' spørring'.($_base->db->queries == 1 ? '' : 'er').')</p>
+	<p id="doc_footer_left">Script: '.round(microtime(true)-SCRIPT_START-$profiler->time, 4).' sek<span id="js_time"></span><br />Database: '.round($profiler->time, 4).' sek ('.$profiler->num.' spørring'.($profiler->num == 1 ? '' : 'er').')</p>
 	<p><a href="http://hsw.no"><span>Henrik Steen Webutvikling</span></a></p>
 </div>
 <!--
@@ -96,8 +97,8 @@ echo '
 Kofradia 2010
 Beskyttet av åndsverkloven
 Utviklet og scriptet av Henrik Steen [henrist.net]
-Script tid: '.round(microtime(true)-SCRIPT_START-$_base->db->time, 4).' sek
-Database tid: '.round($_base->db->time, 4).' sek - '.$_base->db->queries.' database spørring'.($_base->db->queries == 1 ? '' : 'er').'
+Script tid: '.round(microtime(true)-SCRIPT_START-$profiler->time, 4).' sek
+Database tid: '.round($profiler->time, 4).' sek - '.$profiler->num.' database spørring'.($profiler->num == 1 ? '' : 'er').'
 
 -->'.$_base->page->body_end.'
 </body>

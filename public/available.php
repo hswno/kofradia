@@ -54,10 +54,10 @@ class available
 		}
 		
 		// legg til
-		$_base->db->query("INSERT INTO available_group SET ag_title = ".$_base->db->quote($title).", ag_description = ".$_base->db->quote($description).", ag_up_id = ".login::$user->player->id.", ag_time = ".time());
+		\Kofradia\DB::get()->exec("INSERT INTO available_group SET ag_title = ".\Kofradia\DB::quote($title).", ag_description = ".\Kofradia\DB::quote($description).", ag_up_id = ".login::$user->player->id.", ag_time = ".time());
 		
 		// returner nytt objekt
-		return self::get_ag($_base->db->insert_id());
+		return self::get_ag(\Kofradia\DB::get()->lastInsertId());
 	}
 }
 
@@ -83,15 +83,15 @@ class available_group
 		global $_base;
 		
 		$this->ag_id = (int) $ag_id;
-		$result = $_base->db->query("SELECT ag_id, ag_title, ag_description, ag_up_id FROM available_group WHERE ag_id = $this->ag_id");
+		$result = \Kofradia\DB::get()->query("SELECT ag_id, ag_title, ag_description, ag_up_id FROM available_group WHERE ag_id = $this->ag_id");
 		
 		// fant ikke?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			return;
 		}
 		
-		$this->info = mysql_fetch_assoc($result);
+		$this->info = $result->fetch();
 	}
 	
 	/**
@@ -115,7 +115,7 @@ class available_group
 		}
 		
 		// oppdater
-		$_base->db->query("UPDATE available_group SET ag_title = ".$_base->db->quote($title).", ag_description = ".$_base->db->quote($description)." WHERE ag_id = $this->ag_id");
+		\Kofradia\DB::get()->exec("UPDATE available_group SET ag_title = ".\Kofradia\DB::quote($title).", ag_description = ".\Kofradia\DB::quote($description)." WHERE ag_id = $this->ag_id");
 		
 		return true;
 	}
@@ -128,10 +128,10 @@ class available_group
 		global $_base;
 		
 		// hent enhetene
-		$result = $_base->db->query("SELECT ai_id, ai_title, ai_description, ai_order FROM available_items WHERE ai_ag_id = $this->ag_id ORDER BY ai_order");
+		$result = \Kofradia\DB::get()->query("SELECT ai_id, ai_title, ai_description, ai_order FROM available_items WHERE ai_ag_id = $this->ag_id ORDER BY ai_order");
 		
 		$this->ai = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$this->ai[$row['ai_id']] = $row;
 		}
@@ -150,10 +150,10 @@ class available_group
 		if (!$this->ai) $this->get_ai_list();
 		
 		// tøm evt. liste
-		$_base->db->query("DELETE FROM available_votes WHERE av_ag_id = $this->ag_id AND av_up_id = ".login::$user->player->id);
+		\Kofradia\DB::get()->exec("DELETE FROM available_votes WHERE av_ag_id = $this->ag_id AND av_up_id = ".login::$user->player->id);
 		
 		// legg til i brukeroversikten
-		$_base->db->query("REPLACE INTO available_users SET au_ag_id = $this->ag_id, au_up_id = ".login::$user->player->id.", au_note = ".$_base->db->quote($note).", au_time = ".time());
+		\Kofradia\DB::get()->exec("REPLACE INTO available_users SET au_ag_id = $this->ag_id, au_up_id = ".login::$user->player->id.", au_note = ".\Kofradia\DB::quote($note).", au_time = ".time());
 		
 		// gå gjennom hvert valg og legg til hvis det finnes
 		$count = 0;
@@ -166,8 +166,8 @@ class available_group
 			$state = $ai[2] ? 1 : 0;
 			if (!$state && empty($ai[1])) continue; // hopp over fordi den verken er valgt eller har notat
 			
-			$_base->db->query("INSERT IGNORE INTO available_votes SET av_ag_id = $this->ag_id, av_ai_id = $ai_id, av_up_id = ".login::$user->player->id.", av_state = $state, av_note = ".$_base->db->quote($ai[1]));
-			if ($_base->db->affected_rows() > 0) $count++;
+			$a = \Kofradia\DB::get()->exec("INSERT IGNORE INTO available_votes SET av_ag_id = $this->ag_id, av_ai_id = $ai_id, av_up_id = ".login::$user->player->id.", av_state = $state, av_note = ".\Kofradia\DB::quote($ai[1]));
+			if ($a > 0) $count++;
 		}
 		
 		return $count;
@@ -181,17 +181,17 @@ class available_group
 		global $_base;
 		
 		// hent brukerinfo
-		$result = $_base->db->query("SELECT au_up_id, au_note, au_time, up_name, up_access_level FROM available_users LEFT JOIN users_players ON au_up_id = up_id WHERE au_ag_id = $this->ag_id ORDER BY up_name");
+		$result = \Kofradia\DB::get()->query("SELECT au_up_id, au_note, au_time, up_name, up_access_level FROM available_users LEFT JOIN users_players ON au_up_id = up_id WHERE au_ag_id = $this->ag_id ORDER BY up_name");
 		$data = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$row['votes'] = array();
 			$data[$row['au_up_id']] = $row;
 		}
 		
 		// hent data
-		$result = $_base->db->query("SELECT av_ai_id, av_up_id, av_state, av_note FROM available_votes WHERE av_ag_id = $this->ag_id");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT av_ai_id, av_up_id, av_state, av_note FROM available_votes WHERE av_ag_id = $this->ag_id");
+		while ($row = $result->fetch())
 		{
 			if (!isset($data[$row['av_up_id']])) continue;
 			$data[$row['av_up_id']]['votes'][$row['av_ai_id']] = $row;
@@ -504,7 +504,7 @@ echo '
 	<h1 class="bg1">Avstemninger<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">';
 
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 		<p>Ingen avstemninger er opprettet.</p>';
@@ -524,7 +524,7 @@ else
 			<tbody>';
 	
 	$i = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$bb = game::bb_to_html($row['ag_description']);
 		

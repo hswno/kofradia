@@ -20,8 +20,8 @@ if (isset($_GET['admin']) && access::has("crewet"))
 		
 		// hent søknaden
 		$so_id = intval(getval("so_id"));
-		$result = $_base->db->query("SELECT so_id, so_title, so_preinfo, so_info, so_created, so_expire, so_status FROM soknader_oversikt WHERE so_id = $so_id");
-		$soknad = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT so_id, so_title, so_preinfo, so_info, so_created, so_expire, so_status FROM soknader_oversikt WHERE so_id = $so_id");
+		$soknad = $result->fetch();
 		
 		if (!$soknad)
 		{
@@ -37,7 +37,7 @@ if (isset($_GET['admin']) && access::has("crewet"))
 		{
 			if ($soknad['so_status'] != 0)
 			{
-				$_base->db->query("UPDATE soknader_oversikt SET so_status = 0 WHERE so_id = {$soknad['so_id']}");
+				\Kofradia\DB::get()->exec("UPDATE soknader_oversikt SET so_status = 0 WHERE so_id = {$soknad['so_id']}");
 				$_base->page->add_message("Status endret til inaktiv.");
 			}
 			redirect::handle();
@@ -48,7 +48,7 @@ if (isset($_GET['admin']) && access::has("crewet"))
 		{
 			if ($soknad['so_status'] != 1)
 			{
-				$_base->db->query("UPDATE soknader_oversikt SET so_status = 1 WHERE so_id = {$soknad['so_id']}");
+				\Kofradia\DB::get()->exec("UPDATE soknader_oversikt SET so_status = 1 WHERE so_id = {$soknad['so_id']}");
 				$_base->page->add_message("Status endret til aktiv.");
 			}
 			redirect::handle();
@@ -59,7 +59,7 @@ if (isset($_GET['admin']) && access::has("crewet"))
 		{
 			if ($soknad['so_status'] != 2)
 			{
-				$_base->db->query("UPDATE soknader_oversikt SET so_status = 2 WHERE so_id = {$soknad['so_id']}");
+				\Kofradia\DB::get()->exec("UPDATE soknader_oversikt SET so_status = 2 WHERE so_id = {$soknad['so_id']}");
 				$_base->page->add_message("Status endret til behandles.");
 			}
 			redirect::handle();
@@ -70,16 +70,16 @@ if (isset($_GET['admin']) && access::has("crewet"))
 		{
 			if ($soknad['so_status'] != 3)
 			{
-				$_base->db->query("UPDATE soknader_oversikt SET so_status = 3 WHERE so_id = {$soknad['so_id']}");
+				\Kofradia\DB::get()->exec("UPDATE soknader_oversikt SET so_status = 3 WHERE so_id = {$soknad['so_id']}");
 				$_base->page->add_message("Status endret til avsluttet.");
 			}
 			redirect::handle();
 		}
 		
 		// hent felt til søknaden
-		$result = $_base->db->query("SELECT sf_id, sf_title, sf_extra, sf_default_value, sf_params FROM soknader_felt WHERE sf_so_id = {$soknad['so_id']} ORDER BY sf_sort");
+		$result = \Kofradia\DB::get()->query("SELECT sf_id, sf_title, sf_extra, sf_default_value, sf_params FROM soknader_felt WHERE sf_so_id = {$soknad['so_id']} ORDER BY sf_sort");
 		$felt = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$row['params'] = new params($row['sf_params']);
 			$felt[$row['sf_id']] = $row;
@@ -116,8 +116,8 @@ if (isset($_GET['admin']) && access::has("crewet"))
 		$n_year = $date->format("Y");
 		
 		// hent alle søknadene som er levert
-		$result = $_base->db->query("SELECT sa_id, sa_up_id, IF(sa_updated=0, sa_added, sa_updated) AS sa_updated, SUM(LENGTH(saf_value)) total_length, sa_comment, sa_weight, sa_verified, sa_verified_up_id, up_name, up_access_level, u_birth FROM soknader_applicants LEFT JOIN soknader_applicants_felt ON saf_sa_id = sa_id, users_players, users WHERE sa_so_id = {$soknad['so_id']} AND sa_status = 1 AND sa_up_id = up_id AND up_u_id = u_id GROUP BY sa_id ORDER BY IF(sa_weight = 0, 1, 0) DESC, IF(sa_updated > sa_verified, 1, 0) DESC, sa_weight DESC, sa_updated DESC");
-		$levert = mysql_num_rows($result);
+		$result = \Kofradia\DB::get()->query("SELECT sa_id, sa_up_id, IF(sa_updated=0, sa_added, sa_updated) AS sa_updated, SUM(LENGTH(saf_value)) total_length, sa_comment, sa_weight, sa_verified, sa_verified_up_id, up_name, up_access_level, u_birth FROM soknader_applicants LEFT JOIN soknader_applicants_felt ON saf_sa_id = sa_id, users_players, users WHERE sa_so_id = {$soknad['so_id']} AND sa_status = 1 AND sa_up_id = up_id AND up_u_id = u_id GROUP BY sa_id ORDER BY IF(sa_weight = 0, 1, 0) DESC, IF(sa_updated > sa_verified, 1, 0) DESC, sa_weight DESC, sa_updated DESC");
+		$levert = $result->rowCount();
 		if ($levert == 0)
 		{
 			echo '
@@ -129,7 +129,7 @@ if (isset($_GET['admin']) && access::has("crewet"))
 			$i = 0;
 			$hidden = 0;
 			$sa_id = intval(getval("sa_id"));
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$rating = $row['sa_weight'];
 				$comment = game::format_data($row['sa_comment']);
@@ -231,8 +231,8 @@ if (isset($_GET['admin']) && access::has("crewet"))
 		{
 			// hent søknaden
 			$sa_id = intval(getval("sa_id"));
-			$result = $_base->db->query("SELECT sa_id, sa_up_id, sa_added, sa_status, IF(sa_updated=0, sa_added, sa_updated) AS sa_updated, sa_comment, sa_weight, sa_verified, sa_verified_up_id FROM soknader_applicants WHERE sa_id = $sa_id AND sa_so_id = {$soknad['so_id']}");
-			$applicant = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT sa_id, sa_up_id, sa_added, sa_status, IF(sa_updated=0, sa_added, sa_updated) AS sa_updated, sa_comment, sa_weight, sa_verified, sa_verified_up_id FROM soknader_applicants WHERE sa_id = $sa_id AND sa_so_id = {$soknad['so_id']}");
+			$applicant = $result->fetch();
 			
 			if (!$applicant)
 			{
@@ -249,15 +249,15 @@ if (isset($_GET['admin']) && access::has("crewet"))
 				$rating = intval(postval("rating"));
 				$comment = trim(postval("comment"));
 				
-				$_base->db->query("UPDATE soknader_applicants SET sa_weight = $rating, sa_comment = ".$_base->db->quote($comment).", sa_verified = ".time().", sa_verified_up_id = ".login::$user->player->id." WHERE sa_id = {$applicant['sa_id']}");
+				\Kofradia\DB::get()->exec("UPDATE soknader_applicants SET sa_weight = $rating, sa_comment = ".\Kofradia\DB::quote($comment).", sa_verified = ".time().", sa_verified_up_id = ".login::$user->player->id." WHERE sa_id = {$applicant['sa_id']}");
 				$_base->page->add_message("Informasjonen ble lagret.");
 				redirect::handle();
 			}
 			
-			$result = $_base->db->query("SELECT saf_sf_id, saf_value FROM soknader_applicants_felt WHERE saf_sa_id = {$applicant['sa_id']}");
+			$result = \Kofradia\DB::get()->query("SELECT saf_sf_id, saf_value FROM soknader_applicants_felt WHERE saf_sa_id = {$applicant['sa_id']}");
 			$applicant_felt = array();
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$applicant_felt[$row['saf_sf_id']] = $row['saf_value'];
 			}
@@ -355,9 +355,9 @@ if (isset($_GET['admin']) && access::has("crewet"))
 	
 	
 	// hent alle søknader
-	$result = $_base->db->query("SELECT so_id, so_title, so_expire, so_status, COUNT(sa_id) AS sa_count FROM soknader_oversikt LEFT JOIN soknader_applicants ON so_id = sa_so_id AND sa_status = 1 GROUP BY so_id ORDER BY so_expire DESC, so_title");
+	$result = \Kofradia\DB::get()->query("SELECT so_id, so_title, so_expire, so_status, COUNT(sa_id) AS sa_count FROM soknader_oversikt LEFT JOIN soknader_applicants ON so_id = sa_so_id AND sa_status = 1 GROUP BY so_id ORDER BY so_expire DESC, so_title");
 	
-	if (mysql_num_rows($result) == 0)
+	if ($result->rowCount() == 0)
 	{
 		echo '
 		<p>Ingen søknader eksisterer.</p>';
@@ -379,7 +379,7 @@ if (isset($_GET['admin']) && access::has("crewet"))
 			<tbody>';
 		
 		$i = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$status = $row['so_status'] == 0 ? "Inaktiv" : ($row['so_status'] == 1 ? "Aktiv" : ($row['so_status'] == 2 ? "Behandles" : "Avsluttet"));
 			
@@ -416,9 +416,9 @@ echo '
 		<!--<p>Her vil det bli lagt ut søknader for alle ting vi søker folk til. Måtte det være nye folk i crewet eller noe helt annet.</p>-->';
 
 // hent åpne søknader
-$result = $_base->db->query("SELECT so_id, so_title, so_preinfo, so_expire FROM soknader_oversikt WHERE so_expire > ".time()." AND so_status = 1 ORDER BY so_expire, so_title");
+$result = \Kofradia\DB::get()->query("SELECT so_id, so_title, so_preinfo, so_expire FROM soknader_oversikt WHERE so_expire > ".time()." AND so_status = 1 ORDER BY so_expire, so_title");
 
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 		<p class="c">Det er ingen søknader som er åpne for øyeblikket.</p>';
@@ -426,7 +426,7 @@ if (mysql_num_rows($result) == 0)
 
 else
 {
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		echo '
 		<h2 class="bg1">
@@ -459,7 +459,7 @@ echo '
 $pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 20);
 $result = $pagei->query("SELECT so_id, so_title, so_expire, so_status FROM soknader_oversikt WHERE so_expire <= ".time()." AND so_status != 0 ORDER BY so_expire DESC, so_title");
 
-if (mysql_num_rows($result) > 0)
+if ($result->rowCount() > 0)
 {
 	echo '
 <div class="bg1_c small">
@@ -477,7 +477,7 @@ if (mysql_num_rows($result) > 0)
 		2 => "Behandles",
 		3 => "Avsluttet"
 	);
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		echo '
 			<dt><a href="soknader_vis?so_id='.$row['so_id'].'">'.htmlspecialchars($row['so_title']).'</a> <span class="dark">['.$statuses[$row['so_status']].']</span></dt>

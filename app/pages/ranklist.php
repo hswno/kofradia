@@ -61,8 +61,8 @@ class page_ranklist
 		
 		
 		// finn ut antall spillere
-		$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players WHERE {$nsu}up_access_level != 0");
-		$antall_spillere = mysql_result($result, 0, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE {$nsu}up_access_level != 0");
+		$antall_spillere = $result->fetchColumn(0);
 		
 		if ($antall_spillere == 0)
 		{
@@ -111,7 +111,7 @@ class page_ranklist
 			$i = $pagei->start;
 			$last_rank = 0;
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
 				echo '
@@ -150,7 +150,7 @@ class page_ranklist
 		}
 		
 		// hent folka..
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, up_points, up_last_online, up_profile_image_url, upr_rank_pos
 			FROM users_players
 				LEFT JOIN users_players_rank ON upr_up_id = up_id
@@ -159,7 +159,7 @@ class page_ranklist
 			LIMIT 15");
 		
 		// hent familier hvor spilleren er medlem
-		$result_ff = ess::$b->db->query("
+		$result_ff = \Kofradia\DB::get()->query("
 			SELECT ffm_up_id, ffm_priority, ff_id, ff_type, ff_name
 			FROM
 				(
@@ -173,7 +173,7 @@ class page_ranklist
 				JOIN ff ON ff_id = ffm_ff_id AND ff_type = 1 AND ff_inactive = 0
 			ORDER BY ff_name");
 		$familier = array();
-		while ($row = mysql_fetch_assoc($result_ff))
+		while ($row = $result_ff->fetch())
 		{
 			$pos = ff::$types[$row['ff_type']]['priority'][$row['ffm_priority']];
 			$text = '<a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$row['ff_id'].'" title="'.htmlspecialchars($pos).'">'.htmlspecialchars($row['ff_name']).'</a>';
@@ -239,7 +239,7 @@ class page_ranklist
 	<div class="bg1">';
 		
 		$e = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$e++;
 			$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);

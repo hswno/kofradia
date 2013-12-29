@@ -150,17 +150,17 @@ class utpressing extends pages_player
 		$where = $this->get_criterias($cash, true);
 		
 		// finn en tilfeldig spiller som passer med kriteriene
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// hent alle spillerene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_cash, up_energy, up_points
 			FROM users_players
 			WHERE $where
 			ORDER BY up_last_online DESC
 			LIMIT 100");
 		$players = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$players[] = $row;
 		}
@@ -183,14 +183,14 @@ class utpressing extends pages_player
 			}
 			
 			// trekk fra penger
-			ess::$b->db->query("
+			$a = \Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_bank = IF(up_cash < $cash, up_bank - $cash, up_bank),
 					up_cash = IF(up_cash >= $cash, up_cash - $cash, up_cash)
 				WHERE up_id = {$row['up_id']} AND (up_cash >= $cash OR up_bank >= $cash)");
 			
 			// ble ikke endret?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				unset($players[$key]);
 				continue;
@@ -208,7 +208,7 @@ class utpressing extends pages_player
 			putlog("SPAMLOG", "%c11%bUTPRESSING:%b%c %u{$this->up->data['up_name']}%u presset %u{$up->data['up_name']}%u for %u".game::format_cash($cash)."%u".($ret['player_from_bank'] ? ' (fra bankkonto)' : ''));
 
 			// lagre utpressing
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT INTO utpressinger
 				SET
 					ut_action_up_id = {$this->up->id},
@@ -237,7 +237,7 @@ class utpressing extends pages_player
 		$ret['success'] = true;
 		
 		// gi penger til brukeren
-		ess::$b->db->query("UPDATE users_players SET up_utpressing_last = ".time().", up_cash = up_cash + {$ret['cash']} WHERE up_id = {$this->up->id}");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_utpressing_last = ".time().", up_cash = up_cash + {$ret['cash']} WHERE up_id = {$this->up->id}");
 		$this->up->data['up_utpressing_last'] = time();
 		
 		// trigger
@@ -268,7 +268,7 @@ class utpressing extends pages_player
 				"attack" => !empty($ret['attack']) ? $ret['attack'] : false));
 		}
 		
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 	}
 	
 	/**
@@ -279,7 +279,7 @@ class utpressing extends pages_player
 		// mislykket
 		$ret['wanted'] = $this->up->fengsel_rank($this->get_points($opt));
 		
-		ess::$b->db->query("UPDATE users_players SET up_utpressing_last = ".time()." WHERE up_id = {$this->up->id}");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_utpressing_last = ".time()." WHERE up_id = {$this->up->id}");
 		$this->up->data['up_utpressing_last'] = time();
 		
 		// mislykker helt?
@@ -298,7 +298,7 @@ class utpressing extends pages_player
 		$where = $this->get_criterias($cash);
 		
 		// finn en tilfeldig spiller som passer med kriteriene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id
 			FROM (
 				SELECT up_id
@@ -311,7 +311,7 @@ class utpressing extends pages_player
 			LIMIT 1");
 		
 		// fant ingen spillere?
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		if (!$row)
 		{
 			return $ret;
@@ -325,14 +325,14 @@ class utpressing extends pages_player
 	protected function get_ff_up_ids()
 	{
 		// hent alle medlemmer av familie/firma vi med i
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT DISTINCT f2.ffm_up_id
 			FROM ff_members f1
 				JOIN ff ON ff_id = f1.ffm_ff_id AND ff_is_crew = 0
 				JOIN ff_members f2 ON f1.ffm_ff_id = f2.ffm_ff_id AND f2.ffm_status = 1 AND f2.ffm_up_id != f1.ffm_up_id
 			WHERE f1.ffm_up_id = {$this->up->id} AND f1.ffm_status = 1");
 		$up_ids = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$up_ids[] = $row['ffm_up_id'];
 		}

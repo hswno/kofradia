@@ -77,9 +77,9 @@ if (MAIN_SERVER)
 
 
 // hent mysql status
-$result = $_base->db->query("SHOW GLOBAL STATUS");
+$result = \Kofradia\DB::get()->query("SHOW GLOBAL STATUS");
 $vars = array();
-while ($row = mysql_fetch_row($result))
+while ($row = $result->fetch(\PDO::FETCH_NUM))
 {
 	$vars[$row[0]] = $row[1];
 }
@@ -157,7 +157,7 @@ $date->modify("-1 day");
 $igaar2 = $date->format("U");
 
 // hent nøkkeltall
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 SELECT 'players',     COUNT(up_id) FROM users_players WHERE up_access_level < {$_game['access_noplay']} AND up_access_level != 0
 UNION ALL
 SELECT 'cash',        SUM(up_cash) FROM users_players WHERE up_access_level != 0".(!$show_nsu ? " AND up_access_level < {$_game['access_noplay']}" : "")."
@@ -211,7 +211,7 @@ UNION ALL
 SELECT 'users_count_deactivated', COUNT(u_id) FROM users WHERE u_access_level = 0");
 
 $stats = array();
-while ($row = mysql_fetch_row($result))
+while ($row = $result->fetch(\PDO::FETCH_NUM))
 {
 	$stats[$row[0]] = $row[1];
 }
@@ -244,13 +244,13 @@ echo '
 				<tbody>';
 
 
-ess::$b->db->query("
+\Kofradia\DB::get()->query("
 	SET
 		@num := 0,
 		@hour := '',
 		@pos := 0,
 		@time = IF((@time := (SELECT DISTINCT uhi_secs_hour FROM users_hits ORDER BY uhi_secs_hour DESC LIMIT 6,1)) IS NULL, 0, @time)");
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT count_time, pos, uhi_secs_hour, uhi_points, uhi_hits, uhi_up_id, up_name, up_points AS points_total, up_access_level, up_last_online, upr_rank_pos
 	FROM (
 			SELECT uhi_secs_hour, uhi_points, uhi_hits, uhi_up_id,
@@ -266,7 +266,7 @@ $result = ess::$b->db->query("
 	WHERE count_time > 1 AND count_time <= 6 AND pos <= 5");
 
 $hours = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$hours[$row['uhi_secs_hour']][] = $row;
 }
@@ -476,7 +476,7 @@ echo '
 
 function get_df_stats($col, &$ff_id_list)
 {
-	$result = ess::$b->db->query("
+	$result = \Kofradia\DB::get()->query("
 		SELECT up_id, $col
 		FROM users_players
 		WHERE up_access_level != 0 AND up_access_level < ".ess::$g['access_noplay']." AND $col > 0
@@ -484,7 +484,7 @@ function get_df_stats($col, &$ff_id_list)
 		LIMIT 5");
 	
 	$rows = array();
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$rows[] = $row;
 		$ff_id_list[] = $row['up_id'];
@@ -502,7 +502,7 @@ $up_ff = array();
 if (count($ff_id_list) > 0)
 {
 	$up_list = implode(",", array_unique($ff_id_list));
-	$result_ff = ess::$b->db->query("
+	$result_ff = \Kofradia\DB::get()->query("
 		SELECT ffm_up_id, ffm_priority, ff_id, IFNULL(ffm_ff_name, ff_name) ffm_ff_name, ff_type
 		FROM
 			ff_members
@@ -510,7 +510,7 @@ if (count($ff_id_list) > 0)
 		WHERE ffm_up_id IN ($up_list) AND ffm_status = ".ff_member::STATUS_MEMBER." AND ff_is_crew = 0 AND ff_type = 1
 		ORDER BY ffm_ff_name");
 	
-	while ($row = mysql_fetch_assoc($result_ff))
+	while ($row = $result_ff->fetch())
 	{
 		$pos = ff::$types[$row['ff_type']]['priority'][$row['ffm_priority']];
 		$text = '<a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$row['ff_id'].'" title="'.htmlspecialchars($pos).'">'.htmlspecialchars($row['ffm_ff_name']).'</a>';
@@ -616,14 +616,15 @@ $req = array_reverse($req);
 $ranks = array_reverse($ranks);
 
 $req = implode(" UNION ALL ", $req);
-$result = $_base->db->query($req);
+$result = \Kofradia\DB::get()->query($req);
+$data = $result->fetchAll(\PDO::FETCH_COLUMN, 0);
 
 $i = 0;
 $ant = count($ranks);
 foreach ($ranks as $name => $cash_min)
 {
 	$e = $ant - $i;
-	$num = mysql_result($result, $i);
+	$num = $data[$i];
 	$i++;
 	$percent = $num == 0 ? ' colspan="2">' : ' style="color: #888">'.round($num/$stats['players']*100, 1).' %</td>
 						<td align="right">';
@@ -672,12 +673,12 @@ foreach ($ranks as $rank)
 }
 
 $req = implode(" UNION ALL ", $req);
-$result = $_base->db->query($req);
+$result = \Kofradia\DB::get()->query($req);
 
 $i = 0;
 foreach ($ranks as $rank)
 {
-	$num = mysql_result($result, $i);
+	$num = $result->fetchColumn(0);
 	$i++;
 	$percent = $num == 0 ? ' colspan="2">' : ' style="color: #888">'.round($num/$stats['players']*100, 1).' %</td>
 						<td align="right">';
@@ -702,7 +703,7 @@ echo '
 
 
 // hent 10 siste registrasjoner
-$result = $_base->db->query("SELECT up_id, up_name, up_created_time, u_created_ip, up_access_level FROM users_players JOIN users ON up_u_id = u_id ORDER BY up_created_time DESC LIMIT 10");
+$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_created_time, u_created_ip, up_access_level FROM users_players JOIN users ON up_u_id = u_id ORDER BY up_created_time DESC LIMIT 10");
 echo '
 			<!-- 10 siste reg -->
 			<table width="100%" class="table tablemb">
@@ -719,7 +720,7 @@ echo '
 				<tbody>';
 
 $i = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$i++;
 	echo '
@@ -749,9 +750,9 @@ echo '
 				<tbody>';
 
 // hent topp 10 i foruminnlegg
-$result = $_base->db->query("SELECT up_id, up_name, up_access_level, up_forum_num_replies FROM users_players WHERE up_access_level != 0 ORDER BY up_forum_num_replies DESC LIMIT 10");
+$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, up_forum_num_replies FROM users_players WHERE up_access_level != 0 ORDER BY up_forum_num_replies DESC LIMIT 10");
 $i = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$i++;
 	echo '
@@ -783,9 +784,9 @@ if (access::has("mod"))
 				<tbody>';
 
 // hent topp 10 i private meldinger
-$result = $_base->db->query("SELECT up_id, up_name, up_access_level, up_inbox_num_messages FROM users_players WHERE up_access_level != 0 ORDER BY up_inbox_num_messages DESC LIMIT 10");
+$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, up_inbox_num_messages FROM users_players WHERE up_access_level != 0 ORDER BY up_inbox_num_messages DESC LIMIT 10");
 $i = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$i++;
 	echo '
@@ -814,9 +815,9 @@ echo '
 				<tbody>';
 
 // hent topp 15 i rikeste spillere
-$result = $_base->db->query("SELECT up_id, up_name, up_access_level, up_bank+up_cash AS amount FROM users_players WHERE up_access_level != 0".(!$show_nsu ? " AND up_access_level < {$_game['access_noplay']}" : "")." ORDER BY up_bank+up_cash DESC LIMIT 15");
+$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, up_bank+up_cash AS amount FROM users_players WHERE up_access_level != 0".(!$show_nsu ? " AND up_access_level < {$_game['access_noplay']}" : "")." ORDER BY up_bank+up_cash DESC LIMIT 15");
 $i = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$i++;
 	echo '
@@ -848,9 +849,9 @@ echo '
 				<tbody>';
 
 // hent topp 15 rankede spillere
-$result = $_base->db->query("SELECT up_id, up_name, up_access_level, up_points FROM users_players WHERE up_access_level != 0".(!$show_nsu ? " AND up_access_level < {$_game['access_noplay']}" : "")." ORDER BY up_points DESC LIMIT 15");
+$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, up_points FROM users_players WHERE up_access_level != 0".(!$show_nsu ? " AND up_access_level < {$_game['access_noplay']}" : "")." ORDER BY up_points DESC LIMIT 15");
 $i = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$i++;
 	echo '
@@ -869,7 +870,7 @@ echo '
 
 
 // hent de 20 som har ranket mest i løpet av denne timen
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT uhi_up_id, uhi_hits, uhi_points, up_points, up_access_level, upr_rank_pos
 	FROM users_hits
 		LEFT JOIN users_players ON up_id = uhi_up_id
@@ -894,7 +895,7 @@ echo '
 				</thead>
 				<tbody>';
 
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 					<tr>
@@ -905,7 +906,7 @@ if (mysql_num_rows($result) == 0)
 else
 {
 	$i = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$i++;
 		$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
@@ -925,7 +926,7 @@ echo '
 			</table>';
 
 // hent 10 høyest wanted spillere
-$result = $_base->db->query("SELECT up_id, up_name, up_access_level, up_fengsel_time, up_wanted_level FROM users_players WHERE up_wanted_level > 0 ORDER BY up_wanted_level DESC LIMIT 10");
+$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, up_fengsel_time, up_wanted_level FROM users_players WHERE up_wanted_level > 0 ORDER BY up_wanted_level DESC LIMIT 10");
 echo '
 			<!-- mest wanted -->
 			<table width="100%" class="table tablemb">
@@ -940,7 +941,7 @@ echo '
 				</thead>
 				<tbody>';
 
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 					<tr>
@@ -949,7 +950,7 @@ if (mysql_num_rows($result) == 0)
 }
 
 $i = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	echo '
 					<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -964,7 +965,7 @@ echo '
 
 
 // hent 100 siste aktive spillere
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT up_id, up_name, up_points, up_access_level, up_last_online, upr_rank_pos
 	FROM users_players
 		LEFT JOIN users_players_rank ON upr_up_id = up_id
@@ -987,7 +988,7 @@ echo '
 
 $_base->page->add_css('.s_or { color: #BBBBBB } .s_o tbody td { font-size: 9px }');
 $i = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$i++;
 	$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
@@ -1006,7 +1007,7 @@ echo '
 if (access::has("crewet"))
 {
 	// 10 siste eksterne linker
-	$result = $_base->db->query("SELECT lr_up_id, lr_referer, lr_time FROM log_referers ORDER BY lr_time DESC LIMIT 10");
+	$result = \Kofradia\DB::get()->query("SELECT lr_up_id, lr_referer, lr_time FROM log_referers ORDER BY lr_time DESC LIMIT 10");
 	
 	echo '
 			<!-- 10 siste eksterne linker -->
@@ -1023,7 +1024,7 @@ if (access::has("crewet"))
 				<tbody>';
 	
 	$i = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$i++;
 		$player = $row['lr_up_id'] ? '<br /><user id="'.$row['lr_up_id'].'" />' : '';

@@ -1,9 +1,9 @@
 <?php
 
 // sjekk alle bankene for forandringer som skal gjøres med overføringsgebyret
-$result = ess::$b->db->query("SELECT ff_id, ff_name, ff_params FROM ff WHERE ff_type = 3");
+$result = \Kofradia\DB::get()->query("SELECT ff_id, ff_name, ff_params FROM ff WHERE ff_type = 3");
 
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$params = new params_update($row['ff_params'], "ff", "ff_params", "ff_id = {$row['ff_id']}");
 	
@@ -46,6 +46,6 @@ while ($row = mysql_fetch_assoc($result))
 	// forumlogg
 	$action_id = intval(ff::$log['bank_overforing_tap_change'][0]);
 	$change = $next - $current;
-	$data = ess::$b->db->quote("$current:$change");
-	ess::$b->db->query("INSERT INTO ff_log SET ffl_time = ".time().", ffl_ff_id = {$row['ff_id']}, ffl_type = $action_id, ffl_data = $data");
+	$data = \Kofradia\DB::quote("$current:$change");
+	\Kofradia\DB::get()->exec("INSERT INTO ff_log SET ffl_time = ".time().", ffl_ff_id = {$row['ff_id']}, ffl_type = $action_id, ffl_data = $data");
 }

@@ -40,8 +40,8 @@ class inbox_thread
 	{
 		// hent info
 		$this->id = (int) $it_id;
-		$result = ess::$b->db->query("SELECT it_id, it_title FROM inbox_threads WHERE it_id = $this->id");
-		$this->data_thread = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT it_id, it_title FROM inbox_threads WHERE it_id = $this->id");
+		$this->data_thread = $result->fetch();
 		if (!$this->data_thread) return;
 	}
 	
@@ -68,9 +68,9 @@ class inbox_thread
 		if (!access::has("mod")) return false;
 		
 		// sjekk om noen meldinger er rapportert
-		$result = ess::$b->db->query("SELECT r_id FROM rapportering, inbox_messages WHERE im_it_id = $this->id AND r_type = ".rapportering::TYPE_PM." AND r_type_id = im_id LIMIT 1");
+		$result = \Kofradia\DB::get()->query("SELECT r_id FROM rapportering, inbox_messages WHERE im_it_id = $this->id AND r_type = ".rapportering::TYPE_PM." AND r_type_id = im_id LIMIT 1");
 		
-		return mysql_num_rows($result) > 0;
+		return $result->rowCount() > 0;
 	}
 	
 	const RET_INFO_DELETED_OWN = 1;
@@ -194,13 +194,13 @@ class inbox_thread
 	public function check_rel()
 	{
 		// sjekk relasjonsinfo (eier)
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ir_up_id, ir_unread, ir_deleted, ir_restrict_im_time, ir_marked, up_name
 			FROM inbox_rel JOIN users_players ON ir_up_id = up_id AND up_u_id = ".login::$user->id."
 			WHERE ir_it_id = $this->id
 			ORDER BY up_last_online DESC
 			LIMIT 1");
-		$this->data_rel = mysql_fetch_assoc($result);
+		$this->data_rel = $result->fetch();
 		
 		// finnes ikke eller slettet?
 		$deleted = $this->data_rel && $this->data_rel['ir_deleted'] != 0;
@@ -246,7 +246,7 @@ class inbox_thread
 		
 		// hent deltakere
 		$me = $this->data_rel ? $this->data_rel['ir_up_id'] : false;
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ir_up_id, ir_unread, ir_views, ir_deleted, ir_restrict_im_time, ir_marked, COUNT(im_id) AS num_messages, u_active_up_id, u_access_level, up_access_level
 			FROM inbox_rel
 				LEFT JOIN inbox_messages ON im_it_id = ir_it_id AND im_up_id = ir_up_id$restrict
@@ -260,8 +260,8 @@ class inbox_thread
 		$this->can_reply_receivers = false;
 		$this->can_reply_receivers_crew = false;
 		$c = access::has("crewet");
-		$n = mysql_num_rows($result);
-		while ($row = mysql_fetch_assoc($result))
+		$n = $result->rowCount();
+		while ($row = $result->fetch())
 		{
 			// er dette spilleren?
 			if ($row['ir_up_id'] == $me)
@@ -309,7 +309,7 @@ class inbox_thread
 	{
 		if (!$this->data_rel) return;
 		
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE inbox_rel SET ir_views = ir_views + 1
 			WHERE ir_it_id = $this->id AND ir_up_id = {$this->data_rel['ir_up_id']}");
 	}
@@ -325,12 +325,12 @@ class inbox_thread
 		if ($this->data_rel['ir_unread'] == 0) return;
 		
 		// oppdater uleste meldinger i denne tråden
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE inbox_rel SET ir_unread = GREATEST(0, ir_unread - {$this->data_rel['ir_unread']})
 			WHERE ir_it_id = $this->id AND ir_up_id = {$this->data_rel['ir_up_id']}");
 		
 		// oppdater uleste meldinger hos brukeren
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users, (
 				SELECT up_u_id, SUM(ABS(ir_unread)) c
 				FROM users_players LEFT JOIN inbox_rel ON ir_up_id = up_id AND ir_deleted = 0
@@ -351,8 +351,8 @@ class inbox_thread
 	{
 		// finn ut hvor mange meldinger vi kan se
 		$restrict_where = $this->restrict ? " AND im_time <= {$this->data_rel['ir_restrict_im_time']} AND im_deleted = 0" : "";
-		$result = ess::$b->db->query("SELECT COUNT(im_id) FROM inbox_messages WHERE im_it_id = $this->id$restrict_where");
-		return mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(im_id) FROM inbox_messages WHERE im_it_id = $this->id$restrict_where");
+		return $result->fetchColumn(0);
 	}
 	
 	/**
@@ -366,15 +366,15 @@ class inbox_thread
 		
 		// forsøk å finn meldingen
 		$restrict_where = $this->restrict ? " AND im_time <= {$this->data_rel['ir_restrict_im_time']} AND im_deleted = 0" : "";
-		$result = ess::$b->db->query("SELECT im_it_id FROM inbox_messages WHERE im_id = $im_id AND im_it_id = $this->id$restrict_where");
-		if (mysql_num_rows($result) == 0)
+		$result = \Kofradia\DB::get()->query("SELECT im_it_id FROM inbox_messages WHERE im_id = $im_id AND im_it_id = $this->id$restrict_where");
+		if ($result->rowCount() == 0)
 		{
 			return false;
 		}
 		
 		// finn ut antall meldinger som har kommet etter denne
-		$result = ess::$b->db->query("SELECT COUNT(im_id) FROM inbox_messages WHERE im_it_id = $this->id AND im_id > $im_id$restrict_where");
-		$ant = mysql_result($result, 0) + 1;
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(im_id) FROM inbox_messages WHERE im_it_id = $this->id AND im_id > $im_id$restrict_where");
+		$ant = $result->fetchColumn(0) + 1;
 		
 		return $ant;
 	}
@@ -390,8 +390,8 @@ class inbox_thread
 		$im_id = (int) getval("im_del");
 		
 		// hent status
-		$result = ess::$b->db->query("SELECT im_deleted, im_up_id FROM inbox_messages WHERE im_it_id = $this->id AND im_id = $im_id");
-		$row = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT im_deleted, im_up_id FROM inbox_messages WHERE im_it_id = $this->id AND im_id = $im_id");
+		$row = $result->fetch();
 		if (!$row)
 		{
 			ess::$b->page->add_message("Fant ikke svaret som skulle bli slettet.", "error");
@@ -407,8 +407,8 @@ class inbox_thread
 		else
 		{
 			// forsøk å slett svaret
-			ess::$b->db->query("UPDATE inbox_messages SET im_deleted = 1 WHERE im_id = $im_id AND im_deleted = 0");
-			if (ess::$b->db->affected_rows() > 0)
+			$a = \Kofradia\DB::get()->exec("UPDATE inbox_messages SET im_deleted = 1 WHERE im_id = $im_id AND im_deleted = 0");
+			if ($a > 0)
 			{
 				ess::$b->page->add_message("Svaret ble slettet.", "error");
 				crewlog::log(
@@ -439,8 +439,8 @@ class inbox_thread
 		$im_id = (int) getval("im_restore");
 		
 		// hent status
-		$result = ess::$b->db->query("SELECT im_deleted, im_up_id FROM inbox_messages WHERE im_it_id = $this->id AND im_id = $im_id");
-		$row = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT im_deleted, im_up_id FROM inbox_messages WHERE im_it_id = $this->id AND im_id = $im_id");
+		$row = $result->fetch();
 		if (!$row)
 		{
 			ess::$b->page->add_message("Fant ikke svaret som skulle bli gjenopprettet.", "error");
@@ -456,8 +456,8 @@ class inbox_thread
 		else
 		{
 			// forsøk å slett svaret
-			ess::$b->db->query("UPDATE inbox_messages SET im_deleted = 0 WHERE im_id = $im_id AND im_deleted != 0");
-			if (ess::$b->db->affected_rows() > 0)
+			$a = \Kofradia\DB::get()->exec("UPDATE inbox_messages SET im_deleted = 0 WHERE im_id = $im_id AND im_deleted != 0");
+			if ($a > 0)
 			{
 				ess::$b->page->add_message("Svaret ble gjenopprettet.", "error");
 				crewlog::log(
@@ -483,14 +483,14 @@ class inbox_thread
 	public function delete()
 	{
 		// marker som slettet
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE inbox_rel
 				JOIN users_players ON ir_up_id = up_id
 				JOIN users ON up_u_id = u_id
 			SET ir_deleted = 1, u_inbox_new = GREATEST(0, u_inbox_new - ir_unread)
 			WHERE ir_it_id = $this->id AND ir_deleted = 0 AND ir_up_id != ".login::$user->player->id);
 		
-		if (ess::$b->db->affected_rows() > 0)
+		if ($a > 0)
 		{
 			crewlog::log(
 				"player_thread_delete",
@@ -537,12 +537,12 @@ class inbox_thread
 		}
 		
 		// hent kontaktstatus for mottakerene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, uc_id, uc_info
 			FROM users_players, users LEFT JOIN users_contacts ON u_id = uc_u_id AND uc_contact_up_id = ".login::$user->player->id." AND uc_type = 2
 			WHERE up_u_id = u_id AND up_id IN (".implode(",", $this->receivers_accept).")");
 		$blocked = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// blokkert?
 			if ($row['uc_id'])
@@ -638,9 +638,9 @@ class inbox_thread
 		// (ingen melding vil bli gitt til brukeren om at den blir økt eller ikke)
 		// skal kun gjøres dersom forrige svar var fra en annen bruker,
 		// ELLER dersom det har gått mer enn 1 time siden forrige svar
-		$result = ess::$b->db->query("SELECT im_up_id, im_time FROM inbox_messages WHERE im_it_id = $this->id ORDER BY im_time DESC LIMIT 1");
+		$result = \Kofradia\DB::get()->query("SELECT im_up_id, im_time FROM inbox_messages WHERE im_it_id = $this->id ORDER BY im_time DESC LIMIT 1");
 		$add_count = true;
-		if ($row = mysql_fetch_assoc($result))
+		if ($row = $result->fetch())
 		{
 			if ($row['im_up_id'] == login::$user->player->id && $row['im_time'] > $time-3600)
 			{
@@ -648,36 +648,36 @@ class inbox_thread
 			}
 		}
 		
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// legg til meldingen
-		ess::$b->db->query("INSERT INTO inbox_messages SET im_it_id = $this->id, im_up_id = ".login::$user->player->id.", im_time = $time");
+		\Kofradia\DB::get()->exec("INSERT INTO inbox_messages SET im_it_id = $this->id, im_up_id = ".login::$user->player->id.", im_time = $time");
 		
 		// data
-		$insert_id = ess::$b->db->insert_id();
-		ess::$b->db->query("INSERT INTO inbox_data SET id_im_id = $insert_id, id_text = ".ess::$b->db->quote($text));
+		$insert_id = \Kofradia\DB::get()->lastInsertId();
+		\Kofradia\DB::get()->exec("INSERT INTO inbox_data SET id_im_id = $insert_id, id_text = ".\Kofradia\DB::quote($text));
 		
 		// oppdater relasjoner og brukere
 		$where = $this->can_reply_receivers_crew ? " AND (up_access_level != 0 || (u_access_level != 0 AND u_active_up_id = up_id))" : " AND up_access_level != 0";
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE inbox_rel, users, users_players
 			SET ir_unread = ABS(ir_unread) + 1, ir_restrict_im_time = $time, u_inbox_new = u_inbox_new + IF(ir_deleted != 0, ABS(ir_unread), 0) + 1
 			WHERE ir_it_id = $this->id".($this->data_rel ? " AND ir_up_id != {$this->data_rel['ir_up_id']}" : "")." AND ir_up_id = up_id$where AND ir_deleted = 0 AND u_id = up_u_id");
 		
 		// oppdater egen info
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users, users_players
 			SET ".($add_count ? 'up_inbox_num_messages = up_inbox_num_messages + 1, ' : '')."u_inbox_sent_time = $time
 			WHERE u_id = ".login::$user->id." AND up_id = ".login::$user->player->id);
 		if ($this->data_rel)
 		{
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE inbox_rel
 				SET ir_restrict_im_time = $time
 				WHERE ir_it_id = $this->id AND ir_up_id = {$this->data_rel['ir_up_id']}");
 		}
 		
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 		
 		putlog("LOG", "%c13%bMELDING%b%c: %u".login::$user->player->data['up_name']."%u sendte melding til it_id $this->id (%u{$this->data_thread['it_title']}%u). Lengde: ".mb_strlen($plain)."/".mb_strlen($text)." bytes! {$__server['path']}/innboks_les?id=$this->id");
 		
@@ -727,7 +727,7 @@ class inbox_thread
 	public function get_messages($start = NULL, $limit = NULL, $where = NULL)
 	{
 		$where = ($where ? " AND $where" : "") . ($this->restrict ? " AND im_time <= {$this->data_rel['ir_restrict_im_time']} AND im_deleted = 0" : "");
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT im_id, im_up_id, im_time, im_deleted, id_text, r_time
 			FROM inbox_messages
 				LEFT JOIN rapportering ON r_type = ".rapportering::TYPE_PM." AND r_type_id = im_id AND r_source_up_id = ".login::$user->player->id." AND r_state < 2,
@@ -762,7 +762,7 @@ class inbox_thread
 			else
 			{
 				// marker tråden
-				ess::$b->db->query("
+				\Kofradia\DB::get()->exec("
 					UPDATE inbox_rel
 					SET ir_marked = 1
 					WHERE ir_it_id = $this->id AND ir_up_id = {$this->data_rel['ir_up_id']}");
@@ -780,7 +780,7 @@ class inbox_thread
 			else
 			{
 				// marker tråden
-				ess::$b->db->query("
+				\Kofradia\DB::get()->exec("
 					UPDATE inbox_rel
 					SET ir_marked = 0
 					WHERE ir_it_id = $this->id AND ir_up_id = {$this->data_rel['ir_up_id']}");

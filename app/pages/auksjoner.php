@@ -22,11 +22,11 @@ class page_auksjoner extends pages_player
 	protected function check_active()
 	{
 		// hent auksjoner som skal avsluttes
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT a_id
 			FROM auksjoner WHERE a_end <= ".time()." AND a_completed = 0");
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// last inn auksjonen slik at den blir avsluttet
 			auksjon::get($row['a_id']);
@@ -113,7 +113,7 @@ class page_auksjoner extends pages_player
 		
 		// hent alle auksjonene og høyeste bud
 		$expire = time() - 86400; // auksjoner er synlige i 24 timer etter de er avsluttet
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				a_id, a_type, a_title, a_up_id, a_start, a_end, a_bid_start, a_num_bids, a_params, a_completed,
 				ab_bid, ab_up_id, ab_time
@@ -131,7 +131,7 @@ class page_auksjoner extends pages_player
 		$tidligere = array();
 		$senere = array();
 		$tilgjengelige = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$row['params'] = new params($row['a_params']);
 			if ($row['a_end'] < time() || $row['a_completed'] != 0)
@@ -331,13 +331,13 @@ class page_auksjoner extends pages_player
 			else
 			{
 				// trekk fra kulene
-				ess::$b->db->query("
+				$a = \Kofradia\DB::get()->exec("
 					UPDATE users_players
 					SET up_weapon_bullets = up_weapon_bullets - $bullets, up_weapon_bullets_auksjon = up_weapon_bullets_auksjon + $bullets
 					WHERE up_id = {$this->up->id} AND up_weapon_bullets >= $bullets");
 				
 				// hadde ikke nok kuler?
-				if (ess::$b->db->affected_rows() == 0)
+				if ($a == 0)
 				{
 					ess::$b->page->add_message("Du har ikke så mange kuler.", "error");
 				}
@@ -347,12 +347,12 @@ class page_auksjoner extends pages_player
 					// opprett auksjon
 					$params = new params();
 					$params->update("bullets", $bullets);
-					$params = ess::$b->db->quote($params->build());
+					$params = \Kofradia\DB::quote($params->build());
 					$timen = time();
 					$expire = $timen + $time*60;
-					ess::$b->db->query("INSERT INTO auksjoner SET a_type = ".auksjon::TYPE_KULER.", a_title = '$bullets kuler', a_up_id = {$this->up->id}, a_start = $timen, a_end = $expire, a_bid_start = $price, a_bid_jump = 50000, a_active = 1, a_params = $params");
+					\Kofradia\DB::get()->exec("INSERT INTO auksjoner SET a_type = ".auksjon::TYPE_KULER.", a_title = '$bullets kuler', a_up_id = {$this->up->id}, a_start = $timen, a_end = $expire, a_bid_start = $price, a_bid_jump = 50000, a_active = 1, a_params = $params");
 					
-					$a_id = ess::$b->db->insert_id();
+					$a_id = \Kofradia\DB::get()->lastInsertId();
 					putlog("INFO", "%bKULEAUKSJON:%b %u{$this->up->data['up_name']}%u opprettet en auksjon for ".$bullets." kuler med budstart på ".game::format_cash($price)." ".ess::$s['spath']."/auksjoner?a_id=$a_id");
 					
 					$auksjon = auksjon::get($a_id);
@@ -406,13 +406,13 @@ class page_auksjoner extends pages_player
 	protected function show_types()
 	{
 		// hent antall aktive auksjoner i de ulike typene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT a_type, COUNT(a_id) num_a
 			FROM auksjoner
 			WHERE a_active != 0 AND a_completed = 0 AND a_start < ".time()." AND a_end >= ".time()."
 			GROUP BY a_type");
 		$num = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$num[$row['a_type']] = $row['num_a'];
 		}
@@ -531,8 +531,8 @@ class page_auksjoner_auksjon extends pages_player
 		}*/
 		
 		// sjekk minste bud vi kan sette
-		$result = ess::$b->db->query("SELECT ab_bid + {$this->auksjon->data['a_bid_jump']} AS ab_bid FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_active != 0 ORDER BY ab_bid DESC LIMIT 1");
-		$bud = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT ab_bid + {$this->auksjon->data['a_bid_jump']} AS ab_bid FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_active != 0 ORDER BY ab_bid DESC LIMIT 1");
+		$bud = $result->fetch();
 		$min_bud = $bud ? $bud['ab_bid'] : $this->auksjon->data['a_bid_start'];
 		
 		// under min?
@@ -543,8 +543,8 @@ class page_auksjoner_auksjon extends pages_player
 		}
 		
 		// hent tidligere bud
-		$result = ess::$b->db->query("SELECT ab_id, ab_bid, ab_time FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_up_id = {$this->up->id} AND ab_active != 0");
-		$bud = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT ab_id, ab_bid, ab_time FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_up_id = {$this->up->id} AND ab_active != 0");
+		$bud = $result->fetch();
 		
 		$update = false;
 		
@@ -552,8 +552,8 @@ class page_auksjoner_auksjon extends pages_player
 		if ($bud && isset($_POST['raise_bid']))
 		{
 			// er dette det siste budet?
-			$result = ess::$b->db->query("SELECT ab_id FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_active != 0 AND ab_time >= ".(time()-auksjon::MAX_TIME_REMOVE)." ORDER BY ab_time DESC LIMIT 1");
-			$row = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT ab_id FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_active != 0 AND ab_time >= ".(time()-auksjon::MAX_TIME_REMOVE)." ORDER BY ab_time DESC LIMIT 1");
+			$row = $result->fetch();
 			
 			if ($row && $row['ab_id'] == $bud['ab_id'])
 			{
@@ -561,10 +561,10 @@ class page_auksjoner_auksjon extends pages_player
 			}
 			
 			// start transaksjon
-			ess::$b->db->begin();
+			\Kofradia\DB::get()->beginTransaction();
 			
 			// trekk fra pengene
-			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $amount + {$bud['ab_bid']} WHERE up_id = {$this->up->id} AND up_cash >= $amount - {$bud['ab_bid']}");
+			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $amount + {$bud['ab_bid']} WHERE up_id = {$this->up->id} AND up_cash >= $amount - {$bud['ab_bid']}");
 		}
 		
 		// nytt bud?
@@ -576,11 +576,11 @@ class page_auksjoner_auksjon extends pages_player
 				// firma
 				case auksjon::TYPE_FIRMA:
 					// har vi bud på en annen auksjon?
-					$result = ess::$b->db->query("
+					$result = \Kofradia\DB::get()->query("
 						SELECT ab_id
 						FROM auksjoner, auksjoner_bud
 						WHERE ab_a_id = a_id AND a_completed = 0 AND a_active != 0 AND a_type = ".auksjon::TYPE_FIRMA." AND ab_up_id = {$this->up->id} AND ab_active != 0");
-					if (mysql_num_rows($result) > 0)
+					if ($result->rowCount() > 0)
 					{
 						ess::$b->page->add_message("Du har allerede bydd på en annen auksjon. Du kan ikke by på flere auksjoner samtidig.", "error");
 						redirect::handle();
@@ -609,10 +609,10 @@ class page_auksjoner_auksjon extends pages_player
 			}
 			
 			// start transaksjon
-			ess::$b->db->begin();
+			\Kofradia\DB::get()->beginTransaction();
 			
 			// trekk fra pengene
-			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = {$this->up->id} AND up_cash >= $amount");
+			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = {$this->up->id} AND up_cash >= $amount");
 		}
 		
 		// ukjent
@@ -622,10 +622,10 @@ class page_auksjoner_auksjon extends pages_player
 		}
 		
 		// ikke nok penger
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
-			ess::$b->db->rollback();
+			\Kofradia\DB::get()->rollback();
 			redirect::handle();
 		}
 		
@@ -640,7 +640,7 @@ class page_auksjoner_auksjon extends pages_player
 					$kuler = (int) $this->auksjon->params->get("bullets");
 					if ($kuler)
 					{
-						ess::$b->db->query("UPDATE users_players SET up_weapon_bullets_auksjon = up_weapon_bullets_auksjon + $kuler WHERE up_id = {$this->up->id}");
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets_auksjon = up_weapon_bullets_auksjon + $kuler WHERE up_id = {$this->up->id}");
 					}
 				break;
 			}
@@ -649,13 +649,13 @@ class page_auksjoner_auksjon extends pages_player
 		// oppdatere oppføringen?
 		if ($update)
 		{
-			ess::$b->db->query("UPDATE auksjoner_bud SET ab_bid = $amount, ab_time = ".time()." WHERE ab_id = {$bud['ab_id']} AND ab_time = {$bud['ab_time']}");
+			$a = \Kofradia\DB::get()->exec("UPDATE auksjoner_bud SET ab_bid = $amount, ab_time = ".time()." WHERE ab_id = {$bud['ab_id']} AND ab_time = {$bud['ab_time']}");
 			
 			// kunne ikke oppdatere?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message("Du har ikke noe bud.", "error");
-				ess::$b->db->rollback();
+				\Kofradia\DB::get()->rollback();
 				redirect::handle();
 			}
 		}
@@ -666,22 +666,22 @@ class page_auksjoner_auksjon extends pages_player
 			// tidligere bud som skal fjernes?
 			if ($bud)
 			{
-				ess::$b->db->query("UPDATE auksjoner_bud SET ab_active = 0 WHERE ab_id = {$bud['ab_id']} AND ab_time = {$bud['ab_time']} AND ab_active != 0");
+				$a = \Kofradia\DB::get()->exec("UPDATE auksjoner_bud SET ab_active = 0 WHERE ab_id = {$bud['ab_id']} AND ab_time = {$bud['ab_time']} AND ab_active != 0");
 				
 				// kunne ikke fjerne tidligere bud?
-				if (ess::$b->db->affected_rows() == 0)
+				if ($a == 0)
 				{
 					ess::$b->page->add_message("Kunne ikke øke budet.", "error");
-					ess::$b->db->rollback();
+					\Kofradia\DB::get()->rollback();
 					redirect::handle();
 				}
 			}
 			
 			// legg til oppføringen
-			ess::$b->db->query("INSERT INTO auksjoner_bud SET ab_a_id = {$this->auksjon->id}, ab_up_id = {$this->up->id}, ab_bid = $amount, ab_time = ".time());
+			\Kofradia\DB::get()->exec("INSERT INTO auksjoner_bud SET ab_a_id = {$this->auksjon->id}, ab_up_id = {$this->up->id}, ab_bid = $amount, ab_time = ".time());
 			
 			// oppdater auksjonen
-			ess::$b->db->query("UPDATE auksjoner SET a_num_bids = a_num_bids + 1 WHERE a_id = {$this->auksjon->id}");
+			\Kofradia\DB::get()->exec("UPDATE auksjoner SET a_num_bids = a_num_bids + 1 WHERE a_id = {$this->auksjon->id}");
 		}
 		
 		$msg = '';
@@ -711,7 +711,7 @@ class page_auksjoner_auksjon extends pages_player
 		$end_min = time()+120;
 		if ($this->auksjon->data['a_end'] < $end_min)
 		{
-			ess::$b->db->query("UPDATE auksjoner SET a_end = $end_min WHERE a_id = {$this->auksjon->id} AND a_end < $end_min");
+			\Kofradia\DB::get()->exec("UPDATE auksjoner SET a_end = $end_min WHERE a_id = {$this->auksjon->id} AND a_end < $end_min");
 			$msg .= " Auksjonen ble forlenget til ".ess::$b->date->get($end_min)->format(date::FORMAT_SEC).".";
 			
 			putlog("LOG", "%bAUKSJONER:%b %b{$this->auksjon->data['a_title']}%b ble utsatt til ".ess::$b->date->get($end_min)->format(date::FORMAT_SEC)." ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
@@ -719,7 +719,7 @@ class page_auksjoner_auksjon extends pages_player
 		
 		ess::$b->page->add_message($msg);
 		
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 		redirect::handle();
 	}
 	
@@ -730,8 +730,8 @@ class page_auksjoner_auksjon extends pages_player
 	protected function bid_delete()
 	{
 		// hent budet
-		$result = ess::$b->db->query("SELECT ab_id, ab_bid, ab_time FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_up_id = {$this->up->id} AND ab_active != 0");
-		$bud = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT ab_id, ab_bid, ab_time FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_up_id = {$this->up->id} AND ab_active != 0");
+		$bud = $result->fetch();
 		
 		// har ikke noe bud?
 		if (!$bud)
@@ -765,15 +765,15 @@ class page_auksjoner_auksjon extends pages_player
 		}
 		
 		// var dette det siste budet?
-		$result = ess::$b->db->query("SELECT ab_id FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_active != 0 AND ab_id > {$bud['ab_id']} LIMIT 1");
+		$result = \Kofradia\DB::get()->query("SELECT ab_id FROM auksjoner_bud WHERE ab_a_id = {$this->auksjon->id} AND ab_active != 0 AND ab_id > {$bud['ab_id']} LIMIT 1");
 		$msg = '';
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			// sørg for at det er minimum 2 min igjen av auksjonen
 			$end_min = time()+120;
 			if ($this->auksjon->data['a_end'] < $end_min)
 			{
-				ess::$b->db->query("UPDATE auksjoner SET a_end = $end_min WHERE a_id = {$this->auksjon->id} AND a_end < $end_min");
+				\Kofradia\DB::get()->exec("UPDATE auksjoner SET a_end = $end_min WHERE a_id = {$this->auksjon->id} AND a_end < $end_min");
 				$msg .= " Auksjonen ble forlenget til ".ess::$b->date->get($end_min)->format(date::FORMAT_SEC).".";
 				
 				putlog("LOG", "%bAUKSJONER:%b %b{$this->auksjon->data['a_title']}%b ble utsatt til ".ess::$b->date->get($end_min)->format(date::FORMAT_SEC)." ".ess::$s['spath']."/auksjoner?a_id={$this->auksjon->id}");
@@ -790,13 +790,13 @@ class page_auksjoner_auksjon extends pages_player
 	protected function show()
 	{
 		// hent budet som leder, evt. vant
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ab_up_id, ab_bid, ab_time
 			FROM auksjoner_bud
 			WHERE ab_a_id = {$this->auksjon->id} AND ab_active != 0
 			ORDER BY ab_time DESC
 			LIMIT 1");
-		$bud_lead = mysql_fetch_assoc($result);
+		$bud_lead = $result->fetch();
 		
 		// hent alle budene
 		$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 30);
@@ -806,17 +806,17 @@ class page_auksjoner_auksjon extends pages_player
 			WHERE ab_a_id = {$this->auksjon->id}
 			ORDER BY ab_time DESC");
 		$bud = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$bud[] = $row;
 		}
 		
 		// sjekk om vi har bud
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ab_bid, ab_time
 			FROM auksjoner_bud
 			WHERE ab_a_id = {$this->auksjon->id} AND ab_up_id = {$this->up->id} AND ab_active != 0");
-		$bud_own = mysql_fetch_assoc($result);
+		$bud_own = $result->fetch();
 		$bud_own_locked = $this->auksjon->data['a_type'] == auksjon::TYPE_KULER || time() > $bud_own['ab_time'] + auksjon::MAX_TIME_REMOVE;
 		
 		$type = auksjon_type::get($this->auksjon->data['a_type']);

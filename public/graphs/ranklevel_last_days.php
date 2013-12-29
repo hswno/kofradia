@@ -10,22 +10,23 @@ $up_name = login::$user->player->data['up_name'];
 if (isset($_GET['up_id']) && access::has("crewet"))
 {
 	$up_id = (int) getval("up_id");
-	$result = $_base->db->query("SELECT up_u_id, up_id, up_name FROM users_players WHERE up_id = $up_id");
-	if (mysql_num_rows($result) == 0) ajax::text("ERROR:UP-404", ajax::TYPE_404);
+	$result = \Kofradia\DB::get()->query("SELECT up_u_id, up_id, up_name FROM users_players WHERE up_id = $up_id");
+	if ($result->rowCount() == 0) ajax::text("ERROR:UP-404", ajax::TYPE_404);
 	
-	$u_id = mysql_result($result, 0, "up_u_id");
-	$up_name = mysql_result($result, 0, "up_name");
+	$row = $result->fetch();
+	$u_id = $row['up_u_id'];
+	$up_name = $row['up_name'];
 }
 
 // for 28 eller 10 dager?
 $days = isset($_GET['long']) ? 30 : 10;
 
 // hent statistikk for brukeren de siste 10 dagene som er ranket
-$result = ess::$b->db->query("SELECT DATE(FROM_UNIXTIME(uhi_secs_hour)) day, SUM(uhi_points) sum_points FROM users_hits JOIN users_players ON uhi_up_id = up_id AND up_u_id = $u_id GROUP BY DATE(FROM_UNIXTIME(uhi_secs_hour)) ORDER BY day DESC LIMIT $days");
+$result = \Kofradia\DB::get()->query("SELECT DATE(FROM_UNIXTIME(uhi_secs_hour)) day, SUM(uhi_points) sum_points FROM users_hits JOIN users_players ON uhi_up_id = up_id AND up_u_id = $u_id GROUP BY DATE(FROM_UNIXTIME(uhi_secs_hour)) ORDER BY day DESC LIMIT $days");
 $stats = array();
 $stats_avg = array();
 $q = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$stats[$row['day']] = $row['sum_points'];
 	$stats_avg[$row['day']] = $row['sum_points'];
@@ -35,8 +36,8 @@ while ($row = mysql_fetch_assoc($result))
 // beregn gjennomsnittet de siste dagene
 if (count($q) > 0)
 {
-	$result = ess::$b->db->query(implode(" UNION ALL ", $q));
-	while ($row = mysql_fetch_assoc($result))
+	$result = \Kofradia\DB::get()->query(implode(" UNION ALL ", $q));
+	while ($row = $result->fetch())
 	{
 		$stats_avg[$row['day']] = (int) $row['avg_points'];
 	}

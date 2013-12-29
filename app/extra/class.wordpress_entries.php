@@ -82,9 +82,9 @@ class wordpress_entries
 		// lagre hvis det var noe nytt
 		if ($last > 0 && ($last_prev === false || $last_prev < $last || (isset($last_data) && ($row['link'] != $last_data['link'] || $row['title'] != $last_data['title']))))
 		{
-			$data = $_base->db->quote(serialize($row));
-			$_base->db->query("REPLACE INTO settings SET name = 'wordpress_last', value = $last");
-			$_base->db->query("REPLACE INTO settings SET name = 'wordpress_last_data', value = $data");
+			$data = \Kofradia\DB::quote(serialize($row));
+			\Kofradia\DB::get()->exec("REPLACE INTO settings SET name = 'wordpress_last', value = $last");
+			\Kofradia\DB::get()->exec("REPLACE INTO settings SET name = 'wordpress_last_data', value = $data");
 		}
 	}
 	
@@ -100,8 +100,8 @@ class wordpress_entries
 		if (!$data) return false;
 		
 		// lagre ny data
-		$data_sql = $_base->db->quote(serialize($data));
-		$_base->db->query("INSERT INTO settings SET name = 'wordpress_data', value = $data_sql ON DUPLICATE KEY UPDATE value = $data_sql");
+		$data_sql = \Kofradia\DB::quote(serialize($data));
+		\Kofradia\DB::get()->exec("INSERT INTO settings SET name = 'wordpress_data', value = $data_sql ON DUPLICATE KEY UPDATE value = $data_sql");
 		
 		// sjekk for ny data
 		self::check_new($data);

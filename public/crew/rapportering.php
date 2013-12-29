@@ -10,10 +10,10 @@ if (isset($_REQUEST['r_id']))
 {
 	// hent info
 	$r_id = (int)$_REQUEST['r_id'];
-	$result = ess::$b->db->query("SELECT r_id, r_source_up_id, r_up_id, r_type, r_type_id, r_time, r_note, r_state, r_crew_up_id, r_crew_note, r_crew_time FROM rapportering WHERE r_id = $r_id");
+	$result = \Kofradia\DB::get()->query("SELECT r_id, r_source_up_id, r_up_id, r_type, r_type_id, r_time, r_note, r_state, r_crew_up_id, r_crew_note, r_crew_time FROM rapportering WHERE r_id = $r_id");
 	
 	// fant ikke?
-	$r = mysql_fetch_assoc($result);
+	$r = $result->fetch();
 	if (!$r)
 	{
 		ess::$b->page->add_message("Fant ikke rapporteringen.", "error");
@@ -38,10 +38,10 @@ if (isset($_REQUEST['r_id']))
 		// prøv å oppdater
 		else
 		{
-			ess::$b->db->query("UPDATE rapportering SET r_state = 1, r_crew_time = ".time().", r_crew_up_id = ".login::$user->player->id." WHERE r_id = $r_id AND r_state = 0");
+			$a = \Kofradia\DB::get()->exec("UPDATE rapportering SET r_state = 1, r_crew_time = ".time().", r_crew_up_id = ".login::$user->player->id." WHERE r_id = $r_id AND r_state = 0");
 			
 			// ikke oppdatert?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message("En annen bruker var før deg.", "error");
 			}
@@ -70,10 +70,10 @@ if (isset($_REQUEST['r_id']))
 		// forsøk å trekk tilbake
 		else
 		{
-			ess::$b->db->query("UPDATE rapportering SET r_state = 0 WHERE r_id = $r_id AND r_state = 1 AND r_crew_up_id = ".login::$user->player->id);
+			$a = \Kofradia\DB::get()->exec("UPDATE rapportering SET r_state = 0 WHERE r_id = $r_id AND r_state = 1 AND r_crew_up_id = ".login::$user->player->id);
 			
 			// ikke oppdatert?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message("Du er ikke satt opp som ansvarlig for denne rapporteringen.", "error");
 			}
@@ -115,10 +115,10 @@ if (isset($_REQUEST['r_id']))
 			else
 			{
 				// oppdater
-				ess::$b->db->query("UPDATE rapportering SET r_state = 2, r_crew_time = ".time().", r_crew_up_id = ".login::$user->player->id.", r_crew_note = ".ess::$b->db->quote($note)." WHERE r_id = $r_id");
+				$a = \Kofradia\DB::get()->exec("UPDATE rapportering SET r_state = 2, r_crew_time = ".time().", r_crew_up_id = ".login::$user->player->id.", r_crew_note = ".\Kofradia\DB::quote($note)." WHERE r_id = $r_id");
 				
 				// ikke oppdatert?
-				if (ess::$b->db->affected_rows() == 0)
+				if ($a == 0)
 				{
 					ess::$b->page->add_message("Denne rapporteringen er ikke satt som under behandling.", "error");
 				}
@@ -235,7 +235,7 @@ $pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 10);
 $result = $pagei->query("SELECT r_id, r_source_up_id, r_up_id, r_type, r_type_id, r_time, r_note, r_state, r_crew_up_id, r_crew_note, r_crew_time FROM rapportering WHERE $where ORDER BY IF(r_crew_time>0, 1, 0), r_crew_time DESC, r_time DESC");
 
 // ingen rapporteringer?
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	if ($mode == "old")
 	{
@@ -253,7 +253,7 @@ else
 {
 	// hent data og lag data for linker
 	$rap = array();
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$rap[] = $row;
 	}

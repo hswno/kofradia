@@ -23,7 +23,7 @@ class bullets_scheduler
 	public function __construct()
 	{
 		// fjern alle kulene som ikke er kjøpt allerede
-		ess::$b->db->query("TRUNCATE bullets");
+		\Kofradia\DB::get()->exec("TRUNCATE bullets");
 		
 		// sett opp tidsperiode
 		$this->get_time_period();
@@ -70,11 +70,11 @@ class bullets_scheduler
 	protected function get_ff_list()
 	{
 		$this->ff_list = array();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ff_id
 			FROM ff
 			WHERE ff_type = 5");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$row['ant'] = 0;
 			$row['grupper'] = 0;
@@ -88,8 +88,8 @@ class bullets_scheduler
 	protected function get_count()
 	{
 		// hvor mange aktive de siste 48 timene?
-		$result = ess::$b->db->query("SELECT COUNT(*) FROM users_players WHERE up_last_online > ".(time()-86400*2)." AND up_access_level != 0");
-		$this->count_total = round(max(self::PRODUCE_MIN, mysql_result($result, 0) * self::PRODUCE_ACTIVE));
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM users_players WHERE up_last_online > ".(time()-86400*2)." AND up_access_level != 0");
+		$this->count_total = round(max(self::PRODUCE_MIN, $result->fetchColumn(0) * self::PRODUCE_ACTIVE));
 		
 		// fordel antallet på firmaene
 		$ff_count = count($this->ff_list);
@@ -168,7 +168,7 @@ class bullets_scheduler
 		// legg til i databasen
 		if (count($v) > 0)
 		{
-			ess::$b->db->query("INSERT INTO bullets (bullet_ff_id, bullet_time) VALUES ".implode(",", $v));
+			\Kofradia\DB::get()->exec("INSERT INTO bullets (bullet_ff_id, bullet_time) VALUES ".implode(",", $v));
 		}
 	}
 }

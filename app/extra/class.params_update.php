@@ -51,13 +51,13 @@ class params_update extends params
 
 		// er ikke låst i databasemodulen?
 		// lås raden og hent friske verdier
-		if (!ess::$b->db->transaction) ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
-		$result = ess::$b->db->query("SELECT $this->link_column FROM $this->link_table WHERE $this->link_where LIMIT 1 FOR UPDATE");
+		$result = \Kofradia\DB::get()->query("SELECT $this->link_column FROM $this->link_table WHERE $this->link_where LIMIT 1 FOR UPDATE");
 		
 		// erstatt med friske verdier
 		$this->params = array();
-		$this->add_text(mysql_result($result, 0));
+		$this->add_text($result->fetchColumn(0));
 	}
 	
 	/** Fjern en enhet */
@@ -119,20 +119,20 @@ class params_update extends params
 		// ingen endringer?
 		if (!$this->changed_state) {
 			if ($free) {
-				if (ess::$b->db->transaction) ess::$b->db->commit();
+				\Kofradia\DB::get()->commit();
 				$this->locked = false;
 			}
 			return;
 		}
 		
 		// oppdater databasen
-		ess::$b->db->query("UPDATE $this->link_table SET $this->link_column = ".ess::$b->db->quote($this->build())." WHERE $this->link_where LIMIT 1");
+		\Kofradia\DB::get()->exec("UPDATE $this->link_table SET $this->link_column = ".\Kofradia\DB::quote($this->build())." WHERE $this->link_where LIMIT 1");
 		$this->changed_state = false;
 		
 		// frigjøre?
 		if ($free)
 		{
-			ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			$this->locked = false;
 		}
 	}

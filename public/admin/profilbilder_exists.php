@@ -17,11 +17,11 @@ if (isset($_POST['elm']) && is_array($_POST['elm']))
 	
 	if (count($slette) == 0) redirect::handle();
 	
-	$result = $_base->db->query("SELECT profile_images.id, up_id, profile_images.time, profile_images.address, users_players.up_profile_image FROM profile_images LEFT JOIN users_players ON profile_images.id = up_profile_image WHERE profile_images.local = 1 AND FIND_IN_SET(profile_images.id, '".implode(",", $slette)."')");
+	$result = \Kofradia\DB::get()->query("SELECT profile_images.id, up_id, profile_images.time, profile_images.address, users_players.up_profile_image FROM profile_images LEFT JOIN users_players ON profile_images.id = up_profile_image WHERE profile_images.local = 1 AND FIND_IN_SET(profile_images.id, '".implode(",", $slette)."')");
 	
 	$not_found = array();
 	$active = array();
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		if (!file_exists(PATH_PUBLIC . $row['address']))
 		{
@@ -33,14 +33,12 @@ if (isset($_POST['elm']) && is_array($_POST['elm']))
 	// slett fra databasen
 	if (count($not_found) > 0)
 	{
-		$_base->db->query("DELETE FROM profile_images WHERE FIND_IN_SET(id, '".implode(",", $not_found)."')");
-		$oppdatert = $_base->db->affected_rows();
+		$oppdatert = \Kofradia\DB::get()->exec("DELETE FROM profile_images WHERE FIND_IN_SET(id, '".implode(",", $not_found)."')");
 		$_base->page->add_message(game::format_number($oppdatert) . ' profilbilde(r) ble fjernet fra databasen.');
 		
 		if (count($active) > 0)
 		{
-			$_base->db->query("UPDATE users_players SET up_profile_image = NULL WHERE FIND_IN_SET(up_id, '".implode(",", $active)."')");
-			$oppdatert = $_base->db->affected_rows();
+			$oppdatert = \Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_image = NULL WHERE FIND_IN_SET(up_id, '".implode(",", $active)."')");
 			$_base->page->add_message(game::format_number($oppdatert) . ' spiller(e) ble oppdatert og har ikke lengre eget profilbilde.');
 		}
 	}
@@ -50,10 +48,10 @@ if (isset($_POST['elm']) && is_array($_POST['elm']))
 
 
 // hent alle profilbildene fra databasen
-$result = $_base->db->query("SELECT profile_images.id, profile_images.time, profile_images.address, up_profile_image FROM profile_images LEFT JOIN users_players ON up_profile_image = profile_images.id WHERE profile_images.local = 1 GROUP BY profile_images.id");
+$result = \Kofradia\DB::get()->query("SELECT profile_images.id, profile_images.time, profile_images.address, up_profile_image FROM profile_images LEFT JOIN users_players ON up_profile_image = profile_images.id WHERE profile_images.local = 1 GROUP BY profile_images.id");
 
 $not_found = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	if (!file_exists(PATH_PUBLIC . $row['address']))
 	{

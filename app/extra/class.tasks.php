@@ -18,11 +18,11 @@ class tasks
 		if ($skip_cache || !self::$cache)
 		{
 			global $_base;
-			$result = $_base->db->query("SELECT t_name, t_ant, t_last FROM tasks");
+			$result = \Kofradia\DB::get()->query("SELECT t_name, t_ant, t_last FROM tasks");
 			
 			// les data
 			self::$cache = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				self::$cache[$row['t_name']] = $row;
 			}
@@ -54,9 +54,9 @@ class tasks
 		global $_base;
 		
 		// forsøk å øk telleren
-		$_base->db->query("UPDATE tasks SET t_ant = t_ant + 1 WHERE t_name = ".$_base->db->quote($name));
+		$a = \Kofradia\DB::get()->exec("UPDATE tasks SET t_ant = t_ant + 1 WHERE t_name = ".\Kofradia\DB::quote($name));
 		
-		if ($_base->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			sysreport::log("Fant ikke oppgaven $name", "tasks::increment()");
 			return false;
@@ -79,9 +79,9 @@ class tasks
 		$count = max(1, (int) $count);
 		
 		// forsøk å senke telleren
-		$_base->db->query("UPDATE tasks SET t_ant = t_ant - 1 WHERE t_name = ".$_base->db->quote($name));
+		$a = \Kofradia\DB::get()->exec("UPDATE tasks SET t_ant = t_ant - 1 WHERE t_name = ".\Kofradia\DB::quote($name));
 		
-		if ($_base->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			sysreport::log("Fant ikke oppgaven $name", "tasks::mark()");
 			return false;
@@ -104,8 +104,7 @@ class tasks
 		$value = (int) $value;
 		
 		// forsøk å sett telleren til bestemt verdi
-		$_base->db->query("UPDATE tasks SET t_ant = $value WHERE t_name = ".$_base->db->quote($name));
-		$affected = $_base->db->affected_rows();
+		$affected = \Kofradia\DB::get()->exec("UPDATE tasks SET t_ant = $value WHERE t_name = ".\Kofradia\DB::quote($name));
 		
 		// oppdater cache
 		self::load(true);

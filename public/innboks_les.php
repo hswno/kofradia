@@ -391,7 +391,7 @@ class page_innboks_les
 		
 		$i = 0;
 		$last_id = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$e = $this->pagei->total - $i - ($this->pagei->active - 1) * $this->pagei->per_page;
 			if ($i == 0) $last_id = $row['im_id'];

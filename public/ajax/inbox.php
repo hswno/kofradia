@@ -81,7 +81,7 @@ class ajax_inbox
 		
 		// har vi nye meldinger?
 		$messages = array();
-		if (mysql_num_rows($result) > 0)
+		if ($result->rowCount() > 0)
 		{
 			// forsøk å sette ned meldingstelleren
 			$thread->counter_new_reset();
@@ -89,7 +89,7 @@ class ajax_inbox
 			// gå gjennom meldingene
 			$i = 0;
 			$messages = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$e = $num_messages - $i;
 				if ($i == 0) $last_id = $row['im_id'];

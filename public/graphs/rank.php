@@ -22,8 +22,8 @@ while (true)
 	if ($day == $today) break;
 }
 
-$result = $_base->db->query("SELECT DATE(FROM_UNIXTIME(uhi_secs_hour)) day, SUM(uhi_points) sum_points FROM users_hits WHERE uhi_secs_hour >= $expire GROUP BY DATE(FROM_UNIXTIME(uhi_secs_hour))");
-while ($row = mysql_fetch_assoc($result))
+$result = \Kofradia\DB::get()->query("SELECT DATE(FROM_UNIXTIME(uhi_secs_hour)) day, SUM(uhi_points) sum_points FROM users_hits WHERE uhi_secs_hour >= $expire GROUP BY DATE(FROM_UNIXTIME(uhi_secs_hour))");
+while ($row = $result->fetch())
 {
 	$stats[$row['day']] = (int) $row['sum_points'];
 }

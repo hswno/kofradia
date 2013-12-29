@@ -234,7 +234,7 @@ class db_wrap
 	</thead>
 	<tbody>';
 		
-		if (mysql_num_rows($result) == 0) {
+		if ($result->rowCount() == 0) {
 			// ingen rader?
 			echo '
 		<tr>
@@ -245,7 +245,7 @@ class db_wrap
 			mysql_data_seek($result, 0);
 			
 			// vis hver rad
-			while ($row = mysql_fetch_row($result)) {
+			while ($row = $result->fetch(\PDO::FETCH_NUM)) {
 				echo '
 		<tr>';
 				

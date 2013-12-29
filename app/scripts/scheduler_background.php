@@ -28,13 +28,13 @@ ess::$b->scheduler = new scheduler();
 while (true)
 {
 	// finn ut når neste rutine skal utføres
-	$result = ess::$b->db->query("
+	$result = \Kofradia\DB::get()->query("
 		SELECT GREATEST(s_next, s_expire) next
 		FROM scheduler
 		WHERE s_active = 1
 		ORDER BY next
 		LIMIT 1");
-	$row = mysql_fetch_assoc($result);
+	$row = $result->fetch();
 	$next = false;
 	if ($row)
 	{

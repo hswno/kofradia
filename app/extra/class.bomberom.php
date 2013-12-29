@@ -47,8 +47,8 @@ class bomberom
 	{
 		// finn antall pålogget siste 48 timer
 		$expire = time() - 86400 * 2;
-		$result = ess::$b->db->query("SELECT COUNT(*) FROM users_players WHERE up_access_level != 0 AND up_last_online > $expire");
-		$ant_online = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM users_players WHERE up_access_level != 0 AND up_last_online > $expire");
+		$ant_online = $result->fetchColumn(0);
 		
 		// for julaften og nyttår
 		$d = array("12-24", "12-30", "12-31");
@@ -61,12 +61,12 @@ class bomberom
 		// antall som skal fordeles (minimum 5 stk)
 		$ant_fordeles = max(5, ceil($ant_online * self::CAPACITY_FACTOR * $f));
 		
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// hent ut alle bomberommene
-		$result = ess::$b->db->query("SELECT ff_id, ff_params FROM ff WHERE ff_type = 4 AND ff_inactive = 0 FOR UPDATE");
+		$result = \Kofradia\DB::get()->query("SELECT ff_id, ff_params FROM ff WHERE ff_type = 4 AND ff_inactive = 0 FOR UPDATE");
 		$bomberom = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$row['rest'] = 0; // antall ekstra plasser det skal settes av (de som blir fordelt tilfeldig)
 			$bomberom[] = $row;
@@ -77,7 +77,7 @@ class bomberom
 		if ($ant_bomberom == 0)
 		{
 			putlog("LOG", "BOMBEROM KAPASITET: Ingen bomberom eksisterer.");
-			ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			return;
 		}
 		
@@ -110,10 +110,10 @@ class bomberom
 			$params->update("bomberom_kapasitet", $ant);
 			
 			// lagre
-			ess::$b->db->query("UPDATE ff SET ff_params = ".ess::$b->db->quote($params->build())." WHERE ff_id = {$row['ff_id']}");
+			\Kofradia\DB::get()->exec("UPDATE ff SET ff_params = ".\Kofradia\DB::quote($params->build())." WHERE ff_id = {$row['ff_id']}");
 		}
 		
 		// lagre
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 	}
 }

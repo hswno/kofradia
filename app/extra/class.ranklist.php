@@ -8,10 +8,10 @@ class ranklist
 	public static function flush()
 	{
 		// slett gamle lista
-		ess::$b->db->query("TRUNCATE users_players_rank");
+		\Kofradia\DB::get()->exec("TRUNCATE users_players_rank");
 		
 		// overfør spillerdata
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			INSERT IGNORE INTO users_players_rank (upr_up_id, upr_up_access_level, upr_up_points)
 			SELECT up_id, up_access_level, up_points
 			FROM users_players");
@@ -25,8 +25,8 @@ class ranklist
 	 */
 	public static function update()
 	{
-		ess::$b->db->query("SET @num = 1, @rank = 0, @p := NULL, @nc := NULL");
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("SET @num = 1, @rank = 0, @p := NULL, @nc := NULL");
+		\Kofradia\DB::get()->exec("
 			UPDATE users_players_rank m, (
 				SELECT
 					upr_up_id,

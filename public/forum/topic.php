@@ -23,11 +23,11 @@ class page_forum_topic
 		{
 			if (isset($_GET['show_signature']) && login::$user->data['u_forum_show_signature'] == 0)
 			{
-				ess::$b->db->query("UPDATE users SET u_forum_show_signature = 1 WHERE u_id = ".login::$user->id);
+				\Kofradia\DB::get()->exec("UPDATE users SET u_forum_show_signature = 1 WHERE u_id = ".login::$user->id);
 			}
 			elseif (isset($_GET['hide_signature']) && login::$user->data['u_forum_show_signature'] == 1)
 			{
-				ess::$b->db->query("UPDATE users SET u_forum_show_signature = 0 WHERE u_id = ".login::$user->id);
+				\Kofradia\DB::get()->exec("UPDATE users SET u_forum_show_signature = 0 WHERE u_id = ".login::$user->id);
 			}
 			
 			redirect::handle(game::address("topic", $_GET, array("show_signature", "hide_signature")));
@@ -142,8 +142,8 @@ class page_forum_topic
 		{
 			// hent forumsvaret
 			$reply_id = intval($_GET['replyid']);
-			$result = ess::$b->db->query("SELECT fr_id, fr_deleted FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id = $reply_id");
-			$row = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT fr_id, fr_deleted FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id = $reply_id");
+			$row = $result->fetch();
 			
 			// fant ikke forumsvaret, eller slettet uten tilgang?
 			if (!$row || ($row['fr_deleted'] != 0 && !$this->fmod))
@@ -160,8 +160,8 @@ class page_forum_topic
 			}
 			
 			// finn ut antall forumsvar før
-			$result = ess::$b->db->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < $reply_id$deleted");
-			$reply_num = mysql_result($result, 0) + 1;
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < $reply_id$deleted");
+			$reply_num = $result->fetchColumn(0) + 1;
 			
 			// sett opp sidetallet og sett til aktiv side
 			$pagei->__construct(pagei::ACTIVE, ceil($reply_num / $this->topic->replies_per_page));
@@ -185,15 +185,15 @@ class page_forum_topic
 			else
 			{
 				// finn neste forumsvar etter fs_time
-				$result = ess::$b->db->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_time > {$this->topic->info['fs_time']}$deleted ORDER BY fr_time LIMIT 1");
-				$row = mysql_fetch_assoc($result);
+				$result = \Kofradia\DB::get()->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_time > {$this->topic->info['fs_time']}$deleted ORDER BY fr_time LIMIT 1");
+				$row = $result->fetch();
 				
 				// fant ikke noe forumsvar?
 				if (!$row)
 				{
 					// finn det siste innlegget
-					$result = ess::$b->db->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id}$deleted ORDER BY fr_time DESC LIMIT 1");
-					$row = mysql_fetch_assoc($result);
+					$result = \Kofradia\DB::get()->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id}$deleted ORDER BY fr_time DESC LIMIT 1");
+					$row = $result->fetch();
 				}
 				
 				// fremdeles ingen forumsvar å gå til?
@@ -211,8 +211,8 @@ class page_forum_topic
 				else
 				{
 					// finn ut antall forumsvar før det vi skal gå til
-					$result = ess::$b->db->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < {$row['fr_id']}$deleted");
-					$reply_num = mysql_result($result, 0) + 1;
+					$result = \Kofradia\DB::get()->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < {$row['fr_id']}$deleted");
+					$reply_num = $result->fetchColumn(0) + 1;
 					
 					// sett opp sidetallet og kontroller at vi er på riktig side
 					$page = ceil($reply_num / $this->topic->replies_per_page);
@@ -232,8 +232,8 @@ class page_forum_topic
 		if ($show_deleted)
 		{
 			// finn ut hvor mange meldinger som er slettet
-			$result = ess::$b->db->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_deleted != 0");
-			$count = mysql_result($result, 0);
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_deleted != 0");
+			$count = $result->fetchColumn(0);
 			
 			ess::$b->page->add_message("Du viser slettede forumsvar. Denne forumtråden har <b>$count</b> ".fword("slettet forumsvar", "slettede forumsvar", $count).".", NULL, "top");
 		}
@@ -242,7 +242,7 @@ class page_forum_topic
 		// øk visningstelleren hvis vi ikke har besøkt denne forumtråden de siste 10 min
 		if (!isset($_SESSION[$GLOBALS['__server']['session_prefix'].'forum_topics_visited'][$this->topic->id]) || $_SESSION[$GLOBALS['__server']['session_prefix'].'forum_topics_visited'][$this->topic->id] + 600 <= time())
 		{
-			ess::$b->db->query("UPDATE forum_topics SET ft_views = ft_views + 1 WHERE ft_id = {$this->topic->id}");
+			\Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_views = ft_views + 1 WHERE ft_id = {$this->topic->id}");
 		}
 		
 		// lagre som vist
@@ -257,8 +257,8 @@ class page_forum_topic
 		// finn ut antall svar vi har synlige
 		if ($show_deleted)
 		{
-			$result = ess::$b->db->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id}$deleted");
-			$replies_count = mysql_result($result, 0);
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id}$deleted");
+			$replies_count = $result->fetchColumn(0);
 		}
 		else
 		{
@@ -309,7 +309,7 @@ class page_forum_topic
 		if ($replies_count > 0)
 		{
 			// hent svarene
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT
 					fr_id, fr_time, fr_up_id, fr_text, fr_deleted, fr_last_edit, fr_last_edit_up_id,
 					up_name, up_access_level, up_forum_signature, up_points, up_profile_image_url,
@@ -325,7 +325,7 @@ class page_forum_topic
 				ORDER BY fr_time ASC
 				LIMIT {$pagei->start}, {$pagei->per_page}");
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$id_list[] = $row['fr_id'];
 				$up_ids[] = $row['fr_up_id'];
@@ -387,13 +387,13 @@ class page_forum_topic
 		// legge til?
 		if (login::$logged_in && empty($this->topic->info['fs_time']))
 		{
-			ess::$b->db->query("INSERT IGNORE INTO forum_seen SET fs_ft_id = {$this->topic->id}, fs_u_id = ".login::$user->id.", fs_time = $time");
+			\Kofradia\DB::get()->exec("INSERT IGNORE INTO forum_seen SET fs_ft_id = {$this->topic->id}, fs_u_id = ".login::$user->id.", fs_time = $time");
 		}
 		
 		// oppdater
 		elseif (login::$logged_in && $time > $this->topic->info['fs_time'])
 		{
-			ess::$b->db->query("UPDATE forum_seen SET fs_time = GREATEST(fs_time, $time) WHERE fs_ft_id = {$this->topic->id} AND fs_u_id = ".login::$user->id);
+			\Kofradia\DB::get()->exec("UPDATE forum_seen SET fs_time = GREATEST(fs_time, $time) WHERE fs_ft_id = {$this->topic->id} AND fs_u_id = ".login::$user->id);
 		}
 		
 		

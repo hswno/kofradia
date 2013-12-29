@@ -21,8 +21,8 @@ if (isset($_GET['random']))
 		$where .= " AND up_profile_text LIKE '%[music]%[/music]%'";
 	}
 	
-	$result = ess::$b->db->query("SELECT up_name FROM users_players WHERE up_access_level != 0 AND up_last_online > $last$where ORDER BY RAND() LIMIT 1");
-	$name = mysql_result($result, 0);
+	$result = \Kofradia\DB::get()->query("SELECT up_name FROM users_players WHERE up_access_level != 0 AND up_last_online > $last$where ORDER BY RAND() LIMIT 1");
+	$name = $result->fetchColumn(0);
 	
 	redirect::handle("/p/".rawurlencode($name), redirect::ROOT);
 }
@@ -38,17 +38,17 @@ if (isset($_GET['name']))
 	if (isset($_GET['id']))
 	{
 		$up_id = (int) $_GET['id'];
-		$result = ess::$b->db->query("SELECT up_id, up_name FROM users_players WHERE up_id = $up_id AND up_name = ".ess::$b->db->quote($name));
+		$result = \Kofradia\DB::get()->query("SELECT up_id, up_name FROM users_players WHERE up_id = $up_id AND up_name = ".\Kofradia\DB::quote($name));
 		$by_id = true;
 	}
 	
 	else
 	{
-		$result = ess::$b->db->query("SELECT up_id, up_name FROM users_players WHERE up_name = ".ess::$b->db->quote($name)." ORDER BY up_access_level = 0, up_last_online DESC LIMIT 1");
+		$result = \Kofradia\DB::get()->query("SELECT up_id, up_name FROM users_players WHERE up_name = ".\Kofradia\DB::quote($name)." ORDER BY up_access_level = 0, up_last_online DESC LIMIT 1");
 	}
 	
 	// fant ingen spller?
-	$row = mysql_fetch_assoc($result);
+	$row = $result->fetch();
 	if (!$row)
 	{
 		ess::$b->page->add_message("Fant ikke spilleren.", "error");
@@ -72,8 +72,8 @@ if (isset($_GET['name']))
 elseif (isset($_GET['id']))
 {
 	$up_id = (int) $_GET['id'];
-	$result = ess::$b->db->query("SELECT up_id, up_name FROM users_players WHERE up_id = $up_id");
-	$row = mysql_fetch_assoc($result);
+	$result = \Kofradia\DB::get()->query("SELECT up_id, up_name FROM users_players WHERE up_id = $up_id");
+	$row = $result->fetch();
 	
 	if (!$row)
 	{
@@ -134,7 +134,7 @@ if (!login::$logged_in || (!access::is_nostat() && login::$user->id != $player->
 	{
 		$siste = $player->data['up_profile_anon_time'];
 		$player->data['up_profile_anon_time'] = time();
-		ess::$b->db->query("UPDATE users_players SET up_profile_anon_time = {$player->data['up_profile_anon_time']} WHERE up_id = {$player->id}");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_anon_time = {$player->data['up_profile_anon_time']} WHERE up_id = {$player->id}");
 	}
 	
 	// innlogget
@@ -142,13 +142,13 @@ if (!login::$logged_in || (!access::is_nostat() && login::$user->id != $player->
 	{
 		// når besøkte vi profilen sist?
 		$siste = 0;
-		$result = ess::$b->db->query("SELECT time FROM users_views WHERE uv_up_id = $player->id AND uv_visitor_up_id = ".login::$user->player->id);
-		if (mysql_num_rows($result))
+		$result = \Kofradia\DB::get()->query("SELECT time FROM users_views WHERE uv_up_id = $player->id AND uv_visitor_up_id = ".login::$user->player->id);
+		if ($result->rowCount())
 		{
-			$siste = mysql_result($result, 0);
+			$siste = $result->fetchColumn(0);
 		}
 		
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			INSERT INTO users_views SET uv_up_id = $player->id, uv_visitor_up_id = ".login::$user->player->id.", time = ".time()."
 			ON DUPLICATE KEY UPDATE time = ".time());
 	}
@@ -157,7 +157,7 @@ if (!login::$logged_in || (!access::is_nostat() && login::$user->id != $player->
 	// oppdater kun hvis det har gått mer enn 90 sekunder siden forrige visning (30 sekunder for anonyme)
 	if ($siste + (login::$logged_in ? 90 : 30) < time())
 	{
-		ess::$b->db->query("UPDATE users_players SET up_profile_hits = up_profile_hits + 1 WHERE up_id = $player->id");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_hits = up_profile_hits + 1 WHERE up_id = $player->id");
 		$player->data['up_profile_hits']++;
 	}
 }
@@ -165,7 +165,7 @@ if (!login::$logged_in || (!access::is_nostat() && login::$user->id != $player->
 // hent siste besøkende
 $expire = time() - 604800; // 1 uke
 $last_visitors_limit = 7;
-$last_visitors = ess::$b->db->query("
+$last_visitors = \Kofradia\DB::get()->query("
 	SELECT up_id, up_name, up_access_level, time
 	FROM users_views JOIN users_players ON up_id = uv_visitor_up_id
 	WHERE uv_up_id = $player->id AND time > $expire
@@ -196,17 +196,18 @@ else
 
 
 // finn ut rankplassering denne timen
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT COUNT(ref.uhi_up_id)+1, SUM(users_hits.uhi_points)
 	FROM users_hits LEFT JOIN users_hits ref ON ref.uhi_points > users_hits.uhi_points AND ref.uhi_secs_hour = users_hits.uhi_secs_hour
 	WHERE users_hits.uhi_secs_hour = ".login::get_secs_hour()." AND users_hits.uhi_up_id = $player->id
 	GROUP BY users_hits.uhi_secs_hour, users_hits.uhi_up_id");
-$rank_hour_pos = mysql_num_rows($result) > 0 ? (mysql_result($result, 0, 1) == 0 ? 'Ingen' : '#'.game::format_number(mysql_result($result, 0, 0))) : 'Ingen';
+$row = $result->fetch(\PDO::FETCH_NUM);
+$rank_hour_pos = $row ? ($row[1] == 0 ? 'Ingen' : '#'.game::format_number($row[0])) : 'Ingen';
 
 
 // pengerank
-$result = ess::$b->db->query("SELECT COUNT(up_id)+1 FROM users_players WHERE up_cash+up_bank > CAST({$player->data['up_cash']} AS UNSIGNED)+CAST({$player->data['up_bank']} AS UNSIGNED) AND up_access_level < {$_game['access_noplay']} AND up_access_level != 0");
-$pengeplassering = mysql_result($result, 0);
+$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id)+1 FROM users_players WHERE up_cash+up_bank > CAST({$player->data['up_cash']} AS UNSIGNED)+CAST({$player->data['up_bank']} AS UNSIGNED) AND up_access_level < {$_game['access_noplay']} AND up_access_level != 0");
+$pengeplassering = $result->fetchColumn(0);
 $pengerank = "Ubetydelig";
 if ($pengeplassering == 1)
 {
@@ -223,8 +224,8 @@ elseif ($pengeplassering <= 15)
 
 
 // antall vervet
-$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_recruiter_up_id = $player->id");
-$num_recruited = mysql_result($result, 0);
+$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE up_recruiter_up_id = $player->id");
+$num_recruited = $result->fetchColumn(0);
 
 
 // html
@@ -338,9 +339,9 @@ $result_other_up = $pagei_other_up->query("
 	SELECT up_id, up_name, up_access_level, up_created_time, up_last_online, up_points, up_deactivated_time, up_deactivated_dead, upr_rank_pos
 	FROM users_players
 		LEFT JOIN users_players_rank ON upr_up_id = up_id
-	WHERE up_name = ".ess::$b->db->quote($player->data['up_name'])." AND up_u_id = {$player->data['up_u_id']}
+	WHERE up_name = ".\Kofradia\DB::quote($player->data['up_name'])." AND up_u_id = {$player->data['up_u_id']}
 	ORDER BY up_last_online DESC");
-$has_other_up = mysql_num_rows($result_other_up) > 1;
+$has_other_up = $result_other_up->rowCount() > 1;
 
 // antall angrep man har utført
 $attacks = $player->data['up_attack_failed_num'] + $player->data['up_attack_damaged_num'] + $player->data['up_attack_killed_num'];
@@ -451,7 +452,7 @@ if ($has_other_up)
 				</thead>
 				<tbody>';
 	
-	while ($row = mysql_fetch_assoc($result_other_up))
+	while ($row = $result_other_up->fetch())
 	{
 		$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
 		echo '
@@ -481,13 +482,13 @@ echo '
 // hent FF
 $expire = time() - 86400; // vis familier/firmaer man mistet medlemskap i siste 24 timer dersom spilleren er deaktivert
 $where = !$player->active ? " AND ffm_status = ".ff_member::STATUS_DEACTIVATED." AND (ffm_date_part IS NULL OR ffm_date_part > $expire)" : " AND ffm_status = ".ff_member::STATUS_MEMBER." AND ff_inactive = 0";
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT ffm_priority, ff_id, IFNULL(ffm_ff_name, ff_name) ffm_ff_name, ff_inactive, ff_type
 	FROM ff_members JOIN ff ON ffm_ff_id = ff_id
 	WHERE ffm_up_id = $player->id$where
 	ORDER BY ff_type != 1, ffm_ff_name");
 
-if (mysql_num_rows($result) > 0)
+if ($result->rowCount() > 0)
 {
 	echo '
 		<div class="section">
@@ -497,7 +498,7 @@ if (mysql_num_rows($result) > 0)
 	
 	$i = 0;
 	$mod = access::has("mod");
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$type = ff::$types[$row['ff_type']];
 		$title = ' title="'.htmlspecialchars($type['typename']).'"';
@@ -526,7 +527,7 @@ echo '
 		<div class="section">
 			<h2>Siste besøkende</h2>';
 
-if (mysql_num_rows($last_visitors) == 0 && !$last_visitor_anon) echo '
+if ($last_visitors->rowCount() == 0 && !$last_visitor_anon) echo '
 			<p>Ingen besøkende enda.</p>';
 
 else
@@ -538,7 +539,7 @@ else
 				<dt>Anonym</dt>
 				<dd>'.game::timespan($last_visitor_anon, game::TIME_ABS).'</dd>' : '';
 	$i = 0;
-	while ($row = mysql_fetch_assoc($last_visitors))
+	while ($row = $last_visitors->fetch())
 	{
 		if ($i++ == $last_visitors_limit) break;
 		

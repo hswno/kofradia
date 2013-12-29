@@ -4,10 +4,10 @@ require "../../base.php";
 global $_base;
 
 // hent alle kategoriene og sett opp mal
-$result = $_base->db->query("SELECT fse_id, fse_name FROM forum_sections ORDER BY fse_name");
+$result = \Kofradia\DB::get()->query("SELECT fse_id, fse_name FROM forum_sections ORDER BY fse_name");
 $sections = array();
 $stats_mal = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$sections[$row['fse_id']] = $row['fse_name'];
 	$stats_mal[$row['fse_id']]['topics'] = 0;
@@ -16,11 +16,11 @@ while ($row = mysql_fetch_assoc($result))
 
 
 // hent statistikken for antall emner (fordelt dagvis og kategorisk)
-$result = $_base->db->query("SELECT DATE(FROM_UNIXTIME(ft_time)) AS date, ft_fse_id, COUNT(ft_id) AS count FROM forum_topics GROUP BY ft_fse_id, DATE(FROM_UNIXTIME(ft_time)) ORDER BY date DESC");
+$result = \Kofradia\DB::get()->query("SELECT DATE(FROM_UNIXTIME(ft_time)) AS date, ft_fse_id, COUNT(ft_id) AS count FROM forum_topics GROUP BY ft_fse_id, DATE(FROM_UNIXTIME(ft_time)) ORDER BY date DESC");
 
 // del opp i dager og bruk malen
 $stats = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	if (!isset($stats[$row['date']]))
 	{
@@ -35,10 +35,10 @@ while ($row = mysql_fetch_assoc($result))
 
 
 // hent statistikken for antall svar (fordelt dagvis og kategorisk)
-$result = $_base->db->query("SELECT DATE(FROM_UNIXTIME(fr_time)) AS date, ft_fse_id, COUNT(fr_id) AS count FROM forum_replies, forum_topics WHERE fr_ft_id = ft_id GROUP BY ft_fse_id, DATE(FROM_UNIXTIME(fr_time)) ORDER BY date DESC");
+$result = \Kofradia\DB::get()->query("SELECT DATE(FROM_UNIXTIME(fr_time)) AS date, ft_fse_id, COUNT(fr_id) AS count FROM forum_replies, forum_topics WHERE fr_ft_id = ft_id GROUP BY ft_fse_id, DATE(FROM_UNIXTIME(fr_time)) ORDER BY date DESC");
 
 // del opp i dager og bruk malen
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	if (!isset($stats[$row['date']]))
 	{

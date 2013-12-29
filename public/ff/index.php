@@ -40,30 +40,30 @@ class page_ff extends pages_player
 		// hent info
 		$fff_id = (int) $_GET['fff_id'];
 		$limit_time = access::has("mod") ? '' : " AND fff_time_start <= ".time()." AND fff_active = 1";
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT fff_id, fff_time_start, fff_time_expire, fff_required_points, fff_active
 			FROM ff_free
 			WHERE fff_id = $fff_id$limit_time");
 		
 		// fant ikke?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			ess::$b->page->add_message("Fant ikke konkurransen.");
 			redirect::handle();
 		}
-		$faf = mysql_fetch_assoc($result);
+		$faf = $result->fetch();
 		
 		ess::$b->page->add_title("Viser konkurranse om å danne broderskap");
 		
 		// hent familier som deltar eller har deltatt i denne konkurransen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ff_id, ff_name, ff_inactive, ff_inactive_time, ff_date_reg, COUNT(ffm_up_id) as ffm_count
 			FROM ff
 				LEFT JOIN ff_members ON ffm_ff_id = ff_id AND ffm_status = 1
 			WHERE ff_fff_id = $fff_id
 			GROUP BY ff_id");
 		$ff = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$ff[$row['ff_id']] = $row;
 		}
@@ -151,11 +151,11 @@ class page_ff extends pages_player
 		}
 		
 		// se om brukeren er invitert eller medlem av en annen familie
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(ff_id)
 			FROM ff_members JOIN ff ON ffm_ff_id = ff_id
 			WHERE ffm_up_id = ".$this->up->id." AND ff_inactive = 0 AND ff_type = 1 AND ff_is_crew = 0 AND (ffm_status = 0 OR ffm_status = 1)");
-		if (mysql_result($result, 0) >= ff::MAX_FAMILIES && !access::has("mod"))
+		if ($result->fetchColumn(0) >= ff::MAX_FAMILIES && !access::has("mod"))
 		{
 			ess::$b->page->add_message("Du er allerede invitert eller medlem av for mange broderskap.");
 			redirect::handle();
@@ -163,28 +163,29 @@ class page_ff extends pages_player
 		
 		// se om brukeren tidligere har opprettet en familie i noen av konkurransene
 		$time = time();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ff_date_reg, ff_inactive_time
 			FROM ff_free
 				JOIN ff ON ff_fff_id = fff_id AND ff_inactive != 0
 				JOIN ff_members ON ffm_ff_id = ff_id AND ffm_up_id = ".$this->up->id." AND ffm_priority = 1
 			WHERE $time >= fff_time_start AND fff_active = 1 AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT."
 			LIMIT 1");
-		if (mysql_num_rows($result) > 0)
+		if ($result->rowCount() > 0)
 		{
-			ess::$b->page->add_message("Du opprettet et broderskap i denne konkurransen ".ess::$b->date->get(mysql_result($result, 0))->format()." som ble lagt ned ".ess::$b->date->get(mysql_result($result, 0, 1))->format().". Du må vente på en ny konkurranse for å opprette nytt broderskap.", "error");
+			$row = $result->fetch();
+			ess::$b->page->add_message("Du opprettet et broderskap i denne konkurransen ".ess::$b->date->get($row['ff_date_reg'])->format()." som ble lagt ned ".ess::$b->date->get($row['ff_inactive_time'])->format().". Du må vente på en ny konkurranse for å opprette nytt broderskap.", "error");
 			redirect::handle();
 		}
 		
 		// se om det er ledig plass for en familie
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT fff_id, fff_time_start, fff_time_expire, fff_ff_count
 			FROM ff_free
 			WHERE $time >= fff_time_start AND fff_active = 1 AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT."
 			ORDER BY fff_time_start");
 		$total_free = 0;
 		$fafs = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$fafs[$row['fff_id']] = $row;
 			$total_free += ff::MAX_FFF_FF_COUNT - $row['fff_ff_count'];
@@ -201,10 +202,10 @@ class page_ff extends pages_player
 		if (isset($_POST['confirm']) && validate_sid())
 		{
 			// trekk fra pengene fra brukeren
-			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - ".ff::CREATE_COST." WHERE up_id = ".$this->up->id." AND up_cash >= ".ff::CREATE_COST);
+			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - ".ff::CREATE_COST." WHERE up_id = ".$this->up->id." AND up_cash >= ".ff::CREATE_COST);
 			
 			// ble ikke brukeren oppdatert?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
 			}
@@ -215,8 +216,8 @@ class page_ff extends pages_player
 				$fff_id = NULL;
 				foreach ($fafs as $faf)
 				{
-					ess::$b->db->query("UPDATE ff_free SET fff_ff_count = fff_ff_count + 1 WHERE fff_id = {$faf['fff_id']} AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT." AND fff_active = 1");
-					if (ess::$b->db->affected_rows() > 0)
+					$a = \Kofradia\DB::get()->exec("UPDATE ff_free SET fff_ff_count = fff_ff_count + 1 WHERE fff_id = {$faf['fff_id']} AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT." AND fff_active = 1");
+					if ($a > 0)
 					{
 						$fff_id = $faf['fff_id'];
 						break;
@@ -227,7 +228,7 @@ class page_ff extends pages_player
 				if (!$fff_id)
 				{
 					// gi tilbake pengene
-					ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + ".ff::CREATE_COST." WHERE up_id = ".$this->up->id);
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + ".ff::CREATE_COST." WHERE up_id = ".$this->up->id);
 					
 					ess::$b->page->add_message("Det er ikke lenger noen ledige plasser for broderskap.", "error");
 					redirect::handle();
@@ -236,11 +237,11 @@ class page_ff extends pages_player
 				else
 				{
 					// opprett familien
-					ess::$b->db->query("INSERT INTO ff SET ff_date_reg = ".time().", ff_type = 1, ff_name = ".ess::$b->db->quote($this->up->data['up_name']."'s broderskap").", ff_up_limit = ".ess::$b->db->quote(ff::MEMBERS_LIMIT_DEFAULT).", ff_fff_id = $fff_id");
-					$ff_id = ess::$b->db->insert_id();
+					\Kofradia\DB::get()->exec("INSERT INTO ff SET ff_date_reg = ".time().", ff_type = 1, ff_name = ".\Kofradia\DB::quote($this->up->data['up_name']."'s broderskap").", ff_up_limit = ".\Kofradia\DB::quote(ff::MEMBERS_LIMIT_DEFAULT).", ff_fff_id = $fff_id");
+					$ff_id = \Kofradia\DB::get()->lastInsertId();
 					
 					// legg til brukeren som boss
-					ess::$b->db->query("INSERT INTO ff_members SET ffm_up_id = ".$this->up->id.", ffm_ff_id = $ff_id, ffm_date_created = ".time().", ffm_date_join = ".time().", ffm_priority = 1, ffm_status = 1, ffm_pay_points = ".$this->up->data['up_points']);
+					\Kofradia\DB::get()->exec("INSERT INTO ff_members SET ffm_up_id = ".$this->up->id.", ffm_ff_id = $ff_id, ffm_date_created = ".time().", ffm_date_join = ".time().", ffm_priority = 1, ffm_status = 1, ffm_pay_points = ".$this->up->data['up_points']);
 					
 					// logg
 					putlog("INFO", "Broderskap: %u".$this->up->data['up_name']."%u opprettet et broderskap og er nå del av en konkurranse ".ess::$s['path']."/ff/?ff_id=$ff_id");
@@ -456,11 +457,11 @@ class page_ff_id extends pages_player
 			if ($d->format("U") > $date->format("U")) $date = $d; // sørg for at tidspunktet er i perioden
 		}
 		$first = $date->format("Y-m-d");
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffsd_date, ffsd_money_in, ffsd_money_out, ffsd_attack_failed_num, ffsd_attack_damaged_num, ffsd_attack_killed_num, ffsd_attack_bleed_num, ffsd_attacked_failed_num, ffsd_attacked_damaged_num, ffsd_attacked_killed_num, ffsd_attacked_bleed_num
 			FROM ff_stats_daily
 			WHERE ffsd_ff_id = {$this->ff->id} AND ffsd_date >= $first");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if (!isset($stats['ffsd_money_in'][$row['ffsd_date']])) continue;
 			
@@ -648,13 +649,13 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			// hent statistikk over angrep
 			$first = ess::$b->date->get();
 			$first->modify("-7 days");
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT
 					SUM(ffsd_attack_failed_num) afailed, SUM(ffsd_attack_damaged_num) adamaged, SUM(ffsd_attack_killed_num) akilled, SUM(ffsd_attack_bleed_num) ableed,
 					SUM(ffsd_attacked_failed_num) dfailed, SUM(ffsd_attacked_damaged_num) ddamaged, SUM(ffsd_attacked_killed_num) dkilled, SUM(ffsd_attacked_bleed_num) dbleed
 				FROM ff_stats_daily
-				WHERE ffsd_ff_id = {$this->ff->id} AND ffsd_date >= ".ess::$b->db->quote($first->format("Y-m-d")));
-			$stats = mysql_fetch_assoc($result);
+				WHERE ffsd_ff_id = {$this->ff->id} AND ffsd_date >= ".\Kofradia\DB::quote($first->format("Y-m-d")));
+			$stats = $result->fetch();
 			foreach ($stats as &$num) $num = (int) $num;
 			
 			// statistikk over angrep
@@ -904,8 +905,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 					}
 					if (count($ff_ids) > 0)
 					{
-						$result = ess::$b->db->query("SELECT ff_id, ff_name, ff_inactive FROM ff WHERE ff_id IN (".implode(",", $ff_ids).")");
-						while ($row = mysql_fetch_assoc($result))
+						$result = \Kofradia\DB::get()->query("SELECT ff_id, ff_name, ff_inactive FROM ff WHERE ff_id IN (".implode(",", $ff_ids).")");
+						while ($row = $result->fetch())
 						{
 							$stats[$row['ff_id']][1] = $row['ff_name'];
 							$stats[$row['ff_id']][3] = $row['ff_inactive'] == 0;
@@ -1330,7 +1331,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			ORDER BY ffn_published_time DESC");
 		
 		// ingen publiserte utgivelser?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 <p class="c">Ingen avisutgivelser er publisert.</p>';
@@ -1341,7 +1342,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			echo '
 <p class="c">'.$pagei->total.' utgivelse'.($pagei->total == 1 ? '' : 'r').' er publisert:</p>';
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 <div class="section center w200">
@@ -1376,9 +1377,10 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		global $_game;
 		
 		// hent antall klienter og totalt bankinnskudd
-		$result = ess::$b->db->query("SELECT COUNT(up_id), SUM(up_bank) FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_bank_ff_id = {$this->ff->id}");
-		$num_klienter = mysql_result($result, 0);
-		$bank_value = (string) mysql_result($result, 0, 1);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id), SUM(up_bank) FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_bank_ff_id = {$this->ff->id}");
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$num_klienter = $row[0];
+		$bank_value = (string) $row[1];
 		if (mb_strlen($bank_value) > 2)
 		{
 			$bank_value = round(mb_substr($bank_value, 0, 3), -1) . str_repeat("0", mb_strlen($bank_value)-3);
@@ -1404,8 +1406,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		
 		// finn "tilgjengelige" overføringer
 		$expire = time() - 3600;
-		$result = ess::$b->db->query("SELECT COUNT(ffbt_id), SUM(ffbt_amount), SUM(ffbt_profit) FROM ff_bank_transactions WHERE ffbt_ff_id = {$this->ff->id} AND ffbt_up_id = 0 AND ffbt_time > $expire");
-		$info = mysql_fetch_row($result);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(ffbt_id), SUM(ffbt_amount), SUM(ffbt_profit) FROM ff_bank_transactions WHERE ffbt_ff_id = {$this->ff->id} AND ffbt_up_id = 0 AND ffbt_time > $expire");
+		$info = $result->fetch(\PDO::FETCH_NUM);
 		
 		echo '
 <div class="section" style="width: 250px; margin-left: auto; margin-right: auto">
@@ -1574,8 +1576,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			else
 			{
 				// finn ut hvor mange kuler som er til salgs
-				$result = ess::$b->db->query("SELECT COUNT(*) FROM bullets WHERE bullet_ff_id = {$this->ff->id} AND bullet_time <= ".time()." AND (bullet_freeze_time = 0 OR bullet_freeze_time <= ".time().")");
-				$ant = mysql_result($result, 0);
+				$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM bullets WHERE bullet_ff_id = {$this->ff->id} AND bullet_time <= ".time()." AND (bullet_freeze_time = 0 OR bullet_freeze_time <= ".time().")");
+				$ant = $result->fetchColumn(0);
 			}
 			
 			echo '
@@ -1774,13 +1776,13 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			}
 			
 			// forsøk å trekk fra pengene og gi våpen
-			ess::$b->db->query("
+			$a = \Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_weapon_id = $next_id, up_weapon_training = ".($next_id == 1 ? '0.1' : 'up_weapon_training * 0.7').", up_weapon_training_next = NULL, up_weapon_bullets = 0, up_weapon_time = ".time().", up_cash = up_cash - {$next['price']}
-				WHERE up_id = ".$this->up->id." AND up_cash >= {$next['price']} AND up_weapon_id ".($this->up->data['up_weapon_id'] ? "= ".ess::$b->db->quote($this->up->data['up_weapon_id']) : "IS NULL")." AND (up_weapon_time IS NULL OR up_weapon_time <= $expire)");
+				WHERE up_id = ".$this->up->id." AND up_cash >= {$next['price']} AND up_weapon_id ".($this->up->data['up_weapon_id'] ? "= ".\Kofradia\DB::quote($this->up->data['up_weapon_id']) : "IS NULL")." AND (up_weapon_time IS NULL OR up_weapon_time <= $expire)");
 			
 			// noe gikk galt?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message("Kunne ikke kjøpe våpen.", "error");
 			}
@@ -1964,13 +1966,13 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			}
 			
 			// forsøk å trekk fra pengene og gi beskyttelse
-			ess::$b->db->query("
+			$a = \Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_protection_id = $next_id, up_protection_state = 1, up_protection_time = ".time().", up_cash = up_cash - {$next['price']}
-				WHERE up_id = ".$this->up->id." AND up_cash >= {$next['price']} AND up_protection_id ".(!$this->up->protection->data ? 'IS NULL' : '= '.ess::$b->db->quote($this->up->data['up_protection_id']))." AND (up_protection_time IS NULL OR up_protection_time <= $expire)");
+				WHERE up_id = ".$this->up->id." AND up_cash >= {$next['price']} AND up_protection_id ".(!$this->up->protection->data ? 'IS NULL' : '= '.\Kofradia\DB::quote($this->up->data['up_protection_id']))." AND (up_protection_time IS NULL OR up_protection_time <= $expire)");
 			
 			// noe gikk galt?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message("Kunne ikke kjøpe beskyttelse.", "error");
 			}
@@ -2066,8 +2068,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		}
 		
 		// finn ut hvor mange kuler som er til salgs
-		$result = ess::$b->db->query("SELECT COUNT(*) FROM bullets WHERE bullet_ff_id = {$this->ff->id} AND bullet_time <= ".time()." AND (bullet_freeze_time = 0 OR bullet_freeze_time <= ".time().")");
-		$ant = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM bullets WHERE bullet_ff_id = {$this->ff->id} AND bullet_time <= ".time()." AND (bullet_freeze_time = 0 OR bullet_freeze_time <= ".time().")");
+		$ant = $result->fetchColumn(0);
 		
 		// for mange kuler vi ønsker å kjøpe?
 		$h = ess::$b->date->get()->format("H");
@@ -2094,10 +2096,10 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		}
 		
 		
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// forsøk å skaff alle kulene
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE bullets
 			SET bullet_freeze_up_id = ".$this->up->id.", bullet_freeze_time = ".(time()+self::BULLET_FREEZE_WAIT)."
 			WHERE bullet_ff_id = {$this->ff->id} AND bullet_time <= ".time()." AND (bullet_freeze_time = 0 OR bullet_freeze_time <= ".time().")
@@ -2105,10 +2107,10 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			LIMIT $buy_ant");
 		
 		// feil antall kuler anskaffet?
-		if (ess::$b->db->affected_rows() != $buy_ant)
+		if ($a != $buy_ant)
 		{
 			// reverser transaksjon
-			ess::$b->db->rollback();
+			\Kofradia\DB::get()->rollback();
 			
 			// informer
 			ess::$b->page->add_message("Det er ikke så mange kuler til salgs.", "error");
@@ -2116,7 +2118,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			return;
 		}
 		
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 		
 		// kjør anti-bot
 		$this->bullets_antibot->increase_counter();
@@ -2312,7 +2314,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			if ($this->up->data['up_brom_up_id'])
 			{
 				// fjern ansvarlig spiller
-				ess::$b->db->query("UPDATE users_players SET up_brom_up_id = NULL WHERE up_id = ".$this->up->id);
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_brom_up_id = NULL WHERE up_id = ".$this->up->id);
 				ess::$b->page->add_message('<user id="'.$this->up->data['up_brom_up_id'].'" /> kan ikke lenger flytte spilleren din og sette den i bomberom.');
 				
 				putlog("LOG", "BOMBEROM ANSVARLIG: ".$this->up->data['up_name']." fjernet up_id=".$this->up->data['up_brom_up_id']." som ansvarlig for spilleren sin");
@@ -2324,13 +2326,13 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		if (isset($_POST['brom_ans_set']) && isset($_POST['player']))
 		{
 			// finn spilleren
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT up_id, up_name, up_access_level
 				FROM users_players
-				WHERE up_name = ".ess::$b->db->quote($_POST['player'])."
+				WHERE up_name = ".\Kofradia\DB::quote($_POST['player'])."
 				ORDER BY up_access_level = 0, up_last_online DESC
 				LIMIT 1");
-			$player = mysql_fetch_assoc($result);
+			$player = $result->fetch();
 			
 			// fant ikke spilleren?
 			if (!$player)
@@ -2365,7 +2367,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			else
 			{
 				// sett som ansvarlig
-				ess::$b->db->query("UPDATE users_players SET up_brom_up_id = {$player['up_id']} WHERE up_id = ".$this->up->id);
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_brom_up_id = {$player['up_id']} WHERE up_id = ".$this->up->id);
 				
 				putlog("LOG", "BOMBEROM ANSVARLIG: ".$this->up->data['up_name']." satt ".$player['up_name']." som ansvarlig for spilleren sin");
 				
@@ -2406,20 +2408,20 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		</form>';
 		
 		// hent ut medlemmer av familier som kan sette spilleren i bomberom
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT DISTINCT up_id, up_name, up_access_level
 			FROM users_players, ff, ff_members, (
 				SELECT ffm_ff_id ff_id FROM ff_members WHERE ffm_up_id = ".$this->up->id." AND ffm_status = 1
 			) ref
 			WHERE ffm_ff_id = ref.ff_id AND ff.ff_id = ref.ff_id AND ff_type = 1 AND ffm_up_id != ".$this->up->id." AND ffm_status = 1 AND ffm_up_id = up_id AND ff_inactive = 0 AND ff_is_crew = 0
 			ORDER BY up_name");
-		if (mysql_num_rows($result) > 0)
+		if ($result->rowCount() > 0)
 		{
 			echo '
 		<p>Spillere som kan plassere deg og som du kan plassere i bomberom gjennom broderskap:</p>
 		<ul>';
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 			<li>'.game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']).'</li>';
@@ -2458,11 +2460,11 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			
 			// hent informasjon om spilleren og kontroller at vi har ansvar for den
 			$up_id = (int) $_POST['player'];
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT up_id, up_name, up_access_level, up_brom_up_id
 				FROM users_players
 				WHERE up_id = $up_id");
-			$player = mysql_fetch_assoc($result);
+			$player = $result->fetch();
 			
 			// fant ikke spilleren
 			if (!$player)
@@ -2489,14 +2491,14 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			if (isset($_POST['player_new']) || isset($_POST['player_new_id']))
 			{
 				// finn spilleren
-				$where = isset($_POST['player_new_id']) ? "up_id = ".((int)$_POST['player_new_id']) : "up_name = ".ess::$b->db->quote($_POST['player_new']);
-				$result = ess::$b->db->query("
+				$where = isset($_POST['player_new_id']) ? "up_id = ".((int)$_POST['player_new_id']) : "up_name = ".\Kofradia\DB::quote($_POST['player_new']);
+				$result = \Kofradia\DB::get()->query("
 					SELECT up_id, up_name, up_access_level
 					FROM users_players
 					WHERE $where
 					ORDER BY up_access_level = 0, up_last_online DESC
 					LIMIT 1");
-				$player_new = mysql_fetch_assoc($result);
+				$player_new = $result->fetch();
 				
 				// fant ikke spilleren?
 				if (!$player_new)
@@ -2530,7 +2532,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 						validate_sid();
 						
 						// sett som ansvarlig
-						ess::$b->db->query("UPDATE users_players SET up_brom_up_id = {$player_new['up_id']} WHERE up_id = {$player['up_id']}");
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_brom_up_id = {$player_new['up_id']} WHERE up_id = {$player['up_id']}");
 						
 						putlog("LOG", "BOMBEROM ANSVARLIG: ".$this->up->data['up_name']." satt ".$player_new['up_name']." som ansvarlig for {$player['up_name']}");
 						
@@ -2592,13 +2594,13 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		<p>Denne listen viser hvilke spillere som har gitt deg mulighet til å sette dem i bomberom. Du har muligheten til å gi ansvaret videre til en annen spiller.</p>';
 		
 		// hent spillere vi har ansvar for
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, up_b_id, up_fengsel_time, up_brom_expire
 			FROM users_players
 			WHERE up_brom_up_id = ".$this->up->id." AND up_access_level != 0
 			ORDER BY up_name");
 		$ansvar = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$ansvar[] = $row;
 		}
@@ -2676,20 +2678,20 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		}
 		
 		// hent spillere vi har ansvar for
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, up_b_id, up_fengsel_time, up_brom_expire
 			FROM users_players
 			WHERE up_brom_up_id = ".$this->up->id."
 			ORDER BY up_name");
 		$ansvar = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$ansvar[] = $row;
 		}
 		
 		// hent spillere vi er i familie med
 		// hent ut medlemmer av familier som kan sette spilleren i bomberom
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT DISTINCT up_id, up_name, up_access_level, up_b_id, up_fengsel_time, up_brom_expire
 			FROM users_players, ff, ff_members, (
 				SELECT ffm_ff_id ff_id FROM ff_members WHERE ffm_up_id = ".$this->up->id." AND ffm_status = 1
@@ -2697,7 +2699,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			WHERE ffm_ff_id = ref.ff_id AND ff.ff_id = ref.ff_id AND ff_type = 1 AND ffm_up_id != ".$this->up->id." AND ffm_status = 1 AND ffm_up_id = up_id AND ff_inactive = 0 AND ff_is_crew = 0
 			ORDER BY up_name");
 		$familie = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$familie[] = $row;
 		}
@@ -2899,7 +2901,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			if ($player->data['up_brom_up_id'] != $this->up->id)
 			{
 				// sjekk at vi er i en felles familie
-				$result = ess::$b->db->query("
+				$result = \Kofradia\DB::get()->query("
 					SELECT ffm_ff_id
 					FROM ff, ff_members, (
 						SELECT ffm_ff_id ff_id FROM ff_members WHERE ffm_up_id = ".$this->up->id." AND ffm_status = 1
@@ -2908,7 +2910,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 					LIMIT 1");
 				
 				// ikke i felles familie?
-				if (mysql_num_rows($result) == 0)
+				if ($result->rowCount() == 0)
 				{
 					ess::$b->page->add_message('Du kan ikke plassere <user id="'.$player->id.'" /> i bomberom.', "error", null, "bomberom_set");
 					redirect::handle();
@@ -2973,11 +2975,11 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 				
 				else
 				{
-					ess::$b->db->begin();
+					\Kofradia\DB::get()->beginTransaction();
 					
 					// trekk fra pengene
-					ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = ".$this->up->id." AND up_cash >= $price");
-					if (ess::$b->db->affected_rows() == 0)
+					$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = ".$this->up->id." AND up_cash >= $price");
+					if ($a == 0)
 					{
 						ess::$b->page->add_message("Du har ikke så mye penger på hånda.", "error", null, "bomberom_set");
 					}
@@ -2988,13 +2990,13 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 						$b_id = !$self && !$familie ? ', up_b_id = '.$this->ff->data['br_b_id'] : '';
 						
 						// sett spilleren i bomberommet
-						ess::$b->db->query("UPDATE users_players SET up_brom_ff_id = {$this->ff->id}, up_brom_expire = $expire$b_id WHERE up_id = $player->id AND up_brom_expire = {$player->data['up_brom_expire']}");
+						$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_brom_ff_id = {$this->ff->id}, up_brom_expire = $expire$b_id WHERE up_id = $player->id AND up_brom_expire = {$player->data['up_brom_expire']}");
 						
 						// kunne ikke plassere spilleren i bomberommet?
-						if (ess::$b->db->affected_rows() == 0)
+						if ($a == 0)
 						{
 							ess::$b->page->add_message("Kunne ikke plassere spilleren i bomberommet.", "error", null, "bomberom_set");
-							ess::$b->db->rollback();
+							\Kofradia\DB::get()->rollback();
 						}
 						
 						else
@@ -3008,7 +3010,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 							// oppdatere tidspunkt for familie?
 							if ($familie)
 							{
-								ess::$b->db->query("UPDATE users_players SET up_brom_ff_time = ".time()." WHERE up_id = ".$this->up->id);
+								\Kofradia\DB::get()->exec("UPDATE users_players SET up_brom_ff_time = ".time()." WHERE up_id = ".$this->up->id);
 							}
 							
 							// gi penger til firmaet
@@ -3018,12 +3020,12 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 							
 							ess::$b->page->add_message("Du plasserte ".($self ? 'deg selv' : '<user id="'.$player->id.'" />')." i bomberommet med en varighet på <b>$hours</b> ".fword("time", "timer", $hours).". Det kostet deg <b>".game::format_cash($price)."</b>.", null, null, "bomberom_set");
 							
-							ess::$b->db->commit();
+							\Kofradia\DB::get()->commit();
 							redirect::handle("?ff_id={$this->ff->id}");
 						}
 					}
 					
-					ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 				}
 			}
 			
@@ -3069,7 +3071,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		if (isset($_POST['confirm']))
 		{
 			// gå ut av bomberommet
-			ess::$b->db->query("UPDATE users_players SET up_brom_expire = 0 WHERE up_id = ".$this->up->id);
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_brom_expire = 0 WHERE up_id = ".$this->up->id);
 			
 			ess::$b->page->add_message("Du har forlatt bomberommet.");
 			redirect::handle();
@@ -3109,12 +3111,12 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 		}
 		
 		// hent statistikk
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(DISTINCT ugg_up_id) count_up, COUNT(ugg_id) count_ugg, SUM(ugg_places) sum_ugg_places
 			FROM users_garage
 				JOIN users_players ON up_id = ugg_up_id AND up_access_level != 0
 			WHERE ugg_ff_id = {$this->ff->id}");
-		$stats = mysql_fetch_assoc($result);
+		$stats = $result->fetch();
 		
 		echo '
 <div class="bg1_c xxsmall">
@@ -3410,13 +3412,13 @@ class page_ff_sykehus extends pages_player
 		}
 		
 		// trekk fra pengene og øk energien
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE users_players
 			SET up_cash = up_cash - {$opt['price']}, up_energy = up_energy + (".self::ENERGY_MAX." - up_energy / up_energy_max) * {$opt['increase']} * up_energy_max * GREATEST(0.2, LEAST(1, up_energy / up_energy_max)), up_sykehus_time = ".time()."
 			WHERE up_id = ".$this->up->id." AND up_cash >= {$opt['price']}");
 		
 		// ble ikke oppdatert?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Du har ikke nok penger til å utføre dette alternativet.", "error");
 			redirect::handle();
@@ -3454,7 +3456,7 @@ class page_ff_sykehus extends pages_player
 				$this->up->increase_rank(-$p, false);
 				
 				// flytt til korrekt bydel
-				ess::$b->db->query("UPDATE users_players SET up_b_id = {$this->ff->data['br_b_id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id);
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_b_id = {$this->ff->data['br_b_id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id);
 				$this->up->data['up_b_id'] = $this->ff->data['br_b_id'];
 				unset($this->up->bydel);
 				

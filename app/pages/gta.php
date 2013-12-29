@@ -360,12 +360,12 @@ class page_gta extends pages_player
 		}
 		
 		// hent informasjon om garasjen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ugg_time, ugg_time_next_rent, ugg_cost_total, ugg_places, ff_id, ff_name
 			FROM users_garage
 				LEFT JOIN ff ON ff_id = ugg_ff_id
 			WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
-		$garasje = mysql_fetch_assoc($result);
+		$garasje = $result->fetch();
 		
 		// kan vi betale nå?
 		$can_pay = $garasje && gta::can_pay($garasje['ugg_time_next_rent']);
@@ -416,7 +416,7 @@ class page_gta extends pages_player
 	<div class="bg1">';
 			
 			// har vi ingen biler?
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 		<p>Det er ingen biler plassert i denne garasjen. Bilene du stjeler vil bli plassert i garasjen i bydelen du oppholder deg.</p>';
@@ -441,7 +441,7 @@ class page_gta extends pages_player
 				<tbody>';
 				
 				$i = 0;
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					echo '
 					<tr class="box_handle'.(++$i % 2 == 0 ? ' color' : '').'">
@@ -487,14 +487,14 @@ class page_gta extends pages_player
 			if (count($biler_q) > 0)
 			{
 				// hent bilinformasjon
-				$result = ess::$b->db->query("
+				$result = \Kofradia\DB::get()->query("
 					SELECT s.id, s.gtaid, s.time, s.time_last_move, s.b_id_org, s.b_id, g.brand, g.model, g.img_mini, g.value, s.damage
 					FROM users_gta AS s JOIN gta AS g ON s.gtaid = g.id
 					WHERE ug_up_id = {$this->gta->up->id} AND s.b_id = {$this->gta->up->data['up_b_id']} AND s.id IN (".implode(",", $biler_q).")
 					ORDER BY s.time DESC");
 				
 				$biler_q = array();
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$biler[] = $row;
 					$biler_q[] = $row['id'];
@@ -535,12 +535,12 @@ class page_gta extends pages_player
 				else
 				{
 					// flytt bilene
-					ess::$b->db->query("
+					$a = \Kofradia\DB::get()->exec("
 						UPDATE users_gta
 						SET time_last_move = ".time().", b_id = {$bydel['b_id']}
 						WHERE ug_up_id = {$this->gta->up->id} AND b_id = {$this->gta->up->data['up_b_id']} AND id IN (".implode(",", $biler_q).")");
 					
-					ess::$b->page->add_message("Du flyttet <b>".ess::$b->db->affected_rows()."</b> biler til <b>".htmlspecialchars(game::$bydeler[$bydel['b_id']]['name'])."</b>.");
+					ess::$b->page->add_message("Du flyttet <b>".$a."</b> biler til <b>".htmlspecialchars(game::$bydeler[$bydel['b_id']]['name'])."</b>.");
 					
 					$this->antibot->increase_counter();
 					redirect::handle();
@@ -657,31 +657,30 @@ class page_gta extends pages_player
 		}
 		
 		// forsøk å selg bilene
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// sett biler som solgt
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users_gta, gta, users_players
 			SET b_id = 0
 			WHERE up_id = {$this->gta->up->id} AND ug_up_id = up_id AND gtaid = gta.id AND b_id = {$this->gta->up->data['up_b_id']} AND users_gta.id IN (".implode(",", $biler_q).")");
 		
 		// beregn hvor mye vi får for bilene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT SUM(value * (100-damage) / 100)
 			FROM users_gta JOIN gta ON gtaid = gta.id
 			WHERE ug_up_id = {$this->gta->up->id} AND b_id = 0 AND users_gta.id IN (".implode(",", $biler_q).")");
-		$totcash = (int) mysql_result($result, 0);
+		$totcash = (int) $result->fetchColumn(0);
 		
 		// gi penger til spilleren
 		$this->up->update_money($totcash, true, true);
 		
 		// fjern bilene som ble solgt
-		ess::$b->db->query("
+		$ant = \Kofradia\DB::get()->exec("
 			DELETE FROM users_gta
 			WHERE ug_up_id = {$this->gta->up->id} AND b_id = 0 AND id IN (".implode(",", $biler_q).")");
-		$ant = ess::$b->db->affected_rows();
 		
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 		
 		ess::$b->page->add_message("Du solgte <b>$ant</b> ".fword("bil", "biler", $ant)." og fikk totalt <b>".game::format_cash($totcash)."</b>.");
 		redirect::handle();
@@ -695,8 +694,8 @@ class page_gta extends pages_player
 		ess::$b->page->add_title("Leie");
 		
 		// har vi allerede en garasje i denne bydelen?
-		$result = ess::$b->db->query("SELECT ugg_id FROM users_garage WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
-		if (mysql_num_rows($result) > 0)
+		$result = \Kofradia\DB::get()->query("SELECT ugg_id FROM users_garage WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
+		if ($result->rowCount() > 0)
 		{
 			redirect::handle("/gta/garasje", redirect::ROOT);
 		}
@@ -823,8 +822,8 @@ class page_gta extends pages_player
 		if (!isset($_POST['confirm'])) return;
 		
 		// trekk fra penger
-		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = {$this->gta->up->id} AND up_cash >= $price");
-		if (ess::$b->db->affected_rows() == 0)
+		$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = {$this->gta->up->id} AND up_cash >= $price");
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Du har ikke råd til å leie så mange plasser hos dette firmaet.", "error");
 			return;
@@ -840,13 +839,13 @@ class page_gta extends pages_player
 		$next = $next->format("U");
 		
 		// gi garasje
-		ess::$b->db->query("INSERT IGNORE INTO users_garage SET ugg_up_id = {$this->gta->up->id}, ugg_b_id = {$this->gta->up->data['up_b_id']}, ugg_ff_id = {$ff['ff_id']}, ugg_time = ".time().", ugg_time_next_rent = $next, ugg_cost_total = $price, ugg_places = $places");
+		$a = \Kofradia\DB::get()->exec("INSERT IGNORE INTO users_garage SET ugg_up_id = {$this->gta->up->id}, ugg_b_id = {$this->gta->up->data['up_b_id']}, ugg_ff_id = {$ff['ff_id']}, ugg_time = ".time().", ugg_time_next_rent = $next, ugg_cost_total = $price, ugg_places = $places");
 		
 		// kunne ikke gi garasje => allerede kjøpt
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			// gi tilbake pengene
-			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + $price WHERE up_id = {$this->gta->up->id}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + $price WHERE up_id = {$this->gta->up->id}");
 		}
 		
 		else
@@ -868,11 +867,11 @@ class page_gta extends pages_player
 		ess::$b->page->add_title("Avslutte leie");
 		
 		// hent informasjon om garasjen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ugg_time, ugg_time_next_rent, ugg_ff_id, ugg_cost_total, ugg_places
 			FROM users_garage
 			WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
-		$garasje = mysql_fetch_assoc($result);
+		$garasje = $result->fetch();
 		
 		// har vi ingen garasje?
 		if (!$garasje)
@@ -886,8 +885,8 @@ class page_gta extends pages_player
 		$ff = $ff_list[$garasje['ugg_ff_id']];
 		
 		// har vi biler i garasjen?
-		$result = ess::$b->db->query("SELECT COUNT(*) FROM users_gta WHERE ug_up_id = {$this->gta->up->id} AND b_id = {$this->gta->up->data['up_b_id']}");
-		$num = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM users_gta WHERE ug_up_id = {$this->gta->up->id} AND b_id = {$this->gta->up->data['up_b_id']}");
+		$num = $result->fetchColumn(0);
 		if ($num > 0)
 		{
 			ess::$b->page->add_message("Du kan ikke ha noen biler i garasjen om du ønsker å legge den ned.", "error");
@@ -905,7 +904,7 @@ class page_gta extends pages_player
 			}
 			
 			// fjern garasjen
-			ess::$b->db->query("DELETE FROM users_garage WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
+			\Kofradia\DB::get()->exec("DELETE FROM users_garage WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
 			ess::$b->page->add_message("Du har avsluttet ditt leieforhold til utleiefirmaet og har ikke lenger noen garasje i denne bydelen.");
 			
 			redirect::handle("/gta/garasje", redirect::ROOT);
@@ -943,11 +942,11 @@ class page_gta extends pages_player
 		ess::$b->page->add_title("Endre kapasitet");
 		
 		// hent informasjon om garasjen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ugg_time, ugg_time_next_rent, ugg_ff_id, ugg_cost_total, ugg_places
 			FROM users_garage
 			WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
-		$garasje = mysql_fetch_assoc($result);
+		$garasje = $result->fetch();
 		
 		// har vi ingen garasje?
 		if (!$garasje)
@@ -961,8 +960,8 @@ class page_gta extends pages_player
 		$ff = $ff_list[$garasje['ugg_ff_id']];
 		
 		// finn ut antall biler i garasjen
-		$result = ess::$b->db->query("SELECT COUNT(*) FROM users_gta WHERE ug_up_id = {$this->gta->up->id} AND b_id = {$this->gta->up->data['up_b_id']}");
-		$ug_num = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM users_gta WHERE ug_up_id = {$this->gta->up->id} AND b_id = {$this->gta->up->data['up_b_id']}");
+		$ug_num = $result->fetchColumn(0);
 		
 		$limit = $this->gta->get_places_limit();
 		
@@ -1025,9 +1024,9 @@ class page_gta extends pages_player
 					if ($change < 0)
 					{
 						// oppdater
-						ess::$b->db->query("UPDATE users_garage SET ugg_places = $places WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']} AND ugg_places = {$garasje['ugg_places']}");
+						$a = \Kofradia\DB::get()->exec("UPDATE users_garage SET ugg_places = $places WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']} AND ugg_places = {$garasje['ugg_places']}");
 						
-						if (ess::$b->db->affected_rows() > 0)
+						if ($a > 0)
 						{
 							ess::$b->page->add_message("Du nedjusterte kapasiteten i garasjen fra ".$garasje['ugg_places']." plasser til ".fwords("%d plass", "%d plasser", $places).".");
 							redirect::handle("/gta/garasje", redirect::ROOT);
@@ -1038,8 +1037,8 @@ class page_gta extends pages_player
 					else
 					{
 						// forsøk å trekk fra pengene
-						ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = {$this->gta->up->id} AND up_cash >= $price");
-						if (ess::$b->db->affected_rows() == 0)
+						$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = {$this->gta->up->id} AND up_cash >= $price");
+						if ($a == 0)
 						{
 							ess::$b->page->add_message("Du har ikke råd til å leie så mange plasser hos dette firmaet.", "error");
 						}
@@ -1047,12 +1046,12 @@ class page_gta extends pages_player
 						else
 						{
 							// oppdater antall plasser
-							ess::$b->db->query("UPDATE users_garage SET ugg_places = $places, ugg_cost_total = ugg_cost_total + $price WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']} AND ugg_places = {$garasje['ugg_places']}");
+							$a = \Kofradia\DB::get()->exec("UPDATE users_garage SET ugg_places = $places, ugg_cost_total = ugg_cost_total + $price WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']} AND ugg_places = {$garasje['ugg_places']}");
 							
-							if (ess::$b->db->affected_rows() == 0)
+							if ($a == 0)
 							{
 								// kunne ikke oppdatere garasje; gi tilbake pengene
-								ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + $price WHERE up_id = {$this->gta->up->id}");
+								\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + $price WHERE up_id = {$this->gta->up->id}");
 							}
 							
 							else
@@ -1139,11 +1138,11 @@ class page_gta extends pages_player
 		ess::$b->page->add_title("Detaljer");
 		
 		// hent informasjon om garasjen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ugg_time, ugg_time_next_rent, ugg_ff_id, ugg_cost_total, ugg_places
 			FROM users_garage
 			WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
-		$garasje = mysql_fetch_assoc($result);
+		$garasje = $result->fetch();
 		
 		// har vi ingen garasje?
 		if (!$garasje)
@@ -1230,11 +1229,11 @@ class page_gta extends pages_player
 		ess::$b->page->add_title("Betale leie");
 		
 		// hent informasjon om garasjen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ugg_time, ugg_time_next_rent, ugg_ff_id, ugg_cost_total, ugg_places
 			FROM users_garage
 			WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']}");
-		$garasje = mysql_fetch_assoc($result);
+		$garasje = $result->fetch();
 		
 		// har vi ingen garasje eller kan ikke betale leie nå?
 		if (!$garasje || !gta::can_pay($garasje['ugg_time_next_rent']))
@@ -1276,8 +1275,8 @@ class page_gta extends pages_player
 			else
 			{
 				// trekk fra penger
-				ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = {$this->gta->up->id} AND up_cash >= $price");
-				if (ess::$b->db->affected_rows() == 0)
+				$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = {$this->gta->up->id} AND up_cash >= $price");
+				if ($a == 0)
 				{
 					ess::$b->page->add_message("Du har ikke råd til å betale for denne leien.", "error");
 				}
@@ -1291,13 +1290,13 @@ class page_gta extends pages_player
 					$next = $next->format("U");
 					
 					// oppdater garasje
-					ess::$b->db->query("UPDATE users_garage SET ugg_time_next_rent = $next, ugg_cost_total = ugg_cost_total + $price WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']} AND ugg_time_next_rent = {$garasje['ugg_time_next_rent']} AND ugg_places = {$garasje['ugg_places']}");
+					$a = \Kofradia\DB::get()->exec("UPDATE users_garage SET ugg_time_next_rent = $next, ugg_cost_total = ugg_cost_total + $price WHERE ugg_up_id = {$this->gta->up->id} AND ugg_b_id = {$this->gta->up->data['up_b_id']} AND ugg_time_next_rent = {$garasje['ugg_time_next_rent']} AND ugg_places = {$garasje['ugg_places']}");
 					
 					// kunne ikke oppdatere garasje
-					if (ess::$b->db->affected_rows() == 0)
+					if ($a == 0)
 					{
 						// gi tilbake pengene
-						ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + $price WHERE up_id = {$this->gta->up->id}");
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + $price WHERE up_id = {$this->gta->up->id}");
 					}
 					
 					else
@@ -1352,13 +1351,13 @@ class page_gta extends pages_player
 		
 		// hent antall forsøk og vellykkede spredt på hver bydel
 		$stats_totalt = array();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT b_id, MAX(time_last) max_time_last, SUM(count) sum_count, SUM(success) sum_success
 			FROM gta_options_status
 				JOIN gta_options ON optionid = gta_options.id
 			WHERE gos_up_id = {$this->gta->up->id}
 			GROUP BY b_id");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$stats_totalt[$row['b_id']] = $row;
 		}

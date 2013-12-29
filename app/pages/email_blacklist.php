@@ -58,8 +58,8 @@ class page_email_blacklist
 		
 		// forsøk og finn oppføringen
 		$eb_id = (int) $_POST['eb_id'];
-		$result = ess::$b->db->query("SELECT eb_id, eb_type, eb_value, eb_time, eb_up_id, eb_note FROM email_blacklist WHERE eb_id = $eb_id");
-		$eb = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT eb_id, eb_type, eb_value, eb_time, eb_up_id, eb_note FROM email_blacklist WHERE eb_id = $eb_id");
+		$eb = $result->fetch();
 		
 		if (!$eb)
 		{
@@ -101,8 +101,8 @@ class page_email_blacklist
 			else
 			{
 				// sjekk om den allerede eksisterer
-				$result = ess::$b->db->query("SELECT eb_time, eb_up_id FROM email_blacklist WHERE eb_id != $eb_id AND eb_type = ".ess::$b->db->quote($type)." AND eb_value = ".ess::$b->db->quote($value));
-				$row = mysql_fetch_assoc($result);
+				$result = \Kofradia\DB::get()->query("SELECT eb_time, eb_up_id FROM email_blacklist WHERE eb_id != $eb_id AND eb_type = ".\Kofradia\DB::quote($type)." AND eb_value = ".\Kofradia\DB::quote($value));
+				$row = $result->fetch();
 				
 				if ($row)
 				{
@@ -112,7 +112,7 @@ class page_email_blacklist
 				else
 				{
 					// oppdater oppføringen
-					ess::$b->db->query("INSERT INTO email_blacklist SET eb_type = ".ess::$b->db->quote($type).", eb_value = ".ess::$b->db->quote($value).", eb_time = ".time().", eb_up_id = ".login::$user->player->id.", eb_note = ".ess::$b->db->quote($note));
+					\Kofradia\DB::get()->exec("INSERT INTO email_blacklist SET eb_type = ".\Kofradia\DB::quote($type).", eb_value = ".\Kofradia\DB::quote($value).", eb_time = ".time().", eb_up_id = ".login::$user->player->id.", eb_note = ".\Kofradia\DB::quote($note));
 					
 					// logg
 					$msg = $type != $eb['eb_type']
@@ -172,8 +172,8 @@ class page_email_blacklist
 		
 		// forsøk og finn oppføringen
 		$eb_id = (int) $_POST['eb_id'];
-		$result = ess::$b->db->query("SELECT eb_id, eb_type, eb_value, eb_time, eb_up_id, eb_note FROM email_blacklist WHERE eb_id = $eb_id");
-		$eb = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT eb_id, eb_type, eb_value, eb_time, eb_up_id, eb_note FROM email_blacklist WHERE eb_id = $eb_id");
+		$eb = $result->fetch();
 		
 		if (!$eb)
 		{
@@ -185,7 +185,7 @@ class page_email_blacklist
 		if (isset($_POST['confirm']))
 		{
 			// slett oppføringen
-			ess::$b->db->query("DELETE FROM email_blacklist WHERE eb_id = $eb_id");
+			\Kofradia\DB::get()->exec("DELETE FROM email_blacklist WHERE eb_id = $eb_id");
 			
 			// logg
 			putlog("CREWCHAN", "E-POST BLOKKERING: ".login::$user->player->data['up_name']." slettet oppføringen {$eb['eb_value']} ({$eb['eb_type']})");
@@ -259,8 +259,8 @@ class page_email_blacklist
 			else
 			{
 				// sjekk om den allerede eksisterer
-				$result = ess::$b->db->query("SELECT eb_time, eb_up_id FROM email_blacklist WHERE eb_type = ".ess::$b->db->quote($type)." AND eb_value = ".ess::$b->db->quote($value));
-				$row = mysql_fetch_assoc($result);
+				$result = \Kofradia\DB::get()->query("SELECT eb_time, eb_up_id FROM email_blacklist WHERE eb_type = ".\Kofradia\DB::quote($type)." AND eb_value = ".\Kofradia\DB::quote($value));
+				$row = $result->fetch();
 				
 				if ($row)
 				{
@@ -270,7 +270,7 @@ class page_email_blacklist
 				else
 				{
 					// opprett oppføringen
-					ess::$b->db->query("INSERT INTO email_blacklist SET eb_type = ".ess::$b->db->quote($type).", eb_value = ".ess::$b->db->quote($value).", eb_time = ".time().", eb_up_id = ".login::$user->player->id.", eb_note = ".ess::$b->db->quote($note));
+					\Kofradia\DB::get()->exec("INSERT INTO email_blacklist SET eb_type = ".\Kofradia\DB::quote($type).", eb_value = ".\Kofradia\DB::quote($value).", eb_time = ".time().", eb_up_id = ".login::$user->player->id.", eb_note = ".\Kofradia\DB::quote($note));
 					
 					// logg
 					putlog("CREWCHAN", "E-POST BLOKKERING: ".login::$user->player->data['up_name']." la til oppføringen $value ($type)");
@@ -315,12 +315,12 @@ class page_email_blacklist
 	protected function index()
 	{
 		// hent data som er blokkert
-		$result = ess::$b->db->query("SELECT eb_id, eb_type, eb_value, eb_time, eb_up_id, eb_note FROM email_blacklist ORDER BY eb_value");
+		$result = \Kofradia\DB::get()->query("SELECT eb_id, eb_type, eb_value, eb_time, eb_up_id, eb_note FROM email_blacklist ORDER BY eb_value");
 		$data = array(
 			"address" => array(),
 			"domain" => array()
 		);
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$data[$row['eb_type']][] = $row;
 		}

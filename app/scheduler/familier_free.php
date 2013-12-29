@@ -8,17 +8,17 @@ global $_base, $__server;
  */
 
 // hent konkurranser som skal avsluttes
-$result_faf = $_base->db->query("SELECT fff_id, fff_time_expire, fff_required_points FROM ff_free WHERE fff_time_expire <= ".time()." AND fff_active = 1");
+$result_faf = \Kofradia\DB::get()->query("SELECT fff_id, fff_time_expire, fff_required_points FROM ff_free WHERE fff_time_expire <= ".time()." AND fff_active = 1");
 
-while ($faf = mysql_fetch_assoc($result_faf))
+while ($faf = $result_faf->fetch())
 {
 	// rankoversikt for familiene
 	$ff = array();
 	$ff_rank = array();
 	
 	// hent familiene som har konkurrert i denne konkurransen
-	$result = $_base->db->query("SELECT ff_id FROM ff WHERE ff_fff_id = {$faf['fff_id']} AND ff_inactive = 0");
-	while ($row = mysql_fetch_assoc($result))
+	$result = \Kofradia\DB::get()->query("SELECT ff_id FROM ff WHERE ff_fff_id = {$faf['fff_id']} AND ff_inactive = 0");
+	while ($row = $result->fetch())
 	{
 		$familie = ff::get_ff($row['ff_id'], ff::LOAD_SCRIPT);
 		if (!$familie) continue;
@@ -49,7 +49,7 @@ while ($faf = mysql_fetch_assoc($result_faf))
 		ff::create_competition();
 		
 		// sett konkurransen som avsluttet
-		$_base->db->query("UPDATE ff_free SET fff_active = 0 WHERE fff_id = {$faf['fff_id']}");
+		\Kofradia\DB::get()->exec("UPDATE ff_free SET fff_active = 0 WHERE fff_id = {$faf['fff_id']}");
 	}
 	
 	else
@@ -66,10 +66,10 @@ while ($faf = mysql_fetch_assoc($result_faf))
 		$familie->competition_won();
 		
 		// sett status for konkurransen at bygning skal velges
-		$_base->db->query("UPDATE ff_free SET fff_time_expire_br = ".(time()+86400).", fff_active = 2 WHERE fff_id = {$faf['fff_id']}");
+		\Kofradia\DB::get()->exec("UPDATE ff_free SET fff_time_expire_br = ".(time()+86400).", fff_active = 2 WHERE fff_id = {$faf['fff_id']}");
 		
 		// sett opp scheduler for bygning
-		$_base->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE scheduler, (
 				SELECT MIN(fff_time_expire_br) fff_time, COUNT(fff_id) fff_count FROM ff_free WHERE fff_active = 2
 			) ref
@@ -81,7 +81,7 @@ while ($faf = mysql_fetch_assoc($result_faf))
 
 // sett scheduler til neste konkurrase
 $scheduler_skip_next = true;
-$_base->db->query("
+\Kofradia\DB::get()->exec("
 	UPDATE scheduler, (
 		SELECT MIN(fff_time_expire) fff_time, COUNT(fff_id) fff_count FROM ff_free WHERE fff_active = 1
 	) ref

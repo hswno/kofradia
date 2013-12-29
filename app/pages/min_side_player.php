@@ -111,10 +111,10 @@ class page_min_side_player
 		
 		
 		// hvor mange rankprosent må vi til for å ta igjen neste person?
-		$result = ess::$b->db->query("SELECT up_points FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_points > ".page_min_side::$active_player->data['up_points']." ORDER BY up_points LIMIT 1");
+		$result = \Kofradia\DB::get()->query("SELECT up_points FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_points > ".page_min_side::$active_player->data['up_points']." ORDER BY up_points LIMIT 1");
 		$rank_user_next = false;
 		$rank_user_prevnext = false;
-		if ($next = mysql_fetch_assoc($result))
+		if ($next = $result->fetch())
 		{
 			$points = $next['up_points'];
 			$to = game::rank_info($points);
@@ -144,8 +144,8 @@ class page_min_side_player
 			}
 			
 			// finn ut hvor langt det er til forrige rankerte spiller
-			$result = ess::$b->db->query("SELECT up_points FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_id != ".page_min_side::$active_player->id." AND up_points <= ".page_min_side::$active_player->data['up_points']." ORDER BY up_points DESC LIMIT 1");
-			if ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT up_points FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_id != ".page_min_side::$active_player->id." AND up_points <= ".page_min_side::$active_player->data['up_points']." ORDER BY up_points DESC LIMIT 1");
+			if ($row = $result->fetch())
 			{
 				$rank_user_prevnext = round((page_min_side::$active_player->data['up_points']-$row['up_points']) / ($next['up_points']-$row['up_points']) * 100, 4);
 			}
@@ -387,9 +387,9 @@ a.status_venter:hover { }
 				$deact_self = page_min_side::$active_player->data['up_deactivated_up_id'] == page_min_side::$active_player->id;
 				if (!$deact_self)
 				{
-					$result = ess::$b->db->query("SELECT u_id FROM users JOIN users_players ON u_id = up_u_id WHERE up_id = ".page_min_side::$active_player->data['up_deactivated_up_id']);
-					$row = mysql_fetch_assoc($result);
-					mysql_free_result($result);
+					$result = \Kofradia\DB::get()->query("SELECT u_id FROM users JOIN users_players ON u_id = up_u_id WHERE up_id = ".page_min_side::$active_player->data['up_deactivated_up_id']);
+					$row = $result->fetch();
+					unset($result);
 					if ($row && $row['u_id'] == page_min_side::$active_user->id) $deact_self = true;
 				}
 			}
@@ -455,9 +455,10 @@ a.status_venter:hover { }
 		global $_game;
 		
 		// antall ganger vi har vunnet i lotto
-		$result = ess::$b->db->query("SELECT COUNT(id), SUM(won) FROM lotto_vinnere WHERE lv_up_id = ".page_min_side::$active_player->id);
-		$lotto_vinn = mysql_result($result, 0);
-		$lotto_vinn_sum = mysql_result($result, 0, 1);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(id), SUM(won) FROM lotto_vinnere WHERE lv_up_id = ".page_min_side::$active_player->id);
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$lotto_vinn = $row[0];
+		$lotto_vinn_sum = $row[1];
 		
 		ess::$b->page->add_css('
 .minside_stats_h { margin-bottom: 0; text-decoration: underline }
@@ -466,8 +467,8 @@ a.status_venter:hover { }
 		// pengeplassering
 		if (access::has("mod"))
 		{
-			$result = ess::$b->db->query("SELECT COUNT(up_id)+1 FROM users_players WHERE up_cash+up_bank > ".page_min_side::$active_player->data['up_cash']."+".page_min_side::$active_player->data['up_bank']." AND up_access_level < {$_game['access_noplay']} AND up_access_level != 0");
-			$pengeplassering = mysql_result($result, 0);
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id)+1 FROM users_players WHERE up_cash+up_bank > ".page_min_side::$active_player->data['up_cash']."+".page_min_side::$active_player->data['up_bank']." AND up_access_level < {$_game['access_noplay']} AND up_access_level != 0");
+			$pengeplassering = $result->fetchColumn(0);
 		}
 		
 		echo '
@@ -777,11 +778,11 @@ a.status_venter:hover { }
 		$gamelog = new gamelog();
 		
 		// finn ut hva som er tilgjengelig
-		$result = ess::$b->db->query("SELECT type, COUNT(id) AS count FROM users_log WHERE ul_up_id IN (0, ".page_min_side::$active_player->id.") GROUP BY type");
+		$result = \Kofradia\DB::get()->query("SELECT type, COUNT(id) AS count FROM users_log WHERE ul_up_id IN (0, ".page_min_side::$active_player->id.") GROUP BY type");
 		$in_use = array();
 		$count = array();
 		$total = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$in_use[] = $row['type'];
 			$count[$row['type']] = $row['count'];
@@ -817,20 +818,20 @@ a.status_venter:hover { }
 				$counter_total = 0;
 				
 				// hent FF vi skal hente logg for
-				$ffm_result = ess::$b->db->query("SELECT ffm_ff_id, ffm_log_new FROM ff_members WHERE ffm_up_id = ".page_min_side::$active_player->id." AND ffm_status = 1 AND ffm_log_new > 0");
+				$ffm_result = \Kofradia\DB::get()->query("SELECT ffm_ff_id, ffm_log_new FROM ff_members WHERE ffm_up_id = ".page_min_side::$active_player->id." AND ffm_status = 1 AND ffm_log_new > 0");
 				
-				while ($ffm = mysql_fetch_assoc($ffm_result))
+				while ($ffm = $ffm_result->fetch())
 				{
 					$ff = ff::get_ff($ffm['ffm_ff_id'], ff::LOAD_SILENT);
 					if (!$ff) continue;
 					
 					// hent hendelsene
-					$result = ess::$b->db->query("SELECT ffl_id, ffl_time, ffl_type, ffl_data, ffl_extra FROM ff_log WHERE ffl_ff_id = {$ff->id} ORDER BY ffl_time DESC LIMIT {$ffm['ffm_log_new']}");
+					$result = \Kofradia\DB::get()->query("SELECT ffl_id, ffl_time, ffl_type, ffl_data, ffl_extra FROM ff_log WHERE ffl_ff_id = {$ff->id} ORDER BY ffl_time DESC LIMIT {$ffm['ffm_log_new']}");
 					
-					if (mysql_num_rows($result) > 0)
+					if ($result->rowCount() > 0)
 					{
 						$logs = array();
-						while ($row = mysql_fetch_assoc($result))
+						while ($row = $result->fetch())
 						{
 							$counter_total++;
 							
@@ -884,8 +885,8 @@ a.status_venter:hover { }
 				}
 				
 				// nullstill telleren
-				ess::$b->db->query("UPDATE ff_members SET ffm_log_new = 0 WHERE ffm_up_id = ".page_min_side::$active_player->id);
-				ess::$b->db->query("UPDATE users_players SET up_log_ff_new = 0 WHERE up_id = ".page_min_side::$active_player->id);
+				\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_log_new = 0 WHERE ffm_up_id = ".page_min_side::$active_player->id);
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_log_ff_new = 0 WHERE up_id = ".page_min_side::$active_player->id);
 				page_min_side::$active_player->data['up_log_ff_new'] = 0;
 			}
 			
@@ -896,9 +897,9 @@ a.status_venter:hover { }
 				
 				$i_bruk[] = 'NULL';
 				$where = ' AND type IN ('.implode(",", $i_bruk).')';
-				$result = ess::$b->db->query("SELECT time, type, note, num FROM users_log WHERE ul_up_id IN (0, ".page_min_side::$active_player->id.")$where ORDER BY time DESC, id DESC LIMIT ".page_min_side::$active_player->data['up_log_new']);
+				$result = \Kofradia\DB::get()->query("SELECT time, type, note, num FROM users_log WHERE ul_up_id IN (0, ".page_min_side::$active_player->id.")$where ORDER BY time DESC, id DESC LIMIT ".page_min_side::$active_player->data['up_log_new']);
 				
-				if (mysql_num_rows($result) == 0)
+				if ($result->rowCount() == 0)
 				{
 					echo '
 		<p class="c">Ingen hendelser ble funnet.</p>';
@@ -908,7 +909,7 @@ a.status_venter:hover { }
 				{
 					// vis hendelsene
 					$logs = array();
-					while ($row = mysql_fetch_assoc($result))
+					while ($row = $result->fetch())
 					{
 						$day = ess::$b->date->get($row['time'])->format(date::FORMAT_NOTIME);
 						$data = $gamelog->format_log($row['type'], $row['note'], $row['num']);
@@ -938,7 +939,7 @@ a.status_venter:hover { }
 				<p class="c">Viser '.page_min_side::$active_player->data['up_log_new'].' <b>ny'.(page_min_side::$active_player->data['up_log_new'] == 1 ? '' : 'e').'</b> hendelse'.(page_min_side::$active_player->data['up_log_new'] == 1 ? '' : 'r').'<br /><a href="'.htmlspecialchars(page_min_side::addr()).'">Se full oversikt</a></p>';
 				}
 				
-				ess::$b->db->query("UPDATE users_players SET up_log_new = 0 WHERE up_id = ".page_min_side::$active_player->id);
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_log_new = 0 WHERE up_id = ".page_min_side::$active_player->id);
 				page_min_side::$active_player->data['up_log_new'] = 0;
 			}
 			
@@ -1020,7 +1021,7 @@ a.status_venter:hover { }
 			$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, max(50, page_min_side::$active_player->data['up_log_new']));
 			$result = $pagei->query("SELECT time, type, note, num FROM users_log WHERE ul_up_id IN (0, ".page_min_side::$active_player->id.")$where ORDER BY time DESC, id DESC");
 			
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 		<p class="c">Ingen hendelser ble funnet.</p>';
@@ -1041,7 +1042,7 @@ a.status_venter:hover { }
 				$logs = array();
 				$i = 0;
 				$e = $pagei->start;
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$day = ess::$b->date->get($row['time'])->format(date::FORMAT_NOTIME);
 					$data = $gamelog->format_log($row['type'], $row['note'], $row['num']);
@@ -1133,7 +1134,7 @@ a.status_venter:hover { }
 					}
 					else
 					{
-						ess::$b->db->query("UPDATE users_players SET up_forum_signature = NULL WHERE up_id = ".page_min_side::$active_player->id);
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_forum_signature = NULL WHERE up_id = ".page_min_side::$active_player->id);
 						ess::$b->page->add_message("Signaturen ble fjernet.");
 					}
 					if (page_min_side::$active_player->active || access::has("mod")) redirect::handle(page_min_side::addr());
@@ -1202,7 +1203,7 @@ a.status_venter:hover { }
 						
 						if ($ok)
 						{
-							ess::$b->db->query("UPDATE users_players SET up_forum_signature = ".ess::$b->db->quote($signature)." WHERE up_id = ".page_min_side::$active_player->id);
+							\Kofradia\DB::get()->exec("UPDATE users_players SET up_forum_signature = ".\Kofradia\DB::quote($signature)." WHERE up_id = ".page_min_side::$active_player->id);
 							ess::$b->page->add_message("Signaturen ble endret.");
 							redirect::handle(page_min_side::addr());
 						}
@@ -1301,7 +1302,7 @@ function minside_preview_forum()
 			<p>Oversikt over tråder som er opprettet'.($deleted ? ' (viser også <span style="color: #FF0000">slettede</span> tråder)' : '').':</p>';
 			
 			// ingen tråder
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 			<p>Fant ingen forumtråder.</p>';
@@ -1324,7 +1325,7 @@ function minside_preview_forum()
 				
 				// vis trådene
 				$i = 0;
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					// sjekke status?
 					$fs_info = '';
@@ -1409,7 +1410,7 @@ function minside_preview_forum()
 			<p>Oversikt over svar som er opprettet i de ulike trådene'.($deleted ? ' (viser også <span style="color: #FF0000">slettede</span> svar)' : '').':</p>';
 			
 			// ingen svar
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 			<p>Fant ingen forumsvar.</p>';
@@ -1433,7 +1434,7 @@ function minside_preview_forum()
 				
 				// vis svarene
 				$i = 0;
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					// sjekke status?
 					$fs_info = '';
@@ -1541,7 +1542,7 @@ function minside_preview_forum()
 					}
 					else
 					{
-						ess::$b->db->query("UPDATE users_players SET up_profile_text = NULL WHERE up_id = ".page_min_side::$active_player->id);
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_text = NULL WHERE up_id = ".page_min_side::$active_player->id);
 						ess::$b->page->add_message("Innholdet i profilen ble fjernet.");
 					}
 					if (page_min_side::$active_player->active || access::has("mod")) redirect::handle(page_min_side::addr());
@@ -1614,7 +1615,7 @@ function minside_preview_forum()
 						
 						if ($ok)
 						{
-							ess::$b->db->query("UPDATE users_players SET up_profile_text = ".ess::$b->db->quote($text)." WHERE up_id = ".page_min_side::$active_player->id);
+							\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_text = ".\Kofradia\DB::quote($text)." WHERE up_id = ".page_min_side::$active_player->id);
 							ess::$b->page->add_message("Innholdet i profilen ble lagret.");
 							redirect::handle(page_min_side::addr());
 						}
@@ -1673,8 +1674,8 @@ function rp_preview_profile_text()
 			{
 				$id = (int) postval("image_id");
 				
-				$result = ess::$b->db->query("SELECT id, pi_up_id, local, address, time FROM profile_images WHERE id = $id AND pi_up_id = ".page_min_side::$active_player->id);
-				$image = mysql_fetch_assoc($result);
+				$result = \Kofradia\DB::get()->query("SELECT id, pi_up_id, local, address, time FROM profile_images WHERE id = $id AND pi_up_id = ".page_min_side::$active_player->id);
+				$image = $result->fetch();
 				if (!$image)
 				{
 					ess::$b->page->add_message("Fant ikke bildet.", "error");
@@ -1684,7 +1685,7 @@ function rp_preview_profile_text()
 				elseif (isset($_POST['delete']))
 				{
 					// slett bildet
-					ess::$b->db->query("DELETE FROM profile_images WHERE id = $id");
+					\Kofradia\DB::get()->exec("DELETE FROM profile_images WHERE id = $id");
 					
 					// slette lokalt?
 					if ($image['local'])
@@ -1700,7 +1701,7 @@ function rp_preview_profile_text()
 					// fjerne som profilbilde?
 					if (page_min_side::$active_player->data['up_profile_image'] == $id)
 					{
-						ess::$b->db->query("UPDATE users_players SET up_profile_image = NULL, up_profile_image_url = NULL WHERE up_id = ".page_min_side::$active_player->id);
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_image = NULL, up_profile_image_url = NULL WHERE up_id = ".page_min_side::$active_player->id);
 					}
 					
 					ess::$b->page->add_message("Bildet ble slettet.");
@@ -1720,7 +1721,7 @@ function rp_preview_profile_text()
 						$url = ($image['local'] ? "l:" : "") . $image['address'];
 						
 						// oppdater profilen
-						ess::$b->db->query("UPDATE users_players SET up_profile_image = $id, up_profile_image_url = ".ess::$b->db->quote($url)." WHERE up_id = ".page_min_side::$active_player->id);
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_image = $id, up_profile_image_url = ".\Kofradia\DB::quote($url)." WHERE up_id = ".page_min_side::$active_player->id);
 						ess::$b->page->add_message("Bildet ble satt som aktivt profilbilde.");
 					}
 				}
@@ -1733,7 +1734,7 @@ function rp_preview_profile_text()
 			{
 				if (page_min_side::$active_player->data['up_profile_image'])
 				{
-					ess::$b->db->query("UPDATE users_players SET up_profile_image = NULL, up_profile_image_url = NULL WHERE up_id = ".page_min_side::$active_player->id);
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_image = NULL, up_profile_image_url = NULL WHERE up_id = ".page_min_side::$active_player->id);
 					ess::$b->page->add_message("Du har ikke lengre noe profilbilde.");
 				}
 				
@@ -1758,8 +1759,8 @@ function rp_preview_profile_text()
 				}
 				
 				// har allerede maks antall bilder?
-				$result = ess::$b->db->query("SELECT COUNT(*) FROM profile_images WHERE pi_up_id = ".page_min_side::$active_player->id);
-				if (mysql_result($result, 0) >= $profile_images_max)
+				$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM profile_images WHERE pi_up_id = ".page_min_side::$active_player->id);
+				if ($result->fetchColumn(0) >= $profile_images_max)
 				{
 					ess::$b->page->add_message("Du kan ikke ha flere enn ".$profile_images_max." bilder lastet opp samtidig. Slett et bilde og prøv igjen.", "error");
 					redirect::handle();
@@ -1800,8 +1801,8 @@ function rp_preview_profile_text()
 				imagecopyresampled($new, $image, 0, 0, 0, 0, $width, $height, $w, $h);
 				
 				// opprett ny rad i databasen for å finne id
-				ess::$b->db->query("INSERT INTO profile_images SET pi_up_id = ".page_min_side::$active_player->id.", local = 1, time = ".time());
-				$id = ess::$b->db->insert_id();
+				\Kofradia\DB::get()->exec("INSERT INTO profile_images SET pi_up_id = ".page_min_side::$active_player->id.", local = 1, time = ".time());
+				$id = \Kofradia\DB::get()->lastInsertId();
 				
 				// lagre bildet
 				$img_navn = preg_replace("/[^a-zA-Z0-9\\-_\\. ]/u", "", page_min_side::$active_player->data['up_name']);
@@ -1817,8 +1818,8 @@ function rp_preview_profile_text()
 				$url = "l:$img_navn";
 				
 				// oppdater databasen
-				ess::$b->db->query("UPDATE profile_images SET address = ".ess::$b->db->quote($img_navn)." WHERE id = $id");
-				ess::$b->db->query("UPDATE users_players SET up_profile_image = $id, up_profile_image_url = ".ess::$b->db->quote($url)." WHERE up_id = ".page_min_side::$active_player->id);
+				\Kofradia\DB::get()->exec("UPDATE profile_images SET address = ".\Kofradia\DB::quote($img_navn)." WHERE id = $id");
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_image = $id, up_profile_image_url = ".\Kofradia\DB::quote($url)." WHERE up_id = ".page_min_side::$active_player->id);
 				
 				// vis info
 				ess::$b->page->add_message("Bildet ble lastet opp og er satt som ditt nye profilbilde.");
@@ -1831,9 +1832,9 @@ function rp_preview_profile_text()
 			}
 			
 			// hent profilbildene
-			$result = ess::$b->db->query("SELECT id, local, address, time FROM profile_images WHERE pi_up_id = ".page_min_side::$active_player->id." ORDER BY time DESC");
+			$result = \Kofradia\DB::get()->query("SELECT id, local, address, time FROM profile_images WHERE pi_up_id = ".page_min_side::$active_player->id." ORDER BY time DESC");
 			$profile_images = array();
-			while ($row = mysql_fetch_assoc($result)) $profile_images[] = $row;
+			while ($row = $result->fetch()) $profile_images[] = $row;
 			
 			// blokkert?
 			if ($blokkering && !access::has("mod"))
@@ -1994,8 +1995,7 @@ function rp_preview_profile_text()
 			else
 			{
 				// transaksjon
-				$transaction_before = ess::$b->db->transaction;
-				ess::$b->db->begin();
+				\Kofradia\DB::get()->beginTransaction();
 				
 				// deaktiver spilleren
 				if (page_min_side::$active_player->deactivate($log, $note, login::$user->player))
@@ -2006,7 +2006,7 @@ function rp_preview_profile_text()
 					crewlog::log("player_deactivate", page_min_side::$active_player->id, $log, $data);
 					
 					// fullfør transaksjon
-					if (!$transaction_before) ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 					
 					// send e-post
 					if ($send_email)
@@ -2032,7 +2032,7 @@ www.kofradia.no';
 				else
 				{
 					// fullfør transaksjon
-					if (!$transaction_before) ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 				}
 				
 				redirect::handle(page_min_side::addr(""));
@@ -2109,7 +2109,7 @@ www.kofradia.no';
 			else
 			{
 				// lagre endringer
-				ess::$b->db->query("UPDATE users_players SET up_deactivated_reason = ".ess::$b->db->quote($log).", up_deactivated_note = ".ess::$b->db->quote($note)." WHERE up_id = ".page_min_side::$active_player->id);
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_deactivated_reason = ".\Kofradia\DB::quote($log).", up_deactivated_note = ".\Kofradia\DB::quote($note)." WHERE up_id = ".page_min_side::$active_player->id);
 				
 				// lagre crewlog
 				$data = array("log_old" => page_min_side::$active_player->data['up_deactivated_reason'], "note_old" => page_min_side::$active_player->data['up_deactivated_note']);
@@ -2594,7 +2594,7 @@ www.kofradia.no';
 				$result = $pagei->query("SELECT lc_id, lc_up_id, lc_time, lc_lca_id, lc_a_up_id, lc_log FROM log_crew WHERE lc_a_up_id = ".page_min_side::$active_player->id." ORDER BY lc_time DESC");
 				
 				// ingen handlinger?
-				if (mysql_num_rows($result) == 0)
+				if ($result->rowCount() == 0)
 				{
 					echo '
 	<p class="c">Ingen oppføringer eksisterer.</p>';
@@ -2603,7 +2603,7 @@ www.kofradia.no';
 				else
 				{
 					$rows = array();
-					while ($row = mysql_fetch_assoc($result)) $rows[$row['lc_id']] = $row;
+					while ($row = $result->fetch()) $rows[$row['lc_id']] = $row;
 					$data = crewlog::load_summary_data($rows);
 					
 					$logs = array();
@@ -2650,7 +2650,7 @@ www.kofradia.no';
 					
 					else
 					{
-						ess::$b->db->query("UPDATE users_players SET up_note_crew = ".ess::$b->db->quote($notat)." WHERE up_id = ".page_min_side::$active_player->id);
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_note_crew = ".\Kofradia\DB::quote($notat)." WHERE up_id = ".page_min_side::$active_player->id);
 						
 						// legg til crewlogg
 						crewlog::log("player_note_crew", page_min_side::$active_player->id, NULL, array(
@@ -2828,12 +2828,12 @@ www.kofradia.no';
 					{
 						// kontroller spillernavnet (kun hvis endringer utover små/store bokstaver er gjort)
 						$check = strcasecmp(page_min_side::$active_player->data['up_name'], $name) !== 0;
-						if ($check) $result = ess::$b->db->query("SELECT ".ess::$b->db->quote($name, false)." REGEXP regex AS m, error FROM regex_checks WHERE type = 'reg_user_strength' HAVING m = 1");
-						if ($check && mysql_num_rows($result) > 0)
+						if ($check) $result = \Kofradia\DB::get()->query("SELECT ".\Kofradia\DB::quoteNoNull($name)." REGEXP regex AS m, error FROM regex_checks WHERE type = 'reg_user_strength' HAVING m = 1");
+						if ($check && $result->rowCount() > 0)
 						{
 							// sett opp feilmeldingene
 							$feil = array();
-							while ($row = mysql_fetch_assoc($result))
+							while ($row = $result->fetch())
 							{
 								$feil[] = '<li>'.htmlspecialchars($row['error']).'</li>';
 							}
@@ -2845,17 +2845,17 @@ www.kofradia.no';
 						else
 						{
 							// sjekk at spillernavnet ikke finnes fra før
-							$result = ess::$b->db->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE up_name = ".ess::$b->db->quote($name)." AND up_id != ".page_min_side::$active_player->id." AND (up_u_id != ".page_min_side::$active_user->id." OR up_access_level != 0)");
-							if (mysql_num_rows($result) > 0)
+							$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE up_name = ".\Kofradia\DB::quote($name)." AND up_id != ".page_min_side::$active_player->id." AND (up_u_id != ".page_min_side::$active_user->id." OR up_access_level != 0)");
+							if ($result->rowCount() > 0)
 							{
-								$row = mysql_fetch_assoc($result);
+								$row = $result->fetch();
 								ess::$b->page->add_message("Spillernavnet er allerede i bruk: ".game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']), "error");
 							}
 							
 							else
 							{
 								// utfør endringer - endre spillernavnet
-								ess::$b->db->query("UPDATE users_players SET up_name = ".ess::$b->db->quote($name)." WHERE up_id = ".page_min_side::$active_player->id);
+								\Kofradia\DB::get()->exec("UPDATE users_players SET up_name = ".\Kofradia\DB::quote($name)." WHERE up_id = ".page_min_side::$active_player->id);
 								
 								// legg til crewlogg
 								crewlog::log("player_name", page_min_side::$active_player->id, $log, array(
@@ -2996,7 +2996,7 @@ www.kofradia.no';
 			ORDER BY lc_time DESC");
 		
 		$data = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$data[$row['lc_id']] = $row;
 		}

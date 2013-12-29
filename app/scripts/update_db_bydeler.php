@@ -2,9 +2,9 @@
 
 // denne filen henter bydelene og lagrer til cache
 
-$result = ess::$b->db->query("SELECT * FROM bydeler ORDER BY name");
+$result = \Kofradia\DB::get()->query("SELECT * FROM bydeler ORDER BY name");
 game::$bydeler = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	game::$bydeler[$row['id']] = $row;
 }

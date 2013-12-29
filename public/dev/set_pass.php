@@ -30,8 +30,8 @@ if (isset($_POST['u_id']))
 		$user->params->update("extended_access_passkey", $hash, true);
 		
 		// lagre nytt passord
-		$hash = ess::$b->db->quote(password::hash($pass, null, "user"));
-		ess::$b->db->query("UPDATE users SET u_pass = $hash, u_bank_auth = $hash WHERE u_id = $user->id");
+		$hash = \Kofradia\DB::quote(password::hash($pass, null, "user"));
+		\Kofradia\DB::get()->exec("UPDATE users SET u_pass = $hash, u_bank_auth = $hash WHERE u_id = $user->id");
 		
 		ess::$b->page->add_message("Du lagret nytt passord for brukeren #$user->id (".htmlspecialchars($user->data['u_email']).", ".$user->player->profile_link().").");
 		redirect::handle();

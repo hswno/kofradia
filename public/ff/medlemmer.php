@@ -358,11 +358,11 @@ class page_ff_members
 			}
 			
 			// medlem av for mange FF av denne "typen"?
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT COUNT(ff_id)
 				FROM ff JOIN ff_members ON ffm_ff_id = ff_id
 				WHERE ffm_up_id = $up_id AND $where AND ff_is_crew = 0 AND ff_inactive = 0 AND (ffm_status = 0 OR ffm_status = 1)");
-			if (mysql_result($result, 0) >= $limit)
+			if ($result->fetchColumn(0) >= $limit)
 			{
 				ess::$b->page->add_message("Spilleren er allerede medlem av eller invitert til for mange $text.", "error");
 				redirect::handle();
@@ -441,9 +441,9 @@ class page_ff_members
 		if (isset($_POST['player']) || isset($_REQUEST['up_id']))
 		{
 			// hent spillerinformasjon
-			$where = isset($_REQUEST['up_id']) ? 'up_id = '.intval($_REQUEST['up_id']) : 'up_name = '.ess::$b->db->quote($_POST['player']);
+			$where = isset($_REQUEST['up_id']) ? 'up_id = '.intval($_REQUEST['up_id']) : 'up_name = '.\Kofradia\DB::quote($_POST['player']);
 			$more = isset($_REQUEST['up_id']) ? '' : ' ORDER BY up_access_level = 0, up_last_online DESC LIMIT 1';
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT up_id, up_name, up_access_level, up_points, upr_rank_pos, uc_time, uc_info, COUNT(ff_id) ff_num
 				FROM users_players
 					LEFT JOIN users_players_rank ON upr_up_id = up_id
@@ -453,7 +453,7 @@ class page_ff_members
 					LEFT JOIN ff ON ff_id = ffm_ff_id AND ff_is_crew = 0 AND ff_inactive = 0 AND $type_where
 				WHERE $where
 				GROUP BY up_id$more");
-			$row = mysql_fetch_assoc($result);
+			$row = $result->fetch();
 			
 			// fant ikke spilleren?
 			if (!$row || !$row['up_id'])

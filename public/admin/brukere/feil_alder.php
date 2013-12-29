@@ -47,7 +47,7 @@ echo '
 	</p>
 </form>';
 // hent brukerne
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT 
 		up_id, up_name, up_access_level, u_online_ip, up_created_time, u_email, up_last_online, up_hits, up_points, u_birth, up_cash+up_bank AS money
 	FROM users_players 
@@ -59,7 +59,7 @@ $result = $_base->db->query("
 
 // sett opp listen
 $list = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$list[$row['u_birth']][] = $row;
 }

@@ -8,12 +8,12 @@ $_base->page->theme_file = "doc";
 
 // antall brukere
 $pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 20);
-$result = $_base->db->query("SELECT COUNT(up_id) FROM users_players");
-$pagei->set_total(mysql_result($result, 0));
+$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players");
+$pagei->set_total($result->fetchColumn(0));
 $pagei->calc();
 
 $expire = time() - 604800; // 1 uke
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT
 		up.up_id, up.up_name, up.up_access_level, up.up_hits, up.up_last_online, up.up_created_time,
 		up.u_id, up.u_email, up.u_created_ip, up.u_online_ip,
@@ -42,7 +42,7 @@ echo '
 	<tbody>';
 
 $color = true;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	echo '
 		<tr'.($color = !$color ? ' class="color"' : '').'>

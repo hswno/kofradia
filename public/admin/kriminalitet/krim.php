@@ -5,18 +5,18 @@ global $_base, $_game;
 
 // hent krim info
 $id = intval($_GET['id']);
-$result = $_base->db->query("SELECT id, b_id, name FROM kriminalitet WHERE id = $id");
-if (mysql_num_rows($result) == 0)
+$result = \Kofradia\DB::get()->query("SELECT id, b_id, name FROM kriminalitet WHERE id = $id");
+if ($result->rowCount() == 0)
 {
 	$_base->page->add_message("Fant ingen krim med id: $id!", "error");
 	redirect::handle("");
 }
-$krim = mysql_fetch_assoc($result);
+$krim = $result->fetch();
 $bydel = &game::$bydeler[$krim['b_id']];
 
 // hent statistikk: antall brukere forsøkt, antall forsøk totalt, antall vellykkede, antall brukere med vellykkede
-$result = $_base->db->query("SELECT COUNT(ks_up_id) num_users, SUM(count) sum_count, SUM(success) sum_success, COUNT(IF(success > 0, 1, NULL)) num_success FROM kriminalitet_status WHERE krimid = {$krim['id']}");
-$stats = mysql_fetch_assoc($result);
+$result = \Kofradia\DB::get()->query("SELECT COUNT(ks_up_id) num_users, SUM(count) sum_count, SUM(success) sum_success, COUNT(IF(success > 0, 1, NULL)) num_success FROM kriminalitet_status WHERE krimid = {$krim['id']}");
+$stats = $result->fetch();
 
 // tittelen
 $_base->page->add_title($krim['name']);
@@ -32,7 +32,7 @@ if (isset($_POST['change_texts']))
 		{
 			$slett[] = intval($id);
 		}
-		$_base->db->query("DELETE FROM kriminalitet_text WHERE FIND_IN_SET(id, '".implode(",", $slett)."')");
+		\Kofradia\DB::get()->exec("DELETE FROM kriminalitet_text WHERE FIND_IN_SET(id, '".implode(",", $slett)."')");
 		$_base->page->add_message(count($slett).' tekst(er) ble slettet!');
 	}
 	
@@ -47,7 +47,7 @@ if (isset($_POST['change_texts']))
 		}
 		if (count($add) > 0)
 		{
-			$_base->db->query("INSERT INTO kriminalitet_text (krimid, outcome, text) VALUES ".implode(",", $add));
+			\Kofradia\DB::get()->exec("INSERT INTO kriminalitet_text (krimid, outcome, text) VALUES ".implode(",", $add));
 			$_base->page->add_message(count($add).' vellykkede tekst(er) ble lagt till.');
 		}
 	}
@@ -61,7 +61,7 @@ if (isset($_POST['change_texts']))
 		}
 		if (count($add) > 0)
 		{
-			$_base->db->query("INSERT INTO kriminalitet_text (krimid, outcome, text) VALUES ".implode(",", $add));
+			\Kofradia\DB::get()->exec("INSERT INTO kriminalitet_text (krimid, outcome, text) VALUES ".implode(",", $add));
 			$_base->page->add_message(count($add).' mislykkede tekst(er) ble lagt till.');
 		}
 	}
@@ -95,7 +95,7 @@ if (isset($_POST['title']))
 		}
 		
 		// oppdater
-		$_base->db->query("UPDATE kriminalitet SET name = ".$_base->db->quote($title).", b_id = $b_id WHERE id = {$krim['id']}");
+		\Kofradia\DB::get()->exec("UPDATE kriminalitet SET name = ".\Kofradia\DB::quote($title).", b_id = $b_id WHERE id = {$krim['id']}");
 		$_base->page->add_message("Kriminaliteten ble oppdatert.");
 		redirect::handle("krim?id={$krim['id']}");
 	}
@@ -145,12 +145,12 @@ echo '
 </div>';
 
 // hent tekstene for denne krim
-$result = $_base->db->query("SELECT id, outcome, text FROM kriminalitet_text WHERE krimid = {$krim['id']} ORDER BY outcome, text");
+$result = \Kofradia\DB::get()->query("SELECT id, outcome, text FROM kriminalitet_text WHERE krimid = {$krim['id']} ORDER BY outcome, text");
 $texts = array(
 	"success" => array(),
 	"failure" => array()
 );
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	if ($row['outcome'] == 1)
 	{

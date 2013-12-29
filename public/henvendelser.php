@@ -54,8 +54,8 @@ if (isset($_GET['a']) && access::has("mod", NULL, NULL, true))
 		$bb = true;
 		
 		// hent henvendelsen
-		$result = $_base->db->query("SELECT h_id, h_name, h_category, h_email, h_subject, h_name, h_status, h_time, h_random, h_last_visit FROM henvendelser WHERE h_id = $h_id");
-		$h = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT h_id, h_name, h_category, h_email, h_subject, h_name, h_status, h_time, h_random, h_last_visit FROM henvendelser WHERE h_id = $h_id");
+		$h = $result->fetch();
 		
 		if (!$h)
 		{
@@ -112,7 +112,7 @@ if (isset($_GET['a']) && access::has("mod", NULL, NULL, true))
 					$hm_time = time();
 					$set[] = "h_hm_time = $hm_time";
 					if (!$crewonly) $email_content = true;
-					$_base->db->query("INSERT INTO henvendelser_messages SET hm_h_id = $h_id, hm_time = $hm_time, hm_ip = ".$_base->db->quote($_SERVER['REMOTE_ADDR']).", hm_up_id = ".login::$user->player->id.", hm_browser = ".$_base->db->quote($_SERVER['HTTP_USER_AGENT']).", hm_content = ".$_base->db->quote($content).", hm_crew = 1".($crewonly ? ', hm_type = 1' : ''));
+					\Kofradia\DB::get()->exec("INSERT INTO henvendelser_messages SET hm_h_id = $h_id, hm_time = $hm_time, hm_ip = ".\Kofradia\DB::quote($_SERVER['REMOTE_ADDR']).", hm_up_id = ".login::$user->player->id.", hm_browser = ".\Kofradia\DB::quote($_SERVER['HTTP_USER_AGENT']).", hm_content = ".\Kofradia\DB::quote($content).", hm_crew = 1".($crewonly ? ', hm_type = 1' : ''));
 				}
 				
 				// oppdatere status?
@@ -123,10 +123,10 @@ if (isset($_GET['a']) && access::has("mod", NULL, NULL, true))
 				}
 				
 				// oppdater henvendelsen
-				$_base->db->query("UPDATE henvendelser SET ".implode(",", $set)." WHERE h_id = $h_id");
+				\Kofradia\DB::get()->exec("UPDATE henvendelser SET ".implode(",", $set)." WHERE h_id = $h_id");
 				
 				// oppdater cache
-				tasks::set("henvendelser", mysql_result($_base->db->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0"), 0));
+				tasks::set("henvendelser", \Kofradia\DB::get()->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0")->fetchColumn(0));
 				
 				$_base->page->add_message("Endringene ble utført.".($email_content || $email_status ? ' E-post ble sendt.' : ''));
 				
@@ -187,7 +187,7 @@ Denne e-posten kan ikke besvares.";
 		}
 		
 		// hent alle meldingene
-		$result = $_base->db->query("SELECT hm_time, hm_ip, hm_up_id, hm_browser, hm_content, hm_type, hm_crew FROM henvendelser_messages WHERE hm_h_id = $h_id ORDER BY hm_time");
+		$result = \Kofradia\DB::get()->query("SELECT hm_time, hm_ip, hm_up_id, hm_browser, hm_content, hm_type, hm_crew FROM henvendelser_messages WHERE hm_h_id = $h_id ORDER BY hm_time");
 		
 		$_base->page->add_css('
 .henvendelser_melding {
@@ -296,7 +296,7 @@ Denne e-posten kan ikke besvares.";
 			);
 		}
 		
-		while (($row = mysql_fetch_assoc($result)) || (($row = $preview_row) && !($preview_row = false)))
+		while (($row = $result->fetch()) || (($row = $preview_row) && !($preview_row = false)))
 		{
 			$preview = isset($row['preview']);
 			
@@ -383,13 +383,13 @@ Denne e-posten kan ikke besvares.";
 		if (count($show) == 0) $show = array(0,1,2);
 		
 		// hent henvendelsene
-		$result = $_base->db->query("SELECT h_id, h_name, h_category, h_email, h_subject, h_status, h_time FROM henvendelser WHERE h_status IN (".implode(",", $show).") ORDER BY h_hm_time DESC");
+		$result = \Kofradia\DB::get()->query("SELECT h_id, h_name, h_category, h_email, h_subject, h_status, h_time FROM henvendelser WHERE h_status IN (".implode(",", $show).") ORDER BY h_hm_time DESC");
 		
-		if (mysql_num_rows($result) > 0)
+		if ($result->rowCount() > 0)
 		{
 			$list = array();
 			$ids = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$list[$row['h_id']] = $row;
 				$ids[] = $row['h_id'];
@@ -397,8 +397,8 @@ Denne e-posten kan ikke besvares.";
 			$ids = implode(",", $ids);
 			
 			// hent siste svar og antall svar for hver henvendelse
-			$result = $_base->db->query("SELECT hm_id, hm_h_id, hm_time, hm_crew, COUNT(hm_id) AS hm_count FROM (SELECT hm_id, hm_h_id, hm_time, hm_crew FROM henvendelser_messages WHERE hm_h_id IN ($ids) ORDER BY hm_time DESC) AS ref GROUP BY hm_h_id");
-			while ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT hm_id, hm_h_id, hm_time, hm_crew, COUNT(hm_id) AS hm_count FROM (SELECT hm_id, hm_h_id, hm_time, hm_crew FROM henvendelser_messages WHERE hm_h_id IN ($ids) ORDER BY hm_time DESC) AS ref GROUP BY hm_h_id");
+			while ($row = $result->fetch())
 			{
 				$list[$row['hm_h_id']]['hm_time'] = $row['hm_time'];
 				$list[$row['hm_h_id']]['hm_crew'] = $row['hm_crew'];
@@ -420,7 +420,7 @@ Denne e-posten kan ikke besvares.";
 		echo ' '.show_sbutton("Oppdater").'</p>
 </form>';
 		
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 <p class="c">Fant ingen henvendelser.</p>';
@@ -562,8 +562,8 @@ if (isset($_REQUEST['id']))
 	$email = $user ? $user : requestval('email');
 	
 	// finn oppføringen
-	$result = $_base->db->query("SELECT h_id, h_email FROM henvendelser WHERE h_random = $id AND h_email = ".$_base->db->quote($email)." AND h_status != 4 ORDER BY h_hm_time DESC LIMIT 1");
-	$row = mysql_fetch_assoc($result);
+	$result = \Kofradia\DB::get()->query("SELECT h_id, h_email FROM henvendelser WHERE h_random = $id AND h_email = ".\Kofradia\DB::quote($email)." AND h_status != 4 ORDER BY h_hm_time DESC LIMIT 1");
+	$row = $result->fetch();
 	
 	if (!$row)
 	{
@@ -632,21 +632,17 @@ if (isset($_POST['new']) && (isset($_POST['add']) || isset($_POST['preview'])))
 	
 	else
 	{
-		$_base->db->begin();
-		
 		// legg til hovedoppføring
 		$random = rand(10000, 99999);
-		$_base->db->query("INSERT INTO henvendelser SET h_name = ".$_base->db->quote($name).", h_category = ".$_base->db->quote($categories[$category]).", h_email = ".$_base->db->quote($email).", h_subject = ".$_base->db->quote($subject).", h_time = ".time().", h_hm_time = ".time().", h_random = $random");
-		$h_id = $_base->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO henvendelser SET h_name = ".\Kofradia\DB::quote($name).", h_category = ".\Kofradia\DB::quote($categories[$category]).", h_email = ".\Kofradia\DB::quote($email).", h_subject = ".\Kofradia\DB::quote($subject).", h_time = ".time().", h_hm_time = ".time().", h_random = $random");
+		$h_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// legg til meldingen
-		$_base->db->query("INSERT INTO henvendelser_messages SET hm_h_id = $h_id, hm_content = ".$_base->db->quote($content).", hm_time = ".time().", hm_ip = ".$_base->db->quote($_SERVER['REMOTE_ADDR']).", hm_up_id = ".(login::$logged_in ? login::$user->player->id : "NULL").", hm_browser = ".$_base->db->quote($_SERVER['HTTP_USER_AGENT']));
-		$hm_id = $_base->db->insert_id();
-		
-		$_base->db->commit();
+		\Kofradia\DB::get()->exec("INSERT INTO henvendelser_messages SET hm_h_id = $h_id, hm_content = ".\Kofradia\DB::quote($content).", hm_time = ".time().", hm_ip = ".\Kofradia\DB::quote($_SERVER['REMOTE_ADDR']).", hm_up_id = ".(login::$logged_in ? login::$user->player->id : "NULL").", hm_browser = ".\Kofradia\DB::quote($_SERVER['HTTP_USER_AGENT']));
+		$hm_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// oppdater cache
-		tasks::set("henvendelser", mysql_result($_base->db->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0"), 0));
+		tasks::set("henvendelser", \Kofradia\DB::get()->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0")->fetchColumn(0));
 		
 		// send e-post til bruker
 		$mail = new email();
@@ -767,8 +763,8 @@ echo '
 		$bb = true;
 		
 		// hent henvendelsen
-		$result = $_base->db->query("SELECT h_id, h_email, h_category, h_subject, h_name, h_status, h_time FROM henvendelser WHERE h_id = $h_id AND h_email = ".$_base->db->quote($user)." AND h_status != 4");
-		$h = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT h_id, h_email, h_category, h_subject, h_name, h_status, h_time FROM henvendelser WHERE h_id = $h_id AND h_email = ".\Kofradia\DB::quote($user)." AND h_status != 4");
+		$h = $result->fetch();
 		
 		if (!$h)
 		{
@@ -777,7 +773,7 @@ echo '
 		}
 		
 		// oppdater
-		$_base->db->query("UPDATE henvendelser SET h_last_visit = ".time()." WHERE h_id = $h_id");
+		\Kofradia\DB::get()->exec("UPDATE henvendelser SET h_last_visit = ".time()." WHERE h_id = $h_id");
 		
 		// opprette svar?
 		$preview = false;
@@ -798,14 +794,14 @@ echo '
 			
 			else
 			{
-				$_base->db->query("INSERT INTO henvendelser_messages SET hm_h_id = $h_id, hm_time = ".time().", hm_ip = ".$_base->db->quote($_SERVER['REMOTE_ADDR']).", hm_up_id = ".(login::$logged_in ? login::$user->player->id : "NULL").", hm_browser = ".$_base->db->quote($_SERVER['HTTP_USER_AGENT']).", hm_content = ".$_base->db->quote($content));
+				\Kofradia\DB::get()->exec("INSERT INTO henvendelser_messages SET hm_h_id = $h_id, hm_time = ".time().", hm_ip = ".\Kofradia\DB::quote($_SERVER['REMOTE_ADDR']).", hm_up_id = ".(login::$logged_in ? login::$user->player->id : "NULL").", hm_browser = ".\Kofradia\DB::quote($_SERVER['HTTP_USER_AGENT']).", hm_content = ".\Kofradia\DB::quote($content));
 				$_base->page->add_message("Meldingen ble lagt til.");
 				
 				// oppdatere henvendelsen
-				$_base->db->query("UPDATE henvendelser SET h_status = 0, h_hm_time = ".time()." WHERE h_id = $h_id");
+				\Kofradia\DB::get()->exec("UPDATE henvendelser SET h_status = 0, h_hm_time = ".time()." WHERE h_id = $h_id");
 				
 				// oppdater cache
-				tasks::set("henvendelser", mysql_result($_base->db->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0"), 0));
+				tasks::set("henvendelser", \Kofradia\DB::get()->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0")->fetchColumn(0));
 				
 				// send e-post til henrik
 				$mail = new email();
@@ -833,7 +829,7 @@ $content
 		}
 		
 		// hent alle meldingene
-		$result = $_base->db->query("SELECT hm_time, hm_ip, hm_browser, hm_content, hm_crew FROM henvendelser_messages WHERE hm_h_id = $h_id AND hm_type = 0 ORDER BY hm_time");
+		$result = \Kofradia\DB::get()->query("SELECT hm_time, hm_ip, hm_browser, hm_content, hm_crew FROM henvendelser_messages WHERE hm_h_id = $h_id AND hm_type = 0 ORDER BY hm_time");
 		
 		echo '
 <p class="h_info"><span class="h_title">'.htmlspecialchars($h['h_category']).': '.htmlspecialchars($h['h_subject']).'</span> '.$status['other'][$h['h_status']].'</p>
@@ -853,7 +849,7 @@ $content
 			);
 		}
 
-		while (($row = mysql_fetch_assoc($result)) || (($row = $preview_row) && !($preview_row = false)))
+		while (($row = $result->fetch()) || (($row = $preview_row) && !($preview_row = false)))
 		{
 			$preview = isset($row['preview']);
 			
@@ -879,9 +875,9 @@ $content
 	else
 	{
 		// hent henvendelsene
-		$result = $_base->db->query("SELECT h_id, h_category, h_subject, h_status, h_time FROM henvendelser WHERE h_email = ".$_base->db->quote($user)." AND h_status != 4 ORDER BY h_hm_time DESC");
+		$result = \Kofradia\DB::get()->query("SELECT h_id, h_category, h_subject, h_status, h_time FROM henvendelser WHERE h_email = ".\Kofradia\DB::quote($user)." AND h_status != 4 ORDER BY h_hm_time DESC");
 		
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			// alle henvendelsene til denne brukeren er slettet
 			unset($_SESSION[$GLOBALS['__server']['session_prefix'].'henvendelser_email']);
@@ -890,7 +886,7 @@ $content
 		
 		$list = array();
 		$ids = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$list[$row['h_id']] = $row;
 			$ids[] = $row['h_id'];
@@ -899,8 +895,8 @@ $content
 		$ids = implode(",", $ids);
 		
 		// hent siste svar og antall svar for hver henvendelse
-		$result = $_base->db->query("SELECT hm_id, hm_h_id, hm_time, hm_crew, COUNT(hm_id) AS hm_count FROM (SELECT hm_id, hm_h_id, hm_time, hm_crew FROM henvendelser_messages WHERE hm_h_id IN ($ids) AND hm_crew = 0 ORDER BY hm_time DESC) AS ref GROUP BY hm_h_id");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT hm_id, hm_h_id, hm_time, hm_crew, COUNT(hm_id) AS hm_count FROM (SELECT hm_id, hm_h_id, hm_time, hm_crew FROM henvendelser_messages WHERE hm_h_id IN ($ids) AND hm_crew = 0 ORDER BY hm_time DESC) AS ref GROUP BY hm_h_id");
+		while ($row = $result->fetch())
 		{
 			$list[$row['hm_h_id']]['hm_time'] = $row['hm_time'];
 			$list[$row['hm_h_id']]['hm_crew'] = $row['hm_crew'];
@@ -955,9 +951,9 @@ if (isset($_GET['forgot']))
 		$email = trim(postval("email"));
 		
 		// hent henvendelsene med denne e-posten
-		$result = $_base->db->query("SELECT h_id, h_name, h_email, h_category, h_subject, h_status, h_time, h_random FROM henvendelser WHERE h_email = ".$_base->db->quote($email)." AND h_status != 4 ORDER BY h_time");
+		$result = \Kofradia\DB::get()->query("SELECT h_id, h_name, h_email, h_category, h_subject, h_status, h_time, h_random FROM henvendelser WHERE h_email = ".\Kofradia\DB::quote($email)." AND h_status != 4 ORDER BY h_time");
 		
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			$_base->page->add_message("Fant ingen henvendelser med denne e-posten.", "error");
 		}
@@ -966,7 +962,7 @@ if (isset($_GET['forgot']))
 		{
 			$list = array();
 			$hm_id = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$list[] = "ID: {$row['h_random']}\nTidspunkt: ".$_base->date->get($row['h_time'])->format()."\n{$row['h_category']}: {$row['h_subject']}";
 				$random = $row['h_random'];

@@ -62,11 +62,12 @@ class lotto_konk
 	public function run()
 	{
 		// hent informasjon om runden
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(id), COUNT(DISTINCT IF(up_id IS NOT NULL AND up_access_level != 0, l_up_id, NULL))
 			FROM lotto LEFT JOIN users_players ON l_up_id = up_id");
-		$this->antall = mysql_result($result, 0);
-		$this->brukere = mysql_result($result, 0, 1);
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$this->antall = $row[0];
+		$this->brukere = $row[1];
 		
 		// ingen deltakere?
 		if ($this->antall == 0)
@@ -113,7 +114,7 @@ class lotto_konk
 		
 		// beregn hvor mye man tjener
 		$lodd_pris = lotto::get_lodd_price();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				$this->antall * $lodd_pris,
 				$this->antall * $lodd_pris * {$this->premier[0][1]},
@@ -122,11 +123,12 @@ class lotto_konk
 				$this->antall * $lodd_pris * {$this->premier[3][1]},
 				$this->antall * $lodd_pris * {$this->premier[4][1]}");
 		
-		$this->pott = mysql_result($result, 0, 0);
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$this->pott = $row[0];
 		
 		for ($i = 1; $i <= 5; $i++)
 		{
-			$this->premier[$i-1][2] = round(mysql_result($result, 0, $i));
+			$this->premier[$i-1][2] = round($row[$i]);
 		}
 		$this->vinnere = array();
 		$this->vinnere_text = array();
@@ -169,7 +171,7 @@ class lotto_konk
 		}
 		
 		// fjern loddene som var kjøpt
-		ess::$b->db->query("DELETE FROM lotto");
+		\Kofradia\DB::get()->exec("DELETE FROM lotto");
 	}
 	
 	/**
@@ -180,35 +182,35 @@ class lotto_konk
 		$id = $nummer - 1;
 		
 		// finn ut antall lodd vi kan trekke ifra
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(id)
 			FROM lotto JOIN users_players ON up_id = l_up_id AND up_access_level != 0".(count($this->vinnere) > 0 ? "
 			WHERE l_up_id NOT IN (".implode(",", $this->vinnere).")" : ""));
 		
-		$num = mysql_result($result, 0);
+		$num = $result->fetchColumn(0);
 		if ($num == 0) return;
 		
 		// hent en tilfeldig vinner
 		$rand = rand(0, $num - 1);
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT id, l_up_id, time, up_name
 			FROM lotto JOIN users_players ON up_id = l_up_id AND up_access_level != 0".(count($this->vinnere) > 0 ? "
 			WHERE l_up_id NOT IN (".implode(",", $this->vinnere).")" : "")."
 			LIMIT $rand, 1");
-		$vinner = mysql_fetch_assoc($result);
+		$vinner = $result->fetch();
 		if (!$vinner) return;
 		
 		$up = player::get($vinner['l_up_id']);
 		if (!$up) return;
 		
 		// antall lodd vi hadde
-		$result = ess::$b->db->query("SELECT COUNT(*) FROM lotto WHERE l_up_id = {$up->id}");
-		$count = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM lotto WHERE l_up_id = {$up->id}");
+		$count = $result->fetchColumn(0);
 		
 		$up->add_log("lotto", $nummer.":".$this->premier[$id][0], $this->premier[$id][2]);
 		
 		// sett opp som vinner
-		ess::$b->db->query("INSERT INTO lotto_vinnere SET l_id = {$vinner['id']}, lv_up_id = {$vinner['l_up_id']}, time = {$vinner['time']}, won = {$this->premier[$id][2]}, total_lodd = $this->antall, total_users = $this->brukere, type = $nummer");
+		\Kofradia\DB::get()->exec("INSERT INTO lotto_vinnere SET l_id = {$vinner['id']}, lv_up_id = {$vinner['l_up_id']}, time = {$vinner['time']}, won = {$this->premier[$id][2]}, total_lodd = $this->antall, total_users = $this->brukere, type = $nummer");
 		
 		// send brukeren penger
 		$up->update_money($this->premier[$id][2], false);

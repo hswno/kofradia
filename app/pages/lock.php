@@ -112,9 +112,9 @@ class page_lock
 							$deact_self = login::$user->player->data['up_deactivated_up_id'] == login::$user->player->id;
 							if (!$deact_self)
 							{
-								$result = ess::$b->db->query("SELECT u_id FROM users JOIN users_players ON u_id = up_u_id WHERE up_id = ".login::$user->player->data['up_deactivated_up_id']);
-								$row = mysql_fetch_assoc($result);
-								mysql_free_result($result);
+								$result = \Kofradia\DB::get()->query("SELECT u_id FROM users JOIN users_players ON u_id = up_u_id WHERE up_id = ".login::$user->player->data['up_deactivated_up_id']);
+								$row = $result->fetch();
+								unset($result);
 								if ($row && $row['u_id'] == login::$user->id) $deact_self = true;
 							}
 						}
@@ -224,9 +224,9 @@ class page_lock
 				if (isset($_POST['verify']))
 				{
 					// oppdater brukeren
-					ess::$b->db->query("UPDATE users SET u_birth = '$birth' WHERE u_id = ".login::$user->id." AND (u_birth IS NULL OR u_birth = '0000-00-00')");
+					$a = \Kofradia\DB::get()->exec("UPDATE users SET u_birth = '$birth' WHERE u_id = ".login::$user->id." AND (u_birth IS NULL OR u_birth = '0000-00-00')");
 					
-					if (ess::$b->db->affected_rows() > 0)
+					if ($a > 0)
 					{
 						ess::$b->page->add_message("Fødselsdatoen $b_dag. {$_lang['months'][$b_maaned]} $b_aar er nå registrert til din bruker.");
 						putlog("CREWCHAN", "%c7%bFødselsdato registrert:%b%c %u".login::$user->player->data['up_name']."%u la inn fødselsdatoen %u{$birth}%u (%u{$age}%u år).");
@@ -319,12 +319,12 @@ class page_lock
 		redirect::store($_SERVER['REQUEST_URI']);
 		
 		// sjekk om vi allerede har en spiller fra før som ikke er den aktive
-		$result = ess::$b->db->query("SELECT up_id, up_name, up_created_time, up_last_online, up_access_level FROM users_players WHERE up_u_id = ".login::$user->id." AND up_access_level != 0");
-		if (mysql_num_rows($result) > 0)
+		$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_created_time, up_last_online, up_access_level FROM users_players WHERE up_u_id = ".login::$user->id." AND up_access_level != 0");
+		if ($result->rowCount() > 0)
 		{
 			// sett opp liste over spillere
 			$players = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$players[$row['up_id']] = $row;
 			}
@@ -341,7 +341,7 @@ class page_lock
 				}
 				
 				// sett som aktiv spiller
-				ess::$b->db->query("UPDATE users SET u_active_up_id = $up_id WHERE u_id = ".login::$user->id);
+				\Kofradia\DB::get()->exec("UPDATE users SET u_active_up_id = $up_id WHERE u_id = ".login::$user->id);
 				ess::$b->page->add_message('Du har valgt <user="'.$players[$up_id]['up_name'].'" /> som din aktive spiller.');
 				
 				redirect::handle("min_side");
@@ -398,18 +398,18 @@ class page_lock
 			if (!isset(game::$bydeler[$bydel]) || !game::$bydeler[$bydel]['active']) $bydel = false;
 			
 			// kontroller navnet
-			$result1 = ess::$b->db->query("SELECT ".ess::$b->db->quote($name, false)." REGEXP regex AS m, error FROM regex_checks WHERE (type = 'reg_user_special' OR type = 'reg_user_strength') HAVING m = 1");
+			$result1 = \Kofradia\DB::get()->query("SELECT ".\Kofradia\DB::quoteNoNull($name)." REGEXP regex AS m, error FROM regex_checks WHERE (type = 'reg_user_special' OR type = 'reg_user_strength') HAVING m = 1");
 			
 			$where = ALLOW_SAME_PLAYERNAME ? " AND (up_u_id != ".login::$user->id." OR up_access_level != 0)" : "";
-			$result2 = ess::$b->db->query("SELECT up_id FROM users_players WHERE up_name = ".ess::$b->db->quote($name).$where);
+			$result2 = \Kofradia\DB::get()->query("SELECT up_id FROM users_players WHERE up_name = ".\Kofradia\DB::quote($name).$where);
 			
-			$result3 = ess::$b->db->query("SELECT id FROM registration WHERE user = ".ess::$b->db->quote($name));
+			$result3 = \Kofradia\DB::get()->query("SELECT id FROM registration WHERE user = ".\Kofradia\DB::quote($name));
 			
 			// ugyldig navn?
-			if (mysql_num_rows($result1) > 0)
+			if ($result1->rowCount() > 0)
 			{
 				$feil = array();
-				while ($row = mysql_fetch_assoc($result1)) $feil[] = '<li>'.htmlspecialchars($row['error']).'</li>';
+				while ($row = $result1->fetch()) $feil[] = '<li>'.htmlspecialchars($row['error']).'</li>';
 				ess::$b->page->add_message("Spillernavnet var ikke gyldig:<ul>".implode("", $feil)."</ul>", "error");
 			}
 			
@@ -420,13 +420,13 @@ class page_lock
 			}
 			
 			// allerede i bruk?
-			elseif (mysql_num_rows($result2) > 0)
+			elseif ($result2->rowCount() > 0)
 			{
 				ess::$b->page->add_message("Spillernavnet er allerede tatt! Velg et annet.", "error");
 			}
 			
 			// noen forsøker å registrere seg med dette?
-			elseif (mysql_num_rows($result3) > 0)
+			elseif ($result3->rowCount() > 0)
 			{
 				ess::$b->page->add_message("Noen holder allerede på å registrere seg med dette spillernavnet. Velg et annet.", "error");
 			}
@@ -440,29 +440,29 @@ class page_lock
 					if (!$bydel)
 					{
 						// finn en tilfeldig bydel
-						$result = ess::$b->db->query("SELECT id FROM bydeler WHERE active = 1 ORDER BY RAND()");
-						$bydel = mysql_result($result, 0);
+						$result = \Kofradia\DB::get()->query("SELECT id FROM bydeler WHERE active = 1 ORDER BY RAND()");
+						$bydel = $result->fetchColumn(0);
 					}
 					
-					ess::$b->db->begin();
+					\Kofradia\DB::get()->beginTransaction();
 					
 					// opprett spiller og tilknytt brukeren
-					ess::$b->db->query("INSERT INTO users_players SET up_u_id = ".login::$user->id.", up_name = ".ess::$b->db->quote($name).", up_created_time = ".time().", up_b_id = $bydel");
-					$up_id = ess::$b->db->insert_id();
+					\Kofradia\DB::get()->exec("INSERT INTO users_players SET up_u_id = ".login::$user->id.", up_name = ".\Kofradia\DB::quote($name).", up_created_time = ".time().", up_b_id = $bydel");
+					$up_id = \Kofradia\DB::get()->lastInsertId();
 					
 					// sett opp riktig rank plassering
-					#ess::$b->db->query("UPDATE users_players AS main, (SELECT COUNT(users_players.up_id)+1 AS pos, ref.up_id FROM users_players AS ref LEFT JOIN users_players ON users_players.up_points > ref.up_points AND users_players.up_access_level < ".ess::$g['access_noplay']." AND users_players.up_access_level != 0 WHERE ref.up_id = $up_id GROUP BY ref.up_id) AS rp SET main.up_rank_pos = rp.pos WHERE main.up_id = rp.up_id");
-					ess::$b->db->query("INSERT INTO users_players_rank SET upr_up_id = $up_id");
+					#\Kofradia\DB::get()->exec("UPDATE users_players AS main, (SELECT COUNT(users_players.up_id)+1 AS pos, ref.up_id FROM users_players AS ref LEFT JOIN users_players ON users_players.up_points > ref.up_points AND users_players.up_access_level < ".ess::$g['access_noplay']." AND users_players.up_access_level != 0 WHERE ref.up_id = $up_id GROUP BY ref.up_id) AS rp SET main.up_rank_pos = rp.pos WHERE main.up_id = rp.up_id");
+					\Kofradia\DB::get()->exec("INSERT INTO users_players_rank SET upr_up_id = $up_id");
 					ranklist::update();
 					
 					// sett spilleren som den aktive spilleren for brukerne
-					ess::$b->db->query("UPDATE users SET u_active_up_id = $up_id WHERE u_id = ".login::$user->id);
+					\Kofradia\DB::get()->exec("UPDATE users SET u_active_up_id = $up_id WHERE u_id = ".login::$user->id);
 					
-					ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 					
 					// hent antall medlemmer
-					$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_access_level < ".ess::$g['access_noplay']." AND up_access_level != 0");
-					putlog("INFO", "%bNY SPILLER:%b (#$up_id - Nummer %b".mysql_result($result, 0)."%b) %u$name%u registrerte seg! ".ess::$s['path']."/p/".rawurlencode($name));
+					$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE up_access_level < ".ess::$g['access_noplay']." AND up_access_level != 0");
+					putlog("INFO", "%bNY SPILLER:%b (#$up_id - Nummer %b".$result->fetchColumn(0)."%b) %u$name%u registrerte seg! ".ess::$s['path']."/p/".rawurlencode($name));
 					
 					ess::$b->page->add_message("Du har opprettet en ny spiller med navnet <b>".htmlspecialchars($name)."</b>!");
 					redirect::handle("min_side");
@@ -639,7 +639,7 @@ class page_lock
 			// lagre passordet
 			else
 			{
-				ess::$b->db->query("UPDATE users SET u_pass = ".ess::$b->db->quote(password::hash($pass_new, null, 'user')).", u_pass_change = NULL WHERE u_id = ".login::$user->id);
+				\Kofradia\DB::get()->exec("UPDATE users SET u_pass = ".\Kofradia\DB::quote(password::hash($pass_new, null, 'user')).", u_pass_change = NULL WHERE u_id = ".login::$user->id);
 				
 				// melding
 				ess::$b->page->add_message("Du har nå lagret et nytt passord for brukeren din.");
@@ -661,7 +661,7 @@ www.kofradia.no';
 				$email->send(login::$user->data['u_email'], "Nytt passord");
 				
 				// logg ut alle andre brukere
-				ess::$b->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_active = 1 AND ses_u_id = ".login::$user->id." AND ses_id != ".login::$info['ses_id']);
+				\Kofradia\DB::get()->exec("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_active = 1 AND ses_u_id = ".login::$user->id." AND ses_id != ".login::$info['ses_id']);
 				
 				redirect::handle();
 			}

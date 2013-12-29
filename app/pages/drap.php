@@ -99,7 +99,7 @@ class page_drap extends pages_player
 		else
 		{
 			// hent alle FF hvor spilleren var medlem
-			$result_ff = ess::$b->db->query("
+			$result_ff = \Kofradia\DB::get()->query("
 				SELECT ffm_up_id, ffm_priority, ff_id, ff_inactive, IFNULL(ffm_ff_name, ff_name) ffm_ff_name, ff_type
 				FROM
 					(
@@ -116,7 +116,7 @@ class page_drap extends pages_player
 				"firmaer" => array()
 			);
 			$mod = access::has("mod");
-			while ($row = mysql_fetch_assoc($result_ff))
+			while ($row = $result_ff->fetch())
 			{
 				$type = $row['ff_type'] == 1 ? 'broderskap' : 'firmaer';
 				$pos = ff::$types[$row['ff_type']]['priority'][$row['ffm_priority']];
@@ -146,7 +146,7 @@ class page_drap extends pages_player
 			<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$familier = isset($ff_list['familier'][$row['up_id']]) ? implode(",<br />", $ff_list['familier'][$row['up_id']]) : '&nbsp;';
 				$firmaer = isset($ff_list['firmaer'][$row['up_id']]) ? implode(",<br />", $ff_list['firmaer'][$row['up_id']]) : '&nbsp;';
@@ -228,7 +228,7 @@ class page_drap extends pages_player
 			<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -340,7 +340,7 @@ class page_drap extends pages_player
 			ess::$b->page->add_css('.df_ff_list a { font-size: 10px; color: #777; text-decoration: none } .df_ff_list a:hover { text-decoration: underline }');
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				// sett opp vitner
 				$vitner = $row['df_time'] > 1278604000 ? '<span class="dark">Ingen</span>' : '<span class="dark">Ukjent</span>';

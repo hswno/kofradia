@@ -42,8 +42,8 @@ class page_crewloggs
 	protected function handle_specific()
 	{
 		$lc_id = (int) $_GET['lc_id'];
-		$result = ess::$b->db->query("SELECT lc_id, lc_up_id, lc_time, lc_lca_id, lc_a_up_id, lc_log FROM log_crew WHERE lc_id = $lc_id");
-		$lc = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT lc_id, lc_up_id, lc_time, lc_lca_id, lc_a_up_id, lc_log FROM log_crew WHERE lc_id = $lc_id");
+		$lc = $result->fetch();
 		
 		if (!$lc)
 		{
@@ -54,12 +54,12 @@ class page_crewloggs
 		$lc_action = crewlog::$actions[crewlog::$actions_id[$lc['lc_lca_id']]];
 		
 		// hent data
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT lcd_lc_id, lcd_lca_id, lcd_lce_id, lcd_data_int, lcd_data_text, lce_type
 			FROM log_crew_data, log_crew_extra
 			WHERE lcd_lc_id = $lc_id AND lcd_lca_id = lce_lca_id AND lcd_lce_id = lce_id");
 		$data = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$data_name = $lc_action[5][$row['lcd_lce_id']][0];
 			$data[$data_name] = $row['lce_type'] == "int" ? $row['lcd_data_int'] : $row['lcd_data_text'];
@@ -132,7 +132,7 @@ class page_crewloggs
 						crewlog::log("user_warning_invalidated", $lc['lc_a_up_id'], null, $d);
 						
 						// marker som slettet
-						ess::$b->db->query("
+						\Kofradia\DB::get()->exec("
 							INSERT INTO log_crew_data
 							SET lcd_lc_id = {$lc['lc_id']}, lcd_lce_id = 5, lcd_lca_id = {$lc['lc_lca_id']}, lcd_data_int = 1
 							ON DUPLICATE KEY UPDATE lcd_data_int = 1");
@@ -140,7 +140,7 @@ class page_crewloggs
 						// har vi en hendelse vi kan slette?
 						if (!empty($data['notified_id']))
 						{
-							ess::$b->db->query("DELETE FROM users_log WHERE id = {$data['notified_id']}");
+							\Kofradia\DB::get()->exec("DELETE FROM users_log WHERE id = {$data['notified_id']}");
 						}
 						
 						ess::$b->page->add_message("Advarselen ble markert som ugyldig.");
@@ -211,15 +211,15 @@ class page_crewloggs
 							crewlog::log("user_warning_edit", $lc['lc_a_up_id'], null, $d);
 							
 							// oppdater crewloggen
-							ess::$b->db->query("UPDATE log_crew SET lc_log = ".ess::$b->db->quote($log)." WHERE lc_id = {$lc['lc_id']}");
-							ess::$b->db->query("UPDATE log_crew_data SET lcd_data_int = $priority WHERE lcd_lc_id = {$lc['lc_id']} AND lcd_lce_id = 3");
-							ess::$b->db->query("UPDATE log_crew_data SET lcd_data_text = ".ess::$b->db->quote($types[$type])." WHERE lcd_lc_id = {$lc['lc_id']} AND lcd_lce_id = 1");
-							ess::$b->db->query("UPDATE log_crew_data SET lcd_data_text = ".ess::$b->db->quote($note)." WHERE lcd_lc_id = {$lc['lc_id']} AND lcd_lce_id = 2");
+							\Kofradia\DB::get()->exec("UPDATE log_crew SET lc_log = ".\Kofradia\DB::quote($log)." WHERE lc_id = {$lc['lc_id']}");
+							\Kofradia\DB::get()->exec("UPDATE log_crew_data SET lcd_data_int = $priority WHERE lcd_lc_id = {$lc['lc_id']} AND lcd_lce_id = 3");
+							\Kofradia\DB::get()->exec("UPDATE log_crew_data SET lcd_data_text = ".\Kofradia\DB::quote($types[$type])." WHERE lcd_lc_id = {$lc['lc_id']} AND lcd_lce_id = 1");
+							\Kofradia\DB::get()->exec("UPDATE log_crew_data SET lcd_data_text = ".\Kofradia\DB::quote($note)." WHERE lcd_lc_id = {$lc['lc_id']} AND lcd_lce_id = 2");
 							
 							// har vi en hendelse vi kan oppdatere?
 							if (!empty($data['notified_id']))
 							{
-								ess::$b->db->query("UPDATE users_log SET note = ".ess::$b->db->quote(urlencode($types[$type]).":".urlencode($log))." WHERE id = {$data['notified_id']}");
+								\Kofradia\DB::get()->exec("UPDATE users_log SET note = ".\Kofradia\DB::quote(urlencode($types[$type]).":".urlencode($log))." WHERE id = {$data['notified_id']}");
 							}
 							
 							ess::$b->page->add_message("Advarselen ble redigert.");
@@ -589,7 +589,7 @@ class page_crewloggs
 	
 	protected function get_full_up_list($ups)
 	{
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT DISTINCT up2.up_id
 			FROM users_players up1
 				JOIN users ON up1.up_u_id = u_id
@@ -597,7 +597,7 @@ class page_crewloggs
 			WHERE up1.up_name IN (".implode(",", array_map(array(ess::$b->db, "quote"), $ups)).")");
 		
 		$ids = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$ids[] = $row['up_id'];
 		}
@@ -626,7 +626,7 @@ class page_crewloggs
 			WHERE 1$filters
 			ORDER BY lc_time DESC");
 		$rows = array();
-		while ($row = mysql_fetch_assoc($result)) $rows[$row['lc_id']] = $row;
+		while ($row = $result->fetch()) $rows[$row['lc_id']] = $row;
 		
 		$data = crewlog::load_summary_data($rows);
 		

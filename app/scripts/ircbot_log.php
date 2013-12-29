@@ -286,9 +286,9 @@ class hs_irc
 								$time = 300;
 								
 								$last = time()-$time;
-								$result = $_base->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online >= $last");
-								$ant = game::format_number(mysql_result($result, 0));
-								mysql_free_result($result);
+								$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online >= $last");
+								$ant = game::format_number($result->fetchColumn(0));
+								unset($result);
 								
 								$time = game::timespan($time, game::TIME_FULL | game::TIME_NOBOLD);
 								$this->msg($this->connected_cid, "#kofradia", "%c3php-cron: %bAntall pålogget siste $time%b: %u$ant%u");
@@ -332,8 +332,8 @@ class hs_irc
 							$limit = $this->loglimit;
 							
 							// hent meldinger
-							$network = $this->settings['name'] == "SMAFIA_BETA" ? '' : " AND li_network = ".$_base->db->quote($this->settings['name']);
-							$result = $_base->db->query("SELECT li_network, li_channel, li_time, li_message FROM log_irc WHERE 1$network ORDER BY li_time LIMIT $limit", false);
+							$network = $this->settings['name'] == "SMAFIA_BETA" ? '' : " AND li_network = ".\Kofradia\DB::quote($this->settings['name']);
+							$result = \Kofradia\DB::get()->query("SELECT li_network, li_channel, li_time, li_message FROM log_irc WHERE 1$network ORDER BY li_time LIMIT $limit", false);
 							
 							if (!$result)
 							{
@@ -341,14 +341,14 @@ class hs_irc
 								break;
 							}
 							
-							if (($num = mysql_num_rows($result)) == 0)
+							if (($num = $result->rowCount()) == 0)
 							{
 								// ingen rader
 								break;
 							}
 							
 							// gå gjennom hver melding og legg til der dem skal
-							while ($row = mysql_fetch_assoc($result))
+							while ($row = $result->fetch())
 							{
 								$delay = time() - $row['li_time'];
 								$delay = $delay > 1 ? ' %c3(logdelay: '.game::timespan($delay, game::TIME_NOBOLD).')' : '';
@@ -376,19 +376,24 @@ class hs_irc
 								$this->msg($this->connected_cid, $row['li_channel'], "$prefix{$row['li_message']}$delay");
 							}
 							
-							mysql_free_result($result);
+							unset($result);
 							
 							// slett meldingene
 							$limit = min($limit, $num);
-							#$_base->db->query("UPDATE log_irc SET li_deleted = 1, li_deleted_time = ".time()." WHERE li_network = ".$_base->db->quote($this->settings['name'])." AND li_deleted = 0 ORDER BY li_time LIMIT $limit");
+							#\Kofradia\DB::get()->exec("UPDATE log_irc SET li_deleted = 1, li_deleted_time = ".time()." WHERE li_network = ".\Kofradia\DB::quote($this->settings['name'])." AND li_deleted = 0 ORDER BY li_time LIMIT $limit");
 							
 							// forsøk å slette meldingene 3 ganger
 							for ($i = 0; $i < 3; $i++)
 							{
 								$val = $i == 2;
 								
-								if ($_base->db->query("DELETE FROM log_irc WHERE 1$network ORDER BY li_time LIMIT $limit", $val)) break;
-								else sysreport::log("Feil ved sletting av log_irc rader: ".mysql_error($_base->db->link));
+								try {
+									if (\Kofradia\DB::get()->exec("DELETE FROM log_irc WHERE 1$network ORDER BY li_time LIMIT $limit", $val)) break;
+								}
+								catch (Exception $e)
+								{
+									sysreport::log("Feil ved sletting av log_irc rader: ".\Kofradia\DB::get()->errorInfo()[2]);
+								}
 							}
 						break;
 						
@@ -594,10 +599,10 @@ class hs_irc
 						
 						elseif ($content == ".queue")
 						{
-							$w = $this->settings['name'] == "SMAFIA_BETA" ? '1' : " li_network = ".$_base->db->quote($this->settings['name']);
-							$result = $_base->db->query("SELECT COUNT(*) FROM log_irc WHERE $w");
-							$ant = mysql_result($result, 0);
-							mysql_free_result($result);
+							$w = $this->settings['name'] == "SMAFIA_BETA" ? '1' : " li_network = ".\Kofradia\DB::quote($this->settings['name']);
+							$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM log_irc WHERE $w");
+							$ant = $result->fetchColumn(0);
+							unset($result);
 							
 							$this->msg($cid, $arg, "Message queue: " . game::format_number($ant));
 						}
@@ -769,33 +774,40 @@ class hs_irc
 								//$val = shell_exec($arg);
 								
 								$this->send_data($cid, "PRIVMSG $arg :Executing query..\n");
-								$result = $_base->db->query($query, false);
-								
-								if (!$result)
+								$ok = true;
+								try {
+									$result = \Kofradia\DB::get()->query($query);
+								}
+								catch (Exception $e)
 								{
-									$this->send_data($cid, "PRIVMSG $arg :Query failed: ".mysql_error()."\n");
+									$ok = false;
+								}
+								
+								if (!$ok)
+								{
+									$this->send_data($cid, "PRIVMSG $arg :Query failed: ".\Kofradia\DB::get()->errorInfo()[2]."\n");
 								}
 								else
 								{
-									// list opp feltene
-									$fields = array();
-									while ($field = mysql_fetch_field($result)) $fields[] = $field->name;
-									$this->send_data($cid, "PRIVMSG $arg :Fields: " . implode(", ", $fields)."\n");
-									
-									if (mysql_num_rows($result) == 0)
+									if ($result->rowCount() == 0)
 									{
 										$this->send_data($cid, "PRIVMSG $arg :No data in result.\n");
 									}
 									else
 									{
+										// list opp feltene
+										$row = $result->fetch();
+										$fields = array_keys($row);
+										$this->send_data($cid, "PRIVMSG $arg :Fields: " . implode(", ", $fields)."\n");
+									
 										// vis hver rad
 										$i = 1;
-										while ($row = mysql_fetch_row($result)) {
+										do {
 											$data = array();
 											foreach ($row as $value) { $data[] = preg_replace("/[\r\n]/", "", $value); }
 											$this->send_data($cid, "PRIVMSG $arg :Row $i: ".implode(", ", $data)."\n");
 											$i++;
-										}
+										} while ($row = $result->fetch());
 									}
 									
 									$this->send_data($cid, "PRIVMSG $arg :Query completed..\n");
@@ -846,9 +858,9 @@ class hs_irc
 									}
 									
 									$last = time()-$time;
-									$result = $_base->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online >= $last");
-									$ant = game::format_number(mysql_result($result, 0));
-									mysql_free_result($result);
+									$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online >= $last");
+									$ant = game::format_number($result->fetchColumn(0));
+									unset($result);
 									
 									$time = game::timespan($time, game::TIME_FULL | game::TIME_NOBOLD);
 									$this->msg($cid, $arg, "%bAntall pålogget siste $time%b: %u$ant%u");
@@ -994,9 +1006,9 @@ class hs_irc
 		$search = utf8_decode($search);
 		
 		// hent all informasjon
-		$result = ess::$b->db->query("SELECT node_id, node_parent_node_id, node_title, node_type, node_params, node_show_menu, node_expand_menu, node_enabled, node_priority, node_change FROM nodes");
+		$result = \Kofradia\DB::get()->query("SELECT node_id, node_parent_node_id, node_title, node_type, node_params, node_show_menu, node_expand_menu, node_enabled, node_priority, node_change FROM nodes");
 		$nodes = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$row['params'] = new params($row['node_params']);
 			$row['enheter'] = array();
@@ -1027,8 +1039,8 @@ class hs_irc
 		}
 		
 		// hent alle enhetene
-		$result = ess::$b->db->query("SELECT ni_id, ni_node_id, ni_type, nir_content, nir_params, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_enabled != 0 AND ni_deleted = 0 ORDER BY ni_priority");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT ni_id, ni_node_id, ni_type, nir_content, nir_params, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_enabled != 0 AND ni_deleted = 0 ORDER BY ni_priority");
+		while ($row = $result->fetch())
 		{
 			if (!isset($nodes[$row['ni_node_id']])) continue;
 			

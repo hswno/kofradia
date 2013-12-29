@@ -4,10 +4,10 @@ require "../../base.php";
 global $_base, $_game;
 
 // hent alle krimoppføringene
-$result = $_base->db->query("SELECT k.id, k.name, k.b_id, COUNT(IF(t.outcome=1,1,NULL)) AS vellykkede, COUNT(IF(t.outcome=2,1,NULL)) AS mislykkede FROM kriminalitet k LEFT JOIN kriminalitet_text t ON k.id = t.krimid GROUP BY k.id ORDER BY name");
+$result = \Kofradia\DB::get()->query("SELECT k.id, k.name, k.b_id, COUNT(IF(t.outcome=1,1,NULL)) AS vellykkede, COUNT(IF(t.outcome=2,1,NULL)) AS mislykkede FROM kriminalitet k LEFT JOIN kriminalitet_text t ON k.id = t.krimid GROUP BY k.id ORDER BY name");
 $krims = array();
 
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$krims[$row['b_id']][] = $row;
 }

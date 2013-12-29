@@ -363,7 +363,7 @@ class page_angrip extends pages_player
 		}
 		
 		// oppdater tidspunkt for siste angrep
-		ess::$b->db->query("UPDATE users_players SET up_df_time = ".time()." WHERE up_id = ".login::$user->player->id);
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_df_time = ".time()." WHERE up_id = ".login::$user->player->id);
 		
 		// er i annen bydel, bomberom eller vi klarte ikke å finne spilleren?
 		$not_found_b = $this->up_offer->data['up_b_id'] != login::$user->player->data['up_b_id'];
@@ -390,7 +390,7 @@ class page_angrip extends pages_player
 			putlog("DF", "ANGREP FEILET: ".login::$user->player->data['up_name']." skulle angripe%c3 ".$this->up_offer->data['up_name']."%c med $bullets ".fword("kule", "kuler", $bullets).". $reason");
 			
 			// øk telleren over antall ganger vi ikke har funnet spiller
-			ess::$b->db->query("UPDATE users_players SET up_attack_failed_num = up_attack_failed_num + 1 WHERE up_id = ".login::$user->player->id);
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_attack_failed_num = up_attack_failed_num + 1 WHERE up_id = ".login::$user->player->id);
 			
 			// øk telleren over antall ganger vi ikke har funnet spiller (for familien spilleren er medlem i)
 			login::$user->player->attack_ff_update("failed");
@@ -425,7 +425,7 @@ class page_angrip extends pages_player
 		$result = login::$user->player->weapon->attack($this->up_offer, $bullets);
 		
 		// sett ned antall kuler spilleren har
-		ess::$b->db->query("UPDATE users_players SET up_weapon_bullets = GREATEST(0, up_weapon_bullets - $bullets) WHERE up_id = ".login::$user->player->id);
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets = GREATEST(0, up_weapon_bullets - $bullets) WHERE up_id = ".login::$user->player->id);
 		login::$user->player->data['up_weapon_bullets'] = max(0, login::$user->player->data['up_weapon_bullets'] - $bullets);
 		
 		// trigger
@@ -595,13 +595,13 @@ class page_angrip extends pages_player
 			$next_old = login::$user->player->data['up_weapon_training_next'] ? ' = '.login::$user->player->data['up_weapon_training_next'] : ' IS NULL';
 			
 			// utfør våpentrening
-			ess::$b->db->query("
+			$a = \Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_weapon_training = up_weapon_training + (1 - up_weapon_training) * $f, up_weapon_training_next = ".(time()+$opt['wait']).", up_cash = up_cash - {$opt['price']}
 				WHERE up_id = ".login::$user->player->id." AND up_cash >= {$opt['price']} AND up_weapon_training_next$next_old");
 			
 			// ikke oppdatert?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message("Kunne ikke utføre våpentrening.", "error");
 			}

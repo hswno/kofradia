@@ -7,12 +7,12 @@ ajax::require_user();
 ajax::validate_lock();
 
 // hent alle utfordringer
-$result = ess::$b->db->query("SELECT poker_id, poker_starter_up_id, poker_time_start, poker_starter_cards, poker_cash FROM poker WHERE poker_state = 2 ORDER BY poker_cash");
+$result = \Kofradia\DB::get()->query("SELECT poker_id, poker_starter_up_id, poker_time_start, poker_starter_cards, poker_cash FROM poker WHERE poker_state = 2 ORDER BY poker_cash");
 
 $i = 0;
 $data = array();
 $html_to_parse = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$d = array();
 	$d['self'] = $row['poker_starter_up_id'] == login::$user->player->id;

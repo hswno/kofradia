@@ -172,8 +172,8 @@ class page_lotto
 				<div class="bg1">';
 		
 		// hent de siste trekningene
-		$result = ess::$b->db->query("SELECT CEILING((time-900)/1800)*1800+900 FROM lotto_vinnere GROUP BY CEILING((time-900)/1800)*1800+900 ORDER BY time DESC LIMIT 4");
-		if (mysql_num_rows($result) == 0)
+		$result = \Kofradia\DB::get()->query("SELECT CEILING((time-900)/1800)*1800+900 FROM lotto_vinnere GROUP BY CEILING((time-900)/1800)*1800+900 ORDER BY time DESC LIMIT 4");
+		if ($result->rowCount() == 0)
 		{
 			echo '
 					<p>Ingen trekninger har blitt gjennomført.</p>';
@@ -181,15 +181,18 @@ class page_lotto
 		
 		else
 		{
-			$last = mysql_result($result, 0, 0);
-			$first = mysql_result($result, mysql_num_rows($result)-1, 0) - 1800;
+			$row = $result->fetch(\PDO::FETCH_NUM);
+			$last = $row[0];
+			do {
+				$first = $row[0] - 1800;
+			} while ($row = $result->fetch(\PDO::FETCH_NUM));
 			
 			// hent vinnerene
-			$result = ess::$b->db->query("SELECT lv_up_id, time, won, total_lodd, total_users, type FROM lotto_vinnere WHERE time >= $first AND time < $last ORDER BY type");
+			$result = \Kofradia\DB::get()->query("SELECT lv_up_id, time, won, total_lodd, total_users, type FROM lotto_vinnere WHERE time >= $first AND time < $last ORDER BY type");
 			$rounds = array();
 			
 			// legg i riktig gruppe
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$end = ceil(($row['time']-900)/1800)*1800 + 900;
 				
@@ -252,22 +255,23 @@ class page_lotto
 		$this->next = ($offset_now >= 2700 ? 4500-$offset_now : ($offset_now >= 900 ? 2700-$offset_now : 900-$offset_now));
 		
 		// hent informasjon om lottorunden og hvor mange lodd vi har
-		$result = ess::$b->db->query("SELECT COUNT(id), COUNT(IF(l_up_id = ".login::$user->player->id.", 1, NULL)), COUNT(id) * ".lotto::get_lodd_price().", COUNT(DISTINCT l_up_id) FROM lotto");
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(id), COUNT(IF(l_up_id = ".login::$user->player->id.", 1, NULL)), COUNT(id) * ".lotto::get_lodd_price().", COUNT(DISTINCT l_up_id) FROM lotto");
+		$row = $result->fetch(\PDO::FETCH_NUM);
 		$this->info = array(
-			"antall_lodd" => mysql_result($result, 0, 1),
-			"totalt_lodd" => mysql_result($result, 0, 0),
-			"pott" => mysql_result($result, 0, 2),
-			"brukere" => mysql_result($result, 0, 3)
+			"antall_lodd" => $row[1],
+			"totalt_lodd" => $row[0],
+			"pott" => $row[2],
+			"brukere" => $row[3]
 		);
 		
 		$this->last = 0;
 		$this->wait = 0;
 		if ($this->info['antall_lodd'] > 0)
 		{
-			$result = ess::$b->db->query("SELECT time FROM lotto WHERE l_up_id = ".login::$user->player->id." ORDER BY id DESC LIMIT 1");
-			if (mysql_num_rows($result) > 0)
+			$result = \Kofradia\DB::get()->query("SELECT time FROM lotto WHERE l_up_id = ".login::$user->player->id." ORDER BY id DESC LIMIT 1");
+			if ($result->rowCount() > 0)
 			{
-				$this->last = mysql_result($result, 0);
+				$this->last = $result->fetchColumn(0);
 				$this->wait = $this->last - time() + lotto::$ventetid;
 				if ($this->wait < 0) $this->wait = 0;
 			}
@@ -335,8 +339,8 @@ class page_lotto
 		$cost = $lodd * $lodd_price;
 		
 		// trekk fra pengene
-		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - ($lodd * ".$lodd_price.") WHERE up_id = ".login::$user->player->id." AND up_cash >= ($lodd * ".$lodd_price.")");
-		if (ess::$b->db->affected_rows() == 0)
+		$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - ($lodd * ".$lodd_price.") WHERE up_id = ".login::$user->player->id." AND up_cash >= ($lodd * ".$lodd_price.")");
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Du har ikke nok penger på hånda!", "error");
 			redirect::handle();
@@ -346,7 +350,7 @@ class page_lotto
 		$q = array();
 		$time = time();
 		for ($i = 0; $i < $lodd; $i++) $q[] = "(".login::$user->player->id.", $time)";
-		ess::$b->db->query("INSERT INTO lotto (l_up_id, time) VALUES ".implode(",", $q));
+		\Kofradia\DB::get()->exec("INSERT INTO lotto (l_up_id, time) VALUES ".implode(",", $q));
 		
 		// energi
 		login::$user->player->energy_use(self::ENERGY);

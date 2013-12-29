@@ -11,7 +11,7 @@ Energien øker hvert minutt med 1 % av nåværende verdi, og med minimum 10 ener
 */
 
 
-ess::$b->db->begin();
+\Kofradia\DB::get()->beginTransaction();
 $time = time();
 
 
@@ -20,7 +20,7 @@ $time = time();
  */
 
 // sett opp energien
-ess::$b->db->query("
+\Kofradia\DB::get()->exec("
 	UPDATE users_players
 	SET
 		up_energy = IF(
@@ -40,7 +40,7 @@ ess::$b->db->query("
  */
 
 // juster helsen
-ess::$b->db->query("
+\Kofradia\DB::get()->exec("
 	UPDATE users_players
 	SET
 		up_health = LEAST(up_health_max, up_health + IF(
@@ -56,8 +56,8 @@ ess::$b->db->query("
 
 
 // finn spillere som ikke har mer helse og som dør
-$result = ess::$b->db->query("SELECT up_id, up_attacked_time, up_attacked_up_id, up_attacked_ff_id_list FROM users_players WHERE up_access_level != 0 AND up_health <= 0");
-while ($row = mysql_fetch_assoc($result))
+$result = \Kofradia\DB::get()->query("SELECT up_id, up_attacked_time, up_attacked_up_id, up_attacked_ff_id_list FROM users_players WHERE up_access_level != 0 AND up_health <= 0");
+while ($row = $result->fetch())
 {
 	$player = player::get($row['up_id']);
 	if (!$player) throw new HSException("Mangler spiller med ID {$row['up_id']}");
@@ -77,14 +77,14 @@ while ($row = mysql_fetch_assoc($result))
 }
 
 // finn spillere som skal miste FF
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT up_id
 	FROM users_players
 		JOIN ff_members ON ffm_up_id = up_id AND ffm_status = ".ff_member::STATUS_MEMBER."
 		JOIN ff ON ff_id = ffm_ff_id AND ff_inactive = 0 AND ff_is_crew = 0
 	WHERE up_access_level != 0 AND up_health/up_health_max < ".player::FF_HEALTH_LOW."
 	GROUP BY up_id");
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$player = player::get($row['up_id']);
 	if (!$player) throw new HSException("Mangler spiller med ID {$row['up_id']}");
@@ -99,9 +99,9 @@ while ($row = mysql_fetch_assoc($result))
 // - over 40 % helse og blir medlem av FF
 // - spiller blir aktivert
 $expire = $time - 43200; // 12 timer
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->exec("
 	UPDATE ff_members, users_players
 	SET ffm_status = ".ff_member::STATUS_KICKED.", ffm_date_part = $time, up_health_ff_time = NULL
 	WHERE up_access_level != 0 AND up_health_ff_time != 0 AND up_health_ff_time < $expire AND ffm_up_id = up_id AND ffm_status = ".ff_member::STATUS_DEACTIVATED);
 
-ess::$b->db->commit();
+\Kofradia\DB::get()->commit();

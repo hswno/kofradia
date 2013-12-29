@@ -152,7 +152,7 @@ class page_banken extends pages_player
 						$more_info .= '<br />Du mottok <b>'.game::format_cash(self::STARTKAPITAL).'</b> i startkapital.';
 					}
 					
-					ess::$b->db->query("UPDATE users_players SET up_bank_ff_id = $ff_id, up_bank_ff_time = ".time()."$more_fields WHERE up_id = ".$this->up->id);
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_bank_ff_id = $ff_id, up_bank_ff_time = ".time()."$more_fields WHERE up_id = ".$this->up->id);
 					ess::$b->page->add_message("Du har opprettet en bankkonto hos firmaet <b>".htmlspecialchars($bank->data['ff_name'])."</b> og har nå <b>".game::format_cash($this->up->data['up_bank'])."</b> i din bankkonto.$more_info");
 					
 					redirect::handle();
@@ -161,7 +161,7 @@ class page_banken extends pages_player
 		}
 		
 		// hent bankene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ff_id, ff_date_reg, ff_bank, ff_name, ff_is_crew, ff_params, br_b_id
 			FROM ff
 				LEFT JOIN bydeler_resources ON ff_br_id = br_id
@@ -189,7 +189,7 @@ class page_banken extends pages_player
 		
 		// sett opp listen
 		$i = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// bydel
 			if (!isset(game::$bydeler[$row['br_b_id']]))
@@ -281,7 +281,7 @@ class page_banken extends pages_player
 				else
 				{
 					// bytt passordet
-					ess::$b->db->query("UPDATE users SET u_bank_auth = ".ess::$b->db->quote($hash)." WHERE u_id = ".$this->up->user->id);
+					\Kofradia\DB::get()->exec("UPDATE users SET u_bank_auth = ".\Kofradia\DB::quote($hash)." WHERE u_id = ".$this->up->user->id);
 					
 					ess::$b->page->add_message("Ditt bankpassord er nå opprettet.");
 					login::data_set("banken_last_view", time());
@@ -376,7 +376,7 @@ class page_banken extends pages_player
 					else
 					{
 						// bytt passordet
-						ess::$b->db->query("UPDATE users SET u_bank_auth = ".ess::$b->db->quote($hash)." WHERE u_id = ".$this->up->user->id);
+						\Kofradia\DB::get()->exec("UPDATE users SET u_bank_auth = ".\Kofradia\DB::quote($hash)." WHERE u_id = ".$this->up->user->id);
 						
 						ess::$b->page->add_message("Du endret ditt bankpassord.");
 						redirect::handle();
@@ -619,8 +619,8 @@ www.kofradia.no';
 		$this->up->user->params->remove("bankauth_change_expire");
 		$this->up->user->params->remove("bankauth_change_rtime");
 		$this->up->user->params->remove("bankauth_change_hash");
-		ess::$b->db->query("UPDATE users SET u_bank_auth = NULL WHERE u_id = {$this->up->user->id}");
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->exec("UPDATE users SET u_bank_auth = NULL WHERE u_id = {$this->up->user->id}");
+		$this->up->user->params->commit();
 		
 		putlog("NOTICE", "NULLSTILLE BANKPASSORD: {$this->up->data['up_name']} nullstilte sitt bankpassord.");
 		
@@ -651,8 +651,8 @@ www.kofradia.no';
 		elseif ($amount != 0)
 		{
 			// sett inn
-			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $amount, up_bank = up_bank + $amount WHERE up_id = ".$this->up->id." AND up_cash >= $amount");
-			if (ess::$b->db->affected_rows() == 0)
+			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $amount, up_bank = up_bank + $amount WHERE up_id = ".$this->up->id." AND up_cash >= $amount");
+			if ($a == 0)
 			{
 				// mislykket
 				ess::$b->page->add_message("Du har ikke så mye penger på hånda!", "error");
@@ -690,8 +690,8 @@ www.kofradia.no';
 		elseif ($amount != 0)
 		{
 			// sett inn
-			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + $amount, up_bank = up_bank - $amount WHERE up_id = ".$this->up->id." AND up_bank >= $amount");
-			if (ess::$b->db->affected_rows() == 0)
+			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + $amount, up_bank = up_bank - $amount WHERE up_id = ".$this->up->id." AND up_bank >= $amount");
+			if ($a == 0)
 			{
 				// mislykket
 				ess::$b->page->add_message("Du har ikke så mye penger i banken!", "error");
@@ -715,8 +715,8 @@ www.kofradia.no';
 		$amount = game::intval(postval("amount"));
 		
 		// kontroller at vi har nok penger
-		$result = ess::$b->db->query("SELECT $amount <= up_bank FROM users_players WHERE up_id = ".$this->up->id);
-		$amount_ok = mysql_result($result, 0) == 1;
+		$result = \Kofradia\DB::get()->query("SELECT $amount <= up_bank FROM users_players WHERE up_id = ".$this->up->id);
+		$amount_ok = $result->fetchColumn(0) == 1;
 		
 		// sjekk beløpet
 		if ($amount <= 0)
@@ -753,8 +753,8 @@ www.kofradia.no';
 		
 		
 		// sjekk mottaker
-		$result = ess::$b->db->query("SELECT up_id, up_u_id, up_name, up_access_level, up_bank_ff_id FROM users_players WHERE up_name = ".ess::$b->db->quote($mottaker)." ORDER BY up_access_level = 0, up_last_online DESC LIMIT 1");
-		$player = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT up_id, up_u_id, up_name, up_access_level, up_bank_ff_id FROM users_players WHERE up_name = ".\Kofradia\DB::quote($mottaker)." ORDER BY up_access_level = 0, up_last_online DESC LIMIT 1");
+		$player = $result->fetch();
 		
 		// ingen gyldig mottaker?
 		if (!$player)
@@ -778,9 +778,9 @@ www.kofradia.no';
 		}
 		
 		
-		$result = ess::$b->db->query("SELECT uc_info FROM users_contacts WHERE uc_u_id = {$player['up_u_id']} AND uc_contact_up_id = ".$this->up->id." AND uc_type = 2");
-		$blokkert = mysql_num_rows($result) > 0;
-		$blokkert_info = $blokkert ? mysql_result($result, 0) : false;
+		$result = \Kofradia\DB::get()->query("SELECT uc_info FROM users_contacts WHERE uc_u_id = {$player['up_u_id']} AND uc_contact_up_id = ".$this->up->id." AND uc_type = 2");
+		$blokkert = $result->rowCount() > 0;
+		$blokkert_info = $blokkert ? $result->fetchColumn(0) : false;
 		
 		// sjekk bankkontoen til mottaker
 		$bank = page_banken_bank::get($player['up_bank_ff_id']);
@@ -814,8 +814,8 @@ www.kofradia.no';
 		}
 		
 		// regn ut hvor mye penger som skal bli til overs etc
-		$result = ess::$b->db->query("SELECT ROUND($amount * {$this->bank->overforingstap}), ROUND($amount * $bank->overforingstap), ROUND($amount * {$this->bank->overforingstap}) + ROUND($amount * $bank->overforingstap), $amount - ROUND($amount * {$this->bank->overforingstap}) - ROUND($amount * $bank->overforingstap), $amount - ROUND($amount * {$this->bank->overforingstap})");
-		$info = mysql_fetch_row($result);
+		$result = \Kofradia\DB::get()->query("SELECT ROUND($amount * {$this->bank->overforingstap}), ROUND($amount * $bank->overforingstap), ROUND($amount * {$this->bank->overforingstap}) + ROUND($amount * $bank->overforingstap), $amount - ROUND($amount * {$this->bank->overforingstap}) - ROUND($amount * $bank->overforingstap), $amount - ROUND($amount * {$this->bank->overforingstap})");
+		$info = $result->fetch(\PDO::FETCH_NUM);
 		// 0 -> tap sender
 		// 1 -> tap mottaker
 		// 2 -> tap totalt
@@ -844,43 +844,43 @@ www.kofradia.no';
 			else
 			{
 				// start transaksjon
-				ess::$b->db->begin();
+				\Kofradia\DB::get()->beginTransaction();
 				
 				// send pengene
-				ess::$b->db->query("UPDATE users_players AS s, users_players AS m SET s.up_bank = s.up_bank - $amount, m.up_bank = m.up_bank + {$info[3]} WHERE s.up_id = ".$this->up->id." AND m.up_id = {$player['up_id']} AND s.up_bank >= $amount");
+				$a = \Kofradia\DB::get()->exec("UPDATE users_players AS s, users_players AS m SET s.up_bank = s.up_bank - $amount, m.up_bank = m.up_bank + {$info[3]} WHERE s.up_id = ".$this->up->id." AND m.up_id = {$player['up_id']} AND s.up_bank >= $amount");
 				
 				// mislykket?
-				if (ess::$b->db->affected_rows() == 0)
+				if ($a == 0)
 				{
 					ess::$b->page->add_message("Noe gikk galt under overføringen.", "error");
-					ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 				}
 				
 				// vellykket!
 				else
 				{
 					// lagre overføringslogg
-					ess::$b->db->query("INSERT INTO bank_log SET bl_sender_up_id = ".$this->up->id.", bl_receiver_up_id = {$player['up_id']}, amount = {$info[4]}, time = ".time());
+					\Kofradia\DB::get()->exec("INSERT INTO bank_log SET bl_sender_up_id = ".$this->up->id.", bl_receiver_up_id = {$player['up_id']}, amount = {$info[4]}, time = ".time());
 					
 					// oppdater senderen
-					ess::$b->db->query("UPDATE users_players SET up_bank_sent = up_bank_sent + {$info[4]}, up_bank_profit = up_bank_profit - {$info[4]}, up_bank_num_sent = up_bank_num_sent + 1, up_bank_charge = up_bank_charge + {$info[0]} WHERE up_id = ".$this->up->id);
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_bank_sent = up_bank_sent + {$info[4]}, up_bank_profit = up_bank_profit - {$info[4]}, up_bank_num_sent = up_bank_num_sent + 1, up_bank_charge = up_bank_charge + {$info[0]} WHERE up_id = ".$this->up->id);
 					
 					// oppdater mottakeren
-					ess::$b->db->query("UPDATE users_players SET up_bank_received = up_bank_received + {$info[4]}, up_bank_profit = up_bank_profit + {$info[4]}, up_bank_num_received = up_bank_num_received + 1, up_bank_charge = up_bank_charge + {$info[1]} WHERE up_id = {$player['up_id']}");
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_bank_received = up_bank_received + {$info[4]}, up_bank_profit = up_bank_profit + {$info[4]}, up_bank_num_received = up_bank_num_received + 1, up_bank_charge = up_bank_charge + {$info[1]} WHERE up_id = {$player['up_id']}");
 					
 					// spillelogg (med melding)
 					$player2 = new player($player['up_id']);
 					$player2->add_log("bankoverforing", $info[4].":".$note, $this->up->id);
 					
 					// legg til transaksjonsrader
-					if ($info[0] > 0) ess::$b->db->query("INSERT INTO ff_bank_transactions SET ffbt_ff_id = {$this->bank->id}, ffbt_time = ".time().", ffbt_amount = $amount, ffbt_profit = {$info[0]}");
-					if ($info[1] > 0) ess::$b->db->query("INSERT INTO ff_bank_transactions SET ffbt_ff_id = {$bank->id}, ffbt_time = ".time().", ffbt_amount = $amount, ffbt_profit = {$info[1]}");
+					if ($info[0] > 0) \Kofradia\DB::get()->exec("INSERT INTO ff_bank_transactions SET ffbt_ff_id = {$this->bank->id}, ffbt_time = ".time().", ffbt_amount = $amount, ffbt_profit = {$info[0]}");
+					if ($info[1] > 0) \Kofradia\DB::get()->exec("INSERT INTO ff_bank_transactions SET ffbt_ff_id = {$bank->id}, ffbt_time = ".time().", ffbt_amount = $amount, ffbt_profit = {$info[1]}");
 					
 					// IRC logg
 					putlog("LOG", "%c9%uBANKOVERFØRING:%u%c (%u".$this->up->data['up_name']."%u) sendte (%u".game::format_cash($amount)."%u (%u{$info[3]}%u)) til (%u{$player['up_name']}%u) (TAP: ".game::format_cash($info[2]).") ".(!empty($note) ? 'Melding: ('.$note.')' : 'Ingen melding.'));
 					
 					ess::$b->page->add_message('Du overførte <b>'.game::format_cash($info[4]).'</b> til <user id="'.$player['up_id'].'" />.' . ($info[0] > 0 ? ' Banken din tok <b>'.game::format_cash($info[0]).'</b> i overføringsgebyr.' : ''));
-					ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 					
 					// trigger
 					$this->up->update_money(-$amount, false, false, null);
@@ -1167,8 +1167,8 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 		
 		// sideinformasjon - hent sendte overføringer
 		$pagei = new pagei(pagei::ACTIVE_GET, "side_sendte", pagei::PER_PAGE, 8, pagei::TOTAL, $this->up->data['up_bank_num_sent']);
-		$result = ess::$b->db->query("SELECT bl_receiver_up_id, amount, time FROM bank_log WHERE bl_sender_up_id = ".$this->up->id." ORDER BY time DESC LIMIT $pagei->start, $pagei->per_page");
-		if (mysql_num_rows($result) == 0)
+		$result = \Kofradia\DB::get()->query("SELECT bl_receiver_up_id, amount, time FROM bank_log WHERE bl_sender_up_id = ".$this->up->id." ORDER BY time DESC LIMIT $pagei->start, $pagei->per_page");
+		if ($result->rowCount() == 0)
 		{
 			echo '
 				<p>
@@ -1190,7 +1190,7 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 					<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$date = ess::$b->date->get($row['time']);
 				
@@ -1219,8 +1219,8 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 		
 		// sideinformasjon - hent mottatte overføringer
 		$pagei = new pagei(pagei::ACTIVE_GET, "side_mottatte", pagei::PER_PAGE, 8, pagei::TOTAL, $this->up->data['up_bank_num_received']);
-		$result = ess::$b->db->query("SELECT bl_sender_up_id, amount, time FROM bank_log WHERE bl_receiver_up_id = ".$this->up->id." ORDER BY time DESC LIMIT $pagei->start, $pagei->per_page");
-		if (mysql_num_rows($result) == 0)
+		$result = \Kofradia\DB::get()->query("SELECT bl_sender_up_id, amount, time FROM bank_log WHERE bl_receiver_up_id = ".$this->up->id." ORDER BY time DESC LIMIT $pagei->start, $pagei->per_page");
+		if ($result->rowCount() == 0)
 		{
 			echo '
 				<p>
@@ -1242,7 +1242,7 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 					<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$date = ess::$b->date->get($row['time']);
 				
@@ -1318,13 +1318,13 @@ class page_banken_bank
 		// hente info?
 		if ($this->id)
 		{
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT ff_id, ff_date_reg, ff_bank, ff_name, ff_is_crew, ff_params, br_b_id
 				FROM ff
 					LEFT JOIN bydeler_resources ON ff_br_id = br_id
 				WHERE ff_id = $this->id AND ff_type = 3 AND ff_inactive = 0");
 			
-			$this->data = mysql_fetch_assoc($result);
+			$this->data = $result->fetch();
 			if ($this->data)
 			{
 				// ikke crew?

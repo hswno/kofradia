@@ -29,17 +29,17 @@ echo '
 function visliste($name, $where)
 {
 	global $_base;
-	$result = $_base->db->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users_players WHERE $where ORDER BY up_name");
+	$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users_players WHERE $where ORDER BY up_name");
 	
 	// hopp over hvis det ikke finnes noen
-	if (mysql_num_rows($result) == 0) return;
+	if ($result->rowCount() == 0) return;
 	
 	echo '
 		<h2 class="bg1">'.$name.'<span class="left2"></span><span class="right2"></span></h2>
 		<div class="bg1">
 			<dl class="dd_right">';
 	
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		echo '
 				<dt>'.game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']).'</dt>
@@ -65,8 +65,8 @@ if (access::has("crewet"))
 		}
 		
 		// hent informasjon om spilleren
-		$result = ess::$b->db->query("SELECT u_id, u_access_level, up_access_level, up_id, up_name FROM users, users_players WHERE u_active_up_id = up_id AND up_id = $up_id");
-		$up = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT u_id, u_access_level, up_access_level, up_id, up_name FROM users, users_players WHERE u_active_up_id = up_id AND up_id = $up_id");
+		$up = $result->fetch();
 		if (!$up)
 		{
 			ess::$b->page->add_message("Fant ikke spilleren.", "error");
@@ -95,11 +95,11 @@ if (access::has("crewet"))
 		}
 		
 		// overfør nivå
-		ess::$b->db->query("UPDATE users, users_players SET up_access_level = u_access_level WHERE u_active_up_id = up_id AND up_id = {$up['up_id']} AND u_access_level != 0 AND up_access_level != 0");
+		\Kofradia\DB::get()->exec("UPDATE users, users_players SET up_access_level = u_access_level WHERE u_active_up_id = up_id AND up_id = {$up['up_id']} AND u_access_level != 0 AND up_access_level != 0");
 		ess::$b->page->add_message('Tilgangsnivået til brukeren <user id="'.$up['up_id'].'" /> ble overført til spilleren.');
 		
 		// ranklista
-		ess::$b->db->query("UPDATE users, users_players_rank SET upr_up_access_level = u_access_level WHERE upr_up_id = {$up['up_id']} AND upr_up_id = u_active_up_id");
+		\Kofradia\DB::get()->exec("UPDATE users, users_players_rank SET upr_up_access_level = u_access_level WHERE upr_up_id = {$up['up_id']} AND upr_up_id = u_active_up_id");
 		ranklist::update();
 		
 		// logg
@@ -107,12 +107,12 @@ if (access::has("crewet"))
 		redirect::handle();
 	}
 	
-	$result = ess::$b->db->query("
+	$result = \Kofradia\DB::get()->query("
 		SELECT u_id, u_access_level, up_access_level, up_id, up_name, up_last_online
 		FROM users, users_players
 		WHERE u_active_up_id = up_id AND up_u_id = u_id AND u_access_level != up_access_level AND (up_access_level != 0 || u_access_level != 1)
 		ORDER BY up_name");
-	if (mysql_num_rows($result) > 0)
+	if ($result->rowCount() > 0)
 	{
 		$admin = access::has("admin");
 		
@@ -135,7 +135,7 @@ if (access::has("crewet"))
 			</thead>
 			<tbody>';
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// spesielle tilganger?
 			$u_access = "Ukjent";

@@ -14,7 +14,7 @@ $mod = access::has("mod");
 $up_id = intval($_POST['up_id']);
 
 // hent spillerdata
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT
 		users_players.*,
 		up_cash + up_bank AS money,
@@ -26,20 +26,20 @@ $result = $_base->db->query("
 	WHERE up_id = $up_id AND up_u_id = u_id
 	GROUP BY up_id");
 
-if (!($player = mysql_fetch_assoc($result)))
+if (!($player = $result->fetch()))
 {
 	ajax::text("ERROR:404-USER", ajax::TYPE_404);
 }
 
 
 // hent FF
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT ffm_priority, ff_id, ff_name, ff_type
 	FROM ff_members JOIN ff ON ffm_ff_id = ff_id
 	WHERE ffm_up_id = $up_id AND ffm_status = 1 AND ff_inactive = 0
 	ORDER BY ff_name");
 $ff = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$type = ff::$types[$row['ff_type']];
 	$row['posisjon'] = ucfirst($type['priority'][$row['ffm_priority']]);

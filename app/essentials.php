@@ -279,19 +279,19 @@ h1 { font-size: 23px; }
 		// allerede sjekket og OK?
 		if (cache::fetch("ip_ok_".$_SERVER['REMOTE_ADDR'])) return;
 		
-		$ip = $this->db->quote(to_float(ip2long($_SERVER['REMOTE_ADDR'])));
+		$ip = \Kofradia\DB::quote(to_float(ip2long($_SERVER['REMOTE_ADDR'])));
 		$time = time();
 		
-		$result = $this->db->query("SELECT bi_ip_start, bi_ip_end, bi_time_start, bi_time_end, bi_reason FROM ban_ip WHERE $ip BETWEEN bi_ip_start AND bi_ip_end AND IF(ISNULL(bi_time_end), $time >= bi_time_start, $time BETWEEN bi_time_start AND bi_time_end) ORDER BY bi_ip_end - bi_ip_start");
+		$result = \Kofradia\DB::get()->query("SELECT bi_ip_start, bi_ip_end, bi_time_start, bi_time_end, bi_reason FROM ban_ip WHERE $ip BETWEEN bi_ip_start AND bi_ip_end AND IF(ISNULL(bi_time_end), $time >= bi_time_start, $time BETWEEN bi_time_start AND bi_time_end) ORDER BY bi_ip_end - bi_ip_start");
 		
 		// fant ingen IP-ban oppføring
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			// sjekk om vi venter en kommende IP-ban
-			$result = $_base->db->query("SELECT bi_time_start FROM ban_ip WHERE $ip BETWEEN bi_ip_start AND bi_ip_end AND $time <= bi_time_start ORDER BY bi_time_start LIMIT 1");
-			if (mysql_num_rows($result) > 0)
+			$result = \Kofradia\DB::get()->query("SELECT bi_time_start FROM ban_ip WHERE $ip BETWEEN bi_ip_start AND bi_ip_end AND $time <= bi_time_start ORDER BY bi_time_start LIMIT 1");
+			if ($result->rowCount() > 0)
 			{
-				$next = mysql_result($result, 0, 0);
+				$next = $result->fetchColumn(0);
 				
 				// marker som ok for tiden før IP-ban starter
 				cache::store("ip_ok_".$_SERVER['REMOTE_ADDR'], true, $next-$time);
@@ -309,7 +309,7 @@ h1 { font-size: 23px; }
 		// sett opp grunner
 		$ban_end = 0;
 		$reasons = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if ($ban_end !== false && empty($row['bi_time_end'])) { $ban_end = false; }
 			elseif ($ban_end !== false && $row['bi_time_end'] > $ban_end) { $ban_end = $row['bi_time_end']; }

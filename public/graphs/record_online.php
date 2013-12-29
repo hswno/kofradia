@@ -5,11 +5,11 @@ ajax::require_user();
 global $_base;
 
 // hent stats
-$result = $_base->db->query("SELECT name, extra, value, time FROM sitestats");
+$result = \Kofradia\DB::get()->query("SELECT name, extra, value, time FROM sitestats");
 $sitestats = array();
 $max = 0;
 
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$sitestats[$row['name']][$row['extra']] = (int) $row['value'];
 	$max = max($max, $row['value']);

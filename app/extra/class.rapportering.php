@@ -38,14 +38,14 @@ class rapportering
 	{
 		// hent brukerid til meldingen
 		$im_id = (int) $im_id;
-		$result = ess::$b->db->query("SELECT im_up_id FROM inbox_messages WHERE im_id = $im_id");
+		$result = \Kofradia\DB::get()->query("SELECT im_up_id FROM inbox_messages WHERE im_id = $im_id");
 		
 		// fant ikke meldingen?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			return false;
 		}
-		$up_id = mysql_result($result, 0);
+		$up_id = $result->fetchColumn(0);
 		
 		// allerede rapportert?
 		if ($dupe = self::check($up_id, self::TYPE_PM, $im_id, login::$user->player->id))
@@ -66,21 +66,23 @@ class rapportering
 	{
 		// hent brukerid til personen som opprettet forumtråden
 		$ft_id = (int) $ft_id;
-		$result = ess::$b->db->query("SELECT ft_up_id, ft_deleted FROM forum_topics WHERE ft_id = $ft_id");
+		$result = \Kofradia\DB::get()->query("SELECT ft_up_id, ft_deleted FROM forum_topics WHERE ft_id = $ft_id");
 		
 		// fant ikke tråden?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			return false;
 		}
 		
+		$row = $result->fetch();
+		
 		// slettet?
-		if (mysql_result($result, 0, 1) != 0)
+		if ($row['ft_deleted'] != 0)
 		{
 			// slettede tråder skal ikke kunne rapporteres
 			return "deleted";
 		}
-		$up_id = mysql_result($result, 0);
+		$up_id = $row['ft_up_id'];
 		
 		// allerede rapportert?
 		if ($dupe = self::check($up_id, self::TYPE_FORUM_TOPIC, $ft_id))
@@ -101,32 +103,34 @@ class rapportering
 	{
 		// hent brukerid til personen som opprettet forumtråden
 		$fr_id = (int) $fr_id;
-		$result = ess::$b->db->query("SELECT fr_up_id, fr_deleted, fr_ft_id FROM forum_replies WHERE fr_id = $fr_id");
+		$result = \Kofradia\DB::get()->query("SELECT fr_up_id, fr_deleted, fr_ft_id FROM forum_replies WHERE fr_id = $fr_id");
 		
 		// fant ikke svaret?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			return false;
 		}
 		
+		$row = $result->fetch();
+		
 		// slettet?
-		if (mysql_result($result, 0, 1) != 0)
+		if ($row['fr_deleted'] != 0)
 		{
 			// slettede svar skal ikke kunne rapporteres
 			return "deleted";
 		}
 		
 		// sjekk om tråden er slettet
-		$result2 = ess::$b->db->query("SELECT ft_deleted FROM forum_topics WHERE ft_id = ".mysql_result($result, 0, 2));
-		if (mysql_num_rows($result2) == 0)
+		$result2 = \Kofradia\DB::get()->query("SELECT ft_deleted FROM forum_topics WHERE ft_id = ".$row['fr_ft_id']);
+		if ($result2->rowCount() == 0)
 		{
 			return false;
 		}
-		if (mysql_result($result2, 0) != 0)
+		if ($result2->fetchColumn(0) != 0)
 		{
 			return "topic_deleted";
 		}
-		$up_id = mysql_result($result, 0);
+		$up_id = $row['fr_up_id'];
 		
 		// allerede rapportert?
 		if ($dupe = self::check($up_id, self::TYPE_FORUM_REPLY, $fr_id))
@@ -147,10 +151,10 @@ class rapportering
 	{
 		// kontroller at spilleren finnes
 		$up_id = intval($up_id);
-		$result = ess::$b->db->query("SELECT up_id FROM users_players WHERE up_id = $up_id");
+		$result = \Kofradia\DB::get()->query("SELECT up_id FROM users_players WHERE up_id = $up_id");
 		
 		// fant ikke spilleren?
-		if (mysql_num_rows($result) == 0) return "player_not_found";
+		if ($result->rowCount() == 0) return "player_not_found";
 		
 		// allerede rapportert?
 		if ($dupe = self::check($up_id, self::TYPE_SIGNATURE, 0, login::$user->player->id))
@@ -171,10 +175,10 @@ class rapportering
 	{
 		// kontroller at spilleren finnes
 		$up_id = intval($up_id);
-		$result = ess::$b->db->query("SELECT up_id FROM users_players WHERE up_id = $up_id");
+		$result = \Kofradia\DB::get()->query("SELECT up_id FROM users_players WHERE up_id = $up_id");
 		
 		// fant ikke spilleren?
-		if (mysql_num_rows($result) == 0) return "player_not_found";
+		if ($result->rowCount() == 0) return "player_not_found";
 		
 		// allerede rapportert?
 		if ($dupe = self::check($up_id, self::TYPE_PROFILE, 0, login::$user->player->id))
@@ -203,9 +207,9 @@ class rapportering
 		}
 		
 		// finnes det en slik rad?
-		$result = ess::$b->db->query("SELECT r_source_up_id, r_time FROM rapportering WHERE r_type = $type AND r_type_id = $type_id AND r_up_id = $up_id AND r_state < 2$more LIMIT 1");
+		$result = \Kofradia\DB::get()->query("SELECT r_source_up_id, r_time FROM rapportering WHERE r_type = $type AND r_type_id = $type_id AND r_up_id = $up_id AND r_state < 2$more LIMIT 1");
 		
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		if ($row) array_unshift($row, "dupe");
 		
 		return $row;
@@ -234,11 +238,11 @@ class rapportering
 		$up_id = intval($up_id);
 		$type = intval($type);
 		$type_id = intval($type_id);
-		$message = ess::$b->db->quote($message);
+		$message = \Kofradia\DB::quote($message);
 		
 		// legg til
-		ess::$b->db->query("INSERT INTO rapportering SET r_source_up_id = $source_up_id, r_up_id = $up_id, r_type = $type, r_type_id = $type_id, r_time = ".time().", r_note = $message");
-		$id = ess::$b->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO rapportering SET r_source_up_id = $source_up_id, r_up_id = $up_id, r_type = $type, r_type_id = $type_id, r_time = ".time().", r_note = $message");
+		$id = \Kofradia\DB::get()->lastInsertId();
 		
 		// melding på IRC
 		putlog("CREWCHAN", "%bNY RAPPORTERING:%b {$__server['path']}/crew/rapportering");
@@ -288,16 +292,16 @@ class rapportering
 		// hent data
 		if (count($pm) > 0)
 		{
-			$result = ess::$b->db->query("SELECT im_id, im_it_id FROM inbox_messages WHERE im_id IN (".implode(",", $pm).")");
-			while ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT im_id, im_it_id FROM inbox_messages WHERE im_id IN (".implode(",", $pm).")");
+			while ($row = $result->fetch())
 			{
 				self::$data_prerequisite['pm'][$row['im_id']] = $row['im_it_id'];
 			}
 		}
 		if (count($fr) > 0)
 		{
-			$result = ess::$b->db->query("SELECT fr_id, fr_ft_id FROM forum_replies WHERE fr_id IN (".implode(",", $fr).")");
-			while ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT fr_id, fr_ft_id FROM forum_replies WHERE fr_id IN (".implode(",", $fr).")");
+			while ($row = $result->fetch())
 			{
 				self::$data_prerequisite['fr'][$row['fr_id']] = $row['fr_ft_id'];
 			}
@@ -305,8 +309,8 @@ class rapportering
 		if (count($up_id) > 0)
 		{
 			$up_id = array_unique($up_id);
-			$result = ess::$b->db->query("SELECT up_id, up_name FROM users_players WHERE up_id IN (".implode(",", $up_id).")");
-			while ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT up_id, up_name FROM users_players WHERE up_id IN (".implode(",", $up_id).")");
+			while ($row = $result->fetch())
 			{
 				self::$data_prerequisite['up_id'][$row['up_id']] = $row['up_name'];
 			}

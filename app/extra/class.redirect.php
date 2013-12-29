@@ -96,8 +96,8 @@ class redirect
 		// oppdater brukerinfo
 		if (login::$logged_in)
 		{
-			$_base->db->query("UPDATE users_players SET up_hits_redirect = up_hits_redirect + 1 WHERE up_id = ".login::$user->player->id);
-			$_base->db->query("UPDATE users_hits SET uhi_hits_redirect = uhi_hits_redirect + 1 WHERE uhi_up_id = ".login::$user->player->id." AND uhi_secs_hour = ".login::$info['secs_hour']);
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_hits_redirect = up_hits_redirect + 1 WHERE up_id = ".login::$user->player->id);
+			\Kofradia\DB::get()->exec("UPDATE users_hits SET uhi_hits_redirect = uhi_hits_redirect + 1 WHERE uhi_up_id = ".login::$user->player->id." AND uhi_secs_hour = ".login::$info['secs_hour']);
 		}
 		
 		// oppdatere daglig stats (gjester)
@@ -106,7 +106,7 @@ class redirect
 			$date = $_base->date->get()->format("Y-m-d");
 			
 			// oppdater
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT INTO stats_daily SET sd_date = '$date', sd_hits_redirect_g = 1
 				ON DUPLICATE KEY UPDATE sd_hits_redirect_g = sd_hits_redirect_g + 1");
 		}

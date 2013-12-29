@@ -445,7 +445,7 @@ td.support_important {
 .su_time { text-align: center; white-space: nowrap; color: #888888; width: 100px }');
 					
 					$i = 0;
-					while ($row = mysql_fetch_assoc($result))
+					while ($row = $result->fetch())
 					{
 						$content = trim(strip_tags(game::bb_to_html($row['sum_text'])));
 						$length = mb_strlen($content);
@@ -529,9 +529,10 @@ td.support_important {
 		
 		// hent kategori info
 		$where = $oppsummering ? '' : " WHERE su_category = {$kategori['id']}";
-		$result = ess::$b->db->query("SELECT COUNT(su_id), COUNT(IF(su_solved=0,1,NULL)) FROM support$where");
-		$kategori['total'] = mysql_result($result, 0, 0);
-		$kategori['new'] = mysql_result($result, 0, 1);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(su_id), COUNT(IF(su_solved=0,1,NULL)) FROM support$where");
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$kategori['total'] = $row[0];
+		$kategori['new'] = $row[1];
 		
 		// vis kategori informasjon
 		echo '
@@ -583,7 +584,7 @@ td.support_important {
 			FROM support
 				JOIN support_messages sum1 ON sum1.sum_su_id = su_id
 				JOIN support_messages sum2 ON sum2.sum_su_id = su_id
-			WHERE 1".(!$oppsummering ? " AND su_category = ".ess::$b->db->quote($kategori['id']) : "")."
+			WHERE 1".(!$oppsummering ? " AND su_category = ".\Kofradia\DB::quote($kategori['id']) : "")."
 			GROUP BY su_id, sum_id
 			HAVING sum2.sum_id = max_sum_id
 			ORDER BY sum_time DESC");
@@ -592,7 +593,7 @@ td.support_important {
 		ess::$b->page->add_css('
 .support_not_solved { color: #FF0000; font-weight: bold }
 .support_sum_r_time, .support_category { font-size: 11px; color: #888 }');
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			echo '
 		<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -638,14 +639,14 @@ td.support_important {
 		if (!access::has("crewet"))
 		{
 			// hvor lenge er det siden forrige henvendelse ble opprettet?
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT su_time FROM support, users_players
 				WHERE up_u_id = ".login::$user->id." AND su_up_id = up_id
 				ORDER BY su_id DESC LIMIT 1");
 			
-			if (mysql_num_rows($result) > 0)
+			if ($result->rowCount() > 0)
 			{
-				$last = mysql_result($result, 0);
+				$last = $result->fetchColumn(0);
 				$wait = max(0, $last + self::$ventetid_new - time());
 				
 				if ($wait > 0)
@@ -689,15 +690,15 @@ td.support_important {
 		}
 		
 		$time = time();
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// legg til henvendelsen
-		ess::$b->db->query("INSERT INTO support SET su_up_id = ".login::$user->player->id.", su_category = $kategori, su_title = ".ess::$b->db->quote($tittel).", su_time = ".$time);
-		$su_id = ess::$b->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO support SET su_up_id = ".login::$user->player->id.", su_category = $kategori, su_title = ".\Kofradia\DB::quote($tittel).", su_time = ".$time);
+		$su_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// legg til innholdet av henvendelsen
-		ess::$b->db->query("INSERT INTO support_messages SET sum_su_id = $su_id, sum_up_id = ".login::$user->player->id.", sum_time = $time, sum_text = ".ess::$b->db->quote($innhold));
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->exec("INSERT INTO support_messages SET sum_su_id = $su_id, sum_up_id = ".login::$user->player->id.", sum_time = $time, sum_text = ".\Kofradia\DB::quote($innhold));
+		\Kofradia\DB::get()->commit();
 		
 		// sett cache
 		self::update_tasks();
@@ -767,12 +768,12 @@ td.support_important {
 		if (!access::has("crewet")) return;
 		
 		// finn ut hvor mange ubehandlede det er
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT su_category, COUNT(su_id) AS total, COUNT(IF(su_solved=0, 1, NULL)) AS new
 			FROM support GROUP BY su_category");
 		
 		$kategorier = self::$kategorier;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$kategorier[$row['su_category']]['total'] = $row['total'];
 			$kategorier[$row['su_category']]['new'] = $row['new'];
@@ -855,7 +856,7 @@ td.support_important {
 			<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -885,15 +886,15 @@ td.support_important {
 	protected static function show_stats()
 	{
 		// hent litt statistikk
-		$result = ess::$b->db->query("SELECT COUNT(su_id) FROM support");
-		$totalt = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(su_id) FROM support");
+		$totalt = $result->fetchColumn(0);
 		
 		// hent spillere med status..
-		$result = ess::$b->db->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users_players WHERE up_access_level > 1 ORDER BY up_name");
+		$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users_players WHERE up_access_level > 1 ORDER BY up_name");
 		
 		$players = array();
 		$last_online = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if ($row['up_access_level'] == 4)
 				$level = 3;
@@ -908,7 +909,7 @@ td.support_important {
 		}
 		
 		// hent antall besvarelser per bruker
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT sum_up_id, COUNT(sum_id) num_sum, MAX(sum_time) max_sum_time, m.up_last_online, m.up_access_level
 			FROM support
 				JOIN support_messages ON sum_su_id = su_id
@@ -916,7 +917,7 @@ td.support_important {
 				JOIN users_players m ON m.up_id = sum_up_id AND m.up_u_id != s.up_u_id
 			GROUP BY sum_up_id");
 		$reply_users = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if ($row['max_sum_time'] < time() - 2592000 && ($row['up_access_level'] == 0 || $row['up_access_level'] == 1))
 				continue;
@@ -977,7 +978,7 @@ td.support_important {
 		// statistikk for de siste 30 ukene
 		$uker = 30;
 		$limit = 7 * $uker;
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT num_su, num_sum, date_sum
 			FROM
 				(SELECT COUNT(sum_id) num_sum, DATE(FROM_UNIXTIME(sum_time)) date_sum
@@ -1005,7 +1006,7 @@ td.support_important {
 			$d->modify("-1 week");
 		}
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$w = ess::$b->date->parse($row['date_sum'])->format("o-W");
 			if (!isset($data['labels'][$w])) continue;
@@ -1089,7 +1090,7 @@ function open_flash_chart_data()
 	/** Oppdater cache */
 	public static function update_tasks()
 	{
-		tasks::set("support", mysql_result(ess::$b->db->query("SELECT COUNT(su_id) FROM support WHERE su_solved = 0"), 0));
+		tasks::set("support", \Kofradia\DB::get()->query("SELECT COUNT(su_id) FROM support WHERE su_solved = 0")->fetchColumn(0));
 	}
 }
 
@@ -1117,7 +1118,7 @@ class support_henvendelse
 		$su_id = (int) $su_id;
 		
 		// hent informasjon
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				su_id, su_up_id, org.up_u_id, su_category, su_title, su_time, su_solved, su_views_solved, su_views_nosolved, su_views_crew_solved, su_views_crew_nosolved, su_params,
 				new.up_id AS new_up_id
@@ -1127,7 +1128,7 @@ class support_henvendelse
 				JOIN users_players new ON new.up_id = u_active_up_id
 			WHERE su_id = $su_id");
 		
-		$this->data = mysql_fetch_assoc($result);
+		$this->data = $result->fetch();
 		if (!$this->data) return;
 		
 		$this->own = login::$logged_in && $this->data['up_u_id'] == login::$user->id;
@@ -1185,7 +1186,7 @@ class support_henvendelse
 		if (!$this->solved)
 		{
 			// oppdater status
-			ess::$b->db->query("UPDATE support SET su_solved = 1 WHERE su_id = {$this->data['su_id']}");
+			\Kofradia\DB::get()->exec("UPDATE support SET su_solved = 1 WHERE su_id = {$this->data['su_id']}");
 			
 			// send varsel
 			if (!$this->own)
@@ -1228,14 +1229,14 @@ class support_henvendelse
 		if (!access::has("crewet"))
 		{
 			// hvor lenge er det siden forrige melding ble lagt til?
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT sum_time FROM support_messages, users_players
 				WHERE up_u_id = ".login::$user->id." AND sum_up_id = up_id
 				ORDER BY sum_id DESC LIMIT 1");
 			
-			if (mysql_num_rows($result) > 0)
+			if ($result->rowCount() > 0)
 			{
-				$last = mysql_result($result, 0);
+				$last = $result->fetchColumn(0);
 				$wait = max(0, $last + support::$ventetid_reply - time());
 				
 				if ($wait > 0)
@@ -1247,8 +1248,8 @@ class support_henvendelse
 		}
 		
 		// sjekk om det har blitt lagt til noen nye meldinger siden vi viste siden
-		$result = ess::$b->db->query("SELECT sum_id FROM support_messages WHERE sum_su_id = {$this->data['su_id']} ORDER BY sum_time DESC LIMIT 1");
-		$last_sum = mysql_num_rows($result) > 0 ? mysql_result($result, 0) : 0;
+		$result = \Kofradia\DB::get()->query("SELECT sum_id FROM support_messages WHERE sum_su_id = {$this->data['su_id']} ORDER BY sum_time DESC LIMIT 1");
+		$last_sum = $result->rowCount() > 0 ? $result->fetchColumn(0) : 0;
 		if (!isset($_POST['last_sum']) || $_POST['last_sum'] != $last_sum)
 		{
 			ess::$b->page->add_message("Nytt svar har blitt lagt til siden du viste siden sist. Trykk legg til melding på nytt for å fortsette.", "error");
@@ -1256,14 +1257,14 @@ class support_henvendelse
 		}
 		
 		// legg til meldingen
-		ess::$b->db->query("INSERT INTO support_messages SET sum_su_id = {$this->data['su_id']}, sum_up_id = ".login::$user->player->id.", sum_time = ".time().", sum_text = ".ess::$b->db->quote($text));
+		\Kofradia\DB::get()->exec("INSERT INTO support_messages SET sum_su_id = {$this->data['su_id']}, sum_up_id = ".login::$user->player->id.", sum_time = ".time().", sum_text = ".\Kofradia\DB::quote($text));
 		
 		// endre status?
 		if ($this->own) $su_solved = 0;
 		elseif (isset($_POST['solve'])) $su_solved = 1;
 		else $su_solved = 0;
 		
-		ess::$b->db->query("UPDATE support SET su_solved = $su_solved WHERE su_id = {$this->data['su_id']}");
+		\Kofradia\DB::get()->exec("UPDATE support SET su_solved = $su_solved WHERE su_id = {$this->data['su_id']}");
 		
 		// sende logg til spilleren som henvendelsen tilhører?
 		if (!$this->own)
@@ -1353,7 +1354,7 @@ class support_henvendelse
 		}
 		
 		ess::$b->page->add_css('.profile_link_imgfix img { vertical-align: top; margin-top: -2px }');
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			echo '
 <div class="bg1_c" style="width: 500px">
@@ -1391,7 +1392,7 @@ class support_henvendelse
 				: 'su_views_crew_nosolved');
 		
 		// oppdater telleren
-		ess::$b->db->query("UPDATE support SET $f = $f + 1 WHERE su_id = {$this->data['su_id']}");
+		\Kofradia\DB::get()->exec("UPDATE support SET $f = $f + 1 WHERE su_id = {$this->data['su_id']}");
 	}
 	
 	/** Vise skjema for å legge til ny melding */
@@ -1406,8 +1407,8 @@ class support_henvendelse
 		}
 		
 		// finn ID til siste melding
-		$result = ess::$b->db->query("SELECT sum_id FROM support_messages WHERE sum_su_id = {$this->data['su_id']} ORDER BY sum_time DESC LIMIT 1");
-		$last_sum = mysql_num_rows($result) > 0 ? mysql_result($result, 0) : 0;
+		$result = \Kofradia\DB::get()->query("SELECT sum_id FROM support_messages WHERE sum_su_id = {$this->data['su_id']} ORDER BY sum_time DESC LIMIT 1");
+		$last_sum = $result->rowCount() > 0 ? $result->fetchColumn(0) : 0;
 		
 		// vis skjema for å legge til ny melding
 		ess::$b->page->add_css('

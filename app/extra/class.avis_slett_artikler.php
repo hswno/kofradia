@@ -21,14 +21,14 @@ class avis_slett_artikler
 	public function __construct()
 	{
 		// hent alle artikkelene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffna_id, ffna_ffn_id, ffna_created_time, ffna_updated_time, ffna_title, ffna_text, ffna_published, ffna_published_time, ffna_price, ff_id, ff_name, up_name, u_email, up_access_level
 			FROM ff_newspapers_articles
 				LEFT JOIN ff_members ON ffm_ff_id = ffna_ff_id AND ffm_up_id = ffna_up_id AND ffm_status != 2, users, users_players, ff
 			WHERE ffna_ffn_id = 0 AND ffm_up_id IS NULL AND ff_id = ffna_ff_id AND up_id = ffna_up_id AND u_id = up_u_id");
 		
 		// ingen artikler?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			$this->deleted = 0;
 			return;
@@ -38,16 +38,16 @@ class avis_slett_artikler
 		$this->headers['Bcc'] = "henrist@henrist.net";
 		
 		// send hver artikkel på e-post og slett artikkelen
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// send e-post
 			$this->send_email($row);
 			
 			// slett artikkelen
-			ess::$b->db->query("DELETE FROM ff_newspapers_articles WHERE ffna_id = {$row['ffna_id']}");
+			\Kofradia\DB::get()->exec("DELETE FROM ff_newspapers_articles WHERE ffna_id = {$row['ffna_id']}");
 		}
 		
-		$this->deleted = mysql_num_rows($result);
+		$this->deleted = $result->rowCount();
 	}
 	
 	/** Send en bestemt artikkel på e-post */

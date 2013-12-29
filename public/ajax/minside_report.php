@@ -54,7 +54,7 @@ if ($pagei->total == 0)
 }
 
 $raps = array();
-while ($row = mysql_fetch_assoc($result)) $raps[] = $row;
+while ($row = $result->fetch()) $raps[] = $row;
 rapportering::generate_prerequisite($raps);
 
 $data .= '

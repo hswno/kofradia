@@ -131,16 +131,16 @@ class blokkeringer
 		
 		// hent blokkeringen hvis den finnes
 		$type = intval($type);
-		$result = ess::$b->db->query("SELECT ub_id, ub_time_expire, ub_reason FROM users_ban WHERE ub_u_id = $u_id AND ub_type = $type AND ub_time_expire > ".time());
+		$result = \Kofradia\DB::get()->query("SELECT ub_id, ub_time_expire, ub_reason FROM users_ban WHERE ub_u_id = $u_id AND ub_type = $type AND ub_time_expire > ".time());
 		
 		// fant ingen rader?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			return false;
 		}
 		
 		// returner første raden
-		return mysql_fetch_assoc($result);
+		return $result->fetch();
 	}
 	
 	/**
@@ -151,10 +151,10 @@ class blokkeringer
 		$ub_id = (int) $ub_id;
 		
 		// hent informasjon
-		$result = ess::$b->db->query("SELECT ub_id, ub_u_id, ub_type, ub_time_added, ub_time_expire, ub_reason, ub_note FROM users_ban WHERE ub_id = $ub_id");
+		$result = \Kofradia\DB::get()->query("SELECT ub_id, ub_u_id, ub_type, ub_time_added, ub_time_expire, ub_reason, ub_note FROM users_ban WHERE ub_id = $ub_id");
 		
 		// send tilbake resultatet
-		return mysql_fetch_assoc($result);
+		return $result->fetch();
 	}
 	
 	/**
@@ -190,13 +190,13 @@ class blokkeringer
 		}
 		
 		// legg til blokkeringen
-		ess::$b->db->query("INSERT INTO users_ban SET ub_u_id = $u_id, ub_type = $type, ub_time_added = ".time().", ub_time_expire = $expire, ub_reason = ".ess::$b->db->quote($log).", ub_note = ".ess::$b->db->quote($note));
+		\Kofradia\DB::get()->exec("INSERT INTO users_ban SET ub_u_id = $u_id, ub_type = $type, ub_time_added = ".time().", ub_time_expire = $expire, ub_reason = ".\Kofradia\DB::quote($log).", ub_note = ".\Kofradia\DB::quote($note));
 		
 		global $_game;
 		
 		// finn korrekt spiller
-		$result = ess::$b->db->query("SELECT up_id FROM users JOIN users_players ON u_active_up_id = up_id WHERE u_id = $u_id");
-		$up_id = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT up_id FROM users JOIN users_players ON u_active_up_id = up_id WHERE u_id = $u_id");
+		$up_id = $result->fetchColumn(0);
 		
 		// legg til logg hos spilleren
 		player::add_log_static("blokkering", "1:$expire:".urlencode($log), $type, $up_id);
@@ -226,8 +226,7 @@ class blokkeringer
 		$res = self::get_info($ub_id);
 		
 		// forsøk å oppdater blokkeringen
-		ess::$b->db->query("UPDATE users_ban SET ub_time_expire = $expire, ub_reason = ".ess::$b->db->quote($log).", ub_note = ".ess::$b->db->quote($note)." WHERE ub_id = $ub_id AND ub_time_expire > ".time());
-		$aff = ess::$b->db->affected_rows();
+		$aff = \Kofradia\DB::get()->exec("UPDATE users_ban SET ub_time_expire = $expire, ub_reason = ".\Kofradia\DB::quote($log).", ub_note = ".\Kofradia\DB::quote($note)." WHERE ub_id = $ub_id AND ub_time_expire > ".time());
 		
 		// legg til logg hos spilleren
 		if ($res && $aff > 0)
@@ -239,8 +238,8 @@ class blokkeringer
 				global $_game;
 				
 				// finn korrekt spiller
-				$result = ess::$b->db->query("SELECT up_id FROM users JOIN users_players ON u_active_up_id = up_id WHERE u_id = {$res['ub_u_id']}");
-				$up_id = mysql_result($result, 0);
+				$result = \Kofradia\DB::get()->query("SELECT up_id FROM users JOIN users_players ON u_active_up_id = up_id WHERE u_id = {$res['ub_u_id']}");
+				$up_id = $result->fetchColumn(0);
 				
 				player::add_log_static("blokkering", "2:$expire:".urlencode($log), $res['ub_type'], $up_id);
 			}
@@ -260,16 +259,15 @@ class blokkeringer
 		$res = self::get_info($ub_id);
 		
 		// forsøk å sett tidspunktet til nå
-		ess::$b->db->query("UPDATE users_ban SET ub_time_expire = ".time()." WHERE ub_id = $ub_id AND ub_time_expire > ".time());
-		$aff = ess::$b->db->affected_rows();
+		$aff = \Kofradia\DB::get()->exec("UPDATE users_ban SET ub_time_expire = ".time()." WHERE ub_id = $ub_id AND ub_time_expire > ".time());
 		
 		if ($res && $aff > 0)
 		{
 			global $_game;
 			
 			// finn korrekt spiller
-			$result = ess::$b->db->query("SELECT up_id FROM users JOIN users_players ON u_active_up_id = up_id WHERE u_id = {$res['ub_u_id']}");
-			$up_id = mysql_result($result, 0);
+			$result = \Kofradia\DB::get()->query("SELECT up_id FROM users JOIN users_players ON u_active_up_id = up_id WHERE u_id = {$res['ub_u_id']}");
+			$up_id = $result->fetchColumn(0);
 			
 			player::add_log_static("blokkering", "3", $res['ub_type'], $up_id);
 		}

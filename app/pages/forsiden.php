@@ -123,7 +123,7 @@ class page_forsiden extends pages_player
 	protected function show_aviser()
 	{
 		// hent siste avisutgivelsene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				ff_id, ff_name,
 				ffn_id, ffn_published_time, ffn_title
@@ -134,7 +134,7 @@ class page_forsiden extends pages_player
 			LIMIT 8");
 		
 		// ingen utgivelser?
-		if (mysql_num_rows($result) == 0) return;
+		if ($result->rowCount() == 0) return;
 		
 		ess::$b->page->add_css('
 .aviser p {
@@ -157,7 +157,7 @@ class page_forsiden extends pages_player
 	<p>Siste utgitte aviser</p>
 	<ul>';
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$date = ess::$b->date->get($row['ffn_published_time']);
 			
@@ -178,7 +178,7 @@ class page_forsiden extends pages_player
 	protected function show_aviser2()
 	{
 		// hent siste avisutgivelsene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				ff_id, ff_name,
 				ffn_id, ffn_published_time, ffn_title
@@ -189,7 +189,7 @@ class page_forsiden extends pages_player
 			LIMIT 8");
 		
 		// ingen utgivelser?
-		if (mysql_num_rows($result) == 0) return;
+		if ($result->rowCount() == 0) return;
 		
 		ess::$b->page->add_css('
 .aviser p {
@@ -213,7 +213,7 @@ class page_forsiden extends pages_player
 	<p>Siste utgitte aviser</p>
 	<ul>';
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$date = ess::$b->date->get($row['ffn_published_time']);
 			
@@ -319,26 +319,26 @@ class page_forsiden extends pages_player
 		$expire = time() - 86400;
 		
 		// hent en tilfeldig spiller
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id
 			FROM users_players
 			WHERE up_access_level != 0 AND up_access_level < ".ess::$g['access_noplay']." AND up_last_online > $expire AND up_id != ".$this->up->id."
 			ORDER BY RAND()
 			LIMIT 1");
 		
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		if (!$row) return;
 		
 		$up = player::get($row['up_id']);
 		
 		// hent FF
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffm_priority, ff_id, ff_name, ff_type
 			FROM ff_members JOIN ff ON ffm_ff_id = ff_id
 			WHERE ffm_up_id = $up->id AND ffm_status = 1 AND ff_inactive = 0 AND ff_is_crew = 0
 			ORDER BY ff_name");
 		$ff = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$type = ff::$types[$row['ff_type']];
 			$row['posisjon'] = ucfirst($type['priority'][$row['ffm_priority']]);
@@ -385,7 +385,7 @@ class page_forsiden extends pages_player
 		$date_to = $d->format("U");
 		
 		// hent statistikk
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, sum_uhi_points, up_points, up_last_online, up_profile_image_url, upr_rank_pos
 			FROM
 				(
@@ -402,18 +402,18 @@ class page_forsiden extends pages_player
 				LEFT JOIN users_players_rank ON upr_up_id = up_id
 			WHERE uhi_up_id = up_id");
 		
-		if (mysql_num_rows($result) == 0) return;
+		if ($result->rowCount() == 0) return;
 		
 		$players = array();
 		$up_list = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$players[] = $row;
 			$up_list[] = $row['up_id'];
 		}
 		
 		// hent familier hvor spilleren er medlem
-		$result_ff = ess::$b->db->query("
+		$result_ff = \Kofradia\DB::get()->query("
 			SELECT ffm_up_id, ffm_priority, ff_id, ff_type, ff_name
 			FROM
 				ff_members
@@ -421,7 +421,7 @@ class page_forsiden extends pages_player
 			WHERE ffm_up_id IN (".implode(",", $up_list).") AND ffm_status = ".ff_member::STATUS_MEMBER."
 			ORDER BY ff_name");
 		$familier = array();
-		while ($row = mysql_fetch_assoc($result_ff))
+		while ($row = $result_ff->fetch())
 		{
 			$pos = ff::$types[$row['ff_type']]['priority'][$row['ffm_priority']];
 			$text = '<a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$row['ff_id'].'" title="'.htmlspecialchars($pos).'">'.htmlspecialchars($row['ff_name']).'</a>';
@@ -465,7 +465,7 @@ class page_forsiden extends pages_player
 	{
 		// hent aktive auksjonene og høyeste bud
 		$time = time();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				a_id, a_type, a_title, a_up_id, a_end, a_bid_start, a_num_bids,
 				ab_bid, ab_up_id, ab_time
@@ -482,13 +482,13 @@ class page_forsiden extends pages_player
 			LIMIT 5");
 		
 		// ingen aktive auksjoner?
-		if (mysql_num_rows($result) == 0) return;
+		if ($result->rowCount() == 0) return;
 		
 		$data = '
 	<p>Aktive auksjoner</p>
 	<dl class="dd_right">';
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$type = auksjon_type::get($row['a_type']);
 			
@@ -550,9 +550,9 @@ class page_forsiden extends pages_player
 				$deact_self = login::$user->player->data['up_deactivated_up_id'] == login::$user->player->id;
 				if (!$deact_self)
 				{
-					$result = ess::$b->db->query("SELECT u_id FROM users JOIN users_players ON u_id = up_u_id WHERE up_id = ".login::$user->player->data['up_deactivated_up_id']);
-					$row = mysql_fetch_assoc($result);
-					mysql_free_result($result);
+					$result = \Kofradia\DB::get()->query("SELECT u_id FROM users JOIN users_players ON u_id = up_u_id WHERE up_id = ".login::$user->player->data['up_deactivated_up_id']);
+					$row = $result->fetch();
+					unset($result);
 					if ($row && $row['u_id'] == login::$user->id) $deact_self = true;
 				}
 			}

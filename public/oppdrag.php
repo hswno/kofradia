@@ -5,9 +5,9 @@ global $_base;
 
 /*if (isset($_GET['fiks']))
 {
-	#$_base->db->query("UPDATE kriminalitet SET max_strength = RAND()*10 + 1, wait_time = RAND()*5 + 1");
-	$_base->db->query("UPDATE users_oppdrag SET uo_last_time = 0, uo_locked = 0 WHERE uo_o_id AND uo_up_id = ".login::$user->player->id);
-	$_base->db->query("UPDATE users_players SET up_fengsel_time = UNIX_TIMESTAMP() WHERE up_id = ".login::$user->player->id);
+	#\Kofradia\DB::get()->exec("UPDATE kriminalitet SET max_strength = RAND()*10 + 1, wait_time = RAND()*5 + 1");
+	\Kofradia\DB::get()->exec("UPDATE users_oppdrag SET uo_last_time = 0, uo_locked = 0 WHERE uo_o_id AND uo_up_id = ".login::$user->player->id);
+	\Kofradia\DB::get()->exec("UPDATE users_players SET up_fengsel_time = UNIX_TIMESTAMP() WHERE up_id = ".login::$user->player->id);
 	
 	$_base->page->add_message("Hvis du var i fengsel, er du nå ute. Du kan begynne på alle oppdrag du har på listen nedenfor. (Ventetid osv nullstilt.)");
 	redirect::handle();
@@ -23,7 +23,7 @@ login::$user->player->bomberom_require_no();
 // fjerne alle mine oppdrag
 /*if (isset($_POST['delete_oppdrag']))
 {
-	$_base->db->query("DELETE FROM users_oppdrag WHERE uo_up_id = ".login::$user->player->id);
+	\Kofradia\DB::get()->exec("DELETE FROM users_oppdrag WHERE uo_up_id = ".login::$user->player->id);
 	redirect::handle();
 }*/
 

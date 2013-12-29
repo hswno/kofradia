@@ -90,10 +90,10 @@ abstract class Event {
 			}
 		}
 
-		\ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			INSERT INTO github_log
-			SET gl_time = ".$this->event_time->getTimestamp().", gl_event_type = ".\ess::$b->db->quote($this->event_name).",
-			    gl_contents = ".\ess::$b->db->quote(serialize($this)).", gl_log_count = ".$this->getLogCount());
+			SET gl_time = ".$this->event_time->getTimestamp().", gl_event_type = ".\Kofradia\DB::quote($this->event_name).",
+			    gl_contents = ".\Kofradia\DB::quote(serialize($this)).", gl_log_count = ".$this->getLogCount());
 	}
 
 	/**

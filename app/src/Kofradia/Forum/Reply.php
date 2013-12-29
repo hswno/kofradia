@@ -27,13 +27,13 @@ class Reply
 		$this->id = (int) $reply_id;
 		
 		// hent informasjon om forumsvaret
-		$result = \ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT fr_id, fr_ft_id, fr_deleted, fr_up_id, fr_text, fr_last_edit, fr_last_edit_up_id
 			FROM forum_replies
 			WHERE fr_id = $this->id");
 		
 		// fant ikke forumsvaret?
-		$this->info = mysql_fetch_assoc($result);
+		$this->info = $result->fetch();
 		if (!$this->info)
 		{
 			return;
@@ -50,7 +50,7 @@ class Reply
 	 */
 	public function extended_info()
 	{
-		$result = \ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				r.fr_id, r.fr_time, r.fr_up_id, r.fr_text, r.fr_last_edit, r.fr_last_edit_up_id, r.fr_deleted,
 				up_name, up_access_level, up_forum_signature, up_points, up_profile_image_url,
@@ -67,7 +67,7 @@ class Reply
 			GROUP BY r.fr_id
 			ORDER BY r.fr_time ASC");
 		
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		$row['ft_fse_id'] = $this->topic->forum->id;
 		$row['ft_id'] = $this->topic->id;
 		$row['fs_new'] = $this->topic->info['fs_time'] < $row['fr_time'] && \Kofradia\Forum\Category::$fs_check;
@@ -192,36 +192,36 @@ class Reply
 	protected function delete_action()
 	{
 		// forsøk å slett forumsvaret
-		\ess::$b->db->query("UPDATE forum_replies SET fr_deleted = 1 WHERE fr_id = $this->id AND fr_deleted = 0");
-		if (\ess::$b->db->affected_rows() == 0) return false;
+		$a = \Kofradia\DB::get()->exec("UPDATE forum_replies SET fr_deleted = 1 WHERE fr_id = $this->id AND fr_deleted = 0");
+		if ($a == 0) return false;
 		
 		// var dette siste forumsvar i forumtråden?
 		if ($this->id == $this->topic->info['ft_last_reply'])
 		{
 			// hent siste forumsvaret i forumtråden
-			$result = \ess::$b->db->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_deleted = 0 ORDER BY fr_id DESC LIMIT 1");
-			$reply_id = mysql_num_rows($result) > 0 ? mysql_result($result, 0) : 0;
+			$result = \Kofradia\DB::get()->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_deleted = 0 ORDER BY fr_id DESC LIMIT 1");
+			$reply_id = $result->rowCount() > 0 ? $result->fetchColumn(0) : 0;
 			if (!$reply_id) $reply_id = "NULL";
 			
 			// sett som siste forumsvar
-			\ess::$b->db->query("UPDATE forum_topics SET ft_last_reply = $reply_id, ft_replies = ft_replies - 1 WHERE ft_id = {$this->topic->id}");
+			\Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_last_reply = $reply_id, ft_replies = ft_replies - 1 WHERE ft_id = {$this->topic->id}");
 		}
 		
 		// senk telleren over antall forumsvar
 		else
 		{
-			\ess::$b->db->query("UPDATE forum_topics SET ft_replies = ft_replies - 1 WHERE ft_id = {$this->topic->id}");
+			\Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_replies = ft_replies - 1 WHERE ft_id = {$this->topic->id}");
 		}
 		
 		// senk telleren til spilleren over antall forumsvar
 		if ($this->topic->forum->ff)
 		{
-			\ess::$b->db->query("UPDATE ff_members SET ffm_forum_replies = ffm_forum_replies - 1 WHERE ffm_up_id = {$this->info['fr_up_id']} AND ffm_ff_id = {$this->topic->forum->ff->id}");
-			\ess::$b->db->query("UPDATE users_players SET up_forum_ff_num_replies = up_forum_ff_num_replies - 1 WHERE up_id = {$this->info['fr_up_id']}");
+			\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_forum_replies = ffm_forum_replies - 1 WHERE ffm_up_id = {$this->info['fr_up_id']} AND ffm_ff_id = {$this->topic->forum->ff->id}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_forum_ff_num_replies = up_forum_ff_num_replies - 1 WHERE up_id = {$this->info['fr_up_id']}");
 		}
 		else
 		{
-			\ess::$b->db->query("UPDATE users_players SET up_forum_num_replies = up_forum_num_replies - 1 WHERE up_id = {$this->info['fr_up_id']}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_forum_num_replies = up_forum_num_replies - 1 WHERE up_id = {$this->info['fr_up_id']}");
 		}
 		
 		return true;
@@ -239,20 +239,20 @@ class Reply
 		\ess::$b->page->add_message("Forumsvaret ble slettet. Antall forumsvar brukeren har hatt ble redusert med 1.");
 		
 		// hent neste forumsvar
-		$result = \ess::$b->db->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id > $this->id AND fr_deleted = 0 ORDER BY fr_id LIMIT 1");
+		$result = \Kofradia\DB::get()->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id > $this->id AND fr_deleted = 0 ORDER BY fr_id LIMIT 1");
 		
 		// eller hente forrige forumsvar
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
-			$result = \ess::$b->db->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < $this->id AND fr_deleted = 0 ORDER BY fr_id DESC LIMIT 1");
+			$result = \Kofradia\DB::get()->query("SELECT fr_id FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < $this->id AND fr_deleted = 0 ORDER BY fr_id DESC LIMIT 1");
 		}
 		
 		// har vi noe neste forumsvar?
-		if ($row = mysql_fetch_assoc($result))
+		if ($row = $result->fetch())
 		{
 			// hent antall forumsvar før dette forumsvaret
-			$result = \ess::$b->db->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < {$row['fr_id']} AND fr_deleted = 0");
-			$skip = mysql_result($result, 0);
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(fr_id) FROM forum_replies WHERE fr_ft_id = {$this->topic->id} AND fr_id < {$row['fr_id']} AND fr_deleted = 0");
+			$skip = $result->fetchColumn(0);
 			
 			// send til riktig forumsvar
 			$page = ceil($skip / $this->topic->replies_per_page);
@@ -300,31 +300,31 @@ class Reply
 	protected function restore_action()
 	{
 		// forsøk å gjenopprett forumsvaret
-		\ess::$b->db->query("UPDATE forum_replies SET fr_deleted = 0 WHERE fr_id = $this->id AND fr_deleted != 0");
-		if (\ess::$b->db->affected_rows() == 0) return false;
+		$a = \Kofradia\DB::get()->exec("UPDATE forum_replies SET fr_deleted = 0 WHERE fr_id = $this->id AND fr_deleted != 0");
+		if ($a == 0) return false;
 		
 		// er dette det siste forumsvaret i forumtråden?
 		if ($this->id > $this->topic->info['ft_last_reply'])
 		{
 			// sett som siste forumsvar
-			\ess::$b->db->query("UPDATE forum_topics SET ft_last_reply = $this->id, ft_replies = ft_replies + 1 WHERE ft_id = {$this->topic->id}");
+			\Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_last_reply = $this->id, ft_replies = ft_replies + 1 WHERE ft_id = {$this->topic->id}");
 		}
 		
 		// øk telleren over antall forumsvar
 		else
 		{
-			\ess::$b->db->query("UPDATE forum_topics SET ft_replies = ft_replies + 1 WHERE ft_id = {$this->topic->id}");
+			\Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_replies = ft_replies + 1 WHERE ft_id = {$this->topic->id}");
 		}
 		
 		// øk telleren til brukeren over antall forumsvar
 		if ($this->topic->forum->ff)
 		{
-			\ess::$b->db->query("UPDATE ff_members SET ffm_forum_replies = ffm_forum_replies + 1 WHERE ffm_up_id = {$this->info['fr_up_id']} AND ffm_ff_id = {$this->topic->forum->ff->id}");
-			\ess::$b->db->query("UPDATE users_players SET up_forum_ff_num_replies = up_forum_ff_num_replies + 1 WHERE up_id = {$this->info['fr_up_id']}");
+			\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_forum_replies = ffm_forum_replies + 1 WHERE ffm_up_id = {$this->info['fr_up_id']} AND ffm_ff_id = {$this->topic->forum->ff->id}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_forum_ff_num_replies = up_forum_ff_num_replies + 1 WHERE up_id = {$this->info['fr_up_id']}");
 		}
 		else
 		{
-			\ess::$b->db->query("UPDATE users_players SET up_forum_num_replies = up_forum_num_replies + 1 WHERE up_id = {$this->info['fr_up_id']}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_forum_num_replies = up_forum_num_replies + 1 WHERE up_id = {$this->info['fr_up_id']}");
 		}
 		
 		return true;
@@ -385,10 +385,10 @@ class Reply
 		}
 		
 		// rediger forumsvaret
-		\ess::$b->db->query("UPDATE forum_replies SET fr_text = ".\ess::$b->db->quote($text).", fr_last_edit = ".time().", fr_last_edit_up_id = ".\login::$user->player->id." WHERE fr_id = $this->id");
+		$a = \Kofradia\DB::get()->exec("UPDATE forum_replies SET fr_text = ".\Kofradia\DB::quote($text).", fr_last_edit = ".time().", fr_last_edit_up_id = ".\login::$user->player->id." WHERE fr_id = $this->id");
 		
 		// ble ikke oppdatert?
-		if (\ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			// mest sannsynlig finnes ikke forumsvaret, eller så er det oppdatert to ganger samme sekund med samme innhold av samme bruker
 			$this->edit_error_failed();
@@ -457,8 +457,8 @@ class Reply
 		}
 		else
 		{
-			$result = \ess::$b->db->query("SELECT up_name FROM users_players WHERE up_id = {$this->info['fr_up_id']}");
-			$row = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT up_name FROM users_players WHERE up_id = {$this->info['fr_up_id']}");
+			$row = $result->fetch();
 			if (!$row)
 			{
 				$name = "Ukjent";
@@ -482,10 +482,10 @@ class Reply
 			// legg til hendelse i spilleloggen
 			$type = $this->topic->forum->id == 5 ? 'crewforum_svar' : ($this->topic->forum->id == 6 ? 'crewforuma_svar' : 'crewforumi_svar');
 			$access_levels = implode(",", \ess::$g['access']['crewet']);
-			\ess::$b->db->query("INSERT INTO users_log SET time = ".time().", ul_up_id = 0, type = ".intval(\gamelog::$items[$type]).", note = ".\ess::$b->db->quote($this->info['fr_up_id']."#".$this->id.":".$this->topic->info['ft_title']).", num = {$this->topic->id}");
+			\Kofradia\DB::get()->exec("INSERT INTO users_log SET time = ".time().", ul_up_id = 0, type = ".intval(\gamelog::$items[$type]).", note = ".\Kofradia\DB::quote($this->info['fr_up_id']."#".$this->id.":".$this->topic->info['ft_title']).", num = {$this->topic->id}");
 			
 			$upd = \login::$logged_in ? " AND (u_id != ".\login::$user->id." OR u_log_crew_new > 0)" : "";
-			\ess::$b->db->query("UPDATE users SET u_log_crew_new = u_log_crew_new + 1 WHERE u_access_level IN ($access_levels)$upd");
+			\Kofradia\DB::get()->exec("UPDATE users SET u_log_crew_new = u_log_crew_new + 1 WHERE u_access_level IN ($access_levels)$upd");
 		}
 	}
 }

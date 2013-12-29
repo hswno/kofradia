@@ -86,12 +86,12 @@ class page_forum
 		
 		// finn ut hvor mange topics det er
 		$expire_deleted = $show_deleted ? (!$this->forum->ff || access::has("mod") ? "" : " AND (ft_deleted = 0 OR ft_deleted > $access_expire)") : " AND ft_deleted = 0";
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(IF(ft_type = 1, 1, NULL)) AS normal, COUNT(IF(ft_type = 2, 1, NULL)) AS sticky, COUNT(IF(ft_type = 3, 1, NULL)) AS important
 			FROM forum_topics
 			WHERE ft_fse_id = {$this->forum->id}$expire_deleted");
-		$count = mysql_fetch_assoc($result);
-		mysql_free_result($result);
+		$count = $result->fetch();
+		unset($result);
 		
 		
 		// alle important og sticky topics skal vises på første siden
@@ -111,7 +111,7 @@ class page_forum
 		if (isset($_GET['fs_force']) && login::$logged_in && \Kofradia\Forum\Category::$fs_check)
 		{
 			// legg til og oppdater innleggene på denne siden
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT INTO forum_seen (fs_ft_id, fs_u_id, fs_time)
 				
 				SELECT ft_id, ".login::$user->id.", IFNULL(fr_time, ft_time)
@@ -157,7 +157,7 @@ class page_forum
 				$result = $this->get_topics(false, $show_deleted);
 				
 				// vis hver topic
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					// sjekke status?
 					$fs_info = '';
@@ -192,7 +192,7 @@ class page_forum
 			$result = $this->get_topics(true, $show_deleted, $pagei->start, $pagei->per_page);
 			
 			// vis hver topic
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				// sjekke status?
 				$fs_info = '';
@@ -299,10 +299,10 @@ class page_forum
 			}
 			
 			// hent forumtrådene
-			$result = ess::$b->db->query("SELECT ft_id, ft_title, ft_up_id FROM forum_topics WHERE ft_deleted = 0 AND ft_fse_id = {$this->forum->id} AND ft_id IN (".implode(",", $idlist).") FOR UPDATE");
+			$result = \Kofradia\DB::get()->query("SELECT ft_id, ft_title, ft_up_id FROM forum_topics WHERE ft_deleted = 0 AND ft_fse_id = {$this->forum->id} AND ft_id IN (".implode(",", $idlist).") FOR UPDATE");
 			
 			// ingen forumtråder?
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				ess::$b->page->add_message("Fant ingen av de merkede forumtrådene.", "error");
 				redirect::handle(game::address("forum", $_GET));
@@ -313,7 +313,7 @@ class page_forum
 			$time = time();
 			$del_list = array();
 			$log_list = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$log_list[] = "({$row['ft_id']}, 1, ".login::$user->player->id.", $time)";
 				$del_list[] = $row['ft_id'];
@@ -321,10 +321,10 @@ class page_forum
 			}
 			
 			// slett forumtrådene
-			ess::$b->db->query("UPDATE forum_topics SET ft_deleted = $time WHERE ft_id IN (".implode(",", $del_list).")");
+			\Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_deleted = $time WHERE ft_id IN (".implode(",", $del_list).")");
 			
 			// opprett forumlogg
-			ess::$b->db->query("INSERT INTO forum_log (flg_ft_id, flg_action, flg_up_id, flg_time) VALUES ".implode(", ", $log_list));
+			\Kofradia\DB::get()->exec("INSERT INTO forum_log (flg_ft_id, flg_action, flg_up_id, flg_time) VALUES ".implode(", ", $log_list));
 			
 			// opprett crewlogg
 			if (!$this->forum->ff || $this->forum->ff->uinfo->crew)
@@ -380,7 +380,7 @@ class page_forum
 		
 		// hent topicsene
 		$seen_q = login::$logged_in ? "fs_ft_id = ft_id AND fs_u_id = ".login::$user->id : "FALSE";
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				ft_id, ft_type, ft_title, ft_time, ft_views, ft_up_id, ft_locked, ft_replies, ft_last_reply, ft_deleted,
 				up.up_name, up.up_access_level,

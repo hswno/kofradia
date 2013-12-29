@@ -510,7 +510,7 @@ class ff
 		}
 		
 		// hent data
-		$this->data = $ff_data !== null ? $ff_data : mysql_fetch_assoc(self::load_data_result("ff_id = $this->id"));
+		$this->data = $ff_data !== null ? $ff_data : self::load_data_result("ff_id = $this->id")->fetch();
 		
 		// finnes ikke?
 		if (!$this->data)
@@ -549,10 +549,10 @@ class ff
 	{
 		// hent alle FF
 		$result = self::load_data_result($ff_where);
-		if (mysql_num_rows($result) == 0) return array();
+		if ($result->rowCount() == 0) return array();
 		
 		$list = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$list[$row['ff_id']] = $row;
 		}
@@ -576,7 +576,7 @@ class ff
 	protected static function load_data_result($where)
 	{
 		// hent detaljer
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				ff_id, ff_inactive, ff_inactive_time, ff_date_reg, ff_time_reset, ff_type, ff_name, ff_bank, ff_description, ff_up_limit, ff_up_limit_max,
 				ff_is_crew, ff_params, ff_br_id, ff_logo IS NOT NULL has_ff_logo, ff_logo_path, ff_fse_id, ff_fff_id, ff_pay_next, ff_pay_status, ff_pay_points,
@@ -598,7 +598,7 @@ class ff
 	 */
 	protected static function load_members_data($where)
 	{
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				ffm_ff_id, ffm_up_id, ffm_date_created, ffm_date_join, ffm_donate, ffm_priority, ffm_parent_up_id, ffm_status, ffm_params, ffm_forum_topics, ffm_forum_replies, ffm_earnings, ffm_earnings_ff, ffm_pay_points, ffm_log_new,
 				up_u_id, up_name, up_access_level, up_last_online, up_points, up_points_rel,
@@ -610,7 +610,7 @@ class ff
 			ORDER BY ffm_priority, up_name");
 		
 		$ff_members = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$ff_members[$row['ffm_ff_id']][] = $row;
 		}
@@ -788,24 +788,24 @@ class ff
 		// må vi opprette forumet?
 		if (!$fse_id)
 		{
-			$p = ess::$b->db->begin();
+			\Kofradia\DB::get()->beginTransaction();
 			
-			$result = ess::$b->db->query("SELECT ff_fse_id FROM ff WHERE ff_id = $this->id FOR UPDATE");
-			$fse_id = mysql_result($result, 0);
+			$result = \Kofradia\DB::get()->query("SELECT ff_fse_id FROM ff WHERE ff_id = $this->id FOR UPDATE");
+			$fse_id = $result->fetchColumn(0);
 			if (!$fse_id)
 			{
 				// opprett forumet
-				ess::$b->db->query("INSERT INTO forum_sections SET fse_ff_id = $this->id");
-				$fse_id = ess::$b->db->insert_id();
+				\Kofradia\DB::get()->exec("INSERT INTO forum_sections SET fse_ff_id = $this->id");
+				$fse_id = \Kofradia\DB::get()->lastInsertId();
 				
 				// oppdater ff
-				ess::$b->db->query("UPDATE ff SET ff_fse_id = $fse_id WHERE ff_id = $this->id");
+				\Kofradia\DB::get()->exec("UPDATE ff SET ff_fse_id = $fse_id WHERE ff_id = $this->id");
 			}
 			
 			// lagre i ff
 			$this->data['ff_fse_id'] = $fse_id;
 			
-			if ($p) ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 		}
 		
 		return $fse_id;
@@ -849,21 +849,21 @@ class ff
 		
 		if ($type != self::BANK_TJENT)
 		{
-			$note = ess::$b->db->quote($note);
+			$note = \Kofradia\DB::quote($note);
 			$up_id = is_numeric($anonymous) ? (int) $anonymous : ($anonymous ? 'NULL' : intval(login::$user->player->id));
 		}
 		
 		// trekk fra penger
 		if ($type == self::BANK_UTTAK || $type == self::BANK_BETALING)
 		{
-			ess::$b->db->query("UPDATE ff SET ff_bank = ff_bank - $amount WHERE ff_id = $ff_id AND ff_bank >= $amount");
+			$a = \Kofradia\DB::get()->exec("UPDATE ff SET ff_bank = ff_bank - $amount WHERE ff_id = $ff_id AND ff_bank >= $amount");
 			
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				return false;
 			}
 			
-			ess::$b->db->query("INSERT INTO ff_bank_log (ffbl_ff_id, ffbl_type, ffbl_amount, ffbl_up_id, ffbl_note, ffbl_time, ffbl_balance) SELECT ff_id, $type, $amount, $up_id, $note, ".time().", ff_bank FROM ff WHERE ff_id = $ff_id");
+			\Kofradia\DB::get()->exec("INSERT INTO ff_bank_log (ffbl_ff_id, ffbl_type, ffbl_amount, ffbl_up_id, ffbl_note, ffbl_time, ffbl_balance) SELECT ff_id, $type, $amount, $up_id, $note, ".time().", ff_bank FROM ff WHERE ff_id = $ff_id");
 			
 			// oppdater daglig statistikk
 			self::stats_update_static($ff_id, "money_out", $amount, true);
@@ -872,8 +872,8 @@ class ff
 		// legg til penger
 		else
 		{
-			ess::$b->db->query("UPDATE ff SET ff_bank = ff_bank + $amount WHERE ff_id = $ff_id");
-			if ($type != self::BANK_TJENT) ess::$b->db->query("INSERT INTO ff_bank_log (ffbl_ff_id, ffbl_type, ffbl_amount, ffbl_up_id, ffbl_note, ffbl_time, ffbl_balance) SELECT ff_id, $type, $amount, $up_id, $note, ".time().", ff_bank FROM ff WHERE ff_id = $ff_id");
+			\Kofradia\DB::get()->exec("UPDATE ff SET ff_bank = ff_bank + $amount WHERE ff_id = $ff_id");
+			if ($type != self::BANK_TJENT) \Kofradia\DB::get()->exec("INSERT INTO ff_bank_log (ffbl_ff_id, ffbl_type, ffbl_amount, ffbl_up_id, ffbl_note, ffbl_time, ffbl_balance) SELECT ff_id, $type, $amount, $up_id, $note, ".time().", ff_bank FROM ff WHERE ff_id = $ff_id");
 			
 			// oppdater daglig statistikk
 			self::stats_update_static($ff_id, "money_in", $amount, $type != self::BANK_TJENT);
@@ -912,24 +912,23 @@ class ff
 		// oppdater ff
 		if (!$skip_ff)
 		{
-			ess::$b->db->query("
+			$c = \Kofradia\DB::get()->exec("
 				UPDATE ff
 				SET ff_{$type} = ff_{$type} + $value
 				WHERE ff_id = $ff_id");
 			
 			// ingen ff ble oppdatert?
-			$c = ess::$b->db->affected_rows();
 			if ($c == 0) return false;
 		}
 		
 		// oppdater stats_daily for ff
-		$today = ess::$b->db->quote(ess::$b->date->get()->format("Y-m-d"));
-		ess::$b->db->query("
+		$today = \Kofradia\DB::quote(ess::$b->date->get()->format("Y-m-d"));
+		$a = \Kofradia\DB::get()->exec("
 			INSERT INTO ff_stats_daily
 			SET ffsd_ff_id = $ff_id, ffsd_date = $today, ffsd_{$type} = $value
 			ON DUPLICATE KEY UPDATE ffsd_{$type} = ffsd_{$type} + $value");
 		
-		return ess::$b->db->affected_rows() > 0;
+		return $a > 0;
 	}
 	
 	/** Legg til logg */
@@ -942,15 +941,15 @@ class ff
 		}
 		
 		$action_id = intval(self::$log[$action][0]);
-		$data = ess::$b->db->quote($data);
+		$data = \Kofradia\DB::quote($data);
 		
-		$extra = $extra !== false ? ", ffl_extra = ".ess::$b->db->quote($extra) : "";
+		$extra = $extra !== false ? ", ffl_extra = ".\Kofradia\DB::quote($extra) : "";
 		
 		// legg til logg
-		ess::$b->db->query("INSERT INTO ff_log SET ffl_time = ".time().", ffl_ff_id = {$this->id}, ffl_type = $action_id, ffl_data = $data$extra");
+		\Kofradia\DB::get()->exec("INSERT INTO ff_log SET ffl_time = ".time().", ffl_ff_id = {$this->id}, ffl_type = $action_id, ffl_data = $data$extra");
 		
 		// oppdater telleren hos medlemmene
-		if ($this->active) ess::$b->db->query("UPDATE users_players, ff_members SET up_log_ff_new = up_log_ff_new + 1, ffm_log_new = ffm_log_new + 1 WHERE ffm_ff_id = $this->id AND ffm_status = 1 AND up_id = ffm_up_id");
+		if ($this->active) \Kofradia\DB::get()->exec("UPDATE users_players, ff_members SET up_log_ff_new = up_log_ff_new + 1, ffm_log_new = ffm_log_new + 1 WHERE ffm_ff_id = $this->id AND ffm_status = 1 AND up_id = ffm_up_id");
 	}
 	
 	/** Formatere hendelser i loggen */
@@ -1363,13 +1362,13 @@ class ff
 		if (!empty($parent) && $priority != 4) throw new HSException("Kun soldiers kan ha parent.");
 		
 		// sjekk at brukeren finnes og ikke allerede er medlem, invitert eller foreslått av capo
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, !ISNULL(ffm_ff_id) AS in_fa
 			FROM users_players
 				LEFT JOIN ff_members ON ffm_up_id = up_id AND ffm_status != ".ff_member::STATUS_KICKED." AND ffm_status != ".ff_member::STATUS_DEACTIVATED." AND ffm_ff_id = $this->id
 			WHERE up_id = $up_id
 			GROUP BY up_id");
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		
 		// fant ikke brukeren?
 		if (!$row)
@@ -1385,7 +1384,7 @@ class ff
 		
 		// inviter
 		$time = time();
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			INSERT INTO ff_members
 				SET ffm_up_id = $up_id, ffm_ff_id = {$this->id}, ffm_date_created = $time, ffm_date_join = $time, ffm_priority = $priority, ffm_status = 0, ffm_parent_up_id = $parent
 			ON DUPLICATE KEY
@@ -1419,13 +1418,13 @@ class ff
 		$priority = isset($limits[4]) && $limits[4] >= 0 ? 4 : 3;
 		
 		// sjekk at brukeren finnes og ikke allerede er medlem, invitert eller foreslått av capo
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_name, up_access_level, !ISNULL(ffm_ff_id) AS in_ff
 			FROM users_players
 				LEFT JOIN ff_members ON ffm_up_id = up_id AND ffm_status != ".ff_member::STATUS_KICKED." AND ffm_status != ".ff_member::STATUS_DEACTIVATED." AND ffm_ff_id = $this->id
 			WHERE up_id = $up_id
 			GROUP BY up_id");
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		
 		// fant ikke brukeren?
 		if (!$row)
@@ -1442,7 +1441,7 @@ class ff
 		// foreslå
 		$time = time();
 		$parent = $this->type['parent'] ? ", ffm_parent_up_id = ".login::$user->player->id : "";
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			INSERT INTO ff_members
 				SET ffm_up_id = $up_id, ffm_ff_id = $this->id, ffm_date_created = $time, ffm_date_join = $time, ffm_priority = $priority, ffm_status = ".ff_member::STATUS_SUGGESTED."$parent
 			ON DUPLICATE KEY
@@ -1477,7 +1476,7 @@ class ff
 		{
 			// sett som posisjonen
 			$time = time();
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT INTO ff_members
 					SET ffm_up_id = $up_id, ffm_ff_id = $this->id, ffm_date_created = $time, ffm_date_join = $time, ffm_priority = $priority, ffm_status = 1, ffm_parent_up_id = $parent
 				ON DUPLICATE KEY
@@ -1529,8 +1528,8 @@ class ff
 		$this->params->commit();
 		
 		// hent logo og lagre den i logg
-		$result = ess::$b->db->query("SELECT ff_logo FROM ff WHERE ff_id = $this->id");
-		$old = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT ff_logo FROM ff WHERE ff_id = $this->id");
+		$old = $result->fetchColumn(0);
 		if (!empty($old))
 		{
 			$this->add_log("logo", null, base64_encode($old));
@@ -1539,16 +1538,16 @@ class ff
 		// oppdater FF
 		$time = time();
 		$bank = $skip_reset_bank ? "" : ", ff_bank = 0";
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE ff
 			SET
-				ff_time_reset = $time, ff_name = ".ess::$b->db->quote(ucfirst($this->type['typename']))."$bank, ff_description = NULL, ff_logo = NULL,
+				ff_time_reset = $time, ff_name = ".\Kofradia\DB::quote(ucfirst($this->type['typename']))."$bank, ff_description = NULL, ff_logo = NULL,
 				ff_pay_next = NULL, ff_pay_status = 0, ff_pay_points = 0,
 				ff_attack_failed_num = 0, ff_attack_damaged_num = 0, ff_attack_killed_num = 0, ff_attack_bleed_num = 0,
 				ff_attacked_failed_num = 0, ff_attacked_damaged_num = 0, ff_attacked_killed_num = 0, ff_attacked_bleed_num = 0,
 				ff_money_in = 0, ff_money_out = 0, ff_money_reset_time = 0, ff_money_in_total = 0, ff_money_out_total = 0, ff_points = 0
 			WHERE ff_id = $this->id");
-		$this->data = mysql_fetch_assoc(self::load_data_result("ff_id = $this->id"));
+		$this->data = self::load_data_result("ff_id = $this->id")->fetch();
 		
 		$this->reset_date_reg();
 	}
@@ -1559,7 +1558,7 @@ class ff
 	public function reset_forum()
 	{
 		// slett alle forumtrådene som ikke er slettet
-		ess::$b->db->query("UPDATE forum_topics SET ft_deleted = ".time()." WHERE ft_fse_id = ".$this->get_fse_id()." AND ft_deleted = 0");
+		\Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_deleted = ".time()." WHERE ft_fse_id = ".$this->get_fse_id()." AND ft_deleted = 0");
 	}
 	
 	/**
@@ -1568,7 +1567,7 @@ class ff
 	public function reset_bank_stats()
 	{
 		// nullstill statistikken
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE ff
 			SET
 				ff_money_in_total = ff_money_in_total + ff_money_in,
@@ -1600,7 +1599,7 @@ class ff
 		putlog("LOG", "STIFTELSESTIDSPUNKT FOR FF: Endret for FF #$this->id ({$this->data['ff_name']}) fra ".($this->data['ff_date_reg'] ? ess::$b->date->get($this->data['ff_date_reg'])->format() : "ingenting")." til ".ess::$b->date->get($time)->format());
 		
 		$this->data['ff_date_reg'] = $time;
-		ess::$b->db->query("UPDATE ff SET ff_date_reg = $time WHERE ff_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE ff SET ff_date_reg = $time WHERE ff_id = $this->id");
 	}
 	
 	/**
@@ -1644,15 +1643,15 @@ class ff
 			$this->active = false;
 			$this->data['ff_inactive'] = 1;
 			$this->data['ff_inactive_time'] = $time;
-			ess::$b->db->query("UPDATE ff SET ff_inactive = 1, ff_inactive_time = $time WHERE ff_id = $this->id");
+			\Kofradia\DB::get()->exec("UPDATE ff SET ff_inactive = 1, ff_inactive_time = $time WHERE ff_id = $this->id");
 			
 			// legg ut konkurranse om nytt broderskap
 			$others = false;
 			if ($this->competition)
 			{
 				// er vi det eneste broderskapet igjen i konkurransen?
-				$result = ess::$b->db->query("SELECT COUNT(ff_id) FROM ff WHERE ff_fff_id = {$this->data['fff_id']} AND ff_inactive = 0 AND ff_id != $this->id");
-				$others = mysql_result($result, 0) > 0;
+				$result = \Kofradia\DB::get()->query("SELECT COUNT(ff_id) FROM ff WHERE ff_fff_id = {$this->data['fff_id']} AND ff_inactive = 0 AND ff_id != $this->id");
+				$others = $result->fetchColumn(0) > 0;
 			}
 			if (!$this->data['ff_is_crew'] && !$this->params->get("die_no_new") && !$others)
 			{
@@ -1708,10 +1707,10 @@ class ff
 		if (count($this->members['members']) == 0) return;
 		
 		$up_id = array_keys($this->members['members']);
-		$p = ess::$b->db->begin();
-		$result = ess::$b->db->query("SELECT u_id, u_params FROM users, users_players WHERE up_id IN (".implode(",", $up_id).") AND up_u_id = u_id FOR UPDATE");
+		\Kofradia\DB::get()->beginTransaction();
+		$result = \Kofradia\DB::get()->query("SELECT u_id, u_params FROM users, users_players WHERE up_id IN (".implode(",", $up_id).") AND up_u_id = u_id FOR UPDATE");
 		
-		while ($user = mysql_fetch_assoc($result))
+		while ($user = $result->fetch())
 		{
 			$params = new params($user['u_params']);
 			$container = new container($params->get("forums"));
@@ -1734,13 +1733,13 @@ class ff
 				}
 				
 				// lagre nye params
-				ess::$b->db->query("UPDATE users SET u_params = ".ess::$b->db->quote($params->build())." WHERE u_id = {$user['u_id']}");
+				\Kofradia\DB::get()->exec("UPDATE users SET u_params = ".\Kofradia\DB::quote($params->build())." WHERE u_id = {$user['u_id']}");
 				break;
 			}
 		}
 		
 		// lagre endringer
-		if ($p) ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 	}
 	
 	/**
@@ -1765,11 +1764,11 @@ class ff
 		$expire = $time->format("U");
 		
 		// legg til
-		ess::$b->db->query("INSERT INTO ff_free SET fff_time_created = $created, fff_time_start = $start, fff_time_expire = $expire, fff_required_points = 105000");
-		putlog("CREWCHAN", "Ny konkurranse om broderskap planlagt - {$__server['path']}/ff/?fff_id=".ess::$b->db->insert_id());
+		\Kofradia\DB::get()->exec("INSERT INTO ff_free SET fff_time_created = $created, fff_time_start = $start, fff_time_expire = $expire, fff_required_points = 105000");
+		putlog("CREWCHAN", "Ny konkurranse om broderskap planlagt - {$__server['path']}/ff/?fff_id=".\Kofradia\DB::get()->lastInsertId());
 		
 		// sørg for at scheduler settes til første konkurranse som avsluttes
-		ess::$b->db->query("UPDATE scheduler SET s_next = IF(s_active = 0, $expire, LEAST(s_next, $expire)), s_active = 1 WHERE s_name = 'familier_free'");
+		\Kofradia\DB::get()->exec("UPDATE scheduler SET s_next = IF(s_active = 0, $expire, LEAST(s_next, $expire)), s_active = 1 WHERE s_name = 'familier_free'");
 		
 		// live-feed
 		livefeed::add_row('Ny konkurranse for broderskap er planlagt og starter '.ess::$b->date->get($start)->format().'. Broderskapet opprettes via <a href="'.ess::$s['relative_path'].'/bydeler">bydeler</a> når konkurransen har startet.');
@@ -1885,7 +1884,7 @@ class ff
 		if (!$this->data['ff_up_limit_max'] && $limits[0] > 0)
 		{
 			$this->data['ff_up_limit_max'] = $limits[0];
-			ess::$b->db->query("UPDATE ff SET ff_up_limit_max = {$this->data['ff_up_limit_max']} WHERE ff_id = $this->id");
+			\Kofradia\DB::get()->exec("UPDATE ff SET ff_up_limit_max = {$this->data['ff_up_limit_max']} WHERE ff_id = $this->id");
 		}
 		
 		return array(
@@ -1915,13 +1914,13 @@ class ff
 		$new_limit = $this->members_limit_build($new_max);
 		
 		// forsøk å oppdater
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE ff
-			SET ff_up_limit = ".ess::$b->db->quote($new_limit)."
-			WHERE ff_id = $this->id AND ff_up_limit = ".ess::$b->db->quote($this->data['ff_up_limit']));
+			SET ff_up_limit = ".\Kofradia\DB::quote($new_limit)."
+			WHERE ff_id = $this->id AND ff_up_limit = ".\Kofradia\DB::quote($this->data['ff_up_limit']));
 		
 		// endret seg?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. Prøv på nytt om du fremdeles ønsker.", "error");
 			return false;
@@ -1933,7 +1932,7 @@ class ff
 			// lagre maks
 			$this->data['ff_up_limit'] = $new_limit;
 			$this->data['ff_up_limit_max'] = max($this->data['ff_up_limit_max'], $new_max);
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE ff
 				SET ff_up_limit_max = $new_max
 				WHERE ff_id = $this->id AND ff_up_limit_max < $new_max");
@@ -1943,10 +1942,10 @@ class ff
 		}
 		
 		// sett ned begrensningen igjen
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE ff
-			SET ff_up_limit = ".ess::$b->db->quote($this->data['ff_up_limit'])."
-			WHERE ff_id = $this->id AND ff_up_limit = ".ess::$b->db->quote($new_limit));
+			SET ff_up_limit = ".\Kofradia\DB::quote($this->data['ff_up_limit'])."
+			WHERE ff_id = $this->id AND ff_up_limit = ".\Kofradia\DB::quote($new_limit));
 		
 		ess::$b->page->add_message("Det er ikke nok penger i banken for {$this->type['refobj']} til å øke medlemsbegrensningen.", "error");
 		return false;
@@ -1970,13 +1969,13 @@ class ff
 		$new_limit = $this->members_limit_build($new_max);
 		
 		// forsøk å oppdater
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE ff
-			SET ff_up_limit = ".ess::$b->db->quote($new_limit)."
-			WHERE ff_id = $this->id AND ff_up_limit = ".ess::$b->db->quote($this->data['ff_up_limit']));
+			SET ff_up_limit = ".\Kofradia\DB::quote($new_limit)."
+			WHERE ff_id = $this->id AND ff_up_limit = ".\Kofradia\DB::quote($this->data['ff_up_limit']));
 		
 		// endret seg?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Medlemsbegrensningen har endret seg siden du viste siden. Prøv på nytt om du fremdeles ønsker.", "error");
 			return false;
@@ -2020,7 +2019,7 @@ class ff
 		$old_name = $this->data['ff_name'];
 		
 		// sett nytt navn
-		ess::$b->db->query("UPDATE ff SET ff_name = ".ess::$b->db->quote($name)." WHERE ff_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE ff SET ff_name = ".\Kofradia\DB::quote($name)." WHERE ff_id = $this->id");
 		$this->data['ff_name'] = $name;
 		
 		// oppdater params
@@ -2036,10 +2035,10 @@ class ff
 		if (count($this->members['members']) > 0)
 		{
 			$up_id = array_keys($this->members['members']);
-			$p = ess::$b->db->begin();
-			$result = ess::$b->db->query("SELECT u_id, u_params FROM users, users_players WHERE up_id IN (".implode(",", $up_id).") AND up_u_id = u_id FOR UPDATE");
+			\Kofradia\DB::get()->beginTransaction();
+			$result = \Kofradia\DB::get()->query("SELECT u_id, u_params FROM users, users_players WHERE up_id IN (".implode(",", $up_id).") AND up_u_id = u_id FOR UPDATE");
 			
-			while ($user = mysql_fetch_assoc($result))
+			while ($user = $result->fetch())
 			{
 				$params = new params($user['u_params']);
 				$container = new container($params->get("forums"));
@@ -2056,14 +2055,14 @@ class ff
 						$params->update("forums", $container->build());
 						
 						// lagre nye params
-						ess::$b->db->query("UPDATE users SET u_params = ".ess::$b->db->quote($params->build())." WHERE u_id = {$user['u_id']}");
+						\Kofradia\DB::get()->exec("UPDATE users SET u_params = ".\Kofradia\DB::quote($params->build())." WHERE u_id = {$user['u_id']}");
 						break;
 					}
 				}
 			}
 			
 			// lagre endringer
-			if ($p) ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 		}
 		
 		// logg
@@ -2093,7 +2092,7 @@ class ff
 			if ($member->data['ffm_pay_points'] === null)
 			{
 				// sørg for at brukeren har antall poeng ved join lagret
-				ess::$b->db->query("UPDATE ff_members, users_players SET ffm_pay_points = up_points_rel WHERE ffm_ff_id = {$this->id} AND ffm_up_id = {$member->id} AND ffm_up_id = up_id");
+				\Kofradia\DB::get()->exec("UPDATE ff_members, users_players SET ffm_pay_points = up_points_rel WHERE ffm_ff_id = {$this->id} AND ffm_up_id = {$member->id} AND ffm_up_id = up_id");
 				$this->data['ffm_pay_points'] = $this->data['up_points_rel'];
 			}
 			$total_rank += $member->data['up_points_rel']-$member->data['ffm_pay_points'];
@@ -2122,7 +2121,7 @@ class ff
 		else $time->modify("+11 days");
 		$time->setTime(12, 0, 0);
 		$time = $time->format("U");
-		ess::$b->db->query("UPDATE ff SET ff_pay_next = $time, ff_pay_status = 0, ff_pay_points = 0 WHERE ff_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE ff SET ff_pay_next = $time, ff_pay_status = 0, ff_pay_points = 0 WHERE ff_id = $this->id");
 		$this->data['ff_pay_next'] = $time;
 		$this->data['ff_pay_status'] = 0;
 		$this->data['ff_pay_points'] = 0;
@@ -2169,7 +2168,7 @@ class ff
 			$date->setTime(12, 0, 0);
 			
 			$this->data['ff_pay_next'] = $date->format("U");
-			ess::$b->db->query("UPDATE ff SET ff_pay_next = {$this->data['ff_pay_next']} WHERE ff_id = $this->id");
+			\Kofradia\DB::get()->exec("UPDATE ff SET ff_pay_next = {$this->data['ff_pay_next']} WHERE ff_id = $this->id");
 		}
 		
 		// finn ut hvor mye rank vi har samlet opp
@@ -2229,8 +2228,8 @@ class ff
 		}
 		
 		// forsøk å trekk fra pengene
-		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - {$pay_info['price']} WHERE up_id = ".login::$user->player->id);
-		if (ess::$b->db->affected_rows() > 0)
+		$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - {$pay_info['price']} WHERE up_id = ".login::$user->player->id);
+		if ($a > 0)
 		{
 			// betalingen var vellykket
 			$this->pay_reset();
@@ -2268,7 +2267,7 @@ class ff
 		$next->modify("+1 day");
 		$next->setTime(12, 0, 0);
 		$next = $next->format("U");
-		ess::$b->db->query("UPDATE ff SET ff_pay_next = $next, ff_pay_status = 1 WHERE ff_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE ff SET ff_pay_next = $next, ff_pay_status = 1 WHERE ff_id = $this->id");
 		$this->data['ff_pay_next'] = $next;
 		
 		return false;
@@ -2283,8 +2282,8 @@ class ff
 		
 		// lagre informasjon
 		$info = $this->pay_info();
-		$date = ess::$b->db->quote(ess::$b->date->get($this->data['ff_pay_next'])->format("Y-m-d"));
-		ess::$b->db->query("
+		$date = \Kofradia\DB::quote(ess::$b->date->get($this->data['ff_pay_next'])->format("Y-m-d"));
+		\Kofradia\DB::get()->exec("
 			INSERT INTO ff_stats_pay
 			SET
 				ffsp_ff_id = $this->id,
@@ -2293,7 +2292,7 @@ class ff
 				ffsp_points = {$info['rank']},
 				ffsp_up_limit = ".($max['min'] + $max['extra_max']).",
 				ffsp_cost = {$info['price']}");
-		$ffsp_id = ess::$b->db->insert_id();
+		$ffsp_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// lagre informasjon om medlemmene
 		$list = array();
@@ -2308,7 +2307,7 @@ class ff
 		}
 		if (count($list) > 0)
 		{
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT INTO ff_stats_pay_members (ffspm_ffsp_id, ffspm_up_id, ffspm_priority, ffspm_parent_up_id, ffspm_points)
 				VALUES ".implode(", ", $list));
 		}
@@ -2320,14 +2319,14 @@ class ff
 		$next->setTime(12, 0, 0);
 		$next = $next->format("U");
 		
-		ess::$b->db->query("UPDATE ff SET ff_pay_points = 0, ff_pay_next = $next, ff_pay_status = 0, ff_up_limit_max = {$max['active']} WHERE ff_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE ff SET ff_pay_points = 0, ff_pay_next = $next, ff_pay_status = 0, ff_up_limit_max = {$max['active']} WHERE ff_id = $this->id");
 		$this->data['ff_pay_points'] = 0;
 		$this->data['ff_pay_next'] = $next;
 		$this->data['ff_pay_status'] = 0;
 		$this->data['ff_up_limit_max'] = $max['active'];
 		
 		// nullstill telleren for spillerne
-		ess::$b->db->query("UPDATE ff_members, users_players SET ffm_pay_points = up_points_rel WHERE ffm_ff_id = $this->id AND ffm_up_id = up_id");
+		\Kofradia\DB::get()->exec("UPDATE ff_members, users_players SET ffm_pay_points = up_points_rel WHERE ffm_ff_id = $this->id AND ffm_up_id = up_id");
 		
 		// finn ut hvor mye rank vi har samlet opp
 		foreach ($this->members['members'] as $member)
@@ -2491,8 +2490,8 @@ class ff
 		// forsøk å trekk fra pengene fra brukeren
 		if ($status['amount'] > 0)
 		{
-			$result = ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - {$status['amount']}, up_bank_sent = up_bank_sent + {$status['amount']}, up_bank_num_sent = up_bank_num_sent + 1 WHERE up_id = {$status['up_id']} AND up_cash >= {$status['amount']}");
-			if (ess::$b->db->affected_rows() == 0)
+			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - {$status['amount']}, up_bank_sent = up_bank_sent + {$status['amount']}, up_bank_num_sent = up_bank_num_sent + 1 WHERE up_id = {$status['up_id']} AND up_cash >= {$status['amount']}");
+			if ($a == 0)
 			{
 				// har ikke råd
 				$this->params->commit();
@@ -2507,7 +2506,7 @@ class ff
 			if ($status['amount'] > 0)
 			{
 				// gi tilbake pengene
-				ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + {$status['amount']}, up_bank_sent = up_bank_sent - {$status['amount']}, up_bank_num_sent = up_bank_num_sent - 1 WHERE up_id = {$status['up_id']}");
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + {$status['amount']}, up_bank_sent = up_bank_sent - {$status['amount']}, up_bank_num_sent = up_bank_num_sent - 1 WHERE up_id = {$status['up_id']}");
 			}
 			
 			$this->params->commit();
@@ -2517,7 +2516,7 @@ class ff
 		// banklogg
 		if ($status['amount'] > 0)
 		{
-			ess::$b->db->query("INSERT INTO bank_log SET bl_sender_up_id = {$status['up_id']}, bl_receiver_up_id = {$status['init_up_id']}, amount = {$status['amount']}, time = ".time());
+			\Kofradia\DB::get()->exec("INSERT INTO bank_log SET bl_sender_up_id = {$status['up_id']}, bl_receiver_up_id = {$status['init_up_id']}, amount = {$status['amount']}, time = ".time());
 		}
 		
 		// fjern fra params
@@ -2534,7 +2533,7 @@ class ff
 		// gi pengene til selger
 		if ($status['amount'] > 0)
 		{
-			ess::$b->db->query("UPDATE users_players SET up_bank = up_bank + {$status['amount']}, up_bank_received = up_bank_received + {$status['amount']}, up_bank_num_received = up_bank_num_received + 1 WHERE up_id = {$status['init_up_id']}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_bank = up_bank + {$status['amount']}, up_bank_received = up_bank_received + {$status['amount']}, up_bank_num_received = up_bank_num_received + 1 WHERE up_id = {$status['init_up_id']}");
 		}
 		
 		// legg til logg hos selgeren
@@ -2700,14 +2699,14 @@ class ff
 		$stats = array();
 		
 		// hent informasjon om alle FF i konkurransen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ff_id, ff_name, SUM(CONVERT(up_points_rel-ffm_pay_points, SIGNED)) AS total_points
 			FROM ff
 				LEFT JOIN ff_members ON ffm_ff_id = ff_id AND ffm_status = 1
 				LEFT JOIN users_players ON ffm_up_id = up_id AND up_access_level < {$_game['access_noplay']}
 			WHERE ff_fff_id = {$this->data['fff_id']} AND ff_inactive = 0
 			GROUP BY ff_id");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$stats[] = $row;
 		}
@@ -2774,10 +2773,10 @@ class ff
 	 */
 	public function forum_changed()
 	{
-		$s = ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// hent og lås params for alle medlemmer
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT u_id, u_params
 			FROM ff_members
 				JOIN users_players ON ffm_up_id = up_id
@@ -2785,7 +2784,7 @@ class ff
 			WHERE ffm_ff_id = $this->id AND ffm_status = 1
 			FOR UPDATE");
 		
-		while ($u = mysql_fetch_assoc($result))
+		while ($u = $result->fetch())
 		{
 			// hopp over den aktive brukeren
 			if (login::$logged_in && $u['u_id'] == login::$user->id) continue;
@@ -2806,14 +2805,14 @@ class ff
 				// lagre
 				$container->items[$key] = $row;
 				$params->update("forums", $container->build());
-				ess::$b->db->query("UPDATE users SET u_params = ".ess::$b->db->quote($params->build())." WHERE u_id = {$u['u_id']}");
+				\Kofradia\DB::get()->exec("UPDATE users SET u_params = ".\Kofradia\DB::quote($params->build())." WHERE u_id = {$u['u_id']}");
 				
 				continue;
 			}
 		}
 		
 		// fullfør transaksjon
-		if ($s) ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 	}
 	
 	/**
@@ -2873,14 +2872,14 @@ class ff
 		$suf = $targeted ? "ed" : "";
 		
 		// oppdater ff
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE ff
 			SET ff_attack{$suf}_{$type}_num = ff_attack{$suf}_{$type}_num + 1
 			WHERE ff_id IN ($ff_ids) AND ff_inactive = 0");
 		
 		// oppdater stats_daily for ff
-		$today = ess::$b->db->quote(ess::$b->date->get()->format("Y-m-d"));
-		ess::$b->db->query("
+		$today = \Kofradia\DB::quote(ess::$b->date->get()->format("Y-m-d"));
+		\Kofradia\DB::get()->exec("
 			INSERT INTO ff_stats_daily (ffsd_ff_id, ffsd_date, ffsd_attack{$suf}_{$type}_num)
 			SELECT ff_id, $today, 1
 			FROM ff
@@ -2898,12 +2897,12 @@ class ff
 	public static function set_leave($up_id)
 	{
 		$up_id = (int) $up_id;
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE ff_members
 			SET ffm_ff_name = NULL, ffm_status = ".ff_member::STATUS_KICKED.", ffm_date_part = ".time()."
 			WHERE ffm_up_id = $up_id AND ffm_status = ".ff_member::STATUS_DEACTIVATED);
 		
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users_players
 			SET up_health_ff_time = NULL
 			WHERE up_id = $up_id");
@@ -2937,13 +2936,13 @@ class ff
 	 */
 	public function get_bomberom_places()
 	{
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(*)
 			FROM users_players
 			WHERE up_brom_ff_id = {$this->id} AND up_brom_expire > ".time()." AND up_access_level != 0");
 		
-		$ant_i_bomberommet = mysql_result($result, 0);
-		$ledige_plasser = max(0, $this->get_bomberom_capacity() - mysql_result($result, 0));
+		$ant_i_bomberommet = $result->fetchColumn(0);
+		$ledige_plasser = max(0, $this->get_bomberom_capacity() - $result->fetchColumn(0));
 		
 		return array(
 			"in_brom" => $ant_i_bomberommet,
@@ -2984,14 +2983,14 @@ class ff
 		if (count($up_list) == 0) return 0;
 		
 		// hent rank for spillerne
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_points
 			FROM users_players
 			WHERE up_id IN (".implode(",", $up_list).") AND up_access_level < ".ess::$g['access_noplay']);
 		
 		// antall kuler er sum(rank_nummer * 3)
 		$sum = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$rank = game::rank_info($row['up_points']);
 			$sum += $rank['number'] * 3;
@@ -3019,14 +3018,14 @@ class ff
 		// har vi kulene?
 		if ($num > $bullets)
 		{
-			ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			return "missing";
 		}
 		
 		// er ikke plass?
 		if ($up_bullets + $up_bullets_a + $num > $up_cap)
 		{
-			ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			return "full";
 		}
 		
@@ -3040,14 +3039,14 @@ class ff
 		$this->params->update("bullets", $this->params->get("bullets") - $num);
 		
 		// gi til spilleren
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users_players
 			SET up_weapon_bullets = up_weapon_bullets + $num
 			WHERE up_id = ".$up->id);
 		$up->data['up_weapon_bullets'] += $num;
 
 		$this->params->commit(false);
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 		$this->params->commit(); // setter intern status i params_update til ulåst
 		
 		// FF-logg
@@ -3082,11 +3081,11 @@ class ff
 		}
 		
 		// trekk fra spilleren
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE users_players
 			SET up_weapon_bullets = up_weapon_bullets - $num
 			WHERE up_id = ".$up->id." AND up_weapon_bullets >= $num");
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			return "missing";
 		}
@@ -3124,7 +3123,7 @@ class ff
 		
 		// hent FF
 		$up_list = array_unique(array_map("intval", $up_list));
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffm_up_id, ffm_priority, ff_id, ff_type, ff_name
 			FROM
 				ff_members
@@ -3133,7 +3132,7 @@ class ff
 			ORDER BY ff_name");
 		
 		$data = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$pos = ff::$types[$row['ff_type']]['priority'][$row['ffm_priority']];
 			
@@ -3155,12 +3154,12 @@ class ff
 		$ff_list = self::get_ff_group("ff_type = ".self::TYPE_FAMILIE." AND ff_inactive = 0 AND ff_is_crew = 0");
 		
 		// hent alle eiere og medeiere
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffm_up_id, ffm_ff_id, ffm_priority
 			FROM ff_members JOIN ff ON ffm_ff_id = ff_id AND ff_type != ".self::TYPE_FAMILIE." AND ff_is_crew = 0 AND ff_inactive = 0
 			WHERE ffm_priority <= 2 AND ffm_status = ".ff_member::STATUS_MEMBER);
 		$list = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$list[$row['ffm_up_id']][] = $row['ffm_priority'];
 		}
@@ -3255,7 +3254,7 @@ class ff
 		
 		// oppdater eventuelle FF
 		$crew = " AND ff_is_crew ".($up->is_nostat() ? "!=" : "=")." 0";
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users_players, ff, ff_members
 			SET ff_points = ff_points + $p
 			WHERE up_id = {$up->id} AND ffm_up_id = up_id AND ff_id = ffm_ff_id AND (ffm_status = ".ff_member::STATUS_MEMBER." OR ffm_status = ".ff_member::STATUS_DEACTIVATED.")$crew");
@@ -3492,9 +3491,10 @@ class ff_member
 		else
 		{
 			// hent info fra databasen
-			$result = ess::$b->db->query("SELECT u_params, up_params FROM users, users_players WHERE up_id = $this->id AND up_u_id = u_id");
-			$this->params_user = new params_update(mysql_result($result, 0), "users", "u_params", "u_id = $this->id_user");
-			$this->params_player = new params_update(mysql_result($result, 0, 1), "users_players", "up_params", "up_id = $this->id");
+			$result = \Kofradia\DB::get()->query("SELECT u_params, up_params FROM users, users_players WHERE up_id = $this->id AND up_u_id = u_id");
+			$row = $result->fetch();
+			$this->params_user = new params_update($row['u_params'], "users", "u_params", "u_id = $this->id_user");
+			$this->params_player = new params_update($row['up_params'], "users_players", "up_params", "up_id = $this->id");
 		}
 	}
 	
@@ -3628,7 +3628,7 @@ class ff_member
 		$this->data['ffm_date_join'] = time();
 		$this->data['ffm_status'] = 1;
 		$this->data['ffm_pay_points'] = $this->data['up_points_rel'];
-		ess::$b->db->query("UPDATE ff_members, users_players SET ffm_date_join = {$this->data['ffm_date_join']}, ffm_status = 1, ffm_pay_points = up_points_rel, ffm_log_new = 0 WHERE ffm_up_id = $this->id AND ffm_ff_id = {$this->ff->id} AND ffm_up_id = up_id");
+		\Kofradia\DB::get()->exec("UPDATE ff_members, users_players SET ffm_date_join = {$this->data['ffm_date_join']}, ffm_status = 1, ffm_pay_points = up_points_rel, ffm_log_new = 0 WHERE ffm_up_id = $this->id AND ffm_ff_id = {$this->ff->id} AND ffm_up_id = up_id");
 		$this->reattach();
 		
 		// legg til logg
@@ -3656,11 +3656,11 @@ class ff_member
 		if ($this->status != self::STATUS_INVITED) throw new HSException("Medlemmet er ikke invitert til ".$this->ff->type['refobj'].".");
 		
 		// oppdater brukerinfo
-		ess::$b->db->query("UPDATE ff_members SET ffm_status = ".self::STATUS_KICKED." WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id AND ffm_date_join != ffm_date_created");
-		if (ess::$b->db->affected_rows() == 0)
+		$a = \Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_status = ".self::STATUS_KICKED." WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id AND ffm_date_join != ffm_date_created");
+		if ($a == 0)
 		{
 			// brukeren har ikke vært fullverdg medlem - slett oppføringen
-			ess::$b->db->query("DELETE FROM ff_members WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
+			\Kofradia\DB::get()->exec("DELETE FROM ff_members WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
 			
 			// merk som slettet
 			$this->data['ffm_status'] = self::STATUS_DELETED;
@@ -3711,7 +3711,7 @@ class ff_member
 		
 		// opppdater brukerinfo
 		$time = time();
-		ess::$b->db->query("UPDATE ff_members SET ffm_date_join = $time, ffm_status = 0 WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_date_join = $time, ffm_status = 0 WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
 		
 		// brukerlogg
 		$info = $this->ff->id.":".urlencode($this->ff->data['ff_name']).":".urlencode($this->get_priority_name()).":{$this->data['ffm_parent_up_id']}";
@@ -3734,11 +3734,11 @@ class ff_member
 		if ($this->status != self::STATUS_SUGGESTED) throw new HSException("Medlemmet er ikke foreslått til FF.");
 		
 		// oppdater brukerinfo
-		ess::$b->db->query("UPDATE ff_members SET ffm_status = ".self::STATUS_KICKED." WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id AND ffm_date_join != ffm_date_created");
-		if (ess::$b->db->affected_rows() == 0)
+		$a = \Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_status = ".self::STATUS_KICKED." WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id AND ffm_date_join != ffm_date_created");
+		if ($a == 0)
 		{
 			// brukeren har ikke vært fullverdg medlem - slett oppføringen
-			ess::$b->db->query("DELETE FROM ff_members WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
+			\Kofradia\DB::get()->exec("DELETE FROM ff_members WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
 			
 			// merk som slettet
 			$this->data['ffm_status'] = self::STATUS_DELETED;
@@ -3792,8 +3792,8 @@ class ff_member
 		
 		// oppdater brukerinfo
 		$this->data['ffm_status'] = $deactivated || $kicked ? self::STATUS_DEACTIVATED : self::STATUS_KICKED;
-		$more = $deactivated ? ", ffm_ff_name = ".ess::$b->db->quote($this->ff->data['ff_name']) : "";
-		ess::$b->db->query("UPDATE ff_members SET ffm_date_part = ".time().", ffm_status = {$this->data['ffm_status']}$more WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
+		$more = $deactivated ? ", ffm_ff_name = ".\Kofradia\DB::quote($this->ff->data['ff_name']) : "";
+		\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_date_part = ".time().", ffm_status = {$this->data['ffm_status']}$more WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
 		
 		$this->reattach();
 		
@@ -3802,7 +3802,7 @@ class ff_member
 		{
 			$points = $this->data['up_points_rel'] - $this->data['ffm_pay_points'];
 			putlog("NOTICE", "FF RANK: FF {$this->ff->data['ff_name']} (#{$this->ff->id}), spilleren {$this->data['up_name']} (#{$this->id}) forlot FF. $points rankpoeng overført til ff_pay_points.");
-			ess::$b->db->query("UPDATE ff SET ff_pay_points = ff_pay_points + $points WHERE ff_id = {$this->ff->id}");
+			\Kofradia\DB::get()->exec("UPDATE ff SET ff_pay_points = ff_pay_points + $points WHERE ff_id = {$this->ff->id}");
 		}
 		
 		// sjekk om brukeren er involvert i salg av FF
@@ -3846,7 +3846,7 @@ class ff_member
 		// fjern antall nye logg hendelser og lagre tidspunkt for utkastelse
 		$up = player::get($this->id);
 		$up->data['up_health_ff_time'] = time();
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users_players, ff_members
 			SET up_log_ff_new = GREATEST(0, up_log_ff_new - ffm_log_new), up_health_ff_time = {$up->data['up_health_ff_time']}
 			WHERE up_id = $this->id AND ffm_up_id = up_id AND ffm_ff_id = {$this->ff->id}");
@@ -3971,7 +3971,7 @@ class ff_member
 		if (!$sell) $this->sell_remove();
 		
 		// flytt medlemmet
-		ess::$b->db->query("UPDATE ff_members SET ffm_priority = $priority, ffm_parent_up_id = $parent WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_priority = $priority, ffm_parent_up_id = $parent WHERE ffm_ff_id = {$this->ff->id} AND ffm_up_id = $this->id");
 		
 		// kun endret overordnet?
 		if ($priority == $this->data['ffm_priority'])

@@ -9,11 +9,12 @@ $up_name = login::$user->player->data['up_name'];
 if (isset($_GET['up_id']) && access::has("mod"))
 {
 	$up_id = (int) getval("up_id");
-	$result = ess::$b->db->query("SELECT up_u_id, up_id, up_name FROM users_players WHERE up_id = $up_id");
-	if (mysql_num_rows($result) == 0) ajax::text("ERROR:UP-404", ajax::TYPE_404);
+	$result = \Kofradia\DB::get()->query("SELECT up_u_id, up_id, up_name FROM users_players WHERE up_id = $up_id");
+	if ($result->rowCount() == 0) ajax::text("ERROR:UP-404", ajax::TYPE_404);
 	
-	$u_id = mysql_result($result, 0, "up_u_id");
-	$up_name = mysql_result($result, 0, "up_name");
+	$row = $result->fetch();
+	$u_id = $row['up_u_id'];
+	$up_name = $row['up_name'];
 }
 
 // sett opp tidspunkt
@@ -38,7 +39,7 @@ while (true)
 }
 
 // hent statistikk
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT DATE(FROM_UNIXTIME(poker_time_start)) AS day, COUNT(IF(poker_winner = 0, 1, NULL)) num_uavgjort,
 		COUNT(IF((poker_winner = 1 AND poker_starter_up_id = up_id) OR (poker_winner = 2 AND poker_challenger_up_id = up_id), 1, NULL)) num_wins,
 		COUNT(IF((poker_winner = 1 AND poker_starter_up_id = up_id) OR (poker_winner = 2 AND poker_challenger_up_id = up_id), NULL, 1)) num_loss
@@ -46,7 +47,7 @@ $result = $_base->db->query("
 	WHERE poker_time_start >= $time_start AND poker_time_start <= $time_end AND up_u_id = $u_id AND (up_id = poker_starter_up_id OR up_id = poker_challenger_up_id) AND poker_state = 4
 	GROUP BY DATE(FROM_UNIXTIME(poker_time_start))");
 $max = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$stats_wins[$row['day']] = (int) $row['num_wins'];
 	$stats_loss[$row['day']] = (int) $row['num_loss'];

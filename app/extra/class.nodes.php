@@ -66,9 +66,9 @@ class nodes
 	public static function main()
 	{
 		// hent alle nodene
-		$result = ess::$b->db->query("SELECT node_id, node_parent_node_id, node_title, node_type, node_params, node_show_menu, node_expand_menu, node_enabled, node_priority, node_change FROM nodes WHERE node_deleted = 0 ORDER BY node_priority");
+		$result = \Kofradia\DB::get()->query("SELECT node_id, node_parent_node_id, node_title, node_type, node_params, node_show_menu, node_expand_menu, node_enabled, node_priority, node_change FROM nodes WHERE node_deleted = 0 ORDER BY node_priority");
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			self::$nodes[$row['node_id']] = $row;
 			self::$nodes_sub[$row['node_parent_node_id']][] = $row['node_id'];
@@ -193,8 +193,8 @@ class nodes
 		if (isset($_GET['show_disabled_units']) && access::has("crewet"))
 		{
 			// hvor mange enheter er deaktivert?
-			$result = ess::$b->db->query("SELECT COUNT(ni_id) FROM nodes_items WHERE ni_node_id = ".self::$node_id." AND ni_enabled = 0 AND ni_deleted = 0");
-			$ant = mysql_result($result, 0);
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(ni_id) FROM nodes_items WHERE ni_node_id = ".self::$node_id." AND ni_enabled = 0 AND ni_deleted = 0");
+			$ant = $result->fetchColumn(0);
 			
 			if ($ant == 0)
 			{
@@ -215,9 +215,9 @@ class nodes
 		}
 		
 		// vis enhetene
-		$result = ess::$b->db->query("SELECT ni_id, ni_type, nir_content, nir_params, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_node_id = ".self::$node_id.$filter." AND ni_deleted = 0 ORDER BY ni_priority");
+		$result = \Kofradia\DB::get()->query("SELECT ni_id, ni_type, nir_content, nir_params, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_node_id = ".self::$node_id.$filter." AND ni_deleted = 0 ORDER BY ni_priority");
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			echo nodes::content_build($row);
 		}
@@ -295,7 +295,7 @@ class nodes
 				$result = $pageinfo->query($query);
 				$content = '';
 				
-				if (mysql_num_rows($result) == 0)
+				if ($result->rowCount() == 0)
 				{
 					$content .= '
 <p>Ingen nyheter.</p>';
@@ -303,7 +303,7 @@ class nodes
 				
 				else
 				{
-					while ($row = mysql_fetch_assoc($result))
+					while ($row = $result->fetch())
 					{
 						$content .= '
 <h2>'.htmlspecialchars($row['n_title']).'</h2>

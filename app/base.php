@@ -48,8 +48,9 @@ class base
 		$this->check_referer();
 		
 		define("SCRIPT_TIME_HALF", microtime(true)-SCRIPT_START);
-		define("QUERIES_TIME_HALF", ess::$b->db->time);
-		define("QUERIES_NUM_HALF", ess::$b->db->queries);
+		$profiler = \Kofradia\DB::getProfiler();
+		define("QUERIES_TIME_HALF", $profiler ? $profiler->time : null);
+		define("QUERIES_NUM_HALF", $profiler ? $profiler->num : null);
 		
 		$this->load_config();
 		ess::$b->dt("base_loaded");
@@ -96,17 +97,17 @@ class base
 		$date = ess::$b->date->get()->format("Y-m-d");
 		
 		// forsøk og oppdater
-		ess::$b->db->query("UPDATE stats_daily SET sd_hits_guests = sd_hits_guests + 1 WHERE sd_date = '$date'");
+		$a = \Kofradia\DB::get()->exec("UPDATE stats_daily SET sd_hits_guests = sd_hits_guests + 1 WHERE sd_date = '$date'");
 		
 		// ingen oppdater? forsøk å sett inn
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
-			ess::$b->db->query("INSERT IGNORE INTO stats_daily SET sd_date = '$date', sd_hits_guests = 1");
+			$a = \Kofradia\DB::get()->exec("INSERT IGNORE INTO stats_daily SET sd_date = '$date', sd_hits_guests = 1");
 			
 			// ble ikke satt inn? oppdater.. (da er den allerede satt inn av et annet script)
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
-				ess::$b->db->query("UPDATE stats_daily SET sd_hits_guests = sd_hits_guests + 1 WHERE sd_date = '$date'");
+				\Kofradia\DB::get()->exec("UPDATE stats_daily SET sd_hits_guests = sd_hits_guests + 1 WHERE sd_date = '$date'");
 			}
 		}
 	}
@@ -117,12 +118,12 @@ class base
 		if (!defined("AUTOSCRIPT"))
 		{
 			$userid = login::$logged_in ? login::$user->id : 0;
-			$method = ess::$b->db->quote($_SERVER['REQUEST_METHOD']);
-			$uri = ess::$b->db->quote($_SERVER['REQUEST_URI']);
+			$method = \Kofradia\DB::quote($_SERVER['REQUEST_METHOD']);
+			$uri = \Kofradia\DB::quote($_SERVER['REQUEST_URI']);
 			$time = time();
-			$referer = isset($_SERVER['HTTP_REFERER']) ? ess::$b->db->quote($_SERVER['HTTP_REFERER']) : NULL;
-			$ip = ess::$b->db->quote($_SERVER['REMOTE_ADDR'], false);
-			$browser = ess::$b->db->quote($_SERVER['HTTP_USER_AGENT']);
+			$referer = isset($_SERVER['HTTP_REFERER']) ? \Kofradia\DB::quote($_SERVER['HTTP_REFERER']) : NULL;
+			$ip = \Kofradia\DB::quoteNoNull($_SERVER['REMOTE_ADDR'], false);
+			$browser = \Kofradia\DB::quote($_SERVER['HTTP_USER_AGENT']);
 		
 			$file = LOGFILE_REQUESTS;
 			$fh = fopen($file, "a");
@@ -171,7 +172,7 @@ class base
 				}
 				
 				$text = "Location: {$_SERVER['REQUEST_URI']}\nBrowser: {$_SERVER['HTTP_USER_AGENT']}\nIP: {$_SERVER['REMOTE_ADDR']}";
-				ess::$b->db->query("INSERT INTO log_referers SET lr_up_id = ".ess::$b->db->quote($up_id).", lr_referer = ".ess::$b->db->quote($referer).", lr_time = ".time().", lr_data = ".ess::$b->db->quote($text));
+				\Kofradia\DB::get()->exec("INSERT INTO log_referers SET lr_up_id = ".\Kofradia\DB::quote($up_id).", lr_referer = ".\Kofradia\DB::quote($referer).", lr_time = ".time().", lr_data = ".\Kofradia\DB::quote($text));
 			}
 		}
 	}

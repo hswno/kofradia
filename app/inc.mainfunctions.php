@@ -83,14 +83,14 @@ function putlog($area, $msg)
 				$chan = $locations[$area][$i];
 				$net = $locations[$area][$i+1];
 				
-				$_base->db->query("INSERT INTO log_irc SET li_network = ".$_base->db->quote($net).", li_channel = ".$_base->db->quote($chan).", li_time = ".time().", li_message = ".$_base->db->quote($msg));
+				\Kofradia\DB::get()->exec("INSERT INTO log_irc SET li_network = ".\Kofradia\DB::quote($net).", li_channel = ".\Kofradia\DB::quote($chan).", li_time = ".time().", li_message = ".\Kofradia\DB::quote($msg));
 			}
 		}
 		
 		else
 		{
 			$err = "UKJENT($area): ";
-			$_base->db->query("INSERT INTO log_irc SET li_time = ".time().", li_message = ".$_base->db->quote($err.$msg));
+			\Kofradia\DB::get()->exec("INSERT INTO log_irc SET li_time = ".time().", li_message = ".\Kofradia\DB::quote($err.$msg));
 		}
 	}
 	
@@ -350,8 +350,8 @@ function parse_html($content)
 			}
 			
 			// hent info og bytt om
-			$result = $_base->db->query(implode(" UNION ", $q));
-			while ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query(implode(" UNION ", $q));
+			while ($row = $result->fetch())
 			{
 				$content = preg_replace('/(<user="'.preg_quote($row['up_name'], "/").'" \/>|<user id="'.$row['up_id'].'" \/>)/i', game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']), $content);
 				$content = preg_replace('/(<user="'.preg_quote($row['up_name'], "/").'" nolink \/>|<user id="'.$row['up_id'].'" nolink \/>)/i', game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level'], false), $content);
@@ -379,8 +379,8 @@ function parse_html($content)
 		if (count($ids) > 0)
 		{
 			// hent info og bytt om
-			$result = ess::$b->db->query("SELECT ff_id, ff_name, ff_inactive FROM ff WHERE ff_id IN (".implode(",", $ids).")");
-			while ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT ff_id, ff_name, ff_inactive FROM ff WHERE ff_id IN (".implode(",", $ids).")");
+			while ($row = $result->fetch())
 			{
 				$link = $row['ff_inactive'] && !access::has("mod")
 					? htmlspecialchars($row['ff_name'])

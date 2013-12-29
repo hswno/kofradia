@@ -5,13 +5,13 @@ global $_base, $__server;
 
 // hent bydel info
 $bydel = intval($_GET['bydel']);
-$result = $_base->db->query("SELECT id, name FROM bydeler WHERE id = $bydel");
-if (mysql_num_rows($result) == 0)
+$result = \Kofradia\DB::get()->query("SELECT id, name FROM bydeler WHERE id = $bydel");
+if ($result->rowCount() == 0)
 {
 	$_base->page->add_message("Fant ingen bydel med id: $bydel!", "error");
 	redirect::handle("");
 }
-$bydel = mysql_fetch_assoc($result);
+$bydel = $result->fetch();
 
 // legge til krim?
 if (isset($_POST['title']))
@@ -36,8 +36,8 @@ if (isset($_POST['title']))
 		$cash_max = rand($cash_min, $cash_max);
 		
 		// legg til
-		$_base->db->query("INSERT INTO kriminalitet SET b_id = {$bydel['id']}, name = ".$_base->db->quote($title).", wait_time = $wait_time, max_strength = $strength, points = $points, cash_min = $cash_min, cash_max = $cash_max");
-		$id = $_base->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO kriminalitet SET b_id = {$bydel['id']}, name = ".\Kofradia\DB::quote($title).", wait_time = $wait_time, max_strength = $strength, points = $points, cash_min = $cash_min, cash_max = $cash_max");
+		$id = \Kofradia\DB::get()->lastInsertId();
 		
 		// logg
 		putlog("CREWCHAN", "NY KRIM: ".login::$user->player->data['up_name']." la til $title - {$__server['path']}/admin/kriminalitet/krim?id=$id");

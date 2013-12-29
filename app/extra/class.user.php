@@ -78,14 +78,14 @@ class user
 		$this->id = $u_id;
 		
 		// hent brukerdata
-		$result = $_base->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT users.*
 			FROM users
 			WHERE users.u_id = $u_id");
 		
 		// lagre data
-		$this->data = mysql_fetch_assoc($result);
-		mysql_free_result($result);
+		$this->data = $result->fetch();
+		unset($result);
 		
 		// fant ikke brukeren?
 		if (!$this->data)
@@ -165,8 +165,8 @@ class user
 		$this->data['u_access_level'] = 1;
 		
 		// aktiver brukeren
-		ess::$b->db->query("UPDATE users SET u_access_level = 1 WHERE u_id = $this->id AND u_access_level = 0");
-		if (ess::$b->db->affected_rows() == 0) return false;
+		$a = \Kofradia\DB::get()->exec("UPDATE users SET u_access_level = 1 WHERE u_id = $this->id AND u_access_level = 0");
+		if ($a == 0) return false;
 		
 		putlog("CREWCHAN", "%bAktivering%b: Brukeren {$this->data['u_email']} ({$this->player->data['up_name']}) er nå aktivert igjen {$__server['path']}/min_side?u_id=$this->id");
 		return true;
@@ -196,11 +196,11 @@ class user
 		$this->data['u_deactivated_note'] = empty($note) ? NULL : $note;
 		
 		// deaktiver brukeren
-		ess::$b->db->query("UPDATE users SET u_access_level = 0, u_deactivated_time = {$this->data['u_deactivated_time']}, u_deactivated_up_id = $by_up->id, u_deactivated_reason = ".ess::$b->db->quote($reason).", u_deactivated_note = ".ess::$b->db->quote($note)." WHERE u_id = $this->id AND u_access_level != 0");
-		if (ess::$b->db->affected_rows() == 0) return false;
+		$a = \Kofradia\DB::get()->exec("UPDATE users SET u_access_level = 0, u_deactivated_time = {$this->data['u_deactivated_time']}, u_deactivated_up_id = $by_up->id, u_deactivated_reason = ".\Kofradia\DB::quote($reason).", u_deactivated_note = ".\Kofradia\DB::quote($note)." WHERE u_id = $this->id AND u_access_level != 0");
+		if ($a == 0) return false;
 		
 		// logg ut alle øktene
-		ess::$b->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_u_id = $this->id AND ses_active = 1");
+		\Kofradia\DB::get()->exec("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_u_id = $this->id AND ses_active = 1");
 		
 		if ($by_up->id == $this->player->id) $info = 'deaktiverte seg selv';
 		else
@@ -250,40 +250,44 @@ class user
 		global $_game;
 		$level = (int) $level;
 		
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// forsøk å endre tilgangsnivået fra nåværende
-		ess::$b->db->query("UPDATE users SET u_access_level = $level WHERE u_id = $this->id AND u_access_level = {$this->data['u_access_level']}");
-		if (!ess::$b->db->affected_rows() > 0) return false;
+		$a = \Kofradia\DB::get()->exec("UPDATE users SET u_access_level = $level WHERE u_id = $this->id AND u_access_level = {$this->data['u_access_level']}");
+		if (!$a > 0)
+		{
+			\Kofradia\DB::get()->commit();
+			return false;
+		}
 		$this->data['u_access_level'] = $level;
 		
 		// endre spilleren også?
 		if ($this->player->active && !$no_update_up)
 		{
-			ess::$b->db->query("UPDATE users_players SET up_access_level = $level WHERE up_id = {$this->player->id}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_access_level = $level WHERE up_id = {$this->player->id}");
 			
 			// endre rankliste?
 			/*if ($level < $_game['access_noplay'] && $this->player->data['up_access_level'] >= $_game['access_noplay'])
 			{
 				// øk tallplasseringen til de under spilleren
-				ess::$b->db->query("
+				\Kofradia\DB::get()->exec("
 					UPDATE users_players, (SELECT up_id ref_up_id FROM users_players WHERE up_points = {$this->player->data['up_points']} AND up_id != {$this->player->id} AND up_access_level < {$_game['access_noplay']} LIMIT 1) ref
 					SET up_rank_pos = up_rank_pos + 1 WHERE ref_up_id IS NULL AND up_points < {$this->player->data['up_points']}");
 			}
 			elseif ($level >= $_game['access_noplay'] && $this->player->data['up_access_level'] < $_game['access_noplay'])
 			{
 				// senk tallplasseringen til de under spilleren
-				ess::$b->db->query("
+				\Kofradia\DB::get()->exec("
 					UPDATE users_players, (SELECT up_id ref_up_id FROM users_players WHERE up_points = {$this->player->data['up_points']} AND up_id != {$this->player->id} AND up_access_level < {$_game['access_noplay']} LIMIT 1) ref
 					SET up_rank_pos = up_rank_pos - 1 WHERE ref_up_id IS NULL AND up_points < {$this->player->data['up_points']}");
 			}*/
-			ess::$b->db->query("UPDATE users_players_rank SET upr_up_access_level = $level WHERE upr_up_id = {$this->player->id}");
+			\Kofradia\DB::get()->exec("UPDATE users_players_rank SET upr_up_access_level = $level WHERE upr_up_id = {$this->player->id}");
 			ranklist::update();
 			
 			$this->player->data['up_access_level'] = $level;
 		}
 		
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 		
 		return true;
 	}
@@ -303,7 +307,7 @@ class user
 	 */
 	public function updateContactsTime()
 	{
-		\ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users SET u_contacts_update_time = ".time()."
 			WHERE u_id = ".$this->id);
 	}

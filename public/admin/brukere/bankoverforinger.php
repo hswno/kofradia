@@ -19,8 +19,8 @@ if (isset($_GET['u1']))
 	$player_2 = (int) getval("u2");
 	
 	// sjekk at player1 finnes
-	$result = $_base->db->query("SELECT up_id, up_name FROM users_players WHERE up_id = $player_1");
-	if (!($player1 = mysql_fetch_assoc($result)))
+	$result = \Kofradia\DB::get()->query("SELECT up_id, up_name FROM users_players WHERE up_id = $player_1");
+	if (!($player1 = $result->fetch()))
 	{
 		$_base->page->add_message("Spilleren med ID <u>".$player_1."</u> finnes ikke!", "error");
 	}
@@ -28,8 +28,8 @@ if (isset($_GET['u1']))
 	{
 		if (!empty($player_2))
 		{
-			$result = $_base->db->query("SELECT up_id, up_name FROM users_players WHERE up_id = $player_2");
-			if (!($player2 = mysql_fetch_assoc($result)))
+			$result = \Kofradia\DB::get()->query("SELECT up_id, up_name FROM users_players WHERE up_id = $player_2");
+			if (!($player2 = $result->fetch()))
 			{
 				$_base->page->add_message("Spilleren med ID <u>".htmlspecialchars($player_2)."</u> finnes ikke!", "error");
 				$player1 = false;
@@ -71,7 +71,7 @@ echo '
 
 if ($where)
 {
-	$result = $_base->db->query("SELECT id, bl_sender_up_id, bl_receiver_up_id, amount, time FROM bank_log WHERE $where ORDER BY id DESC");
+	$result = \Kofradia\DB::get()->query("SELECT id, bl_sender_up_id, bl_receiver_up_id, amount, time FROM bank_log WHERE $where ORDER BY id DESC");
 	
 	echo '
 <table class="table center tablemb">
@@ -107,7 +107,7 @@ if ($where)
 	</thead>
 	<tbody>';
 	
-	if (mysql_num_rows($result) == 0)
+	if ($result->rowCount() == 0)
 	{
 		echo '
 		<tr>
@@ -117,7 +117,7 @@ if ($where)
 	
 	else
 	{
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			echo '
 		<tr>

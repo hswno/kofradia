@@ -100,7 +100,7 @@ class p_crew_deaktiverte
 <h1>Deaktiverte brukere</h1>';
 		self::table_header();
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if ($row['u_access_level'] == 0)
 			{
@@ -143,7 +143,7 @@ class p_crew_deaktiverte
 <p>Merk: Denne listen viser ikke spillere som har blitt deaktivert samtidig som brukeren ble deaktivert.</p>';
 		self::table_header();
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if ($row['u_access_level'] == 0)
 			{

@@ -60,11 +60,10 @@ class ajax
 		}
 		
 		// sett database info
-		global $_base;
-		if (isset($_base->db))
+		if ($profiler = \Kofradia\DB::getProfiler())
 		{
-			header("X-HSW-Queries: ".$_base->db->queries);
-			header("X-HSW-Queries-Time: ".round($_base->db->time, 4));
+			header("X-HSW-Queries: ".$profiler->num);
+			header("X-HSW-Queries-Time: ".round($profiler->time, 4));
 		}
 	}
 	

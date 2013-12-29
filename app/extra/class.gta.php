@@ -34,8 +34,8 @@ class gta
 		if (access::has("mod")) return array(0, 0);
 		
 		// når utførte vi sist biltyveri?
-		$result = ess::$b->db->query("SELECT MAX(time_last) FROM gta_options_status WHERE gos_up_id = ".$this->up->id);
-		$last = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT MAX(time_last) FROM gta_options_status WHERE gos_up_id = ".$this->up->id);
+		$last = $result->fetchColumn(0);
 		
 		// ventetid
 		$delay = game::$settings['delay_biltyveri']['value'];
@@ -53,8 +53,8 @@ class gta
 	public function check_rank()
 	{
 		// har vi høy nok rank til å utføre biltyveri?
-		$result = ess::$b->db->query("SELECT MIN(min_rank) FROM gta");
-		$min_rank = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT MIN(min_rank) FROM gta");
+		$min_rank = $result->fetchColumn(0);
 		
 		return $this->up->rank['number'] >= $min_rank;
 	}
@@ -69,7 +69,7 @@ class gta
 		if (!$force && $this->options) return;
 		
 		// hent alternativene i denne bydelen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT a.id, a.b_id, a.name, a.max_pos_change, a.max_neg_change, a.max_percent, s.id AS status_id, GREATEST(a.min_percent, IFNULL(s.percent, 0)) AS percent, s.count, s.success
 			FROM gta_options AS a
 				LEFT JOIN gta_options_status AS s ON a.id = s.optionid AND gos_up_id = ".$this->up->id."
@@ -77,7 +77,7 @@ class gta
 			ORDER BY s.percent DESC, a.name");
 		
 		$this->options = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$this->options[$row['id']] = $row;
 		}
@@ -107,10 +107,10 @@ class gta
 		if ($ret['success'])
 		{
 			// hent alle bilene vi kan skaffe
-			$result = ess::$b->db->query("SELECT id, probability FROM gta WHERE min_rank <= ".$this->up->rank['number']);
+			$result = \Kofradia\DB::get()->query("SELECT id, probability FROM gta WHERE min_rank <= ".$this->up->rank['number']);
 			$biler = array();
 			$prob_total = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$prob_total += $row['probability'];
 				$biler[$row['id']] = $row['probability'];
@@ -134,10 +134,10 @@ class gta
 			}
 			
 			// hent bilen
-			$result = ess::$b->db->query("SELECT id, brand, model, min_rank, img_mini, probability FROM gta WHERE id = $bil");
+			$result = \Kofradia\DB::get()->query("SELECT id, brand, model, min_rank, img_mini, probability FROM gta WHERE id = $bil");
 			
 			// finn en tilfeldig bil bassert på sannsynligheten for bilen
-			$bil = mysql_fetch_assoc($result);
+			$bil = $result->fetch();
 			
 			// beregn skade ut i fra sannsynligheten vi hadde
 			$damage_min = 99 - floor($option['percent']) * (rand(1, 15) / 10);
@@ -153,12 +153,12 @@ class gta
 			$ret['rank_change'] = $this->up->increase_rank(self::RANK_BILTYVERI);
 			
 			// gi bil
-			ess::$b->db->query("INSERT INTO users_gta SET ug_up_id = ".$this->up->id.", gtaid = {$bil['id']}, time = ".time().", b_id_org = ".$this->up->data['up_b_id'].", b_id = ".$this->up->data['up_b_id'].", damage = $damage");
+			\Kofradia\DB::get()->exec("INSERT INTO users_gta SET ug_up_id = ".$this->up->id.", gtaid = {$bil['id']}, time = ".time().", b_id_org = ".$this->up->data['up_b_id'].", b_id = ".$this->up->data['up_b_id'].", damage = $damage");
 			$ret['gta'] = $bil;
 			
 			// finn en tekst?
-			$result = ess::$b->db->query("SELECT got_text FROM gta_options_text WHERE got_go_id = {$option['id']} ORDER BY RAND() LIMIT 1");
-			if ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT got_text FROM gta_options_text WHERE got_go_id = {$option['id']} ORDER BY RAND() LIMIT 1");
+			if ($row = $result->fetch())
 			{
 				$replace_from = array("%bil%", "%skade%");
 				$replace_to = array("{$bil['brand']} {$bil['model']}", $damage);
@@ -191,12 +191,12 @@ class gta
 		// ordne status
 		if ($option['status_id'])
 		{
-			ess::$b->db->query("UPDATE gta_options_status SET percent = $percent, time_last = ".time().", count = count + 1".($ret['success'] ? ', success = success + 1' : '')." WHERE id = {$option['status_id']}");
+			\Kofradia\DB::get()->exec("UPDATE gta_options_status SET percent = $percent, time_last = ".time().", count = count + 1".($ret['success'] ? ', success = success + 1' : '')." WHERE id = {$option['status_id']}");
 		}
 		
 		else
 		{
-			ess::$b->db->query("INSERT INTO gta_options_status SET optionid = {$option['id']}, gos_up_id = ".$this->up->id.", percent = $percent, time_last = ".time().", count = 1".($ret['success'] ? ', success = 1' : ''));
+			\Kofradia\DB::get()->exec("INSERT INTO gta_options_status SET optionid = {$option['id']}, gos_up_id = ".$this->up->id.", percent = $percent, time_last = ".time().", count = 1".($ret['success'] ? ', success = 1' : ''));
 		}
 		
 		// energi
@@ -235,24 +235,24 @@ class gta
 		}
 		
 		// antall biler vi har i de ulike bydelene (garasjene)
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT b_id, COUNT(id) AS ant
 			FROM users_gta
 			WHERE ug_up_id = ".$this->up->id."
 			GROUP BY b_id");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if (!isset($bydeler[$row['b_id']])) continue;
 			$bydeler[$row['b_id']]['cars'] = $row['ant'];
 		}
 		
 		// informasjon om garasjene vi har
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ugg_b_id, ugg_places, ugg_time_next_rent, ff_id, ff_name
 			FROM users_garage
 				LEFT JOIN ff ON ff_id = ugg_ff_id
 			WHERE ugg_up_id = ".$this->up->id);
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if (!isset($bydeler[$row['ugg_b_id']])) continue;
 			$bydeler[$row['ugg_b_id']]['garage'] = true;
@@ -275,12 +275,12 @@ class gta
 		
 		// hent firmaer som leier ut garasjer
 		$crew = access::has("mod") ? "" : " AND ff_is_crew = 0";
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ff_id, ff_name, ff_params
 			FROM ff
 			WHERE ff_type = ".ff::TYPE_GARASJE." AND ff_inactive = 0$crew");
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$params = new params($row['ff_params']);
 			unset($row['ff_params']);
@@ -317,7 +317,7 @@ class gta
 	public static function biltyveri_prob_decrease()
 	{
 		// setter ned sannsynligheten med 1 % av nåværende prosentverdi
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE gta_options_status gos
 				JOIN users_players ON up_id = gos.gos_up_id AND up_access_level != 0
 				JOIN gta_options go ON go.id = gos.optionid AND go.min_percent < gos.percent

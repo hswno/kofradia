@@ -17,10 +17,10 @@ class mailer
 		$id = uniqid("", true);
 		
 		// sett tags på e-poster vi ønsker å hente
-		$_base->db->query("UPDATE mailer SET m_active_end = ".(time()+self::$timeout).", m_active_id = ".$_base->db->quote($id)." WHERE (m_active_end IS NULL OR m_active_end < ".time().") LIMIT $limit");
+		$a = \Kofradia\DB::get()->exec("UPDATE mailer SET m_active_end = ".(time()+self::$timeout).", m_active_id = ".\Kofradia\DB::quote($id)." WHERE (m_active_end IS NULL OR m_active_end < ".time().") LIMIT $limit");
 		
 		// ingen endret?
-		if ($_base->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			return 0;
 		}
@@ -38,16 +38,16 @@ class mailer
 		global $_base;
 		
 		// hent alle e-postene vi tagget og forsøk å send de
-		$result = $_base->db->query("SELECT m_id, m_receiver, m_subject, m_headers, m_body, m_params FROM mailer WHERE m_active_id = ".$_base->db->quote($tag));
+		$result = \Kofradia\DB::get()->query("SELECT m_id, m_receiver, m_subject, m_headers, m_body, m_params FROM mailer WHERE m_active_id = ".\Kofradia\DB::quote($tag));
 		
 		$sent = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// send e-posten
 			if (mb_send_mail($row['m_receiver'], $row['m_subject'], $row['m_body'], $row['m_headers'], $row['m_params']))
 			{
 				// fjern fra databasen
-				$_base->db->query("DELETE FROM mailer WHERE m_id = {$row['m_id']}");
+				\Kofradia\DB::get()->exec("DELETE FROM mailer WHERE m_id = {$row['m_id']}");
 				
 				$sent++;
 			}
@@ -83,15 +83,15 @@ class mailer
 		$add = array();
 		foreach ($receivers as $item)
 		{
-			$more = $send_now ? ", ".(time()+self::$timeout).", ".$_base->db->quote($id) : "";
-			$add[] = "(".$_base->db->quote($item).",".$_base->db->quote($subject).",".$_base->db->quote($email->data[0]).",".$_base->db->quote($email->data[1]).",".$_base->db->quote($email->params)."$more)";
+			$more = $send_now ? ", ".(time()+self::$timeout).", ".\Kofradia\DB::quote($id) : "";
+			$add[] = "(".\Kofradia\DB::quote($item).",".\Kofradia\DB::quote($subject).",".\Kofradia\DB::quote($email->data[0]).",".\Kofradia\DB::quote($email->data[1]).",".\Kofradia\DB::quote($email->params)."$more)";
 		}
 		
 		// noen vi skal legge til?
 		if (count($add) > 0)
 		{
 			$more = $send_now ? ", m_active_end, m_active_id" : "";
-			$_base->db->query("INSERT INTO mailer (m_receiver, m_subject, m_headers, m_body, m_params$more) VALUES ".implode(", ", $add));
+			\Kofradia\DB::get()->exec("INSERT INTO mailer (m_receiver, m_subject, m_headers, m_body, m_params$more) VALUES ".implode(", ", $add));
 		}
 		
 		// skal e-postene sendes med en gang?

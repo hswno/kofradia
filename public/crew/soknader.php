@@ -100,13 +100,13 @@ if (isset($_GET['ds_id']))
 	{
 		case "firma_name":
 			// vis navnhistorikk for firmaet
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 					SELECT ds_id, ds_up_id, ds_time, ds_params, ds_reply_decision
 					FROM div_soknader
 					WHERE ds_type = {$soknad['ds_type']} AND ds_rel_id = {$soknad['ds_rel_id']}
 					ORDER BY ds_time DESC
 					LIMIT 10");
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 		<p>Ingen tidligere søknader om navnbytte er registrert for dette firmaet.</p>';
@@ -125,7 +125,7 @@ if (isset($_GET['ds_id']))
 			</thead>
 			<tbody>';
 				
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$params = unserialize($row['ds_params']);
 					echo '
@@ -145,13 +145,13 @@ if (isset($_GET['ds_id']))
 		
 		case "familie_name":
 			// vis navnhistorikk for familien
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 					SELECT ds_id, ds_up_id, ds_time, ds_params, ds_reply_decision
 					FROM div_soknader
 					WHERE ds_type = {$soknad['ds_type']} AND ds_rel_id = {$soknad['ds_rel_id']}
 					ORDER BY ds_time DESC
 					LIMIT 10");
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 		<p>Ingen tidligere søknader om navnbytte er registrert for dette broderskapet.</p>';
@@ -170,7 +170,7 @@ if (isset($_GET['ds_id']))
 			</thead>
 			<tbody>';
 				
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$params = unserialize($row['ds_params']);
 					echo '
@@ -239,7 +239,7 @@ echo '
 	<div class="bg1">';
 
 // ingen søknader?
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 		<p>Det er ingen'.($all ? '' : ' ubehandlede').' søknader.</p>';
@@ -260,7 +260,7 @@ else
 			<tbody>';
 	
 	$i = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$type = soknader::get_type($row['ds_type']);
 		$link = htmlspecialchars($type['title']);

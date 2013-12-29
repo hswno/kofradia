@@ -22,10 +22,10 @@ class hall_of_fame
 		$data = self::get_data_structure();
 		
 		// hent fra databasen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT hof_id, hof_name, hof_sub, hof_time, hof_data
 			FROM hall_of_fame");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$data[$row['hof_name']][$row['hof_sub'] ?: 0] = array($row['hof_time'], unserialize($row['hof_data']));
 		}
@@ -81,14 +81,14 @@ class hall_of_fame
 	 */
 	protected static function set_data($name, $sub, $data, $extra = null)
 	{
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			INSERT IGNORE INTO hall_of_fame
 			SET
-				hof_name = ".ess::$b->db->quote($name).",
-				hof_sub = ".ess::$b->db->quote($sub).",
+				hof_name = ".\Kofradia\DB::quote($name).",
+				hof_sub = ".\Kofradia\DB::quote($sub).",
 				hof_time = ".time().",
-				hof_data = ".ess::$b->db->quote(serialize($data)));
-		$affected = ess::$b->db->affected_rows() > 0;
+				hof_data = ".\Kofradia\DB::quote(serialize($data)));
+		$affected = $a > 0;
 		
 		// logg
 		list($subject, $url) = self::get_subject($name, $extra);
@@ -279,7 +279,7 @@ class hall_of_fame
 					}
 					
 					// slett forrige oppføring
-					ess::$b->db->query("DELETE FROM hall_of_fame WHERE hof_name = 'familie_rank'");
+					\Kofradia\DB::get()->exec("DELETE FROM hall_of_fame WHERE hof_name = 'familie_rank'");
 				}
 				
 				// legg til

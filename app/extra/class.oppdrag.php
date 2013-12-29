@@ -766,7 +766,7 @@ class oppdrag
 		}
 		
 		// oppdater databasen
-		ess::$b->db->query("UPDATE users_oppdrag SET uo_params = ".ess::$b->db->quote($data)." WHERE uo_up_id = {$this->up->id} AND uo_o_id = $o_id");
+		\Kofradia\DB::get()->exec("UPDATE users_oppdrag SET uo_params = ".\Kofradia\DB::quote($data)." WHERE uo_up_id = {$this->up->id} AND uo_o_id = $o_id");
 		
 		// oppdater triggers
 		$this->link_triggers();
@@ -940,10 +940,10 @@ class oppdrag
 		if ($oppdrag['uo_active'] == 0)
 		{
 			// sjekk om noen andre oppdrag er aktive
-			$result = ess::$b->db->query("SELECT uo_o_id, uo_active_time FROM users_oppdrag WHERE uo_up_id = {$this->up->id} AND uo_active != 0 LIMIT 1");
-			if (mysql_num_rows($result) > 0)
+			$result = \Kofradia\DB::get()->query("SELECT uo_o_id, uo_active_time FROM users_oppdrag WHERE uo_up_id = {$this->up->id} AND uo_active != 0 LIMIT 1");
+			if ($result->rowCount() > 0)
 			{
-				$uo = mysql_fetch_assoc($result);
+				$uo = $result->fetch();
 				
 				// et annet oppdrag?
 				if ($uo['uo_o_id'] != $oppdrag['o_id'])
@@ -969,7 +969,7 @@ class oppdrag
 				$oppdrag['uo_active'] = 1;
 				$oppdrag['uo_active_time'] = time();
 				
-				ess::$b->db->query("UPDATE users_oppdrag SET uo_active = 1, uo_active_time = {$oppdrag['uo_active_time']} WHERE uo_up_id = {$this->up->id} AND uo_o_id = {$oppdrag['o_id']}");
+				\Kofradia\DB::get()->exec("UPDATE users_oppdrag SET uo_active = 1, uo_active_time = {$oppdrag['uo_active_time']} WHERE uo_up_id = {$this->up->id} AND uo_o_id = {$oppdrag['o_id']}");
 			}
 		}
 		
@@ -1047,10 +1047,10 @@ class oppdrag
 		
 		// oppdater oppdraget
 		$time = time();
-		ess::$b->db->query("UPDATE users_oppdrag SET uo_repeats = uo_repeats + 1, uo_success = uo_success + 1, uo_last_time = $time, uo_last_state = 1, uo_availiable = 0, uo_locked = 1, uo_active = 0, uo_active_time = 0, uo_params = NULL WHERE uo_up_id = {$this->up->id} AND uo_o_id = $o_id AND uo_active != 0");
+		$a = \Kofradia\DB::get()->exec("UPDATE users_oppdrag SET uo_repeats = uo_repeats + 1, uo_success = uo_success + 1, uo_last_time = $time, uo_last_state = 1, uo_availiable = 0, uo_locked = 1, uo_active = 0, uo_active_time = 0, uo_params = NULL WHERE uo_up_id = {$this->up->id} AND uo_o_id = $o_id AND uo_active != 0");
 		
 		// ble ikke oppdatert?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			// hent frisk data og avbryt
 			$this->user_load_all();
@@ -1123,7 +1123,7 @@ class oppdrag
 							if ($bullets > 0)
 							{
 								// gi kuler
-								ess::$b->db->query("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $bullets WHERE up_id = {$this->up->id}");
+								\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $bullets WHERE up_id = {$this->up->id}");
 								$this->up->data['up_weapon_bullets'] += $bullets;
 								
 								$prizes[] = fwords("%d kule", "%d kuler", $bullets);
@@ -1184,10 +1184,10 @@ class oppdrag
 		
 		// oppdater oppdraget
 		$time = time();
-		ess::$b->db->query("UPDATE users_oppdrag SET uo_repeats = uo_repeats + 1, uo_last_time = $time, uo_last_state = 0, uo_active = 0, uo_active_time = 0, uo_params = NULL WHERE uo_up_id = {$this->up->id} AND uo_o_id = $o_id AND uo_active != 0");
+		$a = \Kofradia\DB::get()->exec("UPDATE users_oppdrag SET uo_repeats = uo_repeats + 1, uo_last_time = $time, uo_last_state = 0, uo_active = 0, uo_active_time = 0, uo_params = NULL WHERE uo_up_id = {$this->up->id} AND uo_o_id = $o_id AND uo_active != 0");
 		
 		// ble ikke oppdatert?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			// hent frisk data og avbryt
 			$this->user_load_all();
@@ -1260,8 +1260,8 @@ class oppdrag
 	public function unlock($o_id, $text = 'Du har gjennomført første delen av oppdraget &laquo;$name&raquo;.')
 	{
 		$o_id = (int) $o_id;
-		ess::$b->db->query("UPDATE users_oppdrag SET uo_locked = 0, uo_params = NULL WHERE uo_up_id = {$this->up->id} AND uo_o_id = $o_id AND uo_locked != 0");
-		$updated = ess::$b->db->affected_rows() > 0;
+		$a = \Kofradia\DB::get()->exec("UPDATE users_oppdrag SET uo_locked = 0, uo_params = NULL WHERE uo_up_id = {$this->up->id} AND uo_o_id = $o_id AND uo_locked != 0");
+		$updated = $a > 0;
 		
 		// oppdater lokal data
 		if (isset($this->oppdrag[$o_id]))
@@ -1326,14 +1326,14 @@ class oppdrag
 	 */
 	public function user_load_all()
 	{
-		$result = ess::$b->db->query("SELECT uo_repeats, uo_success, uo_availiable, uo_locked, uo_last_time, uo_last_state, uo_active, uo_active_time, uo_params, o_id, o_name, o_title, o_description, o_description_unlock, o_rank_min, o_rank_max, o_retry_wait, o_repeat_wait, o_unlock_params, o_params FROM users_oppdrag, oppdrag WHERE uo_up_id = {$this->up->id} AND uo_availiable = 1 AND uo_o_id = o_id ORDER BY uo_time DESC");
+		$result = \Kofradia\DB::get()->query("SELECT uo_repeats, uo_success, uo_availiable, uo_locked, uo_last_time, uo_last_state, uo_active, uo_active_time, uo_params, o_id, o_name, o_title, o_description, o_description_unlock, o_rank_min, o_rank_max, o_retry_wait, o_repeat_wait, o_unlock_params, o_params FROM users_oppdrag, oppdrag WHERE uo_up_id = {$this->up->id} AND uo_availiable = 1 AND uo_o_id = o_id ORDER BY uo_time DESC");
 		
 		// gå gjennom oppdragene
 		unset($this->active);
 		$this->active = false;
 		$this->params = array();
 		$this->oppdrag = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// legg til oppdraget
 			$this->oppdrag[$row['o_id']] = $row;
@@ -1366,24 +1366,24 @@ class oppdrag
 			$limit = oppdrag::AVAILIABLE - count($this->oppdrag);
 			
 			// se om det finnes oppdrag som kan brukes og velg et tilfeldig
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT uo_availiable, uo_locked, uo_last_time, uo_last_state, uo_active, uo_active_time, uo_params, o_id, o_name, o_title, o_description, o_description_unlock, o_rank_min, o_rank_max, o_retry_wait, o_repeat_wait, o_unlock_params, o_params
 				FROM oppdrag LEFT JOIN users_oppdrag ON o_id = uo_o_id AND uo_up_id = ".$this->up->id."
 				WHERE o_active != 0 AND (o_rank_min = 0 OR o_rank_min <= ".$this->up->rank['number'].") AND (o_rank_max = 0 OR o_rank_max >= ".$this->up->rank['number'].") AND IF(!ISNULL(uo_id), uo_availiable = 0 AND ".time()."-uo_last_time >= o_repeat_wait AND (o_repeats = 0 OR o_repeats > uo_repeats), TRUE)
 				ORDER BY RAND() LIMIT $limit");
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				// hatt det før?
 				if ($row['uo_availiable'] !== NULL)
 				{
-					ess::$b->db->query("UPDATE users_oppdrag SET uo_time = ".time().", uo_availiable = 1, uo_locked = 1, uo_params = NULL WHERE uo_up_id = ".$this->up->id." AND uo_o_id = {$row['o_id']} AND uo_availiable = 0");
+					\Kofradia\DB::get()->exec("UPDATE users_oppdrag SET uo_time = ".time().", uo_availiable = 1, uo_locked = 1, uo_params = NULL WHERE uo_up_id = ".$this->up->id." AND uo_o_id = {$row['o_id']} AND uo_availiable = 0");
 				}
 				
 				else
 				{
 					// legg til ny rad
-					ess::$b->db->query("INSERT IGNORE INTO users_oppdrag SET uo_o_id = {$row['o_id']}, uo_up_id = ".$this->up->id.", uo_time = ".time().", uo_availiable = 1");
+					\Kofradia\DB::get()->exec("INSERT IGNORE INTO users_oppdrag SET uo_o_id = {$row['o_id']}, uo_up_id = ".$this->up->id.", uo_time = ".time().", uo_availiable = 1");
 					$row['uo_active'] = 0;
 					$row['uo_active_time'] = 0;
 				}

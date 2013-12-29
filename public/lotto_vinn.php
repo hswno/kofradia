@@ -10,14 +10,14 @@ $up_id = login::$user->player->id;
 if (isset($_GET['up_id']) && access::has("mod"))
 {
 	$find = (int) getval("up_id");
-	$result = $_base->db->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE up_id = $find");
-	if (mysql_num_rows($result) == 0)
+	$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE up_id = $find");
+	if ($result->rowCount() == 0)
 	{
 		$_base->page->add_message("Fant ingen spiller med ID <b>".htmlspecialchars($_GET['up_id'])."</b>!", "error");
 	}
 	else
 	{
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		$up_id = $row['up_id'];
 		$_base->page->add_message("Du viser lottoresultatene for spilleren ".game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level'])."!");
 	}
@@ -33,9 +33,10 @@ echo '
 
 
 // antall vinn og totalt vunnet
-$result = $_base->db->query("SELECT COUNT(id), SUM(won) FROM lotto_vinnere WHERE lv_up_id = $up_id");
-$ant = mysql_result($result, 0, 0);
-$won = mysql_result($result, 0, 1);
+$result = \Kofradia\DB::get()->query("SELECT COUNT(id), SUM(won) FROM lotto_vinnere WHERE lv_up_id = $up_id");
+$row = $result->fetch(\PDO::FETCH_NUM);
+$ant = $row[0];
+$won = $row[1];
 
 if ($ant == 0)
 {
@@ -64,7 +65,7 @@ else
 			<tbody>';
 	
 	$i = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$end = ceil(($row['time']-900)/1800)*1800 + 900;
 		echo '

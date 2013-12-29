@@ -250,7 +250,7 @@ if (isset($_GET['u_id']) || isset($_GET['up_id']) || isset($_GET['name']) || iss
 	', $list).'
 </p>';
 		
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 <p>Ingen brukere ble funnet.</p>';
@@ -335,7 +335,7 @@ function lagre_felt(root)
 			// sett opp data
 			$data = array();
 			$ids = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$data[] = $row;
 				$ids[] = $row['u_id'];
@@ -343,13 +343,13 @@ function lagre_felt(root)
 			
 			// hent inn ip-ban oppføringer
 			$time = time();
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT u_online_ip, bi_id, bi_reason
 				FROM ban_ip
 					JOIN users ON u_id IN (".implode(",", array_unique($ids)).")
 				WHERE INET_ATON(u_online_ip) BETWEEN bi_ip_start AND bi_ip_end AND IF(ISNULL(bi_time_end), $time >= bi_time_start, $time BETWEEN bi_time_start AND bi_time_end)");
 			$ip_bans = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$ip_bans[$row['u_online_ip']] = $row;
 			}

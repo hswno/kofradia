@@ -1,5 +1,6 @@
 <?php
 
+use \Kofradia\DB;
 login::init();
 
 /**
@@ -157,27 +158,27 @@ class login
 				$uid = intval($uid);
 				
 				// finn ut om dette finnes i databasen
-				$result = $_base->db->query("SELECT
+				$result = \Kofradia\DB::get()->query("
+					SELECT
 						ses_id, ses_u_id, ses_hash, ses_expire_type, ses_expire_time, ses_browsers, ses_phpsessid, ses_last_ip, ses_last_time, ses_secure,
 						u_online_time, u_online_ip, u_access_level, u_force_ssl
 					FROM sessions, users WHERE sessions.ses_u_id = users.u_id AND sessions.ses_u_id = $uid AND sessions.ses_id = $sid AND sessions.ses_active = 1 AND sessions.ses_expire_time > ".(time()));
 				
 				// kontroller hash
-				$row = null;
-				if (mysql_num_rows($result) > 0)
+				if ($row = $result->fetch())
 				{
-					$row = mysql_fetch_assoc($result);
 					if ($hash != $row['ses_hash'] && $hash != mb_substr(md5($row['ses_hash']), 0, 13))
 					{
 						$row = null;
 					}
 				}
+
+				unset($result);
 				
 				// har vi en rad?
 				if ($row)
 				{
 					self::$info = $row;
-					mysql_free_result($result);
 					self::$info['ses_secure'] = self::$info['ses_secure'] == 1;
 					$extra = "";
 					
@@ -191,8 +192,9 @@ class login
 						self::logout(true);
 						
 						// hent begrunnelse og info
-						$result = $_base->db->query("SELECT u_id, u_email, u_deactivated_reason, u_deactivated_time, up_name FROM users LEFT JOIN users_players ON up_id = u_active_up_id WHERE u_id = $uid");
-						$_SESSION[$GLOBALS['__server']['session_prefix'].'login_error'] = array("deactivated", mysql_fetch_assoc($result));
+						$result = \Kofradia\DB::get()->query("SELECT u_id, u_email, u_deactivated_reason, u_deactivated_time, up_name FROM users LEFT JOIN users_players ON up_id = u_active_up_id WHERE u_id = $uid");
+						$_SESSION[$GLOBALS['__server']['session_prefix'].'login_error'] = array("deactivated", $result->fetch());
+						unset($result);
 						
 						redirect::handle("", redirect::ROOT);
 					}
@@ -201,11 +203,12 @@ class login
 					if ($_SERVER['REMOTE_ADDR'] != self::$info['ses_last_ip'] && self::$info['ses_last_ip'] != "0.0.0.0" && !empty(self::$info['ses_last_ip']))
 					{
 						// hent IP-liste
-						$result = ess::$b->db->query("
+						$result = \Kofradia\DB::get()->query("
 							SELECT ses_ip_list
 							FROM sessions
 							WHERE ses_id = $sid");
-						$ip_list = explode(";", mysql_result($result, 0));
+						$ip_list = explode(";", $result->fetchColumn(0));
+						unset($result);
 						
 						// er vi allerede verifisert?
 						$ok = false;
@@ -250,7 +253,7 @@ class login
 							{
 								// legg til i listen
 								$ip_list[] = $_SERVER['REMOTE_ADDR'];
-								$extra .= ", ses_ip_list = ".ess::$b->db->quote(implode(";", $ip_list));
+								$extra .= ", ses_ip_list = ".\Kofradia\DB::quote(implode(";", $ip_list));
 								
 								putlog("ABUSE", "%c6%bAUTENTISERT-IP:%b%c #%u{$uid}%u har fått ny IP-adresse autentisert i økten (%u{$_SERVER['REMOTE_ADDR']}%u - forrige: ".self::$info['ses_last_ip'].") {$__server['path']}/min_side?u_id=$uid");
 							}
@@ -264,8 +267,9 @@ class login
 							putlog("CREWCHAN", "%c6%bMISLYKKET-AUTENTISERT-IP:%b%c #%u{$uid}%u har fått ny IP-adresse i økten (%u{$_SERVER['REMOTE_ADDR']}%u - forrige: ".self::$info['ses_last_ip'].") - %c4KUNNE IKKE VERIFISERES%c - {$__server['path']}/min_side?u_id=$uid");
 							
 							// hent e-post
-							$result = $_base->db->query("SELECT u_email FROM users WHERE u_id = $uid");
-							$email = mysql_result($result, 0);
+							$result = \Kofradia\DB::get()->query("SELECT u_email FROM users WHERE u_id = $uid");
+							$email = $result->fetchColumn(0);
+							unset($result);
 							
 							// lagre e-post i sessions slik at det kan hentes ut til logg inn skjemaet
 							$_SESSION[$GLOBALS['__server']['session_prefix'].'logginn_id'] = $email;
@@ -276,7 +280,7 @@ class login
 						}
 						
 						// sett som siste IP
-						$extra .= ", ses_last_ip = ".ess::$b->db->quote($_SERVER['REMOTE_ADDR']);
+						$extra .= ", ses_last_ip = ".\Kofradia\DB::quote($_SERVER['REMOTE_ADDR']);
 					}
 					
 					// bruker ikke sikker tilkobling slik det skal?
@@ -298,7 +302,7 @@ class login
 						setcookie($__server['cookie_prefix'] . "s", 1, $cookie_expire, $__server['cookie_path'], $__server['cookie_domain']);
 						
 						// endre session
-						$_base->db->query("UPDATE sessions SET ses_secure = 1 WHERE ses_id = $sid"); 
+						\Kofradia\DB::get()->exec("UPDATE sessions SET ses_secure = 1 WHERE ses_id = $sid"); 
 						
 						// krev https
 						defined("LOGIN_FORCE_SSL") || define("LOGIN_FORCE_SSL", true);
@@ -322,8 +326,9 @@ class login
 							if ($c_now > $maks)
 							{
 								// finn info
-								$result = $_base->db->query("SELECT up_name FROM users, users_players WHERE u_id = $uid AND up_id = u_active_up_id");
-								$name = mysql_result($result, 0);
+								$result = \Kofradia\DB::get()->query("SELECT up_name FROM users, users_players WHERE u_id = $uid AND up_id = u_active_up_id");
+								$name = $result->fetchColumn(0);
+								unset($result);
 								putlog("ABUSE", "%bHITS LIMIT%b (%u$tid%u-%u$periode%u) - %u$name%u ($uid) - COUNT: %u$c_now%u -- {$_SERVER['REQUEST_METHOD']} -- {$_SERVER['REQUEST_URI']} -- {$__server['path']}/min_side?u_id=$uid");
 								
 								header("HTTP/1.0 503 Service Unavailiable");
@@ -353,19 +358,20 @@ class login
 					if (!in_array($_SERVER['HTTP_USER_AGENT'], $browsers))
 					{
 						$browsers[] = $_SERVER['HTTP_USER_AGENT'];
-						$extra .= ", ses_browsers = ".$_base->db->quote(implode("\n", $browsers));
+						$extra .= ", ses_browsers = ".\Kofradia\DB::quote(implode("\n", $browsers));
 						
-						$result = $_base->db->query("SELECT u_email, up_name FROM users, users_players WHERE u_id = $uid AND u_active_up_id = up_id");
-						$row = mysql_fetch_assoc($result);
+						$result = \Kofradia\DB::get()->query("SELECT u_email, up_name FROM users, users_players WHERE u_id = $uid AND u_active_up_id = up_id");
+						$row = $result->fetch();
+						unset($result);
 						putlog("ABUSE", "%b%c11NETTLESER OPPDAGET:%c%b (%c4%u".count($browsers)."%u%c) - {$row['up_name']} ({$row['u_email']}); UID: %u$uid%u - SID: {$sid} - IP: {$_SERVER['REMOTE_ADDR']} - NETTLESER: {$_SERVER['HTTP_USER_AGENT']}");
 					}
 					if (session_id() != self::$info['ses_phpsessid'])
 					{
-						$phpsessid = $_base->db->quote(session_id());
+						$phpsessid = \Kofradia\DB::quote(session_id());
 						$extra .= ", ses_phpsessid = $phpsessid";
 					}
 					
-					$_base->db->query("UPDATE sessions SET ses_expire_time = $expire, ses_hits = ses_hits + 1, ses_last_time = $time$extra WHERE ses_u_id = $uid AND ses_id = $sid");
+					\Kofradia\DB::get()->exec("UPDATE sessions SET ses_expire_time = $expire, ses_hits = ses_hits + 1, ses_last_time = $time$extra WHERE ses_u_id = $uid AND ses_id = $sid");
 					
 					// hent inn brukeren
 					self::$logged_in = true;
@@ -374,7 +380,7 @@ class login
 					// oppdater statisikk
 					$date = $_base->date->get();
 					self::$info['secs_hour'] = self::get_secs_hour();
-					ess::$b->db->query("
+					\Kofradia\DB::get()->exec("
 						INSERT INTO users_hits SET uhi_hits = 1, uhi_up_id = ".login::$user->player->id.", uhi_secs_hour = ".self::$info['secs_hour']."
 						ON DUPLICATE KEY UPDATE uhi_hits = uhi_hits + 1");
 					
@@ -382,7 +388,7 @@ class login
 					$upd_up = array();
 					if ($_SERVER['REMOTE_ADDR'] != self::$info['ses_last_ip'])
 					{
-						$last_ip = ess::$b->db->quote($_SERVER['REMOTE_ADDR']);
+						$last_ip = \Kofradia\DB::quote($_SERVER['REMOTE_ADDR']);
 						$upd_u[] = "u_online_ip = $last_ip";
 						self::$user->data['u_online_ip'] = $_SERVER['REMOTE_ADDR'];
 						if (self::$info['u_online_time'] > time() - 300)
@@ -393,7 +399,7 @@ class login
 					}
 					elseif ($_SERVER['REMOTE_ADDR'] != self::$info['u_online_ip'])
 					{
-						$last_ip = ess::$b->db->quote($_SERVER['REMOTE_ADDR']);
+						$last_ip = \Kofradia\DB::quote($_SERVER['REMOTE_ADDR']);
 						$upd_u[] = "u_online_ip = $last_ip";
 						self::$user->data['u_online_ip'] = $_SERVER['REMOTE_ADDR'];
 						if (self::$info['u_online_time'] > time() - 300)
@@ -417,8 +423,8 @@ class login
 						$upd_up[] = "up_last_online = $time";
 					}
 					
-					if (count($upd_u) > 0) $_base->db->query("UPDATE users SET ".implode(",", $upd_u)." WHERE u_id = ".self::$user->id);
-					if (count($upd_up) > 0) $_base->db->query("UPDATE users_players SET ".implode(",", $upd_up)." WHERE up_id = ".self::$user->player->id);
+					if (count($upd_u) > 0) \Kofradia\DB::get()->exec("UPDATE users SET ".implode(",", $upd_u)." WHERE u_id = ".self::$user->id);
+					if (count($upd_up) > 0) \Kofradia\DB::get()->exec("UPDATE users_players SET ".implode(",", $upd_up)." WHERE up_id = ".self::$user->player->id);
 				}
 				else
 				{
@@ -481,13 +487,13 @@ class login
 		{
 			// kontakter
 			self::$info['contacts'] = array(1 => array(), 2 => array());
-			$result = $_base->db->query("SELECT uc_id, uc_contact_up_id, uc_time, uc_type, up_name, up_access_level FROM users_contacts LEFT JOIN users_players ON up_id = uc_contact_up_id WHERE uc_u_id = $u_id ORDER BY uc_type, up_name ASC");
+			$result = \Kofradia\DB::get()->query("SELECT uc_id, uc_contact_up_id, uc_time, uc_type, up_name, up_access_level FROM users_contacts LEFT JOIN users_players ON up_id = uc_contact_up_id WHERE uc_u_id = $u_id ORDER BY uc_type, up_name ASC");
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				self::$info['contacts'][$row['uc_type']][$row['uc_contact_up_id']] = $row;
 			}
-			mysql_free_result($result);
+			unset($result);
 			
 			self::$info['contacts_update'] = self::$user->data['u_contacts_update_time'];
 		}
@@ -543,12 +549,12 @@ class login
 		if ($all_sessions)
 		{
 			// slett alle sessions til denne brukeren
-			$_base->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_u_id = ".self::$info['ses_u_id']." AND ses_active = 1");
+			\Kofradia\DB::get()->exec("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_u_id = ".self::$info['ses_u_id']." AND ses_active = 1");
 		}
 		elseif (isset(self::$info['ses_id']) && isset(self::$info['ses_hash']))
 		{
 			// slett kun den aktive session
-			$_base->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_u_id = ".self::$info['ses_u_id']." AND ses_hash = ".$_base->db->quote(self::$info['ses_hash'])." AND ses_id = ".self::$info['ses_id']." AND ses_active = 1");
+			\Kofradia\DB::get()->exec("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_u_id = ".self::$info['ses_u_id']." AND ses_hash = ".\Kofradia\DB::quote(self::$info['ses_hash'])." AND ses_id = ".self::$info['ses_id']." AND ses_active = 1");
 		}
 		
 		return true;
@@ -566,18 +572,18 @@ class login
 	public static function do_login($email, $pass, $expire_type = LOGIN_TYPE_TIMEOUT, $md5 = true, $secure_only = false, $skip_pass = null)
 	{
 		// hent potensielle brukere
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT u_id, u_pass, u_email, u_online_time, u_online_ip, u_access_level, u_force_ssl
 			FROM users LEFT JOIN users_players ON u_id = up_u_id
-			WHERE (u_email = ".ess::$b->db->quote($email)." OR u_id = ".intval($email)." OR up_name = ".ess::$b->db->quote($email).")
+			WHERE (u_email = ".\Kofradia\DB::quote($email)." OR u_id = ".intval($email)." OR up_name = ".\Kofradia\DB::quote($email).")
 			ORDER BY u_access_level = 0, u_online_time DESC");
-		if (mysql_num_rows($result) == 0)
+		if (!$result->rowCount())
 		{
 			return LOGIN_ERROR_USER_OR_PASS;
 		}
 
 		$p_ok = false;
-		while ($user = mysql_fetch_assoc($result))
+		while ($user = $result->fetch())
 		{
 			// ikke sjekke passord
 			if ($skip_pass)
@@ -634,11 +640,12 @@ class login
 		$u_id = (int) $u_id;
 		if (!$user)
 		{
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT u_id, u_email, u_online_time, u_online_ip, u_access_level, u_force_ssl
 				FROM users
 				WHERE u_id = $u_id");
-			$user = mysql_fetch_assoc($result);
+			$user = $result->fetch();
+			unset($result);
 		}
 		
 		if (!$user || $u_id != $user['u_id']) return false;
@@ -660,12 +667,12 @@ class login
 		$expire = $expire_type == LOGIN_TYPE_BROWSER ? time()+60*60*48 : ($expire_type == LOGIN_TYPE_TIMEOUT ? time()+$timeout : time()+31536000);
 		
 		// legg til session
-		$ip = ess::$b->db->quote($_SERVER['REMOTE_ADDR']);
-		$browsers = ess::$b->db->quote($_SERVER['HTTP_USER_AGENT']);
-		ess::$b->db->query("INSERT INTO sessions SET ses_u_id = {$user['u_id']}, ses_hash = ".ess::$b->db->quote($hash).", ses_expire_time = $expire, ses_expire_type = $expire_type, ses_created_time = ".time().", ses_ip_list = $ip, ses_last_ip = $ip, ses_browsers = $browsers, ses_secure = ".($secure_only ? 1 : 0));
+		$ip = \Kofradia\DB::quote($_SERVER['REMOTE_ADDR']);
+		$browsers = \Kofradia\DB::quote($_SERVER['HTTP_USER_AGENT']);
+		\Kofradia\DB::get()->exec("INSERT INTO sessions SET ses_u_id = {$user['u_id']}, ses_hash = ".\Kofradia\DB::quote($hash).", ses_expire_time = $expire, ses_expire_type = $expire_type, ses_created_time = ".time().", ses_ip_list = $ip, ses_last_ip = $ip, ses_browsers = $browsers, ses_secure = ".($secure_only ? 1 : 0));
 		
 		// hent session id
-		$ses_id = ess::$b->db->insert_id();
+		$ses_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// sett cookie
 		$cookie_expire = $expire_type == LOGIN_TYPE_BROWSER ? 0 : time()+31536000;

@@ -13,15 +13,15 @@ if (isset($_POST['cash']))
 {
 	$cash = game::intval($_POST['cash']);
 	
-	$result = $_base->db->query("SELECT $cash > 10000000000");
-	if (mysql_result($result, 0))
+	$result = \Kofradia\DB::get()->query("SELECT $cash > 10000000000");
+	if ($result->fetchColumn(0))
 	{
 		$_base->page->add_message("Du kan ikke sette pengene dine til over 10 mrd!", "error");
 	}
 	
 	else
 	{
-		$_base->db->query("UPDATE users_players SET up_cash = $cash, up_bank = 0 WHERE up_id = ".login::$user->player->id." AND $cash <= 10000000000");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = $cash, up_bank = 0 WHERE up_id = ".login::$user->player->id." AND $cash <= 10000000000");
 		$_base->page->add_message("Du har nå nøyaktig <b>".game::format_cash($cash)."</b> på hånda og <b>0 kr</b> i banken!");
 		
 		putlog("LOG", "%b%NOSTAT PENGER:%c%b %u".login::$user->player->data['up_name']."%u endret pengene sine til nøyaktig %u".game::format_cash($cash)."%u. Tidligere kontant: ".game::format_cash(login::$user->player->data['up_cash']).". Tidligere i banken: ".game::format_cash(login::$user->player->data['up_bank']).".");
@@ -31,10 +31,11 @@ if (isset($_POST['cash']))
 
 
 // har vi over 1 bill nå?
-$result = $_base->db->query("SELECT ".login::$user->player->data['up_cash']."+".login::$user->player->data['up_bank']." > 10000000000, ".login::$user->player->data['up_cash']."+".login::$user->player->data['up_bank'].", 100000000-".login::$user->player->data['up_cash']."-".login::$user->player->data['up_bank']);
-$over = mysql_result($result, 0);
-$cash = mysql_result($result, 0, 1);
-$igjen = mysql_result($result, 0, 2);
+$result = \Kofradia\DB::get()->query("SELECT ".login::$user->player->data['up_cash']."+".login::$user->player->data['up_bank']." > 10000000000, ".login::$user->player->data['up_cash']."+".login::$user->player->data['up_bank'].", 100000000-".login::$user->player->data['up_cash']."-".login::$user->player->data['up_bank']);
+$row = $result->fetch(\PDO::FETCH_NUM);
+$over = $row[0];
+$cash = $row[1];
+$igjen = $row[2];
 
 echo '
 <h1>Penger</h1>

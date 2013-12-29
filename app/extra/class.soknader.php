@@ -65,15 +65,15 @@ class soknader
 		}
 		
 		// legg til
-		$_base->db->query("INSERT INTO div_soknader SET ds_type = $type, ds_up_id = ".self::up_id().", ds_rel_id = $rel_id, ds_time = ".time().", ds_reason = ".$_base->db->quote($reason).", ds_params = ".$_base->db->quote(serialize($params)));
+		\Kofradia\DB::get()->exec("INSERT INTO div_soknader SET ds_type = $type, ds_up_id = ".self::up_id().", ds_rel_id = $rel_id, ds_time = ".time().", ds_reason = ".\Kofradia\DB::quote($reason).", ds_params = ".\Kofradia\DB::quote(serialize($params)));
 		
 		// oppdater cache
-		tasks::set("soknader", mysql_result($_base->db->query("SELECT COUNT(ds_id) FROM div_soknader WHERE ds_reply_decision = 0"), 0));
+		tasks::set("soknader", \Kofradia\DB::get()->query("SELECT COUNT(ds_id) FROM div_soknader WHERE ds_reply_decision = 0")->fetchColumn(0));
 		
 		// logg
 		putlog("NOTICE", "%bNY SØKNAD:%b {$__server['https_path']}{$__server['relative_path']}/crew/soknader");
 		
-		return $_base->db->insert_id();
+		return \Kofradia\DB::get()->lastInsertId();
 	}
 	
 	/**
@@ -84,9 +84,9 @@ class soknader
 		$ds_id = (int) $ds_id;
 		
 		global $_base;
-		$result = $_base->db->query("SELECT ds_id, ds_type, ds_up_id, ds_rel_id, ds_time, ds_reason, ds_params, ds_reply_decision, ds_reply_reason, ds_reply_up_id, ds_reply_time FROM div_soknader WHERE ds_id = $ds_id");
+		$result = \Kofradia\DB::get()->query("SELECT ds_id, ds_type, ds_up_id, ds_rel_id, ds_time, ds_reason, ds_params, ds_reply_decision, ds_reply_reason, ds_reply_up_id, ds_reply_time FROM div_soknader WHERE ds_id = $ds_id");
 		
-		return mysql_fetch_assoc($result);
+		return $result->fetch();
 	}
 	
 	/**
@@ -103,10 +103,10 @@ class soknader
 		{
 			case "ff_name":
 				// hent ffinfo
-				$result = $_base->db->query("SELECT ff_id, ff_name FROM ff WHERE ff_id = {$soknad['ds_rel_id']}");
+				$result = \Kofradia\DB::get()->query("SELECT ff_id, ff_name FROM ff WHERE ff_id = {$soknad['ds_rel_id']}");
 				
 				// finnes ikke FF?
-				$ff = mysql_fetch_assoc($result);
+				$ff = $result->fetch();
 				if (!$ff)
 				{
 					return "Fant ikke FF.";
@@ -227,10 +227,10 @@ class soknader
 		player::add_log_static("soknader", $msg, 0, $soknad['ds_up_id']);
 		
 		// oppdater søknaden
-		$_base->db->query("UPDATE div_soknader SET ds_params = ".$_base->db->quote(serialize($params)).", ds_reply_decision = ".($outcome ? 1 : -1).", ds_reply_reason = ".$_base->db->quote($reason).", ds_reply_up_id = ".self::up_id().", ds_reply_time = ".time()." WHERE ds_id = $ds_id");
+		\Kofradia\DB::get()->exec("UPDATE div_soknader SET ds_params = ".\Kofradia\DB::quote(serialize($params)).", ds_reply_decision = ".($outcome ? 1 : -1).", ds_reply_reason = ".\Kofradia\DB::quote($reason).", ds_reply_up_id = ".self::up_id().", ds_reply_time = ".time()." WHERE ds_id = $ds_id");
 		
 		// oppdater cache
-		tasks::set("soknader", mysql_result($_base->db->query("SELECT COUNT(ds_id) FROM div_soknader WHERE ds_reply_decision = 0"), 0));
+		tasks::set("soknader", \Kofradia\DB::get()->query("SELECT COUNT(ds_id) FROM div_soknader WHERE ds_reply_decision = 0")->fetchColumn(0));
 		
 		return $info;
 	}
@@ -248,12 +248,12 @@ class soknader
 		$where = $force ? '' : ' AND ds_reply_decision = 0';
 		
 		// slett søknaden
-		$_base->db->query("DELETE FROM div_soknader WHERE ds_id = $ds_id$where");
+		$a = \Kofradia\DB::get()->exec("DELETE FROM div_soknader WHERE ds_id = $ds_id$where");
 		
-		if ($_base->db->affected_rows() == 0) return false;
+		if ($a == 0) return false;
 		
 		// oppdater cache
-		tasks::set("soknader", mysql_result($_base->db->query("SELECT COUNT(ds_id) FROM div_soknader WHERE ds_reply_decision = 0"), 0));
+		tasks::set("soknader", \Kofradia\DB::get()->query("SELECT COUNT(ds_id) FROM div_soknader WHERE ds_reply_decision = 0")->fetchColumn(0));
 		return true;
 	}
 }

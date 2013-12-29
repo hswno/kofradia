@@ -117,7 +117,7 @@ class player
 	public function __construct($up_id, user $user_object = NULL, $find_user = NULL)
 	{
 		// hent informasjon
-		$where = !$find_user ? "up_id = " . intval($up_id) : "up_name = ".ess::$b->db->quote($up_id);
+		$where = !$find_user ? "up_id = " . intval($up_id) : "up_name = ".\Kofradia\DB::quote($up_id);
 		$order = $find_user ? " ORDER BY up_access_level = 0, up_last_online DESC" : "";
 		
 		$this->load_data(false, $where, $order);
@@ -156,8 +156,8 @@ class player
 			ranklist::flush();
 			
 			// hent oppdatert plassering
-			$result = ess::$b->db->query("SELECT upr_rank_pos FROM users_players_rank WHERE upr_up_id = $this->id");
-			$row = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT upr_rank_pos FROM users_players_rank WHERE upr_up_id = $this->id");
+			$row = $result->fetch();
 			if ($row) $this->data['upr_rank_pos'] = $row['upr_rank_pos'];
 		}
 		
@@ -177,11 +177,19 @@ class player
 	 */
 	public function lock()
 	{
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		$this->load_data(true);
 		$this->process_data($this->user);
 	}
-	
+
+	/**
+	 * Frigjør lås
+	 */
+	public function lock_commit()
+	{
+		\Kofradia\DB::get()->commit();
+	}
+
 	/**
 	 * Hent inn spillerdata
 	 */
@@ -202,7 +210,7 @@ class player
 		
 		$lock = $lock ? " FOR UPDATE" : "";
 		
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				users_players.*,
 				upr_rank_pos
@@ -211,7 +219,7 @@ class player
 			WHERE $where$groupby$order
 			LIMIT 1$lock");
 		
-		$this->data = mysql_fetch_assoc($result);
+		$this->data = $result->fetch();
 	}
 	
 	/**
@@ -326,15 +334,15 @@ class player
 		
 		// opprett thread
 		$time = time();
-		ess::$b->db->query("INSERT INTO inbox_threads SET it_title = ".ess::$b->db->quote($title));
-		$it_id = ess::$b->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO inbox_threads SET it_title = ".\Kofradia\DB::quote($title));
+		$it_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// opprett melding
-		ess::$b->db->query("INSERT INTO inbox_messages SET im_it_id = $it_id, im_up_id = $this->id, im_time = $time");
-		$im_id = ess::$b->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO inbox_messages SET im_it_id = $it_id, im_up_id = $this->id, im_time = $time");
+		$im_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// opprett data
-		ess::$b->db->query("INSERT INTO inbox_data SET id_im_id = $im_id, id_text = ".ess::$b->db->quote($text));
+		\Kofradia\DB::get()->exec("INSERT INTO inbox_data SET id_im_id = $im_id, id_text = ".\Kofradia\DB::quote($text));
 		
 		// sett opp relasjoner
 		$to_add = array();
@@ -352,10 +360,10 @@ class player
 		}
 		
 		// opprett relasjoner
-		ess::$b->db->query("INSERT INTO inbox_rel (ir_it_id, ir_up_id, ir_unread, ir_deleted, ir_restrict_im_time) VALUES ".implode(",", $to_add));
+		\Kofradia\DB::get()->exec("INSERT INTO inbox_rel (ir_it_id, ir_up_id, ir_unread, ir_deleted, ir_restrict_im_time) VALUES ".implode(",", $to_add));
 		
 		// oppdater egen brukerinfo
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users, users_players
 			SET
 				up_inbox_num_threads = up_inbox_num_threads + 1,
@@ -365,7 +373,7 @@ class player
 		
 		// oppdater brukere
 		if (count($id_list) == 0) $id_list[] = $to_up_id; // fiks for at det alltid vil være en spiller som får ny melding
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users, users_players
 			SET u_inbox_new = u_inbox_new + 1
 			WHERE up_id IN (".implode(",", $id_list).") AND up_u_id = u_id");
@@ -417,12 +425,12 @@ class player
 		$is_login = $use_login && login::$logged_in && $up_id == login::$user->player->id;
 		
 		// hent helt fersk spillerinfo
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_name, up_access_level, up_points, upr_rank_pos
 			FROM users_players
 				LEFT JOIN users_players_rank ON upr_up_id = up_id
 			WHERE up_id = $up_id");
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		
 		// sett opp info
 		$points_change_rel = $points_change_rel === null ? $points_change : (int) $points_change_rel;
@@ -441,8 +449,8 @@ class player
 			ranklist::flush();
 			
 			// hent oppdatert plassering
-			$result = ess::$b->db->query("SELECT upr_rank_pos FROM users_players_rank WHERE upr_up_id = $up_id");
-			$row = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT upr_rank_pos FROM users_players_rank WHERE upr_up_id = $up_id");
+			$row = $result->fetch();
 			
 			// har fortsatt ikke plassering?
 			if (!$row)
@@ -465,13 +473,13 @@ class player
 		if ($points_change > 0)
 		{
 			// hent ny rankplassering
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT MIN(upr_rank_pos)
 				FROM users_players_rank
 				WHERE upr_up_points > $points AND upr_up_points <= $points_after AND upr_up_access_level != 0 AND upr_up_access_level < ".ess::$g['access_noplay']);
 			
 			// endre rankplassering?
-			$pos = mysql_result($result, 0);
+			$pos = $result->fetchColumn(0);
 			if ($pos !== NULL)
 			{
 				#$extra = ", up_rank_pos = $pos";
@@ -480,13 +488,13 @@ class player
 			}
 			
 			// oppdater brukeren
-			ess::$b->db->query("UPDATE users_players SET up_points = up_points + $points_change, up_points_rel = up_points_rel + $points_change_rel$extra WHERE up_id = $up_id");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_points = up_points + $points_change, up_points_rel = up_points_rel + $points_change_rel$extra WHERE up_id = $up_id");
 			
 			// oppdater ranklisten
-			ess::$b->db->query("UPDATE users_players_rank SET upr_up_points = upr_up_points + $points_change WHERE upr_up_id = $up_id");
+			\Kofradia\DB::get()->exec("UPDATE users_players_rank SET upr_up_points = upr_up_points + $points_change WHERE upr_up_id = $up_id");
 			
 			// oppdater rankplasseringen til de vi går forbi
-			#if (!$invisible) ess::$b->db->query("UPDATE users_players SET up_rank_pos = up_rank_pos + 1 WHERE up_points >= $points AND up_points < $points_after");
+			#if (!$invisible) \Kofradia\DB::get()->exec("UPDATE users_players SET up_rank_pos = up_rank_pos + 1 WHERE up_points >= $points AND up_points < $points_after");
 			ranklist::update();
 		}
 		
@@ -494,13 +502,13 @@ class player
 		elseif ($points_change < 0)
 		{
 			// hent ny rankplassering
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT MAX(upr_rank_pos)
 				FROM users_players_rank
 				WHERE upr_up_points < $points AND upr_up_points > $points_after AND upr_up_access_level != 0 AND upr_up_access_level < ".ess::$g['access_noplay']);
 			
 			// endre rankplassering?
-			$pos = mysql_result($result, 0);
+			$pos = $result->fetchColumn(0);
 			if ($pos !== NULL)
 			{
 				$pos++;
@@ -510,21 +518,21 @@ class player
 			}
 			
 			// oppdater brukeren
-			ess::$b->db->query("UPDATE users_players SET up_points = up_points + $points_change, up_points_rel = up_points_rel + $points_change_rel$extra WHERE up_id = $up_id");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_points = up_points + $points_change, up_points_rel = up_points_rel + $points_change_rel$extra WHERE up_id = $up_id");
 			
 			// oppdater ranklisten
-			ess::$b->db->query("UPDATE users_players_rank SET upr_up_points = upr_up_points + $points_change WHERE upr_up_id = $up_id");
+			\Kofradia\DB::get()->exec("UPDATE users_players_rank SET upr_up_points = upr_up_points + $points_change WHERE upr_up_id = $up_id");
 			
 			// oppdater rankplasseringen til de vi går forbi
-			#if (!$invisible) ess::$b->db->query("UPDATE users_players SET up_rank_pos = GREATEST(1, up_rank_pos - 1) WHERE up_points < $points AND up_points >= $points_after");
+			#if (!$invisible) \Kofradia\DB::get()->exec("UPDATE users_players SET up_rank_pos = GREATEST(1, up_rank_pos - 1) WHERE up_points < $points AND up_points >= $points_after");
 			ranklist::update();
 		}
 		
 		// oppdater info knyttet til users_hits og sessions
 		if ($is_login)
 		{
-			ess::$b->db->query("UPDATE users_hits SET uhi_points = uhi_points + $points_change WHERE uhi_up_id = $up_id AND uhi_secs_hour = ".login::$info['secs_hour']);
-			ess::$b->db->query("UPDATE sessions SET ses_points = ses_points + $points_change WHERE ses_id = ".login::$info['ses_id']);
+			\Kofradia\DB::get()->exec("UPDATE users_hits SET uhi_points = uhi_points + $points_change WHERE uhi_up_id = $up_id AND uhi_secs_hour = ".login::$info['secs_hour']);
+			\Kofradia\DB::get()->exec("UPDATE sessions SET ses_points = ses_points + $points_change WHERE ses_id = ".login::$info['ses_id']);
 		}
 		
 		// logg
@@ -576,7 +584,7 @@ class player
 		// sett ny helse og energi
 		if ($rank_num_after != $rank_num_now)
 		{
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET
 					up_health = ROUND(up_health * ({$rank_after['rank_max_health']} / up_health_max)), up_health_max = {$rank_after['rank_max_health']},
@@ -668,15 +676,15 @@ class player
 		}
 		
 		$type = (int) $type;
-		$message = ess::$b->db->quote($message);
+		$message = \Kofradia\DB::quote($message);
 		$num = game::intval($num);
 		$up_id = (int) $up_id;
 		
 		// legg til melding og øk telleren til brukeren
-		ess::$b->db->query("INSERT INTO users_log (time, ul_up_id, type, note, num) VALUES (".time().", $up_id, $type, $message, $num)");
-		$id = ess::$b->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO users_log (time, ul_up_id, type, note, num) VALUES (".time().", $up_id, $type, $message, $num)");
+		$id = \Kofradia\DB::get()->lastInsertId();
 		
-		ess::$b->db->query("UPDATE users_players SET up_log_new = up_log_new + 1 WHERE up_id = $up_id");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_log_new = up_log_new + 1 WHERE up_id = $up_id");
 		
 		if (login::$logged_in && login::$user->player->id == $up_id)
 		{
@@ -703,9 +711,8 @@ class player
 			"last" => false,
 			"wait_time" => 0
 		);
-		$result = ess::$b->db->query("SELECT s.last, k.wait_time FROM kriminalitet_status AS s, kriminalitet AS k WHERE ks_up_id = $this->id AND s.krimid = k.id ORDER BY s.last DESC LIMIT 1");
-		$row = mysql_fetch_assoc($result);
-		mysql_free_result($result);
+		$result = \Kofradia\DB::get()->query("SELECT s.last, k.wait_time FROM kriminalitet_status AS s, kriminalitet AS k WHERE ks_up_id = $this->id AND s.krimid = k.id ORDER BY s.last DESC LIMIT 1");
+		$row = $result->fetch();
 		if ($row)
 		{
 			$info['last'] = $row['last'];
@@ -733,9 +740,8 @@ class player
 			"last" => false,
 			"wait_time" => 0
 		);
-		$result = ess::$b->db->query("SELECT MAX(time_last) last FROM gta_options_status WHERE gos_up_id = $this->id");
-		$row = mysql_fetch_assoc($result);
-		mysql_free_result($result);
+		$result = \Kofradia\DB::get()->query("SELECT MAX(time_last) last FROM gta_options_status WHERE gos_up_id = $this->id");
+		$row = $result->fetch();
 		if ($row)
 		{
 			$info['last'] = $row['last'];
@@ -765,9 +771,8 @@ class player
 		$info['wait_time'] = $lotto_active ? 0 : ($lotto_next <= 60 ? $lotto_next + 60 : $lotto_next-1740);
 		
 		// har vi noen lodd nå?
-		$result = ess::$b->db->query("SELECT MAX(time) FROM lotto WHERE l_up_id = $this->id");
-		$next = mysql_result($result, 0);
-		mysql_free_result($result);
+		$result = \Kofradia\DB::get()->query("SELECT MAX(time) FROM lotto WHERE l_up_id = $this->id");
+		$next = $result->fetchColumn(0);
 		if ($next)
 		{
 			$info['wait_time'] = max($info['wait_time'], $next - time() + lotto::$ventetid);
@@ -790,14 +795,14 @@ class player
 		$this->data['up_access_level'] = 1;
 		
 		// aktiver spilleren og sett helse og energi til maks
-		ess::$b->db->query("UPDATE users_players SET up_access_level = 1, up_health = up_health_max, up_energy = up_energy_max WHERE up_id = $this->id AND up_access_level = 0");
-		if (ess::$b->db->affected_rows() == 0) return false;
+		$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_access_level = 1, up_health = up_health_max, up_energy = up_energy_max WHERE up_id = $this->id AND up_access_level = 0");
+		if ($a == 0) return false;
 		
 		// oppdater ranklisten
-		/*ess::$b->db->query("
+		/*\Kofradia\DB::get()->exec("
 			UPDATE users_players, (SELECT up_id ref_up_id FROM users_players WHERE up_points = {$this->data['up_points']} AND up_id != $this->id AND up_access_level < {$_game['access_noplay']} LIMIT 1) ref
 			SET up_rank_pos = up_rank_pos + 1 WHERE ref_up_id IS NULL AND up_points < {$this->data['up_points']}");*/
-		ess::$b->db->query("UPDATE users_players_rank SET upr_up_access_level = 1 WHERE upr_up_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE users_players_rank SET upr_up_access_level = 1 WHERE upr_up_id = $this->id");
 		ranklist::update();
 		
 		// fjern tilknytninger til FF
@@ -829,14 +834,14 @@ class player
 		$this->data['up_deactivated_rank_pos'] = $this->data['upr_rank_pos'];
 		
 		// deaktiver spilleren
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE users_players LEFT JOIN users_players_rank ON upr_up_id = up_id
 			SET
 				up_access_level = 0, up_deactivated_time = {$this->data['up_deactivated_time']}, up_deactivated_up_id = $by_up->id, up_deactivated_dead = 0,
-				up_deactivated_reason = ".ess::$b->db->quote($reason).", up_deactivated_note = ".ess::$b->db->quote($note).",
+				up_deactivated_reason = ".\Kofradia\DB::quote($reason).", up_deactivated_note = ".\Kofradia\DB::quote($note).",
 				up_deactivated_points = up_points, up_deactivated_rank_pos = upr_rank_pos
 			WHERE up_id = $this->id AND up_access_level != 0");
-		if (ess::$b->db->affected_rows() == 0) return false;
+		if ($a == 0) return false;
 		
 		$ret = $this->release_relations($prev_level, $by_up, false);
 		
@@ -901,14 +906,14 @@ class player
 		
 		// deaktiver spilleren
 		$by_up_id = $by_up ? $by_up->id : 'NULL';
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE users_players LEFT JOIN users_players_rank ON upr_up_id = up_id
 			SET
 				up_access_level = 0, up_deactivated_time = {$this->data['up_deactivated_time']}, up_deactivated_up_id = $by_up_id, up_deactivated_dead = {$this->data['up_deactivated_dead']},
 				up_deactivated_reason = NULL, up_deactivated_note = NULL,
 				up_deactivated_points = up_points, up_deactivated_rank_pos = upr_rank_pos
 			WHERE up_id = $this->id AND up_access_level != 0");
-		if (ess::$b->db->affected_rows() == 0) return false;
+		if ($a == 0) return false;
 		
 		// har vi noen som skal få penger vi har i banken?
 		if ($this->data['up_bank'] > 0)
@@ -921,22 +926,22 @@ class player
 				$ff_ids = implode(",", $ff_list);
 				
 				// familier som skal få penger
-				$result = ess::$b->db->query("
+				$result = \Kofradia\DB::get()->query("
 					SELECT ff_id
 					FROM ff
 					WHERE ff_id IN ($ff_ids) AND ff_type = 1 AND ff_is_crew = 0");
-				$num_ff = mysql_num_rows($result);
+				$num_ff = $result->rowCount();
 			}
 			
 			// har vi noen familier eller ble drept instant
 			if ($num_ff > 0 || $instant)
 			{
 				// hent ut beløpet i banken og sett bankkontoen til 10 %
-				ess::$b->db->query("
+				\Kofradia\DB::get()->exec("
 					UPDATE users_players, (SELECT up_id ref_up_id, @bank := up_bank FROM users_players WHERE up_id = $this->id) ref
 					SET up_bank = up_bank * 0.1
 					WHERE ref_up_id = up_id");
-				$bank = mysql_result(ess::$b->db->query("SELECT @bank"), 0);
+				$bank = \Kofradia\DB::get()->query("SELECT @bank")->fetchColumn(0);
 				
 				if ($num_ff > 0 && $instant)
 				{
@@ -961,7 +966,7 @@ class player
 					$ff_bank_each = bcdiv(bcmul($bank, $f_ff), $num_ff);
 					
 					// del ut pengene til familiene
-					while ($row = mysql_fetch_assoc($result))
+					while ($row = $result->fetch())
 					{
 						ff::bank_static(ff::BANK_DONASJON, $ff_bank_each, $row['ff_id'], "Testamentert", $this->id);
 					}
@@ -972,7 +977,7 @@ class player
 				{
 					$ret['penger_bank'] = bcmul($bank, $f_up);
 					$by_up->data['up_cash'] = bcadd($by_up->data['up_cash'], $ret['penger_bank']);
-					ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + {$ret['penger_bank']} WHERE up_id = $by_up->id");
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + {$ret['penger_bank']} WHERE up_id = $by_up->id");
 				}
 			}
 		}
@@ -1026,21 +1031,21 @@ www.kofradia.no';
 	{
 		// oppdater ranklisten
 		/*if ($previous_level < ess::$g['access_noplay'])
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users_players, (SELECT up_id ref_up_id FROM users_players WHERE up_points = {$this->data['up_points']} AND up_id != $this->id AND up_access_level < ".ess::$g['access_noplay']." LIMIT 1) ref
 				SET up_rank_pos = GREATEST(1, up_rank_pos - 1) WHERE ref_up_id IS NULL AND up_points < {$this->data['up_points']}");*/
 		
-		ess::$b->db->query("UPDATE users_players_rank SET upr_up_access_level = 0 WHERE upr_up_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE users_players_rank SET upr_up_access_level = 0 WHERE upr_up_id = $this->id");
 		ranklist::update();
 		
 		$ret = $this->release_relations_low_health(true, $up_attack, $instant);
 		
 		// overfør ansvar for bomberom
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id
 			FROM users_players
 			WHERE up_brom_up_id = $this->id");
-		if (mysql_num_rows($result) > 0)
+		if ($result->rowCount() > 0)
 		{
 			// TODO: skal spilleren som overtar ansvaret få noen beskjed?
 			// TODO: hvis ingen overtar ansvaret: skal spilleren som mister ansvarsspiller få beskjed om dette?
@@ -1051,7 +1056,7 @@ www.kofradia.no';
 				: "NULL";
 			
 			// sett nytt ansvar
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_brom_up_id = $resp
 				WHERE up_brom_up_id = $this->id");
@@ -1060,7 +1065,7 @@ www.kofradia.no';
 		// fjern ansvaret for denne spilleren
 		if ($this->data['up_brom_up_id'])
 		{
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_brom_up_id = NULL
 				WHERE up_id = $this->id");
@@ -1085,13 +1090,13 @@ www.kofradia.no';
 		);
 		
 		// behandle FF
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ff_id
 			FROM ff_members
 				JOIN ff ON ffm_ff_id = ff_id AND ff_inactive = 0".($release_all ? "" : " AND ff_is_crew = 0")."
 			WHERE ffm_up_id = $this->id AND ffm_status != ".ff_member::STATUS_KICKED." AND ffm_status != ".ff_member::STATUS_DEACTIVATED);
 		$lost = false;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$ff = ff::get_ff($row['ff_id'], ff::LOAD_SCRIPT);
 			if ($ff && isset($ff->members['list'][$this->id]))
@@ -1110,7 +1115,7 @@ www.kofradia.no';
 		// oppdater tidspunkt for når man mistet FF
 		if ($lost)
 		{
-			ess::$b->db->query("UPDATE users_players SET up_health_ff_time = 0 WHERE up_id = $this->id");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_health_ff_time = 0 WHERE up_id = $this->id");
 		}
 		
 		// fjern fra aktive auksjoner for firma
@@ -1179,7 +1184,7 @@ www.kofradia.no';
 	{
 		$value = (int) $value;
 		
-		ess::$b->db->query("UPDATE users_players SET up_energy = GREATEST(0, up_energy - $value) WHERE up_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_energy = GREATEST(0, up_energy - $value) WHERE up_id = $this->id");
 		$this->data['up_energy'] = max(0, $this->data['up_energy'] - $value);
 		
 		$this->trigger("energy", array(
@@ -1283,14 +1288,15 @@ www.kofradia.no';
 		}
 		
 		// øk wanted level
-		ess::$b->db->query("UPDATE users_players SET up_wanted_level = LEAST(1000, up_wanted_level * 1.10 + $increase) WHERE up_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_wanted_level = LEAST(1000, up_wanted_level * 1.10 + $increase) WHERE up_id = $this->id");
 		
 		// hent wanted level og test fengsel
-		$result = ess::$b->db->query("SELECT up_wanted_level, up_fengsel_time FROM users_players WHERE up_id = $this->id");
+		$result = \Kofradia\DB::get()->query("SELECT up_wanted_level, up_fengsel_time FROM users_players WHERE up_id = $this->id");
+		$row = $result->fetch(\PDO::FETCH_NUM);
 		
 		$old_wanted_level = $this->data['up_wanted_level'];
-		$this->data['up_wanted_level'] = mysql_result($result, 0);
-		$this->data['up_fengsel_time'] = mysql_result($result, 0, 1);
+		$this->data['up_wanted_level'] = $row[0];
+		$this->data['up_fengsel_time'] = $row[1];
 		
 		$go_fengsel = $force || (!$success && rand(200, 999) < $this->data['up_wanted_level']);
 		$fengsel_time_wait = $this->fengsel_wait();
@@ -1305,7 +1311,7 @@ www.kofradia.no';
 		if ($go_fengsel && ($fengsel_time_wait == 0 || $fengsel_time_wait < $fengsel_time_wait_new))
 		{
 			// sett i fengsel
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET
 					up_fengsel_num = up_fengsel_num + IF(up_fengsel_time <= ".time().", 1, 0),
@@ -1314,11 +1320,12 @@ www.kofradia.no';
 				WHERE up_id = $this->id");
 			
 			// hent ny data
-			$result = ess::$b->db->query("SELECT up_fengsel_num, up_wanted_level FROM users_players WHERE up_id = $this->id");
+			$result = \Kofradia\DB::get()->query("SELECT up_fengsel_num, up_wanted_level FROM users_players WHERE up_id = $this->id");
+			$row = $result->fetch();
 			
-			$this->data['up_fengsel_num'] = mysql_result($result, 0, 0);
+			$this->data['up_fengsel_num'] = $row['up_fengsel_num'];
 			$this->data['up_fengsel_time'] = $fengsel_time_new;
-			$this->data['up_wanted_level'] = mysql_result($result, 0, 1);
+			$this->data['up_wanted_level'] = $row['up_wanted_level'];
 			
 			// gi melding hvis aktiv bruker (den som viser siden)
 			if ($fengsel_time_wait == 0 && login::is_active_user($this) && isset(ess::$b->page))
@@ -1348,13 +1355,13 @@ www.kofradia.no';
 		if ($this->data['up_fengsel_time'] < time() && $this->data['up_fengsel_dusor'])
 		{
 			// gi tilbake pengene
-			ess::$b->db->query("
+			$a = \Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_cash = up_cash + up_fengsel_dusor, up_fengsel_dusor = 0
 				WHERE up_id = $this->id AND up_fengsel_dusor = {$this->data['up_fengsel_dusor']}");
 			
 			// ble ingenting endret?
-			if (ess::$b->db->affected_rows() == 0) return;
+			if ($a == 0) return;
 			
 			// gi melding om det
 			$this->add_log("fengsel_dusor_return", null, $this->data['up_fengsel_dusor']);
@@ -1436,8 +1443,6 @@ www.kofradia.no';
 	 */
 	public function health_decrease($miste_helse, player $up, $attack_type, $skadeprosent = null, $params = array())
 	{
-		$transaction_before = ess::$b->db->transaction;
-		
 		// lås spillerene
 		$up->lock();
 		$this->lock();
@@ -1445,7 +1450,8 @@ www.kofradia.no';
 		// allerede død?
 		if (!$this->active)
 		{
-			if (!$transaction_before) ess::$b->db->commit();
+			$up->lock_commit();
+			$this->lock_commit();
 			return false;
 		}
 		
@@ -1470,7 +1476,8 @@ www.kofradia.no';
 			$ret = $this->dies(true, $up);
 			if (!$ret)
 			{
-				if (!$transaction_before) ess::$b->db->commit();
+				$up->lock_commit();
+				$this->lock_commit();
 				return false;
 			}
 			
@@ -1478,8 +1485,8 @@ www.kofradia.no';
 			$cash = 0;
 			if ($this->data['up_cash'] > 0)
 			{
-				ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - {$this->data['up_cash']} WHERE up_id = $this->id");
-				ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + {$this->data['up_cash']} WHERE up_id = {$up->id}");
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - {$this->data['up_cash']} WHERE up_id = $this->id");
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + {$this->data['up_cash']} WHERE up_id = {$up->id}");
 				
 				$cash = $this->data['up_cash'];
 				$this->data['up_cash'] = 0;
@@ -1487,7 +1494,7 @@ www.kofradia.no';
 			}
 			
 			// øk telleren over antall drap
-			ess::$b->db->query("UPDATE users_players SET up_attack_killed_num = up_attack_killed_num + 1 WHERE up_id = {$up->id}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_attack_killed_num = up_attack_killed_num + 1 WHERE up_id = {$up->id}");
 			
 			// øk telleren over antall drap i familien spilleren er medlem i
 			$up->attack_ff_update("killed");
@@ -1519,11 +1526,11 @@ www.kofradia.no';
 			
 			// lagre energi, helse og angriper-FF
 			$time = time();
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET {$set}up_health = up_health - $miste_helse,
 					up_attacked_time = $time, up_attacked_up_id = {$up->id},
-					up_attacked_ff_id_list = ".ess::$b->db->quote(implode(",", $ff_ids)).",
+					up_attacked_ff_id_list = ".\Kofradia\DB::quote(implode(",", $ff_ids)).",
 					up_health_ff_time = IF(up_health_ff_time IS NULL, up_health_ff_time, IF(up_health / up_health_max >= ".self::FF_HEALTH_LOW.", IF(up_health_ff_time = 0, $time, up_health_ff_time), 0))
 				WHERE up_id = $this->id");
 			$this->data['up_health'] -= $miste_helse;
@@ -1558,13 +1565,13 @@ www.kofradia.no';
 				if ($this->data['up_health'] / $this->data['up_health_max'] < self::HEALTH_MOVE_AUTO)
 				{
 					// finn en tilfeldig bydel
-					$result = ess::$b->db->query("SELECT id, name FROM bydeler WHERE active = 1 AND id != {$this->data['up_b_id']} ORDER BY RAND()");
+					$result = \Kofradia\DB::get()->query("SELECT id, name FROM bydeler WHERE active = 1 AND id != {$this->data['up_b_id']} ORDER BY RAND()");
 					$moved_from = array("id" => $this->data['up_b_id'], "name" => $this->bydel['name']);
-					$moved = mysql_fetch_assoc($result);
+					$moved = $result->fetch();
 					
 					$this->data['up_b_id'] = $moved['id'];
 					unset($this->bydel);
-					ess::$b->db->query("UPDATE users_players SET up_b_id = {$moved['id']} WHERE up_id = $this->id");
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_b_id = {$moved['id']} WHERE up_id = $this->id");
 				}
 				
 				// mister penger
@@ -1576,14 +1583,14 @@ www.kofradia.no';
 					$extra = ", up_cash = up_cash + {$ret['penger']}";
 					
 					$this->data['up_cash'] = bcsub($this->data['up_cash'], $ret['penger']);
-					ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - {$ret['penger']} WHERE up_id = $this->id");
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - {$ret['penger']} WHERE up_id = $this->id");
 				}
 				
 				// behandle etterlyst
 				$ret['hitlist'] = etterlyst::player_hurt($this, $up, $miste_helse / $this->data['up_health_max']);
 				
 				// øk telleren over antall mislykkede drapsforsøk for angriper
-				ess::$b->db->query("UPDATE users_players SET up_attack_damaged_num = up_attack_damaged_num + 1$extra WHERE up_id = {$up->id}");
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_attack_damaged_num = up_attack_damaged_num + 1$extra WHERE up_id = {$up->id}");
 				
 				// øk telleren over antall mislykkede drapsforsøk i familien spilleren er medlem i
 				$up->attack_ff_update("damaged");
@@ -1686,14 +1693,14 @@ www.kofradia.no';
 			$timelimit = time() - 86400; // vitnet må ha vært pålogget siste 24 timene
 			
 			// hent ut tilfeldige vitner
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT up_id
 				FROM users_players
 				WHERE up_access_level != 0 AND up_access_level < ".ess::$g['access_noplay']." AND up_b_id = {$up->data['up_b_id']} AND up_id NOT IN ({$up->id}, $this->id) AND up_last_online >= $timelimit AND up_brom_expire < ".time()." AND up_fengsel_time < ".time()."
 				ORDER BY RAND()
 				LIMIT $antall");
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$up_vitne = player::get($row['up_id']);
 				$row = array(
@@ -1727,13 +1734,13 @@ www.kofradia.no';
 			{
 				$limit = 21600; // pålogget innen 6 timer
 				$expire = time() - $limit;
-				$result = ess::$b->db->query("
+				$result = \Kofradia\DB::get()->query("
 					SELECT DISTINCT up_id, up_last_online
 					FROM ff_members
 						JOIN users_players ON ffm_up_id = up_id AND up_b_id = {$up->data['up_b_id']} AND up_last_online > $expire
 					WHERE ffm_ff_id IN (".implode(",", $ids).") AND ffm_status = ".ff_member::STATUS_MEMBER." AND ffm_up_id NOT IN ($this->id, $up->id)");
 				
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					// er allerede vitne
 					if (in_array($row['up_id'], $vitner_id)) continue;
@@ -1775,7 +1782,8 @@ www.kofradia.no';
 					"up" => $up));
 		}
 		
-		if (!$transaction_before) ess::$b->db->commit();
+		$up->lock_commit();
+		$this->lock_commit();
 		return $ret;
 	}
 	
@@ -1862,13 +1870,13 @@ www.kofradia.no';
 		// cachet?
 		if (isset($this->ff_list)) return $this->ff_list;
 		
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ff_id, ff_name, ff_type, ff_is_crew, ffm_status, ffm_priority
 			FROM ff, ff_members
 			WHERE ffm_up_id = $this->id AND ffm_ff_id = ff_id AND ff_inactive = 0 AND (ffm_status = ".ff_member::STATUS_MEMBER." OR (ffm_status = ".ff_member::STATUS_DEACTIVATED." AND (ff_time_reset IS NULL OR ff_time_reset < ffm_date_part)))");
 		
 		$list = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$list[] = $row;
 		}
@@ -1930,7 +1938,7 @@ www.kofradia.no';
 	protected function attack_log($ret, $attack_type, $vitner_log, player $up)
 	{
 		// sett opp vitner
-		$vitner = count($vitner_log) > 0 ? ess::$b->db->quote(serialize($vitner_log)) : 'NULL';
+		$vitner = count($vitner_log) > 0 ? \Kofradia\DB::quote(serialize($vitner_log)) : 'NULL';
 		
 		// sett opp liste over FF
 		$ff_defend = array();
@@ -1941,7 +1949,7 @@ www.kofradia.no';
 			$type = ff::$types[$row['ff_type']];
 			$ff_defend[] = array($row['ff_type'], $row['ff_id'], $type['refobj'], $row['ff_name'], $row['ffm_priority'], $type['priority'][$row['ffm_priority']], $row['ffm_status']);
 		}
-		$ff_defend = count($ff_defend) > 0 ? ess::$b->db->quote(serialize($ff_defend)) : 'NULL';
+		$ff_defend = count($ff_defend) > 0 ? \Kofradia\DB::quote(serialize($ff_defend)) : 'NULL';
 		
 		// sett opp liste over FF for angriper
 		$ff_attack = array();
@@ -1952,13 +1960,13 @@ www.kofradia.no';
 			$type = ff::$types[$row['ff_type']];
 			$ff_attack[] = array($row['ff_type'], $row['ff_id'], $type['refobj'], $row['ff_name'], $row['ffm_priority'], $type['priority'][$row['ffm_priority']], $row['ffm_status']);
 		}
-		$ff_attack = count($ff_attack) > 0 ? ess::$b->db->quote(serialize($ff_attack)) : 'NULL';
+		$ff_attack = count($ff_attack) > 0 ? \Kofradia\DB::quote(serialize($ff_attack)) : 'NULL';
 		
 		// legg til i loggen
 		$cash = isset($ret['penger']) ? $ret['penger'] : 0;
 		if (isset($ret['penger_bank'])) $cash = bcadd($cash, $ret['penger_bank']);
 		$hitlist = isset($ret['hitlist']) ? $ret['hitlist'] : 0;
-		ess::$b->db->query("INSERT INTO drapforsok SET df_attack_up_id = {$up->id}, df_defend_up_id = $this->id, df_time = ".time().", df_b_id = ".$up->data['up_b_id'].", df_outcome = ".($ret['drept'] ? 1 : 0).", df_rankpoints = {$ret['rankpoeng']}, df_type = $attack_type, df_cash = $cash, df_hitlist = $hitlist, df_vitner = $vitner, df_attack_ff_list = $ff_attack, df_defend_ff_list = $ff_defend, df_bullets = {$ret['bullets']}");
+		\Kofradia\DB::get()->exec("INSERT INTO drapforsok SET df_attack_up_id = {$up->id}, df_defend_up_id = $this->id, df_time = ".time().", df_b_id = ".$up->data['up_b_id'].", df_outcome = ".($ret['drept'] ? 1 : 0).", df_rankpoints = {$ret['rankpoeng']}, df_type = $attack_type, df_cash = $cash, df_hitlist = $hitlist, df_vitner = $vitner, df_attack_ff_list = $ff_attack, df_defend_ff_list = $ff_defend, df_bullets = {$ret['bullets']}");
 		
 		if ($ret['drept'])
 		{
@@ -2160,10 +2168,10 @@ www.kofradia.no';
 				$check = " AND up_{$field} >= $least";
 			}
 			
-			ess::$b->db->query("UPDATE users_players SET up_{$field} = GREATEST(0, up_{$field} + $amount) WHERE up_id = $this->id$check");
+			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_{$field} = GREATEST(0, up_{$field} + $amount) WHERE up_id = $this->id$check");
 			
 			// ingen ting oppdatert?
-			if (ess::$b->db->affected_rows() == 0) return false;
+			if ($a == 0) return false;
 		}
 		
 		// oppdater spillerfelt
@@ -2183,7 +2191,7 @@ www.kofradia.no';
 	public function can_set_brom(player $up)
 	{
 		// Finn ut om spillere er i samme familie
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffm1.ffm_ff_id
 			FROM ff_members ffm1
 				JOIN ff_members ffm2 ON ffm2.ffm_ff_id = ffm1.ffm_ff_id
@@ -2191,7 +2199,7 @@ www.kofradia.no';
 			  AND ffm2.ffm_status = 1
 			  AND ffm1.ffm_up_id = $this->id
 			  AND ffm2.ffm_up_id = $up->id");
-		if (mysql_num_rows($result) > 0) return true;
+		if ($result->rowCount() > 0) return true;
 		
 		// Hvis ikke, sjekk rankforskjell
 		$rank_diff = $up->rank['id'] - $this->rank['id'];
@@ -2218,7 +2226,7 @@ www.kofradia.no';
 				if ($by_up)
 				{
 					// gi kreditt
-					ess::$b->db->query("UPDATE users_players SET up_attack_bleed_num = up_attack_bleed_num + 1 WHERE up_id = $by_up->id");
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_attack_bleed_num = up_attack_bleed_num + 1 WHERE up_id = $by_up->id");
 					
 					// gi beskjed til spilleren om at denne spillerne blødde ihjel
 					$by_up->add_log("player_bleed", NULL, $this->id);

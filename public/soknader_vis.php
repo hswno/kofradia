@@ -9,10 +9,10 @@ global $_base;
 $_base->page->add_title("Søknader");
 
 // hent aktuell søknad
-$id = $_base->db->quote(getval("so_id"));
-$result = $_base->db->query("SELECT so_id, so_title, so_info, so_expire, so_status FROM soknader_oversikt WHERE so_id = $id");
+$id = \Kofradia\DB::quote(getval("so_id"));
+$result = \Kofradia\DB::get()->query("SELECT so_id, so_title, so_info, so_expire, so_status FROM soknader_oversikt WHERE so_id = $id");
 
-$soknad = mysql_fetch_assoc($result);
+$soknad = $result->fetch();
 $closed = $soknad['so_expire'] <= time();
 
 // finnes ikke, eller ikke tilgang til ikke publisert søknad
@@ -25,9 +25,9 @@ $_base->page->add_title($soknad['so_title']);
 redirect::store("soknader_vis?so_id={$soknad['so_id']}");
 
 // hent felt til søknaden
-$result = $_base->db->query("SELECT sf_id, sf_title, sf_extra, sf_default_value, sf_params FROM soknader_felt WHERE sf_so_id = {$soknad['so_id']} ORDER BY sf_sort");
+$result = \Kofradia\DB::get()->query("SELECT sf_id, sf_title, sf_extra, sf_default_value, sf_params FROM soknader_felt WHERE sf_so_id = {$soknad['so_id']} ORDER BY sf_sort");
 $felt = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$row['params'] = new params($row['sf_params']);
 	$felt[$row['sf_id']] = $row;
@@ -38,17 +38,17 @@ while ($row = mysql_fetch_assoc($result))
 $applicant = null;
 if (login::$logged_in)
 {
-	$result = $_base->db->query("SELECT sa_id, sa_added, sa_status, sa_updated FROM soknader_applicants WHERE sa_so_id = {$soknad['so_id']} AND sa_up_id = ".login::$user->player->id);
-	$applicant = mysql_fetch_assoc($result);
+	$result = \Kofradia\DB::get()->query("SELECT sa_id, sa_added, sa_status, sa_updated FROM soknader_applicants WHERE sa_so_id = {$soknad['so_id']} AND sa_up_id = ".login::$user->player->id);
+	$applicant = $result->fetch();
 }
 
 // hent felt som denne brukeren har lagt til data for
 if ($applicant)
 {
-	$result = $_base->db->query("SELECT saf_sf_id, saf_value FROM soknader_applicants_felt WHERE saf_sa_id = {$applicant['sa_id']}");
+	$result = \Kofradia\DB::get()->query("SELECT saf_sf_id, saf_value FROM soknader_applicants_felt WHERE saf_sa_id = {$applicant['sa_id']}");
 	$applicant_felt = array();
 	
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$applicant_felt[$row['saf_sf_id']] = $row['saf_value'];
 	}
@@ -95,7 +95,7 @@ elseif ($applicant)
 	// trekk tilbake søknad
 	if (isset($_POST['trekk_tilbake']) && !$closed && $applicant['sa_status'] == 1)
 	{
-		$_base->db->query("UPDATE soknader_applicants SET sa_status = 0 WHERE sa_id = {$applicant['sa_id']}");
+		\Kofradia\DB::get()->exec("UPDATE soknader_applicants SET sa_status = 0 WHERE sa_id = {$applicant['sa_id']}");
 		$_base->page->add_message("Du har trukket tilbake søknaden.");
 		redirect::handle();
 	}
@@ -207,14 +207,14 @@ elseif ($applicant)
 			}
 			
 			// slett gamle felt
-			$_base->db->begin();
-			$_base->db->query("DELETE FROM soknader_applicants_felt WHERE saf_sa_id = {$applicant['sa_id']}");
-			$_base->db->query("UPDATE soknader_applicants SET sa_updated = ".time()." WHERE sa_id = {$applicant['sa_id']}");
+			\Kofradia\DB::get()->beginTransaction();
+			\Kofradia\DB::get()->exec("DELETE FROM soknader_applicants_felt WHERE saf_sa_id = {$applicant['sa_id']}");
+			\Kofradia\DB::get()->exec("UPDATE soknader_applicants SET sa_updated = ".time()." WHERE sa_id = {$applicant['sa_id']}");
 			
 			// legg til nye felt
 			foreach ($fields as $key => $value)
 			{
-				$_base->db->query("INSERT INTO soknader_applicants_felt SET saf_sa_id = {$applicant['sa_id']}, saf_sf_id = $key, saf_value = ".$_base->db->quote($value));
+				\Kofradia\DB::get()->exec("INSERT INTO soknader_applicants_felt SET saf_sa_id = {$applicant['sa_id']}, saf_sf_id = $key, saf_value = ".\Kofradia\DB::quote($value));
 			}
 			
 			
@@ -222,7 +222,7 @@ elseif ($applicant)
 			if (isset($_POST['lagre']))
 			{
 				$_base->page->add_message("Endringene ble lagret.");
-				$_base->db->commit();
+				\Kofradia\DB::get()->commit();
 				redirect::handle();
 			}
 			
@@ -230,7 +230,7 @@ elseif ($applicant)
 			elseif (isset($_POST['preview']))
 			{
 				$_base->page->add_message("Endringene ble lagret.");
-				$_base->db->commit();
+				\Kofradia\DB::get()->commit();
 				redirect::handle("soknader_vis?so_id={$soknad['so_id']}&preview");
 			}
 			
@@ -241,14 +241,14 @@ elseif ($applicant)
 				if (count($errors) > 0)
 				{
 					$_base->page->add_message("Kan ikke sende inn søknad fordi noen felt ikke er korrekt utfylt. Se feltene. Endringene ble lagret.", "error");
-					$_base->db->commit();
+					\Kofradia\DB::get()->commit();
 				}
 				
 				else
 				{
 					// send inn søknaden
-					$_base->db->query("UPDATE soknader_applicants SET sa_status = 1 WHERE sa_id = {$applicant['sa_id']}");
-					$_base->db->commit();
+					\Kofradia\DB::get()->exec("UPDATE soknader_applicants SET sa_status = 1 WHERE sa_id = {$applicant['sa_id']}");
+					\Kofradia\DB::get()->commit();
 					
 					$_base->page->add_message("Søknaden er nå sendt inn. Hvis du vil gjøre endringer kan du trekke tilbake søknaden innen fristen har gått ut.");
 					redirect::handle();
@@ -259,8 +259,8 @@ elseif ($applicant)
 		// slett søknad
 		if (isset($_POST['slett']) && isset($_POST['confirm']))
 		{
-			$_base->db->query("DELETE FROM soknader_applicants_felt WHERE saf_sa_id = {$applicant['sa_id']}");
-			$_base->db->query("DELETE FROM soknader_applicants WHERE sa_id = {$applicant['sa_id']}");
+			\Kofradia\DB::get()->exec("DELETE FROM soknader_applicants_felt WHERE saf_sa_id = {$applicant['sa_id']}");
+			\Kofradia\DB::get()->exec("DELETE FROM soknader_applicants WHERE sa_id = {$applicant['sa_id']}");
 			
 			$_base->page->add_message("Søknaden ble slettet.");
 			redirect::handle();
@@ -414,7 +414,7 @@ elseif ($applicant)
 elseif (isset($_POST['opprett']) && login::$logged_in)
 {
 	// opprett søknad
-	$_base->db->query("INSERT INTO soknader_applicants SET sa_so_id = {$soknad['so_id']}, sa_up_id = ".login::$user->player->id.", sa_added = ".time().", sa_status = 0");
+	\Kofradia\DB::get()->exec("INSERT INTO soknader_applicants SET sa_so_id = {$soknad['so_id']}, sa_up_id = ".login::$user->player->id.", sa_added = ".time().", sa_status = 0");
 	$_base->page->add_message("Du har nå opprettet en søknad og kan redigere denne.");
 	redirect::handle();
 }

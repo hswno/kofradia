@@ -1,5 +1,7 @@
 <?php
 
+use \Kofradia\DB;
+
 /**
  * Spesifikk anti-bot test
  */
@@ -29,8 +31,8 @@ class antibot
 		$this->name = $name;
 		$this->span = abs($span);
 		
-		$result = ess::$b->db->query("SELECT id, count, count_last, span, last_try FROM users_antibot WHERE ua_u_id = $this->u_id AND name = ".ess::$b->db->quote($name));
-		$this->data = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT id, count, count_last, span, last_try FROM users_antibot WHERE ua_u_id = $this->u_id AND name = ".\Kofradia\DB::quote($name));
+		$this->data = $result->fetch();
 	}
 	
 	/**
@@ -44,9 +46,9 @@ class antibot
 		if (!$this->data)
 		{
 			// opprett
-			ess::$b->db->query("INSERT INTO users_antibot SET ua_u_id = $this->u_id, name = ".ess::$b->db->quote($this->name).", span = $span, count = 1");
+			\Kofradia\DB::get()->exec("INSERT INTO users_antibot SET ua_u_id = $this->u_id, name = ".\Kofradia\DB::quote($this->name).", span = $span, count = 1");
 			$this->data = array(
-				"id" => ess::$b->db->insert_id(),
+				"id" => \Kofradia\DB::get()->lastInsertId(),
 				"name" => $this->name,
 				"count" => 1,
 				"count_last" => 0,
@@ -57,7 +59,7 @@ class antibot
 		}
 		
 		$set = $span != $this->data['span'] ? ", span = $span" : "";
-		ess::$b->db->query("UPDATE users_antibot SET count = count + 1$set WHERE ua_u_id = $this->u_id AND name = ".ess::$b->db->quote($this->name));
+		\Kofradia\DB::get()->exec("UPDATE users_antibot SET count = count + 1$set WHERE ua_u_id = $this->u_id AND name = ".\Kofradia\DB::quote($this->name));
 	}
 	
 	/**
@@ -65,7 +67,7 @@ class antibot
 	 */
 	protected function abort()
 	{
-		ess::$b->db->query("UPDATE users_antibot SET count = count_last WHERE ua_u_id = $this->u_id AND name = ".ess::$b->db->quote($this->name));
+		\Kofradia\DB::get()->exec("UPDATE users_antibot SET count = count_last WHERE ua_u_id = $this->u_id AND name = ".\Kofradia\DB::quote($this->name));
 	}
 	
 	/**
@@ -81,7 +83,7 @@ class antibot
 		{
 			$this->data['span'] = $this->span;
 			if ($this->data['span'] == 0) throw new HSException("Ugyldig span");
-			ess::$b->db->query("UPDATE users_antibot SET span = {$this->data['span']} WHERE id = {$this->data['id']}");
+			\Kofradia\DB::get()->exec("UPDATE users_antibot SET span = {$this->data['span']} WHERE id = {$this->data['id']}");
 		}
 		
 		// trenger test?
@@ -112,7 +114,7 @@ class antibot
 	 */
 	public function update_time()
 	{
-		ess::$b->db->query("UPDATE users_antibot SET last_try = ".time()." WHERE id = {$this->data['id']}");
+		\Kofradia\DB::get()->exec("UPDATE users_antibot SET last_try = ".time()." WHERE id = {$this->data['id']}");
 	}
 	
 	/**
@@ -125,8 +127,8 @@ class antibot
 			"info" => array(),
 			"valid" => 0
 		);
-		$result = ess::$b->db->query("SELECT id, imgnum, valid, time, data FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT id, imgnum, valid, time, data FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
+		while ($row = $result->fetch())
 		{
 			if ($row['valid']) $images['valid']++;
 			
@@ -145,20 +147,20 @@ class antibot
 	public function generate_images($first = NULL)
 	{
 		// slett gamle bilder
-		ess::$b->db->query("DELETE FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
+		\Kofradia\DB::get()->exec("DELETE FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
 		
 		// lås anti-boten
-		$l = ess::$b->db->begin();
-		ess::$b->db->query("SELECT id FROM users_antibot WHERE id = {$this->data['id']} FOR UPDATE");
+		\Kofradia\DB::get()->beginTransaction();
+		\Kofradia\DB::get()->exec("SELECT id FROM users_antibot WHERE id = {$this->data['id']} FOR UPDATE");
 		
 		// har noen bilder nå?
-		$result = ess::$b->db->query("SELECT COUNT(*) FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
-		if (mysql_result($result, 0) > 0)
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
+		if ($result->fetchColumn(0) > 0)
 		{
-			if ($l) ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			return $this->get_images();
 		}
-		
+
 		$images = array(
 			"data" => array(),
 			"info" => array(),
@@ -176,7 +178,7 @@ class antibot
 			
 			// legg til i databasen
 			$valid = $image['valid'] ? '1' : '0';
-			ess::$b->db->query("INSERT INTO users_antibot_validate SET antibotid = {$this->data['id']}, imgnum = $imgnum, valid = $valid, time = $time, data = ".ess::$b->db->quote($image['data']));
+			\Kofradia\DB::get()->exec("INSERT INTO users_antibot_validate SET antibotid = {$this->data['id']}, imgnum = $imgnum, valid = $valid, time = $time, data = ".\Kofradia\DB::quote($image['data']));
 			
 			// legg til i $antibot
 			$images['info'][$imgnum] = array("time" => $time, "valid" => $valid);
@@ -185,7 +187,7 @@ class antibot
 		}
 		
 		// avslutt lås
-		if ($l) ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 		
 		return $images;
 	}
@@ -196,7 +198,7 @@ class antibot
 	public function delete_images()
 	{
 		// slett anti-bot bildene
-		ess::$b->db->query("DELETE FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
+		\Kofradia\DB::get()->exec("DELETE FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
 	}
 	
 	/**
@@ -211,7 +213,7 @@ class antibot
 		}
 		
 		// sett count_last til count
-		ess::$b->db->query("UPDATE users_antibot SET count_last = count WHERE id = {$this->data['id']}");
+		\Kofradia\DB::get()->exec("UPDATE users_antibot SET count_last = count WHERE id = {$this->data['id']}");
 		
 		$this->delete_images();
 		$this->update_status("success");
@@ -235,13 +237,13 @@ class antibot
 		$time = time();
 		
 		// sjekk om vi fremdeles kan kjøpe kulene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(*)
 			FROM bullets
 			WHERE bullet_freeze_up_id = ".login::$user->player->id." AND bullet_freeze_time > $time");
 		
 		// ingen kuler?
-		$this->kuler_num = mysql_result($result, 0);
+		$this->kuler_num = $result->fetchColumn(0);
 		if ($this->kuler_num == 0)
 		{
 			putlog("LOG", "KJØPE KULER: ".login::$user->player->data['up_name']." var for treg med å utføre anti-bot for å kjøpe kuler");
@@ -253,13 +255,13 @@ class antibot
 		}
 		
 		// finn ut hvor lang tid vi har på oss
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT bullet_freeze_time
 			FROM bullets
 			WHERE bullet_freeze_up_id = ".login::$user->player->id." AND bullet_freeze_time > $time
 			ORDER BY bullet_freeze_time
 			LIMIT 1");
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		if ($row)
 		{
 			$this->kuler_time_left = $row['bullet_freeze_time'] - $time;
@@ -280,34 +282,34 @@ class antibot
 		}
 		
 		$time = time();
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		$price = $this->kuler_num * login::$user->player->weapon->data['bullet_price'];
 		
 		// trekk fra pengene og sjekk samtidig om vi faktisk hadde nok penger
-		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = ".login::$user->player->id." AND up_cash >= $price");
-		if (ess::$b->db->affected_rows() == 0)
+		$affected = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = ".login::$user->player->id." AND up_cash >= $price");
+		if ($affected == 0)
 		{
 			ess::$b->page->add_message("Du har ikke nok penger på hånda. For å kjøpe $this->kuler_num ".fword("kule", "kuler", $this->kuler_num)." må du ha ".game::format_cash($price)." på hånda. Kulene ble gjort tilgjengelig for alle igjen.", "error");
 			
-			ess::$b->db->query("UPDATE bullets SET up_freeze_up_id = NULL, up_freeze_time = 0 WHERE up_freeze_up_id = ".login::$user->player->id);
-			ess::$b->db->commit();
+			\Kofradia\DB::get()->exec("UPDATE bullets SET up_freeze_up_id = NULL, up_freeze_time = 0 WHERE up_freeze_up_id = ".login::$user->player->id);
+			\Kofradia\DB::get()->commit();
 			
 			return;
 		}
 		
 		// forsøk å skaff alle kulene
-		ess::$b->db->query("
+		$affected = \Kofradia\DB::get()->exec("
 			DELETE FROM bullets
 			WHERE bullet_freeze_up_id = ".login::$user->player->id." AND bullet_freeze_time > $time
 			ORDER BY bullet_time
 			LIMIT $this->kuler_num");
 		
 		// feil antall kuler anskaffet?
-		if (ess::$b->db->affected_rows() != $this->kuler_num)
+		if ($affected != $this->kuler_num)
 		{
 			// reverser transaksjon
-			ess::$b->db->rollback();
+			\Kofradia\DB::get()->rollback();
 			
 			// informer
 			putlog("DF", "KJØPE KULER: ".login::$user->player->data['up_name']." var for treg med å utføre anti-bot for å kjøpe kuler");
@@ -317,8 +319,8 @@ class antibot
 		}
 		
 		// gi kulene til spilleren
-		ess::$b->db->query("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $this->kuler_num WHERE up_id = ".login::$user->player->id);
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $this->kuler_num WHERE up_id = ".login::$user->player->id);
+		\Kofradia\DB::get()->commit();
 		
 		// logg
 		putlog("DF", "KJØPE KULER: ".login::$user->player->data['up_name']." kjøpte $this->kuler_num kuler for totalt ".game::format_cash($price));

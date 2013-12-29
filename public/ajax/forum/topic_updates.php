@@ -34,7 +34,7 @@ $topic_last_edit = (int) $_POST['topic_last_edit'];
 
 // hent topic info
 $seen_q = login::$logged_in ? "fs_ft_id = ft_id AND fs_u_id = ".login::$user->id : "FALSE";
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 SELECT
 	ft_id, ft_fse_id, ft_title, ft_deleted, ft_last_reply, ft_last_edit,
 	fs_time
@@ -44,13 +44,13 @@ FROM
 WHERE ft_id = $id");
 
 // finnes ikke?
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	ajax::text("ERROR:404-TOPIC", ajax::TYPE_INVALID);
 }
 
 // les info
-$topic = mysql_fetch_assoc($result);
+$topic = $result->fetch();
 
 // sjekk om det er slettet, har vi tilgang?
 if ($topic['ft_deleted'] != 0 && !access::has("forum_mod"))
@@ -94,8 +94,8 @@ $get_new = isset($_POST['get_new']);
 $deleted = array();
 if (count($id_list) > 0 && !isset($_POST['no_delete']))
 {
-	$result = $_base->db->query("SELECT fr_id FROM forum_replies WHERE fr_id IN (".implode(",", $id_list).") AND fr_deleted != 0");
-	while ($row = mysql_fetch_assoc($result))
+	$result = \Kofradia\DB::get()->query("SELECT fr_id FROM forum_replies WHERE fr_id IN (".implode(",", $id_list).") AND fr_deleted != 0");
+	while ($row = $result->fetch())
 	{
 		$deleted[] = $row['fr_id'];
 		unset($id_list[array_search($row['fr_id'], $id_list)]);
@@ -107,7 +107,7 @@ $updated = array();
 $updated_last_edit = array();
 if (count($id_list) > 0)
 {
-	$result = $_base->db->query("
+	$result = \Kofradia\DB::get()->query("
 	SELECT
 		r.fr_id, r.fr_time, r.fr_up_id, r.fr_text, r.fr_last_edit, r.fr_last_edit_up_id, r.fr_deleted,
 		up_name, up_access_level, up_forum_signature, up_points, up_profile_image_url, upr_rank_pos,
@@ -124,7 +124,7 @@ if (count($id_list) > 0)
 	GROUP BY r.fr_id
 	ORDER BY r.fr_time ASC");
 	
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$data = $row;
 		$data['ft_fse_id'] = $forum->id;
@@ -143,7 +143,7 @@ $new = array();
 $new_last_edit = array();
 if ($get_new)
 {
-	$result = $_base->db->query("
+	$result = \Kofradia\DB::get()->query("
 		SELECT
 			r.fr_id, r.fr_time, r.fr_up_id, r.fr_text, r.fr_last_edit, r.fr_last_edit_up_id, r.fr_deleted,
 			up_name, up_access_level, up_forum_signature, up_points, up_profile_image_url, upr_rank_pos,
@@ -161,7 +161,7 @@ if ($get_new)
 		ORDER BY r.fr_time ASC");
 	
 	$time_last = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$data = $row;
 		$data['ft_fse_id'] = $forum->id;
@@ -179,7 +179,7 @@ if ($get_new)
 	if ($time_last && login::$logged_in)
 	{
 		// oppdater
-		$_base->db->query("UPDATE forum_seen SET fs_time = GREATEST(fs_time, $time_last) WHERE fs_ft_id = $id AND fs_u_id = ".login::$user->id);
+		\Kofradia\DB::get()->exec("UPDATE forum_seen SET fs_time = GREATEST(fs_time, $time_last) WHERE fs_ft_id = $id AND fs_u_id = ".login::$user->id);
 	}
 }
 

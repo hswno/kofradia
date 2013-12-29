@@ -212,7 +212,7 @@ class crewlog
 		}
 		else
 		{
-			$log = $_base->db->quote($log);
+			$log = \Kofradia\DB::quote($log);
 		}
 		
 		// kontroller data
@@ -224,7 +224,7 @@ class crewlog
 			{
 				// sett riktig escaped verdi
 				// NULL, integer, 'string'
-				$value = is_null($data[$info[0]]) ? array('NULL', 'NULL') : ($info[1] == "int" ? array(intval($data[$info[0]]), 'NULL') : array('NULL', $_base->db->quote($data[$info[0]])));
+				$value = is_null($data[$info[0]]) ? array('NULL', 'NULL') : ($info[1] == "int" ? array(intval($data[$info[0]]), 'NULL') : array('NULL', \Kofradia\DB::quote($data[$info[0]])));
 				
 				// legg til i data som skal legges inn
 				$data_new[$id] = $value;
@@ -247,13 +247,13 @@ class crewlog
 		}
 		
 		// legg til i loggen
-		$_base->db->query("INSERT INTO log_crew SET lc_up_id = $up_id, lc_time = ".time().", lc_lca_id = {$a[0]}, lc_a_up_id = $a_up_id, lc_log = $log");
-		$id = $_base->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO log_crew SET lc_up_id = $up_id, lc_time = ".time().", lc_lca_id = {$a[0]}, lc_a_up_id = $a_up_id, lc_log = $log");
+		$id = \Kofradia\DB::get()->lastInsertId();
 		
 		// legg til data
 		foreach ($data_new as $data_id => $data)
 		{
-			$_base->db->query("INSERT INTO log_crew_data SET lcd_lca_id = {$a[0]}, lcd_lc_id = $id, lcd_lce_id = $data_id, lcd_data_int = {$data[0]}, lcd_data_text = {$data[1]}");
+			\Kofradia\DB::get()->exec("INSERT INTO log_crew_data SET lcd_lca_id = {$a[0]}, lcd_lc_id = $id, lcd_lce_id = $data_id, lcd_data_int = {$data[0]}, lcd_data_text = {$data[1]}");
 		}
 		
 		return $id;
@@ -284,8 +284,8 @@ class crewlog
 		if (count($ids) == 0) return $rows;
 		
 		// hent data
-		$result = $_base->db->query("SELECT lcd_lc_id, lcd_lca_id, lcd_lce_id, lcd_data_int, lcd_data_text, lce_type FROM log_crew_data, log_crew_extra WHERE lcd_lc_id IN (".implode(",", $ids).") AND lcd_lca_id = lce_lca_id AND lcd_lce_id = lce_id AND lce_summary = 1");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT lcd_lc_id, lcd_lca_id, lcd_lce_id, lcd_data_int, lcd_data_text, lce_type FROM log_crew_data, log_crew_extra WHERE lcd_lc_id IN (".implode(",", $ids).") AND lcd_lca_id = lce_lca_id AND lcd_lce_id = lce_id AND lce_summary = 1");
+		while ($row = $result->fetch())
 		{
 			$data_name = crewlog::$actions[crewlog::$actions_id[$row['lcd_lca_id']]][5][$row['lcd_lce_id']][0];
 			$rows[$row['lcd_lc_id']]['data'][$data_name] = $row['lce_type'] == "int" ? $row['lcd_data_int'] : $row['lcd_data_text'];
@@ -573,16 +573,16 @@ class crewlog
 		
 		// hent handlingene
 		$actions = array();
-		$result = $_base->db->query("SELECT lca_id, lca_lcg_id, lca_name, lca_have_a_up_id, lca_have_log, lca_description FROM log_crew_actions ORDER BY lca_lcg_id, lca_id");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT lca_id, lca_lcg_id, lca_name, lca_have_a_up_id, lca_have_log, lca_description FROM log_crew_actions ORDER BY lca_lcg_id, lca_id");
+		while ($row = $result->fetch())
 		{
 			$row['data'] = array();
 			$actions[$row['lca_id']] = $row;
 		}
 		
 		// hent dataene
-		$result = $_base->db->query("SELECT lce_lca_id, lce_id, lce_name, lce_summary, lce_type, lce_optional FROM log_crew_extra ORDER BY lce_lca_id, lce_id");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT lce_lca_id, lce_id, lce_name, lce_summary, lce_type, lce_optional FROM log_crew_extra ORDER BY lce_lca_id, lce_id");
+		while ($row = $result->fetch())
 		{
 			$actions[$row['lce_lca_id']]['data'][] = "{$row['lce_id']} => array(\"{$row['lce_name']}\", \"{$row['lce_type']}\", {$row['lce_summary']}, {$row['lce_optional']})";
 		}

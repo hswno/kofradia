@@ -39,7 +39,7 @@ class Topic
 		
 		// hent informasjon om forumtråden
 		$seen_q = \login::$logged_in ? "fs_ft_id = ft_id AND fs_u_id = ".\login::$user->id : "FALSE";
-		$result = \ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				ft_id, ft_type, ft_title, ft_time, ft_up_id, ft_text, ft_fse_id, ft_locked, ft_deleted, ft_last_edit, ft_last_edit_up_id, ft_replies, ft_last_reply,
 				up_name, up_forum_signature, up_access_level, up_points, up_profile_image_url,
@@ -55,7 +55,7 @@ class Topic
 			WHERE ft_id = $this->id
 			GROUP BY ft_id");
 		
-		$this->info = mysql_fetch_assoc($result);
+		$this->info = $result->fetch();
 		
 		// hent informasjon om forumkategorien og kontroller tilgang
 		if ($this->info)
@@ -186,8 +186,8 @@ class Topic
 	protected function delete_action()
 	{
 		// forsøk å slett forumtråden
-		\ess::$b->db->query("UPDATE forum_topics SET ft_deleted = ".time()." WHERE ft_id = $this->id AND ft_deleted = 0");
-		return \ess::$b->db->affected_rows() > 0;
+		$a = \Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_deleted = ".time()." WHERE ft_id = $this->id AND ft_deleted = 0");
+		return $a > 0;
 	}
 	
 	/** Forumtråden er allerede slettet */
@@ -257,8 +257,8 @@ class Topic
 	protected function restore_action()
 	{
 		// forsøk å gjenopprett forumtråden
-		\ess::$b->db->query("UPDATE forum_topics SET ft_deleted = 0 WHERE ft_id = $this->id AND ft_deleted != 0");
-		return \ess::$b->db->affected_rows() > 0;
+		$a = \Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_deleted = 0 WHERE ft_id = $this->id AND ft_deleted != 0");
+		return $a > 0;
 	}
 	
 	/** Forumtråden ble gjenopprettet */
@@ -366,10 +366,10 @@ class Topic
 		if ($only_moved && $this->info['ft_title'] == $title && $this->info['ft_text'] == $text)
 		{
 			// rediger forumtråden
-			\ess::$b->db->query("UPDATE forum_topics SET ft_title = ".\ess::$b->db->quote($title)."$update WHERE ft_id = $this->id");
+			$a = \Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_title = ".\Kofradia\DB::quote($title)."$update WHERE ft_id = $this->id");
 			
 			// ble ikke oppdatert?
-			if (\ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				// mest sannsynlig finnes ikke forumtråden, eller så er det oppdatert to ganger samme sekund med samme innhold av samme bruker
 				$this->edit_error_failed();
@@ -390,10 +390,10 @@ class Topic
 		}
 		
 		// rediger forumtråden
-		\ess::$b->db->query("UPDATE forum_topics SET ft_title = ".\ess::$b->db->quote($title).", ft_text = ".\ess::$b->db->quote($text).", ft_last_edit = ".time().", ft_last_edit_up_id = ".\login::$user->player->id."$update WHERE ft_id = $this->id");
+		$a = \Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_title = ".\Kofradia\DB::quote($title).", ft_text = ".\Kofradia\DB::quote($text).", ft_last_edit = ".time().", ft_last_edit_up_id = ".\login::$user->player->id."$update WHERE ft_id = $this->id");
 		
 		// ble ikke oppdatert?
-		if (\ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			// mest sannsynlig finnes ikke forumtråden, eller så er det oppdatert to ganger samme sekund med samme innhold av samme bruker
 			$this->edit_error_failed();
@@ -569,8 +569,8 @@ class Topic
 		if (!$no_concatenate)
 		{
 			// hent siste forumsvaret
-			$result = \ess::$b->db->query("SELECT fr_id, fr_up_id, fr_time FROM forum_replies WHERE fr_ft_id = $this->id AND fr_deleted = 0 ORDER BY fr_time DESC LIMIT 1");
-			$row = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT fr_id, fr_up_id, fr_time FROM forum_replies WHERE fr_ft_id = $this->id AND fr_deleted = 0 ORDER BY fr_time DESC LIMIT 1");
+			$row = $result->fetch();
 			
 			// fant forumsvar, og tilhører brukeren
 			// forumsvaret er nyere enn 6 timer
@@ -578,7 +578,7 @@ class Topic
 			{
 				// slå sammen med dette forumsvaret
 				$text = "\n\n[hr]\n\n$text";
-				\ess::$b->db->query("UPDATE forum_replies SET fr_text = CONCAT(fr_text, ".\ess::$b->db->quote($text)."), fr_last_edit = ".time().", fr_last_edit_up_id = ".\login::$user->player->id." WHERE fr_id = {$row['fr_id']}");
+				\Kofradia\DB::get()->exec("UPDATE forum_replies SET fr_text = CONCAT(fr_text, ".\Kofradia\DB::quote($text)."), fr_last_edit = ".time().", fr_last_edit_up_id = ".\login::$user->player->id." WHERE fr_id = {$row['fr_id']}");
 				
 				// annonsere forumsvaret?
 				if ($announce && $reply = $this->get_reply($row['fr_id']))
@@ -595,21 +595,21 @@ class Topic
 		}
 		
 		// legg til som nytt forumsvar
-		\ess::$b->db->query("INSERT INTO forum_replies SET fr_time = ".time().", fr_up_id = ".\login::$user->player->id.", fr_text = ".\ess::$b->db->quote($text).", fr_ft_id = $this->id");
-		$reply_id = \ess::$b->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO forum_replies SET fr_time = ".time().", fr_up_id = ".\login::$user->player->id.", fr_text = ".\Kofradia\DB::quote($text).", fr_ft_id = $this->id");
+		$reply_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// oppdater forumtråden med antall forumsvar og siste forumsvar
-		\ess::$b->db->query("UPDATE forum_topics SET ft_replies = ft_replies + 1, ft_last_reply = $reply_id WHERE ft_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE forum_topics SET ft_replies = ft_replies + 1, ft_last_reply = $reply_id WHERE ft_id = $this->id");
 		
 		// oppdater spilleren
 		if ($this->forum->ff)
 		{
-			\ess::$b->db->query("UPDATE ff_members SET ffm_forum_replies = ffm_forum_replies + 1 WHERE ffm_up_id = ".\login::$user->player->id." AND ffm_ff_id = {$this->forum->ff->id}");
-			\ess::$b->db->query("UPDATE users_players SET up_forum_ff_num_replies = up_forum_ff_num_replies + 1 WHERE up_id = ".\login::$user->player->id);
+			\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_forum_replies = ffm_forum_replies + 1 WHERE ffm_up_id = ".\login::$user->player->id." AND ffm_ff_id = {$this->forum->ff->id}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_forum_ff_num_replies = up_forum_ff_num_replies + 1 WHERE up_id = ".\login::$user->player->id);
 		}
 		else
 		{
-			\ess::$b->db->query("UPDATE users, users_players SET up_forum_num_replies = up_forum_num_replies + 1, u_forum_reply_time = ".time()." WHERE up_id = ".\login::$user->player->id." AND up_u_id = u_id");
+			\Kofradia\DB::get()->exec("UPDATE users, users_players SET up_forum_num_replies = up_forum_num_replies + 1, u_forum_reply_time = ".time()." WHERE up_id = ".\login::$user->player->id." AND up_u_id = u_id");
 		}
 		
 		// annonsere forumsvaret?

@@ -25,7 +25,7 @@ class Hendelser {
 	public static function getEventsSinceId($id)
 	{
 		$id = (int) $id;
-		$result = \ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT gl_id, gl_time, gl_event_type, gl_contents, gl_log_count
 			FROM github_log
 			WHERE gl_id > $id
@@ -36,13 +36,13 @@ class Hendelser {
 	/**
 	 * Parse query result
 	 *
-	 * @param mysql_result
+	 * @param \PDOStatement
 	 * @return array of events
 	 */
-	protected static function parseResult($result)
+	protected static function parseResult(\PDOStatement $result)
 	{
 		$events = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$event = unserialize($row['gl_contents']);
 			$event->id = $row['gl_id'];
@@ -59,10 +59,10 @@ class Hendelser {
 	 */
 	public static function incSetting($name, $inc = 1)
 	{
-		$name = \ess::$b->db->quote('github_'.$name);
+		$name = \Kofradia\DB::quote('github_'.$name);
 		$inc = (int) $inc;
 
-		\ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			INSERT INTO settings SET name = $name, value = 1
 			ON DUPLICATE KEY UPDATE value = value + $inc");
 
@@ -140,8 +140,8 @@ class Hendelser {
 	 */
 	public static function getLastId()
 	{
-		$result = \ess::$b->db->query("SELECT gl_id FROM github_log ORDER BY gl_id DESC LIMIT 1");
-		if ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT gl_id FROM github_log ORDER BY gl_id DESC LIMIT 1");
+		if ($row = $result->fetch())
 		{
 			return $row['gl_id'];
 		}
@@ -156,7 +156,7 @@ class Hendelser {
 	{
 		// delete older than 30 days
 		$expire = time() - 86400 * 30;
-		\ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			DELETE FROM github_log
 			WHERE gl_time < $expire");
 	}

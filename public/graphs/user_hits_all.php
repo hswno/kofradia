@@ -10,11 +10,12 @@ $up_name = login::$user->player->data['up_name'];
 if (isset($_GET['up_id']) && access::has("mod"))
 {
 	$up_id = (int) getval("up_id");
-	$result = $_base->db->query("SELECT up_u_id, up_id, up_name FROM users_players WHERE up_id = $up_id");
-	if (mysql_num_rows($result) == 0) ajax::text("ERROR:UP-404", ajax::TYPE_404);
+	$result = \Kofradia\DB::get()->query("SELECT up_u_id, up_id, up_name FROM users_players WHERE up_id = $up_id");
+	if ($result->rowCount() == 0) ajax::text("ERROR:UP-404", ajax::TYPE_404);
 	
-	$u_id = mysql_result($result, 0, "up_u_id");
-	$up_name = mysql_result($result, 0, "up_name");
+	$row = $result->fetch();
+	$u_id = $row['up_u_id'];
+	$up_name = $row['up_name'];
 }
 
 // finn første oppføring i statistikk
@@ -36,8 +37,8 @@ $stats = array();
 $stats_redir = array();
 
 // hent dagstatistikk
-$result = $_base->db->query("SELECT CONCAT(YEAR(FROM_UNIXTIME(uhi_secs_hour)), '-', MONTH(FROM_UNIXTIME(uhi_secs_hour))) AS date, DATE(FROM_UNIXTIME(uhi_secs_hour)) AS mydate, SUM(uhi_hits) sum_hits, SUM(uhi_hits_redirect) sum_hits_redirect FROM users_hits, users_players WHERE up_u_id = $u_id AND up_id = uhi_up_id GROUP BY CONCAT(YEAR(FROM_UNIXTIME(uhi_secs_hour)), '-', MONTH(FROM_UNIXTIME(uhi_secs_hour))) ORDER BY mydate");
-while ($row = mysql_fetch_assoc($result))
+$result = \Kofradia\DB::get()->query("SELECT CONCAT(YEAR(FROM_UNIXTIME(uhi_secs_hour)), '-', MONTH(FROM_UNIXTIME(uhi_secs_hour))) AS date, DATE(FROM_UNIXTIME(uhi_secs_hour)) AS mydate, SUM(uhi_hits) sum_hits, SUM(uhi_hits_redirect) sum_hits_redirect FROM users_hits, users_players WHERE up_u_id = $u_id AND up_id = uhi_up_id GROUP BY CONCAT(YEAR(FROM_UNIXTIME(uhi_secs_hour)), '-', MONTH(FROM_UNIXTIME(uhi_secs_hour))) ORDER BY mydate");
+while ($row = $result->fetch())
 {
 	$stats[$row['date']] = (int) $row['sum_hits'];
 	$stats_redir[$row['date']] = (int) $row['sum_hits_redirect'];

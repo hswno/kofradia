@@ -19,7 +19,7 @@ if (time() > 1354320000 && time() < 1356998399)
 }
 
 // oppdater brukerne med totalt rankepoeng
-ess::$b->db->query("
+\Kofradia\DB::get()->exec("
 	UPDATE users, (
 		SELECT up_u_id, SUM(up_points) sum_up_points
 		FROM users_players
@@ -28,7 +28,7 @@ ess::$b->db->query("
 	WHERE u_id = up_u_id AND u_recruiter_u_id IS NOT NULL");
 
 // hent spillere som skal motta poeng og hvor mye poeng en bruker skal gi bort
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT
 		up_id, up_name, u1.u_id, u1.u_email,
 		u1.u_recruiter_points_last, u1.u_recruiter_points_now, u1.u_recruiter_points
@@ -42,7 +42,7 @@ $result = ess::$b->db->query("
 $players = array();
 $players_count = array();
 
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	// beregn bonus
 	$diff = $row['u_recruiter_points_now'] - $row['u_recruiter_points_last'];
@@ -80,13 +80,13 @@ foreach ($players as $up_id => $bonus)
 		$up->increase_rank($bonus, false);
 		
 		// oppdater antall poeng vi har fått via verving
-		ess::$b->db->query("UPDATE users_players SET up_points_recruited = up_points_recruited + $bonus WHERE up_id = $up_id");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_points_recruited = up_points_recruited + $bonus WHERE up_id = $up_id");
 	}
 }
 
 
 // oppdater brukerene med totalt rankepoeng for forrige oppdatering
-ess::$b->db->query("
+\Kofradia\DB::get()->exec("
 	UPDATE users
 	SET
 		u_recruiter_points_bonus = u_recruiter_points_bonus + ROUND($points_bonus_factor * IF(u_recruiter_points >= $points_limit, 0, LEAST($points_limit, u_recruiter_points + GREATEST(0, CAST(u_recruiter_points_now - u_recruiter_points_last AS SIGNED))) - u_recruiter_points)),

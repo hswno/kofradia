@@ -80,11 +80,11 @@ echo '
 		</form>';
 
 // hent brukerne
-$result = $_base->db->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE up_last_online >= ".(time()-$time)." ORDER BY up_name");
+$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE up_last_online >= ".(time()-$time)." ORDER BY up_name");
 
 // sett opp alfabetisk liste
 $liste = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$liste[mb_strtolower(mb_substr($row['up_name'], 0, 1))][] = game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']);
 }
@@ -93,7 +93,7 @@ echo '
 		<table class="table tablemb">
 			<thead>
 				<tr>
-					<th colspan="2">Spillere pålogget - '.game::format_number(mysql_num_rows($result)).' spiller'.(mysql_num_rows($result) == 1 ? '' : 'e').'</th>
+					<th colspan="2">Spillere pålogget - '.game::format_number($result->rowCount()).' spiller'.($result->rowCount() == 1 ? '' : 'e').'</th>
 				</tr>
 			</thead>
 			<tbody>';

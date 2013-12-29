@@ -26,20 +26,20 @@ redirect::store("/polls/admin", redirect::ROOT);
 if (isset($pages[2]) && preg_match("/^\\d+\$/Du", $pages[2]))
 {
 	// hent avstemningen
-	$result = $_base->db->query("SELECT p_id, p_title, p_text, p_ft_id, p_params, p_active, p_time_start, p_time_end, p_votes FROM polls WHERE p_id = ".intval($pages[2]));
-	if (mysql_num_rows($result) == 0)
+	$result = \Kofradia\DB::get()->query("SELECT p_id, p_title, p_text, p_ft_id, p_params, p_active, p_time_start, p_time_end, p_votes FROM polls WHERE p_id = ".intval($pages[2]));
+	if ($result->rowCount() == 0)
 	{
 		$_base->page->add_message("Fant ikke avstemningen.", "error");
 		redirect::handle();
 	}
 	
-	$poll = mysql_fetch_assoc($result);
+	$poll = $result->fetch();
 	$_base->page->add_title($poll['p_title']);
 	
 	// hent alternativene
 	$poll['options'] = array();
-	$result = $_base->db->query("SELECT po_id, po_text, po_votes FROM polls_options WHERE po_p_id = {$poll['p_id']}");
-	while ($row = mysql_fetch_assoc($result))
+	$result = \Kofradia\DB::get()->query("SELECT po_id, po_text, po_votes FROM polls_options WHERE po_p_id = {$poll['p_id']}");
+	while ($row = $result->fetch())
 	{
 		$poll['options'][$row['po_id']] = $row;
 	}
@@ -103,7 +103,7 @@ if (isset($pages[2]) && preg_match("/^\\d+\$/Du", $pages[2]))
 			if (!$error)
 			{
 				// oppdater
-				$_base->db->query("UPDATE polls SET p_title = ".$_base->db->quote($title).", p_text = ".$_base->db->quote($text).", p_time_start = ".intval($time_start).", p_time_end = ".intval($time_end)." WHERE p_id = {$poll['p_id']}");
+				\Kofradia\DB::get()->exec("UPDATE polls SET p_title = ".\Kofradia\DB::quote($title).", p_text = ".\Kofradia\DB::quote($text).", p_time_start = ".intval($time_start).", p_time_end = ".intval($time_end)." WHERE p_id = {$poll['p_id']}");
 				$_base->page->add_message("Endringene ble lagret.");
 				
 				// slett cache
@@ -168,8 +168,8 @@ function setNow(elm, event)
 				$up_id = intval(postval("up_id"));
 				
 				// kontroller at brukeren finnes
-				$result = $_base->db->query("SELECT up_name FROM users_players WHERE up_id = $up_id");
-				if (mysql_num_rows($result) == 0)
+				$result = \Kofradia\DB::get()->query("SELECT up_name FROM users_players WHERE up_id = $up_id");
+				if ($result->rowCount() == 0)
 				{
 					$_base->page->add_message("Fant ikke spilleren med ID $up_id. Bruker din ID.", "error");
 					$up_id = login::$user->player->id;
@@ -187,7 +187,7 @@ function setNow(elm, event)
 			$params = $params->build();
 			
 			// oppdater
-			$_base->db->query("UPDATE polls SET p_params = ".$_base->db->quote($params)." WHERE p_id = {$poll['p_id']}");
+			\Kofradia\DB::get()->exec("UPDATE polls SET p_params = ".\Kofradia\DB::quote($params)." WHERE p_id = {$poll['p_id']}");
 			$_base->page->add_message("Endringene ble lagret.");
 			
 			// slett cache
@@ -233,7 +233,7 @@ function setNow(elm, event)
 		if (isset($_POST['delete']) && verify_sid())
 		{
 			// slett
-			$_base->db->query("DELETE FROM polls WHERE p_id = {$poll['p_id']}");
+			\Kofradia\DB::get()->exec("DELETE FROM polls WHERE p_id = {$poll['p_id']}");
 			$_base->page->add_message("Avstemningen ble slettet.");
 			
 			// slett cache
@@ -276,7 +276,7 @@ function setNow(elm, event)
 		if ($poll['p_active'] != 0) redirect::handle();
 		
 		// sett aktiv
-		$_base->db->query("UPDATE polls SET p_active = 1 WHERE p_id = {$poll['p_id']}");
+		\Kofradia\DB::get()->exec("UPDATE polls SET p_active = 1 WHERE p_id = {$poll['p_id']}");
 		$_base->page->add_message("Avstemningen er nå satt til aktiv.");
 		
 		// slett cache
@@ -292,7 +292,7 @@ function setNow(elm, event)
 		if ($poll['p_active'] == 0) redirect::handle();
 		
 		// sett inaktiv
-		$_base->db->query("UPDATE polls SET p_active = 0 WHERE p_id = {$poll['p_id']}");
+		\Kofradia\DB::get()->exec("UPDATE polls SET p_active = 0 WHERE p_id = {$poll['p_id']}");
 		$_base->page->add_message("Avstemningen er ikke lengre aktiv.");
 		
 		// slett cache
@@ -316,7 +316,7 @@ function setNow(elm, event)
 			else
 			{
 				// legg til
-				$_base->db->query("INSERT INTO polls_options SET po_p_id = {$poll['p_id']}, po_text = ".$_base->db->quote($text));
+				\Kofradia\DB::get()->exec("INSERT INTO polls_options SET po_p_id = {$poll['p_id']}, po_text = ".\Kofradia\DB::quote($text));
 				$_base->page->add_message("Alternativet ble lagt til.");
 				
 				// slett cache
@@ -371,7 +371,7 @@ function setNow(elm, event)
 			else
 			{
 				// oppdater
-				$_base->db->query("UPDATE polls_options SET po_text = ".$_base->db->quote($text)." WHERE po_id = $po_id");
+				\Kofradia\DB::get()->exec("UPDATE polls_options SET po_text = ".\Kofradia\DB::quote($text)." WHERE po_id = $po_id");
 				$_base->page->add_message("Alternativet ble oppdatert.");
 				
 				// slett cache
@@ -431,7 +431,7 @@ function setNow(elm, event)
 		if (isset($_POST['delete']) && verify_sid())
 		{
 			// slett
-			$_base->db->query("DELETE FROM polls_options WHERE po_id = $po_id");
+			\Kofradia\DB::get()->exec("DELETE FROM polls_options WHERE po_id = $po_id");
 			$_base->page->add_message("Alternativet ble slettet.");
 			
 			// slett cache
@@ -531,8 +531,8 @@ if (isset($pages[2]) && $pages[2] == "new")
 		else
 		{
 			// legg til
-			$_base->db->query("INSERT INTO polls SET p_title = ".$_base->db->quote($title).", p_text = ".$_base->db->quote($text).", p_active = 0");
-			$p_id = $_base->db->insert_id();
+			\Kofradia\DB::get()->exec("INSERT INTO polls SET p_title = ".\Kofradia\DB::quote($title).", p_text = ".\Kofradia\DB::quote($text).", p_active = 0");
+			$p_id = \Kofradia\DB::get()->lastInsertId();
 			
 			$_base->page->add_message("Avstemningen ble lagt til.");
 			redirect::handle("/polls/admin/$p_id", redirect::ROOT);
@@ -592,7 +592,7 @@ else
 			<tbody>';
 	
 	$i = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>

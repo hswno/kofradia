@@ -34,15 +34,15 @@ header("Pragma: no-cache"); // HTTP/1.0
 if (isset($_GET['log_id']))
 {
 	// finn logg info
-	$log_id = $_base->db->quote($_GET['log_id']);
-	$result = $_base->db->query("SELECT ffl_extra FROM ff_log WHERE ffl_id = $log_id AND ffl_ff_id = $ff_id AND ffl_type = 12");
+	$log_id = \Kofradia\DB::quote($_GET['log_id']);
+	$result = \Kofradia\DB::get()->query("SELECT ffl_extra FROM ff_log WHERE ffl_id = $log_id AND ffl_ff_id = $ff_id AND ffl_type = 12");
 	
-	if (mysql_num_rows($result) == 0)
+	if ($result->rowCount() == 0)
 	{
 		error("Fant ikke logg enheten.");
 	}
 	
-	$data = mysql_result($result, 0);
+	$data = $result->fetchColumn(0);
 	if (empty($data))
 	{
 		error("Gammel logo finnes ikke.");
@@ -59,17 +59,17 @@ if (isset($_GET['log_id']))
 }
 
 // hent logo
-$result = $_base->db->query("SELECT ff_logo FROM ff WHERE ff_id = $ff_id");
+$result = \Kofradia\DB::get()->query("SELECT ff_logo FROM ff WHERE ff_id = $ff_id");
 
 // fant ikke?
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	error("Fant ikke FF.");
 }
 
 
 // mangler logoen?
-$data = mysql_result($result, 0);
+$data = $result->fetchColumn(0);
 if (empty($data))
 {
 	// bruk standard logo

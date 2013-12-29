@@ -162,8 +162,8 @@ class page_min_side_user
 		}
 		
 		// har vi blitt vervet av noen?
-		$result = ess::$b->db->query("SELECT r.up_id, r.up_name, r.up_access_level FROM users_players r JOIN users_players ref ON ref.up_u_id = ".page_min_side::$active_user->id." AND ref.up_recruiter_up_id = r.up_id LIMIT 1");
-		if ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT r.up_id, r.up_name, r.up_access_level FROM users_players r JOIN users_players ref ON ref.up_u_id = ".page_min_side::$active_user->id." AND ref.up_recruiter_up_id = r.up_id LIMIT 1");
+		if ($row = $result->fetch())
 		{
 			echo '
 							<dt>Rekrutert av</dt>
@@ -189,9 +189,9 @@ class page_min_side_user
 			$deact_self = false;
 			if (!empty(page_min_side::$active_user->data['u_deactivated_up_id']))
 			{
-				$result = ess::$b->db->query("SELECT u_id FROM users JOIN users_players ON u_id = up_u_id WHERE up_id = ".page_min_side::$active_user->data['u_deactivated_up_id']);
-				$row = mysql_fetch_assoc($result);
-				mysql_free_result($result);
+				$result = \Kofradia\DB::get()->query("SELECT u_id FROM users JOIN users_players ON u_id = up_u_id WHERE up_id = ".page_min_side::$active_user->data['u_deactivated_up_id']);
+				$row = $result->fetch();
+				unset($result);
 				if ($row && $row['u_id'] == page_min_side::$active_user->id) $deact_self = true;
 			}
 			
@@ -263,7 +263,7 @@ class page_min_side_user
 							</thead>
 							<tbody>';
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
 			echo '
@@ -364,7 +364,7 @@ class page_min_side_user
 				<tbody>';
 			
 			$color = true;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 					<tr'.($color = !$color ? ' class="color"' : '').'>
@@ -431,9 +431,8 @@ class page_min_side_user
 			{
 				// forsøk å logg ut de merkede øktene
 				$delete = implode(",", $delete);
-				ess::$b->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_active = 1 AND ses_expire_time > ".time()." AND ses_u_id = ".page_min_side::$active_user->id." AND ses_id != ".login::$info['ses_id']." AND FIND_IN_SET(ses_id, '$delete')");
+				$dels = \Kofradia\DB::get()->exec("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_active = 1 AND ses_expire_time > ".time()." AND ses_u_id = ".page_min_side::$active_user->id." AND ses_id != ".login::$info['ses_id']." AND FIND_IN_SET(ses_id, '$delete')");
 				
-				$dels = ess::$b->db->affected_rows();
 				ess::$b->page->add_message("<b>$dels</b> økt".($dels == 1 ? '' : 'er')." ble logget ut.");
 				redirect::handle(page_min_side::addr());
 			}
@@ -448,7 +447,7 @@ class page_min_side_user
 			<p>Her er en oversikt over alle stedene hvor brukeren er logget inn uten å ha blitt logget ut manuelt og som fortsatt er aktive.</p>';
 		
 		$time = time();
-		$result = ess::$b->db->query("SELECT * FROM sessions WHERE ses_u_id = ".page_min_side::$active_user->id." AND ses_expire_time > $time AND ses_active = 1 ORDER BY ses_id DESC");
+		$result = \Kofradia\DB::get()->query("SELECT * FROM sessions WHERE ses_u_id = ".page_min_side::$active_user->id." AND ses_expire_time > $time AND ses_active = 1 ORDER BY ses_id DESC");
 		
 		echo '
 			<form action="" method="post">
@@ -466,7 +465,7 @@ class page_min_side_user
 					<tbody>';
 		
 		$i = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$class = new attr("class");
 			if ($row['ses_id'] != login::$info['ses_id']) $class->add("box_handle");
@@ -520,7 +519,7 @@ class page_min_side_user
 				<tbody>';
 		
 		$i = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$type = $row['ses_expire_type'];
 			$type = $type == LOGIN_TYPE_TIMEOUT ? 'Tidsavbrudd' : ($type == LOGIN_TYPE_BROWSER ? 'Lukke nettleser' : 'Alltid innlogget');
@@ -642,7 +641,7 @@ class page_min_side_user
 								$pass_new = password::hash($pass, null, 'user');
 
 								// lagre endringer
-								ess::$b->db->query("UPDATE users SET u_pass = ".ess::$b->db->quote($pass_new)." WHERE u_id = ".page_min_side::$active_user->id);
+								\Kofradia\DB::get()->exec("UPDATE users SET u_pass = ".\Kofradia\DB::quote($pass_new)." WHERE u_id = ".page_min_side::$active_user->id);
 								
 								// legg til crewlogg
 								crewlog::log("user_password", page_min_side::$active_player->id, $log, array("pass_old" => page_min_side::$active_user->data['u_pass'], "pass_new" => $pass_new));
@@ -727,14 +726,14 @@ class page_min_side_user
 					// endre passordet
 					else
 					{
-						ess::$b->db->query("UPDATE users SET u_pass = ".ess::$b->db->quote(password::hash($pass_new, null, 'user'))." WHERE u_id = ".page_min_side::$active_user->id);
+						\Kofradia\DB::get()->exec("UPDATE users SET u_pass = ".\Kofradia\DB::quote(password::hash($pass_new, null, 'user'))." WHERE u_id = ".page_min_side::$active_user->id);
 						
 						// melding
 						ess::$b->page->add_message("Passordet ble endret. Alle andre steder brukeren var logget inn er nå logget ut.");
 						putlog("NOTICE", "%bPASSORD-ENDRING%b: %u".page_min_side::$active_player->data['up_name']."%u byttet passordet på sin bruker. {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id);
 						
 						// logg ut alle andre brukere
-						ess::$b->db->query("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_active = 1 AND ses_u_id = ".page_min_side::$active_user->id." AND ses_id != ".login::$info['ses_id']);
+						\Kofradia\DB::get()->exec("UPDATE sessions SET ses_active = 0, ses_logout_time = ".time()." WHERE ses_active = 1 AND ses_u_id = ".page_min_side::$active_user->id." AND ses_id != ".login::$info['ses_id']);
 						
 						redirect::handle();
 					}
@@ -813,8 +812,8 @@ class page_min_side_user
 						$log = trim(postval("log"));
 						
 						// sjekk om e-postadressen allerede er i bruk
-						$result = ess::$b->db->query("SELECT u_id, up_id, up_name, up_access_level FROM users LEFT JOIN users_players ON up_id = u_active_up_id WHERE u_email = ".ess::$b->db->quote($email)." AND u_access_level != 0");
-						$email_ex = mysql_fetch_assoc($result);
+						$result = \Kofradia\DB::get()->query("SELECT u_id, up_id, up_name, up_access_level FROM users LEFT JOIN users_players ON up_id = u_active_up_id WHERE u_email = ".\Kofradia\DB::quote($email)." AND u_access_level != 0");
+						$email_ex = $result->fetch();
 						
 						// ikke gyldig e-postadresse?
 						if (!game::validemail($email))
@@ -843,7 +842,7 @@ class page_min_side_user
 						else
 						{
 							// lagre endringer
-							ess::$b->db->query("UPDATE users SET u_email = ".ess::$b->db->quote($email)." WHERE u_id = ".page_min_side::$active_user->id);
+							\Kofradia\DB::get()->exec("UPDATE users SET u_email = ".\Kofradia\DB::quote($email)." WHERE u_id = ".page_min_side::$active_user->id);
 							
 							// legg til crewlogg
 							crewlog::log("user_email", page_min_side::$active_player->id, $log, array("email_old" => page_min_side::$active_user->data['u_email'], "email_new" => $email));
@@ -909,8 +908,8 @@ class page_min_side_user
 				if ($status)
 				{
 					// se om e-postadressen allerede er i bruk
-					$result = ess::$b->db->query("SELECT COUNT(u_id) FROM users WHERE u_email = ".ess::$b->db->quote($email_addr)." AND u_access_level != 0");
-					$in_use = mysql_result($result, 0) > 0;
+					$result = \Kofradia\DB::get()->query("SELECT COUNT(u_id) FROM users WHERE u_email = ".\Kofradia\DB::quote($email_addr)." AND u_access_level != 0");
+					$in_use = $result->fetchColumn(0) > 0;
 				}
 				
 				// gått for lang tid?
@@ -1049,7 +1048,7 @@ www.kofradia.no';
 						else
 						{
 							// lagre endringer
-							ess::$b->db->query("UPDATE users SET u_email = ".ess::$b->db->quote($email_addr)." WHERE u_id = ".page_min_side::$active_user->id);
+							\Kofradia\DB::get()->exec("UPDATE users SET u_email = ".\Kofradia\DB::quote($email_addr)." WHERE u_id = ".page_min_side::$active_user->id);
 							
 							// legg til crewlogg
 							crewlog::log("user_email", page_min_side::$active_player->id, $note, array("email_old" => page_min_side::$active_user->data['u_email'], "email_new" => $email_addr));
@@ -1098,8 +1097,8 @@ www.kofradia.no';
 					if (isset($_POST['new_email']) && validate_sid(false))
 					{
 						// se om e-postadressen allerede er i bruk
-						$result = ess::$b->db->query("SELECT COUNT(u_id) FROM users WHERE u_email = ".ess::$b->db->quote($_POST['new_email'])." AND u_access_level != 0");
-						$in_use = mysql_result($result, 0) > 0;
+						$result = \Kofradia\DB::get()->query("SELECT COUNT(u_id) FROM users WHERE u_email = ".\Kofradia\DB::quote($_POST['new_email'])." AND u_access_level != 0");
+						$in_use = $result->fetchColumn(0) > 0;
 						
 						// valider e-post
 						$email_addr = $_POST['new_email'];
@@ -1111,8 +1110,8 @@ www.kofradia.no';
 							$pos = mb_strpos($email_addr, "@");
 							$domain = mb_strtolower(mb_substr($email_addr, $pos + 1));
 							
-							$result = ess::$b->db->query("SELECT eb_id, eb_type FROM email_blacklist WHERE (eb_type = 'address' AND eb_value = ".ess::$b->db->quote($email_addr).") OR (eb_type = 'domain' AND eb_value = ".ess::$b->db->quote($domain).") ORDER BY eb_type = 'address' LIMIT 1");
-							$error_email = mysql_fetch_assoc($result);
+							$result = \Kofradia\DB::get()->query("SELECT eb_id, eb_type FROM email_blacklist WHERE (eb_type = 'address' AND eb_value = ".\Kofradia\DB::quote($email_addr).") OR (eb_type = 'domain' AND eb_value = ".\Kofradia\DB::quote($domain).") ORDER BY eb_type = 'address' LIMIT 1");
+							$error_email = $result->fetch();
 						}
 						
 						// ugyldig e-postadresse?
@@ -1262,7 +1261,7 @@ www.kofradia.no';
 				// noe som skal endres?
 				if (count($user_change) > 0)
 				{
-					ess::$b->db->query("UPDATE users SET ".implode(", ", $user_change)." WHERE u_id = ".page_min_side::$active_user->id);
+					\Kofradia\DB::get()->exec("UPDATE users SET ".implode(", ", $user_change)." WHERE u_id = ".page_min_side::$active_user->id);
 					$changed = true;
 				}
 				
@@ -1353,11 +1352,11 @@ www.kofradia.no';
 		);
 		
 		// finn ut hva som er tilgjengelig
-		$result = ess::$b->db->query("SELECT type, COUNT(id) AS count FROM users_log WHERE ul_up_id = 0 AND type IN (".implode(",", $types).") GROUP BY type");
+		$result = \Kofradia\DB::get()->query("SELECT type, COUNT(id) AS count FROM users_log WHERE ul_up_id = 0 AND type IN (".implode(",", $types).") GROUP BY type");
 		$in_use = array();
 		$count = array();
 		$total = 0;
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$in_use[] = $row['type'];
 			$count[$row['type']] = $row['count'];
@@ -1380,9 +1379,9 @@ www.kofradia.no';
 			ess::$b->page->add_css('.ny { color: #FF0000 }');
 			
 			$where = ' AND type IN ('.implode(",", $i_bruk).')';
-			$result = ess::$b->db->query("SELECT time, type, note, num FROM users_log WHERE ul_up_id = 0$where ORDER BY time DESC, id DESC LIMIT ".page_min_side::$active_user->data['u_log_crew_new']);
+			$result = \Kofradia\DB::get()->query("SELECT time, type, note, num FROM users_log WHERE ul_up_id = 0$where ORDER BY time DESC, id DESC LIMIT ".page_min_side::$active_user->data['u_log_crew_new']);
 			
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 		<p class="c">Ingen crewhendelser ble funnet.</p>';
@@ -1392,7 +1391,7 @@ www.kofradia.no';
 			{
 				// vis hendelsene
 				$logs = array();
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$day = ess::$b->date->get($row['time'])->format(date::FORMAT_NOTIME);
 					$data = $gamelog->format_log($row['type'], $row['note'], $row['num']);
@@ -1421,7 +1420,7 @@ www.kofradia.no';
 				echo '
 				<p class="c">Viser '.page_min_side::$active_user->data['u_log_crew_new'].' <b>ny'.(page_min_side::$active_user->data['u_log_crew_new'] == 1 ? '' : 'e').'</b> crewhendelse'.(page_min_side::$active_user->data['u_log_crew_new'] == 1 ? '' : 'r').'<br /><a href="'.htmlspecialchars(page_min_side::addr()).'">Se full oversikt</a></p>';
 				
-				ess::$b->db->query("UPDATE users SET u_log_crew_new = 0 WHERE u_id = ".page_min_side::$active_user->id);
+				\Kofradia\DB::get()->exec("UPDATE users SET u_log_crew_new = 0 WHERE u_id = ".page_min_side::$active_user->id);
 				page_min_side::$active_user->data['u_log_crew_new'] = 0;
 			}
 		}
@@ -1431,7 +1430,7 @@ www.kofradia.no';
 		{
 			if (page_min_side::$active_user->data['u_log_crew_new'] > 0 && login::$user->id == page_min_side::$active_user->id)
 			{
-				ess::$b->db->query("UPDATE users SET u_log_crew_new = 0 WHERE u_id = ".page_min_side::$active_user->id);
+				\Kofradia\DB::get()->exec("UPDATE users SET u_log_crew_new = 0 WHERE u_id = ".page_min_side::$active_user->id);
 				page_min_side::$active_user->data['u_log_crew_new'] = 0;
 			}
 			
@@ -1498,7 +1497,7 @@ www.kofradia.no';
 			$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, max(50, page_min_side::$active_user->data['u_log_crew_new']));
 			$result = $pagei->query("SELECT time, type, note, num FROM users_log WHERE ul_up_id IN (0, ".page_min_side::$active_player->id.")$where ORDER BY time DESC, id DESC");
 			
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 		<p class="c">Ingen hendelser ble funnet.</p>';
@@ -1519,7 +1518,7 @@ www.kofradia.no';
 				$logs = array();
 				$i = 0;
 				$e = $pagei->start;
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$day = ess::$b->date->get($row['time'])->format(date::FORMAT_NOTIME);
 					$data = $gamelog->format_log($row['type'], $row['note'], $row['num']);
@@ -1605,8 +1604,7 @@ www.kofradia.no';
 			else
 			{
 				// transaksjon
-				$transaction_before = ess::$b->db->transaction;
-				ess::$b->db->begin();
+				\Kofradia\DB::get()->beginTransaction();
 				
 				// deaktiver brukeren
 				$player_deact = page_min_side::$active_player->active;
@@ -1618,7 +1616,7 @@ www.kofradia.no';
 					crewlog::log("user_deactivate", page_min_side::$active_player->id, $log, $data);
 					
 					// fullfør transaksjon
-					if (!$transaction_before) ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 					
 					// send e-post
 					if ($send_email)
@@ -1645,7 +1643,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 				else
 				{
 					// fullfør transaksjon
-					if (!$transaction_before) ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 				}
 				
 				redirect::handle(page_min_side::addr(""));
@@ -1715,7 +1713,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 			else
 			{
 				// lagre endringer
-				ess::$b->db->query("UPDATE users SET u_deactivated_reason = ".ess::$b->db->quote($log).", u_deactivated_note = ".ess::$b->db->quote($note)." WHERE u_id = ".page_min_side::$active_user->id);
+				\Kofradia\DB::get()->exec("UPDATE users SET u_deactivated_reason = ".\Kofradia\DB::quote($log).", u_deactivated_note = ".\Kofradia\DB::quote($note)." WHERE u_id = ".page_min_side::$active_user->id);
 				
 				// lagre crewlog
 				$data = array("log_old" => page_min_side::$active_user->data['u_deactivated_reason'], "note_old" => page_min_side::$active_user->data['u_deactivated_note']);
@@ -2236,10 +2234,10 @@ www.kofradia.no';
 			
 			
 			// hent blokkeringer for brukeren
-			$result = ess::$b->db->query("SELECT ub_id, ub_type, ub_time_expire, ub_reason FROM users_ban WHERE ub_u_id = ".page_min_side::$active_user->id." AND ub_time_expire > ".time());
-			if (mysql_num_rows($result) > 0)
+			$result = \Kofradia\DB::get()->query("SELECT ub_id, ub_type, ub_time_expire, ub_reason FROM users_ban WHERE ub_u_id = ".page_min_side::$active_user->id." AND ub_time_expire > ".time());
+			if ($result->rowCount() > 0)
 			{
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$access = access::has(blokkeringer::$types[$row['ub_type']]['access']);
 					
@@ -2283,7 +2281,7 @@ www.kofradia.no';
 			$result = $pagei->query("SELECT lc_id, lc_up_id, lc_time, lc_lca_id, lc_a_up_id, lc_log FROM log_crew JOIN users_players ON up_u_id = ".page_min_side::$active_user->id." WHERE lc_a_up_id = up_id ORDER BY lc_time DESC");
 			
 			// ingen handlinger?
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 	<p class="c">Ingen oppføringer eksisterer.</p>';
@@ -2292,7 +2290,7 @@ www.kofradia.no';
 			else
 			{
 				$rows = array();
-				while ($row = mysql_fetch_assoc($result)) $rows[$row['lc_id']] = $row;
+				while ($row = $result->fetch()) $rows[$row['lc_id']] = $row;
 				$data = crewlog::load_summary_data($rows);
 				
 				$logs = array();
@@ -2861,8 +2859,8 @@ www.kofradia.no';
 	</div>';
 				
 				// hent alle aktive blokkeringer
-				$result = ess::$b->db->query("SELECT ub_type, ub_time_expire, ub_reason FROM users_ban WHERE ub_u_id = ".page_min_side::$active_user->id." AND ub_time_expire > ".time()." ORDER BY ub_time_expire");
-				if (mysql_num_rows($result) > 0)
+				$result = \Kofradia\DB::get()->query("SELECT ub_type, ub_time_expire, ub_reason FROM users_ban WHERE ub_u_id = ".page_min_side::$active_user->id." AND ub_time_expire > ".time()." ORDER BY ub_time_expire");
+				if ($result->rowCount() > 0)
 				{
 					echo '
 	<div class="bg1_c" style="width: 350px">
@@ -2879,7 +2877,7 @@ www.kofradia.no';
 				<tbody>';
 					
 					$i = 0;
-					while ($row = mysql_fetch_assoc($result))
+					while ($row = $result->fetch())
 					{
 						$type = blokkeringer::get_type($row['ub_type']);
 						$access = access::has($type['access']);
@@ -3123,7 +3121,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				ORDER BY lc_time DESC");
 			
 			$data = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$data[$row['lc_id']] = $row;
 			}
@@ -3186,7 +3184,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				
 				else
 				{
-					ess::$b->db->query("UPDATE users SET u_note_crew = ".ess::$b->db->quote($notat)." WHERE u_id = ".page_min_side::$active_user->id);
+					\Kofradia\DB::get()->exec("UPDATE users SET u_note_crew = ".\Kofradia\DB::quote($notat)." WHERE u_id = ".page_min_side::$active_user->id);
 					
 					// legg til crewlogg
 					crewlog::log("user_note_crew", page_min_side::$active_player->id, NULL, array(
@@ -3271,8 +3269,8 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 						sysreport::log("Endring av tilgangsnivå: ".login::$user->player->data['up_name']." endret tilgangsnivået til ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].") fra {$levels[$old]} til {$levels[$level]} {$__server['path']}/min_side?u_id=".page_min_side::$active_user->id."\n\nBegrunnelse: ".strip_tags(game::format_data($log)), "Kofradia: Endring av tilgangsnivå for ".page_min_side::$active_user->data['u_email']." (".page_min_side::$active_player->data['up_name'].")");
 						
 						// finn totalt beløp spilleren har
-						$result = ess::$b->db->query("SELECT up_cash + up_bank FROM users_players WHERE up_id = ".page_min_side::$active_player->id);
-						$money = mysql_result($result, 0);
+						$result = \Kofradia\DB::get()->query("SELECT up_cash + up_bank FROM users_players WHERE up_id = ".page_min_side::$active_player->id);
+						$money = $result->fetchColumn(0);
 						
 						// crewlogg
 						$data = array(
@@ -3361,7 +3359,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				else
 				{
 					$newpass = password::hash($bank_auth, null, 'bank_auth');
-					ess::$b->db->query("UPDATE users SET u_bank_auth = ".ess::$b->db->quote($newpass)." WHERE u_id = ".page_min_side::$active_user->id);
+					\Kofradia\DB::get()->exec("UPDATE users SET u_bank_auth = ".\Kofradia\DB::quote($newpass)." WHERE u_id = ".page_min_side::$active_user->id);
 					
 					// crewlogg
 					crewlog::log("user_bank_auth", page_min_side::$active_player->id, $log, array(
@@ -3408,10 +3406,10 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				else
 				{
 					// kontroller at nummeret ikke er lagt inn fra før
-					$result = ess::$b->db->query("SELECT u_id, u_email, up_id, up_name, up_access_level FROM users, users_players WHERE u_phone = ".ess::$b->db->quote($phone)." AND u_id != ".page_min_side::$active_user->id." AND up_id = u_active_up_id LIMIT 1");
-					if (mysql_num_rows($result) > 0)
+					$result = \Kofradia\DB::get()->query("SELECT u_id, u_email, up_id, up_name, up_access_level FROM users, users_players WHERE u_phone = ".\Kofradia\DB::quote($phone)." AND u_id != ".page_min_side::$active_user->id." AND up_id = u_active_up_id LIMIT 1");
+					if ($result->rowCount() > 0)
 					{
-						$row = mysql_fetch_assoc($result);
+						$row = $result->fetch();
 						ess::$b->page->add_message('Nummeret er allerede i bruk av <a href="min_side?u_id='.$row['u_id'].'">'.htmlspecialchars($row['u_email']).'</a> ('.game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']).').', "error");
 					}
 					
@@ -3430,7 +3428,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 					else
 					{
 						// lagre nytt nummer
-						ess::$b->db->query("UPDATE users SET u_phone = ".ess::$b->db->quote($phone)." WHERE u_id = ".page_min_side::$active_user->id);
+						\Kofradia\DB::get()->exec("UPDATE users SET u_phone = ".\Kofradia\DB::quote($phone)." WHERE u_id = ".page_min_side::$active_user->id);
 						
 						crewlog::log("user_phone", page_min_side::$active_player->id, $log, array(
 							"phone_old" => page_min_side::$active_user->data['u_phone'],
@@ -3530,7 +3528,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 				else
 				{
 					// oppdater
-					ess::$b->db->query("UPDATE users SET u_birth = ".ess::$b->db->quote($birth)." WHERE u_id = ".page_min_side::$active_user->id);
+					\Kofradia\DB::get()->exec("UPDATE users SET u_birth = ".\Kofradia\DB::quote($birth)." WHERE u_id = ".page_min_side::$active_user->id);
 					
 					// legg til crewlogg
 					crewlog::log("user_birth", page_min_side::$active_player->id, $log, array(
@@ -3650,7 +3648,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 					</thead>
 					<tbody>';
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
 			echo '

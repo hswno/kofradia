@@ -19,7 +19,7 @@ ess::$b->page->add_title("Oversikt over brukere med høy advarselpoeng");
 $time = time();
 
 // opprett temporary tabell
-ess::$b->db->query("
+\Kofradia\DB::get()->exec("
 	CREATE TEMPORARY TABLE temp_results (
 		temp_up_id INT(11) UNSIGNED NOT NULL DEFAULT 0,
 		temp_points INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -33,7 +33,7 @@ $lca_id = crewlog::$actions['forum_reply_delete'][0];
 $m = 10;
 $s = 2160 * 3600; // 90 dager
 $expire = $time - $s;
-ess::$b->db->query("
+\Kofradia\DB::get()->exec("
 	INSERT INTO temp_results (temp_up_id, temp_points)
 		SELECT lc_a_up_id, $m * (1 - ($time - lc_time) / $s) AS points
 		FROM log_crew
@@ -55,7 +55,7 @@ $s_3 = 4320 * 3600; // 180 dager
 $expire_1 = $time - $s_1;
 $expire_2 = $time - $s_2;
 $expire_3 = $time - $s_3;
-ess::$b->db->query("
+\Kofradia\DB::get()->exec("
 	INSERT INTO temp_results (temp_up_id, temp_points)
 		SELECT lc_a_up_id, IF(d1.lcd_data_int = 1,
 			$m_1 * (1 - ($time - lc_time) / $s_1),
@@ -88,7 +88,7 @@ $result = $pagei->query("
 	GROUP BY active.up_id
 	ORDER BY points DESC");
 
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 		<p>Fant ingen spillere.</p>';
@@ -106,7 +106,7 @@ else
 			</thead>
 			<tbody>';
 	
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		echo '
 				<tr>

@@ -219,20 +219,22 @@ _SESSION:
 		// deadlock? hent innodb status
 		if (is_a($exception, "SQLQueryException") && $exception->getSQLErrorNum() == 1205)
 		{
-			$result = @mysql_query("SHOW ENGINE INNODB STATUS", ess::$b->db->link);
+			$result = \Kofradia\DB::get()->query("SHOW ENGINE INNODB STATUS");
 			if ($result)
 			{
+				$row = $result->fetch();
+				$status = $row['status'];
 				$text .= '
 
 INNODB STATUS:
 
-'.mysql_result($result, 0, "Status");
+'.$status;
 				
 				if (!MAIN_SERVER)
 				{
 					$html .= '
 <p>InnoDB status:</p>
-<pre>'.htmlspecialchars(mysql_result($result, 0, "Status")).'</pre>';
+<pre>'.htmlspecialchars($status).'</pre>';
 				}
 			}
 		}

@@ -26,7 +26,7 @@ class Log
 		if (!\login::$logged_in) throw new HSNotLoggedIn();
 		
 		if (!$reply_id) $reply_id = "NULL";
-		\ess::$b->db->query("INSERT INTO forum_log SET flg_ft_id = $topic_id, flg_fr_id = $reply_id, flg_action = $action, flg_up_id = ".\login::$user->player->id.", flg_time = ".time());
+		\Kofradia\DB::get()->exec("INSERT INTO forum_log SET flg_ft_id = $topic_id, flg_fr_id = $reply_id, flg_action = $action, flg_up_id = ".\login::$user->player->id.", flg_time = ".time());
 	}
 	
 	/**
@@ -93,14 +93,14 @@ class Log
 			// legg til hendelse i spilleloggen
 			$type = $forum->id == 5 ? 'crewforum_emne' : ($forum->id == 6 ? 'crewforuma_emne' : 'crewforumi_emne');
 			$access_levels = implode(",", \ess::$g['access']['crewet']);
-			\ess::$b->db->query("INSERT INTO users_log SET time = ".time().", ul_up_id = 0, type = ".intval(\gamelog::$items[$type]).", note = ".\ess::$b->db->quote(\login::$user->player->id.":".$data['ft_title']).", num = {$data['ft_id']}");
-			\ess::$b->db->query("UPDATE users SET u_log_crew_new = u_log_crew_new + 1 WHERE u_access_level IN ($access_levels) AND (u_id != ".\login::$user->id." OR u_log_crew_new > 0)");
+			\Kofradia\DB::get()->exec("INSERT INTO users_log SET time = ".time().", ul_up_id = 0, type = ".intval(\gamelog::$items[$type]).", note = ".\Kofradia\DB::quote(\login::$user->player->id.":".$data['ft_title']).", num = {$data['ft_id']}");
+			\Kofradia\DB::get()->exec("UPDATE users SET u_log_crew_new = u_log_crew_new + 1 WHERE u_access_level IN ($access_levels) AND (u_id != ".\login::$user->id." OR u_log_crew_new > 0)");
 			
 			// send e-post til crewet
 			$email = new email();
 			$email->text = "*{$data['ft_title']}* ble opprettet av ".\login::$user->player->data['up_name']."\r\n".\ess::$s['path']."/forum/topic?id={$data['ft_id']}\r\n\r\nForum: ".$forum->get_name()."\r\nAutomatisk melding for Kofradia Crewet";
-			$result = \ess::$b->db->query("SELECT u_email FROM users WHERE u_access_level IN ($access_levels) AND u_id != ".\login::$user->id);
-			while ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT u_email FROM users WHERE u_access_level IN ($access_levels) AND u_id != ".\login::$user->id);
+			while ($row = $result->fetch())
 			{
 				$email->send($row['u_email'], \login::$user->player->data['up_name']." opprettet {$data['ft_title']} -- ".$forum->get_name()."");
 			}
@@ -114,14 +114,14 @@ class Log
 			// legg til hendelse i spilleloggen
 			$type = $forum->id == 4 ? 'crewforume_emne' : 'crewforum_emne';
 			$access_levels = implode(",", \ess::$g['access']['admin']);
-			\ess::$b->db->query("INSERT INTO users_log SET time = ".time().", ul_up_id = 0, type = ".intval(\gamelog::$items[$type]).", note = ".\ess::$b->db->quote(\login::$user->player->id.":".$data['ft_title']).", num = {$data['ft_id']}");
-			\ess::$b->db->query("UPDATE users SET u_log_crew_new = u_log_crew_new + 1 WHERE u_access_level IN ($access_levels) AND (u_id != ".\login::$user->id." OR u_log_crew_new > 0)");
+			\Kofradia\DB::get()->exec("INSERT INTO users_log SET time = ".time().", ul_up_id = 0, type = ".intval(\gamelog::$items[$type]).", note = ".\Kofradia\DB::quote(\login::$user->player->id.":".$data['ft_title']).", num = {$data['ft_id']}");
+			\Kofradia\DB::get()->exec("UPDATE users SET u_log_crew_new = u_log_crew_new + 1 WHERE u_access_level IN ($access_levels) AND (u_id != ".\login::$user->id." OR u_log_crew_new > 0)");
 		
 			// send e-post til crewet
 			$email = new email();
 			$email->text = "*{$data['ft_title']}* ble opprettet av ".\login::$user->player->data['up_name']."\r\n".\ess::$s['path']."/forum/topic?id={$data['ft_id']}\r\n\r\nForum: ".$forum->get_name()."\r\nAutomatisk melding for Kofradia Crewet";
-			$result = \ess::$b->db->query("SELECT u_email FROM users WHERE u_access_level IN ($access_levels) AND u_id != ".\login::$user->id);
-			while ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT u_email FROM users WHERE u_access_level IN ($access_levels) AND u_id != ".\login::$user->id);
+			while ($row = $result->fetch())
 			{
 				$email->send($row['u_email'], \login::$user->player->data['up_name']." opprettet {$data['ft_title']} -- ".$forum->get_name()."");
 			}

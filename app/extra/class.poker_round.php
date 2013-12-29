@@ -87,12 +87,12 @@ class poker_round
 	
 	protected function mark_seen_starter()
 	{
-		ess::$b->db->query("UPDATE poker SET poker_starter_seen = 1 WHERE poker_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE poker SET poker_starter_seen = 1 WHERE poker_id = $this->id");
 	}
 	
 	protected function mark_seen_challenger()
 	{
-		ess::$b->db->query("UPDATE poker SET poker_challenger_seen = 1 WHERE poker_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE poker SET poker_challenger_seen = 1 WHERE poker_id = $this->id");
 	}
 	
 	protected function starter_replace_cards(array $replace)
@@ -122,12 +122,12 @@ class poker_round
 		$update = $dont_save ? '' : ", poker_starter_result = {$this->solve1[0]}, poker_state = 2, poker_time_start = $time";
 		
 		$cards = implode(",", $this->poker1->get_cards());
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE poker
-			SET poker_starter_cards = ".ess::$b->db->quote($cards)."$update
+			SET poker_starter_cards = ".\Kofradia\DB::quote($cards)."$update
 			WHERE poker_id = $this->id AND poker_state = 1");
 		
-		if (ess::$b->db->affected_rows() == 0) return false;
+		if ($a == 0) return false;
 		
 		$this->data['poker_starter_cards'] = $cards;
 		
@@ -155,12 +155,12 @@ class poker_round
 		if ($auto && !$dont_save) $update .= ", poker_auto = 1";
 		
 		$cards = implode(",", $this->poker2->get_cards());
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE poker
-			SET poker_challenger_cards = ".ess::$b->db->quote($cards)."$update
+			SET poker_challenger_cards = ".\Kofradia\DB::quote($cards)."$update
 			WHERE poker_id = $this->id AND poker_state = 3");
 		
-		if (ess::$b->db->affected_rows() == 0) return false;
+		if ($a == 0) return false;
 		if ($dont_save) return true;
 		
 		$this->data['poker_challenger_cards'] = $cards;
@@ -176,7 +176,7 @@ class poker_round
 		{
 			// starter vant
 			case 1:
-				ess::$b->db->query("
+				\Kofradia\DB::get()->exec("
 					UPDATE users_players
 					SET up_cash = up_cash + $prize
 					WHERE up_id = {$this->data['poker_starter_up_id']}");
@@ -188,7 +188,7 @@ class poker_round
 			
 			// utfordrer vant
 			case 2:
-				ess::$b->db->query("
+				\Kofradia\DB::get()->exec("
 					UPDATE users_players
 					SET up_cash = up_cash + $prize
 					WHERE up_id = {$this->data['poker_challenger_up_id']}");
@@ -200,7 +200,7 @@ class poker_round
 			
 			// uavgjort
 			default:
-				ess::$b->db->query("
+				\Kofradia\DB::get()->exec("
 					UPDATE users_players
 					SET up_cash = up_cash + $prize
 					WHERE up_id IN ({$this->data['poker_starter_up_id']}, {$this->data['poker_challenger_up_id']})");
@@ -234,12 +234,12 @@ class poker_round
 	protected function pullback()
 	{
 		// oppdater pokkerunden
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE poker
 			SET poker_state = ".self::STATE_TIMEOUT."
 			WHERE poker_id = $this->id AND poker_state IN (".self::STATE_BEGIN.",".self::STATE_FREE.")");
 		
-		if (ess::$b->db->affected_rows() > 0)
+		if ($a > 0)
 		{
 			poker_round::update_cache();
 			
@@ -250,7 +250,7 @@ class poker_round
 				$up->data['up_cash'] = bcadd($up->data['up_cash'], $this->data['poker_cash']);
 			}
 			
-			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + {$this->data['poker_cash']} WHERE up_id = {$this->data['poker_starter_up_id']}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + {$this->data['poker_cash']} WHERE up_id = {$this->data['poker_starter_up_id']}");
 			
 			$this->data['poker_state'] = self::STATE_TIMEOUT;
 			return true;
@@ -264,7 +264,7 @@ class poker_round
 	 */
 	public static function update_cache()
 	{
-		cache::store("poker_active", mysql_result(ess::$b->db->query("SELECT COUNT(*) FROM poker WHERE poker_state = 2"), 0));
+		cache::store("poker_active", \Kofradia\DB::get()->query("SELECT COUNT(*) FROM poker WHERE poker_state = 2")->fetchColumn(0));
 	}
 	
 	/**
@@ -273,12 +273,12 @@ class poker_round
 	public static function player_dies(player $up)
 	{
 		// hent evt. pokerrunder vi har startet og trekk tilbake
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT poker_id, poker_starter_up_id, poker_challenger_up_id, poker_starter_cards, poker_challenger_cards, poker_time_start, poker_time_challenge, poker_cash, poker_state, poker_prize
 			FROM poker
 			WHERE poker_starter_up_id = ".$up->id." AND poker_state IN (1,2)");
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// forsøk å trekk tilbake
 			$round = new poker_round($row);

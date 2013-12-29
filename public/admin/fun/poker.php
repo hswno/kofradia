@@ -82,11 +82,11 @@ $kortstokk = array(1 => 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22
 
 
 // oppføring fra databasen?
-$result = ess::$b->db->query("SELECT id, upoker_up_id, cards, time, cash, finished FROM users_poker WHERE upoker_up_id = ".login::$user->player->id);
+$result = \Kofradia\DB::get()->query("SELECT id, upoker_up_id, cards, time, cash, finished FROM users_poker WHERE upoker_up_id = ".login::$user->player->id);
 $poker = false;
-if (mysql_num_rows($result) > 0)
+if ($result->rowCount() > 0)
 {
-	$poker = mysql_fetch_assoc($result);
+	$poker = $result->fetch();
 }
 
 // de første kortene
@@ -119,10 +119,10 @@ if (isset($_POST['amount']))
 	$kort = array_rand($kortstokk, 5);
 	
 	// sett inn i databasen
-	ess::$b->db->query("INSERT INTO users_poker SET upoker_up_id = ".login::$user->player->id.", cards = '".implode(",", $kort)."', time = ".time().", cash = $amount");
+	\Kofradia\DB::get()->exec("INSERT INTO users_poker SET upoker_up_id = ".login::$user->player->id.", cards = '".implode(",", $kort)."', time = ".time().", cash = $amount");
 	
 	// fjern pengene fra brukeren
-	ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = ".login::$user->player->id);
+	\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = ".login::$user->player->id);
 	
 	ess::$b->page->add_message("Du har startet et spill med innsats pålydende ".game::format_cash($amount)."!");
 	redirect::handle();
@@ -185,7 +185,7 @@ else
 	if ($poker['finished'] == 1)
 	{
 		// slett fra databasen
-		ess::$b->db->query("DELETE FROM users_poker WHERE id = {$poker['id']}");
+		\Kofradia\DB::get()->exec("DELETE FROM users_poker WHERE id = {$poker['id']}");
 		
 		$siste_innsats = game::intval($_SESSION[$GLOBALS['__server']['session_prefix'].'poker_siste_innsats'] * 1.1);
 		if ($siste_innsats == 0) $siste_innsats = 1000;
@@ -344,7 +344,7 @@ else
 				putlog("SPAMLOG", "%bPOKER%b: (%u".login::$user->player->data['up_name']."%u) satset (".game::format_cash($poker['cash'])."), fikk ({$won[1]}) og vant (".game::format_cash($cash).") (%c".($rest < 100000000 ? 13 : ($rest < 1000000000 ? 9 : 4))."+".game::format_cash($rest)."%c)");
 				
 				// gi pengene til brukeren
-				ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + $cash WHERE up_id = ".login::$user->player->id);
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + $cash WHERE up_id = ".login::$user->player->id);
 			}
 			
 			
@@ -371,25 +371,25 @@ else
 				#}
 				
 				// gi trøstepengene til brukeren
-				ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + ".($cash*$gevinster[9][2])." WHERE up_id = ".login::$user->player->id);
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + ".($cash*$gevinster[9][2])." WHERE up_id = ".login::$user->player->id);
 			}
 			
 			// oppdater statistikken
-			ess::$b->db->query("UPDATE stats SET count = count + 1, count2 = count2 + $cash WHERE area = 'poker' AND name = 'alt' AND stats_up_id = ".login::$user->player->id." AND subname = $stat_id");
-			if (ess::$b->db->affected_rows() == 0)
+			$a = \Kofradia\DB::get()->exec("UPDATE stats SET count = count + 1, count2 = count2 + $cash WHERE area = 'poker' AND name = 'alt' AND stats_up_id = ".login::$user->player->id." AND subname = $stat_id");
+			if ($a == 0)
 			{
 				// opprett
-				ess::$b->db->query("INSERT INTO stats SET area = 'poker', name = 'alt', stats_up_id = ".login::$user->player->id.", subname = $stat_id, count = 1, count2 = $cash");
+				\Kofradia\DB::get()->exec("INSERT INTO stats SET area = 'poker', name = 'alt', stats_up_id = ".login::$user->player->id.", subname = $stat_id, count = 1, count2 = $cash");
 			}
 			
 			// oppdater totalt statistikken
 			if (login::$user->player->data['up_access_level'] < $_game['access_noplay'])
 			{
-				ess::$b->db->query("UPDATE stats SET count = count + 1, count2 = count2 + $cash WHERE area = 'poker' AND name = 'alt' AND stats_up_id = 0 AND subname = $stat_id");
-				if (ess::$b->db->affected_rows() == 0)
+				$a = \Kofradia\DB::get()->exec("UPDATE stats SET count = count + 1, count2 = count2 + $cash WHERE area = 'poker' AND name = 'alt' AND stats_up_id = 0 AND subname = $stat_id");
+				if ($a == 0)
 				{
 					// opprett
-					ess::$b->db->query("INSERT INTO stats SET area = 'poker', name = 'alt', stats_up_id = 0, subname = $stat_id, count = 1, count2 = $cash");
+					\Kofradia\DB::get()->exec("INSERT INTO stats SET area = 'poker', name = 'alt', stats_up_id = 0, subname = $stat_id, count = 1, count2 = $cash");
 				}
 			}
 			
@@ -400,7 +400,7 @@ else
 			{
 				$arr[] = $v[2];
 			}
-			ess::$b->db->query("UPDATE users_poker SET cards = '".implode(",", $arr)."', finished = 1 WHERE id = {$poker['id']}");
+			\Kofradia\DB::get()->exec("UPDATE users_poker SET cards = '".implode(",", $arr)."', finished = 1 WHERE id = {$poker['id']}");
 			
 			// oppdater anti-bot
 			#antibot::inc($antibot_name);
@@ -448,16 +448,16 @@ function gevinster()
 	$stats = array();
 	
 	// hent total statistikk
-	$result = ess::$b->db->query("SELECT subname, count, count2 FROM stats WHERE area = 'poker' AND name = 'alt' AND stats_up_id = 0");
-	while ($row = mysql_fetch_assoc($result))
+	$result = \Kofradia\DB::get()->query("SELECT subname, count, count2 FROM stats WHERE area = 'poker' AND name = 'alt' AND stats_up_id = 0");
+	while ($row = $result->fetch())
 	{
 		$stats[$row['subname']]['total'] = $row['count'];
 		$stats[$row['subname']]['total_cash'] = $row['count2'];
 	}
 	
 	// hent bruker statistikk
-	$result = ess::$b->db->query("SELECT subname, count, count2 FROM stats WHERE area = 'poker' AND name = 'alt' AND stats_up_id = ".login::$user->player->id);
-	while ($row = mysql_fetch_assoc($result))
+	$result = \Kofradia\DB::get()->query("SELECT subname, count, count2 FROM stats WHERE area = 'poker' AND name = 'alt' AND stats_up_id = ".login::$user->player->id);
+	while ($row = $result->fetch())
 	{
 		$stats[$row['subname']]['count'] = $row['count'];
 		$stats[$row['subname']]['cash'] = $row['count2'];

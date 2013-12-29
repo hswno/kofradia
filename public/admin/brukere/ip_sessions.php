@@ -41,10 +41,10 @@ $wc = mb_strpos($ip, "*") !== false || mb_strpos($ip, "?") !== false;
 // hent data
 $pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 200);
 $sort_info = $sort->active();
-$result = $pagei->query("SELECT ses_id, ses_u_id, ses_active, ses_created_time, ses_last_time, ses_logout_time, ses_hits, ses_points, ses_last_ip, u_email, u_access_level, ses_browsers, up_name, up_id, up_access_level FROM sessions LEFT JOIN users ON u_id = ses_u_id LEFT JOIN users_players ON up_id = u_active_up_id WHERE ses_last_ip LIKE ".like_search($_base->db->quote($ip))." ORDER BY {$sort_info['params']}");
+$result = $pagei->query("SELECT ses_id, ses_u_id, ses_active, ses_created_time, ses_last_time, ses_logout_time, ses_hits, ses_points, ses_last_ip, u_email, u_access_level, ses_browsers, up_name, up_id, up_access_level FROM sessions LEFT JOIN users ON u_id = ses_u_id LEFT JOIN users_players ON up_id = u_active_up_id WHERE ses_last_ip LIKE ".like_search(\Kofradia\DB::quote($ip))." ORDER BY {$sort_info['params']}");
 
 // ingen treff?
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 <p>Ingen treff.</p>';
@@ -73,7 +73,7 @@ else
 	<tbody>';
 			
 	$i = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		echo '
 		<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>

@@ -33,9 +33,9 @@ class page_ff_log
 		$ff_reset = $this->ff->data['ff_time_reset'] && !$this->ff->mod ? " AND ffl_time > {$this->ff->data['ff_time_reset']}" : "";
 		
 		// finn ut hva som er tilgjengelig
-		$result = ess::$b->db->query("SELECT DISTINCT ffl_type FROM ff_log WHERE ffl_ff_id = {$this->ff->id}$ff_reset");
+		$result = \Kofradia\DB::get()->query("SELECT DISTINCT ffl_type FROM ff_log WHERE ffl_ff_id = {$this->ff->id}$ff_reset");
 		$in_use = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$in_use[] = $row['ffl_type'];
 		}
@@ -120,7 +120,7 @@ class page_ff_log
 		$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 30);
 		$result = $pagei->query("SELECT SQL_CALC_FOUND_ROWS ffl_id, ffl_time, ffl_type, ffl_data, ffl_extra FROM ff_log WHERE ffl_ff_id = {$this->ff->id}$where ORDER BY ffl_time DESC, ffl_id DESC");
 		
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 <p class="c">
@@ -138,7 +138,7 @@ class page_ff_log
 			
 			// logg meldingene
 			$logs = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$day = ess::$b->date->get($row['ffl_time'])->format(date::FORMAT_NOTIME);
 				$data = $this->ff->format_log($row['ffl_id'], $row['ffl_time'], $row['ffl_type'], $row['ffl_data'], $row['ffl_extra']);

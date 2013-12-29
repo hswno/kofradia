@@ -14,10 +14,10 @@ class Donation {
 			SELECT d_up_id, d_time, d_amount
 			FROM donations
 			ORDER BY d_time DESC";
-		$result = $pagei ? $pagei->query($q) : \ess::$b->db->query($q);
+		$result = $pagei ? $pagei->query($q) : \Kofradia\DB::get()->query($q);
 
 		$list = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$list[] = static::load($row);
 		}

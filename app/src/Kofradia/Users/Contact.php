@@ -30,7 +30,7 @@ class Contact {
 		$order = !is_null($order_col) ? $order_col : null;
 		$result = static::getData("uc_u_id = ".$owner_user->id, $order);
 
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$contacts[] = static::getInstance($row, $owner_user);
 		}
@@ -46,10 +46,10 @@ class Contact {
 	 */
 	public static function getContactById($id)
 	{
-		$id = \ess::$b->db->quote($id);
+		$id = \Kofradia\DB::quote($id);
 		$result = static::getData("uc_id = $id");
 
-		if ($row = mysql_fetch_assoc($result))
+		if ($row = $result->fetch())
 		{
 			return static::getInstance($row);
 		}
@@ -70,12 +70,12 @@ class Contact {
 
 		if (!is_null($is_block))
 		{
-			$row = mysql_fetch_assoc($result);
+			$row = $result->fetch();
 			return $row ? static::getInstance($row) : null;
 		}
 
 		$rows = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$rows[] = static::getInstance($row);
 		}
@@ -93,7 +93,7 @@ class Contact {
 	protected function getData($where, $order = null)
 	{
 		$order = !empty($order) ? ' ORDER BY '.$order : '';
-		return \ess::$b->db->query("
+		return \Kofradia\DB::get()->query("
 			SELECT uc_id, uc_u_id, uc_contact_up_id, uc_time, uc_info, uc_type, up_name, up_access_level, up_last_online
 			FROM users_contacts
 				LEFT JOIN users_players ON up_id = uc_contact_up_id
@@ -112,14 +112,14 @@ class Contact {
 	 */
 	public static function create(\user $user, \player $player, $comment = null, $is_block = false)
 	{
-		\ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			INSERT IGNORE INTO users_contacts
 			SET uc_u_id = {$user->id}, uc_contact_up_id = {$player->id}, uc_time = ".time().",
-				uc_type = ".($is_block ? static::TYPE_BLOCK : static::TYPE_FRIEND).", uc_info = ".\ess::$b->db->quote($comment));
+				uc_type = ".($is_block ? static::TYPE_BLOCK : static::TYPE_FRIEND).", uc_info = ".\Kofradia\DB::quote($comment));
 
-		if (\ess::$b->db->affected_rows())
+		if ($a)
 		{
-			$contact = static::getContactByID(\ess::$b->db->insert_id());
+			$contact = static::getContactByID(\Kofradia\DB::get()->lastInsertId());
 			$contact->getOwnerUser()->updateContactsTime();
 			return $contact;
 		}
@@ -242,12 +242,12 @@ class Contact {
 	 */
 	public function updateInfo($info)
 	{
-		\ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE users_contacts
-			SET uc_info = ".\ess::$b->db->quote($info)."
+			SET uc_info = ".\Kofradia\DB::quote($info)."
 			WHERE uc_id = {$this->data['uc_id']}");
 
-		if (\ess::$b->db->affected_rows() > 0)
+		if ($a > 0)
 		{
 			$this->data['uc_info'] = $info;
 			$this->getOwnerUser()->updateContactsTime();
@@ -264,11 +264,11 @@ class Contact {
 	 */
 	public function delete()
 	{
-		\ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			DELETE FROM users_contacts
 			WHERE uc_id = {$this->data['uc_id']}");
 
-		if (\ess::$b->db->affected_rows() > 0)
+		if ($a > 0)
 		{
 			$this->getOwnerUser()->updateContactsTime();
 			return true;

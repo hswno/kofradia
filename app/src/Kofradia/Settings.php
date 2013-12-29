@@ -7,10 +7,10 @@ class Settings {
 	 */
 	public static function reload()
 	{
-		$result = \ess::$b->db->query("SELECT id, name, value FROM settings");
+		$result = \Kofradia\DB::get()->query("SELECT id, name, value FROM settings");
 
 		\game::$settings = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			\game::$settings[$row['name']] = array("id" => $row['id'], "value" => $row['value']);
 		}

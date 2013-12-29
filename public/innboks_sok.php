@@ -71,7 +71,7 @@ if ($search_from_id == 4)
 	}
 	elseif (count($search_from[4][2]) == 1)
 	{
-		$search_from[4][1] = " AND up.up_name = ".$_base->db->quote($search_from[4][2][0]);
+		$search_from[4][1] = " AND up.up_name = ".\Kofradia\DB::quote($search_from[4][2][0]);
 	}
 	else
 	{
@@ -270,7 +270,7 @@ if (isset($_POST['search']))
 .ir_marked { color: #BBBB99; font-weight: bold }'));
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$content = trim(strip_tags(game::bb_to_html($row['id_text'])));
 				$length = mb_strlen($content);

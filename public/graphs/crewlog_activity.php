@@ -12,7 +12,7 @@ $expire = $_base->date->get();
 $expire->setTime(0, 0, 0);
 $expire->modify("-59 days"); // vis siste 60 dagene
 $expire = $expire->format("U");
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT up_name, COUNT(lc_id) num_actions, DATE(FROM_UNIXTIME(lc_time)) day
 	FROM log_crew JOIN users_players ON lc_up_id = up_id AND up_access_level != 0 AND up_access_level != 1 
 	WHERE lc_time >= $expire
@@ -23,7 +23,7 @@ $result = $_base->db->query("
 $days = array();
 $days_max = 0;
 $users = array();
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$users[$row['up_name']][$row['day']] = (int) $row['num_actions'];
 	$days[$row['day']] = (isset($days[$row['day']]) ? (int)$days[$row['day']] : 0) + (int) $row['num_actions'];

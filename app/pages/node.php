@@ -220,9 +220,9 @@ class page_node
 }');
 		
 		// hent all informasjon
-		$result = ess::$b->db->query("SELECT node_id, node_parent_node_id, node_title, node_type, node_params, node_show_menu, node_expand_menu, node_enabled, node_priority, node_change FROM nodes");
+		$result = \Kofradia\DB::get()->query("SELECT node_id, node_parent_node_id, node_title, node_type, node_params, node_show_menu, node_expand_menu, node_enabled, node_priority, node_change FROM nodes");
 		$nodes = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$row['params'] = new params($row['node_params']);
 			$row['enheter'] = array();
@@ -230,8 +230,8 @@ class page_node
 		}
 		
 		// hent alle enhetene
-		$result = ess::$b->db->query("SELECT ni_id, ni_node_id, ni_type, nir_content, nir_params, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_enabled != 0 AND ni_deleted = 0 ORDER BY ni_priority");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT ni_id, ni_node_id, ni_type, nir_content, nir_params, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_enabled != 0 AND ni_deleted = 0 ORDER BY ni_priority");
+		while ($row = $result->fetch())
 		{
 			if (!isset($nodes[$row['ni_node_id']])) continue;
 			$nodes[$row['ni_node_id']]['enheter'][] = nodes::content_build($row);
@@ -359,9 +359,9 @@ class page_node
 <p>Denne siden lar deg søke gjennom alt innholdet som er synlig i hjelpesidene.</p>';
 		
 		// hent all informasjon
-		$result = ess::$b->db->query("SELECT node_id, node_parent_node_id, node_title, node_type, node_params, node_show_menu, node_expand_menu, node_enabled, node_priority, node_change FROM nodes");
+		$result = \Kofradia\DB::get()->query("SELECT node_id, node_parent_node_id, node_title, node_type, node_params, node_show_menu, node_expand_menu, node_enabled, node_priority, node_change FROM nodes");
 		$nodes = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$row['params'] = new params($row['node_params']);
 			$row['enheter'] = array();
@@ -436,8 +436,8 @@ class page_node
 	protected static function search_handle($search_list, $search_list2, $nodes)
 	{
 		// hent alle enhetene
-		$result = ess::$b->db->query("SELECT ni_id, ni_node_id, ni_type, nir_content, nir_params, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_enabled != 0 AND ni_deleted = 0 ORDER BY ni_priority");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT ni_id, ni_node_id, ni_type, nir_content, nir_params, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_enabled != 0 AND ni_deleted = 0 ORDER BY ni_priority");
+		while ($row = $result->fetch())
 		{
 			if (!isset($nodes[$row['ni_node_id']])) continue;
 			
@@ -725,19 +725,19 @@ class page_node_admin
 			else
 			{
 				// hent priority til previous node
-				$result = ess::$b->db->query("SELECT node_priority FROM nodes WHERE node_parent_node_id = {$parent_node} AND node_id = {$previous_node} AND node_deleted = 0");
-				if (mysql_num_rows($result) == 0)
+				$result = \Kofradia\DB::get()->query("SELECT node_priority FROM nodes WHERE node_parent_node_id = {$parent_node} AND node_id = {$previous_node} AND node_deleted = 0");
+				if ($result->rowCount() == 0)
 				{
 					ess::$b->page->add_message("Noe gikk galt. Prøv igjen.", "error");
 					redirect::handle();
 				}
-				$priority = mysql_result($result, 0);
+				$priority = $result->fetchColumn(0);
 				
 				// hent priority til den vi skal "erstatte"
-				$result = ess::$b->db->query("SELECT node_priority FROM nodes WHERE node_parent_node_id = {$parent_node} AND node_priority > $priority AND node_deleted = 0 ORDER BY node_priority LIMIT 1");
-				if (mysql_num_rows($result) > 0)
+				$result = \Kofradia\DB::get()->query("SELECT node_priority FROM nodes WHERE node_parent_node_id = {$parent_node} AND node_priority > $priority AND node_deleted = 0 ORDER BY node_priority LIMIT 1");
+				if ($result->rowCount() > 0)
 				{
-					$priority = mysql_result($result, 0);
+					$priority = $result->fetchColumn(0);
 				}
 				else
 				{
@@ -745,8 +745,8 @@ class page_node_admin
 				}
 				
 				// hent nummer
-				$result = ess::$b->db->query("SELECT COUNT(node_id) FROM nodes WHERE node_parent_node_id = {$parent_node} AND node_priority < $priority AND node_deleted = 0");
-				$priority_num = mysql_result($result, 0) + 1;
+				$result = \Kofradia\DB::get()->query("SELECT COUNT(node_id) FROM nodes WHERE node_parent_node_id = {$parent_node} AND node_priority < $priority AND node_deleted = 0");
+				$priority_num = $result->fetchColumn(0) + 1;
 			}
 			
 			// legge til?
@@ -769,12 +769,12 @@ class page_node_admin
 				else
 				{
 					// sett opp prioritys
-					ess::$b->db->query("UPDATE nodes SET node_priority = node_priority + 1 WHERE node_parent_node_id = {$parent_node} AND node_priority >= $priority");
+					\Kofradia\DB::get()->exec("UPDATE nodes SET node_priority = node_priority + 1 WHERE node_parent_node_id = {$parent_node} AND node_priority >= $priority");
 					
 					// legg til side
-					ess::$b->db->query("INSERT INTO nodes SET node_parent_node_id = $parent_node, node_title = ".ess::$b->db->quote($title).", node_type = ".ess::$b->db->quote(mb_strtolower($type)).", node_priority = $priority, node_change = ".time());
+					\Kofradia\DB::get()->exec("INSERT INTO nodes SET node_parent_node_id = $parent_node, node_title = ".\Kofradia\DB::quote($title).", node_type = ".\Kofradia\DB::quote(mb_strtolower($type)).", node_priority = $priority, node_change = ".time());
 					
-					$iid = mysql_insert_id();
+					$iid = \Kofradia\DB::get()->lastInsertId();
 					ess::$b->page->add_message("Siden ble lagt til.");
 					redirect::handle("node/a?node_id={$iid}", redirect::ROOT);
 				}
@@ -914,16 +914,16 @@ class page_node_admin
 					
 					else
 					{
-						$new_trans = ess::$b->db->begin();
+						\Kofradia\DB::get()->beginTransaction();
 						
 						// flytt de andre kategoriene
-						ess::$b->db->query("UPDATE nodes SET node_priority = node_priority - 1 WHERE node_parent_node_id = ".nodes::$node_info['node_parent_node_id']." AND node_priority > ".nodes::$node_info['node_priority']);
-						ess::$b->db->query("UPDATE nodes SET node_priority = node_priority + 1 WHERE node_parent_node_id = $parent_node_id".($type == "under" ? " AND node_priority > ".nodes::$nodes[$dest_node_id]['node_priority'] : ""));
+						\Kofradia\DB::get()->exec("UPDATE nodes SET node_priority = node_priority - 1 WHERE node_parent_node_id = ".nodes::$node_info['node_parent_node_id']." AND node_priority > ".nodes::$node_info['node_priority']);
+						\Kofradia\DB::get()->exec("UPDATE nodes SET node_priority = node_priority + 1 WHERE node_parent_node_id = $parent_node_id".($type == "under" ? " AND node_priority > ".nodes::$nodes[$dest_node_id]['node_priority'] : ""));
 						
 						// flytt den valgte siden
-						ess::$b->db->query("UPDATE nodes SET node_parent_node_id = $parent_node_id, node_priority = ".($type == "inside" ? 0 : nodes::$nodes[$dest_node_id]['node_priority'] + 1)." WHERE node_id = ".nodes::$node_id);
+						\Kofradia\DB::get()->exec("UPDATE nodes SET node_parent_node_id = $parent_node_id, node_priority = ".($type == "inside" ? 0 : nodes::$nodes[$dest_node_id]['node_priority'] + 1)." WHERE node_id = ".nodes::$node_id);
 						
-						if ($new_trans) ess::$b->db->commit();
+						\Kofradia\DB::get()->commit();
 						
 						ess::$b->page->add_message("Siden ble flyttet.");
 						redirect::handle();
@@ -1007,7 +1007,7 @@ class page_node_admin
 					else
 					{
 						// oppdater
-						ess::$b->db->query("UPDATE nodes SET node_title = ".ess::$b->db->quote($title)." WHERE node_id = ".nodes::$node_id);
+						\Kofradia\DB::get()->exec("UPDATE nodes SET node_title = ".\Kofradia\DB::quote($title)." WHERE node_id = ".nodes::$node_id);
 						ess::$b->page->add_message("Tittelen ble endret fra &laquo;".htmlspecialchars(nodes::$node_info['node_title'])."&raquo; til &laquo;".htmlspecialchars($title)."&raquo;.");
 						redirect::handle();
 					}
@@ -1054,7 +1054,7 @@ class page_node_admin
 				// oppdater?
 				if ($update !== false)
 				{
-					ess::$b->db->query("UPDATE nodes SET node_enabled = $update WHERE node_id = ".nodes::$node_id);
+					\Kofradia\DB::get()->exec("UPDATE nodes SET node_enabled = $update WHERE node_id = ".nodes::$node_id);
 				}
 				
 				redirect::handle();
@@ -1086,7 +1086,7 @@ class page_node_admin
 				// oppdater?
 				if ($update !== false)
 				{
-					ess::$b->db->query("UPDATE nodes SET node_show_menu = $update WHERE node_id = ".nodes::$node_id);
+					\Kofradia\DB::get()->exec("UPDATE nodes SET node_show_menu = $update WHERE node_id = ".nodes::$node_id);
 				}
 				
 				redirect::handle();
@@ -1118,7 +1118,7 @@ class page_node_admin
 				// oppdater?
 				if ($update !== false)
 				{
-					ess::$b->db->query("UPDATE nodes SET node_expand_menu = $update WHERE node_id = ".nodes::$node_id);
+					\Kofradia\DB::get()->exec("UPDATE nodes SET node_expand_menu = $update WHERE node_id = ".nodes::$node_id);
 				}
 				
 				redirect::handle();
@@ -1131,8 +1131,8 @@ class page_node_admin
 				$where_check = "";
 				
 				// sjekk om det er noen elementer under denne
-				$result = ess::$b->db->query("SELECT COUNT(node_id) FROM nodes WHERE node_parent_node_id = ".nodes::$node_id." AND node_deleted = 0");
-				$ant =  mysql_result($result, 0);
+				$result = \Kofradia\DB::get()->query("SELECT COUNT(node_id) FROM nodes WHERE node_parent_node_id = ".nodes::$node_id." AND node_deleted = 0");
+				$ant =  $result->fetchColumn(0);
 				
 				if ($ant > 0)
 				{
@@ -1148,8 +1148,8 @@ class page_node_admin
 				{
 					case "container":
 						// sjekk antall enheter
-						$result = ess::$b->db->query("SELECT COUNT(ni_id) FROM nodes_items WHERE ni_node_id = ".nodes::$node_id." AND ni_deleted = 0");
-						$ant = mysql_result($result, 0);
+						$result = \Kofradia\DB::get()->query("SELECT COUNT(ni_id) FROM nodes_items WHERE ni_node_id = ".nodes::$node_id." AND ni_deleted = 0");
+						$ant = $result->fetchColumn(0);
 						
 						if ($ant > 0)
 						{
@@ -1166,9 +1166,9 @@ class page_node_admin
 				if (isset($_POST['delete']))
 				{
 					// marker som slettet
-					ess::$b->db->query("UPDATE nodes$table_check SET node_deleted = ".time()." WHERE node_id = ".nodes::$node_id.$where_check);
+					$a = \Kofradia\DB::get()->exec("UPDATE nodes$table_check SET node_deleted = ".time()." WHERE node_id = ".nodes::$node_id.$where_check);
 					
-					if (ess::$b->db->affected_rows() == 0)
+					if ($a == 0)
 					{
 						ess::$b->page->add_message("Noe gikk galt. Prøv på nytt.", "error");
 						redirect::handle();
@@ -1221,13 +1221,13 @@ class page_node_admin
 					if (!is_null($hide))
 					{
 						// hent friske params
-						$result = ess::$b->db->query("SELECT node_params FROM nodes WHERE node_id = ".nodes::$node_id." FOR UPDATE");
-						$params = new params(mysql_result($result, 0));
+						$result = \Kofradia\DB::get()->query("SELECT node_params FROM nodes WHERE node_id = ".nodes::$node_id." FOR UPDATE");
+						$params = new params($result->fetchColumn(0));
 						if ($hide) $params->update("hide_title", "1");
 						else $params->remove("hide_title");
 						
 						// oppdater
-						ess::$b->db->query("UPDATE nodes SET node_params = ".ess::$b->db->quote($params->build())." WHERE node_id = ".nodes::$node_id);
+						\Kofradia\DB::get()->exec("UPDATE nodes SET node_params = ".\Kofradia\DB::quote($params->build())." WHERE node_id = ".nodes::$node_id);
 					}
 					
 					redirect::handle();
@@ -1260,13 +1260,13 @@ class page_node_admin
 					if (!is_null($hide))
 					{
 						// hent friske params
-						$result = ess::$b->db->query("SELECT node_params FROM nodes WHERE node_id = ".nodes::$node_id." FOR UPDATE");
-						$params = new params(mysql_result($result, 0));
+						$result = \Kofradia\DB::get()->query("SELECT node_params FROM nodes WHERE node_id = ".nodes::$node_id." FOR UPDATE");
+						$params = new params($result->fetchColumn(0));
 						if ($hide) $params->update("hide_time_change", "1");
 						else $params->remove("hide_time_change");
 						
 						// oppdater
-						ess::$b->db->query("UPDATE nodes SET node_params = ".ess::$b->db->quote($params->build())." WHERE node_id = ".nodes::$node_id);
+						\Kofradia\DB::get()->exec("UPDATE nodes SET node_params = ".\Kofradia\DB::quote($params->build())." WHERE node_id = ".nodes::$node_id);
 					}
 					
 					redirect::handle();
@@ -1289,10 +1289,10 @@ class page_node_admin
 					}
 					
 					// oppdater
-					ess::$b->db->query("UPDATE nodes_items SET ni_enabled = $value WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $unit_id AND ni_deleted = 0");
-					if (mysql_affected_rows() > 0)
+					$affected = \Kofradia\DB::get()->exec("UPDATE nodes_items SET ni_enabled = $value WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $unit_id AND ni_deleted = 0");
+					if ($affected > 0)
 					{
-						ess::$b->db->query("UPDATE nodes SET node_change = ".time()." WHERE node_id = ".nodes::$node_id);
+						\Kofradia\DB::get()->exec("UPDATE nodes SET node_change = ".time()." WHERE node_id = ".nodes::$node_id);
 						ess::$b->page->add_message($msg);
 					}
 					
@@ -1303,22 +1303,22 @@ class page_node_admin
 				if (isset($_GET['unit_delete']))
 				{
 					// hent enheten
-					$unit_id = ess::$b->db->quote($_GET['unit_delete']);
-					$result = ess::$b->db->query("SELECT ni_id, ni_type, nir_content, nir_params, nir_description, ni_priority, ni_enabled, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $unit_id AND ni_deleted = 0");
+					$unit_id = \Kofradia\DB::quote($_GET['unit_delete']);
+					$result = \Kofradia\DB::get()->query("SELECT ni_id, ni_type, nir_content, nir_params, nir_description, ni_priority, ni_enabled, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $unit_id AND ni_deleted = 0");
 					
 					// fant ikke?
-					if (mysql_num_rows($result) == 0)
+					if ($result->rowCount() == 0)
 					{
 						ess::$b->page->add_message("Fant ikke enheten. Prøv på nytt.", "error");
 						redirect::handle();
 					}
-					$unit = mysql_fetch_assoc($result);
+					$unit = $result->fetch();
 					
 					// slette?
 					if (isset($_POST['delete']))
 					{
 						// marker som slettet
-						ess::$b->db->query("UPDATE nodes_items SET ni_deleted = ".time()." WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $unit_id AND ni_deleted = 0");
+						\Kofradia\DB::get()->exec("UPDATE nodes_items SET ni_deleted = ".time()." WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $unit_id AND ni_deleted = 0");
 						ess::$b->page->add_message("Enheten ble markert som slettet og er ikke lenger tilgjengelig.");
 						redirect::handle();
 					}
@@ -1341,16 +1341,16 @@ class page_node_admin
 				if (isset($_GET['unit_edit']))
 				{
 					// hent enheten
-					$unit_id = ess::$b->db->quote($_GET['unit_edit']);
-					$result = ess::$b->db->query("SELECT ni_id, ni_type, nir_content, nir_params, nir_description, ni_priority, ni_enabled, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $unit_id AND ni_deleted = 0");
+					$unit_id = \Kofradia\DB::quote($_GET['unit_edit']);
+					$result = \Kofradia\DB::get()->query("SELECT ni_id, ni_type, nir_content, nir_params, nir_description, ni_priority, ni_enabled, nir_time FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $unit_id AND ni_deleted = 0");
 					
 					// fant ikke?
-					if (mysql_num_rows($result) == 0)
+					if ($result->rowCount() == 0)
 					{
 						ess::$b->page->add_message("Fant ikke enheten. Prøv på nytt.", "error");
 						redirect::handle();
 					}
-					$unit = mysql_fetch_assoc($result);
+					$unit = $result->fetch();
 					
 					// kan endres?
 					if (!isset(nodes::$item_types[$unit['ni_type']]) || !nodes::$item_types[$unit['ni_type']][1])
@@ -1372,10 +1372,10 @@ class page_node_admin
 						
 						else
 						{
-							ess::$b->db->query("INSERT INTO nodes_items_rev SET nir_ni_id = {$unit['ni_id']}, nir_params = ".ess::$b->db->quote($params->build()).", nir_content = ".ess::$b->db->quote($_POST['content']).", nir_description = ".ess::$b->db->quote($_POST['description']).", nir_time = ".time());
-							$nir_id = ess::$b->db->insert_id();
-							ess::$b->db->query("UPDATE nodes_items SET ni_nir_id = $nir_id, ni_nir_count = ni_nir_count + 1 WHERE ni_id = {$unit['ni_id']}");
-							ess::$b->db->query("UPDATE nodes SET node_change = ".time()." WHERE node_id = ".nodes::$node_id);
+							\Kofradia\DB::get()->exec("INSERT INTO nodes_items_rev SET nir_ni_id = {$unit['ni_id']}, nir_params = ".\Kofradia\DB::quote($params->build()).", nir_content = ".\Kofradia\DB::quote($_POST['content']).", nir_description = ".\Kofradia\DB::quote($_POST['description']).", nir_time = ".time());
+							$nir_id = \Kofradia\DB::get()->lastInsertId();
+							\Kofradia\DB::get()->exec("UPDATE nodes_items SET ni_nir_id = $nir_id, ni_nir_count = ni_nir_count + 1 WHERE ni_id = {$unit['ni_id']}");
+							\Kofradia\DB::get()->exec("UPDATE nodes SET node_change = ".time()." WHERE node_id = ".nodes::$node_id);
 							
 							putlog("CREWCHAN", "NODE REDIGERT: ".login::$user->player->data['up_name']." redigerte %u".nodes::$node_info['node_title']."%u ".ess::$s['spath']."/node/".nodes::$node_id);
 							
@@ -1468,19 +1468,19 @@ class page_node_admin
 					else
 					{
 						// hent priority til forrige
-						$result = ess::$b->db->query("SELECT ni_priority FROM nodes_items WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $previous_unit AND ni_deleted = 0");
-						if (mysql_num_rows($result) == 0)
+						$result = \Kofradia\DB::get()->query("SELECT ni_priority FROM nodes_items WHERE ni_node_id = ".nodes::$node_id." AND ni_id = $previous_unit AND ni_deleted = 0");
+						if ($result->rowCount() == 0)
 						{
 							ess::$b->page->add_message("Noe gikk galt. Prøv igjen.", "error");
 							redirect::handle();
 						}
-						$priority = mysql_result($result, 0);
+						$priority = $result->fetchColumn(0);
 						
 						// hent priority til den vi skal "erstatte"
-						$result = ess::$b->db->query("SELECT ni_priority FROM nodes_items WHERE ni_node_id = ".nodes::$node_id." AND ni_priority > $priority AND ni_deleted = 0 ORDER BY ni_priority LIMIT 1");
-						if (mysql_num_rows($result) > 0)
+						$result = \Kofradia\DB::get()->query("SELECT ni_priority FROM nodes_items WHERE ni_node_id = ".nodes::$node_id." AND ni_priority > $priority AND ni_deleted = 0 ORDER BY ni_priority LIMIT 1");
+						if ($result->rowCount() > 0)
 						{
-							$priority = mysql_result($result, 0);
+							$priority = $result->fetchColumn(0);
 						}
 						else
 						{
@@ -1488,8 +1488,8 @@ class page_node_admin
 						}
 						
 						// hent nummer
-						$result = ess::$b->db->query("SELECT COUNT(ni_id) FROM nodes_items WHERE ni_node_id = ".nodes::$node_id." AND ni_priority < $priority AND ni_deleted = 0");
-						$priority_num = mysql_result($result, 0) + 1;
+						$result = \Kofradia\DB::get()->query("SELECT COUNT(ni_id) FROM nodes_items WHERE ni_node_id = ".nodes::$node_id." AND ni_priority < $priority AND ni_deleted = 0");
+						$priority_num = $result->fetchColumn(0) + 1;
 					}
 					
 					// legge til?
@@ -1508,14 +1508,14 @@ class page_node_admin
 							$description = postval("description", NULL);
 							
 							// sett opp prioritys
-							ess::$b->db->query("UPDATE nodes_items SET ni_priority = ni_priority + 1 WHERE ni_node_id = ".nodes::$node_id." AND ni_priority >= $priority AND ni_deleted = 0");
+							\Kofradia\DB::get()->exec("UPDATE nodes_items SET ni_priority = ni_priority + 1 WHERE ni_node_id = ".nodes::$node_id." AND ni_priority >= $priority AND ni_deleted = 0");
 							
 							// legg til enhet
-							ess::$b->db->query("INSERT INTO nodes_items SET ni_node_id = ".nodes::$node_id.", ni_type = ".ess::$b->db->quote($type).", ni_priority = $priority");
-							$ni_id = ess::$b->db->insert_id();
-							ess::$b->db->query("INSERT INTO nodes_items_rev SET nir_ni_id = $ni_id, nir_time = ".time().", nir_description = ".ess::$b->db->quote($description));
-							$nir_id = ess::$b->db->insert_id();
-							ess::$b->db->query("UPDATE nodes_items SET ni_nir_id = $nir_id WHERE ni_id = $ni_id");
+							\Kofradia\DB::get()->exec("INSERT INTO nodes_items SET ni_node_id = ".nodes::$node_id.", ni_type = ".\Kofradia\DB::quote($type).", ni_priority = $priority");
+							$ni_id = \Kofradia\DB::get()->lastInsertId();
+							\Kofradia\DB::get()->exec("INSERT INTO nodes_items_rev SET nir_ni_id = $ni_id, nir_time = ".time().", nir_description = ".\Kofradia\DB::quote($description));
+							$nir_id = \Kofradia\DB::get()->lastInsertId();
+							\Kofradia\DB::get()->exec("UPDATE nodes_items SET ni_nir_id = $nir_id WHERE ni_id = $ni_id");
 							
 							ess::$b->page->add_message("Enheten ble lagt til.");
 							redirect::handle("node/a?node_id=".nodes::$node_id."&unit_edit=$ni_id", redirect::ROOT);
@@ -1570,15 +1570,15 @@ class page_node_admin
 					if (isset($_POST['url']))
 					{
 						// hent friske params
-						$result = ess::$b->db->query("SELECT node_params FROM nodes WHERE node_id = ".nodes::$node_id." FOR UPDATE");
-						$params = new params(mysql_result($result, 0));
+						$result = \Kofradia\DB::get()->query("SELECT node_params FROM nodes WHERE node_id = ".nodes::$node_id." FOR UPDATE");
+						$params = new params($result->fetchColumn(0));
 						$params->update("url", $_POST['url']);
 						
 						if (isset($_POST['new_window'])) $params->update("new_window", 1);
 						else $params->remove("new_window");
 						
 						// oppdater
-						ess::$b->db->query("UPDATE nodes SET node_params = ".ess::$b->db->quote($params->build())." WHERE node_id = ".nodes::$node_id);
+						\Kofradia\DB::get()->exec("UPDATE nodes SET node_params = ".\Kofradia\DB::quote($params->build())." WHERE node_id = ".nodes::$node_id);
 						ess::$b->page->add_message("Adressen ble oppdatert.");
 						redirect::handle();
 					}
@@ -1651,9 +1651,9 @@ class page_node_admin
 	<tbody class="c">';
 		
 		// hent antall items i hver node
-		$result = ess::$b->db->query("SELECT ni_node_id, COUNT(ni_id) count FROM nodes_items WHERE ni_deleted = 0 GROUP BY ni_node_id");
+		$result = \Kofradia\DB::get()->query("SELECT ni_node_id, COUNT(ni_id) count FROM nodes_items WHERE ni_deleted = 0 GROUP BY ni_node_id");
 		$nodes_items_count = array();
-		while ($row = mysql_fetch_assoc($result)) $nodes_items_count[$row['ni_node_id']] = $row['count'];
+		while ($row = $result->fetch()) $nodes_items_count[$row['ni_node_id']] = $row['count'];
 		foreach (nodes::$nodes as $key => &$value)
 		{
 			$value['ni_count'] = isset($nodes_items_count[$key]) ? $nodes_items_count[$key] : 0;
@@ -1797,7 +1797,7 @@ class page_node_admin
 		if (nodes::$node_info['node_type'] == "container")
 		{
 			// hent enhetene
-			$result = ess::$b->db->query("SELECT ni_id, ni_type, nir_content, nir_params, nir_time, ni_enabled, nir_description FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_node_id = ".nodes::$node_id." AND ni_deleted = 0 ORDER BY ni_priority");
+			$result = \Kofradia\DB::get()->query("SELECT ni_id, ni_type, nir_content, nir_params, nir_time, ni_enabled, nir_description FROM nodes_items LEFT JOIN nodes_items_rev ON nir_id = ni_nir_id WHERE ni_node_id = ".nodes::$node_id." AND ni_deleted = 0 ORDER BY ni_priority");
 			
 			echo '
 <h2>Innstillinger</h2>
@@ -1811,7 +1811,7 @@ class page_node_admin
 <h2>Enhetene</h2>
 <p class="h_right"><a href="'.ess::$s['relative_path'].'/node/a?node_id='.nodes::$node_id.'&amp;unit_new" class="large_button">Ny enhet</a></p>';
 			
-			if (mysql_num_rows($result) == 0)
+			if ($result->rowCount() == 0)
 			{
 				echo '
 <p>
@@ -1835,7 +1835,7 @@ class page_node_admin
 				$i = 0;
 				$highlight = getval("unit_highlight");
 				
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$i++;
 					$class = $highlight == $row['ni_id'] ? ' class="highlight"' : ($i % 2 == 0 ? ' class="color"' : '');

@@ -66,12 +66,13 @@ class auksjon
 		$this->id = (int) $a_id;
 		
 		// hent informasjon
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT a_id, a_type, a_up_id, a_title, a_start, a_end, a_bid_start, a_bid_jump, a_num_bids, a_info, a_params, a_completed
 			FROM auksjoner
 			WHERE a_id = $this->id AND a_active != 0");
 		
-		$this->data = mysql_fetch_assoc($result);
+		$this->data = $result->fetch();
+		unset($result);
 		if (!$this->data) return;
 		
 		if ($this->data['a_bid_jump'] < 1) $this->data['a_bid_jump'] = 1;
@@ -95,23 +96,23 @@ class auksjon
 		{
 			// hent det budet som har stått lenger enn tiden som man kan trekke seg og som er aktivt
 			$expire = time() - self::MAX_TIME_REMOVE;
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT ab_id, ab_bid
 				FROM auksjoner_bud
 				WHERE ab_a_id = $this->id AND ab_active != 0 AND ab_time < $expire
 				ORDER BY ab_time DESC
 				LIMIT 1");
-			$bud = mysql_fetch_assoc($result);
+			$bud = $result->fetch();
 			
 			// har vi dette budet?
 			if ($bud)
 			{
 				// hent alle budene som skal settes inaktive
-				$result = ess::$b->db->query("
+				$result = \Kofradia\DB::get()->query("
 					SELECT ab_id, ab_bid, ab_up_id
 					FROM auksjoner_bud
 					WHERE ab_a_id = $this->id AND ab_active != 0 AND ab_bid < {$bud['ab_bid']}");
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					self::set_bud_inactive($row, $this);
 				}
@@ -126,21 +127,22 @@ class auksjon
 	{
 		// forsøk å sett som behandlet
 		$this->data['a_completed'] = 1;
-		ess::$b->db->query("UPDATE auksjoner SET a_completed = 1 WHERE a_id = {$this->id} AND a_completed = 0");
+		$affected = \Kofradia\DB::get()->exec("UPDATE auksjoner SET a_completed = 1 WHERE a_id = {$this->id} AND a_completed = 0");
 		
 		// allerede behandlet?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($affected == 0)
 		{
 			return;
 		}
 		
 		// hent vinnerbudet
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ab_id, ab_bid, ab_up_id
 			FROM auksjoner_bud
 			WHERE ab_a_id = $this->id AND ab_active != 0
 			ORDER BY ab_time DESC LIMIT 1");
-		$bud = mysql_fetch_assoc($result);
+		$bud = $result->fetch();
+		unset($result);
 		
 		// har ikke noe bud?
 		if (!$bud)
@@ -154,7 +156,7 @@ class auksjon
 					$this->data['a_end'] = time() + 10800;
 					$this->data['a_completed'] = 0;
 					$this->status = self::STATUS_ACTIVE;
-					ess::$b->db->query("UPDATE auksjoner SET a_end = {$this->data['a_end']}, a_completed = 0 WHERE a_id = $this->id");
+					\Kofradia\DB::get()->exec("UPDATE auksjoner SET a_end = {$this->data['a_end']}, a_completed = 0 WHERE a_id = $this->id");
 				break;
 				
 				// kuler
@@ -164,7 +166,7 @@ class auksjon
 					if ($kuler && $this->data['a_up_id'])
 					{
 						player::add_log_static("auksjon_kuler_no_bid", $this->id, $kuler, $this->data['a_up_id']);
-						ess::$b->db->query("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $kuler, up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = {$this->data['a_up_id']}");
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $kuler, up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = {$this->data['a_up_id']}");
 					}
 				break;
 			}
@@ -201,14 +203,14 @@ class auksjon
 						// oppdater antall auksjonskuler for spilleren som holdt auksjonen
 						if ($this->data['a_up_id'])
 						{
-							ess::$b->db->query("UPDATE users_players SET up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = {$this->data['a_up_id']}");
+							\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = {$this->data['a_up_id']}");
 						}
 						
 						// gi kulene til vinneren
 						$up->add_log("auksjon_kuler_won", $this->id.":".$bud['ab_bid'], $kuler);
 						$up->data['up_weapon_bullets'] += $kuler;
 						$up->data['up_weapon_bullets'] = max(0, $up->data['up_weapon_bullets'] - $kuler);
-						ess::$b->db->query("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $kuler, up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = {$bud['ab_up_id']}");
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $kuler, up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = {$bud['ab_up_id']}");
 					}
 				break;
 			}
@@ -219,24 +221,24 @@ class auksjon
 			// gi penger til den som la ut auksjonen
 			if ($this->data['a_up_id'])
 			{
-				ess::$b->db->query("
+				\Kofradia\DB::get()->exec("
 					UPDATE users_players
 					SET up_cash = up_cash + {$bud['ab_bid']}, up_auksjoner_total_in = up_auksjoner_total_in = {$bud['ab_bid']}
 					WHERE up_id = {$this->data['a_up_id']}");
 			}
 			
 			// oppdater statistikk til spilleren som vant budet
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users_players
 				SET up_auksjoner_total_out = up_auksjoner_total_out = {$bud['ab_bid']}
 				WHERE up_id = {$bud['ab_up_id']}");
 			
 			// hent alle budene som skal settes inaktive
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT ab_id, ab_bid, ab_up_id
 				FROM auksjoner_bud
 				WHERE ab_a_id = $this->id AND ab_active != 0 AND ab_id != {$bud['ab_id']}");
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				self::set_bud_inactive($row, $this);
 			}
@@ -267,10 +269,10 @@ class auksjon
 	{
 		// forsøk å sett som behandlet
 		$this->data['a_completed'] = 1;
-		ess::$b->db->query("UPDATE auksjoner SET a_completed = 1 WHERE a_id = $this->id AND a_completed = 0");
+		$affected = \Kofradia\DB::get()->exec("UPDATE auksjoner SET a_completed = 1 WHERE a_id = $this->id AND a_completed = 0");
 		
 		// allerede behandlet?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($affected == 0)
 		{
 			return;
 		}
@@ -283,17 +285,17 @@ class auksjon
 				$kuler = (int) $this->params->get("bullets");
 				if ($kuler && $this->data['a_up_id'])
 				{
-					ess::$b->db->query("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $kuler, up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = {$this->data['a_up_id']}");
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $kuler, up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = {$this->data['a_up_id']}");
 				}
 			break;
 		}
 		
 		// hent alle budene som skal settes inaktive
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ab_id, ab_bid, ab_up_id
 			FROM auksjoner_bud
 			WHERE ab_a_id = $this->id AND ab_active != 0");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			self::set_bud_inactive($row, $this);
 		}
@@ -319,11 +321,11 @@ class auksjon
 		$price = $compare_price ? " AND ab_bid = {$row['ab_bid']}" : "";
 		
 		// sett som inaktivt og gi tilbake pengene
-		ess::$b->db->query("
+		$affected = \Kofradia\DB::get()->exec("
 			UPDATE auksjoner_bud, users_players
 			SET ab_active = 0, up_cash = up_cash + ab_bid
 			WHERE ab_id = {$row['ab_id']} AND ab_active != 0$price AND ab_up_id = up_id");
-		if (ess::$b->db->affected_rows() == 0) return false;;
+		if ($affected == 0) return false;;
 		
 		// bestemt spiller?
 		if ($up)
@@ -350,7 +352,7 @@ class auksjon
 				$kuler = (int) $params->get("bullets");
 				if ($kuler)
 				{
-					ess::$b->db->query("UPDATE users_players SET up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = $up_id");
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets_auksjon = GREATEST(0, up_weapon_bullets_auksjon - $kuler) WHERE up_id = $up_id");
 				}
 			break;
 		}
@@ -370,22 +372,22 @@ class auksjon
 		$type = $type ? " AND a_type = ".((int) $type) : "";
 		
 		// hent auksjonene spilleren selv holder
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT a_id
 			FROM auksjoner
 			WHERE a_completed = 0 AND a_up_id = $up_id$type");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$a = auksjon::get($row['a_id']);
 			if ($a) $a->handle_delete();
 		}
 		
 		// hent budene vi har og sett de som inaktive
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ab_id, ab_up_id, ab_bid, a_id, a_type, a_params
 			FROM auksjoner_bud JOIN auksjoner ON a_id = ab_a_id
 			WHERE a_completed = 0 AND ab_up_id = $up_id AND ab_active != 0$type");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			self::set_bud_inactive($row, null, $up);
 		}
@@ -397,9 +399,9 @@ class auksjon
 	public static function update_cache()
 	{
 		// hent alle aktive og kommende auksjoner
-		$result = ess::$b->db->query("SELECT a_start, a_end FROM auksjoner WHERE a_end >= ".time()." AND a_active != 0 AND a_completed = 0");
+		$result = \Kofradia\DB::get()->query("SELECT a_start, a_end FROM auksjoner WHERE a_end >= ".time()." AND a_active != 0 AND a_completed = 0");
 		$data = array();
-		while ($row = mysql_fetch_row($result))
+		while ($row = $result->fetch(\PDO::FETCH_NUM))
 		{
 			$data[] = $row;
 		}
@@ -434,8 +436,8 @@ class auksjon
 		$params->update("ff_id", $ff->id);
 		
 		// opprett auksjonen
-		ess::$b->db->query("INSERT INTO auksjoner SET a_type = ".self::TYPE_FIRMA.", a_title = ".ess::$b->db->quote($ff->data['ff_name']).", a_start = $start, a_end = $expire, a_bid_start = 1000000, a_bid_jump = 500000, a_active = 1, a_params = ".ess::$b->db->quote($params->build()));
-		$a_id = ess::$b->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO auksjoner SET a_type = ".self::TYPE_FIRMA.", a_title = ".\Kofradia\DB::quote($ff->data['ff_name']).", a_start = $start, a_end = $expire, a_bid_start = 1000000, a_bid_jump = 500000, a_active = 1, a_params = ".\Kofradia\DB::quote($params->build()));
+		$a_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// logg
 		putlog("INFO", "%bAUKSJON:%b Auksjon for %u".$ff->data['ff_name']."%u ble opprettet ".ess::$s['spath']."/auksjoner?a_id=$a_id");

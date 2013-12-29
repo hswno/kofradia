@@ -57,10 +57,10 @@ class Category {
 		$this->id = (int) $s_id;
 		
 		// hent informasjon om forumet
-		$result = \ess::$b->db->query("SELECT fse_id, fse_name, fse_description, fse_params, fse_ff_id FROM forum_sections WHERE fse_id = $this->id");
+		$result = \Kofradia\DB::get()->query("SELECT fse_id, fse_name, fse_description, fse_params, fse_ff_id FROM forum_sections WHERE fse_id = $this->id");
 		
 		// fant ikke forumet?
-		$this->info = mysql_fetch_assoc($result);
+		$this->info = $result->fetch();
 		if (!$this->info)
 		{
 			$this->error_404();
@@ -158,7 +158,7 @@ class Category {
 		// hent alle forumkategoriene
 		if (\login::$logged_in)
 		{
-			$result = \ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT fse_id, fse_name, ff_name, fse_params, fse_ff_id, ff_inactive, ffm_status
 				FROM forum_sections
 					LEFT JOIN ff ON ff_id = fse_ff_id
@@ -167,13 +167,13 @@ class Category {
 		}
 		else
 		{
-			$result = \ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT fse_id, fse_name, NULL ff_name, fse_params, fse_ff_id, NULL ff_inactive, NULL ffm_status
 				FROM forum_sections
 				ORDER BY fse_ff_id IS NOT NULL, fse_name");
 		}
 		$sections = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// ff som vi ikke har tilgang til?
 			if ($row['fse_ff_id'] && !\access::has("mod"))
@@ -361,18 +361,18 @@ class Category {
 		}
 		
 		// legg til forumtråden
-		\ess::$b->db->query("INSERT INTO forum_topics SET ft_title = ".\ess::$b->db->quote($title).", ft_text = ".\ess::$b->db->quote($text).", ft_time = ".time().", ft_up_id = ".\login::$user->player->id.", ft_fse_id = $this->id$set");
-		$topic_id = \ess::$b->db->insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO forum_topics SET ft_title = ".\Kofradia\DB::quote($title).", ft_text = ".\Kofradia\DB::quote($text).", ft_time = ".time().", ft_up_id = ".\login::$user->player->id.", ft_fse_id = $this->id$set");
+		$topic_id = \Kofradia\DB::get()->lastInsertId();
 		
 		// oppdater spilleren
 		if ($this->ff)
 		{
-			\ess::$b->db->query("UPDATE ff_members SET ffm_forum_topics = ffm_forum_topics + 1 WHERE ffm_up_id = ".\login::$user->player->id." AND ffm_ff_id = {$this->ff->id}");
-			\ess::$b->db->query("UPDATE users_players SET up_forum_ff_num_topics = up_forum_ff_num_topics + 1 WHERE up_id = ".\login::$user->player->id);
+			\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_forum_topics = ffm_forum_topics + 1 WHERE ffm_up_id = ".\login::$user->player->id." AND ffm_ff_id = {$this->ff->id}");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET up_forum_ff_num_topics = up_forum_ff_num_topics + 1 WHERE up_id = ".\login::$user->player->id);
 		}
 		else
 		{
-			\ess::$b->db->query("UPDATE users, users_players SET up_forum_num_topics = up_forum_num_topics + 1, u_forum_topic_time = ".time()." WHERE up_id = ".\login::$user->player->id." AND u_id = up_u_id");
+			\Kofradia\DB::get()->exec("UPDATE users, users_players SET up_forum_num_topics = up_forum_num_topics + 1, u_forum_topic_time = ".time()." WHERE up_id = ".\login::$user->player->id." AND u_id = up_u_id");
 		}
 		
 		// oppdater tid om nødvendig
@@ -451,7 +451,7 @@ class Category {
 				\login::$user->params->update("forum_{$this->id}_last_view", $time, true);
 			}
 			
-			\ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				INSERT INTO settings (name, value) VALUES ('forum_{$this->id}_last_change', $time)
 				ON DUPLICATE KEY UPDATE value = VALUES(value)");
 			\cache::delete("settings");
@@ -475,14 +475,14 @@ class Category {
 			return;
 		}
 		
-		$result = \ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffm_up_id, ff_id, ff_name
 			FROM ff_members
 				JOIN ff ON ff_id = ffm_ff_id AND ff_inactive = 0 AND ff_is_crew = 0 AND ff_type = 1
 			WHERE ffm_up_id IN (".implode(",", $up_ids).") AND ffm_status = 1");
 		
 		$ff = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$ff[$row['ffm_up_id']][] = '<a href="'.\ess::$s['rpath'].'/ff/?ff_id='.$row['ff_id'].'" title="Broderskap">'.htmlspecialchars($row['ff_name']).'</a>';
 		}

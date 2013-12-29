@@ -34,11 +34,11 @@ class etterlyst
 	public static function player_dies(player $up, player $killer = NULL, $instant = NULL)
 	{
 		// hent og fjern mulig dusør
-		$hitlist = ess::$b->db->query("SELECT hl_id, hl_by_up_id, hl_time, hl_amount_valid FROM hitlist WHERE hl_up_id = $up->id");
-		if (mysql_num_rows($hitlist) == 0) return array("hitlist" => 0);
+		$hitlist = \Kofradia\DB::get()->query("SELECT hl_id, hl_by_up_id, hl_time, hl_amount_valid FROM hitlist WHERE hl_up_id = $up->id");
+		if ($hitlist->rowCount() == 0) return array("hitlist" => 0);
 		
 		// fjern alle oppføringene
-		ess::$b->db->query("DELETE FROM hitlist WHERE hl_up_id = $up->id");
+		\Kofradia\DB::get()->exec("DELETE FROM hitlist WHERE hl_up_id = $up->id");
 		
 		// deaktiverte seg?
 		if (!$killer)
@@ -46,7 +46,7 @@ class etterlyst
 			$list = array();
 			
 			// sett opp oversikt gruppert over hvem som satt hitlistene
-			while ($row = mysql_fetch_assoc($hitlist))
+			while ($row = $hitlist->fetch())
 			{
 				if (!isset($list[$row['hl_by_up_id']])) $list[$row['hl_by_up_id']] = 0;
 				$list[$row['hl_by_up_id']] += $row['hl_amount_valid'];
@@ -56,10 +56,10 @@ class etterlyst
 			foreach ($list as $up_id => $sum)
 			{
 				// gi pengene tilbake hvis spilleren fremdeles er i live
-				ess::$b->db->query("UPDATE users_players SET up_bank = up_bank + $sum WHERE up_id = $up_id AND up_access_level != 0");
+				$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_bank = up_bank + $sum WHERE up_id = $up_id AND up_access_level != 0");
 				
 				// fikk penger?
-				if (ess::$b->db->affected_rows() > 0)
+				if ($a > 0)
 				{
 					// hendelse om at pengene er returnert
 					player::add_log_static("etterlyst_deactivate", $up->id, $sum, $up_id);
@@ -77,7 +77,7 @@ class etterlyst
 			// beregn total verdi
 			$sum = 0;
 			$oldest_time = null;
-			while ($row = mysql_fetch_assoc($hitlist))
+			while ($row = $hitlist->fetch())
 			{
 				$sum += $row['hl_amount_valid'];
 				if ($oldest_time == null || $row['hl_time'] < $oldest_time) $oldest_time = $row['hl_time'];
@@ -85,7 +85,7 @@ class etterlyst
 			
 			// gi pengene
 			$f = $instant ? 'up_cash' : 'up_bank';
-			ess::$b->db->query("UPDATE users_players SET $f = $f + $sum WHERE up_id = $killer->id");
+			\Kofradia\DB::get()->exec("UPDATE users_players SET $f = $f + $sum WHERE up_id = $killer->id");
 			
 			$killer->data[$f] = bcadd($killer->data[$f], $sum);
 			
@@ -108,10 +108,10 @@ class etterlyst
 	 */
 	public static function player_hurt(player $up, player $attacker, $health_f)
 	{
-		$b = ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// hent informasjon om spilleren
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT SUM(hl_amount_valid) AS sum_hl_amount_valid
 			FROM (
 				SELECT hl_amount_valid
@@ -120,10 +120,10 @@ class etterlyst
 				FOR UPDATE
 			) ref");
 		
-		$hl = mysql_fetch_assoc($result);
+		$hl = $result->fetch();
 		if (!$hl || $hl['sum_hl_amount_valid'] <= 0)
 		{
-			if ($b) ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			return 0;
 		}
 		$sum = $hl['sum_hl_amount_valid'];
@@ -132,13 +132,13 @@ class etterlyst
 		$amount = bcmul($sum, $health_f);
 		if ($amount <= 0)
 		{
-			if ($b) ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			return 0;
 		}
 		
 		// trekk pengene fra hitlist
-		ess::$b->db->query("SET @t := $amount");
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("SET @t := $amount");
+		\Kofradia\DB::get()->exec("
 			UPDATE hitlist h, (
 				SELECT
 					hl_id,
@@ -150,16 +150,16 @@ class etterlyst
 			) r
 			SET h.hl_amount_valid = h.hl_amount_valid - to_remove
 			WHERE h.hl_id = r.hl_id");
-		ess::$b->db->query("DELETE FROM hitlist WHERE hl_amount_valid = 0");
+		\Kofradia\DB::get()->exec("DELETE FROM hitlist WHERE hl_amount_valid = 0");
 		
 		// gi pengene til spilleren
-		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + $amount WHERE up_id = $attacker->id");
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + $amount WHERE up_id = $attacker->id");
 		$attacker->data['up_cash'] = bcadd($attacker->data['up_cash'], $amount);
 		
 		// hendelse om at man mottok penger fra hitlist for angrepet
 		$attacker->add_log("etterlyst_receive", $up->id.":1:1", $amount);
 		
-		if ($b) ess::$b->db->commit();
+		\Kofradia\DB::get()->commit();
 		return $amount;
 	}
 }

@@ -66,13 +66,13 @@ class whatpulse
 	{
 		global $_base;
 		
-		$result = $_base->db->query("SELECT sw_userid, sw_time_update, sw_xml, sw_params FROM stats_whatpulse WHERE sw_up_id = ".intval($up_id));
-		if (mysql_num_rows($result) == 0)
+		$result = \Kofradia\DB::get()->query("SELECT sw_userid, sw_time_update, sw_xml, sw_params FROM stats_whatpulse WHERE sw_up_id = ".intval($up_id));
+		if ($result->rowCount() == 0)
 		{
 			return false;
 		}
 		
-		$this->set_user_data(mysql_fetch_assoc($result));
+		$this->set_user_data($result->fetch());
 		return true;
 	}
 	
@@ -154,7 +154,7 @@ class whatpulse
 				$xml = $xml_update;
 				
 				// lagre data
-				$_base->db->query("UPDATE stats_whatpulse SET sw_time_update = ".time().", sw_xml = ".$_base->db->quote($data)." WHERE sw_userid = $this->user_id");
+				\Kofradia\DB::get()->exec("UPDATE stats_whatpulse SET sw_time_update = ".time().", sw_xml = ".\Kofradia\DB::quote($data)." WHERE sw_userid = $this->user_id");
 			}
 		}
 		

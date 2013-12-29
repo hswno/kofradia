@@ -285,12 +285,12 @@ document.getElementById("b_pass").focus();
 		$ff_reset = !$reset && $this->ff->data['ff_time_reset'] && !$this->ff->mod ? " AND ffbl_time > {$this->ff->data['ff_time_reset']}" : "";
 		
 		// hent statistikk fra bankoverføringene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffbl_type, SUM(ffbl_amount) sum_ffbl_amount
 			FROM ff_bank_log
 			WHERE ffbl_ff_id = {$this->ff->id}".($reset ? ($is_after ? " AND ffbl_time >= $reset" : " AND ffbl_time < $reset") : $ff_reset)."
 			GROUP BY ffbl_type");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if (!isset($stats[$row['ffbl_type']])) continue;
 			$stats[$row['ffbl_type']] = $row['sum_ffbl_amount'];
@@ -305,16 +305,17 @@ document.getElementById("b_pass").focus();
 	 */
 	protected function stats_show($stats)
 	{
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT
 				{$stats[ff::BANK_INNSKUDD]} + {$stats[ff::BANK_DONASJON]} + {$stats[ff::BANK_TILBAKEBETALING]} + {$stats['in']},
 				{$stats[ff::BANK_UTTAK]} + {$stats[ff::BANK_BETALING]} + {$stats['out']},
 				
 				{$stats[ff::BANK_DONASJON]} + {$stats[ff::BANK_TILBAKEBETALING]} + {$stats['in']}
 				- {$stats[ff::BANK_BETALING]} - {$stats['out']}");
-		$totalt_in = mysql_result($result, 0);
-		$totalt_out = mysql_result($result, 0, 1);
-		$totalt_profit = mysql_result($result, 0, 2);
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$totalt_in = $row[0];
+		$totalt_out = $row[1];
+		$totalt_profit = $row[2];
 		
 		echo '
 		<div class="center" style="width: 80%">
@@ -353,7 +354,7 @@ document.getElementById("b_pass").focus();
 	protected function sett_inn()
 	{
 		$amount = game::intval($_POST['bank_inn']);
-		$note = ess::$b->db->quote(postval("note"));
+		$note = \Kofradia\DB::quote(postval("note"));
 		
 		if ($amount < 0)
 		{
@@ -373,13 +374,13 @@ document.getElementById("b_pass").focus();
 		else
 		{
 			// forsøk å sett inn
-			ess::$b->db->query("
+			$a = \Kofradia\DB::get()->exec("
 				UPDATE ff, users_players
 				SET ff_bank = ff_bank + $amount, up_cash = up_cash - $amount
 				WHERE ff_id = {$this->ff->id} AND up_id = ".login::$user->player->id." AND up_cash >= $amount");
 			
 			// hadde ikke nok penger?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message("Du har ikke nok penger på hånda til å sette inn ".game::format_cash($amount).".", "error");
 			}
@@ -387,11 +388,11 @@ document.getElementById("b_pass").focus();
 			else
 			{
 				// balanse
-				$result = ess::$b->db->query("SELECT ff_bank FROM ff WHERE ff_id = {$this->ff->id}");
-				$balance = mysql_result($result, 0);
+				$result = \Kofradia\DB::get()->query("SELECT ff_bank FROM ff WHERE ff_id = {$this->ff->id}");
+				$balance = $result->fetchColumn(0);
 				
 				// legg til logg
-				ess::$b->db->query("INSERT INTO ff_bank_log SET ffbl_ff_id = {$this->ff->id}, ffbl_type = 1, ffbl_amount = $amount, ffbl_up_id = ".login::$user->player->id.", ffbl_time = ".time().", ffbl_balance = $balance, ffbl_note = $note");
+				\Kofradia\DB::get()->exec("INSERT INTO ff_bank_log SET ffbl_ff_id = {$this->ff->id}, ffbl_type = 1, ffbl_amount = $amount, ffbl_up_id = ".login::$user->player->id.", ffbl_time = ".time().", ffbl_balance = $balance, ffbl_note = $note");
 				ess::$b->page->add_message("Du satt inn ".game::format_cash($amount).".");
 			}
 			
@@ -405,7 +406,7 @@ document.getElementById("b_pass").focus();
 	protected function ta_ut()
 	{
 		$amount = game::intval($_POST['bank_ut']);
-		$note = ess::$b->db->quote(postval("note"));
+		$note = \Kofradia\DB::quote(postval("note"));
 		
 		if ($amount < 0)
 		{
@@ -425,24 +426,24 @@ document.getElementById("b_pass").focus();
 		else
 		{
 			// forsøk å ta ut
-			ess::$b->db->query("
+			$a = \Kofradia\DB::get()->exec("
 				UPDATE ff, users_players
 				SET ff_bank = ff_bank - $amount, up_cash = up_cash + $amount
 				WHERE ff_id = {$this->ff->id} AND up_id = ".login::$user->player->id." AND ff_bank >= $amount");
 			
 			// hadde ikke nok penger?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				ess::$b->page->add_message("Det er ikke nok penger til å ta ut ".game::format_cash($amount).".", "error");
 			}
 			else
 			{
 				// balanse
-				$result = ess::$b->db->query("SELECT ff_bank FROM ff WHERE ff_id = {$this->ff->id}");
-				$balance = mysql_result($result, 0);
+				$result = \Kofradia\DB::get()->query("SELECT ff_bank FROM ff WHERE ff_id = {$this->ff->id}");
+				$balance = $result->fetchColumn(0);
 				
 				// legg til logg
-				ess::$b->db->query("INSERT INTO ff_bank_log SET ffbl_ff_id = {$this->ff->id}, ffbl_type = 2, ffbl_amount = $amount, ffbl_up_id = ".login::$user->player->id.", ffbl_time = ".time().", ffbl_balance = $balance, ffbl_note = $note");
+				\Kofradia\DB::get()->exec("INSERT INTO ff_bank_log SET ffbl_ff_id = {$this->ff->id}, ffbl_type = 2, ffbl_amount = $amount, ffbl_up_id = ".login::$user->player->id.", ffbl_time = ".time().", ffbl_balance = $balance, ffbl_note = $note");
 				ess::$b->page->add_message("Du tok ut ".game::format_cash($amount).".");
 			}
 			
@@ -547,7 +548,7 @@ document.getElementById("b_pass").focus();
 		$pagei = new pagei(pagei::ACTIVE_GET, "side", pagei::PER_PAGE, 15);
 		$result = $pagei->query("SELECT ffbl_type, ffbl_amount, ffbl_up_id, ffbl_note, ffbl_time, ffbl_balance FROM ff_bank_log WHERE ffbl_ff_id = {$this->ff->id}$ff_reset ORDER BY ffbl_time DESC");
 		
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 <p class="c">
@@ -575,7 +576,7 @@ document.getElementById("b_pass").focus();
 			$i = 0;
 			$typer = array(1 => "bank_inn", "bank_ut", "bank_doner", "bank_betaling", "bank_tbetaling");
 			
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$type = isset($typer[$row['ffbl_type']]) ? ff::$bank_ikoner[$typer[$row['ffbl_type']]] : 'Ukjent';
 				$type .= " " . (isset(ff::$bank_types[$row['ffbl_type']]) ? ff::$bank_types[$row['ffbl_type']] : 'Ukjent');

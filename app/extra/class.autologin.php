@@ -23,8 +23,8 @@ class autologin
 		$hash = mb_substr(sha1(sha1($u_id . $expire . uniqid()) . ($redirect ? $redirect : "doh")), 0, 16);
 		
 		// opprett
-		$redirect = $redirect ? ", al_redirect = ".ess::$b->db->quote($redirect) : "";
-		ess::$b->db->query("INSERT INTO autologin SET al_u_id = $u_id, al_hash = ".ess::$b->db->quote($hash).", al_time_created = ".time().", al_time_expire = ".$expire."$redirect, al_type = ".ess::$b->db->quote($type));
+		$redirect = $redirect ? ", al_redirect = ".\Kofradia\DB::quote($redirect) : "";
+		\Kofradia\DB::get()->exec("INSERT INTO autologin SET al_u_id = $u_id, al_hash = ".\Kofradia\DB::quote($hash).", al_time_created = ".time().", al_time_expire = ".$expire."$redirect, al_type = ".\Kofradia\DB::quote($type));
 		
 		return $hash;
 	}

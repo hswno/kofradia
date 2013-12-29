@@ -9,19 +9,19 @@
 
 // sett ned våpentreningen
 $expire = time() - 172800; // kun for de som har vært aktive siste 48 timer
-ess::$b->db->query("
+\Kofradia\DB::get()->exec("
 	UPDATE users_players
 	SET up_weapon_training = GREATEST(0.1, up_weapon_training * 0.988)
 	WHERE up_weapon_training > 0.1
 		AND up_last_online > $expire");
 
 // hent de spillerene som skal nedgradere eller miste våpenet sitt
-$result = ess::$b->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT up_id, up_name, up_weapon_id, up_weapon_bullets
 	FROM users_players
 	WHERE up_weapon_training < 0.25 AND up_weapon_id > 1 AND up_access_level != 0");
 
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	if (!isset(weapon::$weapons[$row['up_weapon_id']])) continue;
 	$w = &weapon::$weapons[$row['up_weapon_id']];
@@ -39,12 +39,12 @@ while ($row = mysql_fetch_assoc($result))
 		$training = weapon::DOWNGRADE_TRAINING;
 		
 		// sett til 50 % på forrige våpen
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE users_players
 			SET up_weapon_id = $new_id, up_weapon_bullets = 0, up_weapon_training = $training
 			WHERE up_id = {$row['up_id']} AND up_weapon_id = {$row['up_weapon_id']}");
 		
-		if (ess::$b->db->affected_rows() > 0)
+		if ($a > 0)
 		{
 			// gi hendelse
 			player::add_log_static("weapon_lost", $row['up_weapon_id'].":".urlencode($w['name']).":".urlencode($row['up_weapon_bullets']).":".urlencode($new_w['name']).":".$training, 1, $row['up_id']);
@@ -66,10 +66,10 @@ while ($row = mysql_fetch_assoc($result))
 
 unset($w);
 
-if (mysql_num_rows($result) > 0)
+if ($result->rowCount() > 0)
 {
 	// fjern våpnene fra de som skal miste det
-	ess::$b->db->query("
+	\Kofradia\DB::get()->exec("
 		UPDATE users_players
 		SET up_weapon_id = NULL, up_weapon_bullets = 0
 		WHERE up_weapon_training < 0.25 AND up_weapon_id > 1 AND up_access_level != 0");

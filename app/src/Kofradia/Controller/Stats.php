@@ -11,11 +11,11 @@ class Stats extends \Kofradia\Controller {
 		\ess::$b->page->add_title("Antall pålogget rekorder");
 
 		// hent stats
-		$result = \ess::$b->db->query("SELECT name, extra, value, time FROM sitestats");
+		$result = \Kofradia\DB::get()->query("SELECT name, extra, value, time FROM sitestats");
 		$sitestats = array();
 		$sitestats_max = array();
 
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$sitestats[$row['name']][$row['extra']] = $row;
 			$sitestats[$row['name']][$row['extra']] = $row;

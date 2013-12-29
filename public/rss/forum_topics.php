@@ -39,14 +39,14 @@ $rss = new rss("Forumtråder - Kofradia", "https://www.kofradia.no/", $descripti
 $rss->ttl(1);
 
 // hent trådene
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT up_name, ft_id, ft_type, ft_title, ft_text, ft_fse_id, ft_time
 	FROM forum_topics t
 		LEFT JOIN users_players ON up_id = ft_up_id
 	WHERE ft_fse_id IN (".implode(",", $ids).") AND ft_deleted = 0
 	ORDER BY ft_time DESC LIMIT 50");
 
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$item = new rss_item();
 	$item->title($row['up_name'].' opprettet &laquo;'.htmlspecialchars($row['ft_title']).'&raquo;'.($row['ft_type'] == 2 ? ' (sticky)' : ($row['ft_type'] == 3 ? ' (viktig)' :'')).' ('.$forums[$row['ft_fse_id']].' forum)');

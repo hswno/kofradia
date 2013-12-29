@@ -50,7 +50,7 @@ class Misc extends \Kofradia\Controller {
 			$user->data['u_tos_version'] = intval(Settings::get("tos_version"));
 			$user->data['u_tos_accepted_time'] = time();
 			
-			\ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users
 				SET u_tos_version = ".$user->data['u_tos_version'].",
 					u_tos_accepted_time = ".time()."

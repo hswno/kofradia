@@ -234,9 +234,9 @@ class bydeler_map
 		global $_base;
 		
 		$where = $b_id == 0 ? '' : ' WHERE br_b_id = '.intval($b_id);
-		$result = $_base->db->query("SELECT br_id, br_b_id, br_type, br_pos_x, br_pos_y FROM bydeler_resources$where");
+		$result = \Kofradia\DB::get()->query("SELECT br_id, br_b_id, br_type, br_pos_x, br_pos_y FROM bydeler_resources$where");
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$this->resources[$row['br_id']] = $row;
 		}
@@ -281,8 +281,8 @@ class bydeler_map
 		{
 			// hent ressursen
 			$br_id = (int) $br_id;
-			$result = $_base->db->query("SELECT br_b_id, br_type, br_pos_x, br_pos_y FROM bydeler_resources WHERE br_id = $br_id");
-			if (!($resource = mysql_fetch_assoc($result)))
+			$result = \Kofradia\DB::get()->query("SELECT br_b_id, br_type, br_pos_x, br_pos_y FROM bydeler_resources WHERE br_id = $br_id");
+			if (!($resource = $result->fetch()))
 			{
 				return false;
 			}
@@ -313,8 +313,8 @@ class bydeler_map
 		
 		// hent informasjon om ressursen
 		$br_id = (int) $br_id;
-		$result = $_base->db->query("SELECT br_id, br_b_id, br_type, br_pos_x, br_pos_y FROM bydeler_resources WHERE br_id = $br_id");
-		$br = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT br_id, br_b_id, br_type, br_pos_x, br_pos_y FROM bydeler_resources WHERE br_id = $br_id");
+		$br = $result->fetch();
 		
 		if (!$br)
 		{
@@ -342,11 +342,11 @@ class bydeler_map
 		imagedestroy($punkt);
 		
 		// hent ut ressursene i dette området
-		$result = $_base->db->query("SELECT br_id, br_b_id, br_type, br_pos_x, br_pos_y FROM bydeler_resources LEFT JOIN ff ON ff_br_id = br_id AND ff_inactive = 0 WHERE br_pos_x BETWEEN $x1 AND $x2 AND br_pos_y BETWEEN $y1 AND $y2 AND br_id != {$br['br_id']} AND ff_id IS NOT NULL");
+		$result = \Kofradia\DB::get()->query("SELECT br_id, br_b_id, br_type, br_pos_x, br_pos_y FROM bydeler_resources LEFT JOIN ff ON ff_br_id = br_id AND ff_inactive = 0 WHERE br_pos_x BETWEEN $x1 AND $x2 AND br_pos_y BETWEEN $y1 AND $y2 AND br_id != {$br['br_id']} AND ff_id IS NOT NULL");
 		
 		// tegn på ressursene
 		$punkt = imagecreatefromstring(file_get_contents(bydeler::$map_dir."/familiepunkt_transparent.png"));
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			imagecopy($this->img, $punkt, $row['br_pos_x']-imagesx($punkt)/2, $row['br_pos_y']-imagesy($punkt)/2, 0, 0, imagesx($punkt), imagesy($punkt));
 		}

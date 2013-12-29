@@ -31,7 +31,7 @@ class achievements
 		}
 		
 		// hent frisk data
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ac_id, ac_code, ac_name, ac_text, ac_recurring, ac_apoints, ac_prize, ac_count, ac_params
 			FROM achievements
 			WHERE ac_active = 1
@@ -39,7 +39,7 @@ class achievements
 		
 		$data = array();
 		$data_code = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$data[$row['ac_id']] = new achievements_item($row);
 			$data_code[$row['ac_code']][$row['ac_id']] = $data[$row['ac_id']];
@@ -239,13 +239,13 @@ class achievements_player
 		}
 		
 		// hent frisk data
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT upa_id, upa_ac_id, upa_time, upa_prize, upa_apoints, upa_params, upa_up_id, upa_complete
 			FROM up_achievements
 			WHERE upa_up_id = {$this->up->id} AND upa_complete = 0");
 		
 		$data = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$data[$row['upa_ac_id']] = $row;
 		}
@@ -277,14 +277,14 @@ class achievements_player
 	 */
 	public function get_rep_count()
 	{
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT upa_ac_id, COUNT(upa_id) count_upa_id, MAX(upa_time) max_upa_time
 			FROM up_achievements
 			WHERE upa_up_id = {$this->up->id} AND upa_complete != 0
 			GROUP BY upa_ac_id");
 		
 		$data = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$data[$row['upa_ac_id']] = $row;
 		}
@@ -362,7 +362,7 @@ class achievement_player_item
 	{
 		if ($this->load_active()) return false;
 		
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			INSERT INTO up_achievements
 			SET upa_ac_id = {$this->a->id}, upa_time = ".time().", upa_up_id = {$this->up->id}, upa_complete = 0");
 		
@@ -671,12 +671,12 @@ class achievement_player_item
 	public function check_complete()
 	{
 		// TODO: cache?
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT upa_id
 			FROM up_achievements
 			WHERE upa_ac_id = {$this->a->id} AND upa_up_id = {$this->up->id} AND upa_complete != 0");
 		
-		return mysql_num_rows($result) > 0;
+		return $result->rowCount() > 0;
 	}
 	
 	/**
@@ -690,21 +690,21 @@ class achievement_player_item
 		$this->data['upa_prize'] = $this->a->data['ac_prize'];
 		
 		// marker som utført
-		ess::$b->db->query("
+		$a = \Kofradia\DB::get()->exec("
 			UPDATE up_achievements
-			SET upa_complete = 1, upa_time = {$this->data['upa_time']}, upa_apoints = {$this->data['upa_apoints']}, upa_prize = ".ess::$b->db->quote($this->a->data['ac_prize'])."
+			SET upa_complete = 1, upa_time = {$this->data['upa_time']}, upa_apoints = {$this->data['upa_apoints']}, upa_prize = ".\Kofradia\DB::quote($this->a->data['ac_prize'])."
 			WHERE upa_id = {$this->data['upa_id']} AND upa_complete = 0");
-		if (ess::$b->db->affected_rows() == 0) return false;
+		if ($a == 0) return false;
 		
 		// oppdater count i hovedtabellen
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE achievements
 			SET ac_count = ac_count + 1
 			WHERE ac_id = {$this->a->id}");
 		
 		// oppdater spilleren
 		$this->up->data['up_achievements_points'] += $this->a->data['ac_apoints'];
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users_players
 			SET up_achievements_points = up_achievements_points + {$this->a->data['ac_apoints']}
 			WHERE up_id = {$this->up->id}");
@@ -725,11 +725,11 @@ class achievement_player_item
 	 */
 	protected function get_rep_count()
 	{
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(upa_id)
 			FROM up_achievements
 			WHERE upa_ac_id = {$this->a->id} AND upa_up_id = {$this->up->id}");
-		return mysql_result($result, 0);
+		return $result->fetchColumn(0);
 	}
 	
 	/**
@@ -776,7 +776,7 @@ class achievement_player_item
 					if ($give)
 					{
 						// gi kuler
-						ess::$b->db->query("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $bullets WHERE up_id = {$this->up->id}");
+						\Kofradia\DB::get()->exec("UPDATE users_players SET up_weapon_bullets = up_weapon_bullets + $bullets WHERE up_id = {$this->up->id}");
 						$this->up->data['up_weapon_bullets'] += $bullets;
 					}
 					

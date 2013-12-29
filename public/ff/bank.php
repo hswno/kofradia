@@ -44,11 +44,11 @@ class page_ff_bank
 		ess::$b->page->add_title("Bankkontroll");
 		
 		// hent antall klienter
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(up_id)
 			FROM users_players
 			WHERE up_access_level != 0 AND up_access_level < ".ess::$g['access_noplay']." AND up_bank_ff_id = {$this->ff->id}");
-		$num_klienter = mysql_result($result, 0);
+		$num_klienter = $result->fetchColumn(0);
 		
 		// finn ut nåværende status
 		$status = $this->ff->params->get("bank_overforing_tap_change", 0);
@@ -56,8 +56,8 @@ class page_ff_bank
 		
 		// finn "tilgjengelige" overføringer
 		$expire_ffbt = time() - 3600;
-		$result = ess::$b->db->query("SELECT COUNT(ffbt_id), SUM(ffbt_amount), SUM(ffbt_profit) FROM ff_bank_transactions WHERE ffbt_ff_id = {$this->ff->id} AND ffbt_up_id = 0 AND ffbt_time >= $expire_ffbt");
-		$info = mysql_fetch_row($result);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(ffbt_id), SUM(ffbt_amount), SUM(ffbt_profit) FROM ff_bank_transactions WHERE ffbt_ff_id = {$this->ff->id} AND ffbt_up_id = 0 AND ffbt_time >= $expire_ffbt");
+		$info = $result->fetch(\PDO::FETCH_NUM);
 		
 		// nåværende overføringsgebyr
 		$overforing_tap = $this->ff->params->get("bank_overforing_tap", 0);
@@ -132,24 +132,24 @@ class page_ff_bank
 				redirect::handle();
 			}
 			
-			ess::$b->db->begin();
+			\Kofradia\DB::get()->beginTransaction();
 			
 			// oppdater gebyrene til vår bruker
-			ess::$b->db->query("UPDATE ff_bank_transactions SET ffbt_up_id = ".login::$user->player->id." WHERE ffbt_ff_id = {$this->ff->id} AND ffbt_up_id = 0 AND ffbt_time >= $expire_ffbt");
+			\Kofradia\DB::get()->exec("UPDATE ff_bank_transactions SET ffbt_up_id = ".login::$user->player->id." WHERE ffbt_ff_id = {$this->ff->id} AND ffbt_up_id = 0 AND ffbt_time >= $expire_ffbt");
 			
 			// finn ut hvor mange prosent vi skal få og firmaet skal få
 			$p_player = $access ? 0.5 : ($this->ff->access(2) ? $this->ff->params->get("fortjenestep_2", 0.25) : $this->ff->params->get("fortjenestep_0", 0.1));
 			$p_firma = max(0, 0.5 - $p_player);
 			
 			// hent ut informasjon om hvor mye vi fikk
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT COUNT(ffbt_id), SUM(ffbt_amount), SUM(ffbt_profit)*$p_player, SUM(ffbt_profit)*$p_firma
 				FROM ff_bank_transactions
 				WHERE ffbt_ff_id = {$this->ff->id} AND ffbt_up_id = ".login::$user->player->id." AND ffbt_status = 0");
-			$info = mysql_fetch_row($result); // 0 => antall, 1 => overført, 2 => profit bruker, 3 => profit firma
+			$info = $result->fetch(\PDO::FETCH_NUM); // 0 => antall, 1 => overført, 2 => profit bruker, 3 => profit firma
 			
 			// sett pengene til riktige steder
-			ess::$b->db->query("
+			\Kofradia\DB::get()->exec("
 				UPDATE users_players, ff, ff_bank_transactions, ff_members, (
 						SELECT SUM(ffbt_profit) AS ffbt_profit_sum
 						FROM ff_bank_transactions
@@ -163,7 +163,7 @@ class page_ff_bank
 			
 			// TODO: Slette ffbt oppføringene
 			
-			ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			
 			// ingen ble oppdatert?
 			if ($info[0] == 0)
@@ -207,7 +207,7 @@ class page_ff_bank
 				if ($overforing_tap >= ff::$type_bank['bank_overforing_gebyr_max'])
 				{
 					ess::$b->page->add_message("Overføringsgebyret kan ikke økes mer.", "error");
-					ess::$b->db->query("COMMIT"); // params lock
+					$this->ff->params->commit();
 					redirect::handle("bank?ff_id={$this->ff->id}");
 				}
 				
@@ -225,7 +225,7 @@ class page_ff_bank
 				if ($overforing_tap <= ff::$type_bank['bank_overforing_gebyr_min'])
 				{
 					ess::$b->page->add_message("Overføringsgebyret kan ikke senkes mer.", "error");
-					ess::$b->db->query("COMMIT"); // params lock
+					$this->ff->params->commit();
 					redirect::handle("bank?ff_id={$this->ff->id}");
 				}
 				

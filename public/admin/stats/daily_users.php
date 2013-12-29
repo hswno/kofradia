@@ -9,7 +9,7 @@ $_base->page->add_title("Brukere pålogget per dag");
 $sort_dir = $_GET['sort_dir'] == "asc" ? "ASC" : "DESC";
 $sort = $_GET['sort'] == "users" ? "users" : ($_GET['sort'] == "hits" ? "hits" : "date");
 
-$result = $_base->db->query("
+$result = \Kofradia\DB::get()->query("
 	SELECT
 		DATE(FROM_UNIXTIME(uhi_secs_hour)) AS date,
 		UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(uhi_secs_hour))) AS timestamp,
@@ -52,7 +52,7 @@ echo '
 	<tbody>';
 
 $i = 0;
-while ($row = mysql_fetch_assoc($result))
+while ($row = $result->fetch())
 {
 	$i++;
 	$time = floor((time()-$row['timestamp'])/86400);

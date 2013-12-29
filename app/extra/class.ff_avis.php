@@ -115,12 +115,12 @@ class ff_avis_utgivelse
 		$this->ff = $ff;
 		
 		// hent detaljer
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffn_id, ffn_ff_id, ffn_template, ffn_published, ffn_published_up_id, ffn_published_time, ffn_cost, ffn_sold, ffn_title, ffn_income, ffn_description, ffn_created_time, ffn_created_up_id
 			FROM ff_newspapers
 			WHERE ffn_id = $this->id AND ffn_ff_id = {$this->ff->id}");
 		
-		$this->data = mysql_fetch_assoc($result);
+		$this->data = $result->fetch();
 		if (!$this->data) return;
 		
 		$this->erase();
@@ -153,13 +153,13 @@ class ff_avis_utgivelse
 	public function build_avis_html()
 	{
 		// hent inn alle artiklene i utgivelsen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffna_id, ffna_up_id, ffna_title, ffna_text, ffna_theme_position, ffna_theme_priority
 			FROM ff_newspapers_articles
 			WHERE ffna_ffn_id = $this->id
 			ORDER BY ffna_theme_priority");
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$this->template->add_ffna($row);
 		}
@@ -226,12 +226,12 @@ class ff_avis_artikkel
 		$this->ff = $ff;
 		
 		// hent informasjon
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffna_id, ffna_up_id, ffna_ffn_id, ffna_created_time, ffna_updated_time, ffna_title, ffna_text, ffna_theme_position, ffna_theme_parameters, ffna_theme_priority, ffna_published, ffna_published_time, ffna_price
 			FROM ff_newspapers_articles
 			WHERE ffna_id = $this->id AND ffna_ff_id = {$this->ff->id}");
 		
-		$this->data = mysql_fetch_assoc($result);
+		$this->data = $result->fetch();
 		if (!$this->data) return;
 		
 		// sett opp tilgang

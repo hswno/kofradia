@@ -155,8 +155,39 @@ class page
 		
 		if (defined("SHOW_QUERIES_INFO"))
 		{
+			$profiler = \Kofradia\DB::getProfiler();
+			$db = '';
+			if ($profiler && count($profiler->statements) > 0)
+			{
+				$statements = $profiler->statements;
+				$x = 0;
+				foreach (array_keys($statements[0]) as $key)
+				{
+					$x = max($x, strlen($key));
+				}
+
+				$newlist = array();
+				foreach ($statements as $statement)
+				{
+					$new = array();
+					foreach ($statement as $key => $row)
+					{
+						$new[str_pad($key, $x)] = $row;
+					}
+					$newlist[] = $new;
+				}
+
+				$db = '<br />'.htmlspecialchars(print_r($newlist));
+			}
+
 			echo '
-<a href="javascript:void(0)" onclick="this.nextSibling.style.display=\'block\'">Admin info..</a><div style="display: none"><br /><pre>GET<br />'.htmlspecialchars(print_r($_GET, true)).'<br />POST<br />'.htmlspecialchars(print_r($_POST, true)).'<br />'.htmlspecialchars(print_r($_base->db->queries_text, true)).'</pre></div>';
+<a href="javascript:void(0)" onclick="this.nextSibling.style.display=\'block\'">Admin info..</a>
+<div style="display: none"><br />
+	<pre>
+GET<br />'.htmlspecialchars(print_r($_GET, true)).'<br />
+POST<br />'.htmlspecialchars(print_r($_POST, true)).$db.'
+	</pre>
+</div>';
 		}
 		
 		// stop scriptet

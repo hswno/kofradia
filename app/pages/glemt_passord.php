@@ -56,23 +56,23 @@ class page_glemt_passord
 		}
 		
 		// sjekk om det er noen oppføringer med denne e-posten i databasen (og hent de som lever)
-		$result = ess::$b->db->query("SELECT u_id, up_name, up_access_level, u_pass_change, u_email FROM users LEFT JOIN users_players ON u_active_up_id = up_id WHERE u_email = ".ess::$b->db->quote($epost)." AND u_access_level != 0");
+		$result = \Kofradia\DB::get()->query("SELECT u_id, up_name, up_access_level, u_pass_change, u_email FROM users LEFT JOIN users_players ON u_active_up_id = up_id WHERE u_email = ".\Kofradia\DB::quote($epost)." AND u_access_level != 0");
 		
 		// ingen?
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			ess::$b->page->add_message('Fant ingen bruker som hadde e-postadressen '.htmlspecialchars($epost).'. Du finner ikke din bruker dersom <u>brukeren</u> er deaktivert. Dersom du har blitt deaktivert og mener dette er feil ta <a href="henvendelser">kontakt</a>.', "error");
 			return;
 		}
 		
 		// flere e-postadresser?
-		if (mysql_num_rows($result) > 1)
+		if ($result->rowCount() > 1)
 		{
 			ess::$b->page->add_message('Det finnes flere brukere som er registrert på '.htmlspecialchars($epost).'. Vennligst ta <a href="henvendelser">kontakt</a>!', "error");
 			redirect::handle();
 		}
 		
-		$row = mysql_fetch_assoc($result);
+		$row = $result->fetch();
 		
 		// er det noen oppføring for når passordet sist ble oppdatert?
 		if (!empty($row['u_pass_change']))
@@ -97,7 +97,7 @@ class page_glemt_passord
 		}
 		
 		// legg inn i databasen
-		ess::$b->db->query("UPDATE users SET u_pass_change = 'A;".time().";{$_SERVER['REMOTE_ADDR']}' WHERE u_id = {$row['u_id']}");
+		\Kofradia\DB::get()->exec("UPDATE users SET u_pass_change = 'A;".time().";{$_SERVER['REMOTE_ADDR']}' WHERE u_id = {$row['u_id']}");
 		
 		// generer autologin
 		$hash = autologin::generate($row['u_id'], time()+self::AUTOLOGIN_TIME, null, autologin::TYPE_RESET_PASS);

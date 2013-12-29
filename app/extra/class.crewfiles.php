@@ -194,12 +194,12 @@ class crewfiles
 		global $_base;
 		
 		// hent alle mappene
-		$result = $_base->db->query("SELECT cfd_id, cfd_parent_cfd_id, cfd_title, cfd_description, cfd_time, cfd_up_id, cfd_access_level FROM crewfiles_directories ORDER BY cfd_title");
+		$result = \Kofradia\DB::get()->query("SELECT cfd_id, cfd_parent_cfd_id, cfd_title, cfd_description, cfd_time, cfd_up_id, cfd_access_level FROM crewfiles_directories ORDER BY cfd_title");
 		
 		// les inn mappene
 		$dirs = array();
 		$dirs_sub = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$dirs[$row['cfd_id']] = $row;
 			$dirs_sub[$row['cfd_parent_cfd_id']][] = $row['cfd_id'];
@@ -231,10 +231,10 @@ class crewfiles
 		$tree = crewfiles::get_directory_tree();
 		
 		// hent alle filene som ligger i systemet med antall revisjoner og  info om aktiv revisjon
-		$result = $_base->db->query("SELECT cff_id, cff_cfd_id, cff_title, cff_description, cff_access_level, cff_hidden, a.cfr_id, a.cfr_title, a.cfr_time, a.cfr_size, a.cfr_description, a.cfr_mime, COUNT(r.cfr_id) count_revisions FROM crewfiles_files LEFT JOIN crewfiles_revisions a ON cff_cfr_id = a.cfr_id LEFT JOIN crewfiles_revisions r ON cff_id = r.cfr_cff_id GROUP BY cff_id ORDER BY cff_title");
+		$result = \Kofradia\DB::get()->query("SELECT cff_id, cff_cfd_id, cff_title, cff_description, cff_access_level, cff_hidden, a.cfr_id, a.cfr_title, a.cfr_time, a.cfr_size, a.cfr_description, a.cfr_mime, COUNT(r.cfr_id) count_revisions FROM crewfiles_files LEFT JOIN crewfiles_revisions a ON cff_cfr_id = a.cfr_id LEFT JOIN crewfiles_revisions r ON cff_id = r.cfr_cff_id GROUP BY cff_id ORDER BY cff_title");
 		
 		// les filene inn i riktig mappe i tree
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// kontroller at vi har tilgang til denne fileln
 			if (!empty($row['cff_access_level']) && !crewfiles::access($row['cff_access_level']))
@@ -297,8 +297,8 @@ class crewfiles_directory
 		}
 		
 		// finn mappen
-		$result = $_base->db->query("SELECT cfd_id, cfd_parent_cfd_id, cfd_title, cfd_description, cfd_time, cfd_up_id, cfd_access_level, up_id, up_name, up_access_level FROM crewfiles_directories LEFT JOIN users_players ON cfd_up_id = up_id WHERE cfd_id = $this->id");
-		$info = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT cfd_id, cfd_parent_cfd_id, cfd_title, cfd_description, cfd_time, cfd_up_id, cfd_access_level, up_id, up_name, up_access_level FROM crewfiles_directories LEFT JOIN users_players ON cfd_up_id = up_id WHERE cfd_id = $this->id");
+		$info = $result->fetch();
 		
 		// fant ikke mappen?
 		if (!$info)
@@ -356,8 +356,8 @@ class crewfiles_directory
 		
 		while ($parent_id != 0)
 		{
-			$result = $_base->db->query("SELECT cfd_id, cfd_title, cfd_parent_cfd_id FROM crewfiles_directories WHERE cfd_id = $parent_id");
-			$row = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT cfd_id, cfd_title, cfd_parent_cfd_id FROM crewfiles_directories WHERE cfd_id = $parent_id");
+			$row = $result->fetch();
 			
 			if (!$row)
 			{
@@ -400,12 +400,12 @@ class crewfiles_directory
 	public function get_count()
 	{
 		// antall mapper i denne mappen må være lik null for at mappen skal kunne slettes
-		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_directories WHERE cfd_parent_cfd_id = $this->id");
-		$this->count_dirs = mysql_result($result, 0, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM crewfiles_directories WHERE cfd_parent_cfd_id = $this->id");
+		$this->count_dirs = $result->fetchColumn(0);
 		
 		// antall filer i denne mappen må være lik null for at mappen skal kunne slettes
-		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_files WHERE cff_cfd_id = $this->id");
-		$this->count_files = mysql_result($result, 0, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM crewfiles_files WHERE cff_cfd_id = $this->id");
+		$this->count_files = $result->fetchColumn(0);
 	}
 	
 	/** Hent mapper inni denne mappen */
@@ -414,11 +414,11 @@ class crewfiles_directory
 		global $_base;
 		
 		// hent mappene med antall undermapper og filer
-		$result = $_base->db->query("SELECT m.cfd_id, m.cfd_title, m.cfd_description, m.cfd_access_level, COUNT(r.cfd_id) count_dirs, COUNT(cff_id) count_files FROM crewfiles_directories m LEFT JOIN crewfiles_directories r ON m.cfd_id = r.cfd_parent_cfd_id LEFT JOIN crewfiles_files ON m.cfd_id = cff_cfd_id WHERE m.cfd_parent_cfd_id = $this->id GROUP BY m.cfd_id ORDER BY m.cfd_title");
+		$result = \Kofradia\DB::get()->query("SELECT m.cfd_id, m.cfd_title, m.cfd_description, m.cfd_access_level, COUNT(r.cfd_id) count_dirs, COUNT(cff_id) count_files FROM crewfiles_directories m LEFT JOIN crewfiles_directories r ON m.cfd_id = r.cfd_parent_cfd_id LEFT JOIN crewfiles_files ON m.cfd_id = cff_cfd_id WHERE m.cfd_parent_cfd_id = $this->id GROUP BY m.cfd_id ORDER BY m.cfd_title");
 		
 		// les mappene
 		$dirs = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$dirs[$row['cfd_id']] = $row;
 		}
@@ -440,11 +440,11 @@ class crewfiles_directory
 		}
 		
 		// hent filene med antall revisjoner og info om aktiv revisjon
-		$result = $_base->db->query("SELECT cff_id, cff_title, cff_description, cff_access_level, cff_hidden, a.cfr_id, a.cfr_title, a.cfr_time, a.cfr_size, a.cfr_description, a.cfr_mime, COUNT(r.cfr_id) count_revisions FROM crewfiles_files LEFT JOIN crewfiles_revisions a ON cff_cfr_id = a.cfr_id LEFT JOIN crewfiles_revisions r ON cff_id = r.cfr_cff_id WHERE cff_cfd_id = $this->id GROUP BY cff_id ORDER BY cff_title");
+		$result = \Kofradia\DB::get()->query("SELECT cff_id, cff_title, cff_description, cff_access_level, cff_hidden, a.cfr_id, a.cfr_title, a.cfr_time, a.cfr_size, a.cfr_description, a.cfr_mime, COUNT(r.cfr_id) count_revisions FROM crewfiles_files LEFT JOIN crewfiles_revisions a ON cff_cfr_id = a.cfr_id LEFT JOIN crewfiles_revisions r ON cff_id = r.cfr_cff_id WHERE cff_cfd_id = $this->id GROUP BY cff_id ORDER BY cff_title");
 		
 		// les filene
 		$files = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			// kontroller at vi har tilgang til denne filen
 			if (!empty($row['cff_access_level']) && !crewfiles::access($row['cff_access_level']))
@@ -471,18 +471,18 @@ class crewfiles_directory
 		}
 		
 		// antall mapper i denne mappen må være lik null for at mappen skal kunne slettes
-		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_directories WHERE cfd_parent_cfd_id = $this->id");
-		if (mysql_result($result, 0, 0) > 0) return false;
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM crewfiles_directories WHERE cfd_parent_cfd_id = $this->id");
+		if ($result->fetchColumn(0) > 0) return false;
 		
 		// antall filer i denne mappen må være lik null for at mappen skal kunne slettes
-		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_files WHERE cff_cfd_id = $this->id");
-		if (mysql_result($result, 0, 0) > 0) return false;
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM crewfiles_files WHERE cff_cfd_id = $this->id");
+		if ($result->fetchColumn(0) > 0) return false;
 		
 		// godkjent sletting?
 		if ($confirm)
 		{
 			// slett mappen
-			$_base->db->query("DELETE FROM crewfiles_directories WHERE cfd_id = $this->id");
+			\Kofradia\DB::get()->exec("DELETE FROM crewfiles_directories WHERE cfd_id = $this->id");
 		}
 		
 		return true;
@@ -500,10 +500,10 @@ class crewfiles_directory
 		}
 		
 		// opprett mappen
-		$_base->db->query("INSERT INTO crewfiles_directories SET cfd_parent_cfd_id = $this->id, cfd_title = ".$_base->db->quote($title).", cfd_description = ".$_base->db->quote($description).", cfd_time = ".time().", cfd_up_id = ".crewfiles::$up->id.", cfd_access_level = ".$_base->db->quote($access_level));
+		\Kofradia\DB::get()->exec("INSERT INTO crewfiles_directories SET cfd_parent_cfd_id = $this->id, cfd_title = ".\Kofradia\DB::quote($title).", cfd_description = ".\Kofradia\DB::quote($description).", cfd_time = ".time().", cfd_up_id = ".crewfiles::$up->id.", cfd_access_level = ".\Kofradia\DB::quote($access_level));
 		
 		// hent mappe-ID
-		$id = $_base->db->insert_id();
+		$id = \Kofradia\DB::get()->lastInsertId();
 		
 		// hent mappeinformasjon
 		return new crewfiles_directory($id);
@@ -521,7 +521,7 @@ class crewfiles_directory
 		}
 		
 		// lagre endringer
-		$_base->db->query("UPDATE crewfiles_directories SET cfd_title = ".$_base->db->quote($title).", cfd_description = ".$_base->db->quote($description).", cfd_access_level = ".$_base->db->quote($access_level)." WHERE cfd_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE crewfiles_directories SET cfd_title = ".\Kofradia\DB::quote($title).", cfd_description = ".\Kofradia\DB::quote($description).", cfd_access_level = ".\Kofradia\DB::quote($access_level)." WHERE cfd_id = $this->id");
 		
 		$this->info['cfd_title'] = $title;
 		$this->info['cfd_description'] = $description;
@@ -564,7 +564,7 @@ class crewfiles_directory
 		}
 		
 		// flytt mappen
-		$_base->db->query("UPDATE crewfiles_directories SET cfd_parent_cfd_id = $cfd_id WHERE cfd_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE crewfiles_directories SET cfd_parent_cfd_id = $cfd_id WHERE cfd_id = $this->id");
 		
 		// oppdater lokal info
 		$this->info['cfd_parent_cfd_id'] = $cfd_id;
@@ -586,10 +586,8 @@ class crewfiles_directory
 		}
 		
 		// opprett fil
-		$_base->db->query("INSERT INTO crewfiles_files SET cff_cfd_id = $this->id, cff_title = ".$_base->db->quote($title).", cff_description = ".$_base->db->quote($description_file).", cff_time = ".time().", cff_up_id = ".crewfiles::$up->id.", cff_access_level = ".$_base->db->quote($access_level));
-		
-		// hent fil-ID
-		$id = mysql_insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO crewfiles_files SET cff_cfd_id = $this->id, cff_title = ".\Kofradia\DB::quote($title).", cff_description = ".\Kofradia\DB::quote($description_file).", cff_time = ".time().", cff_up_id = ".crewfiles::$up->id.", cff_access_level = ".\Kofradia\DB::quote($access_level));
+		$id = \Kofradia\DB::get()->lastInsertId();
 		
 		// hent filinformasjon
 		$file = new crewfiles_file($id);
@@ -620,8 +618,8 @@ class crewfiles_file
 		$this->id = intval($id);
 		
 		// finn filen
-		$result = $_base->db->query("SELECT cff_id, cff_cfd_id, cff_title, cff_description, cff_time, cff_up_id, cff_cfr_id, cff_access_level, cff_hidden, cfd_title, cfd_access_level FROM crewfiles_files LEFT JOIN crewfiles_directories On cff_cfd_id = cfd_id WHERE cff_id = $this->id");
-		$info = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT cff_id, cff_cfd_id, cff_title, cff_description, cff_time, cff_up_id, cff_cfr_id, cff_access_level, cff_hidden, cfd_title, cfd_access_level FROM crewfiles_files LEFT JOIN crewfiles_directories On cff_cfd_id = cfd_id WHERE cff_id = $this->id");
+		$info = $result->fetch();
 		
 		// fant ikke filen?
 		if (!$info)
@@ -683,11 +681,11 @@ class crewfiles_file
 		global $_base;
 		
 		// hent revisjonene
-		$result = $_base->db->query("SELECT cfr_id, cfr_title, cfr_description, cfr_time, cfr_up_id, cfr_mime, cfr_size, up_name, up_access_level FROM crewfiles_revisions LEFT JOIN users_players ON cfr_up_id = up_id WHERE cfr_cff_id = $this->id ORDER BY cfr_time DESC");
+		$result = \Kofradia\DB::get()->query("SELECT cfr_id, cfr_title, cfr_description, cfr_time, cfr_up_id, cfr_mime, cfr_size, up_name, up_access_level FROM crewfiles_revisions LEFT JOIN users_players ON cfr_up_id = up_id WHERE cfr_cff_id = $this->id ORDER BY cfr_time DESC");
 		
 		// les revisjonene
 		$revisions = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$revisions[$row['cfr_id']] = $row;
 		}
@@ -715,7 +713,7 @@ class crewfiles_file
 			global $_base;
 			
 			// sett til rotmappe
-			$_base->db->query("UPDATE crewfiles_files SET cff_cfd_id = 0 WHERE cff_id = $this->id");
+			\Kofradia\DB::get()->exec("UPDATE crewfiles_files SET cff_cfd_id = 0 WHERE cff_id = $this->id");
 			$this->info['cff_cfd_id'] = 0;
 			
 			// hent rotmappen
@@ -732,14 +730,14 @@ class crewfiles_file
 		global $_base;
 		
 		// antall revisjoner må være lik null for at filen skal kunne slettes
-		$result = $_base->db->query("SELECT COUNT(*) FROM crewfiles_revisions WHERE cfr_cff_id = $this->id");
-		if (mysql_result($result, 0, 0) > 0) return false;
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM crewfiles_revisions WHERE cfr_cff_id = $this->id");
+		if ($result->fetchColumn(0) > 0) return false;
 		
 		// godkjent sletting?
 		if ($confirm)
 		{
 			// slett filen
-			$_base->db->query("DELETE FROM crewfiles_files WHERE cff_id = $this->id");
+			\Kofradia\DB::get()->exec("DELETE FROM crewfiles_files WHERE cff_id = $this->id");
 		}
 		
 		return true;
@@ -757,7 +755,7 @@ class crewfiles_file
 		global $_base;
 		
 		// lagre endringer
-		$_base->db->query("UPDATE crewfiles_files SET cff_title = ".$_base->db->quote($title).", cff_description = ".$_base->db->quote($description).", cff_access_level = ".$_base->db->quote($access_level).", cff_hidden = ".($hidden ? 1 : 0)." WHERE cff_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE crewfiles_files SET cff_title = ".\Kofradia\DB::quote($title).", cff_description = ".\Kofradia\DB::quote($description).", cff_access_level = ".\Kofradia\DB::quote($access_level).", cff_hidden = ".($hidden ? 1 : 0)." WHERE cff_id = $this->id");
 		
 		$this->info['cff_title'] = $title;
 		$this->info['cff_description'] = $description;
@@ -794,7 +792,7 @@ class crewfiles_file
 		}
 		
 		// flytt filen
-		$_base->db->query("UPDATE crewfiles_files SET cff_cfd_id = $cfd_id WHERE cff_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE crewfiles_files SET cff_cfd_id = $cfd_id WHERE cff_id = $this->id");
 		
 		// oppdater lokal info
 		$this->info['cff_cfd_id'] = $cfd_id;
@@ -841,10 +839,8 @@ class crewfiles_file
 		}
 		
 		// lagre revisjon
-		$_base->db->query("INSERT INTO crewfiles_revisions SET cfr_cff_id = $this->id, cfr_title = ".$_base->db->quote($filename, false).", cfr_description = ".$_base->db->quote($description).", cfr_time = ".time().", cfr_up_id = ".crewfiles::$up->id.", cfr_mime = ".$_base->db->quote($mime).", cfr_path = ".$_base->db->quote($name).", cfr_size = ".intval($size));
-		
-		// hent revisjon-ID
-		$id = mysql_insert_id();
+		\Kofradia\DB::get()->exec("INSERT INTO crewfiles_revisions SET cfr_cff_id = $this->id, cfr_title = ".\Kofradia\DB::quoteNoNull($filename).", cfr_description = ".\Kofradia\DB::quote($description).", cfr_time = ".time().", cfr_up_id = ".crewfiles::$up->id.", cfr_mime = ".\Kofradia\DB::quote($mime).", cfr_path = ".\Kofradia\DB::quote($name).", cfr_size = ".intval($size));
+		$id = \Kofradia\DB::get()->lastInsertId();
 		
 		// hent revisjoninformasjon
 		$revision = new crewfiles_revision($id);
@@ -878,8 +874,8 @@ class crewfiles_revision
 		$this->id = intval($id);
 		
 		// finn revisjonen
-		$result = $_base->db->query("SELECT cfr_id, cfr_cff_id, cfr_title, cfr_description, cfr_time, cfr_up_id, cfr_mime, cfr_path, cfr_size FROM crewfiles_revisions WHERE cfr_id = $this->id");
-		$info = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT cfr_id, cfr_cff_id, cfr_title, cfr_description, cfr_time, cfr_up_id, cfr_mime, cfr_path, cfr_size FROM crewfiles_revisions WHERE cfr_id = $this->id");
+		$info = $result->fetch();
 		
 		// fant ikke revisjonen?
 		if (!$info)
@@ -954,11 +950,11 @@ class crewfiles_revision
 		if ($this->get_file()->info['cff_cfr_id'] == $this->id)
 		{
 			// fjern som aktiv revisjon
-			$_base->db->query("UPDATE crewfiles_files SET cff_cfr_id = NULL WHERE cff_id = {$this->info['cfr_cff_id']} AND cff_cfr_id = $this->id");
+			\Kofradia\DB::get()->exec("UPDATE crewfiles_files SET cff_cfr_id = NULL WHERE cff_id = {$this->info['cfr_cff_id']} AND cff_cfr_id = $this->id");
 		}
 		
 		// slett fra databasen
-		$_base->db->query("DELETE FROM crewfiles_revisions WHERE cfr_id = $this->id");
+		\Kofradia\DB::get()->exec("DELETE FROM crewfiles_revisions WHERE cfr_id = $this->id");
 	}
 	
 	/** Sett som aktiv revisjon */
@@ -967,7 +963,7 @@ class crewfiles_revision
 		global $_base;
 		
 		// oppdater filen
-		$_base->db->query("UPDATE crewfiles_files SET cff_cfr_id = $this->id WHERE cff_id = {$this->info['cfr_cff_id']}");
+		\Kofradia\DB::get()->exec("UPDATE crewfiles_files SET cff_cfr_id = $this->id WHERE cff_id = {$this->info['cfr_cff_id']}");
 	}
 	
 	/** Hent data for revisjonen */
@@ -986,7 +982,7 @@ class crewfiles_revision
 		$title = crewfiles::filter_filename($title);
 		
 		// lagre endringer
-		$_base->db->query("UPDATE crewfiles_revisions SET cfr_title = ".$_base->db->quote($title).", cfr_description = ".$_base->db->quote($description).", cfr_mime = ".$_base->db->quote($mime)." WHERE cfr_id = $this->id");
+		\Kofradia\DB::get()->exec("UPDATE crewfiles_revisions SET cfr_title = ".\Kofradia\DB::quote($title).", cfr_description = ".\Kofradia\DB::quote($description).", cfr_mime = ".\Kofradia\DB::quote($mime)." WHERE cfr_id = $this->id");
 		
 		$this->info['cfr_title'] = $title;
 		$this->info['cfr_description'] = $description;

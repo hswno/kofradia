@@ -447,8 +447,8 @@ class page_ff_panel
 		ess::$b->page->add_title("Navnbytte for moderator");
 		
 		// hent mulig søknad
-		$result = ess::$b->db->query("SELECT ds_id, ds_up_id, ds_time, ds_reason, ds_params FROM div_soknader WHERE ds_type = ".soknader::TYPE_FF_NAME." AND ds_rel_id = {$this->ff->id} AND ds_reply_decision = 0");
-		$soknad = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT ds_id, ds_up_id, ds_time, ds_reason, ds_params FROM div_soknader WHERE ds_type = ".soknader::TYPE_FF_NAME." AND ds_rel_id = {$this->ff->id} AND ds_reply_decision = 0");
+		$soknad = $result->fetch();
 		
 		// har vi en aktiv søknad?
 		if ($soknad)
@@ -532,8 +532,8 @@ class page_ff_panel
 	<h2>Søk om navnbytte</h2><boxes />';
 		
 		// hent mulig søknad
-		$result = ess::$b->db->query("SELECT ds_id, ds_up_id, ds_time, ds_reason, ds_params FROM div_soknader WHERE ds_type = ".soknader::TYPE_FF_NAME." AND ds_rel_id = {$this->ff->id} AND ds_reply_decision = 0");
-		$soknad = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT ds_id, ds_up_id, ds_time, ds_reason, ds_params FROM div_soknader WHERE ds_type = ".soknader::TYPE_FF_NAME." AND ds_rel_id = {$this->ff->id} AND ds_reply_decision = 0");
+		$soknad = $result->fetch();
 		
 		// har vi en aktiv søknad?
 		if ($soknad)
@@ -986,18 +986,18 @@ class page_ff_panel
 		if (isset($_POST['remove']) && $this->ff->data['has_ff_logo'])
 		{
 			// hent gammel logo
-			$result = ess::$b->db->query("SELECT ff_logo, ff_logo_path FROM ff WHERE ff_id = {$this->ff->id}");
-			$old = mysql_result($result, 0);
-			if (empty($old))
+			$result = \Kofradia\DB::get()->query("SELECT ff_logo, ff_logo_path FROM ff WHERE ff_id = {$this->ff->id}");
+			$row = $result->fetch();
+			if (!$row)
 			{
 				$this->ff->add_log("logo", login::$user->player->id.":removed");
 			}
 			else
 			{
-				$this->ff->add_log("logo", login::$user->player->id.":removed", base64_encode($old));
+				$this->ff->add_log("logo", login::$user->player->id.":removed", base64_encode($row['ff_logo']));
 				
 				// forsøk å slett fra disk
-				$old_path = mysql_result($result, 0, 1);
+				$old_path = $row['ff_logo_path'];
 				if (MAIN_SERVER && mb_substr($old_path, 0, 2) == "l:")
 				{
 					$path = PROFILE_IMAGES_FOLDER . "/" . mb_substr($old_path, 2);
@@ -1006,7 +1006,7 @@ class page_ff_panel
 			}
 			
 			// fjern bildet fra databasen
-			ess::$b->db->query("UPDATE ff SET ff_logo = NULL, ff_logo_path = NULL WHERE ff_id = {$this->ff->id}");
+			\Kofradia\DB::get()->exec("UPDATE ff SET ff_logo = NULL, ff_logo_path = NULL WHERE ff_id = {$this->ff->id}");
 			
 			ess::$b->page->add_message("Logoen ble fjernet.");
 			redirect::handle();
@@ -1056,18 +1056,19 @@ class page_ff_panel
 			imagedestroy($img);
 			
 			// hent gammel logo
-			$result = ess::$b->db->query("SELECT ff_logo, ff_logo_path FROM ff WHERE ff_id = {$this->ff->id}");
-			$old = mysql_result($result, 0);
-			if (empty($old))
+			$result = \Kofradia\DB::get()->query("SELECT ff_logo, ff_logo_path FROM ff WHERE ff_id = {$this->ff->id}");
+			$row = $result->fetch();
+			if (!$row)
 			{
 				$this->ff->add_log("logo", login::$user->player->id);
 			}
 			else
 			{
+				$old = $row['ff_logo'];
 				$this->ff->add_log("logo", login::$user->player->id, base64_encode($old));
 				
 				// forsøk å slett fra disk
-				$old_path = mysql_result($result, 0, 1);
+				$old_path = $row['ff_logo_path'];
 				if (MAIN_SERVER && mb_substr($old_path, 0, 2) == "l:")
 				{
 					$path = PROFILE_IMAGES_FOLDER . "/" . mb_substr($old_path, 2);
@@ -1090,7 +1091,7 @@ class page_ff_panel
 			}
 			
 			// lagre bildet til databasen
-			ess::$b->db->query("UPDATE ff SET ff_logo = ".ess::$b->db->quote($data).", ff_logo_path = ".ess::$b->db->quote($url)." WHERE ff_id = {$this->ff->id}");
+			\Kofradia\DB::get()->exec("UPDATE ff SET ff_logo = ".\Kofradia\DB::quote($data).", ff_logo_path = ".\Kofradia\DB::quote($url)." WHERE ff_id = {$this->ff->id}");
 			
 			ess::$b->page->add_message("Logoen ble oppdatert.");
 			redirect::handle("panel?ff_id={$this->ff->id}");
@@ -1144,9 +1145,9 @@ function vis_bilde(elm)
 		if (isset($_POST['player']) || isset($_REQUEST['up_id']))
 		{
 			// hent spillerinformasjon
-			$where = isset($_REQUEST['up_id']) ? 'up_id = '.intval($_REQUEST['up_id']) : 'up_name = '.ess::$b->db->quote($_POST['player']);
+			$where = isset($_REQUEST['up_id']) ? 'up_id = '.intval($_REQUEST['up_id']) : 'up_name = '.\Kofradia\DB::quote($_POST['player']);
 			$more = isset($_REQUEST['up_id']) ? '' : ' ORDER BY up_access_level = 0, up_last_online DESC LIMIT 1';
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT up_id, up_name, up_access_level, up_points, upr_rank_pos, uc_time, uc_info, COUNT(IF(ff_is_crew = 0 AND ff_inactive = 0, 1, NULL)) ff_num
 				FROM users_players
 					LEFT JOIN users_players_rank ON upr_up_id = up_id
@@ -1156,7 +1157,7 @@ function vis_bilde(elm)
 					LEFT JOIN ff ON ff_id = ffm_ff_id
 				WHERE $where
 				GROUP BY up_id$more");
-			$row = mysql_fetch_assoc($result);
+			$row = $result->fetch();
 			
 			// fant ikke spilleren?
 			if (!$row || !$row['up_id'])
@@ -1335,7 +1336,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			}
 			
 			// oppdater
-			ess::$b->db->query("UPDATE ff SET ff_description = ".ess::$b->db->quote($_POST['description'])." WHERE ff_id = {$this->ff->id}");
+			\Kofradia\DB::get()->exec("UPDATE ff SET ff_description = ".\Kofradia\DB::quote($_POST['description'])." WHERE ff_id = {$this->ff->id}");
 			
 			ess::$b->page->add_message("Beskrivelsen er nå oppdatert.");
 			$this->ff->add_log("description", login::$user->player->id, $this->ff->data['ff_description']);
@@ -1520,13 +1521,13 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$bydel = login::$user->player->bydel;
 		
 		// hent ledige bygninger i denne bydelen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT br_id, br_pos_x, br_pos_y
 			FROM bydeler_resources
 				LEFT JOIN (SELECT DISTINCT ff_br_id FROM ff WHERE ff_inactive = 0 AND ff_br_id IS NOT NULL) ref ON ff_br_id = br_id
 			WHERE br_b_id = {$bydel['id']} AND br_type = 1 AND ff_br_id IS NULL");
 		$resources_free = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$resources_free[$row['br_id']] = $row;
 		}
@@ -1545,7 +1546,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			else
 			{
 				// oppdater FF
-				ess::$b->db->query("UPDATE ff SET ff_br_id = $br_id WHERE ff_id = {$this->ff->id}");
+				\Kofradia\DB::get()->exec("UPDATE ff SET ff_br_id = $br_id WHERE ff_id = {$this->ff->id}");
 				
 				global $__server;
 				putlog("INFO", ucfirst($this->ff->type['refobj'])." %u{$this->ff->data['ff_name']}%u har nå valgt".($this->ff->data['br_id'] ? ' ny' : '')." bygning på {$bydel['name']}. {$__server['path']}/ff/?ff_id={$this->ff->id}");
@@ -1568,9 +1569,9 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		
 		
 		// hent FF-ene i denne bydelen
-		$result = ess::$b->db->query("SELECT ff_id, ff_name, br_pos_x, br_pos_y FROM ff JOIN bydeler_resources ON ff_br_id = br_id WHERE br_b_id = {$bydel['id']} AND ff_inactive = 0");
+		$result = \Kofradia\DB::get()->query("SELECT ff_id, ff_name, br_pos_x, br_pos_y FROM ff JOIN bydeler_resources ON ff_br_id = br_id WHERE br_b_id = {$bydel['id']} AND ff_inactive = 0");
 		$resources = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$resources[$row['ff_id']] = $row;
 		}
@@ -1653,8 +1654,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		}
 		
 		// sjekk for aktiv auksjon
-		$result = ess::$b->db->query("SELECT a_id, a_params FROM auksjoner WHERE a_type = ".auksjon::TYPE_FIRMA." AND a_end >= ".time()." AND a_completed = 0 AND a_active != 0");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT a_id, a_params FROM auksjoner WHERE a_type = ".auksjon::TYPE_FIRMA." AND a_end >= ".time()." AND a_completed = 0 AND a_active != 0");
+		while ($row = $result->fetch())
 		{
 			$params = new params($row['a_params']);
 			if ($params->get("ff_id") == $this->ff->id)
@@ -1837,8 +1838,8 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		else
 		{
 			// finn ut når vi donerte siste gang - kan ikke donere oftere enn en gang i timen
-			$result = ess::$b->db->query("SELECT ffbl_time FROM ff_bank_log WHERE ffbl_ff_id = {$this->ff->id} AND ffbl_type = 3 AND ffbl_up_id = ".login::$user->player->id." ORDER BY ffbl_time DESC LIMIT 1");
-			$last = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT ffbl_time FROM ff_bank_log WHERE ffbl_ff_id = {$this->ff->id} AND ffbl_type = 3 AND ffbl_up_id = ".login::$user->player->id." ORDER BY ffbl_time DESC LIMIT 1");
+			$last = $result->fetch();
 			
 			if ($last && $last['ffbl_time']+3600 > time())
 			{
@@ -1855,10 +1856,10 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			elseif (isset($_POST['approve']) && validate_sid(false))
 			{
 				// forsøk å donere
-				ess::$b->db->query("UPDATE ff, users_players SET ff_bank = ff_bank + $amount, up_cash = up_cash - $amount WHERE ff_id = {$this->ff->id} AND up_id = ".login::$user->player->id." AND up_cash >= $amount");
+				$a = \Kofradia\DB::get()->exec("UPDATE ff, users_players SET ff_bank = ff_bank + $amount, up_cash = up_cash - $amount WHERE ff_id = {$this->ff->id} AND up_id = ".login::$user->player->id." AND up_cash >= $amount");
 				
 				// hadde ikke nok penger?
-				if (ess::$b->db->affected_rows() == 0)
+				if ($a == 0)
 				{
 					ess::$b->page->add_message("Du har ikke nok penger på hånda til å donere ".game::format_cash($amount)." til {$this->ff->type['refobj']}.", "error");
 				}
@@ -1866,14 +1867,14 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				else
 				{
 					// finn balanse
-					$result = ess::$b->db->query("SELECT ff_bank FROM ff WHERE ff_id = {$this->ff->id}");
-					$balance = mysql_result($result, 0);
+					$result = \Kofradia\DB::get()->query("SELECT ff_bank FROM ff WHERE ff_id = {$this->ff->id}");
+					$balance = $result->fetchColumn(0);
 					
 					// legg til logg
-					ess::$b->db->query("INSERT INTO ff_bank_log SET ffbl_ff_id = {$this->ff->id}, ffbl_type = 3, ffbl_amount = $amount, ffbl_up_id = ".login::$user->player->id.", ffbl_time = ".time().", ffbl_balance = $balance, ffbl_note = ".ess::$b->db->quote($note));
+					\Kofradia\DB::get()->exec("INSERT INTO ff_bank_log SET ffbl_ff_id = {$this->ff->id}, ffbl_type = 3, ffbl_amount = $amount, ffbl_up_id = ".login::$user->player->id.", ffbl_time = ".time().", ffbl_balance = $balance, ffbl_note = ".\Kofradia\DB::quote($note));
 					
 					// legg til i spillerinfo
-					ess::$b->db->query("UPDATE ff_members SET ffm_donate = ffm_donate + $amount WHERE ffm_up_id = ".login::$user->player->id." AND ffm_ff_id = {$this->ff->id} AND ffm_status = 1");
+					\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_donate = ffm_donate + $amount WHERE ffm_up_id = ".login::$user->player->id." AND ffm_ff_id = {$this->ff->id} AND ffm_status = 1");
 					ess::$b->page->add_message("Du donerte ".game::format_cash($amount)." til {$this->ff->type['refobj']}.");
 					
 					// legg til daglig stats
@@ -2046,7 +2047,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		}
 		
 		// hent statistikk
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffsp_id, ffsp_date, ffsp_manual, ffsp_points, ffsp_up_limit, ffsp_cost
 			FROM ff_stats_pay
 			WHERE ffsp_ff_id = {$this->ff->id}$ff_reset
@@ -2054,7 +2055,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			LIMIT $limit");
 		$periods = array();
 		$ffsp_ids = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$periods[] = $row;
 			$ffsp_ids[] = $row['ffsp_id'];
@@ -2109,11 +2110,11 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$points_max = max($points_max, abs($this->ff->data['ff_pay_points']));
 		
 		// hent inn statistikk over medlemmene
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffspm_ffsp_id, ffspm_up_id, ffspm_points
 			FROM ff_stats_pay_members
 			WHERE ffspm_ffsp_id IN ($ffsp_ids)");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if (!isset($stats[$row['ffspm_up_id']][$row['ffspm_ffsp_id']]))
 			{
@@ -2199,11 +2200,11 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		}
 		
 		$members = array();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT up_id, up_health, up_health_max, up_b_id, up_brom_expire
 			FROM users_players
 			WHERE up_id IN (".implode(",", $members_id).")");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$members[$row['up_id']] = $row;
 		}

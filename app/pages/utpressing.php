@@ -93,7 +93,7 @@ class page_utpressing extends utpressing
 		<p class="c"><a href="utpressing">&laquo; Tilbake</a></p>
 		<p>Her kan du se utpressingene du har utført de siste 12 timene.</p>';
 
-		if (mysql_num_rows($result) == 0)
+		if ($result->rowCount() == 0)
 		{
 			echo '
 		<p>Du har ikke utført noen utpressinger de siste 12 timene.</p>';
@@ -113,7 +113,7 @@ class page_utpressing extends utpressing
 			<tbody>';
 
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$bydel = "Ukjent bydel";
 				if (!empty($row['ut_b_id']) && isset(game::$bydeler[$row['ut_b_id']]))

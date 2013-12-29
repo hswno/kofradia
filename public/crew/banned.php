@@ -13,7 +13,7 @@ echo '
 <h1>Aktive blokkeringer</h1>
 <p>Denne oversikten viser alle blokkeringer som er satt.</p>';
 
-if (mysql_num_rows($result) == 0)
+if ($result->rowCount() == 0)
 {
 	echo '
 <p>Ingen blokkeringer for øyeblikket satt.</p>';
@@ -36,7 +36,7 @@ else
 	<tbody>';
 	
 	$i = 0;
-	while ($row = mysql_fetch_assoc($result))
+	while ($row = $result->fetch())
 	{
 		$access = access::has(blokkeringer::$types[$row['ub_type']]['access']);
 		

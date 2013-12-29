@@ -170,8 +170,8 @@ class page_bydeler extends pages_player
 		if (isset($_POST['teleporter']) && access::is_nostat())
 		{
 			// teleporter
-			ess::$b->db->query("UPDATE users_players SET up_b_id = {$bydel['id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id." AND up_access_level != 0 AND up_b_id != {$bydel['id']}");
-			if (ess::$b->db->affected_rows() == 0) $this->reise_error_in($bydel);
+			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_b_id = {$bydel['id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id." AND up_access_level != 0 AND up_b_id != {$bydel['id']}");
+			if ($a == 0) $this->reise_error_in($bydel);
 			
 			ess::$b->page->add_message('Du teleporterte til <b>'.htmlspecialchars($bydel['name']).'</b>.');
 			redirect::handle();
@@ -250,7 +250,7 @@ class page_bydeler extends pages_player
 				<tbody>';
 				
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$price = $distance * self::GTA_PRICE_KM * self::get_gta_factor_points($row['points']) * self::get_gta_factor_damage($row['damage']);
 				$energy = self::get_gta_energy($row['damage']);
@@ -303,14 +303,14 @@ class page_bydeler extends pages_player
 			}
 			
 			// forsøk å reis
-			ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price, up_b_id = {$bydel['id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id." AND up_cash >= $price AND up_b_id != {$bydel['id']}");
+			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $price, up_b_id = {$bydel['id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id." AND up_cash >= $price AND up_b_id != {$bydel['id']}");
 			
 			// feilet?
-			if (ess::$b->db->affected_rows() == 0)
+			if ($a == 0)
 			{
 				// allerede i bydelen?
-				$result = ess::$b->db->query("SELECT up_b_id FROM users_players WHERE up_id = ".$this->up->id);
-				if (mysql_result($result, 0, 0) == $bydel['id'])
+				$result = \Kofradia\DB::get()->query("SELECT up_b_id FROM users_players WHERE up_id = ".$this->up->id);
+				if ($result->fetchColumn(0) == $bydel['id'])
 				{
 					$this->reise_error_in($bydel);
 				}
@@ -339,13 +339,13 @@ class page_bydeler extends pages_player
 		$ug_id = (int) $_POST['bil'];
 		
 		// hent bilen
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT s.id, g.brand, g.model, g.value, s.damage, g.points
 			FROM users_gta s
 				JOIN gta g ON s.gtaid = g.id
 			WHERE ug_up_id = {$this->up->id} AND s.b_id = {$this->up->data['up_b_id']} AND s.id = $ug_id");
 		
-		$bil = mysql_fetch_assoc($result);
+		$bil = $result->fetch();
 		
 		if (!$bil)
 		{
@@ -364,10 +364,10 @@ class page_bydeler extends pages_player
 		}
 		
 		// forsøk å reis
-		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price, up_b_id = {$bydel['id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id." AND up_cash >= $price AND up_b_id != {$bydel['id']}");
+		$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $price, up_b_id = {$bydel['id']}, up_b_time = ".time()." WHERE up_id = ".$this->up->id." AND up_cash >= $price AND up_b_id != {$bydel['id']}");
 		
 		// feilet?
-		if (ess::$b->db->affected_rows() == 0)
+		if ($a == 0)
 		{
 			// anta dårlig råd
 			$this->reise_error_cash($bydel);
@@ -375,7 +375,7 @@ class page_bydeler extends pages_player
 		}
 		
 		// flytt bilen
-		ess::$b->db->query("UPDATE users_gta SET time_last_move = ".time().", b_id = {$bydel['id']} WHERE id = {$bil['id']}");
+		\Kofradia\DB::get()->exec("UPDATE users_gta SET time_last_move = ".time().", b_id = {$bydel['id']} WHERE id = {$bil['id']}");
 		
 		// energi
 		$this->up->energy_use($energy);
@@ -393,8 +393,8 @@ class page_bydeler extends pages_player
 		global $_game;
 		
 		$expire = time() - 604800; // tell kun spillere som har vært pålogget siste uken
-		$result = ess::$b->db->query("SELECT up_b_id, COUNT(up_id) AS ant, SUM(up_cash) AS money FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_last_online > $expire GROUP BY up_b_id");
-		while ($row = mysql_fetch_assoc($result))
+		$result = \Kofradia\DB::get()->query("SELECT up_b_id, COUNT(up_id) AS ant, SUM(up_cash) AS money FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_last_online > $expire GROUP BY up_b_id");
+		while ($row = $result->fetch())
 		{
 			if (!isset($this->bydeler[$row['up_b_id']])) continue;
 			
@@ -409,22 +409,22 @@ class page_bydeler extends pages_player
 	public function get_ff()
 	{
 		// hent alle eiere
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ffm_up_id, ffm_ff_id
 			FROM ff_members
 			WHERE ffm_priority = 1 AND ffm_status = 1");
 		$eiere = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$eiere[$row['ffm_ff_id']][] = $row['ffm_up_id'];
 		}
 		
 		// hent FF
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ff_id, ff_type, ff_name, ff_br_id, ff_logo_path, br_b_id, br_pos_x, br_pos_y
 			FROM ff LEFT JOIN bydeler_resources ON ff_br_id = br_id
 			WHERE ff_inactive = 0");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$b_id = $row['ff_br_id'] ? $row['br_b_id'] : 0;
 			if ($b_id == 0) $this->bydeler[0]['active'] = true;
@@ -448,12 +448,12 @@ class page_bydeler extends pages_player
 		$this->ff_invites = array();
 		if ($this->up)
 		{
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT ff_id, ff_type, ff_name, ffm_date_join, ffm_priority
 				FROM ff_members JOIN ff ON ff_id = ffm_ff_id
 				WHERE ffm_up_id = ".$this->up->id." AND ffm_status = 0 AND ff_inactive = 0
 				ORDER BY ffm_date_join DESC");
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$row['eier'] = isset($eiere[$row['ff_id']]) ? $eiere[$row['ff_id']] : array();
 				$this->ff_invites[] = $row;
@@ -463,14 +463,14 @@ class page_bydeler extends pages_player
 		// hent konkurranser som er aktive
 		$time = time();
 		$this->fff = array();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT fff_id, fff_time_start, fff_time_expire, COUNT(ff_id) AS ff_count, COUNT(IF(ff_inactive = 0, 1, NULL)) AS ff_count_active
 			FROM ff_free
 				LEFT JOIN ff ON ff_fff_id = fff_id
 			WHERE $time >= fff_time_start AND fff_active = 1
 			GROUP BY fff_id
 			ORDER BY fff_time_expire");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$this->fff[] = $row;
 		}

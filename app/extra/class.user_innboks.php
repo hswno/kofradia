@@ -19,7 +19,7 @@ class user_innboks
 	public function fix_new()
 	{
 		// oppdater uleste meldinger hos brukeren
-		ess::$b->db->query("
+		\Kofradia\DB::get()->exec("
 			UPDATE users, (
 				SELECT up_u_id, SUM(ABS(ir_unread)) c
 				FROM users_players LEFT JOIN inbox_rel ON ir_up_id = up_id AND ir_deleted = 0
@@ -29,11 +29,11 @@ class user_innboks
 			WHERE u_id = up_u_id");
 		
 		// hent og lagre i objektet vårt
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT u_inbox_new
 			FROM users
 			WHERE u_id = {$this->u->id}");
-		$this->u->data['u_inbox_new'] = mysql_result($result, 0);
+		$this->u->data['u_inbox_new'] = $result->fetchColumn(0);
 	}
 	
 	/**
@@ -46,13 +46,12 @@ class user_innboks
 		$it_list = array_map("intval", $it_list);
 		
 		// forsøk å slette meldingstråder
-		ess::$b->db->query("
+		$deleted = \Kofradia\DB::get()->exec("
 			UPDATE inbox_rel JOIN users_players ON up_u_id = {$this->u->id} AND ir_up_id = up_id
 			SET ir_deleted = 1
 			WHERE ir_it_id IN (".implode(",", $it_list).") AND ir_deleted = 0");
 		
 		// ble noen slettet
-		$deleted = ess::$b->db->affected_rows();
 		if ($deleted > 0)
 		{
 			// oppdater uleste meldinger hos brukeren
@@ -73,13 +72,12 @@ class user_innboks
 		$time = (int) $time;
 		
 		// forsøk og slett meldingstråder
-		ess::$b->db->query("
+		$deleted = \Kofradia\DB::get()->exec("
 			UPDATE inbox_rel JOIN users_players ON up_u_id = {$this->u->id} AND ir_up_id = up_id
 			SET ir_deleted = 1
 			WHERE ir_deleted = 0 AND ir_restrict_im_time <= $time AND ir_marked = 0");
 		
 		// ble noen slettet
-		$deleted = ess::$b->db->affected_rows();
 		if ($deleted > 0)
 		{
 			// oppdater uleste meldinger hos brukeren
@@ -110,7 +108,7 @@ class user_innboks
 		// sett opp data for meldingene
 		$meldinger = array();
 		$prev = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$row['up_prev'] = false;
 			$row['up_prev_other'] = false;
@@ -123,7 +121,7 @@ class user_innboks
 		}
 		
 		// hent alle deltakerene i meldingstrådene som skal listes opp
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT ir_it_id, ir_up_id, ir_unread, ir_views, ir_deleted, ir_restrict_im_time, ir_marked, COUNT(im_id) AS num_messages, up_access_level, up_u_id, u_access_level, u_active_up_id
 			FROM inbox_rel
 				JOIN (
@@ -140,7 +138,7 @@ class user_innboks
 			GROUP BY ir_it_id, ir_up_id
 			ORDER BY up_name");
 		$c = access::has("crewet");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$meldinger[$row['ir_it_id']]['receivers'][] = $row;
 			if ($row['ir_up_id'] != $this->u->player->id && $row['ir_deleted'] == 0 && ($row['up_access_level'] != 0 || ($c && $row['u_access_level'] != 0 && $row['u_active_up_id'] == $row['ir_up_id'])))
@@ -155,7 +153,7 @@ class user_innboks
 		
 		// hent spillerene som har skrevet siste melding (inkludert meg)
 		$im_id = array();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT im_id, im_it_id, im_up_id, is_self
 			FROM (
 				SELECT im_id, im_it_id, im_up_id, IF(up1.up_u_id = {$this->u->id}, 1, 0) is_self
@@ -168,7 +166,7 @@ class user_innboks
 			) AS ref
 			GROUP BY im_it_id");
 		$others = array();
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$meldinger[$row['im_it_id']]['up_prev'] = array($row['is_self'], $row['im_up_id']);
 			$im_id[$row['im_id']] = $row['im_it_id'];
@@ -179,7 +177,7 @@ class user_innboks
 		if (count($others) > 0)
 		{
 			// hent spillerene som har skrevet siste melding (ekskludert meg)
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT im_it_id, im_up_id
 				FROM (
 					SELECT im_it_id, im_up_id
@@ -192,7 +190,7 @@ class user_innboks
 				) AS ref
 				GROUP BY im_it_id");
 			$others = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$meldinger[$row['im_it_id']]['up_prev_other'] = $row;
 			}
@@ -201,10 +199,10 @@ class user_innboks
 		// hent innholdet til de siste meldingene
 		if (count($im_id) > 0)
 		{
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT id_im_id, id_text FROM inbox_data WHERE id_im_id IN (".implode(",", array_keys($im_id)).")");
 			$max = 50;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$d = strip_tags(game::format_data($row['id_text']));
 				$d = preg_replace("/(^ +| +$|\\r)/mu", "", $d);

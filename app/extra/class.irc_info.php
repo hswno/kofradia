@@ -55,12 +55,12 @@ abstract class irc_info
 		{
 			$where = "up_name LIKE '".str_replace(array("%", "*"), array("\\%", "%"), addslashes($navn))."'";
 		}
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT $finn
 			FROM users_players
 				LEFT JOIN users_players_rank ON upr_up_id = up_id
 			WHERE $where ORDER BY up_last_online DESC LIMIT 1");
-		return mysql_fetch_assoc($result);
+		return $result->fetch();
 	}
 	
 	/** Regstats */
@@ -74,8 +74,8 @@ abstract class irc_info
 		}
 		else
 		{
-			$result = ess::$b->db->query("SELECT COUNT(up_id), DATE(FROM_UNIXTIME(up_created_time)) AS day FROM users_players WHERE DATE(FROM_UNIXTIME(up_created_time)) = '$date' GROUP BY day");
-			$ant = game::format_number(intval(mysql_result($result, 0)));
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id), DATE(FROM_UNIXTIME(up_created_time)) AS day FROM users_players WHERE DATE(FROM_UNIXTIME(up_created_time)) = '$date' GROUP BY day");
+			$ant = game::format_number(intval($result->fetchColumn(0)));
 			$this->send_output("Antall registrerte $date: $ant");
 		}
 	}
@@ -96,8 +96,8 @@ abstract class irc_info
 		}
 		
 		$last = time()-$time;
-		$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online >= $last");
-		$ant = game::format_number(mysql_result($result, 0));
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE up_last_online >= $last");
+		$ant = game::format_number($result->fetchColumn(0));
 		
 		$time = game::timespan($time, game::TIME_NOBOLD);
 		$this->send_output("%bAntall pålogget siste $time%b: %u$ant%u");
@@ -106,9 +106,10 @@ abstract class irc_info
 	/** Antall pålogget (kort tid) */
 	public function stats_short()
 	{
-		$result = ess::$b->db->query("SELECT COUNT(IF(up_last_online > ".(time()-60).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-10).", 1, NULL)) FROM users_players");
-		$this->send_output("Siste 60 sekundene: ".mysql_result($result, 0, 0));
-		$this->send_output("Siste 10 sekundene: ".mysql_result($result, 0, 1));
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(IF(up_last_online > ".(time()-60).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-10).", 1, NULL)) FROM users_players");
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$this->send_output("Siste 60 sekundene: ".$row[0]);
+		$this->send_output("Siste 10 sekundene: ".$row[1]);
 		#$this->send_output("stats_short er ikke lengre tilgjengelig!");
 		/*
 		$time_10 = time()-10;
@@ -116,15 +117,15 @@ abstract class irc_info
 		$time_300 = time()-300;
 		$time_600 = time()-600;
 		$time_1800 = time()-1800;
-		$result = ess::$b->db->query("SELECT COUNT(IF(time > $time_10, id, NULL)), COUNT(IF(time > $time_60, id, NULL)), COUNT(IF(time > $time_300, id, NULL)), COUNT(IF(time > $time_600, id, NULL)), COUNT(IF(time > $time_1800, id, NULL)) FROM requests");
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(IF(time > $time_10, id, NULL)), COUNT(IF(time > $time_60, id, NULL)), COUNT(IF(time > $time_300, id, NULL)), COUNT(IF(time > $time_600, id, NULL)), COUNT(IF(time > $time_1800, id, NULL)) FROM requests");
 		
-		$hits_10 = game::format_number(mysql_result($result, 0, 0));
+		$hits_10 = game::format_number($result->fetchColumn(0));
 		$hits_60 = game::format_number(mysql_result($result, 0, 1));
 		$hits_300 = game::format_number(mysql_result($result, 0, 2));
 		$hits_600 = game::format_number(mysql_result($result, 0, 3));
 		$hits_1800 = game::format_number(mysql_result($result, 0, 4));
 		
-		$hits_10_m = game::format_number(mysql_result($result, 0, 0)/10);
+		$hits_10_m = game::format_number($result->fetchColumn(0)/10);
 		$hits_60_m = game::format_number(mysql_result($result, 0, 1)/60);
 		$hits_300_m = game::format_number(mysql_result($result, 0, 2)/300);
 		$hits_600_m = game::format_number(mysql_result($result, 0, 3)/600);
@@ -148,7 +149,7 @@ abstract class irc_info
 		$igaar = $date->format("U");
 		$date->modify("-1 day");
 		$igaar2 = $date->format("U");
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT SUM(up_hits) FROM users_players
 			UNION ALL
 			SELECT SUM(uhi_hits) FROM users_hits WHERE uhi_secs_hour >= $idag
@@ -156,10 +157,11 @@ abstract class irc_info
 			SELECT SUM(uhi_hits) FROM users_hits WHERE uhi_secs_hour < $idag AND uhi_secs_hour >= $igaar
 			UNION ALL
 			SELECT SUM(uhi_hits) FROM users_hits WHERE uhi_secs_hour < $igaar AND uhi_secs_hour >= $igaar2");
-		$total = game::format_number(mysql_result($result, 0));
-		$today = game::format_number(mysql_result($result, 1));
-		$day_1 = game::format_number(mysql_result($result, 2));
-		$day_2 = game::format_number(mysql_result($result, 3));
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$total = game::format_number($row[0]);
+		$today = game::format_number($row[1]);
+		$day_1 = game::format_number($row[2]);
+		$day_2 = game::format_number($row[3]);
 		
 		$this->send_output("%bHits statistikk:%b");
 		$this->send_output("%bTotalt:%b %c5%u$total%u");
@@ -193,14 +195,14 @@ abstract class irc_info
 			if ($row = $this->hent_bruker_info($player, "up_id, up_name, up_u_id"))
 			{
 				// hent antall uleste og antall totalt
-				$result = ess::$b->db->query("
+				$result = \Kofradia\DB::get()->query("
 					SELECT u_inbox_new, SUM(im_id)
 					FROM users
 						LEFT JOIN inbox_rel ON ir_up_id = {$row['up_id']}
 						LEFT JOIN inbox_messages ON im_it_id = ir_it_id AND im_time <= ir_restrict_im_time
 					WHERE u_id = {$row['up_u_id']}
 					GROUP BY u_id");
-				$ant = mysql_result($result, 0);
+				$ant = $result->fetchColumn(0);
 				
 				// hent antall uleste meldinger
 				$this->send_output("%b{$row['up_name']}%b har %b".game::format_number($ant)."%b ".($ant == 1 ? 'ulest melding' : 'uleste meldinger')." av totalt %b".game::format_number($ant)."%b ".($ant == 1 ? 'melding' : 'meldinger')." i sin innboks!");
@@ -247,8 +249,8 @@ abstract class irc_info
 		global $__server;
 		$skip = intval($this->cmd_x[1]);
 		
-		$result = ess::$b->db->query("SELECT up_id, up_name, u_inbox_new FROM users JOIN users_players ON u_id = up_u_id ORDER BY u_inbox_new DESC, up_last_online DESC LIMIT 1");
-		$player = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, u_inbox_new FROM users JOIN users_players ON u_id = up_u_id ORDER BY u_inbox_new DESC, up_last_online DESC LIMIT 1");
+		$player = $result->fetch();
 		
 		$this->send_output("%b{$player['up_name']}%b har flest uleste meldinger. %b{$player['u_inbox_new']}%b ".($player['u_inbox_new'] == 1 ? 'ulest melding' : 'uleste meldinger')."! ({$__server['absolute_path']}{$__server['relative_path']}/innboks?user=".urlencode($player['up_name']).")");
 	}
@@ -268,15 +270,15 @@ abstract class irc_info
 		$dager = 5;
 		$date->modify("-".($dager-1)." days");
 		$date = $date->format("Y-m-d");
-		$result = ess::$b->db->query("SELECT COUNT(up_id) AS ant, DATE(FROM_UNIXTIME(up_created_time)) AS day FROM users_players WHERE DATE(FROM_UNIXTIME(up_created_time)) >= '$date' AND DATE(FROM_UNIXTIME(up_created_time)) <= '$date_max' GROUP BY day ORDER BY day DESC");
-		if (mysql_num_rows($result) == 0)
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) AS ant, DATE(FROM_UNIXTIME(up_created_time)) AS day FROM users_players WHERE DATE(FROM_UNIXTIME(up_created_time)) >= '$date' AND DATE(FROM_UNIXTIME(up_created_time)) <= '$date_max' GROUP BY day ORDER BY day DESC");
+		if ($result->rowCount() == 0)
 		{
 			$this->send_output("Ingen registrerte de siste $dager dagene..");
 		}
 		else
 		{
 			$this->send_output("Antall registrasjoner siste $dager dagene:");
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$ant = game::format_number($row['ant']);
 				$this->send_output("%b{$row['day']}%b: {$ant}");
@@ -319,12 +321,12 @@ abstract class irc_info
 			$this->send_output("%bBydel:%b Informasjon om %u{$bydel['name']}%u:");
 			
 			// finn ut hvor mange som bor i denne bydelen
-			$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_b_id = {$bydel['id']}");
-			$this->send_output("%bBosettere:%b %u".game::format_number(mysql_result($result, 0))."%u spillere");
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_b_id = {$bydel['id']}");
+			$this->send_output("%bBosettere:%b %u".game::format_number($result->fetchColumn(0))."%u spillere");
 			
 			// antall biler
-			$result = ess::$b->db->query("SELECT COUNT(users_gta.id) FROM users_gta LEFT JOIN users_players ON up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_id = ug_up_id WHERE users_gta.b_id = {$bydel['id']} GROUP BY users_gta.b_id");
-			$this->send_output("%bBiler:%b %u".game::format_number(mysql_result($result, 0))."%u biler befinner seg i denne bydelen");
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(users_gta.id) FROM users_gta LEFT JOIN users_players ON up_access_level != 0 AND up_access_level < {$_game['access_noplay']} AND up_id = ug_up_id WHERE users_gta.b_id = {$bydel['id']} GROUP BY users_gta.b_id");
+			$this->send_output("%bBiler:%b %u".game::format_number($result->fetchColumn(0))."%u biler befinner seg i denne bydelen");
 		}
 	}
 	
@@ -496,8 +498,8 @@ abstract class irc_info
 			}
 			
 			// hvor mange?
-			$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players WHERE $find");
-			$ant = mysql_result($result, 0, 0);
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE $find");
+			$ant = $result->fetchColumn(0);
 			
 			if ($ant == 0)
 			{
@@ -517,9 +519,9 @@ abstract class irc_info
 					$orderby = "RAND()";
 				}
 				
-				$result = ess::$b->db->query("SELECT up_id, up_name FROM users_players WHERE $find ORDER BY $orderby LIMIT 5");
+				$result = \Kofradia\DB::get()->query("SELECT up_id, up_name FROM users_players WHERE $find ORDER BY $orderby LIMIT 5");
 				$i = 0;
-				while ($row = mysql_fetch_assoc($result))
+				while ($row = $result->fetch())
 				{
 					$i++;
 					$this->send_output("%b$i:%b (#{$row['up_id']}) {$row['up_name']} - {$__server['absolute_path']}{$__server['relative_path']}/p/".rawurlencode($row['up_name'])."/".$row['up_id']);
@@ -559,9 +561,9 @@ abstract class irc_info
 				$time_week_start = $date->format("U");
 				
 				// hent stats
-				$result = ess::$b->db->query("SELECT SUM(IF(uhi_secs_hour >= $time_today, uhi_hits, 0)) AS hits_today, SUM(IF(uhi_secs_hour >= $time_week_start, uhi_hits, 0)) AS hits_week FROM users_hits WHERE uhi_up_id = {$row['up_id']}");
+				$result = \Kofradia\DB::get()->query("SELECT SUM(IF(uhi_secs_hour >= $time_today, uhi_hits, 0)) AS hits_today, SUM(IF(uhi_secs_hour >= $time_week_start, uhi_hits, 0)) AS hits_week FROM users_hits WHERE uhi_up_id = {$row['up_id']}");
 				
-				$stats = mysql_fetch_assoc($result);
+				$stats = $result->fetch();
 				
 				// vis stats
 				$this->send_output("Statistikk for %b{$row['up_name']}%b:");
@@ -596,7 +598,7 @@ abstract class irc_info
 		$online_min = 15;
 		
 		// hent nøkkeltall
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 		SELECT COUNT(up_id) FROM users_players WHERE up_access_level < {$_game['access_noplay']}
 		UNION ALL
 		SELECT SUM(up_cash) FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']}
@@ -607,12 +609,13 @@ abstract class irc_info
 		UNION ALL
 		SELECT COUNT(up_id) FROM users_players WHERE up_last_online >= ".(time()-$online_min*60));
 		
-		$players = game::format_number(mysql_result($result, 0));
-		$cash = game::format_cash(mysql_result($result, 1));
-		$bank = game::format_cash(mysql_result($result, 2));
-		$deaths = game::format_number(mysql_result($result, 3));
-		$living = game::format_number(mysql_result($result, 0)-mysql_result($result, 3));
-		$online = game::format_number(mysql_result($result, 4));
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$players = game::format_number($row[0]);
+		$cash = game::format_cash($row[1]);
+		$bank = game::format_cash($row[2]);
+		$deaths = game::format_number($row[3]);
+		$living = game::format_number($row[0]-$row[3]);
+		$online = game::format_number($row[4]);
 		$this->send_output("%bStatistikk:%b");
 		$this->send_output("Antall spillere: %u$players%u (%u$living%u lever)");
 		$this->send_output("Totalt penger på hånda: %u$cash%u");
@@ -625,11 +628,11 @@ abstract class irc_info
 	{
 		global $_game;
 		
-		$result = ess::$b->db->query("SELECT COUNT(up_id) AS tot, COUNT(IF(up_access_level != 0, 1, NULL)) AS living FROM users_players WHERE up_access_level < {$_game['access_noplay']}");
-		$row = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) AS tot, COUNT(IF(up_access_level != 0, 1, NULL)) AS living FROM users_players WHERE up_access_level < {$_game['access_noplay']}");
+		$row = $result->fetch();
 		
-		$result = ess::$b->db->query("SELECT COUNT(up_id) FROM users_players");
-		$ant = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players");
+		$ant = $result->fetchColumn(0);
 		
 		$this->send_output("%bAntall spillere:%b %u".game::format_number($row['living'])."%u av ".game::format_number($row['tot'])." lever (altså %u".game::format_number($row['tot']-$row['living'])."%u døde) (totalt %u".game::format_number($ant)."%u med nostats)");
 	}
@@ -640,31 +643,31 @@ abstract class irc_info
 		global $_game;
 		$cash = array();
 		
-		$result = ess::$b->db->query("SELECT SUM(up_cash) + SUM(up_bank) FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']}");
-		$current = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT SUM(up_cash) + SUM(up_bank) FROM users_players WHERE up_access_level != 0 AND up_access_level < {$_game['access_noplay']}");
+		$current = $result->fetchColumn(0);
 		$cash[] = $current;
 		$this->send_output("%bPenger i spillet%b: " . game::format_cash($current));
 		
-		$result = ess::$b->db->query("SELECT SUM(poker_cash * IF(poker_challenger_up_id=0,1,2)) FROM poker WHERE poker_state <= 3");
-		$current = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT SUM(poker_cash * IF(poker_challenger_up_id=0,1,2)) FROM poker WHERE poker_state <= 3");
+		$current = $result->fetchColumn(0);
 		$cash[] = $current;
 		$this->send_output("%bPenger i pokeren%b: " . game::format_cash($current));
 		
-		$result = ess::$b->db->query("SELECT SUM(ff_bank) FROM ff");
-		$current = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT SUM(ff_bank) FROM ff");
+		$current = $result->fetchColumn(0);
 		$cash[] = $current;
 		$this->send_output("%bPenger i FF%b: " . game::format_cash($current));
 		
 		// totalt
-		$result = ess::$b->db->query("SELECT ".implode(" + ", $cash));
-		$this->send_output("%bTotalt%b: " . game::format_cash(mysql_result($result, 0)));
+		$result = \Kofradia\DB::get()->query("SELECT ".implode(" + ", $cash));
+		$this->send_output("%bTotalt%b: " . game::format_cash($result->fetchColumn(0)));
 	}
 	
 	/** Hent antall brukere med nummer registrert */
 	public function c_tlf_reg()
 	{
-		$result = ess::$b->db->query("SELECT COUNT(*) FROM users WHERE u_phone IS NOT NULL");
-		$this->send_output("Antall brukere med nummmer registrert: %u".intval(mysql_result($result, 0))."%u");
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM users WHERE u_phone IS NOT NULL");
+		$this->send_output("Antall brukere med nummmer registrert: %u".intval($result->fetchColumn(0))."%u");
 	}
 	
 	/** Tell antall rader i en tabell */
@@ -672,9 +675,9 @@ abstract class irc_info
 	{
 		$find = $this->cmd_x[1];
 		
-		$result = ess::$b->db->query("SHOW TABLES");
+		$result = \Kofradia\DB::get()->exec("SHOW TABLES");
 		$tables = array();
-		while ($row = mysql_fetch_row($result)) $tables[] = $row[0];
+		while ($row = $result->fetch(\PDO::FETCH_NUM)) $tables[] = $row[0];
 		
 		#$this->send_output("Totalt er det %u".count($tables)."%u tabeller i MySQL databasen..");
 		
@@ -682,9 +685,9 @@ abstract class irc_info
 		{
 			$table = array_search($find, $tables);
 			$table = $tables[$table];
-			$result = ess::$b->db->query("SELECT COUNT(*) FROM `".mysql_real_escape_string($table)."`");
+			$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM `".str_replace("`", "``", $table)."`");
 			
-			$num = mysql_result($result, 0);
+			$num = $result->fetchColumn(0);
 			
 			$this->send_output("Tabellen %u$table%u inneholder %u".game::format_number($num)."%u rader..");
 		}
@@ -697,8 +700,8 @@ abstract class irc_info
 	/** Tell antall tabeller i databasen */
 	public function c_count_tables()
 	{
-		$result = ess::$b->db->query("SHOW TABLES");
-		$this->send_output("Totalt finnes det %u".mysql_num_rows($result)."%u tabeller i databasen.");
+		$result = \Kofradia\DB::get()->exec("SHOW TABLES");
+		$this->send_output("Totalt finnes det %u".$result->rowCount()."%u tabeller i databasen.");
 	}
 	
 	/** Tell antall rader i databasen */
@@ -706,13 +709,13 @@ abstract class irc_info
 	{
 		$find = $this->cmd_x[1];
 		
-		$result = ess::$b->db->query("SHOW TABLES");
+		$result = \Kofradia\DB::get()->exec("SHOW TABLES");
 		$rows = 0;
 		$i = 0;
-		while ($row = mysql_fetch_row($result))
+		while ($row = $result->fetch(\PDO::FETCH_NUM))
 		{
-			$sresult = ess::$b->db->query("SELECT COUNT(*) FROM `".mysql_real_escape_string($row[0])."`");
-			$rows += mysql_result($sresult, 0);
+			$sresult = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM `".str_replace("`", "``", $row[0])."`");
+			$rows += $sresult->fetchColumn(0);
 			$i++;
 		}
 		
@@ -730,8 +733,8 @@ abstract class irc_info
 		
 		else
 		{
-			$result = ess::$b->db->query("SELECT up_id, u_phone, up_name FROM users, users_players WHERE up_name = ".ess::$b->db->quote($player)." AND up_u_id = u_id LIMIT 1");
-			if ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT up_id, u_phone, up_name FROM users, users_players WHERE up_name = ".\Kofradia\DB::quote($player)." AND up_u_id = u_id LIMIT 1");
+			if ($row = $result->fetch())
 			{
 				if (empty($row['u_phone']))
 				{
@@ -769,9 +772,9 @@ abstract class irc_info
 				$time_today = $date->format("U");
 				
 				// hent stats
-				$result = ess::$b->db->query("SELECT SUM(IF(uhi_secs_hour >= $time_today, uhi_hits, 0)) AS hits_today FROM users_hits WHERE uhi_up_id = {$row['up_id']}");
+				$result = \Kofradia\DB::get()->query("SELECT SUM(IF(uhi_secs_hour >= $time_today, uhi_hits, 0)) AS hits_today FROM users_hits WHERE uhi_up_id = {$row['up_id']}");
 				
-				$this->send_output("Visninger: ".game::format_number(mysql_result($result, 0)));
+				$this->send_output("Visninger: ".game::format_number($result->fetchColumn(0)));
 			}
 			
 			else
@@ -828,8 +831,8 @@ abstract class irc_info
 		global $_game;
 		
 		// antall biler totalt
-		$result = ess::$b->db->query("SELECT COUNT(users_gta.id) FROM users_gta, users_players WHERE up_id = ug_up_id AND up_access_level != 0 AND up_access_level < {$_game['access_noplay']}");
-		$this->send_output("%bBiler totalt%b: %u".game::format_number(mysql_result($result, 0))."%u");
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(users_gta.id) FROM users_gta, users_players WHERE up_id = ug_up_id AND up_access_level != 0 AND up_access_level < {$_game['access_noplay']}");
+		$this->send_output("%bBiler totalt%b: %u".game::format_number($result->fetchColumn(0))."%u");
 	}
 	
 	/** Oppdater innstillinger som er cachet på nytt fra databasen */
@@ -881,8 +884,8 @@ abstract class irc_info
 		
 		else
 		{
-			$result = ess::$b->db->query("SELECT up_id, u_birth, up_name FROM users, users_players WHERE up_name = ".ess::$b->db->quote($player)." AND up_u_id = u_id LIMIT 1");
-			if ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT up_id, u_birth, up_name FROM users, users_players WHERE up_name = ".\Kofradia\DB::quote($player)." AND up_u_id = u_id LIMIT 1");
+			if ($row = $result->fetch())
 			{
 				if (empty($row['u_birth']))
 				{
@@ -931,8 +934,8 @@ abstract class irc_info
 		
 		else
 		{
-			$result = ess::$b->db->query("SELECT up_id, u_birth, up_name FROM users, users_players WHERE up_name = ".ess::$b->db->quote($player)." AND up_u_id = u_id LIMIT 1");
-			if ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT up_id, u_birth, up_name FROM users, users_players WHERE up_name = ".\Kofradia\DB::quote($player)." AND up_u_id = u_id LIMIT 1");
+			if ($row = $result->fetch())
 			{
 				if (empty($row['birth']))
 				{
@@ -977,8 +980,8 @@ abstract class irc_info
 		
 		else
 		{
-			$result = ess::$b->db->query("SELECT up_id, u_online_ip, up_name FROM users, users_players WHERE up_name = ".ess::$b->db->quote($player)." AND up_u_id = u_id LIMIT 1");
-			if ($row = mysql_fetch_assoc($result))
+			$result = \Kofradia\DB::get()->query("SELECT up_id, u_online_ip, up_name FROM users, users_players WHERE up_name = ".\Kofradia\DB::quote($player)." AND up_u_id = u_id LIMIT 1");
+			if ($row = $result->fetch())
 			{
 				if ($row['up_online_ip'] == $info[1])
 				{
@@ -1001,9 +1004,9 @@ abstract class irc_info
 	public function c_qps()
 	{
 		// finn antall spørringer
-		$result = ess::$b->db->query("SHOW GLOBAL STATUS");
+		$result = \Kofradia\DB::get()->exec("SHOW GLOBAL STATUS");
 		$vars = array();
-		while ($row = mysql_fetch_row($result))
+		while ($row = $result->fetch(\PDO::FETCH_NUM))
 		{
 			$vars[$row[0]] = $row[1];
 		}
@@ -1025,8 +1028,8 @@ abstract class irc_info
 		
 		if (isset($this->cmd_x[1]) && ($this->cmd_x[1] == "reset" || $this->cmd_x[1] == "resetd"))
 		{
-			ess::$b->db->query("REPLACE INTO settings SET name = 'qps_int', value = '$q'");
-			ess::$b->db->query("REPLACE INTO settings SET name = 'qps_time', value = '".microtime(true)."'");
+			\Kofradia\DB::get()->exec("REPLACE INTO settings SET name = 'qps_int', value = '$q'");
+			\Kofradia\DB::get()->exec("REPLACE INTO settings SET name = 'qps_time', value = '".microtime(true)."'");
 			require PATH_APP . "/scripts/update_db_settings.php";
 			if ($this->cmd_x[1] != "resetd") $this->send_output("QPS er nå nullstilt");
 		}
@@ -1035,10 +1038,11 @@ abstract class irc_info
 	/** Finn ut antall spilleren som har blitt deaktivert i et bestemt tidsrom */
 	public function c_deactivated_after()
 	{
-		$result = ess::$b->db->query("SELECT COUNT(up_id), FROM_UNIXTIME(MIN(up_deactivated_time)), FROM_UNIXTIME(MAX(up_deactivated_time)) FROM users_players WHERE up_deactivated_time >= UNIX_TIMESTAMP(".ess::$b->db->quote($this->cmd_x[1]).")");
-		$ant = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id), FROM_UNIXTIME(MIN(up_deactivated_time)), FROM_UNIXTIME(MAX(up_deactivated_time)) FROM users_players WHERE up_deactivated_time >= UNIX_TIMESTAMP(".\Kofradia\DB::quote($this->cmd_x[1]).")");
+		$row = $result->fetch(\PDO::FETCH_NUM);
+		$ant = $row[0];
 		if ($ant == 0) $this->send_output("Ingen ble funnet!");
-		else $this->send_output("Antall deaktivert i tidsrommet: ".mysql_result($result, 0)." (første: ".mysql_result($result, 0, 1)."; siste: ".mysql_result($result, 0, 2).")");
+		else $this->send_output("Antall deaktivert i tidsrommet: ".$result->fetchColumn(0)." (første: ".$row[1]."; siste: ".$row[2].")");
 	}
 	
 	/** Hent status */
@@ -1097,9 +1101,9 @@ abstract class irc_info
 		
 		
 		// hent antall brukere pålogget
-		$result = ess::$b->db->query("SELECT COUNT(IF(up_last_online > ".(time()-1800).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-900).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-600).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-300).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-60).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-30).", 1, NULL)) FROM users_players");
+		$result = \Kofradia\DB::get()->query("SELECT COUNT(IF(up_last_online > ".(time()-1800).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-900).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-600).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-300).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-60).", 1, NULL)), COUNT(IF(up_last_online > ".(time()-30).", 1, NULL)) FROM users_players");
 		
-		$row = mysql_fetch_row($result);
+		$row = $result->fetch(\PDO::FETCH_NUM);
 		
 		$ret = "Status: Antall pålogget siste sekunder: 1800={$row[0]}, 900={$row[1]}, 600={$row[2]}, 300={$row[3]}, 60={$row[4]}, 30={$row[5]}. CPU: $load. Visninger/sekund: {$status[0]}. Nå: {$req}. Minnebruk: {$mem_percent}";
 		
@@ -1116,11 +1120,11 @@ abstract class irc_info
 			if ($ant < 1 || $ant > 20) $ant = 5;
 		}
 		
-		$result = ess::$b->db->query("SELECT u1.up_id, u1.up_name, u1.up_created_time, u2.up_id AS r_id, u2.up_name AS r_up_name FROM users_players AS u1, users_players AS u2 WHERE u1.up_recruiter_up_id = u2.up_id ORDER BY u1.up_created_time DESC LIMIT $ant");
+		$result = \Kofradia\DB::get()->query("SELECT u1.up_id, u1.up_name, u1.up_created_time, u2.up_id AS r_id, u2.up_name AS r_up_name FROM users_players AS u1, users_players AS u2 WHERE u1.up_recruiter_up_id = u2.up_id ORDER BY u1.up_created_time DESC LIMIT $ant");
 		
-		$this->send_output(mysql_num_rows($result)." siste vervede spillere:");
+		$this->send_output($result->rowCount()." siste vervede spillere:");
 		
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			$this->send_output(ess::$b->date->get($row['up_created_time'])->format(date::FORMAT_SEC)." - %u{$row['up_name']}%u (av %u{$row['r_up_name']}%u) - http://smafia.no/p|".urlencode($row['up_name']));
 		}
@@ -1131,10 +1135,10 @@ abstract class irc_info
 	{
 		global $_game;
 		
-		$result = ess::$b->db->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users_players WHERE up_access_level != 0 AND up_access_level != 1 ORDER BY up_last_online DESC");
+		$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level, up_last_online FROM users_players WHERE up_access_level != 0 AND up_access_level != 1 ORDER BY up_last_online DESC");
 		
 		$this->send_output("Sist pålogget for Crewet:");
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = $result->fetch())
 		{
 			if ($row['up_name'] == "SYSTEM" || $row['up_name'] == "beta") continue;
 			

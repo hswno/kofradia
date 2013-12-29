@@ -86,21 +86,21 @@ class page_etterlyst extends pages_player
 			// sett opp liste over alle spillerene
 			$up_ids = array();
 			$list = array();
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				$up_ids[] = $row['hl_up_id'];
 				$list[] = $row;
 			}
 			
 			// hent alle FF hvor spilleren var medlem
-			$result_ff = ess::$b->db->query("
+			$result_ff = \Kofradia\DB::get()->query("
 				SELECT ffm_up_id, ffm_priority, ff_id, ff_name, ff_type
 				FROM ff_members
 					JOIN ff ON ff_id = ffm_ff_id AND ff_inactive = 0 AND ff_is_crew = 0
 				WHERE ffm_up_id IN (".implode(",", array_unique($up_ids)).") AND ffm_status = ".ff_member::STATUS_MEMBER."
 				ORDER BY ff_name");
 			$ff_list = array();
-			while ($row = mysql_fetch_assoc($result_ff))
+			while ($row = $result_ff->fetch())
 			{
 				$pos = ucfirst(ff::$types[$row['ff_type']]['priority'][$row['ffm_priority']]);
 				$text = '<a href="'.ess::$s['relative_path'].'/ff/?ff_id='.$row['ff_id'].'" title="'.htmlspecialchars($pos).'">'.htmlspecialchars($row['ff_name']).'</a>';
@@ -187,7 +187,7 @@ class page_etterlyst extends pages_player
 				<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 					<tr class="box_handle'.(++$i % 2 == 0 ? ' color' : '').'">
@@ -234,11 +234,11 @@ class page_etterlyst extends pages_player
 			}
 			else
 			{
-				$search = "up_name = ".ess::$b->db->quote($_POST['up_name'])." ORDER BY up_access_level = 0, up_last_online DESC LIMIT 1";
+				$search = "up_name = ".\Kofradia\DB::quote($_POST['up_name'])." ORDER BY up_access_level = 0, up_last_online DESC LIMIT 1";
 			}
 			
-			$result = ess::$b->db->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE $search");
-			$player = mysql_fetch_assoc($result);
+			$result = \Kofradia\DB::get()->query("SELECT up_id, up_name, up_access_level FROM users_players WHERE $search");
+			$player = $result->fetch();
 			
 			// fant ikke?
 			if (!$player)
@@ -284,11 +284,11 @@ class page_etterlyst extends pages_player
 		if ($player)
 		{
 			// hent eventuelle aktive dusører på spilleren
-			$result = ess::$b->db->query("
+			$result = \Kofradia\DB::get()->query("
 				SELECT SUM(hl_amount_valid) AS sum_hl_amount_valid
 				FROM hitlist
 				WHERE hl_up_id = {$player['up_id']}");
-			$a = mysql_result($result, 0);
+			$a = $result->fetchColumn(0);
 			
 			// må vi vente?
 			$wait = false;
@@ -315,11 +315,11 @@ class page_etterlyst extends pages_player
 				
 				else
 				{
-					ess::$b->db->begin();
+					\Kofradia\DB::get()->beginTransaction();
 					
 					// forsøk å trekk fra pengene
-					ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = ".$this->up->id." AND up_cash >= $amount");
-					if (ess::$b->db->affected_rows() == 0)
+					$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $amount WHERE up_id = ".$this->up->id." AND up_cash >= $amount");
+					if ($a == 0)
 					{
 						ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
 					}
@@ -327,8 +327,8 @@ class page_etterlyst extends pages_player
 					else
 					{
 						// vellykket
-						ess::$b->db->query("INSERT INTO hitlist SET hl_up_id = {$player['up_id']}, hl_by_up_id = ".$this->up->id.", hl_time = ".time().", hl_amount = $amount, hl_amount_valid = $amount");
-						ess::$b->db->commit();
+						\Kofradia\DB::get()->exec("INSERT INTO hitlist SET hl_up_id = {$player['up_id']}, hl_by_up_id = ".$this->up->id.", hl_time = ".time().", hl_amount = $amount, hl_amount_valid = $amount");
+						\Kofradia\DB::get()->commit();
 						
 						// legg til i loggen til spilleren
 						player::add_log_static("etterlyst_add", NULL, $amount, $player['up_id']);
@@ -342,7 +342,7 @@ class page_etterlyst extends pages_player
 						redirect::handle();
 					}
 					
-					ess::$b->db->commit();
+					\Kofradia\DB::get()->commit();
 				}
 			}
 			
@@ -397,13 +397,13 @@ class page_etterlyst extends pages_player
 		
 		// hent informasjon om spilleren
 		$expire = etterlyst::get_freeze_expire();
-		$result = ess::$b->db->query("
+		$result = \Kofradia\DB::get()->query("
 			SELECT SUM(hl_amount_valid) AS sum_hl_amount_valid, SUM(IF(hl_time < $expire, hl_amount_valid, 0)) AS sum_can_remove
 			FROM hitlist
 			WHERE hl_up_id = $up_id
 			GROUP BY hl_up_id");
 		
-		$hl = mysql_fetch_assoc($result);
+		$hl = $result->fetch();
 		if (!$hl)
 		{
 			ess::$b->page->add_message('Spilleren <user id="'.$hl['hl_up_id'].'" /> har ingen dusør på seg.', "error");
@@ -434,37 +434,39 @@ class page_etterlyst extends pages_player
 			{
 				// beregn kostnad
 				$m = $up_id == $this->up->id ? 3 : 2;
-				$result = ess::$b->db->query("SELECT $amount * $m, $amount > {$hl['sum_can_remove']}, $amount * $m > ".$this->up->data['up_cash']);
-				$price = mysql_result($result, 0);
+				$result = \Kofradia\DB::get()->query("SELECT $amount * $m, $amount > {$hl['sum_can_remove']}, $amount * $m > ".$this->up->data['up_cash']);
+				$row = $result->fetch(\PDO::FETCH_NUM);
+				$price = $row[0];
 				
 				// for høyt beløp?
-				if (mysql_result($result, 0, 1))
+				if ($row[1])
 				{
 					ess::$b->page->add_message("Beløpet var for høyt.", "error");
 				}
 				
 				// har ikke nok penger?
-				elseif (mysql_result($result, 0, 2))
+				elseif ($row[2])
 				{
 					ess::$b->page->add_message("Du har ikke nok penger på hånda. Du må ha ".game::format_cash($price)." på hånda for å kunne betale ut ".game::format_cash($amount).".", "error");
 				}
 				
 				else
 				{
-					ess::$b->db->begin();
+					\Kofradia\DB::get()->beginTransaction();
 					
 					// forsøk å trekk fra pengene
-					ess::$b->db->query("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = ".$this->up->id." AND up_cash >= $price");
-					if (ess::$b->db->affected_rows() == 0)
+					$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - $price WHERE up_id = ".$this->up->id." AND up_cash >= $price");
+					if ($a == 0)
 					{
 						ess::$b->page->add_message("Du har ikke nok penger på hånda. Du må ha ".game::format_cash($price)." på hånda for å kunne betale ut ".game::format_cash($amount).".", "error");
+						\Kofradia\DB::get()->commit();
 					}
 					
 					else
 					{
 						// forsøk å trekk fra pengene fra hitlist
-						ess::$b->db->query("SET @t := $amount");
-						ess::$b->db->query("
+						\Kofradia\DB::get()->exec("SET @t := $amount");
+						\Kofradia\DB::get()->exec("
 							UPDATE hitlist h, (
 								SELECT
 									hl_id,
@@ -476,20 +478,20 @@ class page_etterlyst extends pages_player
 							) r
 							SET h.hl_amount_valid = h.hl_amount_valid - to_remove
 							WHERE h.hl_id = r.hl_id");
-						ess::$b->db->query("DELETE FROM hitlist WHERE hl_amount_valid = 0");
+						\Kofradia\DB::get()->exec("DELETE FROM hitlist WHERE hl_amount_valid = 0");
 						
 						// har vi noe til overs?
-						$result = ess::$b->db->query("SELECT @t");
-						$a = mysql_result($result, 0);
+						$result = \Kofradia\DB::get()->query("SELECT @t");
+						$a = $result->fetchColumn(0);
 						if ($a > 0)
 						{
-							ess::$b->db->rollback();
+							\Kofradia\DB::get()->rollback();
 							ess::$b->page->add_message("Beløpet var for høyt.", "error");
 						}
 						
 						else
 						{
-							ess::$b->db->commit();
+							\Kofradia\DB::get()->commit();
 							
 							putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." kjøpte ut dusør for UP_ID=$up_id på ".game::format_cash($amount).'. Betalte '.game::format_cash($price).'.');
 							
@@ -590,7 +592,7 @@ class page_etterlyst extends pages_player
 			<tbody>';
 			
 			$i = 0;
-			while ($row = mysql_fetch_assoc($result))
+			while ($row = $result->fetch())
 			{
 				echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
@@ -631,8 +633,8 @@ class page_etterlyst extends pages_player
 		$hl_id = (int) $_POST['hl_id'];
 		
 		// hent informasjon
-		$result = ess::$b->db->query("SELECT hl_up_id, hl_time, hl_amount, hl_amount_valid FROM hitlist WHERE hl_id = $hl_id AND hl_by_up_id = ".$this->up->id." AND hl_amount_valid > 0");
-		$hl = mysql_fetch_assoc($result);
+		$result = \Kofradia\DB::get()->query("SELECT hl_up_id, hl_time, hl_amount, hl_amount_valid FROM hitlist WHERE hl_id = $hl_id AND hl_by_up_id = ".$this->up->id." AND hl_amount_valid > 0");
+		$hl = $result->fetch();
 		
 		if (!$hl)
 		{
@@ -640,24 +642,24 @@ class page_etterlyst extends pages_player
 			redirect::handle();
 		}
 		
-		ess::$b->db->begin();
+		\Kofradia\DB::get()->beginTransaction();
 		
 		// slett oppføringen
-		ess::$b->db->query("DELETE FROM hitlist WHERE hl_id = $hl_id AND hl_amount_valid = {$hl['hl_amount_valid']}");
-		if (ess::$b->db->affected_rows() == 0)
+		$a = \Kofradia\DB::get()->exec("DELETE FROM hitlist WHERE hl_id = $hl_id AND hl_amount_valid = {$hl['hl_amount_valid']}");
+		if ($a == 0)
 		{
 			ess::$b->page->add_message("Noen kom deg i forkjøpet og kjøpte ut hele eller deler av dusøren.", "error");
-			ess::$b->db->commit();
+			\Kofradia\DB::get()->commit();
 			redirect::handle();
 		}
 		
 		// hvor mye penger skal vi få?
-		$result = ess::$b->db->query("SELECT ROUND({$hl['hl_amount_valid']}/2)");
-		$amount = mysql_result($result, 0);
+		$result = \Kofradia\DB::get()->query("SELECT ROUND({$hl['hl_amount_valid']}/2)");
+		$amount = $result->fetchColumn(0);
 		
 		// gi penger
-		ess::$b->db->query("UPDATE users_players SET up_cash = up_cash + $amount WHERE up_id = ".$this->up->id);
-		ess::$b->db->commit();
+		\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + $amount WHERE up_id = ".$this->up->id);
+		\Kofradia\DB::get()->commit();
 		
 		putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." trakk tilbake dusør for UP_ID={$hl['hl_up_id']} på ".game::format_cash($hl['hl_amount_valid']).'.');
 		
