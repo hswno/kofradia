@@ -9,7 +9,7 @@ class IssueEvent extends Issue {
 	 */
 	public static function process($data)
 	{
-		return parent::process();
+		return parent::process($data);
 	}
 
 	/**
