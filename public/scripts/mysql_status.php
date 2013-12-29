@@ -1,7 +1,7 @@
 <?php
 
 require "../base.php";
-global $_base;
+access::need("crewet");
 
 $global = isset($_POST['noglobal']) ? "" : " GLOBAL";
 $result = \Kofradia\DB::get()->query("SHOW$global STATUS");
