@@ -151,7 +151,7 @@ class antibot
 		
 		// lås anti-boten
 		\Kofradia\DB::get()->beginTransaction();
-		\Kofradia\DB::get()->exec("SELECT id FROM users_antibot WHERE id = {$this->data['id']} FOR UPDATE");
+		\Kofradia\DB::get()->query("SELECT id FROM users_antibot WHERE id = {$this->data['id']} FOR UPDATE")->closeCursor();
 		
 		// har noen bilder nå?
 		$result = \Kofradia\DB::get()->query("SELECT COUNT(*) FROM users_antibot_validate WHERE antibotid = {$this->data['id']}");
