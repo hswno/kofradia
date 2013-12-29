@@ -45,7 +45,7 @@
 				<div class="col">
 					<div class="section">
 						<h2>PayPal</h2>
-						<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+						<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 							<input type="hidden" name="cmd" value="_donations" />
 							<input type="hidden" name="business" value="henrist@henrist.net" />
 							<input type="hidden" name="item_name" value="Donasjon til Kofradia" />
