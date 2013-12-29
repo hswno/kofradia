@@ -71,6 +71,8 @@ class sysreport
 			}
 			else
 			{
+				if (!isset($row['file'])) $row['file'] = null;
+				if (!isset($row['line'])) $row['line'] = null;
 				if ($html)
 				{
 					$row['file'] = htmlspecialchars($row['file']);
@@ -214,7 +216,7 @@ _COOKIE:
 
 _SESSION:
 
-'.$_SESSION : '');
+'.print_r($_SESSION, true) : '');
 		
 		// deadlock? hent innodb status
 		if (is_a($exception, "SQLQueryException") && $exception->getSQLErrorNum() == 1205)
