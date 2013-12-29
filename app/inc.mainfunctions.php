@@ -438,10 +438,8 @@ function pagenumbers($page_1, $page_x, $pages, $page)
  */
 function force_https($mode = true)
 {
-	if (defined("FORCE_SSL_ALL") && FORCE_SSL_ALL === true) return;
-
 	// hvis login-systemet krever ssl kan vi ikke fravike det
-	if (defined("LOGIN_FORCE_SSL")) $mode = true;
+	if (defined("LOGIN_FORCE_SSL") || defined("FORCE_HTTPS_ALWAYS")) $mode = true;
 	
 	// skal være https - er ikke
 	if ($mode && !HTTPS)
