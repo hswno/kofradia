@@ -333,7 +333,15 @@ class hs_irc
 							
 							// hent meldinger
 							$network = $this->settings['name'] == "SMAFIA_BETA" ? '' : " AND li_network = ".\Kofradia\DB::quote($this->settings['name']);
-							$result = \Kofradia\DB::get()->query("SELECT li_network, li_channel, li_time, li_message FROM log_irc WHERE 1$network ORDER BY li_time LIMIT $limit", false);
+							
+							try {
+								$result = \Kofradia\DB::get()->query("SELECT li_network, li_channel, li_time, li_message FROM log_irc WHERE 1$network ORDER BY li_time LIMIT $limit");
+							}
+							catch (Exception $e)
+							{
+								$this->debug(NULL, "Query failed: ".$e->getMessage()."\n");
+								break;
+							}
 							
 							if (!$result)
 							{
