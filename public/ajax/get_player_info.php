@@ -134,7 +134,7 @@ if (isset($_POST['html']))
 		if ($is_block == 1)
 		{
 			echo '
-				<li><a href="'.$__server['relative_path'].'/kontakter/delete/'.$player['up_id'].'?sid='.login::$info['ses_id'].'">Fjern fra blokkering</a></li>';
+				<li><a href="'.$__server['relative_path'].'/kontakter/delete/'.$player['up_id'].'?sid='.login::$info['ses_id'].'&amp;type=block">Fjern fra blokkering</a></li>';
 		}
 		else
 		{
