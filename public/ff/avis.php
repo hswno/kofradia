@@ -26,7 +26,7 @@ if (isset($_GET['load_logo']))
 			error("Fant ikke utgivelsen.");
 		}
 		
-		$data = $result->fetchColumn(0);
+		$data = $ffn['ffn_logo'];
 	}
 	
 	// har ikke logo?
