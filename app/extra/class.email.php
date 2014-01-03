@@ -86,7 +86,7 @@ class email
 			break;
 			
 			case "quoted-printable":
-				$length = mb_strlen($data);
+				$length = strlen($data);
 				$result = '';
 				$linelength = 0;
 				
