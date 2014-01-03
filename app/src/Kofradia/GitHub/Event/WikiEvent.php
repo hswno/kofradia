@@ -12,6 +12,7 @@ class WikiEvent extends Event {
 	public static function process($data)
 	{
 		$event = parent::process($data);
+		$event->sender_name = $data['sender']['login'];
 		
 		foreach ($data['pages'] as $page)
 		{
