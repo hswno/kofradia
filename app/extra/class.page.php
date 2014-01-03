@@ -177,12 +177,11 @@ class page
 					$newlist[] = $new;
 				}
 
-				$db = '<br />'.htmlspecialchars(print_r($newlist));
+				$db = '<br />DATABASE<br />'.htmlspecialchars(print_r($newlist, true));
 			}
 
 			echo '
-<a href="javascript:void(0)" onclick="this.nextSibling.style.display=\'block\'">Admin info..</a>
-<div style="display: none"><br />
+<a href="javascript:void(0)" onclick="this.nextSibling.style.display=\'block\'">Debug info</a><div style="display: none"><br />
 	<pre>
 GET<br />'.htmlspecialchars(print_r($_GET, true)).'<br />
 POST<br />'.htmlspecialchars(print_r($_POST, true)).$db.'

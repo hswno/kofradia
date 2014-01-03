@@ -41,6 +41,11 @@ class Profiler {
 	 */
 	public $time;
 
+	public function __construct()
+	{
+		$this->debug = isset($_COOKIE['show_queries_info']);
+	}
+
 	/**
 	 * End profiler
 	 *
@@ -61,9 +66,50 @@ class Profiler {
 				"time_since_last_statement" => round($timeSinceLast, 6) * 1000,
 				"statement_time"            => round($duration, 6) * 100,
 				"statement_info"            => "TODO",
-				"statement"                 => $statement
+				"statement"                 => $statement,
+				"backtrace"                 => $this->getBacktrace()
 			);
 		}
+	}
+
+	/**
+	 * Generate string for backtrace in debugging
+	 *
+	 * @return string
+	 */
+	protected function getBacktrace()
+	{
+		$backtrace = debug_backtrace(0);
+		array_shift($backtrace);
+		array_shift($backtrace);
+
+		$ret = array();
+		foreach ($backtrace as $row)
+		{
+			$msg = '';
+			if (isset($row['class']))
+			{
+				$msg .= sprintf("%s%s%s",
+					$row['class'],
+					$row['type'],
+					$row['function']);
+			}
+			else
+			{
+				$msg .= $row['function'];
+			}
+
+			$msg = str_pad($msg, 30, " ");
+
+			if (isset($row['file']))
+			{
+				$msg .= sprintf(" (%s:%s)", $row['file'], $row['line']);
+			}
+
+			$ret[] = $msg;
+		}
+
+		return $ret;
 	}
 
 	/**
