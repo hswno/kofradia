@@ -20,7 +20,6 @@ RewriteRule ^wiki/(.+)$ https://kofradia.no/crewstuff/wiki/w/$1 [R,L]
 RewriteRule ^trac($|/.*)$ https://kofradia.no/crewstuff/trac$1 [R,L]
 RewriteRule ^felles($|/.*)$ https://kofradia.no/crewstuff/felles$1 [R,L]
 RewriteRule ^soknad/([0-9]+)$ /soknader_vis.php?so_id=$1 [R,L]
-RewriteRule ^autologin/([0-9a-z]+) /autologin.php?h=$1 [L]
 RewriteRule ^gta($|/) /gta.php [L]
 RewriteRule ^node($|/) /node.php [L]
 

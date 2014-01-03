@@ -100,7 +100,7 @@ class page_glemt_passord
 		\Kofradia\DB::get()->exec("UPDATE users SET u_pass_change = 'A;".time().";{$_SERVER['REMOTE_ADDR']}' WHERE u_id = {$row['u_id']}");
 		
 		// generer autologin
-		$hash = autologin::generate($row['u_id'], time()+self::AUTOLOGIN_TIME, null, autologin::TYPE_RESET_PASS);
+		$hash = \Kofradia\Users\Autologin::generate($row['u_id'], time()+self::AUTOLOGIN_TIME, null, \Kofradia\Users\Autologin::TYPE_RESET_PASS);
 		
 		// send e-post
 		$email = new email();
@@ -109,7 +109,7 @@ class page_glemt_passord
 Du har bedt om å nullstille ditt passord på '.ess::$s['path'].' fra IP-en '.$_SERVER['REMOTE_ADDR'].' ('.$_SERVER['HTTP_USER_AGENT'].').
 
 Ved å benytte lenken nedenfor vil passordet på brukeren din bli nullstilt, du blir automatisk logget inn og kan fylle inn ditt nye passord:
-'.ess::$s['spath'].'/autologin/'.$hash.'
+'.\Kofradia\Users\Autologin::generateUrl($hash).'
 
 Hvis du ikke ønsker å nullstille ditt passord kan du se bort fra denne e-posten.
 

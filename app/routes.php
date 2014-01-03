@@ -37,4 +37,8 @@ return array(
 	"kontakter/edit/([0-9]+)"   => "Users\\Contacts@edit",
 	"kontakter/delete"          => "Users\\Contacts@delete_many",
 	"kontakter/delete/([0-9]+)" => "Users\\Contacts@delete",
+
+	// autologin
+	"autologin/([0-9a-z]+)" => "Users\\Autologin@index",
+
 );
