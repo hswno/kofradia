@@ -31,6 +31,8 @@ class page_banken extends pages_player
 	 */
 	protected function page_handle()
 	{
+		redirect::store("/banken", redirect::ROOT);
+		
 		// hent inn bankinfo
 		$this->bank = page_banken_bank::get($this->up->data['up_bank_ff_id']);
 		
