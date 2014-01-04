@@ -33,7 +33,7 @@ class Donations extends \Kofradia\Controller
 		$pagei = new \pagei(\pagei::ACTIVE_GET, "side", \pagei::PER_PAGE, 30);
 		$list = Donation::getDonations($pagei);
 
-		return View::forge("donations/list", array(
+		return View::forgeTwig("donations/list", array(
 			"pagei"     => $pagei,
 			"donations" => $list));
 	}

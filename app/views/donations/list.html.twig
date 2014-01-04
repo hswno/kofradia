@@ -1,0 +1,39 @@
+<!--
+
+// data:
+// \pagei  $pagei
+// array(\Kofradia\Donation, ..)  $donations
+
+-->
+<div class="bg1_c xsmall">
+	<h1 class="bg1">Donasjoner<span class="left"></span><span class="right"></span></h1>
+	<p class="h_left"><a href="donasjon">&laquo; Tilbake</a></p>
+
+	{% if pagei.total > 0 %}
+		<p class="h_right">Side {{ pagei.active }} av {{ pagei.pages }}</p>
+	{% endif %}
+
+	<div class="bg1">
+		<p>Denne siden viser en komplett oversikt over alle som har donert og gitt sin støtte til Kofradia.</p>
+
+		{% if not donations %}
+			<p>Ingen donasjoner er registrert.</p>
+		{% else %}
+
+			<dl class="dd_right">
+				{% for donation in donations %}
+					{% set up_id = donation.getPlayerID() %}
+					<dt>{% if up_id %}<user id="{{ up_id }}" />{% else %}Anonym{% endif %}</dt>
+					<dd>{{ donation.getTime()|date('NOTIME') }}</dd>
+				{% endfor %}
+			</dl>
+		{% endif %}
+
+		<p class="c">Vil du også bidra? Trykk <a href="donasjon">her</a>!</p>
+
+		{% if pagei.pages > 1 %}
+			<p class="c">{{ pagei.pagenumbers() }}</p>
+		{% endif %}
+
+	</div>
+</div>
