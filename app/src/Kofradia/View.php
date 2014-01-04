@@ -2,6 +2,13 @@
 
 class View {
 	/**
+	 * Twig-object
+	 *
+	 * @var Twig_Environment
+	 */
+	protected static $twig;
+
+	/**
 	 * Create a view and get its content
 	 *
 	 * @param string  Name of view
@@ -15,6 +22,39 @@ class View {
 		$view->setData($data);
 
 		return $view->render();
+	}
+
+	/**
+	 * Create a view and get its content (by Twig)
+	 *
+	 * @param string  Name of view
+	 * @param array   Data to pass to the view
+	 * @return \Kofradia\Viev
+	 */
+	public static function forgeTwig($name, $data = array())
+	{
+		return static::getTwig()->render($name.".html.twig", $data);
+	} 
+
+	/**
+	 * Get Twig-instance
+	 *
+	 * @return Twig_Environment
+	 */
+	protected static function getTwig()
+	{
+		if (!static::$twig)
+		{
+			$loader = new \Twig_Loader_Filesystem(PATH_APP.'/views');
+			static::$twig = new \Twig_Environment($loader, array(
+				'cache' => MAIN_SERVER ? PATH_DATA.'/twig-cache' : null,
+				'strict_variables' => true,
+				'autoescape' => false,
+			));
+			static::$twig->addExtension(new \Kofradia\Twig\Date());
+		}
+
+		return static::$twig;
 	}
 
 	/**
