@@ -15,7 +15,7 @@ abstract class Base {
 	{
 		if (!static::$by_number)
 		{
-		/	/ check cache first, then get from DB
+			// check cache first, then get from DB
 			if ($cache = \cache::fetch("ranks-".static::$type))
 			{
 				static::$by_number = $cache;
