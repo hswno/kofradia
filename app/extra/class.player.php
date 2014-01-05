@@ -1,5 +1,7 @@
 <?php
 
+use \Kofradia\Game\Player\Rank;
+
 /**
  * Spillersystemet
  */
@@ -41,6 +43,15 @@ class player
 	
 	/** Rankinformasjon */
 	public $rank;
+
+	/**
+	 * Rank-information
+	 *
+	 * New-style
+	 *
+	 * @var \Kofradia\Game\Player\Rank
+	 */
+	protected $rankNewStyle;
 	
 	/** Bydelsinformasjon */
 	public $bydel;
@@ -2244,5 +2255,21 @@ www.kofradia.no';
 		$this->attacked_ff_update("bleed");
 		
 		return $by_up;
+	}
+
+	/**
+	 * Get rank object
+	 *
+	 * @return \Kofradia\Game\Player\Rank
+	 */
+	public function getRank()
+	{
+		if (!$this->rankNewStyle)
+		{
+			$this->rankNewStyle = new Rank($this->data['up_points'],
+				$this->data['upr_rank_pos'], $this->data['up_access_level']);
+		}
+
+		return $this->rankNewStyle;
 	}
 }

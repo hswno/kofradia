@@ -376,7 +376,7 @@ echo '
 					</dd>
 					
 					<dt>Rank</dt>
-					<dd>'.$player->rank['name'].($player->rank['orig'] ? ' ('.$player->rank['orig'].')' : '').'</dd>
+					<dd>'.$player->getRank()->getName().'</dd>
 					
 					<dt>Prestasjonspoeng</dt>
 					<dd>'.game::format_num($player->data['up_achievements_points']).'</dd>'.($attacks == 0 ? '' : '

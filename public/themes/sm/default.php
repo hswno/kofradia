@@ -153,7 +153,7 @@ class theme_sm_default
 		{
 			echo '
 			<div id="def_ui2">
-				<p>'.login::$user->player->rank['name'].(login::$user->player->rank['orig'] ? ' ('.login::$user->player->rank['orig'].')' : '').'</p>
+				<p>'.login::$user->player->getRank()->getName().'</p>
 				<p><span class="farge">Sted: </span> <span id="status_bydel">'.game::$bydeler[login::$user->player->data['up_b_id']]['name'].'</span></p>
 				<p><span class="farge">Har ute</span> <span id="status_cash">'.game::format_cash(login::$user->player->data['up_cash']).'</span></p>
 				<p><span class="farge">Plassering: </span> nr. <span id="status_rankpos">'.login::$user->player->data['upr_rank_pos'].'</span></p>

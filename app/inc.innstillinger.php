@@ -35,7 +35,7 @@ $_game = array(
 		10 => 'Systembruker',
 		11 => 'Seniormoderator'
 	),
-	"rank_death" => "Cadaveri Eccelenti",
+	"rank_death" => "Cadaveri Eccelenti", // @deprecated - see \Kofradia\Game\Player\Rank
 	
 	// tilgangene - hvilken tilgang representerer hvilket nummer?
 	"access" => array(
