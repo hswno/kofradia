@@ -333,12 +333,6 @@ class page_angrip extends pages_player
 	 */
 	protected function handle_attack()
 	{
-		// kontroller skjema
-		if (MAIN_SERVER && !$this->form->validateHashOrAlert(null, "Angrip spiller: {$this->up_offer->data['up_name']}"))
-		{
-			return;
-		}
-		
 		// har vi ingen kuler?
 		if (login::$user->player->data['up_weapon_bullets'] == 0) return;
 		
@@ -362,6 +356,12 @@ class page_angrip extends pages_player
 		if ($this->up_offer->fengsel_check())
 		{
 			ess::$b->page->add_message('<user id="'.$this->up_offer->id.'" /> er i fengsel og kan ikke angripes nå.', "error");
+			return;
+		}
+		
+		// kontroller skjema
+		if (MAIN_SERVER && !$this->form->validateHashOrAlert(null, "Angrip spiller: {$this->up_offer->data['up_name']}"))
+		{
 			return;
 		}
 		
