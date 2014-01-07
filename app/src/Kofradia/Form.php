@@ -118,6 +118,15 @@ class Form {
 	protected $data;
 
 	/**
+	 * New unused object
+	 *
+	 * Set if we try to get a unused hash and this is already used
+	 *
+	 * @var \Kofradia\Form
+	 */
+	public $unused;
+
+	/**
 	 * Set user
 	 *
 	 * @param \user
@@ -210,6 +219,26 @@ class Form {
 		}
 
 		return $this->hash;
+	}
+
+	/**
+	 * Get unused hash
+	 *
+	 * Will create a new object if current hash is used
+	 * but will not return this object
+	 *
+	 * The variable 'unused' will be set if a new
+	 * object is created
+	 */
+	public function getHashUnused()
+	{
+		if (!$this->isUsed())
+		{
+			$this->unused = static::getByDomain($this->domain, $this->user);
+			return $this->unused->getHash();
+		}
+
+		return $this->getHash();
 	}
 
 	/**
@@ -407,7 +436,7 @@ class Form {
 	}
 
 	/**
-	 * Create HTML-input
+	 * Create HTML-input for unused hash (creates a new object if required)
 	 *
 	 * @param string|null Name of input-object (or null to use default)
 	 * @return string
@@ -419,7 +448,7 @@ class Form {
 			$name = $this->getVarName();
 		}
 
-		return '<input type="hidden" name="'.htmlspecialchars($name).'" value="'.htmlspecialchars($this->getHash()).'" />';
+		return '<input type="hidden" name="'.htmlspecialchars($name).'" value="'.htmlspecialchars($this->getHashUnused()).'" />';
 	}
 
 	/**
