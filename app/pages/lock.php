@@ -541,7 +541,7 @@ class page_lock
 				alert("En feil oppsto.");
 			});
 		}
-		xhr.send({"data": {"q": $("name_enter").get("value").trim(), "is": true}});
+		xhr.send({"data": {"q": $("name_enter").get("value").trim()'.(ALLOW_SAME_PLAYERNAME ? ', "is": true' : '').'}});
 	};
 	if ($("name_enter").get("value") != "") $("name_enter").search.run(null, $("name_enter"));
 	else status("");
