@@ -1,6 +1,13 @@
 <?php namespace Kofradia\Network;
 
 class Helpers {
+	/**
+	 * Check if a IP matches a CIDR
+	 *
+	 * @param string IP to check, e.g. 10.4.0.1
+	 * @param string CIDR to match, e.g. 10.4.0.0/24
+	 * @return bool
+	 */
 	public static function cidr_match($ip, $range)
 	{
 		list ($subnet, $bits) = explode('/', $range);
