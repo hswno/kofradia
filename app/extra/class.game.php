@@ -1087,6 +1087,7 @@ class game
 	
 	/**
 	 * Generer HTML tag for counter (timespan)
+	 * @deprecated Use Twig-extension counter
 	 * @param int $time
 	 * @param bool/string $redirect = NULL
 	 */

@@ -52,6 +52,7 @@ class View {
 				'autoescape' => false,
 			));
 			static::$twig->addExtension(new \Kofradia\Twig\Date());
+			static::$twig->addExtension(new \Kofradia\Twig\Counter());
 		}
 
 		return static::$twig;
