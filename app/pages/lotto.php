@@ -51,7 +51,7 @@ class page_lotto
 		
 		ess::$b->page->add_title("Lotto");
 		
-		$this->form = new form("lotto");
+		$this->form = \Kofradia\Form::getByDomain("lotto", login::$user);
 		$this->antibot = antibot::get("lotto", 21);
 		$this->antibot->check_required();
 		
@@ -87,14 +87,13 @@ class page_lotto
 			// kan vi kjøpe lodd?
 			if ($this->info['antall_lodd'] < lotto::$lodd_maks)
 			{
-				$form_check = '<input type="hidden" name="hash" value="'.$this->form->create().'" />';
 				$antall = min(lotto::$lodd_maks_om_gangen, floor(login::$user->player->data['up_cash']/lotto::get_lodd_price()));
 				
 				echo '
-					<form action="" method="post">'.$form_check.'<input type="hidden" name="b" value="Gjenstående lodd" /><input type="hidden" name="lodd" value="'.$antall.'" /></form>'.(time() < lotto::PRICE_CHANGE+43200 ? '
+					<form action="" method="post">'.$this->form->getHTMLInput().'<input type="hidden" name="b" value="Gjenstående lodd" /><input type="hidden" name="lodd" value="'.$antall.'" /></form>'.(time() < lotto::PRICE_CHANGE+43200 ? '
 					<p class="c">Pris per lodd '.(time() < lotto::PRICE_CHANGE ? 'blir' : 'ble').' økt til <span style="color: #DD3333">'.game::format_cash(lotto::PRICE).'</span> kl. '.ess::$b->date->get(lotto::PRICE_CHANGE)->format("H:i").'</p>' : '').'
 					<form action="" method="post">
-						'.$form_check.'
+						'.$this->form->getHTMLInput().'
 						<dl class="dd_right center" style="width: 80%">
 							<dt>Gjenstående lodd</dt>
 							<dd>'.game::format_number(lotto::$lodd_maks-$this->info['antall_lodd']).'</dd>
@@ -290,7 +289,10 @@ class page_lotto
 			redirect::handle();
 		}
 		
-		$this->form->validate($_POST['hash'], ($this->last > 0 ? "Previous=".game::timespan($this->last, game::TIME_ABS | game::TIME_SHORT | game::TIME_NOBOLD).";" : "First;").($this->active ? "Active;" : "NOT-ACTIVE;").($this->wait ? "%c11Ventetid=".game::timespan($this->wait, game::TIME_SHORT | game::TIME_NOBOLD)."%c" : "%c9No-wait%c"));
+		if (!$this->form->validateHashOrAlert(null, ($this->last > 0 ? "Previous=".game::timespan($this->last, game::TIME_ABS | game::TIME_SHORT | game::TIME_NOBOLD).";" : "First;").($this->active ? "Active;" : "NOT-ACTIVE;").($this->wait ? "%c11Ventetid=".game::timespan($this->wait, game::TIME_SHORT | game::TIME_NOBOLD)."%c" : "%c9No-wait%c")))
+		{
+			return;
+		}
 		
 		if (isset($_POST['b']))
 		{

@@ -76,7 +76,7 @@ class page_antibot
 		// hent bildene
 		$this->load_images();
 		
-		$this->form = new form("anti-bot");
+		$this->form = \Kofradia\Form::getByDomain("anti-bot", login::$user);
 		
 		// utføre sjekk?
 		if (isset($_POST['valider']) && isset($this->images) && !$this->wait)
@@ -143,7 +143,10 @@ class page_antibot
 	 */
 	protected function check()
 	{
-		$this->form->validate(postval("hash"));
+		if (!$this->form->validateHashOrAlert())
+		{
+			return;
+		}
 		
 		// ingen merket?
 		if (!isset($_POST['bilde']))
@@ -203,7 +206,10 @@ class page_antibot
 	 */
 	protected function new_imgs()
 	{
-		$this->form->validate(postval("hash"));
+		if (!$this->form->validateHashOrAlert())
+		{
+			return;
+		}
 		
 		// kan vi be om nye bilder nå?
 		$delay = $this->images_time + $this->update_delay - time();
@@ -229,7 +235,6 @@ class page_antibot
 	protected function show()
 	{
 		login::$data['antibot'][$this->antibot->data['id']] = $this->images_data;
-		$hash = $this->form->create();
 		
 		ess::$b->page->add_css_file("sjekk.css?u");
 		
@@ -245,7 +250,7 @@ class page_antibot
 		<p>Merk de bildene som inneholder en <u>bil</u> og trykk på &laquo;Fullfør&raquo; knappen nederst.</p>'.($this->wait ? '
 		<p class="error_box">Du må vente '.game::counter($this->wait).' før du kan utføre anti-bot sjekk på nytt.</p>' : '').'
 		<form action="" method="post" id="antibot_form">
-			<input type="hidden" name="hash" value="'.$hash.'" />
+			'.$this->form->getHTMLInput().'
 			<div id="antibot">
 				<div class="antibot_row">
 					<div class="antibot_col1 box_handle box_handle_noimg">

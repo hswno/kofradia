@@ -121,7 +121,7 @@ class page_gta extends pages_player
 		$this->antibot->check_required(ess::$s['rpath'].'/gta');
 		
 		// skjema
-		$this->form = new form("biltyveri");
+		$this->form = \Kofradia\Form::getByDomain("biltyveri", login::$user);
 		
 		// hent inn alternativene
 		$this->gta->load_options();
@@ -177,8 +177,6 @@ class page_gta extends pages_player
 		
 		else
 		{
-			$form_check = '<input type="hidden" name="hash" value="'.$this->form->create().'" />';
-			
 			$id = reset($this->gta->options);
 			$id = $id['id'];
 			
@@ -186,7 +184,7 @@ class page_gta extends pages_player
 			
 			echo '
 		<form action="" method="post" onsubmit="noSubmit(this)">
-			'.$form_check.'
+			'.$this->form->getHTMLInput().'
 			<table class="table game center tablemt" style="width: 100%">
 				<thead>
 					<tr>
@@ -253,7 +251,10 @@ class page_gta extends pages_player
 		$wait = $this->gta->calc_wait();
 		
 		// form sjekking
-		$this->form->validate(postval("hash"), ($wait[1] ? "Siste=".game::timespan($wait[1], game::TIME_SHORT | game::TIME_NOBOLD).";" : "First;").($wait[0] ? "%c11Ventetid=".game::timespan($wait[0], game::TIME_NOBOLD | game::TIME_SHORT)."%c" : "%c9No-wait%c"));
+		if (!$this->form->validateHashOrAlert(null, ($wait[1] ? "Siste=".game::timespan($wait[1], game::TIME_SHORT | game::TIME_NOBOLD).";" : "First;").($wait[0] ? "%c11Ventetid=".game::timespan($wait[0], game::TIME_NOBOLD | game::TIME_SHORT)."%c" : "%c9No-wait%c")))
+		{
+			return;
+		}
 		
 		// har vi noe ventetid?
 		if ($wait[0] > 0)
@@ -341,7 +342,7 @@ class page_gta extends pages_player
 		}
 		
 		// skjema
-		$this->form = new form("gta_garasje");
+		$this->form = \Kofradia\Form::getByDomain("gta_garasje", login::$user);
 		
 		// anti-bot
 		$this->antibot = antibot::get("biltyveri", 10);
@@ -427,7 +428,7 @@ class page_gta extends pages_player
 			{
 				echo '
 		<form action="" method="post">
-			<input type="hidden" name="hash" value="'.$this->form->create().'" />
+			'.$this->form->getHTMLInput().'
 			<table class="table tablemt center">
 				<thead>
 					<tr>
@@ -513,10 +514,8 @@ class page_gta extends pages_player
 		$bydeler = $this->gta->get_bydeler_info();
 		
 		// flytte bilene til en garasje?
-		if (isset($_POST['flyttdo']))
-		{
-			$this->form->validate(postval("hash"), "Flytte biler");
-			
+		if (isset($_POST['flyttdo']) && $this->form->validateHashOrAlert(null, "Flytte biler"))
+		{	
 			// har vi ikke valgt noen bydel?
 			if (!isset($_POST['bydel']) || !isset($bydeler[$_POST['bydel']]))
 			{
@@ -551,7 +550,7 @@ class page_gta extends pages_player
 		// vis oversikt over garasjer vi kan velge mellom
 		echo '
 <form action="" method="post">
-	<input type="hidden" name="hash" value="'.$this->form->create().'" />
+	'.$this->form->getHTMLInput().'
 	<input type="hidden" name="bil" value="'.implode(",", $biler_q).'" />
 	<input type="hidden" name="flytt" />
 	<div class="bg1_c xsmall">

@@ -39,7 +39,7 @@ class page_ff_bank
 	protected function page_handle()
 	{
 		$access = $this->ff->access(1);
-		$this->form = new form("firma");
+		$this->form = \Kofradia\Form::getByDomain("firma", login::$user);
 		
 		ess::$b->page->add_title("Bankkontroll");
 		
@@ -112,10 +112,8 @@ class page_ff_bank
 		
 		
 		// hente gebyr?
-		if (isset($_POST['hent_gebyr']))
-		{
-			$this->form->validate(postval("hash"));
-			
+		if (isset($_POST['hent_gebyr']) && $this->form->validateHashOrAlert())
+		{	
 			// ingen gebyr å hente?
 			if ($info[0] == 0)
 			{
@@ -346,7 +344,7 @@ class page_ff_bank
 		</p>
 	</div>'.($info[0] > 0 ? '
 	<form action="" method="post">
-		<input type="hidden" name="hash" value="'.$this->form->create().'" />
+		'.$this->form->getHTMLInput().'
 		<h4>'.show_sbutton("Hent gebyr", 'name="hent_gebyr"').'</h4>
 	</form>' : '').'
 </div>';

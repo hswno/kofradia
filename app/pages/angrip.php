@@ -264,7 +264,7 @@ class page_angrip extends pages_player
 		}
 		
 		// sett opp skjema
-		$this->form = new form("angrip");
+		$this->form = \Kofradia\Form::getByDomain("angrip", login::$user);
 		
 		// utføre et angrep?
 		if (isset($_POST['attack']))
@@ -275,7 +275,7 @@ class page_angrip extends pages_player
 		echo '
 <form action="" method="post">
 	<input type="hidden" name="up_id" value="'.$this->up_offer->id.'" />
-	<input type="hidden" name="un" value="'.$this->form->create().'" />
+	'.$this->form->getHTMLInput().'
 	<div class="bg1_c xsmall">
 		<h1 class="bg1">Angrip spiller<span class="left2"></span><span class="right2"></span></h1>
 		<div class="bg1">
@@ -334,7 +334,10 @@ class page_angrip extends pages_player
 	protected function handle_attack()
 	{
 		// kontroller skjema
-		if (MAIN_SERVER) $this->form->validate(postval("un"), "Angrip spiller: {$this->up_offer->data['up_name']}");
+		if (MAIN_SERVER && !$this->form->validateHashOrAlert(null, "Angrip spiller: {$this->up_offer->data['up_name']}"))
+		{
+			return;
+		}
 		
 		// har vi ingen kuler?
 		if (login::$user->player->data['up_weapon_bullets'] == 0) return;
@@ -556,16 +559,14 @@ class page_angrip extends pages_player
 		if (MAIN_SERVER) $this->training_antibot->check_required();
 		
 		// sett opp skjema
-		$this->training_form = new form("training");
+		$this->training_form = \Kofradia\Form::getByDomain("training", login::$user);
 		
 		// ventetid?
 		$wait = max(0, login::$user->player->data['up_weapon_training_next'] - time());
 		
 		// skal vi trene våpenet?
-		if (isset($_POST['wt']))
+		if (isset($_POST['wt']) && $this->training_form->validateHashOrAlert(null, "Våpentrening"))
 		{
-			$this->training_form->validate(postval("h"), "Våpentrening");
-			
 			// kan vi ikke trene nå?
 			if ($wait > 0)
 			{
@@ -633,7 +634,7 @@ class page_angrip extends pages_player
 			// vis alternativene
 			echo '
 		<form action="" method="post">
-			<input type="hidden" name="h" value="'.$this->training_form->create().'" />
+			'.$this->training_form->getHTMLInput().'
 			<table class="table tablemt center">
 				<thead>
 					<tr>

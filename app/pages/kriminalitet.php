@@ -43,7 +43,7 @@ class page_kriminalitet extends pages_player
 		$this->krim->up->energy_require(kriminalitet::ENERGY_KRIM*1.3); // legg til 30 % på kravet
 		
 		// sett opp skjema
-		$this->form = new form("kriminalitet");
+		$this->form = \Kofradia\Form::getByDomain("kriminalitet", login::$user);
 		
 		// sett opp antibot og sjekk om den skal utføres nå
 		$this->antibot = antibot::get("kriminalitet", 12);
@@ -179,7 +179,7 @@ class page_kriminalitet extends pages_player
 			
 			echo '
 		<form action="" method="post">
-			<input type="hidden" name="hash" value="'.$this->form->create().'" />
+			'.$this->form->getHTMLInput().'
 			<input type="hidden" name="theid" value="" id="theid" />';
 			
 			$i = 0;
@@ -217,7 +217,10 @@ class page_kriminalitet extends pages_player
 	protected function utfor()
 	{
 		// form sjekking
-		$this->form->validate(postval('hash'), ($this->krim->last ? "Siste=".game::timespan($this->krim->last['last'], game::TIME_ABS | game::TIME_SHORT | game::TIME_NOBOLD).";" : "First;").($this->krim->wait ? "%c11Ventetid=".game::timespan($this->krim->wait, game::TIME_SHORT | game::TIME_NOBOLD)."%c" : "%c9No-wait%c"));
+		if (!$this->form->validateHashOrAlert(null, ($this->krim->last ? "Siste=".game::timespan($this->krim->last['last'], game::TIME_ABS | game::TIME_SHORT | game::TIME_NOBOLD).";" : "First;").($this->krim->wait ? "%c11Ventetid=".game::timespan($this->krim->wait, game::TIME_SHORT | game::TIME_NOBOLD)."%c" : "%c9No-wait%c")))
+		{
+			return;
+		}
 		
 		// kontroller at vi ikke har noe ventetid
 		if ($this->krim->wait)

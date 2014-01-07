@@ -204,14 +204,11 @@ class page_bomberom
 		}
 		
 		// sett opp skjema
-		$form = new form("other");
+		$form = \Kofradia\Form::getByDomain("other", login::$user);
 		
 		// har vi bekreftet ønsket om å kaste ut en spiller?
-		if (isset($_POST['confirm']))
-		{
-			// bekreft skjema
-			$form->validate(postval("h"), "Kast ut spiller fra bomberom");
-			
+		if (isset($_POST['confirm']) && $form->validateHashOrAlert(null, "Kast ut spiller fra bomberom"))
+		{	
 			\Kofradia\DB::get()->beginTransaction();
 			
 			// forsøk å trekk fra pengene
@@ -294,7 +291,7 @@ www.kofradia.no';
 			echo '
 		<p>'.($this->fam ? 'Broderskapet' : 'Firmaet').' har for øyeblikket '.game::format_cash($this->ff->data['ff_bank']).' på konto.</p>
 		<form action="" method="post">
-			<input type="hidden" name="h" value="'.$form->create().'" />
+			'.$form->getHTMLInput().'
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="player" value="'.$up['up_id'].'" />
 			<input type="hidden" name="kick" />

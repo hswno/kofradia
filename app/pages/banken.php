@@ -825,14 +825,11 @@ www.kofradia.no';
 		// 4 -> mellombeløp (utgangsbeløpet - tap sender)
 		
 		// kontrollere at overføringen ikke blir utført flere ganger
-		$form = new form("banken_".$player['up_id']);
+		$form = \Kofradia\Form::getByDomain("banken_".$player['up_id'], login::$user);
 		
 		// bekreftet?
-		if (isset($_POST['confirm']) && isset($_POST['ovt_s']) && isset($_POST['ovt_m']))
+		if (isset($_POST['confirm']) && isset($_POST['ovt_s']) && isset($_POST['ovt_m']) && $form->validateHashOrAlert())
 		{
-			// kontroller at skjemaet ikke har blitt sendt inn allerede
-			$form->validate(postval('hash'));
-			
 			// kontroller overføringstapene (slik at det ikke har skjedd noen endringer)
 			$ovt_s = postval("ovt_s");
 			$ovt_m = postval("ovt_m");
@@ -904,7 +901,7 @@ www.kofradia.no';
 	<input type="hidden" name="note" value="'.htmlspecialchars($note).'" />
 	<input type="hidden" name="ovt_s" value="'.$this->bank->overforingstap.'" />
 	<input type="hidden" name="ovt_m" value="'.$bank->overforingstap.'" />
-	<input type="hidden" name="hash" value="'.$form->create().'" />';
+	'.$form->getHTMLInput().'
 		
 		// hoppe over overføringstapet?
 		if ($skip_bog)

@@ -1486,7 +1486,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 			if ($this->up->weapon)
 			{
 				// sett opp skjema for å kjøpe kuler
-				$this->bullets_form = new form("bullets");
+				$this->bullets_form = \Kofradia\Form::getByDomain("bullets", login::$user);
 				
 				// skal vi kjøpe kuler?
 				if (isset($_POST['buy_bullets']))
@@ -1601,7 +1601,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 				echo '
 		<p>Det er for øyeblikket '.fwords("<b>%d</b> kule", "<b>%d</b> kuler", $ant).' til salgs.</p>
 		<form action="" method="post">
-			<input type="hidden" name="h" value="'.$this->bullets_form->create().'"  />
+			'.$this->bullets_form->getHTMLInput().'
 			<p class="c">Antall kuler: <input type="text" name="bullets" value="'.htmlspecialchars(postval("bullets", 1)).'" class="styled w30" /> '.show_sbutton("Kjøp", 'name="buy_bullets"').'</p>
 		</form>';
 			}
@@ -2050,7 +2050,10 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 	protected function bullets_buy()
 	{
 		// kontroller skjema
-		$this->bullets_form->validate(postval("h"), "Kjøpe kuler");
+		if (!$this->bullets_form->validateHashOrAlert(null, "Kjøpe kuler"))
+		{
+			return;
+		}
 		
 		// kan vi ikke kjøpe kuler for øyeblikket?
 		if (DISABLE_BUY_VAP && !access::has("mod"))
@@ -3290,7 +3293,7 @@ class page_ff_sykehus extends pages_player
 			if ($this->up->fengsel_require_no(false) || $this->up->bomberom_require_no(false)) return;
 			
 			// sett opp skjema
-			$this->form = new form("sykehus");
+			$this->form = \Kofradia\Form::getByDomain("sykehus", login::$user);
 			
 			// utføre et alternativ?
 			if (isset($_POST['sykehus']))
@@ -3347,7 +3350,7 @@ class page_ff_sykehus extends pages_player
 			// vis alternativene
 			echo '
 		<form action="" method="post">
-			<input type="hidden" name="h" value="'.$this->form->create().'" />
+			'.$this->form->getHTMLInput().'
 			<table class="table center">
 				<thead>
 					<tr>
@@ -3387,7 +3390,10 @@ class page_ff_sykehus extends pages_player
 	protected function action()
 	{
 		// kontroller skjema
-		$this->form->validate(postval("h"), "Sykehus");
+		if (!$this->form->validateHashOrAlert(null, "Sykehus"))
+		{
+			return;
+		}
 		
 		// mangler vi alternativ?
 		if (!isset($_POST['id']) || !isset(self::$options[$_POST['id']]))
@@ -3449,7 +3455,10 @@ class page_ff_sykehus extends pages_player
 			
 			else
 			{
-				$this->form->validate(postval("h"), "Sykehus");
+				if (!$this->form->validateHashOrAlert(null, "Sykehus"))
+				{
+					return;
+				}
 				
 				// sett ned ranken
 				$p = round($this->up->data['up_points'] * 0.25);
@@ -3481,7 +3490,7 @@ class page_ff_sykehus extends pages_player
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<input type="hidden" name="sykebil" />
-			<input type="hidden" name="h" value="'.$this->form->create().'" />
+			'.$this->form->getHTMLInput().'
 			<p class="c"><input type="checkbox" id="sykebil_c" name="c" /><label for="sykebil_c"> Jeg bekrefter at jeg mister 25 % av min rank</label></p>
 			<p class="c">'.show_sbutton("Be om sykebil", 'name="confirm"').'</p>
 		</form>
