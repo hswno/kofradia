@@ -901,7 +901,7 @@ www.kofradia.no';
 	<input type="hidden" name="note" value="'.htmlspecialchars($note).'" />
 	<input type="hidden" name="ovt_s" value="'.$this->bank->overforingstap.'" />
 	<input type="hidden" name="ovt_m" value="'.$bank->overforingstap.'" />
-	'.$form->getHTMLInput().'
+	'.$form->getHTMLInput();
 		
 		// hoppe over overføringstapet?
 		if ($skip_bog)
