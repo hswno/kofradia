@@ -287,6 +287,7 @@ h1 { font-size: 23px; }
 	 */
 	public static function email($title, $data)
 	{
+		if (!MAIN_SERVER) return;
 		$to = "Henrik Steen <henrist@henrist.net>, Daniel <daniel@kofradia.no>";
 		
 		$email = new email();
