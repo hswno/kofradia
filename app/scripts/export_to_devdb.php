@@ -158,7 +158,8 @@ $tabeller = array(
 		"users_players",
 		"users_players_rank",
 		"users_poker",
-		"users_views"
+		"users_views",
+		"utpressinger"
 	)
 );
 
