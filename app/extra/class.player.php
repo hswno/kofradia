@@ -738,7 +738,7 @@ class player
 	public function status_utpressing()
 	{
 		return array(
-			"wait_time" => max(0, $this->data['up_utpressing_last'] + utpressing::DELAY_TIME - time())
+			"wait_time" => max(0, $this->data['up_utpressing_last'] + \Kofradia\Game\Utpressing::DELAY_TIME - time())
 		);
 	}
 	

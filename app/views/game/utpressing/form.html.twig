@@ -1,0 +1,36 @@
+{#
+
+// data:
+// $wait
+// $form
+// $options
+
+#}
+{% import 'helpers/forms.html.twig' as forms %}
+<div class="bg1_c xsmall">
+	<h1 class="bg1">Utpressing<span class="left2"></span><span class="right2"></span></h1>
+	<p class="h_right"><a href="/node/4">Hjelp</a></p>
+	<div class="bg1">
+		<boxes />
+		{% if wait > 0 %}
+			<p>Du må vente {{ wait|counter(true) }} før du kan utføre en ny utpressing!</p>
+		{% else %}
+
+			<form action="" method="post">
+				<p class="c">Velg alternativ:</p>
+				{{ form.getHTMLInput() }}
+				<table class="table center">
+					<tbody>
+						{% for key, row in options %}
+							<tr class="box_handle{% if loop.index % 2 == 0 %} color{% endif %}">
+								<td><input type="radio" name="opt" value="{{ key|e }}"{% if key == match %} checked="checked"{% endif %} />{{ row.text }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<p class="c">{{ forms.sbutton("Utfør", '', 'name="utpressing"') }}</p>
+			</form>
+
+		{% endif %}
+	</div>
+</div>

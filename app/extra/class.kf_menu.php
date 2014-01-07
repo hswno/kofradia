@@ -56,7 +56,7 @@ class kf_menu
 				<li><a href="'.ess::$s['relative_path'].'/kriminalitet" class="menu-icon menu-krim">Kriminalitet<span class="icon"></span></a></li>
 				<li><a href="'.ess::$s['relative_path'].'/utpressing" class="menu-icon menu-utpr">Utpressing<span class="icon"></span></a>'.(isset(self::$data['utpressing']) ? '
 					<ul>
-						<li><a href="'.ess::$s['relative_path'].'/utpressing?log">Siste utpressinger</a></li>
+						<li><a href="'.ess::$s['relative_path'].'/utpressing/log">Siste utpressinger</a></li>
 					</ul>' : '').'</li>
 				<li><a href="'.ess::$s['relative_path'].'/gta" class="menu-icon menu-bilt">Biltyveri<span class="icon"></span></a>'.(defined("SHOW_GTA_MENU") ? '
 					<ul>

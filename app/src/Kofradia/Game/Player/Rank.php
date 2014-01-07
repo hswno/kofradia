@@ -100,4 +100,14 @@ class Rank {
 
 		return sprintf("%s (%s)", $name_extra, $name);
 	}
+
+	/**
+	 * Get the points rank
+	 *
+	 * @return \Kofradia\Game\Rank\Points
+	 */
+	public function getPointsRank()
+	{
+		return $this->pointsRank;
+	}
 }

@@ -10,13 +10,14 @@ return array(
 	"polls/admin(/.*)?" => "Polls@admin",
 
 	// div funksjoner
-	"angrip"        => "Game\\Angrep@index",
-	"auksjoner"     => "Game\\Auksjoner@index",
-	"banken"        => "Game\\Banken@index",
-	"bydeler"       => "Game\\Bydeler@index",
-	"kriminalitet"  => "Game\\Kriminalitet@index",
-	"lotto"         => "Game\\Lotto@index",
-	"utpressing"    => "Game\\Utpressing@index",
+	"angrip"         => "Game\\Angrep@index",
+	"auksjoner"      => "Game\\Auksjoner@index",
+	"banken"         => "Game\\Banken@index",
+	"bydeler"        => "Game\\Bydeler@index",
+	"kriminalitet"   => "Game\\Kriminalitet@index",
+	"lotto"          => "Game\\Lotto@index",
+	"utpressing"     => "Game\\Utpressing@index",
+	"utpressing/log" => "Game\\Utpressing@log",
 
 	// diverse
 	"betingelser"     => "Misc@betingelser",
