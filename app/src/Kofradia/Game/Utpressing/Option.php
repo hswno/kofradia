@@ -396,7 +396,7 @@ class Option {
 		
 		if (MAIN_SERVER)
 		{
-			$where .= access::is_nostat()
+			$where .= \access::is_nostat()
 				? " AND up_access_level >= ".ess::$g['access_noplay']
 				: " AND up_access_level < ".ess::$g['access_noplay'];
 		}
