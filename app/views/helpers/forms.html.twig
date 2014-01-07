@@ -1,0 +1,3 @@
+{% macro sbutton(text, class = '', attr = '') %}
+	<input type="submit" value="{{ text|e('html_attr') }}" class="button{% if class %} {{ class }}{% endif %}" onmouseover="this.className='button_hover'" onmouseout="this.className='button'"{% if attr %} {{ attr }}{% endif %} />
+{% endmacro %}
