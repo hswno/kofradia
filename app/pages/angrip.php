@@ -360,7 +360,7 @@ class page_angrip extends pages_player
 		}
 		
 		// kontroller skjema
-		if (MAIN_SERVER && !$this->form->validateHashOrAlert(null, "Angrip spiller: {$this->up_offer->data['up_name']}"))
+		if (!$this->form->validateHashOrAlert(null, "Angrip spiller: {$this->up_offer->data['up_name']}"))
 		{
 			return;
 		}
