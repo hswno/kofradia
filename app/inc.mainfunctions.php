@@ -44,19 +44,20 @@ function putlog($area, $msg)
 	static $u = "";
 	
 	static $locations = array(
-		"LOG" => array("#SMLogs", "SMAFIA"),
-		"SPAM" => array("#SMLogs", "SMAFIA"), #, "#SMSpam", "QuakeNet"),
-		"INFO" => array("#SMLogs", "SMAFIA", "#kofradia", "QuakeNet"),
-		"SPAMLOG" => array("#SMLogs", "SMAFIA"),
-		"ANTIBOT" => array("#SMLogs", "SMAFIA"),
-		"SUPERLOG" => array("#SMLogs", "SMAFIA"),
-		"PROFILVIS" => array("#SMLogs", "SMAFIA"),
-		"CREWCHAN" => array("#SMLogs", "SMAFIA", "#opers", "SMAFIA"),
+		"LOG"           => array("#SMLogs", "SMAFIA"),
+		"SPAM"          => array("#SMLogs", "SMAFIA"), #, "#SMSpam", "QuakeNet"),
+		"INFO"          => array("#SMLogs", "SMAFIA", "#kofradia", "QuakeNet"),
+		"SPAMLOG"       => array("#SMLogs", "SMAFIA"),
+		"ANTIBOT"       => array("#SMLogs", "SMAFIA"),
+		"SUPERLOG"      => array("#SMLogs", "SMAFIA"),
+		"PROFILVIS"     => array("#SMLogs", "SMAFIA"),
+		"CREWCHAN"      => array("#SMLogs", "SMAFIA", "#opers", "SMAFIA"),
 		"ANTIBOT_ERROR" => array("#opers", "SMAFIA"),
-		"FF" => array("#SMLogs", "SMAFIA", "#FF", "SMAFIA"),
-		"ABUSE" => array("#SMLogs", "SMAFIA", "#SMAbuse", "SMAFIA"),
-		"NOTICE" => array("#SMLogs", "SMAFIA", "#SMNotice", "SMAFIA"),
-		"DF" => array("#SMDF", "SMAFIA")
+		"FF"            => array("#SMLogs", "SMAFIA", "#FF", "SMAFIA"),
+		"ABUSE"         => array("#SMLogs", "SMAFIA", "#SMAbuse", "SMAFIA"),
+		"ABUSE2"        => array("#SMLogs", "SMAFIA", "#SMAbuse", "SMAFIA", "#opers", "SMAFIA"),
+		"NOTICE"        => array("#SMLogs", "SMAFIA", "#SMNotice", "SMAFIA"),
+		"DF"            => array("#SMDF", "SMAFIA")
 	);
 	
 	// bytt ut juksetegnene med spesialtegn

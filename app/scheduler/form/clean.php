@@ -1,0 +1,3 @@
+<?php
+
+\Kofradia\Form::cleanDatabase();
