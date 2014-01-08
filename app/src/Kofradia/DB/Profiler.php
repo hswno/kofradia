@@ -44,6 +44,7 @@ class Profiler {
 	public function __construct()
 	{
 		$this->debug = isset($_COOKIE['show_queries_info']);
+		\ess::$b->profiler->addDBProfiler($this);
 	}
 
 	/**

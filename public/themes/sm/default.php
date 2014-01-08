@@ -230,21 +230,22 @@ class theme_sm_default
 	</div>'.ess::$b->page->body_end;
 		
 		// debug time
-		$time = SCRIPT_START;
+		/*$time = SCRIPT_START;
 		ess::$b->dt("end");
 		$dt = 'start';
 		foreach (ess::$b->time_debug as $row)
 		{
 			$dt .= ' -> '.round(($row[1]-$time)*1000, 2).' -> '.$row[0];
 			$time = $row[1];
-		}
+		}*/
 		/*if (MAIN_SERVER)
 		{
 			$text = ess::$b->date->get()->format("Y-m-d\tH:i:s\t")."{$_SERVER['REMOTE_ADDR']}\t{$_SERVER['REQUEST_METHOD']}\t{$_SERVER['REQUEST_URI']}\t".login::$user->player->id."\t".login::$user->player->data['up_name']."\t".round(microtime(true)-SCRIPT_START-ess::$b->db->time, 4)."\t".round(ess::$b->db->time, 4)."\t".ess::$b->db->queries."\t".str_replace(" -> ", "\t", $dt)."\n"; 
 			@file_put_contents("/home/smafia/debugtime.log", $text, FILE_APPEND);
 		}*/
+		/*echo '
+	<!-- '.$dt.' -->*/
 		echo '
-	<!-- '.$dt.' -->
 </body>
 </html>';
 	}

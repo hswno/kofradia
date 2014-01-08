@@ -1,5 +1,7 @@
 <?php
 
+use \Kofradia\Utils\Profiler;
+
 mb_internal_encoding("utf-8");
 
 class ess
@@ -58,6 +60,13 @@ class essentials
 	
 	/** For å holde tidsoversikt i scriptet */
 	public $time_debug = array();
+
+	/**
+	 * Profiler
+	 *
+	 * @var \Kofradia\Utils\Profiler
+	 */
+	public $profiler;
 	
 	/**
 	 * @var base
@@ -124,18 +133,19 @@ class essentials
 		if (MAIN_SERVER) @set_time_limit(10);
 		else @set_time_limit(120);
 		
-		$this->dt("check_lockdown_pre");
+		//$this->dt("check_lockdown_pre");
 		
 		// sjekk lock status
 		if (MAIN_SERVER) $this->check_lockdown();
 		
-		$this->dt("mainfunctions_settings_pre");
+		//$this->dt("mainfunctions_settings_pre");
 		
 		// hent flere filer
 		require "inc.mainfunctions.php";
 		require "inc.innstillinger.php";
-		
-		$this->dt("post");
+		$this->profiler = new Profiler(SCRIPT_START);
+
+		$this->dt("settings, mainfunctions loaded");
 		
 		// sett opp exception handler
 		set_exception_handler(array("sysreport", "exception_handler"));
@@ -173,7 +183,7 @@ class essentials
 	/** Lagre scripttid (debug time) */
 	public function dt($name)
 	{
-		$this->time_debug[] = array($name, microtime(true));
+		$this->profiler->tag($name);
 	}
 	
 	/**
