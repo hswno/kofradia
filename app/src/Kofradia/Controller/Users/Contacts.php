@@ -6,6 +6,8 @@ use \Kofradia\View;
 
 class Contacts extends \Kofradia\Controller
 {
+	public $createResponseObject = false;
+	
 	/**
 	 * Add title to page and deny guests
 	 */

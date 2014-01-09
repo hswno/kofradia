@@ -5,6 +5,8 @@ use \Kofradia\View;
 use \Kofradia\Donation;
 
 class Misc extends \Kofradia\Controller {
+	public $createResponseObject = false;
+
 	/**
 	 * Ikke styr ssl foer kontrolleren
 	 */

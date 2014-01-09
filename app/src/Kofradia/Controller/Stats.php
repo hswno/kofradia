@@ -3,6 +3,8 @@
 use \Kofradia\View;
 
 class Stats extends \Kofradia\Controller {
+	public $createResponseObject = false;
+	
 	/**
 	 * Shows a recordlist of online users within each hour
 	 */

@@ -5,6 +5,8 @@ use \Kofradia\View;
 
 class GitHub extends \Kofradia\Controller
 {
+	public $createResponseObject = false;
+	
 	public function action_index()
 	{
 		// sjekk at dette er GitHub

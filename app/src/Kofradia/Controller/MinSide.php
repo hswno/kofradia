@@ -2,6 +2,7 @@
 
 class MinSide extends \Kofradia\Controller
 {
+	public $createResponseObject = false;
 	protected $ssl = true;
 
 	public function action_index()

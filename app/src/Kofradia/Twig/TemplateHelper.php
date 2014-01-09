@@ -186,7 +186,7 @@ class TemplateHelper {
 		if (!$github->hasActivated())
 		{
 			$boxes[] = array(
-				ess::$s['relative_path'].'/github',
+				\ess::$s['relative_path'].'/github',
 				'Du vil nå motta nye hendelser fra GitHub her. Trykk her for å se de siste hendelsene.');
 		}
 		else

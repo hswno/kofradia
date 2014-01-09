@@ -3,6 +3,8 @@
 use \Kofradia\View;
 
 class Utpressing extends \Kofradia\Controller\Game {
+	public $createResponseObject = false;
+	
 	/**
 	 * Count between anti-bot checks
 	 *

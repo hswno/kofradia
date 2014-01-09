@@ -6,6 +6,8 @@ use \Kofradia\View;
 
 class Donations extends \Kofradia\Controller
 {
+	public $createResponseObject = false;
+	
 	/**
 	 * Show infopage
 	 */
