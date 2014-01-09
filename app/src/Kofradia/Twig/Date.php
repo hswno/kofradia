@@ -10,7 +10,14 @@ class Date extends \Twig_Extension {
 
 	public function dateFilter($timestamp, $format = \date::FORMAT_NORMAL)
 	{
-		$d = \ess::$b->date->get($timestamp);
+		if (is_numeric($timestamp))
+		{
+			$d = \ess::$b->date->get($timestamp);
+		}
+		else
+		{
+			$d = \ess::$b->date->parse($timestamp);
+		}
 		return $d->format($this->getFormat($format));
 	}
 
