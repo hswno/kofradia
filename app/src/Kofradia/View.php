@@ -33,6 +33,7 @@ class View {
 	 */
 	public static function forgeTwig($name, $data = array())
 	{
+		\ess::$b->dt(sprintf('forgeTwig(%s)', $name));
 		return static::getTwig()->render($name.".html.twig", $data);
 	} 
 
