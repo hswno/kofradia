@@ -214,12 +214,11 @@ class page_gta extends pages_player
 				</tbody>
 			</table>';
 			
-			if (isset(ess::$b->page->messages['gta_result']))
+			$msg = ess::$b->page->messages->getMessageByName("gta_result");
+			if ($msg)
 			{
 				echo '
-			<div class="p c">'.ess::$b->page->messages['gta_result']['message'].'</div>';
-				
-				unset(ess::$b->page->messages['gta_result']);
+			<div class="p c">'.$msg->content.'</div>';
 			}
 			
 			echo ($wait > 0 ? '
