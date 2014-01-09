@@ -33,10 +33,8 @@ cd kofradia
 composer install --no-dev --optimize-autoloader
 
 ./phinx migrate
+
+./refresh.sh
 cd ..
-
-
-lynx --dump http://kofradia.serask.vpn.hsw.no/apc_clear_cache.php
-date
 
 php /var/www/kofradia.no/kofradia/app/scripts/finished_pull_all.php

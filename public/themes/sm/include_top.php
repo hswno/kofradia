@@ -12,7 +12,7 @@ $head = '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="alternate" href="'.ess::$s['relative_path'].'/rss/forum_topics" type="application/rss+xml" title="Siste tråder i forumene" />
 <link rel="alternate" href="'.ess::$s['relative_path'].'/rss/forum_replies" type="application/rss+xml" title="Siste svar i forumene" />
 <link rel="alternate" href="http://kofradia.wordpress.com/feed/" type="application/rss+xml" title="Nyheter fra bloggen" />
-<link href="'.ess::$s['path'].'/themes/sm/default.css?'.@filemtime(dirname(__FILE__)."/default.css").'" rel="stylesheet" type="text/css" />';
+<link href="'.ess::$s['path'].'/assets/css/default.css?'.@filemtime(PATH_PUBLIC."/assets/css/default.css").'" rel="stylesheet" type="text/css" />';
 
 if (!ess::$b->page->js_disable)
 {

@@ -12,3 +12,4 @@ app/gamelogs
 error_log
 /vendor
 public-docs
+public/assets
