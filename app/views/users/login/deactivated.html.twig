@@ -1,0 +1,18 @@
+{% extends 'templates/guest/simple.html.twig' %}
+
+{% block content2 %}
+	<h1>Deaktivert</h1>
+	<p>Din bruker med e-postadresse <u>{{ email|e }}</u> ble deaktivert {{ date|date() }}</p>
+
+	{% if reason %}
+		<div class="section">
+			<h2>Begrunnelse</h2>
+			<p>{{ reason }}</p>
+		</div>
+	{% else %}
+		<p>Begrunnelse er ikke oppgitt.</p>';
+	{% endif %}
+
+	<p>Dersom du mener denne deaktiveringen er feil kan du ta <a href="&rpath;/henvendelser">kontakt</a>.
+		Kun seriøse henvendelser blir behandlet.</p>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% if player %}
+	{% embed "templates/guest/helpers/get_box.html.twig" with {'class': 'login_ranker'} %}
+		{% block title %}&raquo; Beste ranker siste 24 timer{% endblock %}
+		{% block content %}
+			<p class="ranklist_box">
+				<a href="{{ url('/p/' ~ player['up_name']|url_encode(true)) }}" title="Vis profil"><img src="{{ img|e('html_attr') }}" alt="Profilbilde" class="profile_image" /></a>
+				<span class="ranklist_player">
+					<span class="rp_up">{{ profile_link }}</span><br />
+					<span class="rp_rank">{{ rank.getName() }}</span>
+				</span>
+				<span class="rp_familie">
+					{% if player['ff_links'] %}
+						player['ff_links']|join(', ')
+					{% else %}
+						<i class="rp_no_familie">Ingen broderskap</i>
+					{% endif %}
+				</span>
+				<span class="clear"></span>
+			</p>
+		{% endblock %}
+	{% endembed %}
+{% endif %}

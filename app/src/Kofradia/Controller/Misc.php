@@ -20,8 +20,7 @@ class Misc extends \Kofradia\Controller {
 		if (!$this->user)
 		{
 			force_https();
-			new \page_logginn();
-			return;
+			return \Kofradia\Controller::execute("Users\\Login@index");
 		}
 
 		// videresende?

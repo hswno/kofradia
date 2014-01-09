@@ -1,0 +1,10 @@
+{% if data %}
+	{% embed "templates/guest/helpers/get_box.html.twig" with {'class': 'login_actions_box'} %}
+		{% block title %}&raquo; Siste hendelser i spillet{% endblock %}
+		{% block content %}
+			{% for row in data %}
+				<p>{{ row['lf_time']|date('H:i') }}: {{ row['lf_html'] }}</p>
+			{% endfor %}
+		{% endblock %}
+	{% endembed %}
+{% endif %}

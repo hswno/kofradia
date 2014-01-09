@@ -1,0 +1,14 @@
+{% embed "templates/guest/helpers/get_box.html.twig" with {'class': 'login_actions_box'} %}
+	{% block title %}&raquo; Siste fra forumene{% endblock %}
+	{% block content %}
+		{% for item in new %}
+			<p>
+				<span class="time">{{ item['time']|date('H:i') }}:</span>
+				<user id="{{ item['user'] }}" /> {% if item['reply'] %}svarte i tråden{% else %}opprettet{% endif %}
+				<a href="{{ url(item['url'])|e }}">{{ item['title']|e }}</a> i {{ item['section']|e }}
+			</p>
+		{% endfor %}
+		
+		<p class="last"><a href="forum">Gå til forumene &raquo;</a></p>
+	{% endblock %}
+{% endembed %}

@@ -1,0 +1,123 @@
+{% extends 'templates/guest.html.twig' %}
+{% import 'helpers/forms.html.twig' as forms %}
+
+{% block title %}Kofradia | Kampen om broderskapet{% endblock %}
+
+{% block rawcss %}
+	html, body {
+		min-width: 770px;
+		max-width: 770px;
+		font-size: 13px;
+	}
+	{{ parent() }}
+{% endblock %}
+
+{% block js_domready %}
+	var b = $("idf");
+	if (b.get("value") != "" && $("passordf"))
+	{
+		$("passordf").focus();
+	}
+	else
+	{
+		b.focus();
+	}
+
+	$("minid_info").addEvents({
+		"mouseenter": function()
+		{
+			this.store("infobox", new Element("div", {
+				"styles": {
+					"left": this.getPosition().x + 30,
+					"top": this.getPosition().y - 5
+				},
+				"class": "popup_info_box r3",
+				"html": "<h1>Min ID</h1><p>Enkelt å logge inn! Velg en av disse alternativene:</p><ul><li>Navnet på en av dine spillere</li><li>ID-en til din bruker</li><li>E-postadressen din</li></ul></div>",
+			}).set("tween", {"duration": "short"}).fade("hide").inject(document.body).fade(0.95));
+		},
+		"mouseleave": function()
+		{
+			this.retrieve("infobox").destroy();
+		}
+	});
+	{{ parent() }}
+{% endblock %}
+
+{% block head %}
+	{{ parent() }}
+	<link rel="stylesheet" type="text/css" href="/assets/css/login.css" />
+	{% if norobots %}
+		<meta name="robots" content="noindex" />
+	{% endif %}
+{% endblock %}
+
+{% block facebook_likes %}
+	<iframe src="https://www.facebook.com/plugins/like.php?app_id=245125612176286&amp;href=http%3A%2F%2Fwww.facebook.com%2Fkofradia&amp;send=false&amp;layout=button_count&amp;width=60&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px; margin: 10px 0 13px" allowTransparency="true"></iframe>
+{% endblock %}
+
+{% block content %}
+
+	{% embed "templates/guest/helpers/get_box.html.twig" with {'class': 'login_box'} %}
+		{% block title %}&raquo; Logg inn{% endblock %}
+		{% block content %}
+			{{ helper.getMessageBoxes('login') }}
+			<form action="" method="post" autocomplete="off">
+				<p>
+					<label for="idf">Din ID <span id="minid_info">(?)</span>:</label><br />
+					<input type="text" name="id" id="idf" value="{{ userid|e('html_attr') }}" />
+				</p>
+
+				{% if helper.isMainServer() %}
+					<p>
+						<label for="passordf">Passord:</label><br />
+						<input type="password" name="passord" id="passordf" />
+					</p>
+				{% endif %}
+				
+				<div class="clear"></div>
+				
+				{{ forms.sbutton('Logg inn') }}
+				<a href="registrer" class="button">Registrer deg</a>
+				
+				<p>
+					<strong>Logg ut automatisk</strong><br />
+					
+					<input type="radio" name="expire_type" value="0" id="expire_type_0"{% if expire == 0 %} checked="checked"{% endif %} />
+					<label for="expire_type_0">Etter 15 minutter inaktivitet</label><br />
+					
+					<input type="radio" name="expire_type" value="1" id="expire_type_1"{% if expire == 1 %} checked="checked"{% endif %} />
+					<label for="expire_type_1">Når nettleseren lukkes</label><br />
+					
+					<input type="radio" name="expire_type" value="2" id="expire_type_2"{% if expire == 2 %} checked="checked"{% endif %} />
+					<label for="expire_type_2">Aldri</label>
+
+					{% if helper.hasHttpsSupport() %}
+						<br /><br />
+						<input type="checkbox" name="secure_only" id="secure_only_box"{% if secure_only %} checked="checked"{% endif %} />
+						<label for="secure_only_box">Benytt alltid sikker tilkobling</label>
+					{% endif %}
+				</p>
+			</form>
+		{% endblock %}
+	{% endembed %}
+
+	{% embed "templates/guest/helpers/get_box.html.twig" with {'class': 'login_info'} %}
+		{% block title %}&raquo; Informasjon{% endblock %}
+		{% block content %}
+			<ul>
+				<li><a href="http://kofradia.no/blogg/">Blogg</a></li>
+				<li><a href="{{ url('/node') }}">Hjelp</a></li>
+				<li><a href="{{ url('/forum/') }}">Forum</a></li>
+				<li><a href="{{ url('/statistikk') }}">Statistikk</a></li>
+				<li><a href="{{ url('/crewet') }}">Crewet</a></li>
+			</ul>
+		{% endblock %}
+	{% endembed %}
+
+	{{ render('Templating\\Helpers@bestranker') }}
+	{{ render('Templating\\Helpers@forum_box') }}
+	{{ render('Templating\\Helpers@livefeed') }}
+
+	{{ page.content }}
+
+{% endblock %}
