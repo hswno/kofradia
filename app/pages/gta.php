@@ -157,11 +157,11 @@ class page_gta extends pages_player
 		// har ikke plass til flere biler?
 		elseif ($bydeler[$this->gta->up->data['up_b_id']]['garage_free'] == 0)
 		{
-			$msg = ess::$b->page->message_get("gta_result");
+			$msg = ess::$b->page->messages->getMessageByName("gta_result");
 			if ($msg)
 			{
 				echo '
-		<div class="p c">'.$msg['message'].'</div>';
+		<div class="p c">'.$msg->content.'</div>';
 			}
 			
 			echo '
