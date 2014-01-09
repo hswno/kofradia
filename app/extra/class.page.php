@@ -19,7 +19,12 @@ class page
 	public $content = '';
 	public $content_right = array();
 	
-	public $messages = false;
+	/**
+	 * Messages
+	 *
+	 * @var \Kofradia\Page\MessagesContainer
+	 */
+	public $messages;
 	
 	/**
 	 * Ikke legge til javascript på siden
@@ -41,20 +46,24 @@ class page
 		$this->theme = $__page['theme'];
 		
 		// sørg for at sessions/page_settings/messages er satt opp
-		if (!isset($_SESSION[$__server['session_prefix'].'page_settings']['messages']))
+		if (!isset($_SESSION[$__server['session_prefix'].'page_settings']['messages'])
+			|| !($_SESSION[$__server['session_prefix'].'page_settings']['messages'] instanceof \Kofradia\Page\MessagesContainer))
 		{
-			$_SESSION[$__server['session_prefix'].'page_settings']['messages'] = array();
+			$_SESSION[$__server['session_prefix'].'page_settings']['messages'] = new \Kofradia\Page\MessagesContainer();
 		}
-		
+
 		$this->messages = &$_SESSION[$__server['session_prefix'].'page_settings']['messages'];
 	}
 	
 	/** Last inn siden (kalles til slutten av scriptet for å hente themet */
 	public function load()
 	{
+		$this->content .= ob_get_contents();
+		@ob_clean();
+
 		global $_base;
 		$_base->dt("page_load_pre");
-		
+
 		// temafilen
 		$theme_file = PATH_PUBLIC."/themes/".$this->theme."/".$this->theme_file.".php";
 		
@@ -63,6 +72,36 @@ class page
 		{
 			throw new HSException("Fant ikke temafilen <b>$this->theme_file.php</b> for temaet <b>$this->theme</b>.");
 		}
+
+		if (mb_strpos($this->content, '<boxes />') === false)
+		{
+			$this->content = '<boxes />'.$this->content;
+		}
+
+		// hent temafilen
+		require $theme_file;
+		
+		// hent full html kode som ble generert
+		$content = ob_get_contents();
+		@ob_clean();
+
+		echo $this->postParse($content);
+		die;
+	}
+
+	/**
+	 * Parse innhold etter det er generert og gjør siste endringer
+	 *
+	 * Legger til meldinger, brukerlenker m.v.
+	 *
+	 * Legger også til debuginfo
+	 *
+	 * @param string
+	 * @return string
+	 */
+	public function postParse($content)
+	{
+		\ess::$b->dt("postParse start");
 		
 		// sjekk om betingelsene er oppdatert
 		if (login::$logged_in && login::$user->data['u_tos_version'] != game::$settings['tos_version']['value'] && !defined("TOS_MESSAGE"))
@@ -71,87 +110,29 @@ class page
 			$this->add_message('<b>Betingelser oppdatert -</b> Du har ikke lest gjennom de nyeste <a href="'.ess::$s['rpath'].'/betingelser">betingelsene</a>! Ditt videre bruk betyr at du samtykker i disse betingelsene.', "error");
 		}
 		
-		// legg til innholdet
-		$this->content .= ob_get_contents();
-		@ob_clean();
-		
-		// sjekk om vi har en placeholder (der for standard meldinger skal plasseres)
-		$placeholder = mb_strpos($this->content, '<boxes />');
-		
 		// informasjonsmeldinger
-		if (count($this->messages) > 0)
+		$msgs = $this->messages->getBoxes();
+		if (!preg_match_all("~<boxes( (-?\\d+))? />~", $content, $matches, PREG_SET_ORDER))
 		{
-			$msgs = '';
-			$msgs_top = '';
-			$msgs_bottom = '';
-			
-			// gå gjennom hver melding
-			foreach ($this->messages as $row)
-			{
-				// sett opp html
-				$msg = $this->message_format($row);
-				
-				// spesiell plassering?
-				$force = isset($row['force']) ? $row['force'] : false;
-				
-				// på toppen
-				if ($force == "top" && $placeholder !== false)
-				{
-					$msgs_top .= $msg;
-				}
-				
-				// i bunnen
-				elseif ($force == "bottom")
-				{
-					$msgs_bottom .= $msg;
-				}
-				
-				// standard
-				else
-				{
-					$msgs .= $msg;
-				}
-			}
-			
-			// plasser meldingene som skal i bunnen
-			if ($msgs_bottom != "") $this->content .= $msgs_bottom;
-			
-			// plasser meldingene som skal i toppen
-			if ($msgs_top != "") $this->content = $msgs_top . $this->content;
-			
-			// plasser standard meldinger
-			if ($placeholder !== false)
-			{
-				// sørg for korrekt posisjon hvor den skal plasseres i tilfelle innholdet har blitt endret
-				// sjekk om vi har en placeholder (der for standard meldinger skal plasseres)
-				$placeholder = mb_strpos($this->content, '<boxes />');
-				
-				$this->content = mb_substr($this->content, 0, $placeholder) . $msgs . mb_substr($this->content, $placeholder);
-			}
-			else
-			{
-				$this->content = $msgs . $this->content;
-			}
-			
-			// tøm meldingene
-			$this->messages = array();
+			throw new \RuntimeException("Missing boxes-element from template.");
 		}
-		
-		// fjern placeholder tags
-		if ($placeholder !== false)
+
+		$match = '';
+		$match_id = null;
+		foreach ($matches as $m)
 		{
-			$this->content = strtr($this->content, array('<boxes />' => ''));
+			$id = isset($m[2]) ? (int) $m[2] : 0;
+			if ($match_id === null || $id > $match_id)
+			{
+				$match = $m[0];
+			}
 		}
-		
-		// hent temafilen
-		require $theme_file;
-		
-		// hent full html kode som ble generert
-		$content = ob_get_contents();
-		@ob_clean();
-		
+
+		$content = preg_replace("~".preg_quote($match, "~")."~", $msgs, $content, 1);
+		$content = preg_replace("~<boxes( (-?\\d+))? />~", "", $content);
+
 		// gå gjennom HTML og sjekk for brukerlinker (<user../>) osv. og vis innholdet
-		echo parse_html($content);
+		$content = parse_html($content);
 		
 		if (defined("SHOW_QUERIES_INFO"))
 		{
@@ -180,7 +161,7 @@ class page
 				$db = '<br />DATABASE<br />'.htmlspecialchars(print_r($newlist, true));
 			}
 
-			echo '
+			$content .= '
 <a href="javascript:void(0)" onclick="this.nextSibling.style.display=\'block\'">Debug info</a><div style="display: none"><br />
 	<pre>
 GET<br />'.htmlspecialchars(print_r($_GET, true)).'<br />
@@ -188,9 +169,9 @@ POST<br />'.htmlspecialchars(print_r($_POST, true)).$db.'
 	</pre>
 </div>';
 		}
-		
-		// stop scriptet
-		die;
+
+		\ess::$b->dt('postParse end');
+		return $content;
 	}
 	
 	/** Hent innhold til <head> */
@@ -358,30 +339,18 @@ POST<br />'.htmlspecialchars(print_r($_POST, true)).$db.'
 	 * @param string $type = NULL
 	 * @param string $force = NULL
 	 * @param string $name = NULL
+	 * @return \Kofradia\Page\Message
 	 */
 	public function add_message($value, $type = NULL, $force = NULL, $name = NULL)
 	{
-		// standard type er info
-		if ($type === NULL) $type = "info";
-		
-		// raden
-		$row = array(
-			"type" => $type,
-			"message" => $value
-		);
-		
-		// skal den plasseres et bestemt sted?
-		if ($force !== NULL) $row['force'] = $force;
-		
-		// for å muliggjøre overskriving/sletting
+		if (!$type) $type = 'info';
+		$msg = \Kofradia\Page\Message::forge($value, $type, $force);
 		if ($name)
 		{
-			$this->messages[$name] = $row;
+			$msg->name = $name;
 		}
-		else
-		{
-			$this->messages[] = $row;
-		}
+
+		return $this->messages->addMessage($msg);
 	}
 	
 	/**
@@ -389,46 +358,17 @@ POST<br />'.htmlspecialchars(print_r($_POST, true)).$db.'
 	 */
 	public function message_get($name, $erase = true, $format = null)
 	{
-		// finnes ikke meldingen?
-		if (!isset($this->messages[$name])) return null;
-		$msg = &$this->messages[$name];
-		
-		// slette meldingen?
-		if ($erase)
-		{
-			unset($this->messages[$name]);
-		}
-		
-		if ($format) return $this->message_format($msg);
-		return $msg;
+		return $this->messages->getMessageByName($name, $erase, $format);
 	}
-	
+
 	/**
 	 * Formater html for melding
 	 */
-	public function message_format($row)
+	public function getContent()
 	{
-		// hva slags type melding?
-		switch ($row['type'])
-		{
-			// feilmelding
-			case "error":
-				return '<div class="error_box">'.$row['message'].'</div>';
-			break;
-			
-			// informasjon
-			case "info":
-				return '<div class="info_box">'.$row['message'].'</div>';
-			break;
-			
-			// egendefinert
-			case "custom":
-				return $row['message'];
-			break;
-			
-			// ukjent
-			default:
-				return '<div class="info_box">'.htmlspecialchars($row['type']).' (ukjent): '.$row['message'].'</div>';
-		}
+		return $this->content;
+		$content = $this->content;
+		$this->content = '';
+		return $content;
 	}
 }
