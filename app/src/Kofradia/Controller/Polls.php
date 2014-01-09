@@ -4,6 +4,8 @@ use \Kofradia\Polls\Poll;
 use \Kofradia\View;
 
 class Polls extends \Kofradia\Controller {
+	public $createResponseObject = false;
+
 	/**
 	 * List polls
 	 */

@@ -1,5 +1,7 @@
 <?php namespace Kofradia;
 
+use \Kofradia\Controller;
+
 class Route {
 	/**
 	 * The URI currently requested
@@ -48,7 +50,16 @@ class Route {
 		$this->loadController();
 		if ($this->controller)
 		{
-			$this->processController();
+			$ret = $this->processController();
+			if ($ret instanceof \Kofradia\Response)
+			{
+				$ret->output();
+			}
+			else
+			{
+				echo $ret;
+				\ess::$b->page->load();
+			}
 		}
 		else
 		{
@@ -66,24 +77,13 @@ class Route {
 		if (is_callable($this->controller))
 		{
 			$func = new \ReflectionFunction($this->controller);
-			echo $func->invokeArgs($this->controller_args);
+			return $func->invokeArgs($this->controller_args);
 		}
 
 		else
 		{
-			$pos = strpos($this->controller, "@");
-			$classname = "\\Kofradia\\Controller\\".substr($this->controller, 0, $pos);
-			$method = "action_".substr($this->controller, $pos+1);
-
-			$class = new \ReflectionClass($classname);
-
-			$instance = $class->newInstance();
-			$class->getMethod("before")->invoke($instance);
-
-			echo $class->getMethod($method)->invokeArgs($instance, $this->controller_args);
+			return Controller::execute($this->controller, $this->controller_args);
 		}
-
-		\ess::$b->page->load();
 	}
 
 	/**
