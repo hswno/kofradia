@@ -3,8 +3,9 @@
 	"description": "Kofradia - Kampen om broderskapet",
 	"keywords": ["Kofradia", "Henrik Steen Webutvikling"],
 	"require": {
-		 "robmorgan/phinx": "*",
-		 "twig/twig": "1.*"
+		"robmorgan/phinx": "*",
+		"twig/twig": "1.*",
+		"kriswallsmith/assetic": "1.2.*@dev"
 	},
 	"require-dev": {
 		"phpdocumentor/phpdocumentor": "2.*"
