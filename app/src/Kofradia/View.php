@@ -54,6 +54,11 @@ class View {
 			));
 			static::$twig->addExtension(new \Kofradia\Twig\Date());
 			static::$twig->addExtension(new \Kofradia\Twig\Counter());
+			static::$twig->addExtension(new \Kofradia\Twig\Render());
+			static::$twig->addExtension(new \Kofradia\Twig\Helpers());
+
+			static::$twig->addGlobal("page", \ess::$b->page);
+			static::$twig->addGlobal("helper", new \Kofradia\Twig\TemplateHelper());
 		}
 
 		return static::$twig;
