@@ -20,3 +20,8 @@ Når Composer er satt opp må vi laste inn systemet, og må derfor kjøre instal
 ## Dokumentasjon
 Dokumentasjon i utgangspunkt med phpDoc genereres hver natt kl 03, og ellers ved behov, og er tilgjengelig her:
 https://kofradia.no/docs/
+
+## Avhengigheter
+
+* UglifyCSS
+** ```npm install -g uglifycss```
