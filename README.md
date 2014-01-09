@@ -24,4 +24,4 @@ https://kofradia.no/docs/
 ## Avhengigheter
 
 * UglifyCSS
-** ```npm install -g uglifycss```
+ * ```npm install -g uglifycss```
