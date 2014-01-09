@@ -1,0 +1,65 @@
+{% extends 'templates/guest.html.twig' %}
+
+{% block head %}
+	{{ parent() }}
+	<link rel="stylesheet" type="text/css" href="/assets/css/node.css" />
+{% endblock %}
+
+{% block body_start %}
+	<aside class="node_header">
+		<div class="node_header_r">
+			{% if helper.isLoggedIn() %}
+				<p>Logget inn som {{ helper.getUser().player.profile_link() }} | <a href="{{ url('/loggut?sid=' ~ helper.getSid()) }}">Logg ut</a></p>
+
+			{% else %}
+				<p id="node_userinfo">Du er ikke logget inn | <a href="{{ url(helper.getLoginUrl()) }}">Logg inn</a> | <a href="{{ url('/register') }}">Registrer</a></p>
+			{% endif %}
+		</div>
+
+		{% if helper.hasExtededAccess() %}
+			{% if helper.isExtendedAccessAuthed() %}
+				<div id="node_crewm">
+					<p class="first">
+						<a href="{{ url('/crew/') }}">Crew</a> (<a href="https://kofradia.no/crewstuff/" target="_blank">Stuff</a>)<br />
+						<a href="https://github.com/hswno/kofradia/pulse" target="_blank">GitHub</a><br />
+						<a href="{{ url('/crew/htpass') }}">HT-pass</a>
+					</p>
+
+					{% if helper.checkAccess('crewet') %}
+						<p>
+							<a href="{{ url('/forum/forum?id=5') }}">Crewforum</a> (<a href="{{ url('/forum/forum?id=6') }}">arkiv</a>)<br />
+							<a href="{{ url('/forum/forum?id=7') }}">Idémyldringsforum</a><br />
+						</p>
+
+						{% set boxes = helper.getExtendedAccessBoxes() %}
+						{% for box in boxes %}
+							<div class="link_box"><a href="{{ box[0] }}">{{ box[1] }}</a></div>
+						{% endfor %}
+					{% endif %}
+				</div>
+
+				<p>Logget inn som {{ helper.getAccessName() }} | <a href="{{ url(helper.getExtendedAccessLogoutUrl())|e }}">Logg ut</a></p>
+			{% else %}
+				{% if not helper.hasExtendedAccessPass() %}
+					<p><b>Ikke</b> logget inn som {{ helper.getAccessName() }} | <a href="{{ url(helper.getExtendedAccessCreateUrl())|e }}">Opprett passord</a></p>
+				{% else %}
+					<p><b>Ikke</b> logget inn som {{ helper.getAccessName() }} | <a href="{{ url(helper.getExtendedAccessLoginUrl())|e }}">Logg inn</a></p>
+				{% endif %}
+			{% endif %}
+		{% endif %}{# end hasExtendedAccess #}
+
+	</aside>
+{% endblock %}
+
+{% set boxcontent = block('content2') %}
+{% block content %}
+	{% include 'templates/guest/helpers/adds.html.twig' %}
+
+	<div class="node_wrap">
+		<boxes 2 />
+		{{ page.getContent() }}
+		{{ boxcontent }}
+	</div>
+{% endblock %}
+
+{% block class_browser %} theme_with_adds {{ parent() }}{% endblock %}

@@ -61,6 +61,23 @@ class page
 		$this->content .= ob_get_contents();
 		@ob_clean();
 
+		// load through twig template?
+		$templates = array(
+			'guest_simple' => 'templates/guest/simple',
+			'guest' => 'templates/guest/wide',
+			'node' => 'templates/guest/node',
+		);
+		if (isset($templates[$this->theme_file]))
+		{
+			$template = $templates[$this->theme_file];
+
+			\Kofradia\View::forgeTwig($template);
+			$response = new \Kofradia\Response();
+			$response->setContents(\Kofradia\View::forgeTwig($template));
+			$response->output();
+			die;
+		}
+
 		global $_base;
 		$_base->dt("page_load_pre");
 
@@ -362,7 +379,7 @@ POST<br />'.htmlspecialchars(print_r($_POST, true)).$db.'
 	}
 
 	/**
-	 * Formater html for melding
+	 * Get contents and clean
 	 */
 	public function getContent()
 	{

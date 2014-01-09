@@ -1,0 +1,7 @@
+<section class="guest_page_box{% if class is defined %} {{ class }}{% endif %}"{% if id is defined %} id="{{ id|e }}"{% endif %}>
+	<h1 class="guest_title">{% block title %}{% endblock %}</h1>
+	<div class="guest_content">
+		{% block content %}{% endblock %}
+		{% block boxcontent %}{% endblock %}
+	</div>
+</section>

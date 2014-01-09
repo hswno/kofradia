@@ -1,0 +1,22 @@
+{% extends 'templates/guest.html.twig' %}
+
+{% block rawcss %}
+	html, body {
+		min-width: 770px;
+		max-width: 770px;
+		font-size: 13px;
+	}
+	{{ parent() }}
+{% endblock %}
+
+{% set boxcontent = block('content2') %}
+{% block content %}
+	{% embed "templates/guest/helpers/get_box.html.twig" with {'id': 'guest_simple_page'} %}
+		{% block title %}{{ page.generate_title() }}{% endblock %}
+		{% block content %}
+			<boxes 2 />
+			{{ page.getContent() }}
+			{{ boxcontent }}
+		{% endblock %}
+	{% endembed %}
+{% endblock %}

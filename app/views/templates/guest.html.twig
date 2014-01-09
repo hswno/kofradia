@@ -1,0 +1,66 @@
+{% extends 'templates/outer.html.twig' %}
+
+{% block class_browser %}{{ parent() }} theme_guest{% endblock %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="/assets/css/guest.css" />
+{% endblock %}
+
+{% block body %}
+	<header>
+		<h1><a href="&rpath;/"><span>Kofradia.no - Kampen om broderskapet</span></a></h1>
+		
+		<aside id="facebook">
+			{% block facebook_likes %}
+				<p id="num">{{ helper.getFacebookLikesNum() }}</p>
+			{% endblock %}
+			<p id="sub"><a href="http://www.facebook.com/kofradia">Støtt oss på facebook</a></p>
+		</aside>
+	</header>
+
+	<boxes 1 />
+	{% block content %}
+		{{ page.getContent() }}
+	{% endblock %}
+	{% block content_outer %}{% endblock %}
+	
+	<footer>
+		{% block footer %}{% endblock %}
+
+		<p id="first">
+			{% if not helper.isPage('/node(/.*)?') %}
+			<a href="&rpath;/node" class="help">Hjelp / innføring</a>
+			{% endif %}
+
+			{% if not helper.isLoggedIn() %}
+			
+				{% if not helper.isPage('/') %}
+					<a href="{{ url('/') }}" class="login">Logg inn</a>
+				{% endif %}
+
+				{% if not helper.isPage('/registrer') %}
+					<a href="{{ url('/registrer') }}" class="register">Registrer deg</a>
+				{% endif %}
+
+				{% if not helper.isPage('/glemt_passord') %}
+					<a href="{{ url('/glemt_passord') }}" class="forgot">Glemt passord</a>
+				{% endif %}
+
+			{% else %}
+				<a href="{{ url('/') }}" class="frontpage">Forsiden</a>
+			{% endif %}
+
+			{% if not helper.isPage('/henvendelser') %}
+				<a href="{{ url('/henvendelser') }}" class="contact">Kontakt oss</a>
+			{% endif %}
+		</p>
+
+		<p id="last">
+			<a href="https://hsw.no">Henrik Steen Webutvikling</a> - 
+			<a href="http://kofradia.no/blogg/">Blogg</a> - 
+			<a href="http://www.facebook.com/kofradia">Facebook</a> - 
+			<a href="https://github.com/hswno/kofradia">GitHub</a>
+		</p>
+	</footer>
+	
+{% endblock %}
