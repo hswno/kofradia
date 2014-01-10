@@ -14,7 +14,7 @@ use Assetic\Filter\UglifyCssFilter;
 
 
 $factory = new AssetFactory(PATH_APP."/assets");
-$factory->setDebug(true);
+if (!MAIN_SERVER) $factory->setDebug(true);
 
 $am = new AssetManager();
 $factory->setAssetManager($am);
