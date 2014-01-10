@@ -58,7 +58,7 @@ foreach ($img as $num) {
 }
 
 // export the image
-imagejpeg($image, "", 90);
+imagejpeg($image, null, 90);
 imagedestroy($image);
 
 $mimetype = "image/jpeg";
