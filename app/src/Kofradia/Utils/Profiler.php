@@ -43,8 +43,12 @@ class Profiler {
 
 	/**
 	 * Get DB-times
+	 *
+	 * Loops over all DB-profilers and sum the time
+	 *
+	 * @return int
 	 */
-	protected function getDBTime()
+	public function getDBTime()
 	{
 		$t = 0;
 		foreach ($this->dbProfilers as $profiler)
@@ -55,7 +59,36 @@ class Profiler {
 	}
 
 	/**
+	 * Get DB query count
+	 *
+	 * Loops over all DB-profilers and sum the count
+	 *
+	 * @return int
+	 */
+	public function getDBQueryCount()
+	{
+		$c = 0;
+		foreach ($this->dbProfilers as $profiler)
+		{
+			$c += $profiler->num;
+		}
+		return $c;
+	}
+
+	/**
+	 * Get total time
+	 *
+	 * @return float Time elapsed since profiler started
+	 */
+	public function getTime()
+	{
+		return microtime(true) - $this->startTime;
+	}
+
+	/**
 	 * Add tag
+	 *
+	 * @param string Description to mark the tag
 	 */
 	public function tag($description)
 	{
@@ -68,6 +101,8 @@ class Profiler {
 
 	/**
 	 * Format a pretty table
+	 *
+	 * @return string
 	 */
 	public function getPrettyTable()
 	{
