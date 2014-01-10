@@ -9,6 +9,18 @@ class Helpers extends \Twig_Extension {
 		);
 	}
 
+	public function getFilters()
+	{
+		return array(
+			new \Twig_SimpleFilter('bb', array($this, 'bbFilter')),
+		);
+	}
+
+	public function bbFilter($data)
+	{
+		return \game::bb_to_html($data);
+	}
+
 	public function urlFragment($path, $absolute = false)
 	{
 		$url = $absolute ? \ess::$s['path'] : \ess::$s['rpath'];

@@ -228,4 +228,9 @@ class TemplateHelper {
 	{
 		return isset(\login::$extended_access['passkey']);
 	}
+
+	public function getProfiler()
+	{
+		return \ess::$b->profiler;
+	}
 }

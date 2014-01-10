@@ -52,6 +52,7 @@ class View {
 				'strict_variables' => true,
 				'autoescape' => false,
 			));
+			static::$twig->getExtension('core')->setNumberFormat(2, ',', ' ');
 			static::$twig->addExtension(new \Kofradia\Twig\Date());
 			static::$twig->addExtension(new \Kofradia\Twig\Counter());
 			static::$twig->addExtension(new \Kofradia\Twig\Render());
