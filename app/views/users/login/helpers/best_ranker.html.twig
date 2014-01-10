@@ -10,7 +10,7 @@
 				</span>
 				<span class="rp_familie">
 					{% if player['ff_links'] %}
-						player['ff_links']|join(', ')
+						{{ player['ff_links']|join(', ') }}
 					{% else %}
 						<i class="rp_no_familie">Ingen broderskap</i>
 					{% endif %}
