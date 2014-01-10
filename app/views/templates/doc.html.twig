@@ -1,0 +1,67 @@
+{% extends 'templates/outer.html.twig' %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="/assets/css/doc.css" />
+{% endblock %}
+
+{% block body %}
+	<h1 id="doc_header"><a href="{{ url('/') }}">Kofradia</a></h1>
+
+	{% if helper.isLoggedIn() %}
+		<p id="doc_userinfo">Logget inn som {{ helper.getUser().player.profile_link() }} | <a href="{{ url('/loggut?sid=' ~ helper.getSid()) }}">Logg ut</a></p>
+
+
+		{% if helper.hasExtededAccess() %}
+			{% if helper.isExtendedAccessAuthed() %}
+				<p id="doc_crew">Logget inn som {{ helper.getAccessName() }} | <a href="{{ url(helper.getExtendedAccessLogoutUrl())|e }}">Logg ut</a></p>
+
+
+				<div id="doc_crewm">
+					<p class="first">
+						<a href="{{ url('/crew/') }}">Crew</a> (<a href="https://kofradia.no/crewstuff/" target="_blank">Stuff</a>)<br />
+						<a href="https://github.com/hswno/kofradia/pulse" target="_blank">GitHub</a><br />
+						<a href="{{ url('/crew/htpass') }}">HT-pass</a>
+					</p>
+
+					{% if helper.checkAccess('crewet') %}
+						<p>
+							<a href="{{ url('/forum/forum?id=5') }}">Crewforum</a> (<a href="{{ url('/forum/forum?id=6') }}">arkiv</a>)<br />
+							<a href="{{ url('/forum/forum?id=7') }}">Idémyldringsforum</a><br />
+						</p>
+					{% endif %}
+
+					{% set boxes = helper.getExtendedAccessBoxes() %}
+					{% for box in boxes %}
+						<div class="link_box"><a href="{{ box[0] }}">{{ box[1] }}</a></div>
+					{% endfor %}
+				</div>
+			{% else %}
+				{% if not helper.hasExtendedAccessPass() %}
+					<p id="doc_crew"><b>Ikke</b> logget inn som {{ helper.getAccessName() }} | <a href="{{ url(helper.getExtendedAccessCreateUrl())|e }}">Opprett passord</a></p>
+				{% else %}
+					<p id="doc_crew"><b>Ikke</b> logget inn som {{ helper.getAccessName() }} | <a href="{{ url(helper.getExtendedAccessLoginUrl())|e }}">Logg inn</a></p>
+				{% endif %}
+			{% endif %}
+		{% endif %}{# end hasExtendedAccess #}
+
+	{% else %}
+		<p id="doc_userinfo">Du er ikke logget inn | <a href="{{ url(helper.getLoginUrl()) }}">Logg inn</a> | <a href="{{ url('/register') }}">Registrer</a></p>
+	{% endif %}
+
+	<div id="doc_content">
+		<boxes 1 />
+		{% block content %}
+			{{ page.getContent() }}
+		{% endblock %}
+	</div>
+
+	<div id="doc_footer">
+		{% set profiler = helper.getProfiler() %}
+		{% set database_time = profiler.getDBTime() %}
+		{% set script_time = profiler.getTime() - database_time %}
+		{% set num_queries = profiler.getDBQueryCount() %}
+		<p id="doc_footer_left">Script: {{ script_time|number_format(4) }} sek<span id="js_time"></span><br />Database: {{ database_time|number_format(4) }} sek ({{ num_queries }} spørring{% if num_queries != 1 %}er{% endif %})</p>
+		<p><a href="http://hsw.no"><span>Henrik Steen Webutvikling</span></a></p>
+	</div>
+
+{% endblock %}

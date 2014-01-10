@@ -66,6 +66,7 @@ class page
 			'guest_simple' => 'templates/guest/simple',
 			'guest' => 'templates/guest/wide',
 			'node' => 'templates/guest/node',
+			'doc' => 'templates/doc',
 		);
 		if (isset($templates[$this->theme_file]))
 		{

@@ -51,5 +51,13 @@ $am->set('node', $factory->createAsset(
 	array('name' => 'node', 'output' => 'css/*')
 ));
 
+
+$am->set('doc', $factory->createAsset(
+	array(PATH_APP."/assets/css/doc.css"),
+	array('?uglifycss'),
+	array('name' => 'doc', 'output' => 'css/*')
+));
+
+
 $writer = new AssetWriter(PATH_PUBLIC."/assets");
 $writer->writeManagerAssets($am);
