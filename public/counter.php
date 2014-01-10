@@ -3,7 +3,7 @@
 ob_start();
 
 // The images that contains a number from 0 to 9
-$folder = "../imgs/tall_counter/";
+$folder = "../../imgs/tall_counter/";
 $imgnum = array(
 	$folder . "0.png",
 	$folder . "1.png",
