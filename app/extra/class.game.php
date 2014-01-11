@@ -914,9 +914,9 @@ class game
 				
 				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(https?://)?(www.)?youtube.com/.+v=([0-9a-z_\-]{11})[^\s<]*~iu' => '<object width="425" height="350"><param name="movie" value="https://www.youtube.com/v/$3"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/$3" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
-				'~\[youtube\].+v=([0-9a-z_\.]+).*\[/youtube\]~iu' => '<object width="425" height="350"><param name="movie" value="https://www.youtube.com/v/$1"></param><param name="wmode" value="transparent"></param><embed src="https://www.youtube.com/v/$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
+				'~\[youtube\].+v=([0-9a-z_\.]+).*\[/youtube\]~iu' => '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/$1"></param><param name="wmode" value="transparent"></param><embed src="https://www.youtube.com/v/$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
-				'~\[youtube\]https?://((www.)?youtube.com/.+?)\[/youtube\]~iu' => '<object width="425" height="350"><param name="movie" value="https://$1"></param><param name="wmode" value="transparent"></param><embed src="https://$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
+				'~\[youtube\](https?://(www.)?youtube.com/.+?)\[/youtube\]~iu' => '<object width="425" height="350"><param name="movie" value="$1"></param><param name="wmode" value="transparent"></param><embed src="$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
 				// bilder
 				'~\[img\]([^\["\'\n]+)\[/img\]~ieu' => 'game::secure_img_addr(\'$1\')',
