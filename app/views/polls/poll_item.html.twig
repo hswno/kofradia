@@ -1,0 +1,40 @@
+{#
+
+// data:
+// $poll
+// $vote
+
+#}
+{% set periode = '' %}
+{% set end = not poll.item.data['p_time_end'] ? 'ubestemt' : poll.item.data['p_time_end']|date %}
+
+{% if not poll.item.data['p_time_start'] %}
+	{% set periode = 'Til ' ~ end %}
+{% else %}
+	{% set periode = 'Fra ' ~ poll.item.data['p_time_start']|date ~ ' til ' ~ end %}
+{% endif %}
+
+<div class="bg1_c xsmall">
+	<h2 class="bg1">{{ poll.item.data['p_title']|e }}<span class="left2"></span><span class="right2"></span></h2>
+	<div class="bg1">
+		<p><b>Periode:</b><br />{{ periode }}</p>
+		<p><b>Antall stemmer:</b> {{ poll.item.votes|number_format(0) }}</p>
+
+		{% set bb = poll.item.data['p_text']|bb %}
+		{% if bb != "" %}
+			<div class="p">{{ bb }}</div>
+		{% endif %}
+
+		<div class="poll_options">
+	
+			{% for option in poll.options %}
+				<div class="poll_option{% if option.is_vote %} voted{% endif %}">
+					<div class="p">{{ option.item.data['po_text']|bb }}{% if option.is_vote %} (valgt){% endif %}</div>
+					<div class="poll_option_bar_wrap" style="width: 150px">
+						<div class="poll_option_bar" style="width: {{ option.width }}%"><p>{{ option.percent }} %{% if option.is_vote %} (valgt){% endif %}</p></div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>

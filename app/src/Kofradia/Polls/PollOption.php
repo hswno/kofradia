@@ -42,4 +42,21 @@ class PollOption {
 
 		return $ok;
 	}
+
+	/**
+	 * Get percent of total votes this option represents
+	 *
+	 * With one decimal
+	 *
+	 * @return float
+	 */
+	public function getPercent()
+	{
+		if ($this->poll->votes == 0)
+		{
+			return 0;
+		}
+
+		return round($this->data['po_votes'] / $this->poll->votes * 100, 1);
+	}
 }

@@ -1,0 +1,22 @@
+{#
+
+// data:
+// $polls
+// $pagei
+
+#}
+{% if not polls %}
+	{% include 'polls/no_polls.html.twig' %}
+{% else %}
+	{% for poll in polls %}
+		{% include 'polls/poll_item.html.twig' with { 'poll': poll } %}
+	{% endfor %}
+{% endif %}
+
+{% if pagei.pages > 1 %}
+	<p class="c">{{ pagei.pagenumbers('/polls', '/polls/_pageid_') }}</p>
+{% endif %}
+
+{% if helper.checkAccess('forum_mod') %}
+	<p class="c" style="margin-top: 30px"><a href="{{ url('/polls/admin') }}">Administrer avstemninger &raquo;</a></p>
+{% endif %}

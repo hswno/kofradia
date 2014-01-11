@@ -18,8 +18,41 @@ class Polls extends \Kofradia\Controller {
 		$pagei->__construct(\pagei::ACTIVE, intval($page));
 		$polls = Poll::getPolls($pagei, \login::$logged_in ? \login::$user : null);
 
-		return View::forge("polls/poll_list", array(
-			"polls" => $polls,
+		$data = array();
+		foreach ($polls as $poll)
+		{
+			$vote = \login::$logged_in ? $poll->getVote() : null;
+			
+			// finn alternativet med flest stemmer
+			$votes_max = 0;
+			foreach ($poll->options as $option)
+			{
+				if ($option->data['po_votes'] > $votes_max)
+				{
+					$votes_max = $option->data['po_votes'];
+				}
+			}
+
+			$options = array();
+			foreach ($poll->options as $option)
+			{
+				$options[] = array(
+					"item" => $option,
+					"percent" => $option->getPercent(),
+					"is_vote" => $option == $vote,
+					"width" => round($option->data['po_votes'] / $votes_max * 100)
+				);
+			}
+
+			$data[] = array(
+				"item" => $poll,
+				"options" => $options,
+				"in_progress" => $poll->data['p_time_end'] > time()
+			);
+		}
+
+		return View::forgeTwig("polls/poll_list", array(
+			"polls" => $data,
 			"pagei" => $pagei));
 	}
 
