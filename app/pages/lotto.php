@@ -277,7 +277,7 @@ class page_lotto
 		}
 
 		// correct time if it ends in the lock-time
-		if (time() + $this->wait > $this->next - 60)
+		if ($this->wait > $this->next - 60)
 		{
 			$this->wait = $this->next + 60;
 		}
