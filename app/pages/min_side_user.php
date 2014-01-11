@@ -239,17 +239,20 @@ class page_min_side_user
 					</div>
 				</div>';
 		}
-		
-		// hent spillerene tilhørende denne personen
-		$pagei = new pagei(pagei::ACTIVE_GET, "side_up", pagei::PER_PAGE, 7);
-		$result = $pagei->query("
-			SELECT up_id, up_name, up_access_level, up_created_time, up_last_online, up_points, up_deactivated_time, upr_rank_pos
-			FROM users_players
-				LEFT JOIN users_players_rank ON upr_up_id = up_id
-			WHERE up_u_id = ".page_min_side::$active_user->id."
-			ORDER BY up_last_online DESC");
-		
-		echo '
+
+		// vis liste over spillere kun for spillerne selv eller en moderator
+		if ($mod || page_min_side::$active_own)
+		{
+			// hent spillerene tilhørende denne personen
+			$pagei = new pagei(pagei::ACTIVE_GET, "side_up", pagei::PER_PAGE, 7);
+			$result = $pagei->query("
+				SELECT up_id, up_name, up_access_level, up_created_time, up_last_online, up_points, up_deactivated_time, upr_rank_pos
+				FROM users_players
+					LEFT JOIN users_players_rank ON upr_up_id = up_id
+				WHERE up_u_id = ".page_min_side::$active_user->id."
+				ORDER BY up_last_online DESC");
+				
+			echo '
 				<div class="bg1_c">
 					<h1 class="bg1">Spillere tilhørende brukeren<span class="left2"></span><span class="right2"></span></h1>'.(access::is_nostat() || page_min_side::$active_own ? '
 					<p class="h_right">'.page_min_side::link("Mer info &raquo;", "up").'</p>' : '').'
@@ -262,11 +265,11 @@ class page_min_side_user
 								</tr>
 							</thead>
 							<tbody>';
-		
-		while ($row = $result->fetch())
-		{
-			$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
-			echo '
+			
+			while ($row = $result->fetch())
+			{
+				$rank = game::rank_info($row['up_points'], $row['upr_rank_pos'], $row['up_access_level']);
+				echo '
 								<tr>
 									<td>'.game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level'], true, 'min_side?up_id='.$row['up_id']).'<br /><span style="font-size: 10px">'.$rank['name'].'</span></td>
 									<td style="font-size: 10px">
@@ -276,14 +279,28 @@ class page_min_side_user
 										Sist pålogget: '.ess::$b->date->get($row['up_last_online'])->format()).'
 									</td>
 								</tr>';
-		}
-		
-		echo '
+			}
+			
+			echo '
 							</tbody>
 						</table>'.($pagei->pages > 1 ? '
 						<p class="c">'.$pagei->pagenumbers().'</p>' : '').'
 					</div>
+				</div>';
+		}
+
+		else
+		{
+			echo '
+			<div class="bg1_c">
+				<h1 class="bg1">Spillere tilhørende brukeren<span class="left2"></span><span class="right2"></span></h1>
+				<div class="bg1">
+					<p>Du har ikke tilgang til å vise denne oversikten.</p>
 				</div>
+			</div>';
+		}
+
+		echo '
 			</div>
 		</div>
 	</div>';
