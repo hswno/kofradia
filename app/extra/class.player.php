@@ -788,6 +788,12 @@ class player
 		{
 			$info['wait_time'] = max($info['wait_time'], $next - time() + lotto::$ventetid);
 		}
+
+		// correct time if it ends in the lock-time
+		if (time() + $info['wait_time'] > $lotto_next - 60)
+		{
+			$info['wait_time'] = $lotto_next + 60;
+		}
 		
 		return $info;
 	}

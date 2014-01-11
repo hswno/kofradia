@@ -275,6 +275,12 @@ class page_lotto
 				if ($this->wait < 0) $this->wait = 0;
 			}
 		}
+
+		// correct time if it ends in the lock-time
+		if (time() + $this->wait > $this->next - 60)
+		{
+			$this->wait = $this->next + 60;
+		}
 	}
 	
 	/**
