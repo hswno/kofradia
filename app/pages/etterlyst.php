@@ -339,7 +339,7 @@ class page_etterlyst extends pages_player
 						ess::$b->page->add_message('Du la til '.game::format_cash($amount).' som dusør for spilleren <user id="'.$player['up_id'].'" />.');
 						$this->up->params->update("hitlist_last_new", time(), true);
 						
-						redirect::handle();
+						redirect::handle("etterlyst");
 					}
 					
 					\Kofradia\DB::get()->commit();
@@ -407,14 +407,14 @@ class page_etterlyst extends pages_player
 		if (!$hl)
 		{
 			ess::$b->page->add_message('Spilleren <user id="'.$hl['hl_up_id'].'" /> har ingen dusør på seg.', "error");
-			redirect::handle();
+			redirect::handle("etterlyst");
 		}
 		
 		// kan ikke kjøpe ut noe?
 		if ($hl['sum_can_remove'] == 0)
 		{
 			ess::$b->page->add_message('Du må vente lenger for å kunne kjøpe ut dusøren til <user id="'.$up_id.'" />.', "error");
-			redirect::handle();
+			redirect::handle("etterlyst");
 		}
 		
 		$least = min(max(etterlyst::MIN_AMOUNT_BUYOUT, etterlyst::MIN_AMOUNT_BUYOUT_RATIO * $hl['sum_can_remove']), $hl['sum_can_remove']);
@@ -504,7 +504,7 @@ class page_etterlyst extends pages_player
 								ess::$b->page->add_message("Du kjøpte ut en dusør på ".game::format_cash($amount).' for <user id="'.$up_id.'" />. Du måtte betale '.game::format_cash($price).' for dette.');
 							}
 							
-							redirect::handle();
+							redirect::handle("etterlyst");
 						}
 					}
 				}
@@ -546,7 +546,7 @@ class page_etterlyst extends pages_player
 	 */
 	protected function show_details()
 	{
-		if (empty($_GET['up_id']) || !access::has("mod")) redirect::handle();
+		if (empty($_GET['up_id']) || !access::has("mod")) redirect::handle("etterlyst");
 		
 		// last inn spiller
 		$up_id = (int) $_GET['up_id'];
@@ -555,7 +555,7 @@ class page_etterlyst extends pages_player
 		if (!$up)
 		{
 			ess::$b->page->add_message("Ingen spiller med id $up_id.", "error");
-			redirect::handle();
+			redirect::handle("etterlyst");
 		}
 		
 		$pagei = new pagei(pagei::PER_PAGE, 30, pagei::ACTIVE_GET, 'side');
@@ -627,7 +627,7 @@ class page_etterlyst extends pages_player
 		if (!isset($_POST['hl_id']))
 		{
 			ess::$b->page->add_message("Du må velge en dusør du har satt.", "error");
-			redirect::handle();
+			redirect::handle("etterlyst");
 		}
 		
 		$hl_id = (int) $_POST['hl_id'];
@@ -639,7 +639,7 @@ class page_etterlyst extends pages_player
 		if (!$hl)
 		{
 			ess::$b->page->add_message("Fant ikke oppføringen.", "error");
-			redirect::handle();
+			redirect::handle("etterlyst")
 		}
 		
 		\Kofradia\DB::get()->beginTransaction();
@@ -650,7 +650,7 @@ class page_etterlyst extends pages_player
 		{
 			ess::$b->page->add_message("Noen kom deg i forkjøpet og kjøpte ut hele eller deler av dusøren.", "error");
 			\Kofradia\DB::get()->commit();
-			redirect::handle();
+			redirect::handle("etterlyst")
 		}
 		
 		// hvor mye penger skal vi få?
@@ -664,6 +664,6 @@ class page_etterlyst extends pages_player
 		putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." trakk tilbake dusør for UP_ID={$hl['hl_up_id']} på ".game::format_cash($hl['hl_amount_valid']).'.');
 		
 		ess::$b->page->add_message('Du trakk tilbake dusøren på <user id="'.$hl['hl_up_id'].'" /> som ble satt '.ess::$b->date->get($hl['hl_time'])->format().' og som hadde igjen '.game::format_cash($hl['hl_amount_valid']).'. Du fikk tilbake '.game::format_cash($amount).'.');
-		redirect::handle();
+		redirect::handle("etterlyst")
 	}
 }
