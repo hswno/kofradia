@@ -639,7 +639,7 @@ class page_etterlyst extends pages_player
 		if (!$hl)
 		{
 			ess::$b->page->add_message("Fant ikke oppføringen.", "error");
-			redirect::handle("etterlyst")
+			redirect::handle("etterlyst");
 		}
 		
 		\Kofradia\DB::get()->beginTransaction();
@@ -650,7 +650,7 @@ class page_etterlyst extends pages_player
 		{
 			ess::$b->page->add_message("Noen kom deg i forkjøpet og kjøpte ut hele eller deler av dusøren.", "error");
 			\Kofradia\DB::get()->commit();
-			redirect::handle("etterlyst")
+			redirect::handle("etterlyst");
 		}
 		
 		// hvor mye penger skal vi få?
@@ -664,6 +664,6 @@ class page_etterlyst extends pages_player
 		putlog("LOG", "ETTERLYST: ".$this->up->data['up_name']." trakk tilbake dusør for UP_ID={$hl['hl_up_id']} på ".game::format_cash($hl['hl_amount_valid']).'.');
 		
 		ess::$b->page->add_message('Du trakk tilbake dusøren på <user id="'.$hl['hl_up_id'].'" /> som ble satt '.ess::$b->date->get($hl['hl_time'])->format().' og som hadde igjen '.game::format_cash($hl['hl_amount_valid']).'. Du fikk tilbake '.game::format_cash($amount).'.');
-		redirect::handle("etterlyst")
+		redirect::handle("etterlyst");
 	}
 }
