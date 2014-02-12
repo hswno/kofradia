@@ -96,7 +96,7 @@ class Result {
 				}
 				else
 				{
-					$msg[] = sprintf("Du fant %s og prettet spilleren for %s.",
+					$msg[] = sprintf("Du fant %s og utpresset spilleren for %s.",
 						$this->up->profile_link(),
 						\game::format_cash($this->cash));
 				}
