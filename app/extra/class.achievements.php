@@ -41,7 +41,7 @@ class achievements
 		$data_code = array();
 		while ($row = $result->fetch())
 		{
-			$data[$row['ac_id']] = new achievements_item($row);
+			$data[$row['ac_id']] = new achievemendts_item($row);
 			$data_code[$row['ac_code']][$row['ac_id']] = $data[$row['ac_id']];
 		}
 		
@@ -632,12 +632,6 @@ class achievement_player_item
 				return;
 			}
 			
-			// offer ikke pålogget siste 7 dager?
-			if ($data['up']->data['up_last_online'] < time()-86400*7)
-			{
-				putlog("DF", $this->up->data['up_name'].' (#'.$this->up->id.') oppnådde ikke etterlyst-prestasjon mot '.$data['up']->data['up_name'].' (#'.$data['up']->id.') grunnet at offeret ikke har vært pålogget siste 7 dager.');
-				return;
-			}
 		}
 		
 		// marker som utført
