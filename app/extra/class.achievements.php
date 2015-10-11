@@ -41,7 +41,7 @@ class achievements
 		$data_code = array();
 		while ($row = $result->fetch())
 		{
-			$data[$row['ac_id']] = new achievemendts_item($row);
+			$data[$row['ac_id']] = new achievements_item($row);
 			$data_code[$row['ac_code']][$row['ac_id']] = $data[$row['ac_id']];
 		}
 		
