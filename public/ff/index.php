@@ -3238,7 +3238,7 @@ class page_ff_sykehus extends pages_player
 	public static $options = array(
 		1 => array(
 			"name" => "Mye energi",
-			"price" => 3000000,
+			"price" => 5000000,
 			"increase" => 0.25
 		),
 		array(
@@ -3266,7 +3266,7 @@ class page_ff_sykehus extends pages_player
 	/**
 	 * Ventetid mellom hver gang man utfører et alternativ
 	 */
-	const WAIT = 300; // 5 minutter ventetid
+	const WAIT = 180; // 3 minutter ventetid
 	
 	/** Prosent energi for å kunne utføre sykebil valget */
 	const ENERGY_SYKEBIL_REQ = 25;
