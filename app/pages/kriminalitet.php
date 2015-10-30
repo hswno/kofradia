@@ -68,7 +68,7 @@ class page_kriminalitet extends pages_player
 	<h1 class="bg1">Kriminalitet<span class="left2"></span><span class="right2"></span></h1>
 	<p class="h_right"><a href="'.ess::$s['rpath'].'/node/3">Hjelp</a></p>
 	<div class="bg1" style="padding-bottom: 1em">
-		<p>Her kan du gjøre enkle forbrytelser. Type forbrytelse er forskjellig fra bydel til bydel. Jo flere ganger du utfører handlingen vil du få en høyere sannsynlighet for å klare det.</p>';
+		<p>Her kan du gjøre enkle forbrytelser. Type forbrytelse er forskjellig fra bydel til bydel. Sannsynligheten justerer seg etter resultatet av forrige forsøk.</p>';
 		
 		// siste utført?
 		if ($this->krim->last)
