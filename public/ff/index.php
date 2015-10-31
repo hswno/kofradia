@@ -1757,7 +1757,7 @@ function ofc_get_data_'.$id.'() { return '.js_encode((string) $ofc).'; }');
 		$next = isset(weapon::$weapons[$next_id]) ? weapon::$weapons[$next_id] : false;
 		
 		// sjekk ventetid
-		$expire = time() - 86400 * 2; // 48 timer mellom hvert kjøp
+		$expire = time() - 86400; // 24 timer mellom hvert kjøp
 		$wait = max(0, $this->up->data['up_weapon_time'] - $expire);
 		
 		// rank ok?
