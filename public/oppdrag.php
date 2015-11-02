@@ -70,7 +70,7 @@ if (login::$user->player->oppdrag->active)
 <div class="bg1_c medium">
 	<h1 class="bg1">Avbryte &laquo;'.htmlspecialchars($oppdrag['o_title']).'&raquo;<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p>Hvis du avbryter oppdraget vil oppdraget bli mislykket. Du må da vente 1 time før du kan forsøke dette på dette oppdraget igjen. I tillegg vil du komme i fengsel i 15 minutter.</p>
+		<p>Hvis du avbryter oppdraget vil oppdraget bli mislykket. Du må da vente 30 minutter før du kan forsøke på dette oppdraget igjen. I tillegg vil du komme i fengsel i 15 minutter.</p>
 		<form action="" method="post">
 			<input type="hidden" name="o_id" value="'.$oppdrag['o_id'].'" />
 			<input type="hidden" name="confirm" value="1" />
@@ -177,7 +177,7 @@ if (isset($_GET['o_id']))
 		<p><b>Beskrivelse:</b></p>
 		<div class="p">'.login::$user->player->oppdrag->get_description($oppdrag['o_id']).'</div>
 		<p><b>Merk:</b></p>
-		<p>Hvis du mislykker oppdraget, må du vente 1 time før du kan utføre oppdraget på nytt. I tillegg kommer du i fengsel i 15 minutter. Hvis du avbryter oppdraget vil det tilsvare at oppdraget blir mislykket.</p>
+		<p>Hvis du mislykker oppdraget, må du vente 30 minutter før du kan forsøke oppdraget på nytt. I tillegg kommer du i fengsel i 15 minutter. Hvis du avbryter oppdraget vil det tilsvare at oppdraget blir mislykket.</p>
 		<form action="" method="post">
 			<input type="hidden" name="o_id" value="'.$oppdrag['o_id'].'" />
 			<p class="c">'.show_sbutton("Start oppdrag", 'name="start"').' - <a href="oppdrag" class="button">Avbryt</a></p>
