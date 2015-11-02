@@ -68,7 +68,7 @@ class PushEvent extends Event {
 	public function getDescriptionHTML()
 	{
 		$text = array();
-		foreach ($this->commits as $commit)
+		foreach ((array) $this->commits as $commit)
 		{
 			$text[] = $commit->getDescriptionHTML();
 		}
