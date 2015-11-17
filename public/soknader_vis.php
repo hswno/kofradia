@@ -16,7 +16,7 @@ $soknad = $result->fetch();
 $closed = $soknad['so_expire'] <= time();
 
 // finnes ikke, eller ikke tilgang til ikke publisert søknad
-if (!$soknad || ($soknad['so_status'] == 0 && !access::has("crewet")))
+if (!$soknad || ($soknad['so_status'] == 0 && !access::has("mod")))
 {
 	$_base->page->add_message("Fant ikke søknaden.", "error");
 	redirect::handle("soknader");

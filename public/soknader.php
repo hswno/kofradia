@@ -8,7 +8,7 @@ global $_base;
 $_base->page->add_title("Søknader");
 
 // administrere?
-if (isset($_GET['admin']) && access::has("crewet"))
+if (isset($_GET['admin']) && access::has("mod"))
 {
 	redirect::store("soknader?admin");
 	$_base->page->add_title("Administrasjon");
@@ -410,7 +410,7 @@ echo '
 		Søknader
 		<span class="left"></span>
 		<span class="right"></span>
-	</h1>'.(access::has("crewet") ? '
+	</h1>'.(access::has("mod") ? '
 	<p class="h_left"><a href="soknader?admin">Administrer søknader</a></p>' : '').'
 	<div class="bg1">
 		<!--<p>Her vil det bli lagt ut søknader for alle ting vi søker folk til. Måtte det være nye folk i crewet eller noe helt annet.</p>-->';
