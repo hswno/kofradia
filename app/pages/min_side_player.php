@@ -715,6 +715,7 @@ a.status_venter:hover { }
 				
 				// fremdrift
 				$progress = '';
+				$progress_text = '';
 				$item = new achievement_player_item(page_min_side::$active_player, $a);
 				$item->load_active();
 				if ($p = $item->get_progress())
