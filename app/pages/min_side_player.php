@@ -722,6 +722,8 @@ a.status_venter:hover { }
 					$w = round($p['current'] / $p['target'] * 100, 1);
 					$progress = '
 			<div class="ac_progress" title="Fremdrift: '.$p['current'].' / '.$p['target'].'" style="width: '.$w.'%"></div>';
+					$progress_text = '
+			<p class="ac_progress_text" style="text-align: right;">Fremdrift: '.$p['current'].' / '.$p['target'].'</p>';
 				}
 				
 				echo '
@@ -732,6 +734,7 @@ a.status_venter:hover { }
 				<p class="ac_prize">Premie: '.$prize.'</p>
 				<p class="ac_apoints" title="Prestasjonspoeng">'.$img.$a->data['ac_apoints'].'</p>
 				<p class="ac_status">'.$done.'</p>
+				'.$progress_text.'
 			</div>
 		</div>';
 			}
