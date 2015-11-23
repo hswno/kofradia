@@ -113,7 +113,7 @@ class Log
 				
 			// legg til hendelse i spilleloggen
 			$type = $forum->id == 4 ? 'crewforume_emne' : 'crewforum_emne';
-			$access_levels = implode(",", \ess::$g['access']['admin']);
+			$access_levels = implode(",", \ess::$g['access']['seniormod']);
 			\Kofradia\DB::get()->exec("INSERT INTO users_log SET time = ".time().", ul_up_id = 0, type = ".intval(\gamelog::$items[$type]).", note = ".\Kofradia\DB::quote(\login::$user->player->id.":".$data['ft_title']).", num = {$data['ft_id']}");
 			\Kofradia\DB::get()->exec("UPDATE users SET u_log_crew_new = u_log_crew_new + 1 WHERE u_access_level IN ($access_levels) AND (u_id != ".\login::$user->id." OR u_log_crew_new > 0)");
 		
