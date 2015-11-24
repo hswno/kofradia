@@ -44,7 +44,7 @@
 		</table>
 
 			<?php if ($pagei->pages > 1): ?>
-		<p class="c">'.$pagei->pagenumbers().'</p>
+		<p class="c"><?php echo $pagei->pagenumbers() ?></p>
 			<?php endif ?>
 
 		<?php endif ?>
