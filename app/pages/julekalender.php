@@ -42,9 +42,9 @@ class page_julekalender extends pages_player
 	}
 
 	private function check_access_julekalender() {
-		$sunreal = ((login::$user->id == 21900) && (access::has("forum_mod")));
+		$swift = ((login::$user->id == 23660) && (access::has("mod")));
 
-		return (access::has("admin") || $sunreal);
+		return (access::has("senior_mod") || $swift);
 	}
 
 	private function admin() {
