@@ -597,7 +597,7 @@ function checkReferer(elm)
 		<dd><input type="password" name="passord1" class="styled w120" /></dd>
 		<dt>Gjenta passord</dt>
 		<dd><input type="password" name="passord2" class="styled w120" /></dd>
-		<dt>Hvor hørte du om SM?</dt>
+		<dt>Hvor hørte du om Kofradia?</dt>
 		<dd>
 			<select name="referer1" id="referer_select" onchange="checkReferer(this)">';
 		
