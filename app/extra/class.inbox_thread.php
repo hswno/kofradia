@@ -141,7 +141,7 @@ class inbox_thread
 					$row = game::profile_link($row['up_id'], $row['up_name'], $row['up_access_level']).(($reason = game::bb_to_html($row['uc_info'])) == "" ? "" : ' - begrunnelse: '.$reason);
 				}
 				
-				ess::$b->page->add_message("Du kan ikke svaret på denne meldingstråden fordi følgende brukere har blokkert deg:<ul><li>".implode("</li><li>", $data)."</li></ul>", "error");
+				ess::$b->page->add_message("Du kan ikke svare på denne meldingstråden fordi følgende brukere har blokkert deg:<ul><li>".implode("</li><li>", $data)."</li></ul>", "error");
 			break;
 			
 			case self::RET_INFO_BLOCKED:
