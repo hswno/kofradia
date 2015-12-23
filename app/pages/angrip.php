@@ -113,8 +113,8 @@ class page_angrip extends pages_player
 
 		// kan vi ikke angripe nå?
 		$lock = array(
-			array(1387839600, 1387925940, "Angrepsfunksjonen er stengt på julaften."), // julaften 2012 (kl 06 den 24 - kl 06 den 25)
-			array(1388444400, 1388530740, "Angrepsfunksjonen er stengt på nyttårsaften.") // nyttår 2012-2013 (kl 18 den 31 - kl 18 den 1)
+			array(1450933200, 1451019600, "Angrepsfunksjonen er stengt på julaften."), // julaften 2015 (kl 06 den 24 - kl 06 den 25)
+			array(1451581200, 1451667600, "Angrepsfunksjonen er stengt på nyttårsaften.") // nyttår 2015-2016 (kl 18 den 31 - kl 18 den 1)
 		);
 		$locked = false;
 
