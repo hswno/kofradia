@@ -1482,8 +1482,8 @@ class oppdrag
 		{
 			case "rank_points":
 				// oppnå poeng på gitt tid
-				$target = $this->up->data['up_points']+$params->get("points");
-				return $prefix.'<p>Oppnå totalt '.game::format_num($target).' poeng i løpet av '.game::timespan($time_limit, game::TIME_FULL).'. <span class="dark">Merk at <i>lotto</i> og <i>angrep</i> ikke teller med. Hvis du mottar poeng fra disse funksjonene vil poenggrensen øke med så mange poeng du mottar.</span></p>'.$suffix;
+				$target = $params->get("points");
+				return $prefix.'<p>Oppnå '.game::format_num($target).' poeng i løpet av '.game::timespan($time_limit, game::TIME_FULL).'. <span class="dark">Merk at <i>lotto</i> og <i>angrep</i> ikke teller med. Hvis du mottar poeng fra disse funksjonene vil poenggrensen øke med så mange poeng du mottar.</span></p>'.$suffix;
 			break;
 			
 			case "kriminalitet_different":
