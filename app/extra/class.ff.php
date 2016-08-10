@@ -1655,7 +1655,7 @@ class ff
 			}
 			if (!$this->data['ff_is_crew'] && !$this->params->get("die_no_new") && !$others)
 			{
-				self::create_competition();
+				//self::create_competition();
 				
 				// sett params slik at det ikke blir lagt ut ny konkurranse dersom broderskapet blir aktivert og så deaktivert igjen
 				$this->params->update("die_no_new", 1, true);
