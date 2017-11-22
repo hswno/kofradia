@@ -191,7 +191,7 @@ class page_julekalender extends pages_player
 
 		$d = $this->get_today(true);
 		$today = $d->format("j");
-		$date_ok = $d->format("Y-m") == "2015-12";
+		$date_ok = $d->format("Y-m") == "2017-12";
 
 		$data = $this->obj->load_data();
 		$my_answers = $this->obj->load_my_answers();
