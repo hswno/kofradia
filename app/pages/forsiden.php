@@ -23,8 +23,8 @@ class page_forsiden extends pages_player
 	{
 		$this->player_dead();
 
-		// vis julekalender kun i desember 2015
-		if (ess::$b->date->get()->format("Y-m") == "2015-12") {
+		// vis julekalender kun i desember 2017
+		if (ess::$b->date->get()->format("Y-m") == "2017-12") {
 			new page_julekalender($this->up);
 		}
 		
