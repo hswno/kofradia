@@ -42,9 +42,7 @@ class page_julekalender extends pages_player
 	}
 
 	private function check_access_julekalender() {
-		$swift = ((login::$user->id == 23660) && (access::has("mod")));
-
-		return (access::has("senior_mod") || $swift);
+		return access::has("senior_mod");
 	}
 
 	private function admin() {
