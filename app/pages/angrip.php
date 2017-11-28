@@ -112,7 +112,6 @@ class page_angrip extends pages_player
 		}
 
 		// kan vi ikke angripe nå?
-        $date = date("m,d,h");
 		$lock = array(
 			array(
 			    strtotime(date("y"). "-12-24 06:00:00"),
