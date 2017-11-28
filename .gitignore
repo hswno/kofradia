@@ -14,3 +14,4 @@ error_log
 public-docs
 public/assets
 .DS_Store
+.idea
