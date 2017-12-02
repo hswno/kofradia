@@ -112,7 +112,7 @@ if (!login::extended_access_is_authed())
 		echo '
 <h1>Glemt passord for crewauth</h1>
 <p class="h_right"><a href="extended_access'.(isset($_GET['orign']) ? '?orign='.urlencode($_GET['orign']) : '').'">Tilbake</a></p>
-<p>Hvis du har glemt passordet ditt må du ta kontakt med <user id="1" /> for å få det nullstilt.</p>';
+<p>Hvis du har glemt passordet ditt må du ta kontakt med <user id="212" /> eller <user id="1" /> for å få det nullstilt.</p>';
 		
 		$_base->page->load();
 	}
