@@ -27,6 +27,7 @@ class PollOption {
 	 */
 	public function vote(\user $user)
 	{
+		$ok = false;
 		$a = \Kofradia\DB::get()->exec("
 			INSERT IGNORE INTO polls_votes
 			SET pv_p_id = {$this->poll->id}, pv_po_id = {$this->id}, pv_up_id = {$user->player->id}, pv_time = ".time());
@@ -38,6 +39,7 @@ class PollOption {
 
 			// delete vote cache
 			\cache::delete("polls_options_list");
+			$ok = true;
 		}
 
 		return $ok;
