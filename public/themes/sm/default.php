@@ -117,7 +117,7 @@ class theme_sm_default
 		if (!self::$locked)
 		{
 			echo '
-				<li><a href="'.ess::$s['relative_path'].'/forum/topic?id=94159" target="_blank">Discord</a></li>';
+				<li><a href="'.ess::$s['relative_path'].'/forum/topic?id=94159">Discord</a></li>';
 		}
 		
 		echo '
