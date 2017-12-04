@@ -42,7 +42,7 @@ class page_julekalender extends pages_player
 	}
 
 	private function check_access_julekalender() {
-		return access::has("senior_mod");
+		return access::has("seniormod");
 	}
 
 	private function admin() {
