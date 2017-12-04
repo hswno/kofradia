@@ -99,13 +99,6 @@ class theme_sm_default
 			<p id="fb_link"><a href="http://www.facebook.com/kofradia" target="_blank"><span>Du finner oss på Facebook</span></a></p>';
 			//<p id="donate_link"><a href="'.ess::$s['relative_path'].'/donasjon" title="Doner &raquo;"><span>Donér &raquo;</span></a></p>';
 		
-		$blog_links = self::get_blog_links();
-		if ($blog_links)
-		{
-			echo '
-			<p id="blog_link">'.implode("<br />", $blog_links).'</p>';
-		}
-		
 		echo '
 			<ul id="default_topmenu">
 				<li><a href="'.ess::$s['relative_path'].'/loggut?sid='.login::$info['ses_id'].'" onclick="return confirm(\'Er du sikker på at du vil logge ut?\n\nTips! Trykk Esc knappen tre ganger for å logge ut uten å måtte trykke på denne knappen!\')"><b>Logg ut</b></a></li>
@@ -124,7 +117,7 @@ class theme_sm_default
 		if (!self::$locked)
 		{
 			echo '
-				<li><a href="'.ess::$s['relative_path'].'/irc/client/" target="_blank">Chat</a></li>';
+				<li><a href="'.ess::$s['relative_path'].'/forum/topic?id=94159" target="_blank">Discord</a></li>';
 		}
 		
 		echo '
