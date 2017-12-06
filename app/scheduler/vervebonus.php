@@ -77,7 +77,7 @@ foreach ($players as $up_id => $bonus)
 		$up->add_log("verve_bonus", $players_count[$up_id], $bonus);
 		
 		// gi rankpoengene
-		$up->increase_rank($bonus, false);
+		$up->increase_rank($bonus, false, null, null, "vervebonus");
 		
 		// oppdater antall poeng vi har fått via verving
 		\Kofradia\DB::get()->exec("UPDATE users_players SET up_points_recruited = up_points_recruited + $bonus WHERE up_id = $up_id");

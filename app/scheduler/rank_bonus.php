@@ -53,7 +53,7 @@ while ($row = $result->fetch())
 		$up->add_log("rank_bonus", $i.":".$tabell[$i], $bonus);
 		
 		// gi rankpoengene
-		$up->increase_rank($bonus, false);
+		$up->increase_rank($bonus, false, null, null, "rankbonus");
 		
 		// logg
 		putlog("LOG", "RANKBONUS: {$up->data['up_name']} fikk $i. plass for 24 timer ranking (fikk $bonus rankpoeng, opptjent {$row['sum_uhi_points']} poeng siste 24 timer)");
