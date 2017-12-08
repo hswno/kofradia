@@ -517,7 +517,7 @@ class page_fengsel
 				<dt>Tid</dt>
 				<dd><input type="text" name="time" value="'.htmlspecialchars(postval("time", 20)).'" class="styled w40" /> sekunder</dd>
 			</dl>
-			<p class="c">'.show_sbutton("Gå inn i fensgel").'</p>').'
+			<p class="c">'.show_sbutton("Gå inn i fengsel").'</p>').'
 		</form>
 	</div>
 </div>';
