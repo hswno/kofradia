@@ -15,10 +15,10 @@ echo '
 		<p class="c">Her er en liten liste med Crewet her på Kofradia!</p>
 		<p class="c">Trenger du hjelp til noe relatert til spillet? Les på <a href="&path;/node">hjelpesidene</a> eller <a href="&path;/support/">send inn en supporthenvendelse</a>.</p>';
 
-visliste("Administratorer", "up_access_level IN ({$_game['access']['admin'][0]}, {$_game['access']['sadmin'][0]})", "Ingen Administratorer!");
+visliste("Administrator", "up_access_level IN ({$_game['access']['admin'][0]}, {$_game['access']['sadmin'][0]})", "Ingen Administrator!");
 visliste("Seniormoderator", "up_access_level = {$_game['access']['seniormod'][0]}", "Ingen Seniormoderator!");
-visliste("Moderatorer", "up_access_level = {$_game['access']['mod'][0]}", "Ingen Moderatorer!");
-visliste("Forummoderatorer", "up_access_level IN ({$_game['access']['forum_mod'][0]}, {$_game['access']['forum_mod_nostat'][0]})", "Ingen Forummoderatorer!");
+visliste("Moderator", "up_access_level = {$_game['access']['mod'][0]}", "Ingen Moderator!");
+visliste("Forummoderator", "up_access_level IN ({$_game['access']['forum_mod'][0]}, {$_game['access']['forum_mod_nostat'][0]})", "Ingen Forummoderator!");
 visliste("Utvikler", "up_access_level = {$_game['access']['developer'][0]}");
 visliste("Ressurs", "up_access_level IN ({$_game['access']['ressurs'][0]}, {$_game['access']['ressurs_nostat'][0]})");
 
