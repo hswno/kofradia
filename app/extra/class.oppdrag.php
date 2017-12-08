@@ -476,6 +476,20 @@ class oppdrag
 								// lagre status
 								$this->update_status($trigger['o_id'], $trigger['status']);
 							}
+
+							// fikk vi rank fra vervebonus eller rankbonus? (vervebonus og rankbonus teller ikke)
+							elseif ($data['source'] == "vervebonus" || $data['source'] == "rankbonus")
+							{
+								// legg til melding i hendelser
+								$this->up->add_log("oppdrag", "Du fikk ". $data['source'] ." og din rank har nå økt. Derfor har også målet i ditt nåværende oppdrag blitt høyere fordi ". $data['source'] ." ikke er en del av oppdraget.");
+
+								// legg til ranken man fikk til målet
+								$target = $target + $data['points'];
+								$trigger['status']->update("target_points", $target);
+
+								// lagre status
+								$this->update_status($trigger['o_id'], $trigger['status']);
+							}
 							
 							// fikk vi rank fra angrep? (angrep teller ikke)
 							elseif ($data['source'] == "attack")
@@ -516,7 +530,7 @@ class oppdrag
 						else
 						{
 							// lotto og angrep teller ikke med
-							if ($data['source'] == "lotto" || $data['source'] == "attack") continue;
+							if ($data['source'] == "lotto" || $data['source'] == "attack" || $data['source'] == "vervebonus" || $data['rankbonus'] == "attack") continue;
 							
 							// hvor mange poeng må vi oppnå?
 							$target = $trigger['status']->get("points");
