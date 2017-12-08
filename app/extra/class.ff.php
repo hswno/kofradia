@@ -2942,8 +2942,8 @@ class ff
 			WHERE up_brom_ff_id = {$this->id} AND up_brom_expire > ".time()." AND up_access_level != 0");
 		
 		$ant_i_bomberommet = $result->fetchColumn(0);
-		$ledige_plasser = max(0, $this->get_bomberom_capacity() - $result->fetchColumn(0));
-		
+		$ledige_plasser = max(0, $this->get_bomberom_capacity() - $ant_i_bomberommet);
+
 		return array(
 			"in_brom" => $ant_i_bomberommet,
 			"free" => $ledige_plasser
