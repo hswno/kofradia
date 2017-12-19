@@ -1621,6 +1621,9 @@ class ff
 		}
 		foreach ($this->members['invited'] as $member)
 		{
+			// Trekk tilbake invitasjon
+			$member->invite_pullback(true);
+
 			// brukerlogg
 			player::add_log_static("ff_dead_invited", $this->refstring.":".urlencode($this->data['ff_name']), $this->id, $member->id);
 		}
