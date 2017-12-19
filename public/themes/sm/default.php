@@ -288,10 +288,10 @@ class theme_sm_default
 						
 						// forsøk å lag emnet først
 						\Kofradia\DB::get()->beginTransaction();
-						$update = \Kofradia\DB::get()->query("SELECT p_ft_id FROM polls WHERE p_id = {$row['p_id']} FOR UPDATE");
+						$update = \Kofradia\DB::get()->query("SELECT p_ft_id FROM polls WHERE p_id = {$row['p_id']} AND p_ft_id IS NOT NULL FOR UPDATE");
 						
 						// fremdeles ingen emner opprettet
-						if (!$result->rowCount())
+						if (!$update->rowCount())
 						{
 							// opprett
 							\Kofradia\DB::get()->exec("INSERT INTO forum_topics SET ft_type = 1, ft_title = ".\Kofradia\DB::quote($title).", ft_time = ".time().", ft_up_id = ".intval($up_id).", ft_text = ".\Kofradia\DB::quote($text).", ft_fse_id = 1, ft_locked = 0");
