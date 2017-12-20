@@ -377,7 +377,7 @@ www.kofradia.no';
 		}
 		
 		echo '
-<p><b>Velkommen</b> til Kofradia sine nettsider! Kofradia er et tekstbassert nettspill som handler om å utføre forskjellige funksjoner for å stige i gradene. I tillegg finnes det både forum og diverse annen informasjon på siden!</p>
+<p><b>Velkommen</b> til Kofradia! Kampen om broderskapet tar sted i Drammen hvor folket har tatt opp kampen for å etablere seg. Her handler det ikke bare om å ha mest penger eller være høyest rank, men å stå samlet for å etablere det sterkeste og mektigste broderskapet. Kanskje kan du være med å gjøre en forskjell? Lykke til!</p>
 <p>På denne siden oppretter du din bruker og spiller. Merk! Det er kun lov å ha én bruker. Har du allerede en bruker fra før har du ikke lov til å registrere ny bruker.</p>';
 		
 		if (!isset($_REQUEST['e']))
