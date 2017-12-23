@@ -441,7 +441,10 @@ class game
 		global $_base;
 		
 		// har vi musikk?
-		$text = preg_replace("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|eu", 'game::music_get(\'$1\', true)', $text);
+		$text = preg_replace_callback("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|u",
+            function ($m) {
+		        return game::music_get($m[1], true);
+            }, $text);
 		
 		game::$nobb[] = $text;
 		end(game::$nobb);
@@ -463,7 +466,10 @@ class game
 	
 	public static function nobb_replace($text)
 	{
-		return preg_replace("|<nobb id=\"([0-9]+)\" />|eu", 'game::nobb_get(\'$1\')', $text);
+		return preg_replace_callback("|<nobb id=\"([0-9]+)\" />|u",
+            function ($m) {
+		        return game::nobb_get($m[1]);
+            }, $text);
 	}
 	
 	public static function linkonly_add($text)
@@ -499,7 +505,10 @@ class game
 	
 	public static function linkonly_replace($text)
 	{
-		return preg_replace("|<linkonly id=\"([0-9]+)\" />|eu", 'game::linkonly_get(\'$1\')', $text);
+		return preg_replace_callback("|<linkonly id=\"([0-9]+)\" />|u",
+            function ($m) {
+		        return game::linkonly_get($m[1]);
+            }, $text);
 	}
 	
 	public static function music_add($text)
@@ -545,9 +554,15 @@ class game
 	{
 		if ($original)
 		{
-			return preg_replace("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|eu", 'game::music_get(\'$1\', true)', $text);
+			return preg_replace_callback("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|u",
+                function ($m) {
+			        return game::music_get($m[1], true);
+                }, $text);
 		}
-		return preg_replace("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|eu", 'game::music_get(\'$1\')', $text);
+		return preg_replace_callback("|&lt;music id=\\&quot;([0-9]+)\\&quot; /&gt;|u",
+            function ($m) {
+		        return game::music_get($m[1]);
+            }, $text);
 	}
 	
 	// formatter tekst til riktig format
@@ -572,7 +587,10 @@ class game
 				return $bb;
 			
 			case "music_pre":
-				return preg_replace('~\[music\](https?://.+?)\[/music\]~ieu', 'game::music_add(\'$1\')', $data);
+				return preg_replace_callback('~\[music\](https?://.+?)\[/music\]~iu',
+                    function ($m) {
+				        return game::music_add($m[1]);
+                    }, $data);
 			
 			case "music_post":
 				return game::music_replace($data);
@@ -875,6 +893,7 @@ class game
 	// gjør om bb koder til html
 	public static function bb_to_html($bb)
 	{
+	    static $replaces_single_callback = array();
 		static $code_from_cache_single = array();
 		static $code_to_cache_single = array();
 		static $code_from_cache = array();
@@ -886,20 +905,39 @@ class game
 		if (empty($code_from_cache))
 		{
 			global $__server;
+
+			$replaces_single_callback = array(
+                // raw html i BB kode (ved hjelp av "passphrase"
+                '~\[html=([a-z0-9]+)\](.+?)\[/html=\1\]~isu' => function ($m) {
+                    return game::html_add($m[1], $m[2]);
+                },
+
+                // nobb -> ikke formatter bb kodene inni denne..
+                '~\[nobb\](.+?)\[/nobb\]~isu' => function ($m) {
+                    return game::nobb_add($m[1]);
+                },
+
+                // linkonly -> til bruk for youtube-adresser
+                '~\[linkonly\](.+?)\[/linkonly\]~isu' => function ($m) {
+                    return game::linkonly_add($m[1]);
+                },
+
+                // bilder
+                '~\[img\]([^\["\'\n]+)\[/img\]~iu' => function ($m) {
+                    return game::secure_img_addr($m[1]);
+                },
+
+                // intern adresse på nettstedet
+                '~\[iurl=/?([^\]\n]*)\](.+?)\[/iurl\]~iu' => function ($m) {
+                    global $__server;
+                    return '<a href="'.$__server['absolute_path'].'/$1">'.stripslashes($m[2]).'</a>';
+                }
+            );
 			
 			// kode som kun skal kjøres en gang
 			$replaces_single = array(
 				// carrage returns
 				'~\r~u' => '',
-				
-				// raw html i BB kode (ved hjelp av "passphrase"
-				'~\[html=([a-z0-9]+)\](.+?)\[/html=\1\]~iseu' => 'game::html_add(\'$1\', \'$2\')',
-				
-				// nobb -> ikke formatter bb kodene inni denne..
-				'~\[nobb\](.+?)\[/nobb\]~iseu' => 'game::nobb_add(\'$1\')',
-				
-				// linkonly -> til bruk for youtube-adresser
-				'~\[linkonly\](.+?)\[/linkonly\]~iseu' => 'game::linkonly_add(\'$1\')',
 				
 				// kommentarer -> skjul alt
 				'~\[comment\](.+?)\[/comment\]~isu' => '#',
@@ -918,15 +956,9 @@ class game
 				
 				'~\[youtube\]https?://((www.)?youtube.com/.+?)\[/youtube\]~iu' => '<object width="425" height="350"><param name="movie" value="https://$1"></param><param name="wmode" value="transparent"></param><embed src="https://$1" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>',
 				
-				// bilder
-				'~\[img\]([^\["\'\n]+)\[/img\]~ieu' => 'game::secure_img_addr(\'$1\')',
-				
 				// internettadresser
 				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)((?:https?|ftp)://([\w\d/=;\\\?#\\-_%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="$1" target="_blank">$1</a>',
 				'~(?<=[!>:\?\.\s\xA0[\]()*\\\;]|^)(www\.([\w\d/=;\\\?#\\-_%:@+æøå\\~]|[,.](?! )|&amp;)+)~iu' => '<a href="http://$1" target="_blank">$1</a>',
-				
-				// intern adresse på nettstedet
-				'~\[iurl=/?([^\]\n]*)\](.+?)\[/iurl\]~ieu' => '\'<a href="'.$__server['absolute_path'].'/$1">\'.stripslashes(\'$2\').\'</a>\'',
 				
 				// brukere
 				'~\[user=([0-9a-zA-Z\-_ ]+)\]~iu' => '<user="$1" />',
@@ -1004,7 +1036,9 @@ class game
 		}
 		
 		// fiks bb-koder som kun skal kjøres en gang
+        $bb = preg_replace_callback_array($replaces_single_callback, $bb);
 		$bb = preg_replace($code_from_cache_single, $code_to_cache_single, $bb);
+
 		
 		// fiks liste med *
 		$matches = false;
