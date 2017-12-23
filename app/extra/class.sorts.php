@@ -26,7 +26,7 @@ class sorts {
 	public $sort_name = NULL;
 
 	// construct
-	function sorts($sort_name = "sort", $address = NULL)
+	function __construct($sort_name = "sort", $address = NULL)
 	{
 		// sett riktig adresse til knapper
 		$this->types = array(

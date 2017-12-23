@@ -80,7 +80,7 @@ class registrer
 	public $id = false;
 	public $info = false;
 	
-	function registrer()
+	function __construct()
 	{
 		$this->clean();
 	}

@@ -124,7 +124,7 @@ class hs_irc
 	//public $nick = "";
 	
 	// init
-	function hs_irc($network)
+	function __construct($network)
 	{
 		$this->settings = $network['settings'];
 		$this->clients = $network['clients'];

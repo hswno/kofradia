@@ -5,7 +5,7 @@ class timer {
 	public $end = 0;
 	public $time = 0;
 	
-	function timer()
+	function __construct()
 	{
 		$this->start = microtime(true);
 	}
