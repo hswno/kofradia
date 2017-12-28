@@ -1318,7 +1318,7 @@ class game
 	 * @param player $up1 spiller 1
 	 * @param player $up2 spiller 2
 	 */
-	public function calc_rank_diff(player $up1, player $up2)
+	public static function calc_rank_diff(player $up1, player $up2)
 	{
 		return $up2->rank['number'] - $up1->rank['number'];
 	}
@@ -1328,7 +1328,7 @@ class game
 	 * @param player $up1 spiller 1
 	 * @param player $up2 spiller 2
 	 */
-	public function calc_specrank_diff(player $up1, player $up2)
+	public static function calc_specrank_diff(player $up1, player $up2)
 	{
 		// beregn spiller 1 sin spesialrank
 		$r1 = 0;

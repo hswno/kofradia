@@ -394,7 +394,7 @@ legend { color: #FFFFFF; background-color: #222222; padding: 3px 5px; border: 3p
 	/**
 	 * Håndter routes
 	 */
-	public function handle_route()
+	public static function handle_route()
 	{
 		$route = \Kofradia\Route::getRoute();
 		$route->process();

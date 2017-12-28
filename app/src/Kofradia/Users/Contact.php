@@ -90,7 +90,7 @@ class Contact {
 	 * @param string ORDER-clause (without ORDER)
 	 * @return result object
 	 */
-	protected function getData($where, $order = null)
+	protected static function getData($where, $order = null)
 	{
 		$order = !empty($order) ? ' ORDER BY '.$order : '';
 		return \Kofradia\DB::get()->query("
