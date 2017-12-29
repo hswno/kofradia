@@ -158,7 +158,7 @@ Stabel:
 	/**
 	 * Exceptions handler
 	 */
-	public static function exception_handler(Exception $exception)
+	public static function exception_handler(Throwable $exception)
 	{
 		@ob_clean();
 		
