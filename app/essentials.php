@@ -204,10 +204,7 @@ class essentials
 		{
 			case "db":
 				// hent inn databasemodulen
-				$this->db = $this->db_debug ? new db_wrap_debug() : new db_wrap();
-				
-				// koble til databasen
-				$this->db->connect(DBHOST, DBUSER, DBPASS, DBNAME);
+				$this->db = \Kofradia\DB::get();
 				
 				return $this->db;
 			
