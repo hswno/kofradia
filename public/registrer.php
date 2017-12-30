@@ -123,7 +123,7 @@ class registrer
 			// ønsker å avbryte?
 			if (isset($_POST['abort']))
 			{
-				ess::$b->page->add_message("Din registrering ble avbrytet!");
+				ess::$b->page->add_message("Din registrering ble avbrutt!");
 				$this->trash();
 				redirect::handle();
 			}
