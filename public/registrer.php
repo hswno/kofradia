@@ -123,7 +123,7 @@ class registrer
 			// ønsker å avbryte?
 			if (isset($_POST['abort']))
 			{
-				ess::$b->page->add_message("Din registrering ble avbrytet!");
+				ess::$b->page->add_message("Din registrering ble avbrutt!");
 				$this->trash();
 				redirect::handle();
 			}
@@ -738,7 +738,7 @@ www.kofradia.no';
 				$email->headers['Reply-To'] = "henvendelse@smafia.no";
 				$email->send($this->info['email'], "Velkommen til Kofradia");
 				
-				ess::$b->page->add_message('Velkommen til Kofradia!<br /><br />Du er nå registrert som <b>'.$this->info['user'].'</b> og automatisk logget inn.<br /><br />Sjekk ut menyen til venstre så ser du hva vi har å tilby i dag.<br /><br />Hvis du har noen spørsmål ta en titt under <a href="'.ess::$s['relative_path'].'/node">hjelp</a> og ta evt. kontakt med <a href="support/">support</a> om du ikke finner svar på det du lurer på!<br /><br />Ikke glem og les gjennom <a href="'.ess::$s['relative_path'].'/node/6">reglene for forumene</a> før du skriver i forumet. Lykke til i spillet!');
+				ess::$b->page->add_message('Velkommen til Kofradia!<br /><br />Du er nå registrert som <b>'.$this->info['user'].'</b> og automatisk logget inn.<br /><br />Sjekk ut menyen til venstre så ser du hva vi har å tilby i dag.<br /><br />Hvis du har noen spørsmål ta en titt under <a href="'.ess::$s['relative_path'].'/node">hjelp</a> eller ta kontakt med <a href="support/">support</a> om du ikke finner svar på det du lurer på!<br /><br />Ikke glem å lese gjennom <a href="'.ess::$s['relative_path'].'/node/6">reglene for forumene</a> før du skriver i forumet. Lykke til i spillet!');
 				
 				// hent antall medlemmer
 				$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE up_access_level < {$_game['access_noplay']} AND up_access_level != 0");
