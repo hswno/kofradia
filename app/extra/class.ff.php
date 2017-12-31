@@ -1616,6 +1616,17 @@ class ff
 		// legg til logg hos medlemmer og inviterte
 		foreach ($this->members['members'] as $member)
 		{
+		    // Sjekk om spiller sitter i familie bomberom
+            $result = \Kofradia\DB::get()->query("SELECT up_brom_ff_id, up_brom_expire FROM users_players WHERE up_id = ".$member->id);
+            $row = $result->fetch();
+
+            if ($row['up_brom_ff_id'] == $this->id && $row['up_brom_expire'] != 0) {
+
+                // Fjern spillerne fra bomberom
+                \Kofradia\DB::get()->exec("UPDATE users_players SET up_brom_expire = 0 WHERE up_id = ".$member->id);
+            }
+
+
 			// brukerlogg
 			player::add_log_static("ff_dead", $this->refstring.":".urlencode($this->data['ff_name']), $this->id, $member->id);
 		}
