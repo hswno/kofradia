@@ -272,7 +272,7 @@ class registrer
 				// sjekk eneste bruker
 				elseif (!$forste_bruker)
 				{
-					ess::$b->page->add_message("I følge betingelsene kan du kun ha en bruker. Bruk den!", "error");
+					ess::$b->page->add_message("Ifølge betingelsene kan du kun ha én bruker. Bruk den!", "error");
 					redirect::handle("", redirect::ROOT);
 				}
 				
