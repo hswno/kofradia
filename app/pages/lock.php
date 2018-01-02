@@ -483,7 +483,7 @@ class page_lock
 				<dt>Bydel</dt>
 				<dd>'.($bydel ? htmlspecialchars(game::$bydeler[$bydel]['name']) : 'Tilfeldig valgt').'</dd>
 			</dl> 
-			<p>Du kan ikke bytte dette spillernavnet senere uten og opprette en ny spiller.</p>
+			<p>Du kan ikke bytte spillernavnet ditt senere. Ønsker du nytt navn senere må du deaktivere spilleren din og opprette ny.</p>
 			<p class="c">'.show_sbutton("Opprett spiller", 'name="confirm"').' '.show_sbutton("Avbryt", 'name="abort"').'</p>
 		</form>
 	</div>
@@ -555,7 +555,7 @@ class page_lock
 		<form action="" method="post">
 			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
 			<p>Du er nå i ferd med å opprette en ny spiller. Du kan også se informasjon for din tidligere spiller <a href="min_side?up_id='.login::$user->player->id.'">'.htmlspecialchars(login::$user->player->data['up_name']).'</a>.</p>
-			<p>Du kan ikke bytte spillernavnet du velger å opprette her uten og opprette en ny spiller.</p>
+			<p>Du kan ikke bytte spillernavnet ditt senere.</p>
 			<dl class="dd_right" style="overflow: hidden">
 				<dt>Nytt spillernavn</dt>
 				<dd><input type="text" id="name_enter" name="name" class="styled w120" value="'.htmlspecialchars(postval("name")).'" /></dd>
