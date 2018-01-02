@@ -245,7 +245,7 @@ class page_bomberom
 					player::add_log_static("bomberom_kicked", login::$user->player->id.":".urlencode($this->ff->data['ff_name']).":{$up['up_brom_expire']}", $this->ff->id, $up['up_id']);
 					
 					// send e-post til spilleren
-					$email = new email();
+					$email = new \Kofradia\Utils\Email();
 					$email->text = 'Hei,
 
 Din spiller ble kastet ut fra bomberommet av '.($this->fam ? 'broderskapet' : 'firmaet').' som styrer bomberommet.

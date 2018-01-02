@@ -2015,7 +2015,7 @@ function rp_preview_profile_text()
 					// send e-post
 					if ($send_email)
 					{
-						$email = new email();
+						$email = \Kofradia\Utils\Email();
 						$email->text = 'Hei,
 
 Din spiller '.page_min_side::$active_player->data['up_name'].' har blitt deaktivert av Crewet.
@@ -2209,7 +2209,7 @@ www.kofradia.no';
 					page_min_side::$active_player->params->update("deactivate_time", time(), true);
 					
 					// opprett e-post
-					$email = new email();
+					$email = new \Kofradia\Utils\Email();
 					$email->text = 'Hei,
 
 Du har bedt om å deaktivere din spiller '.page_min_side::$active_player->data['up_name'].' på Kofradia.
@@ -2326,7 +2326,7 @@ www.kofradia.no';
 								ess::$b->page->add_message("Spilleren er nå deaktivert.");
 								
 								// send e-post
-								$email = new email();
+								$email = new \Kofradia\Utils\Email();
 								$email->text = 'Hei,
 
 Du har deaktivert din spiller '.page_min_side::$active_player->data['up_name'].'.
@@ -2462,7 +2462,7 @@ www.kofradia.no';
 					// send e-post
 					if ($send_email)
 					{
-						$email = new email();
+						$email = new \Kofradia\Utils\Email();
 						$email->text = 'Hei,
 
 Din'.($user_activate ? ' bruker og' : '').' spiller '.page_min_side::$active_player->data['up_name'].' har blitt aktivert igjen av Crewet.

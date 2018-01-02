@@ -34,7 +34,7 @@ class avis_slett_artikler
 			return;
 		}
 		
-		$this->email = new email();
+		$this->email = new \Kofradia\Utils\Email();
 		$this->headers['Bcc'] = "henrist@henrist.net";
 		
 		// send hver artikkel på e-post og slett artikkelen

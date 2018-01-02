@@ -103,7 +103,7 @@ class page_glemt_passord
 		$hash = \Kofradia\Users\Autologin::generate($row['u_id'], time()+self::AUTOLOGIN_TIME, null, \Kofradia\Users\Autologin::TYPE_RESET_PASS);
 		
 		// send e-post
-		$email = new email();
+		$email = new \Kofradia\Utils\Email();
 		$email->text = 'Hei,
 
 Du har bedt om å nullstille ditt passord på '.ess::$s['path'].' fra IP-en '.$_SERVER['REMOTE_ADDR'].' ('.$_SERVER['HTTP_USER_AGENT'].').

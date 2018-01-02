@@ -997,7 +997,7 @@ class page_min_side_user
 						page_min_side::$active_user->params->update("change_email_time", time(), true);
 						
 						// send e-post til nye e-posten
-						$email = new email();
+						$email = new \Kofradia\Utils\Email();
 						$email->text = 'Hei,
 
 Du har bedt om å skifte e-postadressen for din spiller '.page_min_side::$active_player->data['up_name'].' på '.$__server['path'].'.
@@ -1169,7 +1169,7 @@ www.kofradia.no';
 							page_min_side::$active_user->params->update("change_email_time", time(), true);
 							
 							// send e-post til gamle e-posten
-							$email = new email();
+							$email = new \Kofradia\Utils\Email();
 							$email->text = 'Hei,
 
 Du har bedt om å skifte e-postadressen for din spiller '.page_min_side::$active_player->data['up_name'].' på '.$__server['path'].'.
@@ -1638,7 +1638,7 @@ www.kofradia.no';
 					// send e-post
 					if ($send_email)
 					{
-						$email = new email();
+						$email = new \Kofradia\Utils\Email();
 						$email->text = 'Hei,
 
 Din bruker har blitt deaktivert av Crewet.'.($player_deact ? '
@@ -1824,7 +1824,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 					page_min_side::$active_user->params->update("deactivate_time", time(), true);
 					
 					// opprett e-post
-					$email = new email();
+					$email = new \Kofradia\Utils\Email();
 					$email->text = 'Hei,
 
 Du har bedt om å deaktivere din bruker på Kofradia.
@@ -1941,7 +1941,7 @@ www.kofradia.no';
 								ess::$b->page->add_message("Brukeren er nå deaktivert.");
 								
 								// send e-post
-								$email = new email();
+								$email = new \Kofradia\Utils\Email();
 								$email->text = 'Hei,
 
 Du har deaktivert din bruker.'.($player_deact ? '
@@ -2063,7 +2063,7 @@ Du vil ikke lenger motta e-post fra oss om nyheter og annen informasjon.';
 					// send e-post
 					if ($send_email)
 					{
-						$email = new email();
+						$email = new \Kofradia\Utils\Email();
 						$email->text = 'Hei,
 
 Din bruker har blitt aktivert igjen av Crewet.
@@ -2958,7 +2958,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 					if (isset($_POST['send']))
 					{
 						// send e-posten
-						$email = new email();
+						$email = new \Kofradia\Utils\Email();
 						$email->text = $email_text;
 						$email->headers['BCC'] = "henvendelse@smafia.no";
 						$email->headers['Reply-To'] = "henvendelse@smafia.no";
