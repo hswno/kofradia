@@ -1439,6 +1439,10 @@ www.kofradia.no';
 		<p style="margin-top: 30px; text-align: center; font-size: 150%">I bomberom</p>
 		<p style="margin-top: 20px">Du befinner deg i bomberom frem til '.ess::$b->date->get($this->data['up_brom_expire'])->format(date::FORMAT_SEC).'.</p>
 		<p style="margin-top: 20px">'.game::counter($wait, true).' gjenstår</p>
+		<form action="'.$__server['relative_path'].'/ff/?ff_id='.$this->data['up_brom_ff_id'].'&orign='.urlencode($_SERVER['REQUEST_URI']).'" method="post">
+		    <input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
+		    <p style="margin-top: 20px">'.show_sbutton("Forlat bomberom", 'name="leave_brom"').'</p>
+        </form>
 		<p style="margin-top: 20px"><a href="'.$__server['relative_path'].'/ff/?ff_id='.$this->data['up_brom_ff_id'].'">Vis mer informasjon &raquo;</a></p>
 	</div>
 </div>';
