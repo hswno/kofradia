@@ -1712,7 +1712,7 @@ function rp_preview_profile_text()
 
                     // legg til crewlogg
                     if (page_min_side::$active_player->id != login::$user->player->id) {
-                        crewlog::log("player_image_del", page_min_side::$active_player->id, "Slettet bilde this should be crewlog", array(
+                        crewlog::log("player_image_del", page_min_side::$active_player->id, null, array(
                                 "image_id" => $id,
                                 "image_data" => "")
                         );
