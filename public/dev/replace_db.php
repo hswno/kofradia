@@ -1,7 +1,7 @@
 <?php
 
 set_time_limit(0);
-require "../../app/inc.innstillinger_pre.php";
+require "../base.php";
 
 if (MAIN_SERVER)
 {
@@ -19,16 +19,10 @@ if ($_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR'])
 $ret = shell_exec("mysql --version");
 if (empty($ret)) die("Det ser ikke ut som mysql kommandoen er tilgjengelig på systemet.");
 
-/** Egen exception type */
-class HSException extends Exception {}
 
-require "../../app/extra/class.db_wrap.php";
 
 // last inn databaseobjekt
-$db = new db_wrap();
-
-// koble til databasen
-$db->connect(DBHOST, DBUSER, DBPASS);
+$db = \Kofradia\DB::get();
 
 // laste opp ny database?
 if (isset($_FILES['sqlfile']))
@@ -73,3 +67,4 @@ echo '
 	<p><input type="submit" value="Last opp og erstatt databasen" /></p>
 	<p>Merk at handlingen kan ta lang tid. <b>Ikke avbryt handlingen for å prøve på nytt.</b></p>
 </form>';
+ess::$b->page->load();

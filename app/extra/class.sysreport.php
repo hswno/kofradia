@@ -158,7 +158,7 @@ Stabel:
 	/**
 	 * Exceptions handler
 	 */
-	public static function exception_handler(Exception $exception)
+	public static function exception_handler(Throwable $exception)
 	{
 		@ob_clean();
 		
@@ -290,7 +290,7 @@ h1 { font-size: 23px; }
 		if (!MAIN_SERVER) return;
 		$to = "Henrik Steen <henrist@henrist.net>, Daniel <daniel@kofradia.no>";
 		
-		$email = new email();
+		$email = new \Kofradia\Utils\Email();
 		$email->text($data);
 		return $email->send($to, $title);
 	}

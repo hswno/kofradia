@@ -646,7 +646,7 @@ class page_lock
 				putlog("NOTICE", "%bPASSORD%b: %u".login::$user->player->data['up_name']."%u lagret nytt passord på sin bruker (var nullstilt). ".ess::$s['path']."/min_side?u_id=".login::$user->id);
 				
 				// send ut e-post for å informere
-				$email = new email();
+				$email = new \Kofradia\Utils\Email();
 				$email->text = 'Hei,
 
 Det er nå blitt opprettet et nytt passord fra '.$_SERVER['REMOTE_ADDR'].' ('.$_SERVER['HTTP_USER_AGENT'].').

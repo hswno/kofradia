@@ -1760,7 +1760,7 @@ class page_node_admin
 </table>';
 	}
 	
-	protected function show_node_info($node)
+	protected static function show_node_info($node)
 	{
 		switch (nodes::$node_info['node_type'])
 		{

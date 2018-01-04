@@ -59,7 +59,7 @@ class tinymce
 		self::$elements[$mode][] = htmlspecialchars($elm_id);
 	}
 	
-	function load()
+	static function load()
 	{
 		$count_admin = count(self::$elements['admin']);
 		$count_normal = count(self::$elements['normal']);

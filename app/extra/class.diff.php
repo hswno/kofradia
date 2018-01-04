@@ -9,7 +9,7 @@ class diff
 	 * @param string $text_new
 	 * @return string
 	 */
-	function make($text_old, $text_new)
+	static function make($text_old, $text_new)
 	{
 		// del opp til linjer
 		$lines_old = explode("\n", $text_old);

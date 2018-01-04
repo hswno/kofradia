@@ -563,7 +563,7 @@ document.getElementById("b_pass").focus();
 		$expire = time() + 3600;
 		
 		// send e-post
-		$email = new email();
+		$email = new \Kofradia\Utils\Email();
 		$email->text = 'Hei,
 
 For å bytte ditt bankpassord for spilleren '.$this->up->data['up_name'].' må du åpne denne adressen:

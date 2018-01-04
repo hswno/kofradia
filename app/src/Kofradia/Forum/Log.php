@@ -97,7 +97,7 @@ class Log
 			\Kofradia\DB::get()->exec("UPDATE users SET u_log_crew_new = u_log_crew_new + 1 WHERE u_access_level IN ($access_levels) AND (u_id != ".\login::$user->id." OR u_log_crew_new > 0)");
 			
 			// send e-post til crewet
-			$email = new email();
+			$email = new \Kofradia\Utils\Email();
 			$email->text = "*{$data['ft_title']}* ble opprettet av ".\login::$user->player->data['up_name']."\r\n".\ess::$s['path']."/forum/topic?id={$data['ft_id']}\r\n\r\nForum: ".$forum->get_name()."\r\nAutomatisk melding for Kofradia Crewet";
 			$result = \Kofradia\DB::get()->query("SELECT u_email FROM users WHERE u_access_level IN ($access_levels) AND u_id != ".\login::$user->id);
 			while ($row = $result->fetch())
@@ -118,7 +118,7 @@ class Log
 			\Kofradia\DB::get()->exec("UPDATE users SET u_log_crew_new = u_log_crew_new + 1 WHERE u_access_level IN ($access_levels) AND (u_id != ".\login::$user->id." OR u_log_crew_new > 0)");
 		
 			// send e-post til crewet
-			$email = new email();
+			$email = new \Kofradia\Utils\Email();
 			$email->text = "*{$data['ft_title']}* ble opprettet av ".\login::$user->player->data['up_name']."\r\n".\ess::$s['path']."/forum/topic?id={$data['ft_id']}\r\n\r\nForum: ".$forum->get_name()."\r\nAutomatisk melding for Kofradia Crewet";
 			$result = \Kofradia\DB::get()->query("SELECT u_email FROM users WHERE u_access_level IN ($access_levels) AND u_id != ".\login::$user->id);
 			while ($row = $result->fetch())

@@ -31,7 +31,7 @@ class address
 	/**
 	 * Lag adresse
 	 */
-	public function make()
+	public static function make()
 	{
 		// reset
 		self::$html = true;
@@ -141,7 +141,7 @@ class address
 	 * 
 	 * @param string path to file $path
 	 */
-	private function set_path($path)
+	private static function set_path($path)
 	{
 		if (($pos = mb_strpos($path, "?")) !== false)
 		{
@@ -156,7 +156,7 @@ class address
 	 * 
 	 * @param array elements $elms
 	 */
-	private function add_elms($elms, $encode_value = true)
+	private static function add_elms($elms, $encode_value = true)
 	{
 		if (!is_array($elms)) throw new HSException("\$elms i not an array");
 		
@@ -173,7 +173,7 @@ class address
 	 * @param mixed $value
 	 * @param boolean $encode_value
 	 */
-	private function add($key, $value, $encode_value = true)
+	private static function add($key, $value, $encode_value = true)
 	{
 		self::verify($value);
 		
@@ -192,7 +192,7 @@ class address
 	 * 
 	 * @param string name $key OR array names $key
 	 */
-	private function evict($key)
+	private static function evict($key)
 	{
 		if (is_array($key))
 		{
@@ -211,7 +211,7 @@ class address
 	 * 
 	 * @param mixed $value
 	 */
-	private function verify($value)
+	private static function verify($value)
 	{
 		if (is_null($value) || is_bool($value) || is_scalar($value))
 		{
@@ -233,7 +233,7 @@ class address
 	 * @param bool $html
 	 * @param string $suffix
 	 */
-	private function build()
+	private static function build()
 	{
 		// sett opp alle element par
 		$pairs = self::build_pairs(self::$elements);
@@ -264,7 +264,7 @@ class address
 	 * 
 	 * @param array elements
 	 */
-	private function build_pairs($elms, $encode_value = true)
+	private static function build_pairs($elms, $encode_value = true)
 	{
 		$ret = array();
 		

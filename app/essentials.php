@@ -204,10 +204,7 @@ class essentials
 		{
 			case "db":
 				// hent inn databasemodulen
-				$this->db = $this->db_debug ? new db_wrap_debug() : new db_wrap();
-				
-				// koble til databasen
-				$this->db->connect(DBHOST, DBUSER, DBPASS, DBNAME);
+				$this->db = \Kofradia\DB::get();
 				
 				return $this->db;
 			
@@ -394,7 +391,7 @@ legend { color: #FFFFFF; background-color: #222222; padding: 3px 5px; border: 3p
 	/**
 	 * Håndter routes
 	 */
-	public function handle_route()
+	public static function handle_route()
 	{
 		$route = \Kofradia\Route::getRoute();
 		$route->process();

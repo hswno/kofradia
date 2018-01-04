@@ -135,7 +135,7 @@ if (isset($_GET['a']) && access::has("mod", NULL, NULL, true))
 				{
 					$title = $email_content ? 'Ny melding i henvendelse' : 'Status endret for henvendelse';
 
-					$email = new email();
+					$email = new \Kofradia\Utils\Email();
 					$email->text = "$title (".$_base->date->get()->format(date::FORMAT_SEC)."):
 
 Direktelink: {$__server['path']}/henvendelser?id={$h['h_random']}&email={$h['h_email']}
@@ -645,7 +645,7 @@ if (isset($_POST['new']) && (isset($_POST['add']) || isset($_POST['preview'])))
 		tasks::set("henvendelser", \Kofradia\DB::get()->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0")->fetchColumn(0));
 		
 		// send e-post til bruker
-		$mail = new email();
+		$mail = new \Kofradia\Utils\Email();
 		$mail->text = "Hei $name,
 
 Din henvendelse er nå levert til Kofradia Crewet. Henvendelsen vil bli besvart hvis det er behov for det, og du vil motta e-post når det blir gjort endringer til din henvendelse.
@@ -671,7 +671,7 @@ Takk for din henvendelse.";
 		$mail->send($email, "Henvendelse mottatt - {$categories[$category]}: $subject");
 		
 		// send e-post til henrik
-		$mail = new email();
+		$mail = new \Kofradia\Utils\Email();
 		$mail->text = "Henvendelse mottatt fra {$_SERVER['REMOTE_ADDR']} ".$_base->date->get()->format(date::FORMAT_SEC).":
 
 Nettleser: {$_SERVER['HTTP_USER_AGENT']}
@@ -804,7 +804,7 @@ echo '
 				tasks::set("henvendelser", \Kofradia\DB::get()->query("SELECT COUNT(h_id) FROM henvendelser WHERE h_status = 0")->fetchColumn(0));
 				
 				// send e-post til henrik
-				$mail = new email();
+				$mail = new \Kofradia\Utils\Email();
 				$mail->text = "Ny melding i henvendelse:
 
 Navn: {$h['h_name']}
@@ -969,7 +969,7 @@ if (isset($_GET['forgot']))
 			}
 			
 			// send e-post til bruker
-			$mail = new email();
+			$mail = new \Kofradia\Utils\Email();
 			$mail->text = "Hei,
 
 Du har bedt om en oversikt over dine henvendelser som er sendt inn til Kofradia.

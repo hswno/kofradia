@@ -486,7 +486,7 @@ class antibot_generate
 	/**
 	 * Hent liste over alle bildene i en mappe
 	 */
-	protected function dir_list($dir)
+	protected static function dir_list($dir)
 	{
 		$bilder = array();
 		if ($dh = @opendir($dir))
@@ -505,7 +505,7 @@ class antibot_generate
 	}
 	
 	/** Sjekk for gyldig bildetype */
-	protected function image_type($name)
+	protected static function image_type($name)
 	{
 		$ext = mb_substr($name, mb_strrpos($name, ".")+1);
 		if ($ext == "jpg" || $ext == "jpeg") return "jpeg";
@@ -515,7 +515,7 @@ class antibot_generate
 	}
 	
 	/** Generer raw for et bilde */
-	protected function image_raw($img)
+	protected static function image_raw($img)
 	{
 		$pre = ob_get_contents();
 		@ob_clean();
@@ -531,7 +531,7 @@ class antibot_generate
 	}
 	
 	/** Generer et bilde */
-	protected function image_create($valid, $images, $dir)
+	protected static function image_create($valid, $images, $dir)
 	{
 		// ingen bilder?
 		if (count($images) == 0)

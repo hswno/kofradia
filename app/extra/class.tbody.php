@@ -8,7 +8,7 @@ class tbody
 	public $row = 0;
 
 	// construct
-	function tbody($cols)
+	function __construct($cols)
 	{
 		$this->cols = $cols;
 	}

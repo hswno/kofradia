@@ -1022,7 +1022,7 @@ class player
 		$ret = array_merge($ret, etterlyst::player_dies($this, $by_up, $instant));
 		
 		// informer spilleren på e-post
-		$email = new email();
+		$email = new \Kofradia\Utils\Email();
 		$email->text = 'Hei,
 
 Din spiller '.$this->data['up_name'].' '.($instant ? 'har blitt drept av en annen spiller' : 'døde på grunn av lav energi og lav helse').'.
@@ -1626,7 +1626,7 @@ www.kofradia.no';
 				}
 				
 				// informer spilleren på e-post
-				$email = new email();
+				$email = new \Kofradia\Utils\Email();
 				$email->text = 'Hei,
 
 Din spiller '.$this->data['up_name'].' har blitt angrepet av en annen spiller og du har blitt skadet.

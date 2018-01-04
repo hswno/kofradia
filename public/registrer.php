@@ -80,7 +80,7 @@ class registrer
 	public $id = false;
 	public $info = false;
 	
-	function registrer()
+	function __construct()
 	{
 		$this->clean();
 	}
@@ -308,7 +308,7 @@ class registrer
 						\Kofradia\DB::get()->exec("INSERT INTO registration SET time = ".time().", birth = '$birth', email = ".\Kofradia\DB::quote($epost1).", code = '$code', ip = '{$_SERVER['REMOTE_ADDR']}', expire = ".(time()+7200));
 						
 						// send e-post
-						$email = new email();
+						$email = new \Kofradia\Utils\Email();
 						$email->text = 'Hei,
 
 Du har begynt registrering av bruker på Kofradia.
@@ -725,7 +725,7 @@ function checkReferer(elm)
 				\Kofradia\DB::get()->commit();
 				
 				// send e-post
-				$email = new email();
+				$email = new \Kofradia\Utils\Email();
 				$email->text = 'Hei,
 
 Du har registrert deg som '.$this->info['user'].' på Kofradia.
