@@ -3077,6 +3077,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			\Kofradia\DB::get()->exec("UPDATE users_players SET up_brom_expire = 0 WHERE up_id = ".$this->up->id);
 			
 			ess::$b->page->add_message("Du har forlatt bomberommet.");
+            if (isset($_GET['orign'])) redirect::handle($_GET['orign'], redirect::SERVER);
 			redirect::handle();
 		}
 		
