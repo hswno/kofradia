@@ -1709,6 +1709,14 @@ function rp_preview_profile_text()
 					}
 					
 					ess::$b->page->add_message("Bildet ble slettet.");
+
+                    // legg til crewlogg
+                    if (page_min_side::$active_player->id != login::$user->player->id) {
+                        crewlog::log("player_image_del", page_min_side::$active_player->id, null, array(
+                                "image_id" => $id,
+                                "image_data" => "")
+                        );
+                    }
 				}
 				
 				// sette som aktivt bilde
@@ -1727,6 +1735,13 @@ function rp_preview_profile_text()
 						// oppdater profilen
 						\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_image = $id, up_profile_image_url = ".\Kofradia\DB::quote($url)." WHERE up_id = ".page_min_side::$active_player->id);
 						ess::$b->page->add_message("Bildet ble satt som aktivt profilbilde.");
+
+                        // legg til crewlogg
+						if (page_min_side::$active_player->id != login::$user->player->id) {
+                            crewlog::log("player_image_active", page_min_side::$active_player->id, null, array(
+                                    "image_id" => $id)
+                            );
+                        }
 					}
 				}
 				
@@ -1740,6 +1755,13 @@ function rp_preview_profile_text()
 				{
 					\Kofradia\DB::get()->exec("UPDATE users_players SET up_profile_image = NULL, up_profile_image_url = NULL WHERE up_id = ".page_min_side::$active_player->id);
 					ess::$b->page->add_message("Du har ikke lengre noe profilbilde.");
+
+                    // legg til crewlogg
+                    if (page_min_side::$active_player->id != login::$user->player->id) {
+                        crewlog::log("player_image_inactive", page_min_side::$active_player->id, null, array(
+                                "image_id" => page_min_side::$active_player->data['up_profile_image'])
+                        );
+                    }
 				}
 				
 				redirect::handle();
@@ -1831,6 +1853,13 @@ function rp_preview_profile_text()
 				// irc announce
 				$url = PROFILE_IMAGES_HTTP . "/" . rawurlencode($img_navn);
 				putlog("NOTICE", "%bPROFILBILDE:%b ".login::$user->player->data['up_name']." lastet opp $url");
+
+                // legg til crewlogg
+                if (page_min_side::$active_player->id != login::$user->player->id) {
+                    crewlog::log("player_image_add", page_min_side::$active_player->id, null, array(
+                            "image_id" => $id)
+                    );
+                }
 				
 				redirect::handle();
 			}
