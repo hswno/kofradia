@@ -10,6 +10,13 @@ class page_ff extends pages_player
 	public function __construct(player $up = null)
 	{
 		parent::__construct($up);
+
+        if (isset($_POST['new_comp'])) {
+            access::need("mod");
+            ff::create_competition();
+            ess::$b->page->add_message("Ny broderskapkonkurranse ble opprettet");
+            redirect::handle("bydeler", redirect::SERVER);
+        }
 		
 		// vis en konkurranse
 		if (isset($_GET['fff_id']))
@@ -52,6 +59,13 @@ class page_ff extends pages_player
 			redirect::handle();
 		}
 		$faf = $result->fetch();
+
+        if (isset($_POST['deactivate_comp'])) {
+            access::need("mod");
+            \Kofradia\DB::get()->exec("UPDATE ff_free SET fff_active = 0 WHERE fff_id = ".$fff_id);
+            ess::$b->page->add_message("Broderskapkonkurransen ble deaktivert");
+            redirect::handle("bydeler", redirect::SERVER);
+        }
 		
 		ess::$b->page->add_title("Viser konkurranse om å danne broderskap");
 		
