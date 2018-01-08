@@ -1259,7 +1259,7 @@ function minside_preview_forum()
 		<div class="bg1">'.($blokkering && !access::has("mod") ? '
 			<p class="error_box">Du er blokkert fra å redigere signaturen din. Blokkeringen varer til '.ess::$b->date->get($blokkering['ub_time_expire'])->format(date::FORMAT_SEC).'.<br /><b>Begrunnelse:</b> '.game::format_data($blokkering['ub_reason'], "bb-opt", "Ingen begrunnelse gitt.").'</p>' : '').'
 			<boxes />
-			<p><b>Begrensninger:</b> Maks 4-5 linjer med tekst. Dersom du har et eller flere bilder i signaturen er maks høyde totalt 100 pixels. Ved bilde kan man kun ha én linje tekst over eller under bildet. Hvis bildet ditt er for stort, kan du prøve å lagre det som PNG og bruke <a href="https://tinypng.com/">https://tinypng.com/</a> for å komprimere det.</p>
+			<p><b>Begrensninger:</b> Maks 4-5 linjer med tekst. Dersom du har et eller flere bilder i signaturen er maks høyde totalt 100 pixels. Ved bilde kan man kun ha én linje tekst over eller under bildet.</p>
 			<p>Vanlige <a href="'.ess::$s['relative_path'].'/node/11" target="_blank">BB-koder</a> og <a href="'.ess::$s['relative_path'].'/node/15" target="_blank">uttryks-ikon</a> kan benyttes.</p>
 			<form action="" method="post">
 				<p><textarea name="signature" id="minside_signatur" style="width: 98%" rows="4">'.htmlspecialchars(postval("signature", page_min_side::$active_player->data['up_forum_signature'])).'</textarea></p>
