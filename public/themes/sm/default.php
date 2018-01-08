@@ -101,7 +101,7 @@ class theme_sm_default
 		
 		echo '
 			<ul id="default_topmenu">
-				<li><a href="'.ess::$s['relative_path'].'/loggut?sid='.login::$info['ses_id'].'" onclick="return confirm(\'Er du sikker på at du vil logge ut?\n\nTips! Trykk Esc knappen tre ganger for å logge ut uten å måtte trykke på denne knappen!\')"><b>Logg ut</b></a></li>
+				<li><a href="'.ess::$s['relative_path'].'/loggut?sid='.login::$info['ses_id'].'" onclick="return confirm(\'Er du sikker på at du vil logge ut?\n\nTips! Trykk Esc-knappen tre ganger for å logge ut uten å måtte trykke på denne knappen!\')"><b>Logg ut</b></a></li>
 				<li><a href="'.ess::$s['relative_path'].'/innboks">Meldinger</a></li>';
 		
 		if (!self::$locked)
@@ -201,7 +201,7 @@ class theme_sm_default
 	</div>
 	<div id="default_bottom_1">
 		<p><a href="/">Kofradia</a> &copy; - Beskyttet av <a href="http://www.lovdata.no/all/nl-19610512-002.html" target="_blank">åndsverkloven</a> - Utviklet av <a href="http://www.henrist.net/" target="_blank">Henrik Steen</a></p>
-		<p><a href="'.ess::$s['relative_path'].'/betingelser">Betingelser for bruk</a> - Besøk <a href="irc://irc.quakenet.org/kofradia" target="_blank">#Kofradia</a> på QuakeNet<!-- <a href="'.ess::$s['relative_path'].'/forum/topic?id=85">(Hjelp)</a>--> - <a href="'.ess::$s['relative_path'].'/credits">Takk til</a></p>
+		<p><a href="'.ess::$s['relative_path'].'/betingelser">Betingelser for bruk</a> - <a href="'.ess::$s['relative_path'].'/credits">Takk til</a></p>
 	</div>
 	<div id="default_bottom_2">';
 
