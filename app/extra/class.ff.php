@@ -1645,7 +1645,7 @@ class ff
 		// logg
 		putlog("CREWCHAN", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u har blitt oppløst. {$__server['path']}/ff/?ff_id={$this->id}");
 		putlog("INFO", ucfirst($this->refstring)." %u{$this->data['ff_name']}%u har blitt oppløst.");
-		
+
 		// live-feed
 		livefeed::add_row(ucfirst($this->refstring)." ".htmlspecialchars($this->data['ff_name'])." ble oppløst.");
 		
@@ -1660,16 +1660,9 @@ class ff
 			\Kofradia\DB::get()->exec("UPDATE ff SET ff_inactive = 1, ff_inactive_time = $time WHERE ff_id = $this->id");
 			
 			// legg ut konkurranse om nytt broderskap
-			$others = false;
-			if ($this->competition)
+			if (!$this->data['ff_is_crew'] && !$this->params->get("die_no_new") && !$this->competition)
 			{
-				// er vi det eneste broderskapet igjen i konkurransen?
-				$result = \Kofradia\DB::get()->query("SELECT COUNT(ff_id) FROM ff WHERE ff_fff_id = {$this->data['fff_id']} AND ff_inactive = 0 AND ff_id != $this->id");
-				$others = $result->fetchColumn(0) > 0;
-			}
-			if (!$this->data['ff_is_crew'] && !$this->params->get("die_no_new") && !$others)
-			{
-				//self::create_competition();
+				self::create_competition();
 				
 				// sett params slik at det ikke blir lagt ut ny konkurranse dersom broderskapet blir aktivert og så deaktivert igjen
 				$this->params->update("die_no_new", 1, true);
@@ -1778,7 +1771,7 @@ class ff
 		$expire = $time->format("U");
 		
 		// legg til
-		\Kofradia\DB::get()->exec("INSERT INTO ff_free SET fff_time_created = $created, fff_time_start = $start, fff_time_expire = $expire, fff_required_points = 105000");
+		\Kofradia\DB::get()->exec("INSERT INTO ff_free SET fff_time_created = $created, fff_time_start = $start, fff_time_expire = $expire, fff_required_points = 75000");
 		putlog("CREWCHAN", "Ny konkurranse om broderskap planlagt - {$__server['path']}/ff/?fff_id=".\Kofradia\DB::get()->lastInsertId());
 		
 		// sørg for at scheduler settes til første konkurranse som avsluttes
