@@ -5,6 +5,7 @@
 // $description
 // $hidden_inputs
 // $form_button_text
+// $cancel_href
 
 #}
 {% import 'helpers/forms.html.twig' as forms %}
@@ -17,7 +18,8 @@
                 {% for hidden_input in hidden_inputs %}
                     <input type="hidden" name="{{ hidden_input.name }}" value="{{ hidden_input.value }}" />
                 {% endfor %}
-                <p class="c">{{ forms.sbutton(form_button_text, '', 'name="confirm"') }}</p>
+                <p class="c">{{ forms.sbutton(form_button_text, '', 'name="confirm"') }} - <a href="{{ cancel_href }}" class="button">Avbryt</a></p>
+
             </form>
     </div>
 </div>

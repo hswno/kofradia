@@ -68,7 +68,8 @@ class page_ff extends pages_player
 			"title" => "Deaktiver broderskapkonkurrans",
 			"description" => "Du er i ferd med å deaktivere en broderskapkonkurranse.",
 			"hidden_inputs" => $hidden_inputs,
-			"form_button_text" => "Deaktiver broderskapkonkurranse"
+			"form_button_text" => "Deaktiver broderskapkonkurranse",
+			"cancel_href" => "/bydeler"
 		));
 
 		// vis skjema
@@ -101,7 +102,8 @@ class page_ff extends pages_player
 			"title" => "Ny broderskapkonkurranse",
 			"description" => "Du er i ferd med å opprette en ny broderskapkonkurranse.",
 			"hidden_inputs" => $hidden_inputs,
-			"form_button_text" => "Opprett ny broderskapkonkurranse"
+			"form_button_text" => "Opprett ny broderskapkonkurranse",
+			"cancel_href" => "/bydeler"
 		));
 
 		// vis skjema
