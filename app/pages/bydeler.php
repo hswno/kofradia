@@ -683,7 +683,7 @@ class page_bydeler extends pages_player
 
 				echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
-					'.(access::has("mod") ?  '<td><form action="'.$__server['relative_path'].'/ff/?fff_id='.$row['fff_id'].'" method="post">'.show_sbutton("Deaktiver", 'name="deactivate_comp"').'</form></td>' : '').'				
+					'.(access::has("mod") ?  '<td><form action="'.$__server['relative_path'].'/ff/" method="post"><input type="hidden" name="fff_id" value="'.$row['fff_id'].'">'.show_sbutton("Deaktiver", 'name="comp_deactivate"').'</form></td>' : '').'				
 					<td>'.ess::$b->date->get($row['fff_time_expire'])->format(date::FORMAT_SEC).'</td>
 					<td>'.game::timespan(max(time(), $row['fff_time_expire']), game::TIME_ABS).'</td>
 					<td>'.$row['ff_count'].'</td>
