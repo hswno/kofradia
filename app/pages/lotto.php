@@ -52,7 +52,7 @@ class page_lotto
 		ess::$b->page->add_title("Lotto");
 		
 		$this->form = \Kofradia\Form::getByDomain("lotto", login::$user);
-		$this->antibot = antibot::get("lotto", 21);
+		$this->antibot = antibot::get_default();
 		$this->antibot->check_required();
 		
 		// sjekk for aktiv runde, ventetid osv

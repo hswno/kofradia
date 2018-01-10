@@ -180,7 +180,7 @@ class page_angrip extends pages_player
 		}
 		
 		// sett opp og test for anti-bot
-		$this->antibot = new antibot(login::$user->id, "angrip", 2);
+		$this->antibot = antibot::get_default();
 		if (MAIN_SERVER) $this->antibot->check_required();
 		
 		// valgt spiller?
@@ -562,7 +562,7 @@ class page_angrip extends pages_player
 	protected function page_training_show()
 	{
 		// sett opp og test for anti-bot
-		$this->training_antibot = new antibot(login::$user->id, "training", 7);
+		$this->training_antibot = antibot::get_default();
 		if (MAIN_SERVER) $this->training_antibot->check_required();
 		
 		// sett opp skjema

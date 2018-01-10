@@ -1,15 +1,39 @@
 <?php
 
-use \Kofradia\DB;
-
 /**
  * Spesifikk anti-bot test
  */
 class antibot
 {
+
+	/**
+	 * Count between anti-bot checks
+	 * @var int
+	 */
+	const ANTIBOT_SPAN = 9;
+
+	/**
+	 * User id
+	 * @var int
+	 */
 	public $u_id;
+
+	/**
+	 * Navn på antibot test
+	 * @var
+	 */
 	public $name;
+
+	/**
+	 * Antibot data hentet fra Databsen
+	 * @var
+	 */
 	public $data;
+
+	/**
+	 * Count between each check
+	 * @var float|int
+	 */
 	public $span;
 	
 	/**
@@ -20,6 +44,16 @@ class antibot
 	{
 		if (!login::$logged_in) throw new HSException("Ingen bruker.");
 		return new antibot(login::$user->id, $name, $span);
+	}
+
+	/**
+	 * Henter default testen
+	 * @return antibot
+	 * @throws HSException
+	 */
+	public static function get_default() {
+		if (!login::$logged_in) throw new HSException("Ingen bruker.");
+		return new antibot(login::$user->id, "default", static::ANTIBOT_SPAN);
 	}
 	
 	/**
