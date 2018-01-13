@@ -11,12 +11,15 @@ class page_ff extends pages_player
 	{
 		parent::__construct($up);
 
-        if (isset($_POST['new_comp'])) {
-            access::need("mod");
-            ff::create_competition();
-            ess::$b->page->add_message("Ny broderskapkonkurranse ble opprettet");
-            redirect::handle("bydeler", redirect::SERVER);
-        }
+		// opprett en ny konkurranse
+		if (isset($_POST['new_comp'])) {
+			$this->comp_create();
+		}
+
+		// deaktiver en konkurranse
+		if (isset($_POST['comp_deactivate'])) {
+			$this->comp_deactivate();
+		}
 		
 		// vis en konkurranse
 		if (isset($_GET['fff_id']))
@@ -37,6 +40,76 @@ class page_ff extends pages_player
 		}
 		
 		redirect::handle("/bydeler", redirect::ROOT);
+	}
+
+	/**
+	 * Deaktiver en broderskapkonkurranse
+	 */
+	protected function comp_deactivate() {
+		$fff_id = (int) $_POST['fff_id'];
+
+		if (isset($_POST['confirm']) && validate_sid()) {
+			access::need("mod");
+			\Kofradia\DB::get()->exec("UPDATE ff_free SET fff_active = 0 WHERE fff_id = ".$fff_id);
+			ess::$b->page->add_message("Broderskapkonkurransen ble deaktivert");
+			redirect::handle("bydeler", redirect::SERVER);
+		}
+
+		ess::$b->page->add_title("Deaktiver broderskapkonkurranse");
+
+		$hidden_inputs = array(
+			array("name" => "sid", "value" => login::$info['ses_id']),
+			array("name" => "comp_deactivate", "value" => ""),
+			array("name" => "fff_id", "value" => $fff_id)
+		);
+
+		// Generere skjema
+		$form = \Kofradia\View::forgeTwig("helpers/confirm", array(
+			"title" => "Deaktiver broderskapkonkurrans",
+			"description" => "Du er i ferd med å deaktivere en broderskapkonkurranse.",
+			"hidden_inputs" => $hidden_inputs,
+			"form_button_text" => "Deaktiver broderskapkonkurranse",
+			"cancel_href" => "/bydeler"
+		));
+
+		// vis skjema
+		echo $form;
+
+		ess::$b->page->load();
+
+	}
+
+	/**
+	 * Opprett ny konkurranse
+	 */
+	protected function comp_create() {
+		if (isset($_POST['confirm']) && validate_sid()) {
+			access::need("mod");
+			ff::create_competition();
+			ess::$b->page->add_message("Ny broderskapkonkurranse ble opprettet");
+			redirect::handle("bydeler", redirect::SERVER);
+		}
+
+		ess::$b->page->add_title("Opprett ny broderskapkonkurranse");
+
+		$hidden_inputs = array(
+			array("name" => "sid", "value" => login::$info['ses_id']),
+			array("name" => "new_comp", "value" => "")
+		);
+
+		// Generere skjema
+		$form = \Kofradia\View::forgeTwig('helpers/confirm', array(
+			"title" => "Ny broderskapkonkurranse",
+			"description" => "Du er i ferd med å opprette en ny broderskapkonkurranse.",
+			"hidden_inputs" => $hidden_inputs,
+			"form_button_text" => "Opprett ny broderskapkonkurranse",
+			"cancel_href" => "/bydeler"
+		));
+
+		// vis skjema
+		echo $form;
+
+		ess::$b->page->load();
 	}
 	
 	/**
@@ -59,13 +132,6 @@ class page_ff extends pages_player
 			redirect::handle();
 		}
 		$faf = $result->fetch();
-
-        if (isset($_POST['deactivate_comp'])) {
-            access::need("mod");
-            \Kofradia\DB::get()->exec("UPDATE ff_free SET fff_active = 0 WHERE fff_id = ".$fff_id);
-            ess::$b->page->add_message("Broderskapkonkurransen ble deaktivert");
-            redirect::handle("bydeler", redirect::SERVER);
-        }
 		
 		ess::$b->page->add_title("Viser konkurranse om å danne broderskap");
 		

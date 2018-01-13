@@ -1,0 +1,25 @@
+{#
+
+// data:
+// $title
+// $description
+// $hidden_inputs
+// $form_button_text
+// $cancel_href
+
+#}
+{% import 'helpers/forms.html.twig' as forms %}
+<div class="bg1_c xsmall">
+    <h1 class="bg1">{{ title }}<span class="left2"></span><span class="right2"></span></h1>
+    <div class="bg1">
+        <p class="c">{{ description }}</p>
+        <boxes />
+            <form action="" method="post">
+                {% for hidden_input in hidden_inputs %}
+                    <input type="hidden" name="{{ hidden_input.name }}" value="{{ hidden_input.value }}" />
+                {% endfor %}
+                <p class="c">{{ forms.sbutton(form_button_text, '', 'name="confirm"') }} - <a href="{{ cancel_href }}" class="button">Avbryt</a></p>
+
+            </form>
+    </div>
+</div>
