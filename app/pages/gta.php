@@ -117,7 +117,7 @@ class page_gta extends pages_player
 		$this->gta->up->energy_require(gta::ENERGY_BILTYVERI*1.3); // legg til 30 % på kravet
 		
 		// anti-bot
-		$this->antibot = antibot::get("biltyveri", 10);
+		$this->antibot = antibot::get_default();
 		$this->antibot->check_required(ess::$s['rpath'].'/gta');
 		
 		// skjema
@@ -344,7 +344,7 @@ class page_gta extends pages_player
 		$this->form = \Kofradia\Form::getByDomain("gta_garasje", login::$user);
 		
 		// anti-bot
-		$this->antibot = antibot::get("biltyveri", 10);
+		$this->antibot = antibot::get_default();
 		$this->antibot->check_required(ess::$s['rpath'].'/gta');
 		
 		// flytte biler?
