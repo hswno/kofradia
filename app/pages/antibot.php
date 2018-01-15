@@ -41,7 +41,7 @@ class page_antibot
 		
 		// sjekk etter anti-bot
 		$name = getval("name");
-		$this->antibot = antibot::get_default();
+		$this->antibot = antibot::get($name);
 
 		if (!$this->antibot->data)
 		{
