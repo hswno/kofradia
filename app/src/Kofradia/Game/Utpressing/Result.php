@@ -140,7 +140,7 @@ class Result {
 				// do the player have money in the bank?
 				if ($this->up->data['up_bank'] > 10000)
 				{
-					$msg[] = sprintf("Du fant %s, men spillerne hadde verken kontanter eller bankkort på seg.",
+					$msg[] = sprintf("Du fant %s, men spilleren hadde verken kontanter eller bankkort på seg.",
 						$this->up->profile_link());
 				}
 
