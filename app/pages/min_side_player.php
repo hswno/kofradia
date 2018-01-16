@@ -4,7 +4,7 @@ class page_min_side_player
 {
 	public static function main()
 	{
-		$nye_hendelser = page_min_side::$active_player->data['up_log_ff_new'] + page_min_side::$active_player->data['up_log_new'];
+		$nye_hendelser = page_min_side::$active_player->data['up_log_new'];
 		if (page_min_side::$subpage == "log" && page_min_side::$active_user->id == login::$user->id) $nye_hendelser = 0;
 		
 		echo '
@@ -808,74 +808,69 @@ a.status_venter:hover { }
 		
 		$i_bruk = $tilgjengelig;
 		$total = array_sum($count);
-		
-		// nye hendelser (viser også nye hendelser i firma/familie)?
-		if ((page_min_side::$active_player->data['up_log_ff_new'] > 0 || page_min_side::$active_player->data['up_log_new'] > 0) && page_min_side::$active_own)
-		{
-			echo '
-		<h1 class="c">Nye hendelser</h1>';
-			
+
+		if (isset($_GET['ff'])) {
 			// nye hendelser i ff?
-			if (page_min_side::$active_player->data['up_log_ff_new'] > 0)
+			if (login::$user->player->data['up_log_ff_new'] > 0)
 			{
 				// totalt antall logg hendelser som blir vist
 				$counter_total = 0;
-				
+
 				// hent FF vi skal hente logg for
-				$ffm_result = \Kofradia\DB::get()->query("SELECT ffm_ff_id, ffm_log_new FROM ff_members WHERE ffm_up_id = ".page_min_side::$active_player->id." AND ffm_status = 1 AND ffm_log_new > 0");
-				
+				$ffm_result = \Kofradia\DB::get()->query("SELECT ffm_ff_id, ffm_log_new FROM ff_members WHERE ffm_up_id = ".login::$user->player->id." AND ffm_status = 1 AND ffm_log_new > 0");
+
 				while ($ffm = $ffm_result->fetch())
 				{
 					$ff = ff::get_ff($ffm['ffm_ff_id'], ff::LOAD_SILENT);
 					if (!$ff) continue;
-					
+
 					// hent hendelsene
 					$result = \Kofradia\DB::get()->query("SELECT ffl_id, ffl_time, ffl_type, ffl_data, ffl_extra FROM ff_log WHERE ffl_ff_id = {$ff->id} ORDER BY ffl_time DESC LIMIT {$ffm['ffm_log_new']}");
-					
+
 					if ($result->rowCount() > 0)
 					{
 						$logs = array();
 						while ($row = $result->fetch())
 						{
 							$counter_total++;
-							
+
 							$day = ess::$b->date->get($row['ffl_time'])->format(date::FORMAT_NOTIME);
 							$data = $ff->format_log($row['ffl_id'], $row['ffl_time'], $row['ffl_type'], $row['ffl_data'], $row['ffl_extra']);
-							
+
 							$logs[$day][] = '<span class="ffl_time">'.ess::$b->date->get($row['ffl_time'])->format("H:i").':</span> '.$data;
 						}
-						
+
 						echo '
 		<div class="log_section">';
-						
+
 						$ff->load_header();
-						
+
 						foreach ($logs as $day => $items)
 						{
 							echo '
 			<div class="section">
 				<h2>'.$day.'</h2>';
-							
+
 							foreach ($items as $item)
 							{
 								echo '
 				<p>'.$item.'</p>';
 							}
-							
+
 							echo '
 			</div>';
 						}
-						
+
 						echo '
-			<p class="c"><a href="ff/logg?ff_id='.$ff->id.'">Vis alle hendelsene for '.$ff->type['refobj'].' &raquo;</a></p>';
-						
+			<p class="c"><a href="/ff/logg?ff_id='.$ff->id.'">Vis alle hendelsene for '.$ff->type['refobj'].' &raquo;</a></p>';
+
 						$ff->load_footer();
-						
+
 						echo '
 		</div>';
 					}
 				}
-				
+
 				// ble det ikke vist noen hendelser?
 				if ($counter_total == 0)
 				{
@@ -887,12 +882,20 @@ a.status_venter:hover { }
 			</div>
 		</div>';
 				}
-				
+
 				// nullstill telleren
-				\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_log_new = 0 WHERE ffm_up_id = ".page_min_side::$active_player->id);
-				\Kofradia\DB::get()->exec("UPDATE users_players SET up_log_ff_new = 0 WHERE up_id = ".page_min_side::$active_player->id);
+				\Kofradia\DB::get()->exec("UPDATE ff_members SET ffm_log_new = 0 WHERE ffm_up_id = ".login::$user->player->id);
+				\Kofradia\DB::get()->exec("UPDATE users_players SET up_log_ff_new = 0 WHERE up_id = ".login::$user->player->id);
 				page_min_side::$active_player->data['up_log_ff_new'] = 0;
+				ess::$b->page->load();
 			}
+		}
+
+		// nye hendelser (viser også nye hendelser i firma/familie)?
+		if (page_min_side::$active_player->data['up_log_new'] > 0 && page_min_side::$active_own)
+		{
+			echo '
+		<h1 class="c">Nye hendelser</h1>';
 			
 			// nye normale hendelser
 			if (page_min_side::$active_player->data['up_log_new'] > 0)

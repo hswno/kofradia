@@ -19,6 +19,7 @@ class theme_sm_default
 	
 	protected static $num_pm;
 	protected static $num_log;
+	protected static $num_log_ff;
 	
 	#protected static $content_right;
 	protected static $date_now;
@@ -134,7 +135,8 @@ class theme_sm_default
 		<div id="default_header_subline">
 			<p id="server_klokka"><span>'.self::$date_now->format(date::FORMAT_WEEKDAY).' '.self::$date_now->format(date::FORMAT_NOTIME).' - '.self::$date_now->format("H:i:s").'</span></p>
 			<div id="pm_new">'.(self::$num_pm > 0 ? '<p class="notification_box"><a href="'.ess::$s['relative_path'].'/innboks"><b>'.self::$num_pm.' '.fword("ny</b> melding", "nye</b> meldinger", self::$num_pm).'</a></p>' : '').'</div>
-			<div id="log_new">'.(self::$num_log > 0 ? '<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?log"><b>'.self::$num_log.' '.fword("ny</b> hendelse", "nye</b> hendelser", self::$num_log).'</a></p>' : '').'</div>';
+			<div id="log_new">'.(self::$num_log > 0 ? '<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?log"><b>'.self::$num_log.' '.fword("ny</b> hendelse", "nye</b> hendelser", self::$num_log).'</a></p>' : '').'</div>
+			'.(self::$num_log_ff > 0 ? '<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?log&ff"><b>'.self::$num_log_ff.' '.fword("ny</b> FF-hendelse", "nye</b> FF-hendelser", self::$num_log_ff).'</a></p>' : '');
 		
 		if (login::$user->data['u_log_crew_new'] > 0 && isset(login::$extended_access))
 		{
@@ -417,8 +419,9 @@ class theme_sm_default
 	protected static function load_vars()
 	{
 		self::$num_pm = login::$user->data['u_inbox_new'];
-		self::$num_log = login::$user->player->data['up_log_new'] + login::$user->player->data['up_log_ff_new'];
-		
+		self::$num_log = login::$user->player->data['up_log_new'];
+		self::$num_log_ff = login::$user->player->data['up_log_ff_new'];
+
 	}
 	
 	protected static function load_polls()
