@@ -1,0 +1,21 @@
+{#
+
+// data:
+// $title
+// $oppdrag_description
+// $hidden_inputs
+// $form_button_text
+// $cancel_href
+
+#}
+{% set description %}
+    <div class="information">
+        <p><b>Merk:</b> Du må trykke &laquo;Start oppdrag&raquo; knappen nederst på denne siden før oppdraget blir gjeldende.</p>
+    </div>
+    <p><b>Beskrivelse:</b></p>
+    <div class="p">{{ oppdrag_description }}</div>
+    <p><b>Merk:</b></p>
+    <p>Hvis du mislykker oppdraget, må du vente 30 minutter før du kan forsøke oppdraget på nytt. I tillegg kommer du i fengsel i 15 minutter. Hvis du avbryter oppdraget vil det tilsvare at oppdraget blir mislykket.</p>
+{% endset %}
+{% set div_size = 'medium' %}
+{% include 'helpers/confirm.html.twig' %}

@@ -1523,4 +1523,43 @@ class oppdrag
 		
 		return !empty($prefix) ? $prefix.$suffix : '<p>Fant ingen relevant beskrivelse for dette oppdraget på dette stadiet. Ingen triggere som må utføres?</p>'.$suffix;
 	}
+
+	/**
+	 * @return array med info om hvert oppdrag
+	 */
+	public function get_oppdrag_info() {
+		// $oppdrag_info
+		//   oppdrag.background
+		//   oppdrag.description
+		//   oppdrag.status
+		//   oppdrag.wait
+		//   oppdrag.o_title
+		//   oppdrag.o_id
+		//   oppdrag.uo_locked
+		//   oppdrag.uo_last_state
+
+		$oppdrag_info = array();
+
+		$i = 0;
+		foreach ($this->oppdrag as $row) {
+			$oppdrag_info[$i] = $row;
+
+			// har vi bakgrunnsbilde?
+			$bg = $this->params[$row['o_id']][$row['uo_locked'] != 0 ? 'o_unlock_params' : 'o_params']->get("list_img");
+			$oppdrag_info[$i]['background'] = $bg ? ' style="background-image: url('.htmlspecialchars($bg).')"' : '';
+
+			// hent beskrivelsen
+			$oppdrag_info[$i]['description'] = $this->get_description($row['o_id']);
+
+			// hent status
+			$oppdrag_info[$i]['status'] = $this->status($row['o_id']);
+
+			// hent ventetid
+			$oppdrag_info[$i]['wait'] = $row['uo_last_time']+$row['o_retry_wait'] - time();
+
+			$i++;
+		}
+
+		return $oppdrag_info;
+	}
 }
