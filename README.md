@@ -8,6 +8,11 @@ Kopiering fra dette prosjektet er ikke tillatt. Se `LICENSE` for nærmere detalj
 
 Denne veiledningen er uferdig.
 
+### Docker
+Det enkleste er å bruke docker og docker-compose. 
+* Lag en mappe som du kaller for "db" i docker-mappen og plasser database dumpen der.
+* Kjør så docker-compose ```docker-compose up -d --build```
+
 ### Composer
 Kofradia bruker Composer til å hente inn tredjepartsbibliotek og for å gjøre
 enkelte oppgaver i systemet.
