@@ -573,10 +573,10 @@ class theme_sm_default
 				<li><a href="'.ess::$s['relative_path'].'/crewstuff/f/" target="_blank">Filer</a> - <a href="https://github.com/hswno/kofradia/pulse" target="_blank">GitHub</a> - <a href="https://kofradia.no/crewstuff/" target="_blank">Stuff</a></li>';
 		
 		if (access::has("crewet")) $data .= '
-				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=5"'.($fc[5] ? ' class="crew_updates"' : '').'>Crewforum</a> - <a href="'.ess::$s['relative_path'].'/forum/forum?id=6"'.($fc[6] ? ' class="crew_updates"' : '').'>arkiv</a></li>
-				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=7"'.($fc[7] ? ' class="crew_updates"' : '').'>Idémyldringsforum</a></li>';
+				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=5"'.($fc[5] ? ' class="crew_updates"' : '').'>Crewforum</a> - <a href="'.ess::$s['relative_path'].'/forum/forum?id=6"'.($fc[6] ? ' class="crew_updates"' : '').'>arkiv</a></li>';
 
         if (access::has("seniormod")) $data .= '
+                <li><a href="'.ess::$s['relative_path'].'/forum/forum?id=7"'.($fc[7] ? ' class="crew_updates"' : '').'>Idémyldringsforum</a></li>
                 <li><a href="'.ess::$s['relative_path'].'/forum/forum?id=4">Evalueringsforum</a></li>';
 
 		if (access::has("crewet")) $data .= '

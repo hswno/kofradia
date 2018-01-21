@@ -438,7 +438,7 @@ class Category {
 	public function update_change_time()
 	{
 		// oppdater innstillinger hvis crewforum
-		if ($this->id >= 5 && $this->id <= 7)
+		if ($this->id >= 4 && $this->id <= 7)
 		{
 			// oppdatere brukeren for å unngå markering om noe nytt?
 			$t = isset(\game::$settings["forum_{$this->id}_last_change"]) ? \game::$settings["forum_{$this->id}_last_change"]['value'] : false;
