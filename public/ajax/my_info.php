@@ -75,7 +75,7 @@ ajax::xml('<userinfo u_id="'.$user['u_id'].'">
 		<up_last_online_rel>'.htmlspecialchars(game::timespan($user['up_last_online'], game::TIME_ABS)).'</up_last_online_rel>
 		<up_activated>'.htmlspecialchars($user['up_access_level'] == 0 ? 0 : 1).'</up_activated>
 		<up_profile_image>'.htmlspecialchars($profile_image).'</up_profile_image>
-		<up_log_new>'.($user['up_log_new']+$user['up_log_ff_new']).'</up_log_new>
+		<up_log_new>'.($user['up_log_new']).'</up_log_new>
 		<up_rank_name>'.htmlspecialchars($rank['name'].($rank['orig'] ? ' ('.$rank['orig'].')' : '')).'</up_rank_name>
 		<up_rank_position>'.$user['upr_rank_pos'].'</up_rank_position>
 		<up_hits>'.$user['up_hits'].'</up_hits>
