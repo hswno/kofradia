@@ -2336,7 +2336,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 					if ($this->ff->access(true))
 					{
 						echo '
-			<p>Bomberommet er egentlig fullt, men du kan alikevel sette deg selv i bomberommet.</p>';
+			<p>Bomberommet er egentlig fullt, men du kan likevel sette deg selv i bomberommet.</p>';
 					}
 					
 					else
@@ -3115,7 +3115,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			echo '
 		'.ess::$b->page->message_get("bomberom_set", true, true).'
 		<p>Du er i ferd med å plassere '.($self ? 'deg selv' : $player->profile_link()).' i dette bomberommet.</p>
-		<p>For tiden er det '.fwords("%d spiller", "%d spillere", $ant_i_bomberommet).' i bomberommet og '.fwords("%d ledig plass", "%d ledige plasser", $ledige_plasser).'.'.($ledige_plasser == 0 ? ' Du har alikevel plass i bomberommet som medlem av firmaet.' : '').'</p>
+		<p>For tiden er det '.fwords("%d spiller", "%d spillere", $ant_i_bomberommet).' i bomberommet og '.fwords("%d ledig plass", "%d ledige plasser", $ledige_plasser).'.'.($ledige_plasser == 0 ? ' Du har likevel plass i bomberommet som medlem av firmaet.' : '').'</p>
 		<dl class="dd_right">
 			<dt>Antall timer</dt>
 			<dd>'.fwords("<b>%d</b> time", "<b>%d</b> timer", $hours).'</dd>
