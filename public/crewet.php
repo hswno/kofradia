@@ -12,8 +12,8 @@ echo '
 <div class="bg1_c xsmall" style="width: 280px">
 	<h1 class="bg1">Crewet<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
-		<p class="c">Her er en liten liste med Crewet her på Kofradia!</p>
-		<p class="c">Trenger du hjelp til noe relatert til spillet? Les på <a href="&path;/node">hjelpesidene</a> eller <a href="&path;/support/">send inn en supporthenvendelse</a>.</p>';
+		<p class="c">Her er en liste over Crewet på Kofradia!</p>
+		<p class="c">Trenger du hjelp til noe angående spillet? Les på <a href="&path;/node">hjelpsidene</a> eller <a href="&path;/support/">send inn en supporthenvendelse</a>.</p>';
 
 visliste("Administrator", "up_access_level IN ({$_game['access']['admin'][0]}, {$_game['access']['sadmin'][0]})", "Ingen Administrator!");
 visliste("Seniormoderator", "up_access_level = {$_game['access']['seniormod'][0]}", "Ingen Seniormoderator!");
@@ -118,7 +118,7 @@ if (access::has("crewet"))
 		
 		echo '
 <div class="bg1_c medium">
-	<h1 class="bg1">Forskjell mellom brukernivå og spillernivå<span class="left2"></span><span class="right2"></span></h1>
+	<h1 class="bg1">Brukere med forskjellig spillernivå<span class="left2"></span><span class="right2"></span></h1>
 	<div class="bg1">
 		<boxes />'.($admin ? '
 		<form action="" method="post">' : '').'
