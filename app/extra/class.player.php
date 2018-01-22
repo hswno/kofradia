@@ -636,7 +636,7 @@ class player
 		}
 		
 		// har vi endret plass når vi er i top 100 lista?
-		if (($rank_pos <= 10 || $pos <= 10) && $pos_change != 0 && !$silent)
+		if (($rank_pos <= 15 || $pos <= 15) && $pos_change != 0 && !$silent)
 		{
 			if ($pos_change < 0)
 			{
