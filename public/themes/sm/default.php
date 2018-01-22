@@ -139,7 +139,7 @@ class theme_sm_default
 		if (login::$user->data['u_log_crew_new'] > 0 && isset(login::$extended_access))
 		{
 			echo '
-			<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?u&a=crewlog"><b>'.login::$user->data['u_log_crew_new'].'</b> '.fword("ny hendelse som crew", "nye hendelser som crew", login::$user->data['u_log_crew_new']).'</a></p>';
+			<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?u&a=crewlog"><b>'.login::$user->data['u_log_crew_new'].' '.fword("ny</b> crew-hendelse", "nye</b> crew-hendelser", login::$user->data['u_log_crew_new']).'</a></p>';
 		}
 		
 		if (!self::$locked)
