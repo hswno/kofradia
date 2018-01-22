@@ -24,7 +24,7 @@
 		<p class="c" style="margin: 20px 0"><img src="&staticlink;/other/stott_kofradia_donasjon.png" alt="Støtt Kofradia - doner!" /></p>
 		<p>Kofradia driver per i dag på frivillig basis og har ingen inntekt. Samtidig har vi en del utgifter for server, domene og liknende.</p>
 		<p>For at vi skal kunne fortsette å tilby denne tjenesten og utvide med nye funksjoner, håper vi at folk ønsker å donere en liten pengesum til oss.</p>
-		<p>Selv små donasjoner hjelper. Merk alikevel at donasjoner under <b>kr. 20</b> ikke vil bli ført opp i listen over brukere som har donert.</p>
+		<p>Selv små donasjoner hjelper. Merk likevel at donasjoner under <b>20 NOK</b> ikke vil bli ført opp i listen over brukere som har donert.</p>
 		<p><a href="donasjon?vis">Vis oversikt over donasjoner &raquo;</a></p>
 		<p><u>Donasjonsløsninger:</u></p>
 		<ol>
