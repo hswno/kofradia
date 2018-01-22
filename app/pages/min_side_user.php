@@ -3083,7 +3083,7 @@ Denne meldingen ble sendt til ".page_min_side::$active_user->data['u_email']." s
 		<div class="bg1">
 			<form action="" method="post">
 				<boxes />
-				<p>Dette kan benyttes som et verktøy for å gi advarsler til brukere. Det kan velges om brukeren skal motta advarselen eller ikke. Hvis man ikke velger å informere brukeren om noe, blir det alikevel søkbart i crewloggen for brukeren.</p>
+				<p>Dette kan benyttes som et verktøy for å gi advarsler til brukere. Det kan velges om brukeren skal motta advarselen eller ikke. Hvis man ikke velger å informere brukeren om noe, blir det likevel søkbart i crewloggen for brukeren.</p>
 				<p>Alvorligheten av advarselen blir benyttet for å automatisere en poengsum brukeren får avhengig av antall advarseler. En advarsel med høy alvorlighet varer lenger og teller mer enn en med lav alvorlighet.</p>
 				<dl class="dd_right">
 					<dt>Kategori</dt>
