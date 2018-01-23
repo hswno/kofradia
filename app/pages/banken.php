@@ -859,17 +859,17 @@ www.kofradia.no';
 				else
 				{
 					// lagre overføringslogg
-					\Kofradia\DB::get()->exec("INSERT INTO bank_log SET bl_sender_up_id = ".$this->up->id.", bl_receiver_up_id = {$player['up_id']}, amount = {$info[4]}, time = ".time());
+					\Kofradia\DB::get()->exec("INSERT INTO bank_log SET bl_sender_up_id = ".$this->up->id.", bl_receiver_up_id = {$player['up_id']}, amount = {$info[3]}, time = ".time());
 					
 					// oppdater senderen
-					\Kofradia\DB::get()->exec("UPDATE users_players SET up_bank_sent = up_bank_sent + {$info[4]}, up_bank_profit = up_bank_profit - {$info[4]}, up_bank_num_sent = up_bank_num_sent + 1, up_bank_charge = up_bank_charge + {$info[0]} WHERE up_id = ".$this->up->id);
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_bank_sent = up_bank_sent + {$info[3]}, up_bank_profit = up_bank_profit - {$info[3]}, up_bank_num_sent = up_bank_num_sent + 1, up_bank_charge = up_bank_charge + {$info[0]} WHERE up_id = ".$this->up->id);
 					
 					// oppdater mottakeren
-					\Kofradia\DB::get()->exec("UPDATE users_players SET up_bank_received = up_bank_received + {$info[4]}, up_bank_profit = up_bank_profit + {$info[4]}, up_bank_num_received = up_bank_num_received + 1, up_bank_charge = up_bank_charge + {$info[1]} WHERE up_id = {$player['up_id']}");
+					\Kofradia\DB::get()->exec("UPDATE users_players SET up_bank_received = up_bank_received + {$info[3]}, up_bank_profit = up_bank_profit + {$info[3]}, up_bank_num_received = up_bank_num_received + 1, up_bank_charge = up_bank_charge + {$info[1]} WHERE up_id = {$player['up_id']}");
 					
 					// spillelogg (med melding)
 					$player2 = new player($player['up_id']);
-					$player2->add_log("bankoverforing", $info[4].":".$note, $this->up->id);
+					$player2->add_log("bankoverforing", $info[3].":".$note, $this->up->id);
 					
 					// legg til transaksjonsrader
 					if ($info[0] > 0) \Kofradia\DB::get()->exec("INSERT INTO ff_bank_transactions SET ffbt_ff_id = {$this->bank->id}, ffbt_time = ".time().", ffbt_amount = $amount, ffbt_profit = {$info[0]}");
@@ -878,7 +878,7 @@ www.kofradia.no';
 					// IRC logg
 					putlog("LOG", "%c9%uBANKOVERFØRING:%u%c (%u".$this->up->data['up_name']."%u) sendte (%u".game::format_cash($amount)."%u (%u{$info[3]}%u)) til (%u{$player['up_name']}%u) (TAP: ".game::format_cash($info[2]).") ".(!empty($note) ? 'Melding: ('.$note.')' : 'Ingen melding.'));
 					
-					ess::$b->page->add_message('Du overførte <b>'.game::format_cash($info[4]).'</b> til <user id="'.$player['up_id'].'" />.' . ($info[0] > 0 ? ' Banken din tok <b>'.game::format_cash($info[0]).'</b> i overføringsgebyr.' : ''));
+					ess::$b->page->add_message('Du overførte <b>'.game::format_cash($info[3]).'</b> til <user id="'.$player['up_id'].'" />.' . ($info[0] > 0 ? ' Banken din tok <b>'.game::format_cash($info[0]).'</b> i overføringsgebyr.' : ''));
 					\Kofradia\DB::get()->commit();
 					
 					// trigger

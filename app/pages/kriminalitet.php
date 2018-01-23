@@ -46,7 +46,7 @@ class page_kriminalitet extends pages_player
 		$this->form = \Kofradia\Form::getByDomain("kriminalitet", login::$user);
 		
 		// sett opp antibot og sjekk om den skal utføres nå
-		$this->antibot = antibot::get("kriminalitet", 12);
+		$this->antibot = antibot::get_default();
 		$this->antibot->check_required();
 		
 		ess::$b->page->add_title("Kriminalitet");

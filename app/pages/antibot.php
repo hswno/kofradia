@@ -42,6 +42,7 @@ class page_antibot
 		// sjekk etter anti-bot
 		$name = getval("name");
 		$this->antibot = antibot::get($name);
+
 		if (!$this->antibot->data)
 		{
 			ess::$b->page->add_message("Anti-bot oppføringen er ikke opprettet.", "error");

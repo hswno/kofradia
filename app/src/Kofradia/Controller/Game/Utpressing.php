@@ -45,7 +45,7 @@ class Utpressing extends \Kofradia\Controller\Game {
 		$this->user->player->energy_require(\Kofradia\Game\Utpressing::ENERGY*1.3); // legg til 30 % for krav
 		
 		// kontroller anti-bot
-		$this->antibot = \antibot::get("utpressing", static::ANTIBOT_SPAN);
+		$this->antibot = \antibot::get_default();
 		$this->antibot->check_required();
 		
 		// skjema

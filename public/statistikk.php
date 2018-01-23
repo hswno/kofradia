@@ -474,13 +474,13 @@ echo '
 
 // drap og angrepstats
 
-function get_df_stats($col, &$ff_id_list)
+function get_df_stats($col, $order, &$ff_id_list)
 {
 	$result = \Kofradia\DB::get()->query("
 		SELECT up_id, $col
 		FROM users_players
-		WHERE up_access_level != 0 AND up_access_level < ".ess::$g['access_noplay']." AND $col > 0
-		ORDER BY $col DESC
+		WHERE up_access_level != 0 AND up_access_level < ".ess::$g['access_noplay']." AND $order > 0
+		ORDER BY $order DESC
 		LIMIT 5");
 	
 	$rows = array();
@@ -494,8 +494,8 @@ function get_df_stats($col, &$ff_id_list)
 }
 
 $ff_id_list = array();
-$stats_kills = get_df_stats("up_attack_killed_num", $ff_id_list);
-$stats_dam = get_df_stats("up_attack_damaged_num", $ff_id_list);
+$stats_kills = get_df_stats("up_attack_killed_num, up_attack_bleed_num", "up_attack_killed_num", $ff_id_list);
+$stats_dam = get_df_stats("up_attack_damaged_num", "up_attack_damaged_num", $ff_id_list);
 
 // hent alle FF hvor spilleren var medlem
 $up_ff = array();
@@ -539,12 +539,12 @@ $i = 0;
 foreach ($stats_kills as $row)
 {
 	$familier = isset($up_ff[$row['up_id']]) ? implode(",<br />", $up_ff[$row['up_id']]) : '&nbsp;';
-	
+
 	echo '
 					<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
 						<td class="c">'.$i.'.</td>
 						<td><user id="'.$row['up_id'].'" /></td>
-						<td class="r">'.game::format_num($row['up_attack_killed_num']).'</td>
+						<td class="r">'.game::format_num($row['up_attack_killed_num']+$row['up_attack_bleed_num']).'</td>
 						<td>'.$familier.'</td>
 					</tr>';
 }

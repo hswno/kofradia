@@ -467,7 +467,7 @@ class page_bydeler extends pages_player
 			SELECT fff_id, fff_time_start, fff_time_expire, COUNT(ff_id) AS ff_count, COUNT(IF(ff_inactive = 0, 1, NULL)) AS ff_count_active
 			FROM ff_free
 				LEFT JOIN ff ON ff_fff_id = fff_id
-			WHERE $time >= fff_time_start AND fff_active = 1
+			WHERE $time >= fff_time_created AND fff_active = 1
 			GROUP BY fff_id
 			ORDER BY fff_time_expire");
 		while ($row = $result->fetch())
@@ -653,21 +653,22 @@ class page_bydeler extends pages_player
 	</div>
 </div>';
 		}
-		
-		if (count($this->fff) > 0)
+
+		if (count($this->fff) > 0 || access::has("mod"))
 		{
 			echo '
 <div class="bg1_c medium bydeler_br bydeler_ressurs bydeler_ressurs_familie">
-	<h1 class="bg1">Konkurranse om å danne broderskap<span class="left2"></span><span class="right2"></span></h1>
-	<div class="bg1">
+	<h1 class="bg1">Konkurranse om å danne broderskap <span class="left2"></span><span class="right2"></span></h1>
+	<div class="bg1 c">
 		<table class="table center tablem">
 			<thead>
 				<tr>
+					'.(access::has("mod") ?  '<th>Admin</th>' : '').'
 					<th>Avsluttes</th>
 					<th>Gjenstår</th>
 					<th>Antall broderskap</th>
 					<th>Gjenstående broderskap</th>
-					<th>&nbsp;</th>
+					<th>Status</th>
 				</tr>
 			</thead>
 			<tbody class="r">';
@@ -676,15 +677,20 @@ class page_bydeler extends pages_player
 			$free = 0;
 			foreach ($this->fff as $row)
 			{
-				if ($row['ff_count'] < ff::MAX_FFF_FF_COUNT) $free += ff::MAX_FFF_FF_COUNT-$row['ff_count'];
-				
+				$time = time();
+
+				if ($row['ff_count'] < ff::MAX_FFF_FF_COUNT && $time >= $row['fff_time_start']) $free += ff::MAX_FFF_FF_COUNT-$row['ff_count'];
+
 				echo '
 				<tr'.(++$i % 2 == 0 ? ' class="color"' : '').'>
+					'.(access::has("mod") ?  '<td><form action="'.$__server['relative_path'].'/ff/" method="post"><input type="hidden" name="fff_id" value="'.$row['fff_id'].'">'.show_sbutton("Deaktiver", 'name="comp_deactivate"').'</form></td>' : '').'				
 					<td>'.ess::$b->date->get($row['fff_time_expire'])->format(date::FORMAT_SEC).'</td>
 					<td>'.game::timespan(max(time(), $row['fff_time_expire']), game::TIME_ABS).'</td>
 					<td>'.$row['ff_count'].'</td>
 					<td>'.$row['ff_count_active'].'</td>
-					<td><a href="'.$__server['relative_path'].'/ff/?fff_id='.$row['fff_id'].'">Vis &raquo;</a></td>
+					'.($time >= $row['fff_time_start'] ?
+						'<td><a href="'.$__server['relative_path'].'/ff/?fff_id='.$row['fff_id'].'">Vis &raquo;</a></td>' :
+						'<td>Starter om '.game::timespan(max(time(), $row['fff_time_start']), game::TIME_ABS).'</td>').'
 				</tr>';
 			}
 			
@@ -693,12 +699,13 @@ class page_bydeler extends pages_player
 					? ' - Du har ikke høy nok rank til å opprette et broderskap'
 					: ' - Du har høy nok rank - <a href="'.$__server['relative_path'].'/ff/?create">Opprett broderskap &raquo;</a>')
 				: '';
-			
+
 			echo '
 			</tbody>
 		</table>'.($free > 0 ? '
 		<p class="c" style="margin-top: 0">Det er '.$free.' '.fword("ledig konkurranseplass", "ledige konkurranseplasser", $free).$create_link.'</p>' : '
 		<p class="c" style="margin-top: 0">Ingen ledige konkurranseplasser.</p>').'
+		'.(access::has("mod") ?  '<p style="margin-top: 20px;"><form action="'.$__server['relative_path'].'/ff/" method="post">'.show_sbutton("Opprett ny broderskapskonkurranse", 'name="new_comp"').'</form></p>' : '').'
 	</div>
 </div>';
 		}

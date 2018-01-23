@@ -239,7 +239,7 @@ function setNow(elm, event)
 			// slett cache
 			cache::delete("polls_list");
 			
-			redirect::handle();
+			redirect::handle("polls/admin");
 		}
 		
 		$bb = game::bb_to_html($poll['p_text']);

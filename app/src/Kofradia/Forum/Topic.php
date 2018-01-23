@@ -108,7 +108,7 @@ class Topic
 	/** Slettet, men tilgang */
 	protected function deleted_with_access()
 	{
-		\ess::$b->page->add_message("Denne forumtråden er slettet. Du har alikevel tilgang til å vise den.");
+		\ess::$b->page->add_message("Denne forumtråden er slettet. Du har likevel tilgang til å vise den.");
 	}
 	
 	/** Slettet og uten tilgang, eller finnes ikke */
@@ -661,7 +661,7 @@ class Topic
 	 */
 	protected function add_reply_merged($reply_id)
 	{
-		\ess::$b->page->add_message("Siden det siste forumsvaret tilhørte deg, har teksten blitt redigert inn i det forumsvaret.");
+		\ess::$b->page->add_message("Siden det siste forumsvaret tilhørte deg, har teksten blitt redigert inn der.");
 		\redirect::handle("/forum/topic?id={$this->id}&replyid=$reply_id", \redirect::ROOT);
 	}
 	

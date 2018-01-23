@@ -514,7 +514,7 @@ class database_archive
 	 */
 	public static function handle_tables_forum()
 	{
-		$crewforum = "5,6,7";
+		$crewforum = "4,5,6,7";
 		
 		// finn trådene som må slettes
 		$table_ft = self::create_backup_table("forum_topics");

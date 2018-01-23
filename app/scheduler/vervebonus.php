@@ -13,7 +13,7 @@ $points_limit = 300000;
 $points_bonus_factor = 0.10; // 10 % i bonus
 
 // Øk bonusen til 20% i desember
-if (time() > 1354320000 && time() < 1356998399)
+if (date('m') == 12)
 {
 	$points_bonus_factor = 0.20;
 }

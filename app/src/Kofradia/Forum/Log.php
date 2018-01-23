@@ -85,8 +85,8 @@ class Log
 		// finn ut hvor loggen skal plasseres
 		$location = "INFO";
 		
-		// crewforum, crewforum arkiv eller idémyldringsforumet
-		if ($forum->id >= 5 && $forum->id <= 7)
+		// crewforum eller crewforum arkiv
+		if ($forum->id == 5 || $forum->id == 6)
 		{
 			$location = "CREWCHAN";
 			
@@ -106,8 +106,8 @@ class Log
 			}
 		}
 		
-		//Evalueringsforum
-		elseif ($forum->id == 4)
+		//Evalueringsforum eller idémyldringsforumet
+		elseif ($forum->id == 4 || $forum-id == 7)
 		{
 			$location = "";
 				

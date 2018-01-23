@@ -339,17 +339,17 @@ class crewlog
 			case "user_bank_auth":
 				return 'Bruker: Endret bankpassordet'.$up_til.'. (<user id="'.$row['lc_up_id'].'" />)'.$log_info;
 				
-			case "user_image_add":
-				return 'Bruker: Lastet opp et nytt profilbilde'.$up_for.' (bilde #'.$data['image_id'].'). (<user id="'.$row['lc_up_id'].'" />)';
+			case "player_image_add":
+				return 'Spiller: Lastet opp et nytt profilbilde'.$up_for.' (bilde #'.$data['image_id'].'). (<user id="'.$row['lc_up_id'].'" />)';
 				
-			case "user_image_del":
-				return 'Bruker: Slettet et profilbilde'.$up_til.' (bilde #'.$data['image_id'].'). (<user id="'.$row['lc_up_id'].'" />)';
+			case "player_image_del":
+				return 'Spiller: Slettet et profilbilde'.$up_til.' (bilde #'.$data['image_id'].'). (<user id="'.$row['lc_up_id'].'" />)';
 				
-			case "user_image_active":
-				return 'Bruker: Endret aktivt profilbilde'.$up_til.' (til bilde #'.$data['image_id'].'). (<user id="'.$row['lc_up_id'].'" />)';
+			case "player_image_active":
+				return 'Spiller: Endret aktivt profilbilde'.$up_til.' (til bilde #'.$data['image_id'].'). (<user id="'.$row['lc_up_id'].'" />)';
 				
-			case "user_image_inactive":
-				return 'Bruker: Fjernet aktivt profilbilde'.$up_til.' (bilde #'.$data['image_id'].'). (<user id="'.$row['lc_up_id'].'" />)';
+			case "player_image_inactive":
+				return 'Spiller: Fjernet aktivt profilbilde'.$up_til.' (bilde #'.$data['image_id'].'). (<user id="'.$row['lc_up_id'].'" />)';
 				
 			case "user_note_crew":
 				return 'Bruker: Endret crewnotatet'.$up_til.'. '.$more_link.' (<user id="'.$row['lc_up_id'].'" />)';

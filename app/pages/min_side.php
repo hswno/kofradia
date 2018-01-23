@@ -162,7 +162,13 @@ class page_min_side
 		// egen bruker?
 		self::$active_own = login::$user->id == self::$active_user->id;
 		if (!self::$active_own && !access::has("mod")) self::$pstats = false;
-		
+
+		// FF-hendelser?
+		if (isset($_GET['log']) && isset($_GET['ff']))
+		{
+			redirect::handle(self::addr("log&ff", "", "player"));
+		}
+
 		// hendelser?
 		if (isset($_GET['log']))
 		{

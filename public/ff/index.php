@@ -10,6 +10,16 @@ class page_ff extends pages_player
 	public function __construct(player $up = null)
 	{
 		parent::__construct($up);
+
+		// opprett en ny konkurranse
+		if (isset($_POST['new_comp'])) {
+			$this->comp_create();
+		}
+
+		// deaktiver en konkurranse
+		if (isset($_POST['comp_deactivate'])) {
+			$this->comp_deactivate();
+		}
 		
 		// vis en konkurranse
 		if (isset($_GET['fff_id']))
@@ -30,6 +40,76 @@ class page_ff extends pages_player
 		}
 		
 		redirect::handle("/bydeler", redirect::ROOT);
+	}
+
+	/**
+	 * Deaktiver en broderskapkonkurranse
+	 */
+	protected function comp_deactivate() {
+		$fff_id = (int) $_POST['fff_id'];
+
+		if (isset($_POST['confirm']) && validate_sid()) {
+			access::need("mod");
+			\Kofradia\DB::get()->exec("UPDATE ff_free SET fff_active = 0 WHERE fff_id = ".$fff_id);
+			ess::$b->page->add_message("Broderskapkonkurransen ble deaktivert");
+			redirect::handle("bydeler", redirect::SERVER);
+		}
+
+		ess::$b->page->add_title("Deaktiver broderskapkonkurranse");
+
+		$hidden_inputs = array(
+			array("name" => "sid", "value" => login::$info['ses_id']),
+			array("name" => "comp_deactivate", "value" => ""),
+			array("name" => "fff_id", "value" => $fff_id)
+		);
+
+		// Generere skjema
+		$form = \Kofradia\View::forgeTwig("helpers/confirm", array(
+			"title" => "Deaktiver broderskapkonkurrans",
+			"description" => "Du er i ferd med å deaktivere en broderskapkonkurranse.",
+			"hidden_inputs" => $hidden_inputs,
+			"form_button_text" => "Deaktiver broderskapkonkurranse",
+			"cancel_href" => "/bydeler"
+		));
+
+		// vis skjema
+		echo $form;
+
+		ess::$b->page->load();
+
+	}
+
+	/**
+	 * Opprett ny konkurranse
+	 */
+	protected function comp_create() {
+		if (isset($_POST['confirm']) && validate_sid()) {
+			access::need("mod");
+			ff::create_competition();
+			ess::$b->page->add_message("Ny broderskapkonkurranse ble opprettet");
+			redirect::handle("bydeler", redirect::SERVER);
+		}
+
+		ess::$b->page->add_title("Opprett ny broderskapkonkurranse");
+
+		$hidden_inputs = array(
+			array("name" => "sid", "value" => login::$info['ses_id']),
+			array("name" => "new_comp", "value" => "")
+		);
+
+		// Generere skjema
+		$form = \Kofradia\View::forgeTwig('helpers/confirm', array(
+			"title" => "Ny broderskapkonkurranse",
+			"description" => "Du er i ferd med å opprette en ny broderskapkonkurranse.",
+			"hidden_inputs" => $hidden_inputs,
+			"form_button_text" => "Opprett ny broderskapkonkurranse",
+			"cancel_href" => "/bydeler"
+		));
+
+		// vis skjema
+		echo $form;
+
+		ess::$b->page->load();
 	}
 	
 	/**
@@ -2256,7 +2336,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 					if ($this->ff->access(true))
 					{
 						echo '
-			<p>Bomberommet er egentlig fullt, men du kan alikevel sette deg selv i bomberommet.</p>';
+			<p>Bomberommet er egentlig fullt, men du kan likevel sette deg selv i bomberommet.</p>';
 					}
 					
 					else
@@ -3035,7 +3115,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			echo '
 		'.ess::$b->page->message_get("bomberom_set", true, true).'
 		<p>Du er i ferd med å plassere '.($self ? 'deg selv' : $player->profile_link()).' i dette bomberommet.</p>
-		<p>For tiden er det '.fwords("%d spiller", "%d spillere", $ant_i_bomberommet).' i bomberommet og '.fwords("%d ledig plass", "%d ledige plasser", $ledige_plasser).'.'.($ledige_plasser == 0 ? ' Du har alikevel plass i bomberommet som medlem av firmaet.' : '').'</p>
+		<p>For tiden er det '.fwords("%d spiller", "%d spillere", $ant_i_bomberommet).' i bomberommet og '.fwords("%d ledig plass", "%d ledige plasser", $ledige_plasser).'.'.($ledige_plasser == 0 ? ' Du har likevel plass i bomberommet som medlem av firmaet.' : '').'</p>
 		<dl class="dd_right">
 			<dt>Antall timer</dt>
 			<dd>'.fwords("<b>%d</b> time", "<b>%d</b> timer", $hours).'</dd>
@@ -3077,6 +3157,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			\Kofradia\DB::get()->exec("UPDATE users_players SET up_brom_expire = 0 WHERE up_id = ".$this->up->id);
 			
 			ess::$b->page->add_message("Du har forlatt bomberommet.");
+            if (isset($_GET['orign'])) redirect::handle($_GET['orign'], redirect::SERVER);
 			redirect::handle();
 		}
 		

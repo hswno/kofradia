@@ -123,7 +123,7 @@ class registrer
 			// ønsker å avbryte?
 			if (isset($_POST['abort']))
 			{
-				ess::$b->page->add_message("Din registrering ble avbrytet!");
+				ess::$b->page->add_message("Din registrering ble avbrutt!");
 				$this->trash();
 				redirect::handle();
 			}
@@ -272,7 +272,7 @@ class registrer
 				// sjekk eneste bruker
 				elseif (!$forste_bruker)
 				{
-					ess::$b->page->add_message("I følge betingelsene kan du kun ha en bruker. Bruk den!", "error");
+					ess::$b->page->add_message("Ifølge betingelsene kan du kun ha én bruker. Bruk den!", "error");
 					redirect::handle("", redirect::ROOT);
 				}
 				
@@ -377,7 +377,7 @@ www.kofradia.no';
 		}
 		
 		echo '
-<p><b>Velkommen</b> til Kofradia sine nettsider! Kofradia er et tekstbassert nettspill som handler om å utføre forskjellige funksjoner for å stige i gradene. I tillegg finnes det både forum og diverse annen informasjon på siden!</p>
+<p><b>Velkommen</b> til Kofradia! Kampen om broderskapet tar sted i Drammen hvor folket har tatt opp kampen for å etablere seg. Her handler det ikke bare om å ha mest penger eller være høyest rank, men å stå samlet for å etablere det sterkeste og mektigste broderskapet. Kanskje kan du være med å gjøre en forskjell? Lykke til!</p>
 <p>På denne siden oppretter du din bruker og spiller. Merk! Det er kun lov å ha én bruker. Har du allerede en bruker fra før har du ikke lov til å registrere ny bruker.</p>';
 		
 		if (!isset($_REQUEST['e']))
@@ -738,7 +738,7 @@ www.kofradia.no';
 				$email->headers['Reply-To'] = "henvendelse@smafia.no";
 				$email->send($this->info['email'], "Velkommen til Kofradia");
 				
-				ess::$b->page->add_message('Velkommen til Kofradia!<br /><br />Du er nå registrert som <b>'.$this->info['user'].'</b> og automatisk logget inn.<br /><br />Sjekk ut menyen til venstre så ser du hva vi har å tilby i dag.<br /><br />Hvis du har noen spørsmål ta en titt under <a href="'.ess::$s['relative_path'].'/node">hjelp</a> og ta evt. kontakt med <a href="support/">support</a> om du ikke finner svar på det du lurer på!<br /><br />Ikke glem og les gjennom <a href="'.ess::$s['relative_path'].'/node/6">reglene for forumene</a> før du skriver i forumet. Lykke til i spillet!');
+				ess::$b->page->add_message('Velkommen til Kofradia!<br /><br />Du er nå registrert som <b>'.$this->info['user'].'</b> og automatisk logget inn.<br /><br />Sjekk ut menyen til venstre så ser du hva vi har å tilby i dag.<br /><br />Hvis du har noen spørsmål ta en titt under <a href="'.ess::$s['relative_path'].'/node">hjelp</a> eller ta kontakt med <a href="support/">support</a> om du ikke finner svar på det du lurer på!<br /><br />Ikke glem å lese gjennom <a href="'.ess::$s['relative_path'].'/node/6">reglene for forumene</a> før du skriver i forumet. Lykke til i spillet!');
 				
 				// hent antall medlemmer
 				$result = \Kofradia\DB::get()->query("SELECT COUNT(up_id) FROM users_players WHERE up_access_level < {$_game['access_noplay']} AND up_access_level != 0");

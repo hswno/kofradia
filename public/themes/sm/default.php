@@ -19,6 +19,7 @@ class theme_sm_default
 	
 	protected static $num_pm;
 	protected static $num_log;
+	protected static $num_log_ff;
 	
 	#protected static $content_right;
 	protected static $date_now;
@@ -101,7 +102,7 @@ class theme_sm_default
 		
 		echo '
 			<ul id="default_topmenu">
-				<li><a href="'.ess::$s['relative_path'].'/loggut?sid='.login::$info['ses_id'].'" onclick="return confirm(\'Er du sikker på at du vil logge ut?\n\nTips! Trykk Esc knappen tre ganger for å logge ut uten å måtte trykke på denne knappen!\')"><b>Logg ut</b></a></li>
+				<li><a href="'.ess::$s['relative_path'].'/loggut?sid='.login::$info['ses_id'].'" onclick="return confirm(\'Er du sikker på at du vil logge ut?\n\nTips! Trykk Esc-knappen tre ganger for å logge ut uten å måtte trykke på denne knappen!\')"><b>Logg ut</b></a></li>
 				<li><a href="'.ess::$s['relative_path'].'/innboks">Meldinger</a></li>';
 		
 		if (!self::$locked)
@@ -134,12 +135,13 @@ class theme_sm_default
 		<div id="default_header_subline">
 			<p id="server_klokka"><span>'.self::$date_now->format(date::FORMAT_WEEKDAY).' '.self::$date_now->format(date::FORMAT_NOTIME).' - '.self::$date_now->format("H:i:s").'</span></p>
 			<div id="pm_new">'.(self::$num_pm > 0 ? '<p class="notification_box"><a href="'.ess::$s['relative_path'].'/innboks"><b>'.self::$num_pm.' '.fword("ny</b> melding", "nye</b> meldinger", self::$num_pm).'</a></p>' : '').'</div>
-			<div id="log_new">'.(self::$num_log > 0 ? '<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?log"><b>'.self::$num_log.' '.fword("ny</b> hendelse", "nye</b> hendelser", self::$num_log).'</a></p>' : '').'</div>';
+			<div id="log_new">'.(self::$num_log > 0 ? '<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?log"><b>'.self::$num_log.' '.fword("ny</b> hendelse", "nye</b> hendelser", self::$num_log).'</a></p>' : '').'</div>
+			'.(self::$num_log_ff > 0 ? '<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?log&ff"><b>'.self::$num_log_ff.' '.fword("ny</b> FF-hendelse", "nye</b> FF-hendelser", self::$num_log_ff).'</a></p>' : '');
 		
 		if (login::$user->data['u_log_crew_new'] > 0 && isset(login::$extended_access))
 		{
 			echo '
-			<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?u&a=crewlog"><b>'.login::$user->data['u_log_crew_new'].'</b> '.fword("ny hendelse som crew", "nye hendelser som crew", login::$user->data['u_log_crew_new']).'</a></p>';
+			<p class="notification_box"><a href="'.ess::$s['relative_path'].'/min_side?u&a=crewlog"><b>'.login::$user->data['u_log_crew_new'].' '.fword("ny</b> crewhendelse", "nye</b> crewhendelser", login::$user->data['u_log_crew_new']).'</a></p>';
 		}
 		
 		if (!self::$locked)
@@ -201,7 +203,7 @@ class theme_sm_default
 	</div>
 	<div id="default_bottom_1">
 		<p><a href="/">Kofradia</a> &copy; - Beskyttet av <a href="http://www.lovdata.no/all/nl-19610512-002.html" target="_blank">åndsverkloven</a> - Utviklet av <a href="http://www.henrist.net/" target="_blank">Henrik Steen</a></p>
-		<p><a href="'.ess::$s['relative_path'].'/betingelser">Betingelser for bruk</a> - Besøk <a href="irc://irc.quakenet.org/kofradia" target="_blank">#Kofradia</a> på QuakeNet<!-- <a href="'.ess::$s['relative_path'].'/forum/topic?id=85">(Hjelp)</a>--> - <a href="'.ess::$s['relative_path'].'/credits">Takk til</a></p>
+		<p><a href="'.ess::$s['relative_path'].'/betingelser">Betingelser for bruk</a> - <a href="'.ess::$s['relative_path'].'/credits">Takk til</a></p>
 	</div>
 	<div id="default_bottom_2">';
 
@@ -288,10 +290,10 @@ class theme_sm_default
 						
 						// forsøk å lag emnet først
 						\Kofradia\DB::get()->beginTransaction();
-						$update = \Kofradia\DB::get()->query("SELECT p_ft_id FROM polls WHERE p_id = {$row['p_id']} FOR UPDATE");
+						$update = \Kofradia\DB::get()->query("SELECT p_ft_id FROM polls WHERE p_id = {$row['p_id']} AND p_ft_id IS NOT NULL FOR UPDATE");
 						
 						// fremdeles ingen emner opprettet
-						if (!$result->rowCount())
+						if (!$update->rowCount())
 						{
 							// opprett
 							\Kofradia\DB::get()->exec("INSERT INTO forum_topics SET ft_type = 1, ft_title = ".\Kofradia\DB::quote($title).", ft_time = ".time().", ft_up_id = ".intval($up_id).", ft_text = ".\Kofradia\DB::quote($text).", ft_fse_id = 1, ft_locked = 0");
@@ -417,8 +419,9 @@ class theme_sm_default
 	protected static function load_vars()
 	{
 		self::$num_pm = login::$user->data['u_inbox_new'];
-		self::$num_log = login::$user->player->data['up_log_new'] + login::$user->player->data['up_log_ff_new'];
-		
+		self::$num_log = login::$user->player->data['up_log_new'];
+		self::$num_log_ff = login::$user->player->data['up_log_ff_new'];
+
 	}
 	
 	protected static function load_polls()
@@ -573,10 +576,10 @@ class theme_sm_default
 				<li><a href="'.ess::$s['relative_path'].'/crewstuff/f/" target="_blank">Filer</a> - <a href="https://github.com/hswno/kofradia/pulse" target="_blank">GitHub</a> - <a href="https://kofradia.no/crewstuff/" target="_blank">Stuff</a></li>';
 		
 		if (access::has("crewet")) $data .= '
-				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=5"'.($fc[5] ? ' class="crew_updates"' : '').'>Crewforum</a> - <a href="'.ess::$s['relative_path'].'/forum/forum?id=6"'.($fc[6] ? ' class="crew_updates"' : '').'>arkiv</a></li>
-				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=7"'.($fc[7] ? ' class="crew_updates"' : '').'>Idémyldringsforum</a></li>';
+				<li><a href="'.ess::$s['relative_path'].'/forum/forum?id=5"'.($fc[5] ? ' class="crew_updates"' : '').'>Crewforum</a> - <a href="'.ess::$s['relative_path'].'/forum/forum?id=6"'.($fc[6] ? ' class="crew_updates"' : '').'>arkiv</a></li>';
 
         if (access::has("seniormod")) $data .= '
+                <li><a href="'.ess::$s['relative_path'].'/forum/forum?id=7"'.($fc[7] ? ' class="crew_updates"' : '').'>Idémyldringsforum</a></li>
                 <li><a href="'.ess::$s['relative_path'].'/forum/forum?id=4">Evalueringsforum</a></li>';
 
 		if (access::has("crewet")) $data .= '
