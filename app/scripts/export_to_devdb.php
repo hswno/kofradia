@@ -178,6 +178,7 @@ foreach ($tabeller as $x => $rows)
 $alldata = array(
 	// smafia_database
 	array(
+	    "achievements",
 		"auksjoner",
 		"auksjoner_bud",
 		"bydeler",
@@ -191,6 +192,8 @@ $alldata = array(
 		"gta",
 		"gta_options",
 		"gta_options_text",
+		"julekalender",
+		"julekalender_bidrag",
 		"kriminalitet",
 		"kriminalitet_text",
 		"livefeed",
@@ -212,6 +215,7 @@ $alldata = array(
 		"stats_daily",
 		#"stats_time",
 		"tasks",
+        "up_achievements",
 	)
 );
 
