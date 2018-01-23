@@ -52,6 +52,7 @@ foreach ($nc as $name) {
 $tabeller = array(
 	// smafia_database
 	array(
+        "achievements",
 		"auksjoner",
 		"auksjoner_bud",
 		"autologin",
@@ -100,6 +101,8 @@ $tabeller = array(
 		"inbox_messages",
 		"inbox_rel",
 		"inbox_threads",
+        "julekalender",
+        "julekalender_bidrag",
 		"kriminalitet",
 		"kriminalitet_status",
 		"kriminalitet_text",
@@ -159,7 +162,8 @@ $tabeller = array(
 		"users_players_rank",
 		"users_poker",
 		"users_views",
-		"utpressinger"
+		"utpressinger",
+        "up_achievements"
 	)
 );
 
@@ -192,8 +196,6 @@ $alldata = array(
 		"gta",
 		"gta_options",
 		"gta_options_text",
-		"julekalender",
-		"julekalender_bidrag",
 		"kriminalitet",
 		"kriminalitet_text",
 		"livefeed",
@@ -215,7 +217,7 @@ $alldata = array(
 		"stats_daily",
 		#"stats_time",
 		"tasks",
-        "up_achievements",
+        "up_achievements"
 	)
 );
 
