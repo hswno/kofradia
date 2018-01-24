@@ -2134,6 +2134,7 @@ class ff
 		$this->data['ff_pay_points'] = 0;
 		
 		$this->data['fff_active'] = 0;
+		$this->competition = false;
 		
 		// send melding til boss og underboss
 		for ($i = 1; $i <= 2; $i++)
