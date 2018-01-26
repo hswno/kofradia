@@ -3,6 +3,7 @@ FROM php:5.4-apache
 # TODO: Need to find out which extensions are needed.
 RUN apt-get update \
   && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng12-dev libmcrypt-dev \
+  && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
   && docker-php-ext-install pdo_mysql mysqli mbstring gd iconv mcrypt bcmath
 
 RUN apt-get install -y curl git unzip zip npm
