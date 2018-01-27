@@ -2967,7 +2967,7 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			
 			// hent spillerinfo
 			$player = player::get(postval("player"));
-			if (!$player || !$player->active || $player->bomberom_check() || $player->fengsel_check())
+			if (!$player || !$player->active || $player->bomberom_check() || $player->fengsel_check() || $player->oppdrag->active)
 			{
 				ess::$b->page->add_message("Kan ikke plassere spilleren i bomberom.", "error", null, "bomberom_set");
 				redirect::handle();
@@ -3011,7 +3011,12 @@ $("brom_hidden").getElement("a").addEvent("click", function(e)
 			
 			$self = false;
 		}
-		
+
+		if ($self && $player->oppdrag->active) {
+			ess::$b->page->add_message("Du kan ikke sette deg selv i bomberom når du har et aktivt oppdrag!", "error", null, "bomberom_set");
+			redirect::handle();
+		}
+
 		// familie og vi har allerede plassert en spiller de siste 12 timene?
 		if ($familie)
 		{
