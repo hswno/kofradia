@@ -297,9 +297,15 @@ class page_forsiden extends pages_player
 		$data = '
 	<div class="livefeed">
 		<ul>';
-		
+		$previousDay = "";
 		foreach ($result as $row)
 		{
+			$thisDay = ess::$b->date->get($row['lf_time'])->format(date::FORMAT_NOTIME);
+			if ($previousDay != $thisDay) {
+				$previousDay = $thisDay;
+				$data .= '<h2 class="bg1">'.ess::$b->date->get($row['lf_time'])->format(date::FORMAT_NOTIME).'</h2>';
+			}
+			
 			$data .= '
 			<li><span class="time">'.ess::$b->date->get($row['lf_time'])->format("H:i").':</span> <span class="feedtext">'.$row['lf_html'].'</span></li>';
 		}
