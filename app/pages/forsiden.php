@@ -292,14 +292,30 @@ class page_forsiden extends pages_player
 }
 .livefeed ul { padding: 0 }
 .livefeed li { list-style: none; padding-top: 5px }
-.livefeed .time { color: #888 }');
+.livefeed .time { color: #888 }
+.livefeed div.bg1 {
+    background-color: #1d1d1d;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}');
 		
 		$data = '
 	<div class="livefeed">
 		<ul>';
 		
+		// First day
+		$thisDay = ess::$b->date->get($result[0]['lf_time'])->format(date::FORMAT_NOTIME);
+		$previousDay = $thisDay;
+		$data .= '<h2 class="bg1">'.$thisDay.'</h2><div class="bg1">';
+		
 		foreach ($result as $row)
 		{
+			$thisDay = ess::$b->date->get($row['lf_time'])->format(date::FORMAT_NOTIME);
+			if ($previousDay != $thisDay) {
+				$previousDay = $thisDay;
+				$data .= '</div><h2 class="bg1">'.$thisDay.'</h2><div class="bg1">';
+			}
+			
 			$data .= '
 			<li><span class="time">'.ess::$b->date->get($row['lf_time'])->format("H:i").':</span> <span class="feedtext">'.$row['lf_html'].'</span></li>';
 		}
