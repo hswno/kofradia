@@ -1028,7 +1028,7 @@ var user_cash = '.js_encode(game::format_cash($this->up->data['up_cash'])).';');
 	<div class="bg1" style="padding: 0 15px">
 		<!-- bankkonto informasjon -->
 		<div style="width: 50%; margin-left: -5px; float: left">
-			<h2 class="bg1">Bankkonto informasjon<span class="left2"></span><span class="right2"></span></h2>
+			<h2 class="bg1">Kontoinformasjon<span class="left2"></span><span class="right2"></span></h2>
 			<div class="bg1">
 				<dl class="dd_right">
 					<dt>Kontoeier</dt>
