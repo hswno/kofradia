@@ -1,0 +1,42 @@
+{#
+
+// data:
+// $konkurranser
+// $session_id
+// $player_name
+// $create_cost
+
+
+#}
+{% import 'helpers/forms.html.twig' as forms %}
+<div class="bg1_c small">
+    <h1 class="bg1">Danne nytt broderskap<span class="left"></span><span class="right"></span></h1>
+    <p class="h_left"><a href="./">&laquo; Tilbake</a></p>
+    <div class="bg1">
+        <boxes />
+        <dl class="dd_right">
+            <dt>Broderskapnavn</dt>
+            <dd>{{ player_name|e }}'s broderskap</dd>
+            <dt>Kostnad å opprette</dt>
+            <dd>{{ create_cost }}</dd>
+        </dl>
+        <p>Du vil kunne sende søknad om å endre navnet på broderskapet etter den er opprettet.</p>
+        <p>Dette vil danne et konkurrende broderskap. I løpet av en gitt periode vil broderskapet få i oppdrag om å ranke mer enn to andre broderskap. Broderskapet som oppnår mest samlet rank får beholde broderskapet, mens de to andre broderskapene dør ut.</p>
+        <form action="" method="post">
+            <input type="hidden" name="sid" value="{{ session_id }}" />
+            <table class="table center">
+                <tbody>
+                {% for konkurranse in konkurranser %}
+                    <tr class="box_handle{% if loop.index % 2 == 0 %} color{% endif %}">
+                        <td><input type="radio" name="fff_id" value="{{ konkurranse.fff_id }}"{% if loop.index == 1 %} checked="checked"{% endif %} />broderskapkonkurranse som slutter den {{ konkurranse.fff_time_expire|date('NORMAL') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <p class="c">
+                {{ forms.sbutton("Opprett konkurrende broderskap", '', 'name="confirm"') }}
+                <a href="./">Tilbake</a>
+            </p>
+        </form>
+    </div>
+</div>

@@ -220,17 +220,18 @@ class page_ff extends pages_player
 		if ($this->up->rank['number'] < ff::$types[1]['priority_rank'][1])
 		{
 			ess::$b->page->add_message("Du må ha oppnådd ranken <b>".game::$ranks['items_number'][ff::$types[1]['priority_rank'][1]]['name']."</b> for å kunne danne et broderskap.", "error");
-			redirect::handle();
+			redirect::handle("bydeler", redirect::ROOT);
 		}
 		
 		// har for lav helse?
 		if ($this->up->get_health_percent() < player::FF_HEALTH_LOW*100)
 		{
 			ess::$b->page->add_message("Du har for lite helse til å kunne danne et broderskap. Du må ha minimium ".(player::FF_HEALTH_LOW*100)." % helse.", "error");
-			redirect::handle();
+			redirect::handle("bydeler", redirect::ROOT);
 		}
 		
-		// se om brukeren er invitert eller medlem av en annen familie
+		// se om brukeren er invitert eller medlem av et annet broderskap
+		$time = time();
 		$result = \Kofradia\DB::get()->query("
 			SELECT COUNT(ff_id)
 			FROM ff_members JOIN ff ON ffm_ff_id = ff_id
@@ -238,49 +239,43 @@ class page_ff extends pages_player
 		if ($result->fetchColumn(0) >= ff::MAX_FAMILIES && !access::has("mod"))
 		{
 			ess::$b->page->add_message("Du er allerede invitert eller medlem av for mange broderskap.");
-			redirect::handle();
+			redirect::handle("bydeler", redirect::ROOT);
 		}
 		
-		// se om brukeren tidligere har opprettet en familie i noen av konkurransene
-		$time = time();
-		$result = \Kofradia\DB::get()->query("
-			SELECT ff_date_reg, ff_inactive_time
-			FROM ff_free
-				JOIN ff ON ff_fff_id = fff_id AND ff_inactive != 0
-				JOIN ff_members ON ffm_ff_id = ff_id AND ffm_up_id = ".$this->up->id." AND ffm_priority = 1
-			WHERE $time >= fff_time_start AND fff_active = 1 AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT."
-			LIMIT 1");
-		if ($result->rowCount() > 0)
-		{
-			$row = $result->fetch();
-			ess::$b->page->add_message("Du opprettet et broderskap i denne konkurransen ".ess::$b->date->get($row['ff_date_reg'])->format()." som ble lagt ned ".ess::$b->date->get($row['ff_inactive_time'])->format().". Du må vente på en ny konkurranse for å opprette nytt broderskap.", "error");
-			redirect::handle();
-		}
-		
-		// se om det er ledig plass for en familie
+		// se om det er ledig plass for et broderskap
 		$result = \Kofradia\DB::get()->query("
 			SELECT fff_id, fff_time_start, fff_time_expire, fff_ff_count
 			FROM ff_free
 			WHERE $time >= fff_time_start AND fff_active = 1 AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT."
-			ORDER BY fff_time_start");
-		$total_free = 0;
-		$fafs = array();
+			ORDER BY fff_time_expire");
+		$konkurranser = array();
 		while ($row = $result->fetch())
 		{
-			$fafs[$row['fff_id']] = $row;
-			$total_free += ff::MAX_FFF_FF_COUNT - $row['fff_ff_count'];
+			$konkurranser[] = $row;
 		}
 		
-		// ingen ledige plasser?
-		if ($total_free == 0)
-		{
-			ess::$b->page->add_message("Det er ikke lenger noen ledige plasser for broderskap.", "error");
-			redirect::handle();
-		}
 		
-		// danne familien
-		if (isset($_POST['confirm']) && validate_sid())
+		// danne broderskapet
+		if (isset($_POST['confirm']) && validate_sid() && isset($_POST['fff_id']))
 		{
+			$fff_id = $_POST['fff_id'];
+			
+			// se om brukeren tidligere har opprettet et broderskap i noen av konkurransene
+			$time = time();
+			$result = \Kofradia\DB::get()->query("
+			SELECT ff_date_reg, ff_inactive_time
+			FROM ff_free
+				JOIN ff ON ff_fff_id = fff_id AND ff_inactive != 0
+				JOIN ff_members ON ffm_ff_id = ff_id AND ffm_up_id = ".$this->up->id." AND ffm_priority = 1
+			WHERE $time >= fff_time_start AND fff_active = 1 AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT." AND fff_id = $fff_id
+			LIMIT 1");
+			if ($result->rowCount() > 0)
+			{
+				$row = $result->fetch();
+				ess::$b->page->add_message("Du opprettet et broderskap i denne konkurransen ".ess::$b->date->get($row['ff_date_reg'])->format()." som ble lagt ned ".ess::$b->date->get($row['ff_inactive_time'])->format().". Du må vente på en ny konkurranse for å opprette nytt broderskap.", "error");
+				redirect::handle("bydeler", redirect::ROOT);
+			}
+			
 			// trekk fra pengene fra brukeren
 			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - ".ff::CREATE_COST." WHERE up_id = ".$this->up->id." AND up_cash >= ".ff::CREATE_COST);
 			
@@ -292,31 +287,22 @@ class page_ff extends pages_player
 			
 			else
 			{
-				// forsøk å danne familie
-				$fff_id = NULL;
-				foreach ($fafs as $faf)
-				{
-					$a = \Kofradia\DB::get()->exec("UPDATE ff_free SET fff_ff_count = fff_ff_count + 1 WHERE fff_id = {$faf['fff_id']} AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT." AND fff_active = 1");
-					if ($a > 0)
-					{
-						$fff_id = $faf['fff_id'];
-						break;
-					}
-				}
+				// forsøk å danne broderskap
+				$a = \Kofradia\DB::get()->exec("UPDATE ff_free SET fff_ff_count = fff_ff_count + 1 WHERE fff_id = {$fff_id} AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT." AND fff_active = 1");
 				
 				// fant ingen ledig konkurranse?
-				if (!$fff_id)
+				if ($a == 0)
 				{
 					// gi tilbake pengene
 					\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + ".ff::CREATE_COST." WHERE up_id = ".$this->up->id);
 					
 					ess::$b->page->add_message("Det er ikke lenger noen ledige plasser for broderskap.", "error");
-					redirect::handle();
+					redirect::handle("bydeler", redirect::ROOT);
 				}
 				
 				else
 				{
-					// opprett familien
+					// opprett broderskapet
 					\Kofradia\DB::get()->exec("INSERT INTO ff SET ff_date_reg = ".time().", ff_type = 1, ff_name = ".\Kofradia\DB::quote($this->up->data['up_name']."'s broderskap").", ff_up_limit = ".\Kofradia\DB::quote(ff::MEMBERS_LIMIT_DEFAULT).", ff_fff_id = $fff_id");
 					$ff_id = \Kofradia\DB::get()->lastInsertId();
 					
@@ -344,30 +330,14 @@ class page_ff extends pages_player
 		
 		ess::$b->page->add_title("Danne nytt broderskap");
 		
-		echo '
-<div class="bg1_c xsmall">
-	<h1 class="bg1">Danne nytt broderskap<span class="left"></span><span class="right"></span></h1>
-	<p class="h_left"><a href="./">&laquo; Tilbake</a></p>
-	<div class="bg1">
-		<boxes />
-		<p>For øyeblikket er det '.$total_free.' '.fword("ledig broderskapplass", "ledige broderskapplasser", $total_free).'.</p>
-		<dl class="dd_right">
-			<dt>Broderskapnavn</dt>
-			<dd>'.$this->up->data['up_name'].'\'s broderskap</dd>
-			<dt>Kostnad å opprette</dt>
-			<dd>'.game::format_cash(ff::CREATE_COST).'</dd>
-		</dl>
-		<p>Du vil kunne sende søknad om å endre navnet på broderskapet etter den er opprettet.</p>
-		<p>Dette vil danne et konkurrende broderskap. I løpet av en gitt periode vil broderskapet få i oppdrag om å ranke mer enn to andre broderskap. Broderskapet som oppnår mest samlet rank får beholde broderskapet, mens de to andre broderskapene dør ut.</p>
-		<form action="" method="post">
-			<input type="hidden" name="sid" value="'.login::$info['ses_id'].'" />
-			<p class="c">
-				'.show_sbutton("Opprett konkurrende broderskap", 'name="confirm"').'
-				<a href="./">Tilbake</a>
-			</p>
-		</form>
-	</div>
-</div>';
+		$form = \Kofradia\View::forgeTwig("helpers/new_broderskap", array(
+			'konkurranser' => 	$konkurranser,
+			'session_id' => login::$info['ses_id'],
+			'player_name' => $this->up->data['up_name'],
+			'create_cost' => game::format_cash(ff::CREATE_COST)
+		));
+		
+		echo $form;
 		
 		ess::$b->page->load();
 	}
