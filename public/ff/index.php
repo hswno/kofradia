@@ -277,10 +277,10 @@ class page_ff extends pages_player
 			}
 			
 			// trekk fra pengene fra brukeren
-			$a = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - ".ff::CREATE_COST." WHERE up_id = ".$this->up->id." AND up_cash >= ".ff::CREATE_COST);
+			$withdrawMoneyFromPlayer = \Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash - ".ff::CREATE_COST." WHERE up_id = ".$this->up->id." AND up_cash >= ".ff::CREATE_COST);
 			
 			// ble ikke brukeren oppdatert?
-			if ($a == 0)
+			if ($withdrawMoneyFromPlayer == 0)
 			{
 				ess::$b->page->add_message("Du har ikke nok penger på hånda.", "error");
 			}
@@ -288,10 +288,10 @@ class page_ff extends pages_player
 			else
 			{
 				// forsøk å danne broderskap
-				$a = \Kofradia\DB::get()->exec("UPDATE ff_free SET fff_ff_count = fff_ff_count + 1 WHERE fff_id = {$fff_id} AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT." AND fff_active = 1");
+				$createBroderskap = \Kofradia\DB::get()->exec("UPDATE ff_free SET fff_ff_count = fff_ff_count + 1 WHERE fff_id = {$fff_id} AND fff_ff_count < ".ff::MAX_FFF_FF_COUNT." AND fff_active = 1");
 				
 				// fant ingen ledig konkurranse?
-				if ($a == 0)
+				if ($createBroderskap == 0)
 				{
 					// gi tilbake pengene
 					\Kofradia\DB::get()->exec("UPDATE users_players SET up_cash = up_cash + ".ff::CREATE_COST." WHERE up_id = ".$this->up->id);
