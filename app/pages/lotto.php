@@ -90,8 +90,8 @@ class page_lotto
 				$antall = min(lotto::$lodd_maks_om_gangen, floor(login::$user->player->data['up_cash']/lotto::get_lodd_price()));
 				
 				echo '
-					<form action="" method="post">'.$this->form->getHTMLInput().'<input type="hidden" name="b" value="Gjenstående lodd" /><input type="hidden" name="lodd" value="'.$antall.'" /></form>'.(time() < lotto::PRICE_CHANGE+43200 ? '
-					<p class="c">Pris per lodd '.(time() < lotto::PRICE_CHANGE ? 'blir' : 'ble').' økt til <span style="color: #DD3333">'.game::format_cash(lotto::PRICE).'</span> kl. '.ess::$b->date->get(lotto::PRICE_CHANGE)->format("H:i").'</p>' : '').'
+					<form action="" method="post">'.$this->form->getHTMLInput().'<input type="hidden" name="b" value="Gjenstående lodd" /><input type="hidden" name="lodd" value="'.$antall.'" /></form>'.(time() < lotto::PRICE_CHANGE_TIME+43200 ? '
+					<p class="c">Pris per lodd '.(time() < lotto::PRICE_CHANGE_TIME ? 'blir' : 'ble').' økt til <span style="color: #DD3333">'.game::format_cash(lotto::PRICE).'</span> kl. '.ess::$b->date->get(lotto::PRICE_CHANGE_TIME)->format("H:i").'</p>' : '').'
 					<form action="" method="post">
 						'.$this->form->getHTMLInput().'
 						<dl class="dd_right center" style="width: 80%">
