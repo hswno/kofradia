@@ -38,7 +38,7 @@ class lotto
 
 	public static function use_old_price()
     {
-        return (time() < (self::PRICE_CHANGE_TIME + (self::ADD_SECONDS_TO_CHANGE_TIME * 1000)));
+        return (time() < (self::PRICE_CHANGE_TIME + self::ADD_SECONDS_TO_CHANGE_TIME));
     }
 	
 	/**
