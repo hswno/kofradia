@@ -28,8 +28,8 @@ echo '
 		<ul>
             <li><a href="../extended_access">Endre eget passord til utvidet tilganger</a></li>
 			<li><a href="htpass">Endre eget HT-Pass</a></li>
-			<li><a href="./?facebook_cache_clear">Slett cache for Facebook-feed på forsiden</a></li>'.(access::has("forum_mod") ? '
-			<li><a href="'.$__server['relative_path'].'/polls/admin">Administrer avstemninger</a></li>' : '').'
+			<li><a href="./?facebook_cache_clear">Slett cache for Facebook-feed på forsiden</a></li>
+			'.(access::has("forum_mod") ? '<li><a href="'.$__server['relative_path'].'/polls/admin">Administrer avstemninger</a></li>' : '').'
 		</ul>
 	</div>
 </div>';
