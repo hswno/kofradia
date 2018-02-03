@@ -9,19 +9,19 @@ class lotto
 	public static $ventetid = 120;
 	public static $lodd_maks_om_gangen = 10;
 	public static $premier = array(
-		array(600, 0.35),
+		array(600, 0.40),
 		array(380, 0.23),
-		array(230, 0.12),
+		array(230, 0.14),
 		array(160, 0.1),
 		array(90, 0.08)
 	);
 	
-	const PRICE = 5000;
-	const PRICE_CHANGE = 1277954155;
-	const PRICE_CHANGE_OLD = 1000;
+	const PRICE = 50000;
+	const PRICE_CHANGE = 1517674500;
+	const PRICE_CHANGE_OLD = 5000;
 	
 	/**
-	 * Antall spillere hvor grensen mellom nedsettelse av bevinst går
+	 * Antall spillere hvor grensen mellom nedsettelse av gevinst går
 	 */
 	const PLAYERS_TOP = 5;
 	
