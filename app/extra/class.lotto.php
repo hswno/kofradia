@@ -17,7 +17,8 @@ class lotto
 	);
 	
 	const PRICE = 50000;
-	const PRICE_CHANGE = 1517674500;
+	const PRICE_CHANGE_TIME = 1517674500;
+	const ADD_SECONDS_TO_CHANGE_TIME = 15;
 	const PRICE_CHANGE_OLD = 5000;
 	
 	/**
@@ -30,11 +31,15 @@ class lotto
 	 */
 	public static function get_lodd_price()
 	{
-		// gammel pris?
-		if (time() < self::PRICE_CHANGE) return self::PRICE_CHANGE_OLD;
-		
+		if (self::use_old_price())
+		    return self::PRICE_CHANGE_OLD;
 		return self::PRICE;
 	}
+
+	public static function use_old_price()
+    {
+        return (time() < (self::PRICE_CHANGE_TIME + (self::ADD_SECONDS_TO_CHANGE_TIME * 1000)));
+    }
 	
 	/**
 	 * Kjør konkurranse
