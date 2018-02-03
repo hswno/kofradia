@@ -17,8 +17,8 @@ class lotto
 	);
 	
 	const PRICE = 50000;
-	const PRICE_CHANGE = 1277954155;
-	const PRICE_CHANGE_OLD = 1000;
+	const PRICE_CHANGE = 1517674500;
+	const PRICE_CHANGE_OLD = 5000;
 	
 	/**
 	 * Antall spillere hvor grensen mellom nedsettelse av gevinst går
