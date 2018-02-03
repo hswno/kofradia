@@ -7,6 +7,8 @@
 #}
 {% if helper.checkAccess('forum_mod') %}
 	<p class="c" style="margin-top: 30px"><a href="{{ url('/polls/admin') }}">Administrer avstemninger &raquo;</a></p>
+{% endif %}
+
 {% if not polls %}
 	{% include 'polls/no_polls.html.twig' %}
 {% else %}
@@ -17,6 +19,4 @@
 
 {% if pagei.pages > 1 %}
 	<p class="c">{{ pagei.pagenumbers('/polls', '/polls/_pageid_') }}</p>
-{% endif %}
-
 {% endif %}
