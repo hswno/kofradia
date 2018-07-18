@@ -253,7 +253,7 @@ INNODB STATUS:
 <h1>En feil har oppstått</h1>'.$html.'
 <p>Feilen er automatisk rapportert.</p>');
 		
-		die;
+		exit(1);
 	}
 	
 	/**
