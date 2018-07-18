@@ -1,0 +1,37 @@
+{#
+
+// data:
+// $title
+// $description
+// $status
+// $hidden_inputs
+// $date_start
+// $date_end
+// $time_left
+// $oppdrag_name
+#}
+{% import 'helpers/forms.html.twig' as forms %}
+<div class="bg1_c medium">
+    <h1 class="bg1">{{ title|e }}<span class="left"></span><span class="right"></span></h1>
+    <div class="bg1">
+        <dl class="dl_15">
+            <dt>Påbegynt</dt>
+            <dd>{{ date_start }}</dd>
+            <dt>Tidsgrense</dt>
+            <dd>{{ date_end }} ({{ time_left }})</dd>
+        </dl>
+
+        {% if oppdrag_name == "single_poker" %}
+            <p class="c" style="font-size: 16px"><a href="oppdrag">Gå til pokeren</a></p>
+        {% endif %}
+
+        <div class="p">{{ description }}</div>
+        {{ status }}
+        <form action="" method="post">
+            {% for hidden_input in hidden_inputs %}
+                <input type="hidden" name="{{ hidden_input.name }}" value="{{ hidden_input.value }}" />
+            {% endfor %}
+            <p class="c">{{ forms.sbutton("Avbryt oppdrag", '', 'name="abort"') }}</p>
+        </form>
+    </div>
+</div>

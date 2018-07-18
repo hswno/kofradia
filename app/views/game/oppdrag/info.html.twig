@@ -1,0 +1,56 @@
+{#
+
+// data:
+// $oppdrag_info
+//   oppdrag.background
+//   oppdrag.description
+//   oppdrag.status
+//   oppdrag.wait
+//   oppdrag.o_title
+//   oppdrag.o_id
+//   oppdrag.uo_locked
+//   oppdrag.uo_last_state
+
+// $oppdrag_new
+//
+
+#}
+{% import 'helpers/forms.html.twig' as forms %}
+<div class="bg1_c medium">
+    <h1 class="bg1">Oppdrag<span class="left"></span><span class="right"></span></h1>
+    <p class="h_right"><a href="/node/26">Hjelp</a></p>
+    <div class="bg1 r2b">
+        {% if oppdrag_new|length > 0 %}
+            <div class="information c"><p>Du har mottatt nye oppdrag.</p></div>
+        {% endif %}
+
+        {% if oppdrag_info|length == 0 %}
+            <div class="information c"><p>Du har ingen oppdrag tilgjengelige.</p></div>
+            <h3><b>Hvordan motta nye oppdrag?</b></h3>
+            <p>Etter hvert som du stiger i høyere rang får du tilgang til nye og flere oppdrag. Har du nettopp utført et oppdrag, må du nok vente en stund før oppdraget blir tilgjengelig igjen.</p>
+            <p>Sjekk derfor innom oppdrag av og til og se om du er klar for en utfordring!</p>
+        {% else %}
+            {% for oppdrag in oppdrag_info %}
+                <div class="oppdrag_list_uo r3" {{ oppdrag.background }}>
+                    <h2>{{ oppdrag.o_title|e }}</h2>
+                    {% if oppdrag_new[oppdrag.o_id] is defined %}
+                        <p><b>Nytt oppdrag!</b></p>
+                    {% endif %}
+
+                    {% if oppdrag.uo_locked != 0 %}
+                        <div class="p">{{ oppdrag.description }}</div>
+                        {{ oppdrag.status }}
+                    {% else %}
+                        <div class="p">{{ oppdrag.description }}</div>
+                        {% if (oppdrag.uo_last_state == 0) and (oppdrag.wait > 0) %}
+                            <p>Du mislyktes oppdraget forrige gang du prøvde og må vente {{ oppdrag.wait|counter(true) }} før du kan prøve igjen.</p>
+                        {% else %}
+                            <p><a href="?o_id={{ oppdrag.o_id }}" class="button">Start oppdrag &raquo;</a></p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+        {% endif %}
+    </div>
+</div>

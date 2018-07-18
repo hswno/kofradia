@@ -18,6 +18,7 @@ return array(
 	"lotto"          => "Game\\Lotto@index",
 	"utpressing"     => "Game\\Utpressing@index",
 	"utpressing/log" => "Game\\Utpressing@log",
+	"oppdrag"        => "Game\\Oppdrag@index",
 
 	// diverse
 	"betingelser"     => "Misc@betingelser",

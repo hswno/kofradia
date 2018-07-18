@@ -1,7 +1,7 @@
 <?php
 
 define("KORT_URL", STATIC_LINK . "/kort/60x90/%d/%s.png");
-global $oppdrag, $trigger, $status, $expire, $_base;
+global $_base;
 
 /*
  * 			chips (int): Antall chips man skal nå
