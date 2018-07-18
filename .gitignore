@@ -13,5 +13,6 @@ error_log
 /vendor
 public-docs
 public/assets
+public/imgs/profilbilder
 .DS_Store
 .idea
