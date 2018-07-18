@@ -6,7 +6,6 @@
 .project
 .settings
 /app/data
-/app/data/trac_rss.php
 /app/gamelogs
 /app/inc.innstillinger_local.php
 /public-docs
