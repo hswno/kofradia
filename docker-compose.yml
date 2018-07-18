@@ -1,0 +1,29 @@
+# For development purposes only
+version: '3'
+
+services:
+  app:
+    image: kofradia
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./:/project/kofradia
+      - ./.dev/inc.innstillinger_local.php:/project/kofradia/app/inc.innstillinger_local.php
+    ports:
+      - 127.0.0.1:8080:80
+    sysctls:
+      - net.ipv4.ip_unprivileged_port_start=0
+
+  mysql:
+    image: mysql:5.5
+    ports:
+      - 127.0.0.1:3306:3306
+    environment:
+      MYSQL_DATABASE: kofradia
+      MYSQL_ROOT_PASSWORD: kofradiapass
+
+  adminer:
+    image: adminer
+    ports:
+      - 127.0.0.1:8081:8080

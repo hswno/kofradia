@@ -6,16 +6,53 @@ Kopiering fra dette prosjektet er ikke tillatt. Se `LICENSE` for nærmere detalj
 
 ## Oppsett av utviklertjener
 
-Denne veiledningen er uferdig.
+Sett opp database:
 
-### Composer
-Kofradia bruker Composer til å hente inn tredjepartsbibliotek og for å gjøre
-enkelte oppgaver i systemet.
+```bash
+docker-compose up -d mysql
+```
 
-Se http://getcomposer.org/doc/00-intro.md#installation-nix for info om å sette opp Composer.
+Hent ned siste versjon fra https://kofradia.no/crewstuff/f/fil/190-devdb-main
 
-Når Composer er satt opp må vi laste inn systemet, og må derfor kjøre install-kommandoen i rotmappa, f.eks. slik:
-```php composer.phar install```
+(Se [app/scripts/export_to_devdb.php](app/scripts/export_to_devdb.php) for å
+generere ny versjon.)
+
+```bash
+docker exec -i $(docker-compose ps -q mysql) mysql -pkofradiapass kofradia <export_to_devdb.xxxxxxxx-xxxxxx.main.sql
+# dette tar en del tid, så bare å vente
+```
+
+Start resten av tjenestene:
+
+```bash
+docker-compose up
+```
+
+http://localhost:8080/ peker nå på lokal installasjon. La dette kjøre i en
+egen terminal. Bruk evt. opsjon `-d` for å kjøre i bakgrunnen.
+
+Ting skal nå fungere lokalt!
+
+http://localhost:8081/ kan brukes for database-administrasjon lokalt.
+Bruk host:mysql user:root pass:kofradiapass ved innlogging.
+
+For å laste inn ny versjon av utviklingsdatabase må forrige versjon slettes
+først. Enkleste måte å gjøre det på:
+
+```bash
+# slett mysql-container og tilhørende data
+docker-compose rm -s -f -v mysql
+
+# start mysql-container i bakgrunnen
+docker-compose up -d mysql
+```
+
+Hvis man har behov for et shell for å kjøre PHP-script, composer osv, kan man
+koble seg til kjørende container slik:
+
+```
+docker-compose exec -u app app bash
+```
 
 ## Dokumentasjon
 Dokumentasjon i utgangspunkt med phpDoc genereres hver natt kl 03, og ellers ved behov, og er tilgjengelig her:
