@@ -13,7 +13,8 @@ echo '
 	<h1 class="bg1">Crewet<span class="left"></span><span class="right"></span></h1>
 	<div class="bg1">
 		<p class="c">Her er en liste over Crewet på Kofradia!</p>
-		<p class="c">Trenger du hjelp til noe angående spillet? Les på <a href="&path;/node">hjelpsidene</a> eller <a href="&path;/support/">send inn en supporthenvendelse</a>.</p>';
+		<p class="c">Trenger du hjelp til noe angående spillet? Les på <a href="&path;/node">hjelpsidene</a> eller <a href="&path;/support/">send inn en supporthenvendelse</a>.</p>
+		<p class="c">Hvis Daniel sier at han skal svare på noe "i morgen", så betyr det "vent minst en uke på svar".</p>';
 
 visliste("Administrator", "up_access_level IN ({$_game['access']['admin'][0]}, {$_game['access']['sadmin'][0]})", "Ingen Administrator!");
 visliste("Seniormoderator", "up_access_level = {$_game['access']['seniormod'][0]}", "Ingen Seniormoderator!");
